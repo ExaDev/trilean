@@ -85,7 +85,9 @@ Logical AND, OR, and NOT behave differently: they have absorbing values, and thi
 | F | T |
 | U | U |
 
-**Identity elements for the N-ary and collection forms.** AND is a fold over `true` (the identity for AND), OR is a fold over `false` (the identity for OR) — this is a structural property of the operation, not a separate design choice, so it applies consistently everywhere an AND/OR is taken across a list: an empty `allOf` is definitely `true`; an empty `anyOf` is definitely `false`; a "some" quantifier over an empty collection is definitely `false` (no item can satisfy it); an "every" quantifier over an empty collection is definitely `true` (vacuous truth, nothing violates it).
+**Identity elements for the N-ary and collection forms.** AND is a fold over `true` (the identity for AND), OR is a fold over `false` (the identity for OR) — this is a structural property of the operation, not a separate design choice, so it applies consistently everywhere an AND/OR is taken across a list: an empty `allOf` is definitely `true`; an empty `anyOf` is definitely `false`; a "some" quantifier over an empty collection is definitely `false` (no item can satisfy it).
+
+> **Deliberate, settled: `every` over an empty collection is definitely `true`.** This is vacuous truth — the standard convention for universal quantification over an empty set, and exactly the same identity-element reasoning already used for `allOf` above (an empty `allOf`'s `true` and an empty `every`'s `true` are the same fact, stated twice because `every` is a quantifier over resolved items rather than a literal list of sub-nodes). This is worth stating explicitly and prominently, rather than leaving it as something an implementer might reasonably second-guess, because at least one other real, existing tool in this space gets exactly this case wrong — its own "all" operator returns `false` for an empty collection, which is simply an incorrect implementation of universal quantification, not an equally valid alternative convention. Nothing about a genuinely empty collection can violate "every item satisfies X", so `true` is the only value consistent with what the quantifier claims to mean; this document's `every` must not be "fixed" to match that other tool's behaviour.
 
 ## Derived connectives
 
@@ -101,9 +103,14 @@ const nand    = (a: PredicateNode, b: PredicateNode): PredicateNode => not(and(a
 const nor     = (a: PredicateNode, b: PredicateNode): PredicateNode => not(or(a, b));
 const implies = (a: PredicateNode, b: PredicateNode): PredicateNode => or(not(a), b);
 const iff     = (a: PredicateNode, b: PredicateNode): PredicateNode => not(xor(a, b));
+
+const none = (collection: JsonValue, item: PredicateNode, filter?: PredicateNode): PredicateNode =>
+  not({ kind: "some", collection, item, filter });
 ```
 
 None of `xor`/`nand`/`nor`/`implies`/`iff` ever appears as a `kind` discriminant on the wire — a serialised tree containing an XOR is indistinguishable from one written out by hand using `or`/`and`/`not`. Three-valued correctness for all five is therefore inherited automatically from the already-verified AND/OR/NOT tables above, never requiring a separate proof for each.
+
+The same treatment applies to a third quantifier, `none` ("no item satisfies") — defined purely as `not(some(...))`, never as its own independently-evaluated node kind, and so never appearing as its own `kind` discriminant either. Its three-valued correctness is inherited automatically from NOT and from `some`'s own already-established correctness (including its absorbing behaviour and its `filter` handling) — no new truth table or worked proof is needed, exactly as for the five connectives above.
 
 ### Worked correctness check: exclusive-or
 
@@ -149,6 +156,7 @@ A `PredicateNode` evaluates to `Evaluation<boolean>` — true, false, or indeter
 ```ts
 type ComparisonOperator = "gt" | "gte" | "lt" | "lte" | "eq" | "neq";
 type TextComparisonOperator = "equals" | "notEquals" | "matches" | "notMatches";
+type MembershipOperator = "in" | "notIn";
 
 type PredicateNode =
   | { kind: "not"; operand: PredicateNode }
@@ -158,9 +166,10 @@ type PredicateNode =
   | { kind: "anyOf"; operands: PredicateNode[] }
   | { kind: "compare"; op: ComparisonOperator; left: ExpressionNode; right: ExpressionNode }
   | { kind: "textCompare"; op: TextComparisonOperator; left: ExpressionNode; right: ExpressionNode }
+  | { kind: "memberOf"; op: MembershipOperator; operand: ExpressionNode; candidates: ExpressionNode[] }
   | { kind: "exists"; operand: ExpressionNode }
-  | { kind: "some"; collection: JsonValue; item: PredicateNode }
-  | { kind: "every"; collection: JsonValue; item: PredicateNode };
+  | { kind: "some"; collection: JsonValue; item: PredicateNode; filter?: PredicateNode }
+  | { kind: "every"; collection: JsonValue; item: PredicateNode; filter?: PredicateNode };
 ```
 
 ### `not`, `and`, `or`
@@ -179,13 +188,21 @@ A relational-comparison leaf: compares two computed values using `gt`/`gte`/`lt`
 
 A text-matching leaf, symmetric in the same way as `compare`: both `left` and `right` are `ExpressionNode`, and either may be a literal or an arbitrary formula. `equals`/`notEquals` are exact string equality; `matches`/`notMatches` interpret `right` as a pattern (an ECMAScript-style regular expression) tested against `left`'s text. Both operands must resolve to the `text` computed-value kind; anything else is `wrong-type`. A "small fixed category" value (e.g. a status label) is simply a `text` computed value from this leaf's point of view — no separate category kind exists.
 
+### `memberOf`
+
+A membership-test leaf, parallel to `compare` and `textCompare` rather than folded into either one's operator set: `operand` is the `ExpressionNode` being tested; `candidates` is a list of `ExpressionNode`s to test it against, every element of which may independently be an arbitrary formula, not only a literal — the same symmetry principle already applied to `compare` and `textCompare`. `op: "in"` asks whether `operand` equals any candidate; `op: "notIn"` asks whether it equals none of them.
+
+Membership is decided by value equality between computed values of the same kind, respecting units for numeric values exactly as `compare`'s own `eq` already does — a candidate of an incompatible kind, or a `number` candidate with an incompatible unit, can never be a match, and the comparison for that one element is `wrong-type`, not simply "not equal".
+
+Evaluate `operand` first; if it is indeterminate, the whole leaf is indeterminate with that reason. Otherwise, scan `candidates` in order: a candidate that is a **definite match** immediately settles the result — `in` is definitely `true`, `notIn` is definitely `false` — regardless of any not-yet-scanned or indeterminate candidates, mirroring the same absorbing-value discipline already established for OR and `some` elsewhere in this document (a confirmed match cannot be undone by an unrelated element's data problem). If scanning completes with no definite match: the leaf is indeterminate (first indeterminate candidate's reason, per the tie-break rule in [The evaluation model](#the-evaluation-model)) if at least one candidate was itself indeterminate or of an incompatible kind/unit; otherwise every candidate was a definite, comparable non-match, and `in` is definitely `false`, `notIn` is definitely `true`. An empty `candidates` list is never scanned and never indeterminate: `in` is definitely `false` and `notIn` is definitely `true` — the same non-vacuous facts an empty `anyOf`/`allOf` already establishes for OR/AND.
+
 ### `exists`
 
 Evaluates `true` if the given `ExpressionNode` can be resolved to some value at all, `false` if it definitely cannot be resolved (the data point is genuinely absent), independent of whether that value would itself be usable in further computation. Concretely: evaluate the operand; if the result is definite, `exists` is `true`; if the result is indeterminate with reason `not-found`, `exists` is `false`; if the result is indeterminate with reason `wrong-type` or `domain-error`, `exists` is still `true` — the underlying data point *did* resolve to something, it merely wasn't usable for whatever computation was attempted around it, which is exactly why section [The evaluation model](#the-evaluation-model) distinguishes "did not exist" from "existed but unusable" in the first place. `exists` itself is never indeterminate — it always produces a definite boolean.
 
 ### `some`, `every`
 
-Quantifiers over a collection, sharing the exact collection-resolution mechanism described in [Collections](#collections). `some` is semantically an OR of `item` evaluated once per resolved item; `every` is semantically an AND of `item` evaluated once per resolved item — both inherit the absorbing-value propagation from the AND/OR tables applied across the whole collection (e.g. `some` can be definitely `true` from one known-true item even if every other item in the collection is unresolvable). The item's own evaluation context is the item itself — see [Collections](#collections).
+Quantifiers over a collection, sharing the exact collection-resolution mechanism described in [Collections](#collections). `some` is semantically an OR of `item` evaluated once per participating item; `every` is semantically an AND of `item` evaluated once per participating item — both inherit the absorbing-value propagation from the AND/OR tables applied across the whole collection (e.g. `some` can be definitely `true` from one known-true item even if every other participating item is unresolvable). An optional `filter` narrows which resolved items participate at all before either quantifier runs over them — see [Collections](#collections) for exactly how a `filter` result feeds into this same absorption. The item's own evaluation context (for both `filter` and `item`) is the item itself — see [Collections](#collections). A third quantifier, "no item satisfies", is derived from `some` — see [Derived connectives](#derived-connectives).
 
 ## The expression tree
 
@@ -202,7 +219,11 @@ type ComputedValue =
   | { kind: "duration"; value: number; unit: DurationUnit };
 
 type ArithmeticOperator = "add" | "subtract" | "multiply" | "divide" | "power" | "modulo";
-type AggregateFunction = "sum" | "count" | "max" | "min" | "average";
+
+type FoldCombiner =
+  | { mode: "max"; item: ExpressionNode }
+  | { mode: "min"; item: ExpressionNode }
+  | { mode: "reduce"; initial: ExpressionNode; combine: ExpressionNode };
 
 type ExpressionNode =
   | { kind: "numberLiteral"; value: number; unit?: Unit }
@@ -215,7 +236,8 @@ type ExpressionNode =
   | { kind: "call"; fn: string; args: ExpressionNode[] }
   | { kind: "lookup"; table: JsonValue; keys: ExpressionNode[] }
   | { kind: "conditional"; cases: { when: PredicateNode; then: ExpressionNode }[]; fallback: ExpressionNode }
-  | { kind: "fold"; aggregate: AggregateFunction; collection: JsonValue; item: ExpressionNode; period?: { from?: ExpressionNode; to?: ExpressionNode } }
+  | { kind: "fold"; collection: JsonValue; filter?: PredicateNode; combiner: FoldCombiner }
+  | { kind: "accumulator" }
   | { kind: "delegate"; system: string; payload: JsonValue };
 ```
 
@@ -263,9 +285,74 @@ A piecewise/conditional-value node: an ordered, possibly-empty list of `{ when, 
 
 ### `fold`
 
-An aggregation over a collection (see [Collections](#collections)): `aggregate` names the combining function (`sum`/`count`/`max`/`min`/`average`); `collection` is the opaque collection reference; `item` is evaluated once per resolved item, using that item as its evaluation context, before the results are combined. An optional `period` narrows which items are included, by evaluating `period.from`/`period.to` in the *fold node's own* (outer) context to two `instant` values and passing them to the collection resolver alongside the collection reference — narrowing by time is entirely the resolver's responsibility, the same as resolving the collection itself is (see [Collections](#collections)).
+An aggregation over a collection (see [Collections](#collections)): `collection` is the opaque collection reference; an optional `filter` narrows which resolved items participate (see [Collections](#collections)); `combiner` decides how the participating items' values become one result. There is exactly one general mechanism, `reduce`, and exactly two named forms, `max`/`min`, that cannot be expressed as an instance of it — see [Derived aggregates](#derived-aggregates) for why `sum`, `count`, and `average` need no combiner mode of their own at all.
 
-If any per-item evaluation of `item` is indeterminate, the whole `fold` is indeterminate with that item's reason (first such item, in resolved-list order) — this applies to `count` as well as the numeric aggregates: `count` is not simply "how many items are in the collection", it is "how many items' formulae could all be evaluated", so a collection with one item missing the field `item` refers to makes the count itself unreliable, not just that one item's contribution. Over an empty (post-filtering) collection: `sum` is definitely `0`; `count` is definitely `0`; `max`, `min`, and `average` are `domain-error` (undefined over an empty set — the same category as division by zero, per [The evaluation model](#the-evaluation-model)'s explicit allowance for "any comparable domain violation for any function added later").
+**`reduce`** is "fold with an accumulator": `initial` is evaluated once, in the fold node's own (outer) context, to seed the running result; then, for each participating item in turn, `combine` is evaluated with that item as its evaluation context to produce the new running result from the old one. `combine` reaches the running result through the dedicated [`accumulator`](#accumulator) leaf; the item's own fields are reached the ordinary way, through `reference`/`lookup` nodes resolved against the item context. Over an empty (post-filter) collection, a `reduce` fold evaluates to `initial` without ever touching `combine`.
+
+**`max`/`min`** each carry an `item`, evaluated once per participating item using that item as its evaluation context, and keep the largest/smallest projected value seen. These two are the only combining behaviours that stay as their own directly-specified forms, for a precise mathematical reason rather than an arbitrary exception: `reduce` needs a seed value that is also the identity for `combine` (as `0` is for addition), and there is no largest or smallest real number to seed a running maximum or minimum with — the JSON number model has no literal for an unbounded sentinel. `max`/`min` are still the same underlying mechanism, just its standard *unseeded* variant (sometimes called "reduce1" elsewhere): the running result starts as the first participating item's own projected value, and `combine` (the ordinary "keep the larger"/"keep the smaller" comparison) is applied to each item after that — not an independently-invented special case, only the one variant of the mechanism that a literal `initial` genuinely cannot express. Over an empty (post-filter) collection, both are `domain-error` (undefined over an empty set, the same category as division by zero, per [The evaluation model](#the-evaluation-model)'s explicit allowance for "any comparable domain violation for any function added later") — there is no first item to seed from.
+
+**Indeterminacy, both forms.** If any participating item's `filter` evaluation is indeterminate, the whole `fold` is indeterminate with that reason — `fold` has no absorbing value (see [Three-valued propagation rules](#three-valued-propagation-rules)), so unlike a quantifier's OR/AND there is no other item's outcome that can override this (see [Pre-filtering which items participate](#pre-filtering-which-items-participate)). The same is true of any participating item's `item`/`combine` evaluation, and of a `reduce`'s `initial`: if any is indeterminate, the whole `fold` is indeterminate with that reason (first such candidate, in resolved-list order, `initial` counting as evaluated before any item).
+
+### `accumulator`
+
+A zero-field leaf, meaningful only inside the `combine` expression of an enclosing `fold`'s `reduce` form (see [`fold`](#fold) above), where it evaluates to that step's running accumulated result. A nested `fold`'s own `combine` expression introduces its own, separate accumulator scope — `accumulator` always refers to the innermost enclosing reduce fold. Using `accumulator` anywhere else (a `max`/`min` fold's `item`, a `filter` predicate, a quantifier's `item`, or outside any fold at all) is `wrong-type` — there is no running accumulator in scope.
+
+### Derived aggregates
+
+`sum`, `count`, and `average` are never their own `FoldCombiner` mode — each is a builder function that assembles an ordinary `fold` (and, for `average`, one `arithmetic` division of two ordinary folds), exactly the same treatment [Derived connectives](#derived-connectives) already gives `xor`/`nand`/`nor`/`implies`/`iff`/`none`: correctness is inherited from the mechanism they're built from, rather than needing its own independent implementation that could silently drift from it.
+
+```ts
+const sum = (collection: JsonValue, item: ExpressionNode, filter?: PredicateNode): ExpressionNode => ({
+  kind: "fold",
+  collection,
+  filter,
+  combiner: {
+    mode: "reduce",
+    initial: { kind: "numberLiteral", value: 0 },
+    combine: { kind: "arithmetic", op: "add", left: { kind: "accumulator" }, right: item },
+  },
+});
+
+const presenceOf = (probe: ExpressionNode): ExpressionNode => ({
+  kind: "conditional",
+  cases: [
+    {
+      when: { kind: "memberOf", op: "in", operand: probe, candidates: [probe] },
+      then: { kind: "numberLiteral", value: 1 },
+    },
+  ],
+  fallback: { kind: "numberLiteral", value: 0 }, // unreachable: a definite probe is always a member of the single-element list containing only itself
+});
+
+const count = (collection: JsonValue, filter?: PredicateNode, probe?: ExpressionNode): ExpressionNode => ({
+  kind: "fold",
+  collection,
+  filter,
+  combiner: {
+    mode: "reduce",
+    initial: { kind: "numberLiteral", value: 0 },
+    combine: {
+      kind: "arithmetic",
+      op: "add",
+      left: { kind: "accumulator" },
+      right: probe ? presenceOf(probe) : { kind: "numberLiteral", value: 1 },
+    },
+  },
+});
+
+const average = (collection: JsonValue, item: ExpressionNode, filter?: PredicateNode): ExpressionNode => ({
+  kind: "arithmetic",
+  op: "divide",
+  left: sum(collection, item, filter),
+  right: count(collection, filter),
+});
+```
+
+`sum` needs no per-item probe beyond `item` itself: it is a literal `reduce` seeded at `0`, adding each participating item's projected value to the running total, and it already goes indeterminate if `item` fails to resolve for any participating item — no separate mechanism needed, since `item`'s value is exactly what gets added.
+
+`count` takes an optional third argument, `probe`, and this is where it matters that `filter` and a probe are not the same thing. `filter` *excludes* an item from participating — a filtered-out item's absence is invisible in the final result, exactly as if it had never been in the collection at all. A `probe` does the opposite: it doesn't decide whether an item participates, it makes the *whole count* indeterminate if it fails to resolve for *any* participating item, surfacing "I cannot give you a trustworthy count" rather than silently reporting a smaller, technically-successful count for the same underlying data-quality problem — precisely the distinction the rest of this document's indeterminate-outcome model exists to preserve (see [The evaluation model](#the-evaluation-model)). `count(collection, filter)` with no `probe` is a plain `reduce` seeded at `0` that adds `1` per participating item, with no indeterminacy of its own beyond `filter`'s. `count(collection, filter, probe)` instead adds `presenceOf(probe)` per participating item — a small helper built entirely from already-established primitives, with no restriction on `probe`'s kind: it tests `probe` for membership in the single-element list `[probe]`, so a `memberOf` "in" test against itself is trivially true whenever `probe` resolves to a definite value of *any* kind (`memberOf`'s equality is already kind-agnostic across `number`/`text`/`instant`/`duration` — see [`memberOf`](#memberof)), and exactly `probe`'s own indeterminate outcome otherwise, per `memberOf`'s own "evaluate `operand` first" rule. A `conditional` then turns that boolean into the number `1`; its `fallback` is never reached, since a definite `probe` always equals itself. (A real implementation may memoise `probe`'s single evaluation rather than running the resolver twice for `operand` and its one `candidates` entry — resolvers are pure functions of their inputs throughout this design, so this is a performance choice, not a correctness one.)
+
+`average` is `sum` divided by `count` over the same `collection`/`filter`, with no `probe` — `sum`'s own `item` already forces every participating item's projected value to resolve, so `average`'s numerator is already indeterminate under exactly the condition a `count` probe exists to detect, with nothing left to duplicate. Nothing new to verify for the empty-collection case either: division's own already-established rule (zero divisor is `domain-error`) is *why* `average` over an empty collection is `domain-error`, since `count` over an empty collection is `0` and `sum(...)/0` already means exactly that.
 
 ### `delegate`
 
@@ -273,7 +360,7 @@ An explicitly-named external system plus an arbitrary, unevaluated JSON payload,
 
 ## Collections
 
-Both `fold` and the two quantifier leaves (`some`/`every`) need "a collection of items" resolved from something the schema itself treats as opaque data. The schema's job is only to carry an opaque reference to what collection is meant, plus a sub-node (an `ExpressionNode` for `fold`, a `PredicateNode` for the quantifiers) to be evaluated once per resolved item, using that single item as its evaluation context.
+Both `fold` and the two quantifier leaves (`some`/`every`, and transitively `none`) need "a collection of items" resolved from something the schema itself treats as opaque data. The schema's job is only to carry an opaque reference to what collection is meant, plus a sub-node (an `ExpressionNode` for `fold`, a `PredicateNode` for the quantifiers) to be evaluated once per resolved item, using that single item as its evaluation context, plus an optional per-item pre-filter — see [Pre-filtering which items participate](#pre-filtering-which-items-participate).
 
 How an opaque collection reference actually becomes a concrete list of items is entirely the resolver's responsibility, and is expected to vary enormously between consumers — one consumer's "collection" might be an array already sitting inside a single in-hand record (zero further lookups needed); a completely different consumer's "collection" might require actively traversing some larger connected structure outward from a starting point to discover which items even belong to it, with nothing available up front. The schema and evaluator support both extremes, and anything in between, equally well, purely by keeping the reference opaque and leaving all resolution logic behind the injected collection resolver — there is no assumption anywhere about how many steps are involved in turning a reference into a list.
 
@@ -284,6 +371,12 @@ type EvaluationContext = unknown;
 ```
 
 Every evaluation call is threaded through an `EvaluationContext` — an opaque, purely in-process value supplied by the caller, never itself part of the serialised tree and never required to be JSON-serialisable (unlike every payload described above, which *does* travel inside the tree and must be plain JSON). `reference` and `lookup` resolution both receive the current context. Descending into a `fold` or a quantifier replaces the context for the sub-node's evaluation with the single resolved item — literally the item itself, not a wrapper around it — so that a `reference` inside `item`/case sub-trees resolves against that item rather than against whatever the outer context was.
+
+### Pre-filtering which items participate
+
+`fold`, `some`, and `every` each accept an optional `filter: PredicateNode`, evaluated once per candidate item using that item as its own evaluation context — exactly the same mechanism `fold`'s own per-item expression and the quantifiers' own `item` sub-node already use. An item for which `filter` is definitely `true` participates; one for which it is definitely `false` is excluded, exactly as if it had never been in the collection at all. Time-window narrowing (only include items whose own timestamp falls within given bounds) is simply one example use of this general mechanism — a `filter` predicate comparing the item's own timestamp field against bounds via `compare` — not a separate concept, and there is no dedicated time-scoping field alongside it. A resolver that already knows how to push a narrowing hint down into its own data access remains free to do so using whatever it can infer from the opaque `collection` reference and `context` it already receives — `filter` narrows the schema's own view of the result, it doesn't preclude a resolver-side optimisation underneath.
+
+An item whose `filter` is itself indeterminate is never silently included or excluded — silently picking either would hide a real data-quality problem behind an arbitrary default. What happens next depends on whether the surrounding node has an absorbing value: `fold` has none (see [Three-valued propagation rules](#three-valued-propagation-rules)), so an indeterminate `filter` on any candidate item unconditionally makes the whole `fold` indeterminate, exactly as an indeterminate `item`/`combine` evaluation already does. The quantifiers do have one: an indeterminate `filter` makes that one item's own contribution to the surrounding OR (`some`)/AND (`every`) indeterminate, and the quantifier's already-established absorption rule then decides the final result exactly as it already does for an indeterminate `item` evaluation — a `some` with one item whose `filter` can't be resolved still comes back definitely `true` if a different, cleanly-filtered item is a definite match. Treating an indeterminate filter as an automatic override of an already-decided quantifier result would reintroduce, for filtering specifically, exactly the "any indeterminate operand poisons everything, no absorption" defect this document already identifies as wrong for AND/OR in general.
 
 ## Resolvers
 
@@ -302,18 +395,14 @@ interface Resolvers {
   resolveLookup(table: JsonValue, keys: ComputedValue[], context: EvaluationContext): Promise<Resolution>;
 
   /** Resolver 3 — an opaque collection reference to a concrete list of items (fold/some/every). */
-  resolveCollection(
-    collection: JsonValue,
-    context: EvaluationContext,
-    period?: { from?: ComputedValue; to?: ComputedValue },
-  ): Promise<unknown[]>;
+  resolveCollection(collection: JsonValue, context: EvaluationContext): Promise<unknown[]>;
 
   /** Optional, separate from the three core contracts — see the `delegate` node kind. */
   resolveDelegate?(system: string, payload: JsonValue, context: EvaluationContext): Promise<Resolution>;
 }
 ```
 
-`resolveCollection` returns a plain array rather than a `Resolution` envelope: a collection's "nothing here" state is unambiguously an empty array, unlike a single value's absence, which needs an explicit flag to distinguish "there is genuinely nothing here" from any value the resolver might otherwise legitimately return. Each resolver may itself be asynchronous, independently of the others. None of the three needs to know anything about the other two; a consumer implementing all three (and, optionally, the delegate handler) is free to have them share underlying data-access logic, but the schema and evaluator never require or assume that they do.
+`resolveCollection` takes no narrowing parameter of its own: it always returns the full candidate list for the given reference, and narrowing which of those candidates actually take part is handled uniformly, after resolution, by the `filter` mechanism described under [Pre-filtering which items participate](#pre-filtering-which-items-participate) — no resolver needs a bespoke narrowing argument for this. It also returns a plain array rather than a `Resolution` envelope: a collection's "nothing here" state is unambiguously an empty array, unlike a single value's absence, which needs an explicit flag to distinguish "there is genuinely nothing here" from any value the resolver might otherwise legitimately return. Each resolver may itself be asynchronous, independently of the others. None of the three needs to know anything about the other two; a consumer implementing all three (and, optionally, the delegate handler) is free to have them share underlying data-access logic, but the schema and evaluator never require or assume that they do.
 
 ## Evaluator entry points
 
@@ -343,8 +432,9 @@ How each reason category can arise, per node kind. "Propagates" means: an indete
 | `allOf` / `anyOf` | as `and`/`or`, extended pairwise across the list | as `and`/`or` | as `and`/`or` |
 | `compare` | either operand not found | operand kinds differ, or units incompatible, or kind is not `number`/`instant`/`duration` | never directly (comparison itself has no domain restriction) |
 | `textCompare` | either operand not found | either operand is not `text` | never directly |
+| `memberOf` | `operand` not found, or (with no definite match found) a scanned candidate not found | `operand`/a candidate resolves to an incompatible kind or unit, with no definite match found among the rest | never directly |
 | `exists` | never — converts operand `not-found` to definite `false` | never — converts operand `wrong-type`/`domain-error` to definite `true` | never — see `wrong-type` column |
-| `some` / `every` | an item's `item` sub-node reports not-found, and it is not absorbed by an already-decided item | as `not-found` | as `not-found` |
+| `some` / `every` | an item's `filter` or `item` sub-node reports not-found, and it is not absorbed by an already-decided item | as `not-found` | as `not-found` |
 | literals (`numberLiteral`, `textLiteral`, `instantLiteral`, `durationLiteral`) | never | never | never |
 | `reference` | resolver reports absence | resolver's value doesn't match an expected `unit`, or is used where an incompatible kind is required upstream | never directly |
 | `arithmetic` | either operand not found | operand not numeric (or temporal-kind mismatch — see [Temporal values](#temporal-values)), or unit mismatch on add/subtract | zero divisor, or any other documented domain violation for the operator |
@@ -352,14 +442,15 @@ How each reason category can arise, per node kind. "Propagates" means: an indete
 | `call` | any argument not found | unregistered function name, or an argument of the wrong kind for that function | argument outside the function's valid domain (e.g. negative input to `squareRoot`) |
 | `lookup` | any key not found, or resolver reports no match | a key expression resolves to the wrong kind for that table | never directly |
 | `conditional` | an unmatched guard's own evaluation is `not-found`, before any earlier guard matched | as `not-found`; also the chosen branch's own result if it is `wrong-type` | as `not-found`; also the chosen branch's own result if it is `domain-error` |
-| `fold` | any included item's `item` evaluation is `not-found` | any included item's `item` evaluation is `wrong-type` | empty (post-filter) collection with `max`/`min`/`average`; or an included item's `item` evaluation is `domain-error` |
+| `fold` | any participating item's `filter`, `item`, or `combine` evaluation is `not-found`; or a `reduce`'s `initial` is `not-found` | any participating item's `filter`, `item`, or `combine` evaluation is `wrong-type`; or a `reduce`'s `initial` is `wrong-type` | empty (post-filter) collection with `max`/`min` (no first item to seed from); or any participating item's `item`/`combine` evaluation is `domain-error`; or a `reduce`'s `initial` is `domain-error` |
+| `accumulator` | never | used outside a reduce fold's `combine` expression | never |
 | `delegate` | never (no resolution attempted without a handler) | no handler registered for the named `system` | never |
 
 ## Worked example
 
 A single condition combining a boolean tree, a comparison leaf whose value side is itself a formula, a fold/aggregation node, and all three resolver contracts in use — every name below is a generic placeholder.
 
-**Rule:** "`isActive` is true, and the sum of `amount` across the `items` collection is greater than `x + y`." `isActive` is modelled as the number `1` for true — the computed-value model has no native boolean kind, so a boolean data point is represented however best suits the consumer, here as a numeric flag compared for equality.
+**Rule:** "`isActive` is true, and the sum of `amount` across the `items` collection is greater than `x + y`." `isActive` is modelled as the number `1` for true — the computed-value model has no native boolean kind, so a boolean data point is represented however best suits the consumer, here as a numeric flag compared for equality. The `fold` below is exactly what the [`sum`](#derived-aggregates) builder produces — shown here as the literal tree it assembles, to keep the resolver trace below concrete.
 
 ```json
 {
@@ -375,9 +466,17 @@ A single condition combining a boolean tree, a comparison leaf whose value side 
     "op": "gt",
     "left": {
       "kind": "fold",
-      "aggregate": "sum",
       "collection": "items",
-      "item": { "kind": "reference", "key": "amount" }
+      "combiner": {
+        "mode": "reduce",
+        "initial": { "kind": "numberLiteral", "value": 0 },
+        "combine": {
+          "kind": "arithmetic",
+          "op": "add",
+          "left": { "kind": "accumulator" },
+          "right": { "kind": "reference", "key": "amount" }
+        }
+      }
     },
     "right": {
       "kind": "arithmetic",
@@ -418,7 +517,7 @@ const resolvers: Resolvers = {
 Tracing the evaluation against `data` as the root `EvaluationContext`:
 
 1. `compare eq` (left branch): `resolveValue("isActive", data)` → `{ found: true, value: { kind: "number", value: 1 } }`; compared against `numberLiteral 1` → definite `true`.
-2. `fold sum`: `resolveCollection("items", data)` → three items. For each, `reference("amount")` is evaluated with that single item as context — `resolveValue("amount", item)` → `8`, `12`, `1`, all definite. Sum → `21`.
+2. `fold` (`reduce`, seeded at `0`): `resolveCollection("items", data)` → three items. The accumulator starts at `0`; for each item in turn, `combine` evaluates `accumulator + reference("amount")` with that single item as context — `resolveValue("amount", item)` → `8`, `12`, `1`, all definite — stepping the accumulator `0 → 8 → 20 → 21`. Final accumulator → `21`.
 3. `arithmetic add`: `resolveValue("x", data)` → `10`; `resolveValue("y", data)` → `5`. Sum → `15`.
 4. `compare gt` (right branch): `21 > 15` → definite `true`.
 5. `and(true, true)` → definite `true`.
@@ -433,5 +532,6 @@ This package is a representation-plus-evaluator for conditions and formulae over
 
 - **Symbolic algebra.** It cannot solve an expression for an unknown quantity, symbolically simplify an expression, or perform symbolic differentiation or integration. A consumer needing any of that is expected to translate the pure-arithmetic portion of an expression tree into the input format of existing, general-purpose symbolic-mathematics software — several mature, freely available options already exist — and let that external system do the symbolic work. This package's job stops at representing and numerically evaluating a tree, not manipulating it symbolically.
 - **Complex-number or phasor arithmetic.** Every numeric value in this design is real-valued. Some domains occasionally need calculations naturally expressed with complex numbers; rather than extending the core numeric model to support that — a far larger and more invasive change than adding one more named function — the recommended approach is the same delegation escape hatch described under [`delegate`](#delegate): hand the relevant subtree, unevaluated, to an external system built for that kind of mathematics, several of which already exist as mature, freely available tooling.
+- **Batch unresolvable-reference reporting.** This design deliberately has no node kind for asking "which of these references, across a whole batch, are unresolvable" as a single evaluation — only the [`exists`](#exists) leaf's one-at-a-time true/false/false-on-absence check. A tool that wants to report a *list* of every missing reference (for an authoring UI validating a tree before it's saved, say) is expected to build that on top of `exists` — walk the references of interest and evaluate an `exists` leaf over each — at the authoring/tooling layer, rather than this package growing a bespoke aggregate-diagnostic node kind for it. This is a deliberate boundary, not an oversight: it keeps the evaluation tree itself limited to producing one `Evaluation` per node, and leaves "collect many such results and report on them together" to whatever sits above the evaluator, exactly like symbolic algebra and complex-number arithmetic above are left to whatever sits beside it.
 
-This package does not name or depend on any specific external tool for either of these two delegation cases — it only defines the shape of the hand-off (an opaque payload plus a named destination system).
+This package does not name or depend on any specific external tool for either of the two delegation cases above — it only defines the shape of the hand-off (an opaque payload plus a named destination system).
