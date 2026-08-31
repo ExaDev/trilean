@@ -26,6 +26,19 @@ export { emptyFunctionRegistry } from "./functions";
 
 export { createEvaluator, evaluatePredicate, evaluateValue } from "./evaluator";
 
+export {
+  and,
+  iff,
+  implies,
+  nand,
+  none,
+  nor,
+  not,
+  or,
+  xor,
+} from "./derived-connectives";
+export { average, count, presenceOf, sum } from "./derived-aggregates";
+
 export type {
   AccumulatorNode,
   AllOfNode,
