@@ -18,6 +18,7 @@ import type {
   ComparisonOperator,
   ExpressionNode,
   PredicateNode,
+  TextComparisonOperator,
 } from "./tree";
 
 /**
@@ -140,6 +141,48 @@ function compareValues(
       );
     default:
       throw new Error("unreachable computed-value kind");
+  }
+}
+
+/** `textCompare`'s two operands must both resolve to the `text` computed-value kind -- any other kind, on either operand, is `wrong-type` (see the `textCompare` section of README.md). `equals`/`notEquals` are exact string equality; `matches`/`notMatches` interpret `right`'s text as an ECMAScript regular expression tested against `left`'s text. An invalid pattern is `wrong-type` rather than a thrown exception -- every data-quality problem stays inside the `Evaluation` result, per `Evaluation<T>`'s own doc comment in evaluation.ts. */
+function compareText(
+  op: TextComparisonOperator,
+  left: ComputedValue,
+  right: ComputedValue,
+): Evaluation<boolean> {
+  if (left.kind !== "text") {
+    return indeterminate(
+      "wrong-type",
+      `'textCompare' requires 'text' operands; the left operand is '${left.kind}'`,
+    );
+  }
+  if (right.kind !== "text") {
+    return indeterminate(
+      "wrong-type",
+      `'textCompare' requires 'text' operands; the right operand is '${right.kind}'`,
+    );
+  }
+  switch (op) {
+    case "equals":
+      return definite(left.value === right.value);
+    case "notEquals":
+      return definite(left.value !== right.value);
+    case "matches":
+    case "notMatches": {
+      let pattern: RegExp;
+      try {
+        pattern = new RegExp(right.value);
+      } catch {
+        return indeterminate(
+          "wrong-type",
+          `'${right.value}' is not a valid regular expression pattern`,
+        );
+      }
+      const isMatch = pattern.test(left.value);
+      return definite(op === "matches" ? isMatch : !isMatch);
+    }
+    default:
+      throw new Error("unreachable text comparison operator");
   }
 }
 
@@ -463,7 +506,27 @@ async function evaluatePredicateInternal(
       if (right.status === "indeterminate") return right;
       return compareValues(node.op, left.value, right.value);
     }
-    case "textCompare":
+    case "textCompare": {
+      const [left, right] = await Promise.all([
+        evaluateValueInternal(
+          node.left,
+          context,
+          resolvers,
+          accumulator,
+          functions,
+        ),
+        evaluateValueInternal(
+          node.right,
+          context,
+          resolvers,
+          accumulator,
+          functions,
+        ),
+      ]);
+      if (left.status === "indeterminate") return left;
+      if (right.status === "indeterminate") return right;
+      return compareText(node.op, left.value, right.value);
+    }
     case "memberOf":
     case "exists":
     case "some":
