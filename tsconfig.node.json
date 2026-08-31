@@ -5,6 +5,6 @@
     "types": ["node"],
     "allowImportingTsExtensions": true
   },
-  "include": ["src/**/*.test.ts", "src/test-support/**/*.ts", "test/**/*.ts", "*.config.ts", "eslint.config.ts", "scripts/**/*.mjs"],
+  "include": ["src/**/*.test.ts", "src/test-support/**/*.ts", "test/**/*.ts", "*.config.ts", "eslint.config.ts"],
   "exclude": []
 }

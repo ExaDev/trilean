@@ -28,6 +28,7 @@ export default [
         "node_modules",
         ".turbo",
         "schemas",
+        "scripts",
         "test/smoke.test.mjs",
       ],
     },
