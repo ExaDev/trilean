@@ -32,7 +32,7 @@
       "outputs": []
     },
     "_build": {
-      "inputs": ["src/**", "tsdown.config.ts", "package.json"],
+      "inputs": ["src/**", "tsdown.config.ts", "package.json", "scripts/**"],
       "outputs": ["dist/**", "schemas/**"]
     }
   }

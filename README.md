@@ -52,7 +52,7 @@ pnpm install
 pnpm build          # tsdown -> dist/, then generates schemas/json-operators.schema.json
 pnpm test           # unit suite, against src/
 pnpm test:integration # multi-kind composition, schema-pipeline, and function-registry/delegate tests, against src/
-pnpm test:smoke     # asserts the built dist/ exports resolve correctly in both ESM and CJS
+pnpm test:smoke     # builds first, then checks dist/ in both ESM and CJS plus the generated JSON Schema
 pnpm test:workers   # runs the evaluator inside a real Cloudflare Workers isolate
 pnpm lint
 pnpm typecheck
