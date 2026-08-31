@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ES2024"],
+    "types": ["node"],
+    "allowImportingTsExtensions": true
+  },
+  "include": ["src/**/*.test.ts", "src/test-support/**/*.ts", "test/**/*.ts", "*.config.ts", "eslint.config.ts", "scripts/**/*.mjs"],
+  "exclude": []
+}

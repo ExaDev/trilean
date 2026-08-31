@@ -1,0 +1,113 @@
+{
+  "name": "json-operators",
+  "version": "0.0.0-development",
+  "description": "Consumer-agnostic, three-valued predicate/expression evaluation trees over injected resolvers -- no assumptions about consumer data, no I/O of its own.",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExaDev/json-operators.git"
+  },
+  "homepage": "https://github.com/ExaDev/json-operators#readme",
+  "bugs": {
+    "url": "https://github.com/ExaDev/json-operators/issues"
+  },
+  "exports": {
+    ".": {
+      "types": {
+        "import": "./dist/index.d.ts",
+        "require": "./dist/index.d.cts"
+      },
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./*": {
+      "types": {
+        "import": "./dist/*.d.ts",
+        "require": "./dist/*.d.cts"
+      },
+      "import": "./dist/*.js",
+      "require": "./dist/*.cjs"
+    },
+    "./schema.json": "./schemas/json-operators.schema.json"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "schemas"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true,
+    "registry": "https://registry.npmjs.org/"
+  },
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT",
+  "packageManager": "pnpm@11.6.0",
+  "dependencies": {
+    "zod": "^4.5.4"
+  },
+  "scripts": {
+    "build": "turbo run _build",
+    "_build": "tsdown && node scripts/generate-json-schema.mjs",
+    "lint": "turbo run _lint",
+    "_lint": "eslint . --fix --cache --max-warnings 0",
+    "typecheck": "turbo run _typecheck",
+    "_typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.node.json",
+    "test": "turbo run _test",
+    "_test": "vitest run --project unit",
+    "test:coverage": "turbo run _test:coverage",
+    "_test:coverage": "vitest run --project unit --coverage",
+    "test:smoke": "turbo run _test:smoke",
+    "_test:smoke": "vitest run --project smoke",
+    "test:workers": "turbo run _test:workers",
+    "_test:workers": "vitest run --project workers",
+    "prepublishOnly": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run build && publint && attw --pack",
+    "prepare": "husky",
+    "release": "semantic-release"
+  },
+  "keywords": [
+    "json",
+    "predicate",
+    "expression",
+    "evaluator",
+    "three-valued-logic",
+    "zod",
+    "rules-engine",
+    "isomorphic"
+  ],
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
+    "@cloudflare/vitest-pool-workers": "^0.22.0",
+    "@commitlint/cli": "^21.2.2",
+    "@commitlint/config-conventional": "^21.2.2",
+    "@eslint/js": "^10.0.1",
+    "@exadev/eslint-config": "^2.10.0",
+    "@semantic-release/changelog": "^7.0.0",
+    "@semantic-release/commit-analyzer": "^13.0.1",
+    "@semantic-release/git": "^11.0.1",
+    "@semantic-release/github": "^12.0.9",
+    "@semantic-release/npm": "^13.1.5",
+    "@semantic-release/release-notes-generator": "^14.1.1",
+    "@types/node": "^26.4.0",
+    "@vitest/coverage-v8": "^4.1.11",
+    "eslint": "^10.9.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.6",
+    "globals": "^17.11.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.4.1",
+    "prettier": "^3.9.6",
+    "publint": "^0.3.24",
+    "semantic-release": "^25.0.9",
+    "tsdown": "^0.22.14",
+    "turbo": "^2.10.12",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.68.0",
+    "vitest": "^4.1.11"
+  }
+}
