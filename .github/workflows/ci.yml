@@ -218,8 +218,8 @@ jobs:
         run: echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> ~/.npmrc
       - run: pnpm publish --access public --no-git-checks
 
-  attest:
-    name: Attest SBOM and build provenance
+  attest-npm:
+    name: Attest SBOM and build provenance (npm)
     needs: release
     if: needs.release.outputs.published == 'true'
     runs-on: ubuntu-latest
@@ -240,6 +240,42 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
       # Pack into a directory of its own, separate from dist/ (tsdown's raw build output). The attestation subject has to be the artefact that actually ships -- attesting dist/ itself would mix in files that never leave the repo, producing digests that match nothing a consumer can download.
+      - run: pnpm pack --pack-destination release-artifact
+      - run: pnpm sbom --sbom-format spdx --prod > release-artifact/sbom.spdx.json
+      - name: Attest SBOM
+        uses: actions/attest@v4
+        with:
+          subject-path: release-artifact/*.tgz
+          sbom-path: release-artifact/sbom.spdx.json
+      - name: Attest build provenance
+        uses: actions/attest@v4
+        with:
+          subject-path: release-artifact/*.tgz
+
+  attest-github-packages:
+    name: Attest SBOM and build provenance (GitHub Packages)
+    needs: release
+    if: needs.release.outputs.published == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main # the release commit semantic-release just pushed
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      # The GitHub Packages mirror ships under a different name (see publish-github-packages) and is therefore a genuinely different artefact from the one attest-npm covers above -- attesting only the unscoped tarball would leave the scoped mirror with no provenance a consumer could verify. This job's own attest@v4 attestations land in this repository's own attestation store regardless of which registry the tarball is later published to, so no id-token/OIDC conflict with publish-github-packages' own npm-registry auth exists here.
+      - name: Rewrite the package name to match the GitHub Packages mirror
+        run: npm pkg set name="@exadev/trilean"
       - run: pnpm pack --pack-destination release-artifact
       - run: pnpm sbom --sbom-format spdx --prod > release-artifact/sbom.spdx.json
       - name: Attest SBOM
