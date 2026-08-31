@@ -1,15 +1,15 @@
 {
-  "name": "json-operators",
+  "name": "trilean",
   "version": "0.0.0-development",
   "description": "Consumer-agnostic, three-valued predicate/expression evaluation trees over injected resolvers -- no assumptions about consumer data, no I/O of its own.",
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExaDev/json-operators.git"
+    "url": "git+https://github.com/ExaDev/trilean.git"
   },
-  "homepage": "https://github.com/ExaDev/json-operators#readme",
+  "homepage": "https://github.com/ExaDev/trilean#readme",
   "bugs": {
-    "url": "https://github.com/ExaDev/json-operators/issues"
+    "url": "https://github.com/ExaDev/trilean/issues"
   },
   "exports": {
     ".": {

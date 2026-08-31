@@ -1,4 +1,4 @@
-# json-operators
+# trilean
 
 A serialisable (JSON) representation of two related tree structures — a **predicate tree** (truth-valued) and an **expression tree** (value-valued) — together with an evaluator for both. The package is deliberately domain-agnostic: the schema layer never assumes anything about where data actually comes from. Every point of contact with a consumer's real data is an injected, opaque resolver function supplied by whoever embeds the package.
 
@@ -7,15 +7,15 @@ Typical use: representing business rules, eligibility conditions, pricing formul
 ## Getting started
 
 ```sh
-npm install json-operators
+npm install trilean
 # or
-pnpm add json-operators
+pnpm add trilean
 ```
 
 The package ships as dual ESM and CJS builds, is isomorphic (no assumptions about a Node, browser, or Workers runtime — see [Design principles](#design-principles)), and has zero runtime dependencies beyond [Zod](https://zod.dev).
 
 ```ts
-import { evaluatePredicate, type PredicateNode, type Resolvers } from "json-operators";
+import { evaluatePredicate, type PredicateNode, type Resolvers } from "trilean";
 
 const node: PredicateNode = {
   kind: "compare",
@@ -49,7 +49,7 @@ See [Evaluator entry points](#evaluator-entry-points) and [Resolvers](#resolvers
 
 ```sh
 pnpm install
-pnpm build          # tsdown -> dist/, then generates schemas/json-operators.schema.json
+pnpm build          # tsdown -> dist/, then generates schemas/trilean.schema.json
 pnpm test           # unit suite, against src/
 pnpm test:integration # multi-kind composition, schema-pipeline, and function-registry/delegate tests, against src/
 pnpm test:smoke     # builds first, then checks dist/ in both ESM and CJS plus the generated JSON Schema

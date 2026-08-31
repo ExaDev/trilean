@@ -12,7 +12,7 @@ function isUnknownArray(value: unknown): value is unknown[] {
 }
 
 /**
- * The exact worked example from README.md's "Worked example" section: `isActive` equals `1` AND `sum(items.amount)` -- the literal `fold` tree the `sum` derived-aggregate builder assembles -- is greater than `x + y`. Exported here, rather than defined separately in each consuming test file, so the unit-project gate (src/golden-examples.test.ts) and the Cloudflare Workers re-run (test/workers/json-operators.test.ts) share one byte-identical fixture and can never silently drift apart.
+ * The exact worked example from README.md's "Worked example" section: `isActive` equals `1` AND `sum(items.amount)` -- the literal `fold` tree the `sum` derived-aggregate builder assembles -- is greater than `x + y`. Exported here, rather than defined separately in each consuming test file, so the unit-project gate (src/golden-examples.test.ts) and the Cloudflare Workers re-run (test/workers/trilean.test.ts) share one byte-identical fixture and can never silently drift apart.
  */
 export const goldenExampleTree: PredicateNode = {
   kind: "and",

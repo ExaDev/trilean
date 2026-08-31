@@ -1,4 +1,4 @@
-// Generates schemas/json-operators.schema.json from the package's own Zod schemas via z.toJSONSchema() (https://zod.dev/json-schema). Run as part of `pnpm build` (see package.json's "_build" script), so schemas/ is always fresh for a real `npm publish` -- prepublishOnly runs the full build, not tsdown alone.
+// Generates schemas/trilean.schema.json from the package's own Zod schemas via z.toJSONSchema() (https://zod.dev/json-schema). Run as part of `pnpm build` (see package.json's "_build" script), so schemas/ is always fresh for a real `npm publish` -- prepublishOnly runs the full build, not tsdown alone.
 //
 // Imports from the freshly-built ../dist/tree.js rather than ../dist/index.js: tsdown's glob multi-entry config (tsdown.config.ts) builds one output file per top-level src/*.ts module, and PredicateNodeSchema/ExpressionNodeSchema both live in src/tree.ts alone (they are mutually recursive via z.lazy(), which is exactly why they are co-located there rather than split across files -- see src/tree.ts's own top comment).
 //
@@ -21,7 +21,7 @@ import { ExpressionNodeSchema, PredicateNodeSchema } from "../dist/tree.js";
 const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(here, "..");
 const schemasDir = join(repoRoot, "schemas");
-const outputPath = join(schemasDir, "json-operators.schema.json");
+const outputPath = join(schemasDir, "trilean.schema.json");
 
 const registry = z.registry<z.core.JSONSchemaMeta>();
 registry.add(PredicateNodeSchema, { id: "PredicateNode" });
