@@ -53,7 +53,7 @@
   },
   "scripts": {
     "build": "turbo run _build",
-    "_build": "tsdown && node scripts/generate-json-schema.mjs",
+    "_build": "tsdown && tsx scripts/generate-json-schema.ts",
     "lint": "turbo run _lint",
     "_lint": "eslint . --fix --cache --max-warnings 0",
     "typecheck": "turbo run _typecheck",
@@ -107,6 +107,7 @@
     "publint": "^0.3.24",
     "semantic-release": "^25.0.9",
     "tsdown": "^0.22.14",
+    "tsx": "^4.23.13",
     "turbo": "^2.10.12",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.68.0",

@@ -26,7 +26,7 @@
     },
     "_test:smoke": {
       "dependsOn": ["_build"],
-      "inputs": ["src/**", "tsdown.config.ts", "package.json", "vitest.config.ts", "vitest.smoke.config.ts", "test/smoke.test.mjs"],
+      "inputs": ["src/**", "tsdown.config.ts", "package.json", "vitest.config.ts", "vitest.smoke.config.ts", "test/smoke.test.ts"],
       "outputs": []
     },
     "_test:workers": {
