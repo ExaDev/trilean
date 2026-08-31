@@ -3,10 +3,12 @@
   "globalDependencies": ["pnpm-lock.yaml"],
   "tasks": {
     "_typecheck": {
+      "dependsOn": ["_build"],
       "inputs": ["$TURBO_DEFAULT$", "tsconfig.json", "tsconfig.node.json"],
       "outputs": []
     },
     "_lint": {
+      "dependsOn": ["_build"],
       "inputs": ["$TURBO_DEFAULT$", "eslint.config.ts"],
       "outputs": [".eslintcache"]
     },
