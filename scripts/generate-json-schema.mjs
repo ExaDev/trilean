@@ -47,7 +47,10 @@ const combined = {
     ExpressionNode: expressionNodeDef,
     ...(schemas.__shared?.$defs ?? {}),
   },
-  oneOf: [{ $ref: "#/$defs/PredicateNode" }, { $ref: "#/$defs/ExpressionNode" }],
+  oneOf: [
+    { $ref: "#/$defs/PredicateNode" },
+    { $ref: "#/$defs/ExpressionNode" },
+  ],
 };
 
 mkdirSync(schemasDir, { recursive: true });
