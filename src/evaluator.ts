@@ -1,5 +1,9 @@
-import type { ComputedValue, DurationUnit } from "./computed-value";
-import { unitsEqual } from "./computed-value";
+import type { ComputedValue, DurationUnit, Unit } from "./computed-value";
+import {
+  combineUnitsForDivide,
+  combineUnitsForMultiply,
+  unitsEqual,
+} from "./computed-value";
 import {
   type Evaluation,
   definite,
@@ -9,7 +13,12 @@ import {
 import type { FunctionRegistry } from "./functions";
 import { emptyFunctionRegistry } from "./functions";
 import type { EvaluationContext, Resolvers } from "./resolvers";
-import type { ComparisonOperator, ExpressionNode, PredicateNode } from "./tree";
+import type {
+  ArithmeticOperator,
+  ComparisonOperator,
+  ExpressionNode,
+  PredicateNode,
+} from "./tree";
 
 /**
  * `evaluatePredicateInternal` and `evaluateValueInternal` are co-located in this one file, rather than split across `predicate-evaluator.ts`/`value-evaluator.ts`, because they are mutually recursive: a predicate leaf (`compare`, `textCompare`, `memberOf`, `exists`) holds `ExpressionNode` operands, and an expression node (`conditional`'s `when`, a fold's `filter`) holds `PredicateNode` operands. Splitting them across modules would make each half import the other, and whichever module finished loading second would see the other's export as `undefined` at its own module-evaluation time -- a genuine circular-import TDZ hazard, not merely a style preference.
@@ -70,6 +79,11 @@ const millisecondsPerDurationUnit: Record<DurationUnit, number> = {
   d: 86_400_000,
 };
 
+/** Normalises a `duration`'s magnitude to milliseconds, the common base unit for combining or comparing two `duration`s (or an `instant` and a `duration`) of potentially different `DurationUnit`s -- shared by `compareValues`'s own `duration` branch below and by the temporal arithmetic further down. */
+function toMilliseconds(value: number, unit: DurationUnit): number {
+  return value * millisecondsPerDurationUnit[unit];
+}
+
 /** `compare`'s two operands: valid kinds are `number` (matching units required), `instant` (ordered by parsed epoch millisecond), or `duration` (ordered by magnitude normalised to milliseconds) -- `text` is never valid here (see `textCompare`), and a kind mismatch between the two operands is `wrong-type`. Narrowing `right` against a literal `left.kind` case (rather than asserting it) is what lets both sides stay properly typed with no `as`. */
 function compareValues(
   op: ComparisonOperator,
@@ -120,13 +134,220 @@ function compareValues(
       return definite(
         applyComparisonOperator(
           op,
-          left.value * millisecondsPerDurationUnit[left.unit],
-          right.value * millisecondsPerDurationUnit[right.unit],
+          toMilliseconds(left.value, left.unit),
+          toMilliseconds(right.value, right.unit),
         ),
       );
     default:
       throw new Error("unreachable computed-value kind");
   }
+}
+
+/** `power`/`modulo` have no defined unit-combination rule in this design (unlike `add`/`subtract`'s "identical units" requirement or `multiply`/`divide`'s dimensional-exponent combination) -- scoping them to dimensionless operands avoids inventing an unspecified unit-scaling semantics for a fractional or runtime-determined exponent. */
+function isDimensionless(unit: Unit | undefined): boolean {
+  return unitsEqual(unit, undefined);
+}
+
+/** `negate` is never sugar for "zero minus the value" (see the `arithmetic`/`negate` section of README.md) -- a `duration`'s magnitude is negated directly, in its own original unit, with no subtraction or millisecond normalisation involved. */
+function applyNegate(operand: ComputedValue): Evaluation<ComputedValue> {
+  switch (operand.kind) {
+    case "number":
+      return definite({
+        kind: "number",
+        value: -operand.value,
+        unit: operand.unit,
+      });
+    case "duration":
+      return definite({
+        kind: "duration",
+        value: -operand.value,
+        unit: operand.unit,
+      });
+    case "text":
+    case "instant":
+      return indeterminate(
+        "wrong-type",
+        `cannot negate a '${operand.kind}' value`,
+      );
+    default:
+      throw new Error("unreachable computed-value kind");
+  }
+}
+
+function applyArithmeticOnNumbers(
+  op: ArithmeticOperator,
+  left: Extract<ComputedValue, { kind: "number" }>,
+  right: Extract<ComputedValue, { kind: "number" }>,
+): Evaluation<ComputedValue> {
+  switch (op) {
+    case "add":
+      if (!unitsEqual(left.unit, right.unit)) {
+        return indeterminate(
+          "wrong-type",
+          "cannot add numbers with incompatible units",
+        );
+      }
+      return definite({
+        kind: "number",
+        value: left.value + right.value,
+        unit: left.unit,
+      });
+    case "subtract":
+      if (!unitsEqual(left.unit, right.unit)) {
+        return indeterminate(
+          "wrong-type",
+          "cannot subtract numbers with incompatible units",
+        );
+      }
+      return definite({
+        kind: "number",
+        value: left.value - right.value,
+        unit: left.unit,
+      });
+    case "multiply":
+      return definite({
+        kind: "number",
+        value: left.value * right.value,
+        unit: combineUnitsForMultiply(left.unit, right.unit),
+      });
+    case "divide":
+      if (right.value === 0) {
+        return indeterminate("domain-error", "division by zero");
+      }
+      return definite({
+        kind: "number",
+        value: left.value / right.value,
+        unit: combineUnitsForDivide(left.unit, right.unit),
+      });
+    case "power":
+      if (!isDimensionless(left.unit) || !isDimensionless(right.unit)) {
+        return indeterminate(
+          "wrong-type",
+          "'power' requires dimensionless operands",
+        );
+      }
+      if (left.value < 0 && !Number.isInteger(right.value)) {
+        return indeterminate(
+          "domain-error",
+          "a negative base raised to a non-integer power is not a real number",
+        );
+      }
+      return definite({ kind: "number", value: left.value ** right.value });
+    case "modulo":
+      if (!isDimensionless(left.unit) || !isDimensionless(right.unit)) {
+        return indeterminate(
+          "wrong-type",
+          "'modulo' requires dimensionless operands",
+        );
+      }
+      if (right.value === 0) {
+        return indeterminate("domain-error", "modulo by zero");
+      }
+      return definite({ kind: "number", value: left.value % right.value });
+    default:
+      throw new Error("unreachable arithmetic operator");
+  }
+}
+
+/** The only same-kind, non-`number` arithmetic this design defines: two `duration`s combine by normalising both to milliseconds first (see `toMilliseconds`), reporting the result in milliseconds -- `multiply`/`divide`/`power`/`modulo` have no representable result unit for a `duration` squared or a dimensionless ratio, so they are `wrong-type` rather than invented. */
+function applyArithmeticOnDurations(
+  op: ArithmeticOperator,
+  left: Readonly<Extract<ComputedValue, { kind: "duration" }>>,
+  right: Readonly<Extract<ComputedValue, { kind: "duration" }>>,
+): Evaluation<ComputedValue> {
+  switch (op) {
+    case "add":
+      return definite({
+        kind: "duration",
+        value:
+          toMilliseconds(left.value, left.unit) +
+          toMilliseconds(right.value, right.unit),
+        unit: "ms",
+      });
+    case "subtract":
+      return definite({
+        kind: "duration",
+        value:
+          toMilliseconds(left.value, left.unit) -
+          toMilliseconds(right.value, right.unit),
+        unit: "ms",
+      });
+    case "multiply":
+    case "divide":
+    case "power":
+    case "modulo":
+      return indeterminate(
+        "wrong-type",
+        `arithmetic operator '${op}' is not defined between two 'duration' values`,
+      );
+    default:
+      throw new Error("unreachable arithmetic operator");
+  }
+}
+
+/**
+ * Dispatches `arithmetic` by operand kind. The three cross-kind temporal combinations this design defines (`instant - instant`, `instant + duration`, `duration + instant`) are checked explicitly first, in that order, against the exact operator each requires; any other combination touching an `instant` is `wrong-type` (see "Temporal values" in README.md -- e.g. adding two instants, or subtracting a `duration` from an `instant`, are deliberately *not* defined). Same-kind `duration`/`duration` combinations are delegated to `applyArithmeticOnDurations`; a `duration` paired with anything other than an `instant` or another `duration` is `wrong-type`. Everything remaining requires two `number` operands.
+ */
+function applyArithmetic(
+  op: ArithmeticOperator,
+  left: ComputedValue,
+  right: ComputedValue,
+): Evaluation<ComputedValue> {
+  if (
+    left.kind === "instant" &&
+    right.kind === "instant" &&
+    op === "subtract"
+  ) {
+    return definite({
+      kind: "duration",
+      value: Date.parse(left.value) - Date.parse(right.value),
+      unit: "ms",
+    });
+  }
+  if (left.kind === "instant" && right.kind === "duration" && op === "add") {
+    return definite({
+      kind: "instant",
+      value: new Date(
+        Date.parse(left.value) + toMilliseconds(right.value, right.unit),
+      ).toISOString(),
+    });
+  }
+  if (left.kind === "duration" && right.kind === "instant" && op === "add") {
+    return definite({
+      kind: "instant",
+      value: new Date(
+        Date.parse(right.value) + toMilliseconds(left.value, left.unit),
+      ).toISOString(),
+    });
+  }
+  if (left.kind === "instant" || right.kind === "instant") {
+    return indeterminate(
+      "wrong-type",
+      `arithmetic operator '${op}' is not defined between a '${left.kind}' and a '${right.kind}' value`,
+    );
+  }
+  if (left.kind === "duration" && right.kind === "duration") {
+    return applyArithmeticOnDurations(op, left, right);
+  }
+  if (left.kind === "duration" || right.kind === "duration") {
+    return indeterminate(
+      "wrong-type",
+      `arithmetic operator '${op}' is not defined between a '${left.kind}' and a '${right.kind}' value`,
+    );
+  }
+  if (left.kind !== "number") {
+    return indeterminate(
+      "wrong-type",
+      `arithmetic requires numeric operands; got a '${left.kind}' value`,
+    );
+  }
+  if (right.kind !== "number") {
+    return indeterminate(
+      "wrong-type",
+      `arithmetic requires numeric operands; got a '${right.kind}' value`,
+    );
+  }
+  return applyArithmeticOnNumbers(op, left, right);
 }
 
 async function evaluatePredicateInternal(
@@ -325,11 +546,50 @@ async function evaluateValueInternal(
       return definite(outcome);
     }
     case "numberLiteral":
+      return definite({ kind: "number", value: node.value, unit: node.unit });
     case "textLiteral":
+      return definite({ kind: "text", value: node.value });
     case "instantLiteral":
+      return definite({ kind: "instant", value: node.value });
     case "durationLiteral":
-    case "arithmetic":
-    case "negate":
+      return definite({
+        kind: "duration",
+        value: node.value,
+        unit: node.unit,
+      });
+    case "arithmetic": {
+      const [left, right] = await Promise.all([
+        evaluateValueInternal(
+          node.left,
+          context,
+          resolvers,
+          accumulator,
+          functions,
+        ),
+        evaluateValueInternal(
+          node.right,
+          context,
+          resolvers,
+          accumulator,
+          functions,
+        ),
+      ]);
+      // Unlike `and`/`or` (see `combineAnd`/`combineOr` above), arithmetic has no absorbing value: any indeterminate operand always makes the whole node indeterminate, regardless of what the other operand would have been, tie-broken left before right per the tie-break rule.
+      if (left.status === "indeterminate") return left;
+      if (right.status === "indeterminate") return right;
+      return applyArithmetic(node.op, left.value, right.value);
+    }
+    case "negate": {
+      const operand = await evaluateValueInternal(
+        node.operand,
+        context,
+        resolvers,
+        accumulator,
+        functions,
+      );
+      if (operand.status === "indeterminate") return operand;
+      return applyNegate(operand.value);
+    }
     case "lookup":
     case "conditional":
     case "fold":
