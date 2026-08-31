@@ -483,6 +483,35 @@ function evaluateValue(
 ): Promise<Evaluation<ComputedValue>>;
 ```
 
+Both are exported directly, bound to an empty function registry — under them, any [`call`](#call) node is `wrong-type`. The registry a `call` resolves against is fixed at evaluator construction time rather than passed per evaluation (unlike `resolvers`, which are supplied fresh on every call), so supplying one means building a bound pair:
+
+```ts
+type FunctionRegistry = Record<
+  string,
+  (args: readonly ComputedValue[]) => ComputedValue | { domainError: string }
+>;
+
+function createEvaluator(options: { functions?: FunctionRegistry }): {
+  evaluatePredicate: (node: PredicateNode, context: EvaluationContext, resolvers: Resolvers) => Promise<Evaluation<boolean>>;
+  evaluateValue: (node: ExpressionNode, context: EvaluationContext, resolvers: Resolvers) => Promise<Evaluation<ComputedValue>>;
+};
+```
+
+A registered function signals an argument outside its domain by *returning* `{ domainError: message }` rather than throwing, which is what keeps `call` inside the same three-outcome model as every other node kind (see [The evaluation model](#the-evaluation-model)); only the registry's own keys count as registered names, so a tree naming an inherited `Object.prototype` member is `wrong-type` like any other unregistered name.
+
+```ts
+const { evaluateValue } = createEvaluator({
+  functions: {
+    squareRoot: (args) => {
+      const [arg] = args;
+      if (arg?.kind !== "number") return { domainError: "squareRoot requires one number argument" };
+      if (arg.value < 0) return { domainError: "squareRoot of a negative number is not a real number" };
+      return { kind: "number", value: Math.sqrt(arg.value) };
+    },
+  },
+});
+```
+
 ## Indeterminacy reference
 
 How each reason category can arise, per node kind. "Propagates" means: an indeterminate operand/sub-result, with no other rule overriding it, makes the whole node indeterminate with that same reason (subject to the tie-break rule in [The evaluation model](#the-evaluation-model) when more than one candidate reason is present, and to the absorbing-value exceptions called out explicitly below).
