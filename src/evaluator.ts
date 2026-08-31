@@ -87,6 +87,33 @@ function toMilliseconds(value: number, unit: DurationUnit): number {
   return value * millisecondsPerDurationUnit[unit];
 }
 
+/** `Date.parse` reports an unparseable timestamp as `NaN`, and every downstream use of that `NaN` then fails silently rather than loudly: every comparison against it is `false` (so `neq` between two unparseable instants would come back definitely `true`), a subtraction yields a `NaN`-magnitude duration, and `new Date(NaN).toISOString()` throws a `RangeError` outright -- a thrown exception for a data-quality problem, which this design never does (see `Evaluation<T>`'s own doc comment in evaluation.ts). An `instant` whose string will not parse is a value the operation cannot use, so every caller below reports it as `wrong-type`, exactly like any other unusable operand. */
+function toEpochMilliseconds(value: string): number | undefined {
+  const epochMilliseconds = Date.parse(value);
+  return Number.isNaN(epochMilliseconds) ? undefined : epochMilliseconds;
+}
+
+function unparseableInstant(value: string): Evaluation<never> {
+  return indeterminate(
+    "wrong-type",
+    `'${value}' is not a parseable ISO-8601 timestamp`,
+  );
+}
+
+/** The representable timestamp range is finite, so a valid instant shifted by a large enough duration lands outside it, where `new Date(...).toISOString()` throws a `RangeError`. Checking the shifted date against the platform's own notion of a valid time value keeps that inside the three-outcome model as a `domain-error` -- an operation pushed outside its valid domain, the same category as division by zero -- and avoids hardcoding the range bound. */
+function instantFromEpochMilliseconds(
+  epochMilliseconds: number,
+): Evaluation<ComputedValue> {
+  const shifted = new Date(epochMilliseconds);
+  if (Number.isNaN(shifted.getTime())) {
+    return indeterminate(
+      "domain-error",
+      "the resulting instant falls outside the representable timestamp range",
+    );
+  }
+  return definite({ kind: "instant", value: shifted.toISOString() });
+}
+
 /** `compare`'s two operands: valid kinds are `number` (matching units required), `instant` (ordered by parsed epoch millisecond), or `duration` (ordered by magnitude normalised to milliseconds) -- `text` is never valid here (see `textCompare`), and a kind mismatch between the two operands is `wrong-type`. Narrowing `right` against a literal `left.kind` case (rather than asserting it) is what lets both sides stay properly typed with no `as`. */
 function compareValues(
   op: ComparisonOperator,
@@ -113,20 +140,19 @@ function compareValues(
         "wrong-type",
         "text values are not comparable via 'compare'; use 'textCompare'",
       );
-    case "instant":
+    case "instant": {
       if (right.kind !== "instant") {
         return indeterminate(
           "wrong-type",
           `cannot compare an 'instant' value with a '${right.kind}' value`,
         );
       }
-      return definite(
-        applyComparisonOperator(
-          op,
-          Date.parse(left.value),
-          Date.parse(right.value),
-        ),
-      );
+      const leftEpoch = toEpochMilliseconds(left.value);
+      if (leftEpoch === undefined) return unparseableInstant(left.value);
+      const rightEpoch = toEpochMilliseconds(right.value);
+      if (rightEpoch === undefined) return unparseableInstant(right.value);
+      return definite(applyComparisonOperator(op, leftEpoch, rightEpoch));
+    }
     case "duration":
       if (right.kind !== "duration") {
         return indeterminate(
@@ -216,16 +242,21 @@ function computeMembershipMatch(
         );
       }
       return definite(operand.value === candidate.value);
-    case "instant":
+    case "instant": {
       if (candidate.kind !== "instant") {
         return indeterminate(
           "wrong-type",
           `cannot compare an 'instant' value with a '${candidate.kind}' value for membership`,
         );
       }
-      return definite(
-        Date.parse(operand.value) === Date.parse(candidate.value),
-      );
+      const operandEpoch = toEpochMilliseconds(operand.value);
+      if (operandEpoch === undefined) return unparseableInstant(operand.value);
+      const candidateEpoch = toEpochMilliseconds(candidate.value);
+      if (candidateEpoch === undefined) {
+        return unparseableInstant(candidate.value);
+      }
+      return definite(operandEpoch === candidateEpoch);
+    }
     case "duration":
       if (candidate.kind !== "duration") {
         return indeterminate(
@@ -331,6 +362,13 @@ function applyArithmeticOnNumbers(
           "a negative base raised to a non-integer power is not a real number",
         );
       }
+      // A zero base with a negative exponent is a division by zero written the other way round, so it belongs in the same domain-error category rather than escaping as a definite (infinite) result.
+      if (left.value === 0 && right.value < 0) {
+        return indeterminate(
+          "domain-error",
+          "zero raised to a negative power is a division by zero",
+        );
+      }
       return definite({ kind: "number", value: left.value ** right.value });
     case "modulo":
       if (!isDimensionless(left.unit) || !isDimensionless(right.unit)) {
@@ -397,27 +435,29 @@ function applyArithmetic(
     right.kind === "instant" &&
     op === "subtract"
   ) {
+    const leftEpoch = toEpochMilliseconds(left.value);
+    if (leftEpoch === undefined) return unparseableInstant(left.value);
+    const rightEpoch = toEpochMilliseconds(right.value);
+    if (rightEpoch === undefined) return unparseableInstant(right.value);
     return definite({
       kind: "duration",
-      value: Date.parse(left.value) - Date.parse(right.value),
+      value: leftEpoch - rightEpoch,
       unit: "ms",
     });
   }
   if (left.kind === "instant" && right.kind === "duration" && op === "add") {
-    return definite({
-      kind: "instant",
-      value: new Date(
-        Date.parse(left.value) + toMilliseconds(right.value, right.unit),
-      ).toISOString(),
-    });
+    const leftEpoch = toEpochMilliseconds(left.value);
+    if (leftEpoch === undefined) return unparseableInstant(left.value);
+    return instantFromEpochMilliseconds(
+      leftEpoch + toMilliseconds(right.value, right.unit),
+    );
   }
   if (left.kind === "duration" && right.kind === "instant" && op === "add") {
-    return definite({
-      kind: "instant",
-      value: new Date(
-        Date.parse(right.value) + toMilliseconds(left.value, left.unit),
-      ).toISOString(),
-    });
+    const rightEpoch = toEpochMilliseconds(right.value);
+    if (rightEpoch === undefined) return unparseableInstant(right.value);
+    return instantFromEpochMilliseconds(
+      rightEpoch + toMilliseconds(left.value, left.unit),
+    );
   }
   if (left.kind === "instant" || right.kind === "instant") {
     return indeterminate(
@@ -789,7 +829,10 @@ async function evaluateValueInternal(
         if (result.status === "indeterminate") return result;
         args.push(result.value);
       }
-      const fn = functions[node.fn];
+      // `node.fn` comes off the serialised tree, which this design treats as data that may have been authored anywhere (see README.md's opening section), while `FunctionRegistry` is an ordinary object with `Object.prototype` on its chain. A bare index lookup would therefore resolve `toString`, `valueOf`, `constructor` and friends as though a consumer had registered them; only the registry's own keys count as registered function names.
+      const fn = Object.hasOwn(functions, node.fn)
+        ? functions[node.fn]
+        : undefined;
       if (fn === undefined) {
         return indeterminate(
           "wrong-type",

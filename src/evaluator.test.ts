@@ -308,6 +308,20 @@ describe("arithmetic domain errors", () => {
     expectIndeterminate(result, "domain-error");
   });
 
+  it("a zero base raised to a negative power is domain-error, not a definite infinity", async () => {
+    const result = await evaluateValue(
+      {
+        kind: "arithmetic",
+        op: "power",
+        left: { kind: "numberLiteral", value: 0 },
+        right: { kind: "numberLiteral", value: -1 },
+      },
+      undefined,
+      resolvers,
+    );
+    expectIndeterminate(result, "domain-error");
+  });
+
   it("power and modulo are otherwise ordinary numeric operations", async () => {
     const power = await evaluateValue(
       {
@@ -503,6 +517,97 @@ describe("temporal arithmetic -- wrong-type violations", () => {
       resolvers,
     );
     expectIndeterminate(result, "wrong-type");
+  });
+
+  /** An `instant`'s value is an opaque string until something parses it: nothing in the schema layer checks that it really is an ISO-8601 timestamp, and a resolver can return whatever its backing data holds. Every operation that has to parse one must therefore keep an unparseable value inside the three-outcome model rather than letting `Date.parse`'s `NaN` leak onward -- silently, as a definite result computed from `NaN`, or loudly, as a thrown `RangeError` from `toISOString`. */
+  describe("an unparseable instant is wrong-type, never a throw or a NaN-derived definite result", () => {
+    const unparseable: ExpressionNode = {
+      kind: "instantLiteral",
+      value: "not-a-timestamp",
+    };
+    const parseable: ExpressionNode = {
+      kind: "instantLiteral",
+      value: "2026-01-01T00:00:00.000Z",
+    };
+    const oneHour: ExpressionNode = {
+      kind: "durationLiteral",
+      value: 1,
+      unit: "h",
+    };
+
+    it("instant - instant", async () => {
+      const result = await evaluateValue(
+        {
+          kind: "arithmetic",
+          op: "subtract",
+          left: unparseable,
+          right: parseable,
+        },
+        undefined,
+        resolvers,
+      );
+      expectIndeterminate(result, "wrong-type");
+    });
+
+    it("instant + duration", async () => {
+      const result = await evaluateValue(
+        { kind: "arithmetic", op: "add", left: unparseable, right: oneHour },
+        undefined,
+        resolvers,
+      );
+      expectIndeterminate(result, "wrong-type");
+    });
+
+    it("duration + instant", async () => {
+      const result = await evaluateValue(
+        { kind: "arithmetic", op: "add", left: oneHour, right: unparseable },
+        undefined,
+        resolvers,
+      );
+      expectIndeterminate(result, "wrong-type");
+    });
+
+    it("compare -- neq between two unparseable instants is not definitely true", async () => {
+      const result = await evaluatePredicate(
+        {
+          kind: "compare",
+          op: "neq",
+          left: unparseable,
+          right: unparseable,
+        },
+        undefined,
+        resolvers,
+      );
+      expectIndeterminate(result, "wrong-type");
+    });
+
+    it("memberOf -- an unparseable candidate is not a definite non-match", async () => {
+      const result = await evaluatePredicate(
+        {
+          kind: "memberOf",
+          op: "in",
+          operand: parseable,
+          candidates: [unparseable],
+        },
+        undefined,
+        resolvers,
+      );
+      expectIndeterminate(result, "wrong-type");
+    });
+
+    it("shifting a parseable instant beyond the representable timestamp range is domain-error", async () => {
+      const result = await evaluateValue(
+        {
+          kind: "arithmetic",
+          op: "add",
+          left: parseable,
+          right: { kind: "durationLiteral", value: 1e18, unit: "d" },
+        },
+        undefined,
+        resolvers,
+      );
+      expectIndeterminate(result, "domain-error");
+    });
   });
 
   it("multiplying two durations is wrong-type (no representable result unit)", async () => {
@@ -1556,6 +1661,11 @@ describe("accumulator", () => {
   });
 
   it("resolves to the running value inside a reduce fold's own combine expression", async () => {
+    // The collection has to genuinely resolve to items: over an empty one `combine` is never evaluated at all and the fold returns `initial` untouched, so an assertion against `initial`'s own value would hold whether or not `accumulator` resolved correctly. Stepping the accumulator once per item is what makes the expected value depend on it.
+    const twoItemResolvers: Resolvers = {
+      ...resolvers,
+      resolveCollection: async () => Promise.resolve([{}, {}]),
+    };
     const result = await evaluateValue(
       {
         kind: "fold",
@@ -1563,13 +1673,18 @@ describe("accumulator", () => {
         combiner: {
           mode: "reduce",
           initial: { kind: "numberLiteral", value: 5 },
-          combine: { kind: "accumulator" },
+          combine: {
+            kind: "arithmetic",
+            op: "add",
+            left: { kind: "accumulator" },
+            right: { kind: "numberLiteral", value: 1 },
+          },
         },
       },
       undefined,
-      resolvers,
+      twoItemResolvers,
     );
-    expectDefinite(result, { kind: "number", value: 5 });
+    expectDefinite(result, { kind: "number", value: 7 });
   });
 });
 
@@ -1650,6 +1765,19 @@ describe("call", () => {
     );
     expectIndeterminate(result, "wrong-type");
   });
+
+  /** A `FunctionRegistry` is an ordinary object, so `Object.prototype`'s own members answer a bare index lookup on it. A tree naming one of those is naming a function nobody registered, and must be reported as such rather than reaching a prototype method -- which would either throw or produce a "definite" result that is not a `ComputedValue` at all. */
+  it.each(["toString", "valueOf", "constructor", "hasOwnProperty"])(
+    "treats the inherited Object.prototype member '%s' as an unregistered function name",
+    async (fn) => {
+      const result = await evaluateValue(
+        { kind: "call", fn, args: [] },
+        undefined,
+        resolvers,
+      );
+      expectIndeterminate(result, "wrong-type");
+    },
+  );
 
   it("is domain-error when the registered function reports one", async () => {
     const { evaluateValue: evaluate } = createEvaluator({
