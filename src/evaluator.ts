@@ -12,6 +12,7 @@ import {
 } from "./evaluation";
 import type { FunctionRegistry } from "./functions";
 import { emptyFunctionRegistry } from "./functions";
+import type { JsonValue } from "./json-value";
 import type { EvaluationContext, Resolvers } from "./resolvers";
 import type {
   ArithmeticOperator,
@@ -183,6 +184,60 @@ function compareText(
     }
     default:
       throw new Error("unreachable text comparison operator");
+  }
+}
+
+/** `memberOf`'s own value-equality test between two computed values -- kind-agnostic across `number`/`text`/`instant`/`duration` (see the `memberOf` section of README.md, and its "Derived aggregates" note that this equality is kind-agnostic across every computed-value kind), unlike `compare`'s own `eq`, which rejects a `text` operand outright and directs callers to `textCompare` instead. A kind mismatch, or a `number` pair with an incompatible unit, is `wrong-type` -- never simply "not equal". Narrowing `candidate` against a literal `operand.kind` case (rather than asserting it) is the same technique `compareValues` uses above. */
+function computeMembershipMatch(
+  operand: ComputedValue,
+  candidate: ComputedValue,
+): Evaluation<boolean> {
+  switch (operand.kind) {
+    case "number":
+      if (candidate.kind !== "number") {
+        return indeterminate(
+          "wrong-type",
+          `cannot compare a 'number' value with a '${candidate.kind}' value for membership`,
+        );
+      }
+      if (!unitsEqual(operand.unit, candidate.unit)) {
+        return indeterminate(
+          "wrong-type",
+          "cannot compare numbers with incompatible units for membership",
+        );
+      }
+      return definite(operand.value === candidate.value);
+    case "text":
+      if (candidate.kind !== "text") {
+        return indeterminate(
+          "wrong-type",
+          `cannot compare a 'text' value with a '${candidate.kind}' value for membership`,
+        );
+      }
+      return definite(operand.value === candidate.value);
+    case "instant":
+      if (candidate.kind !== "instant") {
+        return indeterminate(
+          "wrong-type",
+          `cannot compare an 'instant' value with a '${candidate.kind}' value for membership`,
+        );
+      }
+      return definite(
+        Date.parse(operand.value) === Date.parse(candidate.value),
+      );
+    case "duration":
+      if (candidate.kind !== "duration") {
+        return indeterminate(
+          "wrong-type",
+          `cannot compare a 'duration' value with a '${candidate.kind}' value for membership`,
+        );
+      }
+      return definite(
+        toMilliseconds(operand.value, operand.unit) ===
+          toMilliseconds(candidate.value, candidate.unit),
+      );
+    default:
+      throw new Error("unreachable computed-value kind");
   }
 }
 
@@ -393,6 +448,45 @@ function applyArithmetic(
   return applyArithmeticOnNumbers(op, left, right);
 }
 
+/** A collection candidate paired with its own pre-filter outcome: `"include"`/`"exclude"` when `filter` resolved definitely, or the filter's own indeterminate `Evaluation` when it did not (there is no third, definite-but-neither branch -- see `resolveParticipatingItems` below). */
+interface ResolvedCollectionItem {
+  readonly item: unknown;
+  readonly filterOutcome: "include" | "exclude" | Evaluation<never>;
+}
+
+/**
+ * Collection resolution shared by the quantifiers (`some`/`every`, below) and by `fold` (a later phase): resolves the opaque `collection` reference to its concrete candidate list via `resolvers.resolveCollection`, then evaluates each candidate's optional `filter` with that candidate as its own evaluation context and the accumulator reset to `undefined` -- see the README's "Evaluation context" and "Pre-filtering which items participate" sections. Deliberately stops short of deciding how an indeterminate filter combines with the rest of the surrounding node: `some`/`every` fold a filter-indeterminate item in as its own vote via the surrounding OR/AND absorption, while `fold` has no absorbing value at all and goes indeterminate outright on the same condition -- the two callers need genuinely different combination logic over these same per-item outcomes, so this helper only produces the outcomes and leaves combining them to the caller.
+ */
+async function resolveParticipatingItems(
+  collection: JsonValue,
+  filter: PredicateNode | undefined,
+  // eslint-disable-next-line exadev/prefer-readonly-object-param -- see EvaluationContext's own doc comment in resolvers.ts
+  context: EvaluationContext,
+  resolvers: Readonly<Resolvers>,
+  functions: Readonly<FunctionRegistry>,
+): Promise<ResolvedCollectionItem[]> {
+  const candidates = await resolvers.resolveCollection(collection, context);
+  return Promise.all(
+    candidates.map(async (item): Promise<ResolvedCollectionItem> => {
+      if (filter === undefined) return { item, filterOutcome: "include" };
+      const filterResult = await evaluatePredicateInternal(
+        filter,
+        item,
+        resolvers,
+        undefined,
+        functions,
+      );
+      if (filterResult.status === "indeterminate") {
+        return { item, filterOutcome: filterResult };
+      }
+      return {
+        item,
+        filterOutcome: filterResult.value ? "include" : "exclude",
+      };
+    }),
+  );
+}
+
 async function evaluatePredicateInternal(
   node: PredicateNode,
   // eslint-disable-next-line exadev/prefer-readonly-object-param -- see EvaluationContext's own doc comment in resolvers.ts
@@ -527,12 +621,100 @@ async function evaluatePredicateInternal(
       if (right.status === "indeterminate") return right;
       return compareText(node.op, left.value, right.value);
     }
-    case "memberOf":
-    case "exists":
+    case "memberOf": {
+      const operandResult = await evaluateValueInternal(
+        node.operand,
+        context,
+        resolvers,
+        accumulator,
+        functions,
+      );
+      if (operandResult.status === "indeterminate") return operandResult;
+
+      // Every candidate is evaluated concurrently; the scan below then walks the resolved outcomes in declared order, so a definite match short-circuits the *result* without ever needing to short-circuit the resolver calls themselves.
+      const candidateOutcomes = await Promise.all(
+        node.candidates.map(async (candidate): Promise<Evaluation<boolean>> => {
+          const candidateResult = await evaluateValueInternal(
+            candidate,
+            context,
+            resolvers,
+            accumulator,
+            functions,
+          );
+          if (candidateResult.status === "indeterminate") {
+            return candidateResult;
+          }
+          return computeMembershipMatch(
+            operandResult.value,
+            candidateResult.value,
+          );
+        }),
+      );
+
+      for (const outcome of candidateOutcomes) {
+        if (outcome.status === "definite" && outcome.value) {
+          return definite(node.op === "in");
+        }
+      }
+      // No definite match: indeterminate (first candidate's reason, per the tie-break rule) if any candidate was itself indeterminate or of an incompatible kind/unit; otherwise every candidate was a definite non-match. An empty `candidates` array falls straight through to this same definite non-match result, with no separate empty-list branch needed.
+      const reason = firstIndeterminate(...candidateOutcomes);
+      if (reason !== undefined) return { status: "indeterminate", reason };
+      return definite(node.op === "notIn");
+    }
+    case "exists": {
+      const operandResult = await evaluateValueInternal(
+        node.operand,
+        context,
+        resolvers,
+        accumulator,
+        functions,
+      );
+      // The data point resolved to *something* unless it was flatly not-found; a resolved-but-unusable value (wrong-type/domain-error) still counts as existing. `exists` is never itself indeterminate.
+      if (
+        operandResult.status === "indeterminate" &&
+        operandResult.reason.code === "not-found"
+      ) {
+        return definite(false);
+      }
+      return definite(true);
+    }
     case "some":
-    case "every":
+    case "every": {
+      const participating = await resolveParticipatingItems(
+        node.collection,
+        node.filter,
+        context,
+        resolvers,
+        functions,
+      );
+      // A filter-excluded item contributes no vote at all (as if never in the collection); a filter-indeterminate item contributes its own indeterminate vote, letting a different item's clean match still absorb it -- contrast with `fold`, which has no absorbing value and goes indeterminate outright on the same condition.
+      const votes = (
+        await Promise.all(
+          participating.map(
+            async ({
+              item,
+              filterOutcome,
+            }): Promise<Evaluation<boolean> | undefined> => {
+              if (filterOutcome === "exclude") return undefined;
+              if (filterOutcome !== "include") return filterOutcome;
+              return evaluatePredicateInternal(
+                node.item,
+                item,
+                resolvers,
+                undefined,
+                functions,
+              );
+            },
+          ),
+        )
+      ).filter((vote): vote is Evaluation<boolean> => vote !== undefined);
+      // `some` is an OR fold seeded at `false`; `every` an AND fold seeded at `true` -- exactly `anyOf`/`allOf`'s own pairwise fold, so an empty `votes` list (an empty collection, or every candidate filtered out) already reduces to `anyOf([])`/`allOf([])`'s own identity values with no separate empty-collection branch.
+      const combine = node.kind === "some" ? combineOr : combineAnd;
+      const identity = node.kind === "some" ? definite(false) : definite(true);
+      return votes.reduce<Evaluation<boolean>>(combine, identity);
+    }
     default:
-      throw new Error(`not yet implemented: ${node.kind}`);
+      throw new Error("unreachable predicate node kind");
   }
 }
 
