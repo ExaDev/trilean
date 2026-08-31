@@ -181,6 +181,40 @@ jobs:
         id: after
         run: echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
 
+  publish-github-packages:
+    name: Publish mirror to GitHub Packages
+    needs: release
+    if: needs.release.outputs.published == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      packages: write
+      # Deliberately no id-token: write here -- GitHub Packages has no OIDC trusted-publishing exchange, and holding id-token: write makes pnpm attempt (and fail) that exchange anyway, which then breaks its fallback to the GITHUB_TOKEN this job actually authenticates with.
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main # the release commit semantic-release just pushed
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: pnpm
+          # Deliberately NOT setup-node's own registry-url/scope inputs: those write an @exadev:registry=https://npm.pkg.github.com/ *install-time* scope-to-registry mapping into .npmrc, which would redirect this package's own @exadev-scoped devDependency installs (e.g. @exadev/eslint-config, published only to the default registry) through GitHub Packages too, breaking `pnpm install` below. publishConfig.registry (set explicitly below) already fully determines pnpm publish's *target* registry on its own; only the host-scoped auth token below is genuinely needed, added after install so install never sees any @exadev scope mapping at all.
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - name: Rewrite the package name for the GitHub Packages mirror
+        # trilean itself stays unscoped on npmjs.org (see package.json's own "name"), but GitHub Packages' npm registry structurally requires every package it hosts to be scoped to the owning org -- an unscoped `trilean` publish there is rejected outright. This job's own package.json rewrite (never committed -- it runs against the checkout's working tree only) is what lets the same build ship under both names without the primary npm publish above ever carrying the @exadev scope.
+        run: npm pkg set name="@exadev/trilean"
+      - name: Rewrite the registry for the GitHub Packages mirror
+        # publishConfig.registry has to be overridden explicitly: without it, pnpm publish would target registry.npmjs.org -- the registry the primary, unscoped npm publish already used in the release job above -- instead of GitHub Packages.
+        run: npm pkg set publishConfig.registry="https://npm.pkg.github.com"
+      - name: Configure the GitHub Packages auth token for publish only
+        run: echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> ~/.npmrc
+      - run: pnpm publish --access public --no-git-checks
+
   attest:
     name: Attest SBOM and build provenance
     needs: release
