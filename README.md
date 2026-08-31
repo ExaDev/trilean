@@ -51,6 +51,7 @@ See [Evaluator entry points](#evaluator-entry-points) and [Resolvers](#resolvers
 pnpm install
 pnpm build          # tsdown -> dist/, then generates schemas/json-operators.schema.json
 pnpm test           # unit suite, against src/
+pnpm test:integration # multi-kind composition, schema-pipeline, and function-registry/delegate tests, against src/
 pnpm test:smoke     # asserts the built dist/ exports resolve correctly in both ESM and CJS
 pnpm test:workers   # runs the evaluator inside a real Cloudflare Workers isolate
 pnpm lint

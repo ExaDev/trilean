@@ -88,6 +88,20 @@ jobs:
           label: unit
           fail-on-error: false
 
+  test-integration:
+    name: Integration test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test:integration
+
   test-smoke:
     name: Smoke test
     runs-on: ubuntu-latest
@@ -119,7 +133,7 @@ jobs:
 
   release:
     name: Release
-    needs: [commitlint, lint, typecheck, test, test-smoke, test-workers]
+    needs: [commitlint, lint, typecheck, test, test-integration, test-smoke, test-workers]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 15

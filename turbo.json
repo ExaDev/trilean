@@ -18,6 +18,10 @@
       "inputs": ["src/**", "vitest.config.ts", "vitest.unit.config.ts", "package.json"],
       "outputs": ["coverage/**"]
     },
+    "_test:integration": {
+      "inputs": ["src/**", "package.json", "vitest.config.ts", "vitest.integration.config.ts", "test/integration/**"],
+      "outputs": []
+    },
     "_test:smoke": {
       "inputs": ["src/**", "tsdown.config.ts", "package.json", "vitest.config.ts", "vitest.smoke.config.ts", "test/smoke.test.mjs"],
       "outputs": []

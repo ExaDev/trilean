@@ -5,6 +5,7 @@ export default defineConfig({
   test: {
     projects: [
       "./vitest.unit.config.ts",
+      "./vitest.integration.config.ts",
       "./vitest.smoke.config.ts",
       "./vitest.workers.config.ts",
     ],

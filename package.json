@@ -62,6 +62,8 @@
     "_test": "vitest run --project unit",
     "test:coverage": "turbo run _test:coverage",
     "_test:coverage": "vitest run --project unit --coverage",
+    "test:integration": "turbo run _test:integration",
+    "_test:integration": "vitest run --project integration",
     "test:smoke": "turbo run _test:smoke",
     "_test:smoke": "vitest run --project smoke",
     "test:workers": "turbo run _test:workers",
