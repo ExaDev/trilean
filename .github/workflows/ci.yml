@@ -57,9 +57,8 @@ jobs:
           node-version: '22'
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      # turbo's _typecheck task depends on _build, so this already builds dist/ before type-checking. attw (are-the-types-wrong) needs that same dist/, which is why it runs straight after with no separate build step.
       - run: pnpm typecheck
-      # attw (are-the-types-wrong) needs the built dist/, so build first. Mirrors the prepublishOnly check, now enforced on every push rather than only at publish.
-      - run: pnpm build
       - run: pnpm exec attw --pack
 
   test:
