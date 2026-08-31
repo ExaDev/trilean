@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { evaluatePredicate, evaluateValue } from "./evaluator";
+import { createEvaluator, evaluatePredicate, evaluateValue } from "./evaluator";
 import type { Evaluation } from "./evaluation";
+import type { FunctionRegistry } from "./functions";
 import type { ExpressionNode, PredicateNode } from "./tree";
 import type { Resolvers } from "./resolvers";
 
@@ -1233,49 +1234,548 @@ describe("some, every", () => {
   });
 });
 
-/** Early integration checkpoint for the README "Worked example" golden example -- just the `isActive equals 1` half (a `compare`/`eq` node over a `reference` and a `numberLiteral`), against the same resolvers shown there. The full golden example, including the `fold` half, arrives once `fold` itself is implemented. */
-describe("golden example checkpoint (isActive equals 1)", () => {
-  it("a compare/eq node comparing a reference against a numberLiteral composes correctly", async () => {
+describe("lookup", () => {
+  const lookupResolvers: Resolvers = {
+    resolveValue: async (key) => {
+      if (key === "region") {
+        return Promise.resolve({
+          found: true,
+          value: { kind: "text", value: "north" },
+        });
+      }
+      if (key === "tier") {
+        return Promise.resolve({
+          found: true,
+          value: { kind: "number", value: 2 },
+        });
+      }
+      return Promise.resolve({ found: false });
+    },
+    resolveLookup: async (table) =>
+      Promise.resolve(
+        table === "pricing"
+          ? { found: true, value: { kind: "number", value: 42 } }
+          : { found: false },
+      ),
+    resolveCollection: async () => Promise.resolve([]),
+  };
+
+  it("evaluates every key and passes its resolved value to resolveLookup, in declared order", async () => {
+    const receivedKeys: unknown[] = [];
+    const trackingResolvers: Resolvers = {
+      ...lookupResolvers,
+      resolveLookup: async (table, keys, context) => {
+        receivedKeys.push(...keys);
+        return lookupResolvers.resolveLookup(table, keys, context);
+      },
+    };
+    const result = await evaluateValue(
+      {
+        kind: "lookup",
+        table: "pricing",
+        keys: [
+          { kind: "reference", key: "region" },
+          { kind: "reference", key: "tier" },
+        ],
+      },
+      undefined,
+      trackingResolvers,
+    );
+    expect(receivedKeys).toEqual([
+      { kind: "text", value: "north" },
+      { kind: "number", value: 2 },
+    ]);
+    expectDefinite(result, { kind: "number", value: 42 });
+  });
+
+  it("is not-found when the resolver reports no match", async () => {
+    const result = await evaluateValue(
+      {
+        kind: "lookup",
+        table: "unknown-table",
+        keys: [{ kind: "reference", key: "region" }],
+      },
+      undefined,
+      lookupResolvers,
+    );
+    expectIndeterminate(result, "not-found");
+  });
+});
+
+describe("conditional", () => {
+  const whenEquals = (left: number, right: number): PredicateNode => ({
+    kind: "compare",
+    op: "eq",
+    left: { kind: "numberLiteral", value: left },
+    right: { kind: "numberLiteral", value: right },
+  });
+
+  it("evaluates the then of the first case whose when is definitely true, skipping earlier false cases", async () => {
+    const result = await evaluateValue(
+      {
+        kind: "conditional",
+        cases: [
+          {
+            when: whenEquals(1, 2),
+            then: { kind: "numberLiteral", value: 100 },
+          },
+          {
+            when: whenEquals(1, 1),
+            then: { kind: "numberLiteral", value: 200 },
+          },
+          {
+            when: whenEquals(1, 1),
+            then: { kind: "numberLiteral", value: 300 },
+          },
+        ],
+        fallback: { kind: "numberLiteral", value: 0 },
+      },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(result, { kind: "number", value: 200 });
+  });
+
+  it("evaluates fallback when no case matches", async () => {
+    const result = await evaluateValue(
+      {
+        kind: "conditional",
+        cases: [
+          {
+            when: whenEquals(1, 2),
+            then: { kind: "numberLiteral", value: 100 },
+          },
+        ],
+        fallback: { kind: "numberLiteral", value: 999 },
+      },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(result, { kind: "number", value: 999 });
+  });
+
+  it("an empty cases list always evaluates to fallback", async () => {
+    const result = await evaluateValue(
+      {
+        kind: "conditional",
+        cases: [],
+        fallback: { kind: "numberLiteral", value: 999 },
+      },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(result, { kind: "number", value: 999 });
+  });
+
+  it("never evaluates a later case's then once an earlier case has already matched", async () => {
+    let laterThenEvaluations = 0;
+    const trackingResolvers: Resolvers = {
+      ...resolvers,
+      resolveValue: async (key, context) => {
+        if (key === "later-then-marker") laterThenEvaluations += 1;
+        return resolvers.resolveValue(key, context);
+      },
+    };
+    const result = await evaluateValue(
+      {
+        kind: "conditional",
+        cases: [
+          {
+            when: whenEquals(1, 1),
+            then: { kind: "numberLiteral", value: 200 },
+          },
+        ],
+        fallback: { kind: "reference", key: "later-then-marker" },
+      },
+      undefined,
+      trackingResolvers,
+    );
+    expectDefinite(result, { kind: "number", value: 200 });
+    expect(laterThenEvaluations).toBe(0);
+  });
+});
+
+describe("fold", () => {
+  const foldResolvers: Resolvers = {
+    resolveValue: async (key, context) => {
+      if (
+        typeof key !== "string" ||
+        !isPlainRecord(context) ||
+        !(key in context)
+      ) {
+        return Promise.resolve({ found: false });
+      }
+      const value = context[key];
+      if (typeof value === "number") {
+        return Promise.resolve({
+          found: true,
+          value: { kind: "number", value },
+        });
+      }
+      if (typeof value === "string") {
+        return Promise.resolve({ found: true, value: { kind: "text", value } });
+      }
+      return Promise.resolve({ found: false });
+    },
+    resolveLookup: async () => Promise.resolve({ found: false }),
+    resolveCollection: async (collection) => {
+      if (collection === "amounts") {
+        return Promise.resolve([{ amount: 8 }, { amount: 12 }, { amount: 1 }]);
+      }
+      if (collection === "grouped") {
+        return Promise.resolve([
+          { group: "keep", amount: 5 },
+          { group: "skip", amount: 999 },
+        ]);
+      }
+      if (collection === "empty") return Promise.resolve([]);
+      return Promise.resolve([]);
+    },
+  };
+
+  describe("reduce", () => {
+    it("sums participating items, threading the running total through accumulator", async () => {
+      const result = await evaluateValue(
+        {
+          kind: "fold",
+          collection: "amounts",
+          combiner: {
+            mode: "reduce",
+            initial: { kind: "numberLiteral", value: 0 },
+            combine: {
+              kind: "arithmetic",
+              op: "add",
+              left: { kind: "accumulator" },
+              right: { kind: "reference", key: "amount" },
+            },
+          },
+        },
+        undefined,
+        foldResolvers,
+      );
+      expectDefinite(result, { kind: "number", value: 21 });
+    });
+
+    it("filter narrows which items participate, exactly like some/every's own filter", async () => {
+      const result = await evaluateValue(
+        {
+          kind: "fold",
+          collection: "grouped",
+          filter: {
+            kind: "textCompare",
+            op: "equals",
+            left: { kind: "reference", key: "group" },
+            right: { kind: "textLiteral", value: "keep" },
+          },
+          combiner: {
+            mode: "reduce",
+            initial: { kind: "numberLiteral", value: 0 },
+            combine: {
+              kind: "arithmetic",
+              op: "add",
+              left: { kind: "accumulator" },
+              right: { kind: "reference", key: "amount" },
+            },
+          },
+        },
+        undefined,
+        foldResolvers,
+      );
+      // The excluded item's amount (999) never participates; only the kept item's 5 does.
+      expectDefinite(result, { kind: "number", value: 5 });
+    });
+
+    it("over an empty (post-filter) collection evaluates to initial directly, without touching combine", async () => {
+      const result = await evaluateValue(
+        {
+          kind: "fold",
+          collection: "empty",
+          combiner: {
+            mode: "reduce",
+            initial: { kind: "numberLiteral", value: 7 },
+            combine: { kind: "numberLiteral", value: 999 },
+          },
+        },
+        undefined,
+        foldResolvers,
+      );
+      expectDefinite(result, { kind: "number", value: 7 });
+    });
+  });
+
+  describe("max, min", () => {
+    it("max keeps the largest projected value seen", async () => {
+      const result = await evaluateValue(
+        {
+          kind: "fold",
+          collection: "amounts",
+          combiner: { mode: "max", item: { kind: "reference", key: "amount" } },
+        },
+        undefined,
+        foldResolvers,
+      );
+      expectDefinite(result, { kind: "number", value: 12 });
+    });
+
+    it("min keeps the smallest projected value seen", async () => {
+      const result = await evaluateValue(
+        {
+          kind: "fold",
+          collection: "amounts",
+          combiner: { mode: "min", item: { kind: "reference", key: "amount" } },
+        },
+        undefined,
+        foldResolvers,
+      );
+      expectDefinite(result, { kind: "number", value: 1 });
+    });
+
+    it("is domain-error over an empty (post-filter) collection -- there is no first item to seed from", async () => {
+      const result = await evaluateValue(
+        {
+          kind: "fold",
+          collection: "empty",
+          combiner: { mode: "max", item: { kind: "reference", key: "amount" } },
+        },
+        undefined,
+        foldResolvers,
+      );
+      expectIndeterminate(result, "domain-error");
+    });
+  });
+});
+
+describe("accumulator", () => {
+  it("is wrong-type when evaluated outside any fold's combine expression", async () => {
+    const result = await evaluateValue(
+      { kind: "accumulator" },
+      undefined,
+      resolvers,
+    );
+    expectIndeterminate(result, "wrong-type");
+  });
+
+  it("resolves to the running value inside a reduce fold's own combine expression", async () => {
+    const result = await evaluateValue(
+      {
+        kind: "fold",
+        collection: "items",
+        combiner: {
+          mode: "reduce",
+          initial: { kind: "numberLiteral", value: 5 },
+          combine: { kind: "accumulator" },
+        },
+      },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(result, { kind: "number", value: 5 });
+  });
+});
+
+describe("delegate", () => {
+  it("is wrong-type when no delegate handler is registered", async () => {
+    const result = await evaluateValue(
+      { kind: "delegate", system: "tax-engine", payload: { rate: 0.2 } },
+      undefined,
+      resolvers,
+    );
+    expectIndeterminate(result, "wrong-type");
+  });
+
+  it("resolves via the registered handler when one is provided", async () => {
+    const delegateResolvers: Resolvers = {
+      ...resolvers,
+      resolveDelegate: async (system) =>
+        Promise.resolve(
+          system === "tax-engine"
+            ? { found: true, value: { kind: "number", value: 42 } }
+            : { found: false },
+        ),
+    };
+    const result = await evaluateValue(
+      { kind: "delegate", system: "tax-engine", payload: null },
+      undefined,
+      delegateResolvers,
+    );
+    expectDefinite(result, { kind: "number", value: 42 });
+  });
+
+  it("is not-found when the registered handler itself reports absence", async () => {
+    const delegateResolvers: Resolvers = {
+      ...resolvers,
+      resolveDelegate: async () => Promise.resolve({ found: false }),
+    };
+    const result = await evaluateValue(
+      { kind: "delegate", system: "tax-engine", payload: null },
+      undefined,
+      delegateResolvers,
+    );
+    expectIndeterminate(result, "not-found");
+  });
+});
+
+describe("call", () => {
+  const doubleFn: FunctionRegistry = {
+    double: (args) => {
+      const [arg] = args;
+      if (arg?.kind !== "number") {
+        return { domainError: "double requires a single number argument" };
+      }
+      return { kind: "number", value: arg.value + arg.value };
+    },
+  };
+
+  it("invokes the registered function with the resolved arguments", async () => {
+    const { evaluateValue: evaluate } = createEvaluator({
+      functions: doubleFn,
+    });
+    const result = await evaluate(
+      {
+        kind: "call",
+        fn: "double",
+        args: [{ kind: "numberLiteral", value: 21 }],
+      },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(result, { kind: "number", value: 42 });
+  });
+
+  it("is wrong-type for an unregistered function name", async () => {
+    const result = await evaluateValue(
+      { kind: "call", fn: "doesNotExist", args: [] },
+      undefined,
+      resolvers,
+    );
+    expectIndeterminate(result, "wrong-type");
+  });
+
+  it("is domain-error when the registered function reports one", async () => {
+    const { evaluateValue: evaluate } = createEvaluator({
+      functions: doubleFn,
+    });
+    const result = await evaluate(
+      {
+        kind: "call",
+        fn: "double",
+        args: [{ kind: "textLiteral", value: "x" }],
+      },
+      undefined,
+      resolvers,
+    );
+    expectIndeterminate(result, "domain-error");
+  });
+
+  it("evaluates every argument concurrently, tie-breaking an indeterminate outcome to the first in declared order", async () => {
+    const { evaluateValue: evaluate } = createEvaluator({
+      functions: doubleFn,
+    });
+    const result = await evaluate(
+      {
+        kind: "call",
+        fn: "double",
+        args: [
+          { kind: "reference", key: "missing" },
+          { kind: "reference", key: "also-missing" },
+        ],
+      },
+      undefined,
+      resolvers,
+    );
+    expectIndeterminate(result, "not-found");
+  });
+});
+
+/** README.md's own "Worked example" (§ Worked example), verbatim: `isActive equals 1` AND `sum(items.amount) > x + y`, where the sum is exactly the `fold` tree the `sum` derived-aggregate builder assembles. Both variations from the README are included, exercising the propagation rules the worked example is there to demonstrate -- absorption via `and`'s definitely-false right operand, versus a missing reference surfacing all the way to the top because `true` is not absorbing for `and`. */
+describe("golden example (README Worked example)", () => {
+  const goldenExampleResolvers: Resolvers = {
+    resolveValue: async (key, context) => {
+      if (
+        typeof key !== "string" ||
+        !isPlainRecord(context) ||
+        !(key in context)
+      ) {
+        return Promise.resolve({ found: false });
+      }
+      const value = context[key];
+      return Promise.resolve(
+        typeof value === "number"
+          ? { found: true, value: { kind: "number", value } }
+          : { found: false },
+      );
+    },
+    resolveLookup: async () => Promise.resolve({ found: false }),
+    resolveCollection: async (collection, context) => {
+      if (collection !== "items" || !isPlainRecord(context)) {
+        return Promise.resolve([]);
+      }
+      const items = context.items;
+      return Promise.resolve(isUnknownArray(items) ? items : []);
+    },
+  };
+
+  const node: PredicateNode = {
+    kind: "and",
+    left: {
+      kind: "compare",
+      op: "eq",
+      left: { kind: "reference", key: "isActive" },
+      right: { kind: "numberLiteral", value: 1 },
+    },
+    right: {
+      kind: "compare",
+      op: "gt",
+      left: {
+        kind: "fold",
+        collection: "items",
+        combiner: {
+          mode: "reduce",
+          initial: { kind: "numberLiteral", value: 0 },
+          combine: {
+            kind: "arithmetic",
+            op: "add",
+            left: { kind: "accumulator" },
+            right: { kind: "reference", key: "amount" },
+          },
+        },
+      },
+      right: {
+        kind: "arithmetic",
+        op: "add",
+        left: { kind: "reference", key: "x" },
+        right: { kind: "reference", key: "y" },
+      },
+    },
+  };
+
+  it("base case: isActive=1, sum(items.amount)=21 > x+y=15 => definitely true", async () => {
     const data = {
       isActive: 1,
       x: 10,
       y: 5,
       items: [{ amount: 8 }, { amount: 12 }, { amount: 1 }],
     };
-    const goldenExampleResolvers: Resolvers = {
-      resolveValue: async (key, context) => {
-        if (
-          typeof key !== "string" ||
-          !isPlainRecord(context) ||
-          !(key in context)
-        ) {
-          return Promise.resolve({ found: false });
-        }
-        const value = context[key];
-        return Promise.resolve(
-          typeof value === "number"
-            ? { found: true, value: { kind: "number", value } }
-            : { found: false },
-        );
-      },
-      resolveLookup: async () => Promise.resolve({ found: false }),
-      resolveCollection: async (collection, context) => {
-        if (collection !== "items" || !isPlainRecord(context)) {
-          return Promise.resolve([]);
-        }
-        const items = context.items;
-        return Promise.resolve(isUnknownArray(items) ? items : []);
-      },
-    };
-    const node: PredicateNode = {
-      kind: "compare",
-      op: "eq",
-      left: { kind: "reference", key: "isActive" },
-      right: { kind: "numberLiteral", value: 1 },
-    };
-
     const result = await evaluatePredicate(node, data, goldenExampleResolvers);
-
     expect(result).toEqual({ status: "definite", value: true });
+  });
+
+  it("empty items: the sum-over-empty identity (0) is not > 15, and false absorbs regardless of the left branch", async () => {
+    const data = { isActive: 1, x: 10, y: 5, items: [] as unknown[] };
+    const result = await evaluatePredicate(node, data, goldenExampleResolvers);
+    expect(result).toEqual({ status: "definite", value: false });
+  });
+
+  it("missing x: not-found surfaces to the top, since true is not absorbing for and", async () => {
+    const data = {
+      isActive: 1,
+      y: 5,
+      items: [{ amount: 8 }, { amount: 12 }, { amount: 1 }],
+    };
+    const result = await evaluatePredicate(node, data, goldenExampleResolvers);
+    expect(result.status).toBe("indeterminate");
+    if (result.status === "indeterminate") {
+      expect(result.reason.code).toBe("not-found");
+    }
   });
 });

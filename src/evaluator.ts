@@ -6,6 +6,7 @@ import {
 } from "./computed-value";
 import {
   type Evaluation,
+  type IndeterminateReason,
   definite,
   firstIndeterminate,
   indeterminate,
@@ -487,6 +488,17 @@ async function resolveParticipatingItems(
   );
 }
 
+/** The first participating item (in declared collection order) whose `filter` evaluation was itself indeterminate, or `undefined` if every participating item's filter resolved definitely -- a filter-excluded item's own `"exclude"` outcome never counts here. Used only by `fold`, which -- unlike `some`/`every`'s OR/AND absorption -- has no absorbing value at all: any participating item's indeterminate filter makes the whole fold indeterminate outright, with no other item's outcome able to override it. */
+function firstFilterIndeterminate(
+  participating: readonly ResolvedCollectionItem[],
+): IndeterminateReason | undefined {
+  for (const { filterOutcome } of participating) {
+    if (filterOutcome === "include" || filterOutcome === "exclude") continue;
+    if (filterOutcome.status === "indeterminate") return filterOutcome.reason;
+  }
+  return undefined;
+}
+
 async function evaluatePredicateInternal(
   node: PredicateNode,
   // eslint-disable-next-line exadev/prefer-readonly-object-param -- see EvaluationContext's own doc comment in resolvers.ts
@@ -835,12 +847,167 @@ async function evaluateValueInternal(
       if (operand.status === "indeterminate") return operand;
       return applyNegate(operand.value);
     }
-    case "lookup":
-    case "conditional":
-    case "fold":
-    case "delegate":
+    case "lookup": {
+      // All keys are evaluated concurrently; any indeterminate key makes the whole lookup indeterminate immediately, with no `resolveLookup` call attempted at all -- see the `lookup` section of README.md.
+      const keyResults = await Promise.all(
+        node.keys.map(async (key) =>
+          evaluateValueInternal(
+            key,
+            context,
+            resolvers,
+            accumulator,
+            functions,
+          ),
+        ),
+      );
+      const keyValues: ComputedValue[] = [];
+      for (const result of keyResults) {
+        if (result.status === "indeterminate") return result;
+        keyValues.push(result.value);
+      }
+      const resolution = await resolvers.resolveLookup(
+        node.table,
+        keyValues,
+        context,
+      );
+      if (!resolution.found) {
+        return indeterminate(
+          "not-found",
+          `no match found in lookup table ${JSON.stringify(node.table)}`,
+        );
+      }
+      return definite(resolution.value);
+    }
+    case "conditional": {
+      // Strictly sequential, not concurrent: a for...of loop with early return on the first definite match, or the first indeterminate guard, is required behaviour -- evaluation must never skip past an unresolved guard to try a later case that might only look correct because an earlier one couldn't actually be checked (see the `conditional` section of README.md).
+      for (const { when, then } of node.cases) {
+        const whenResult = await evaluatePredicateInternal(
+          when,
+          context,
+          resolvers,
+          accumulator,
+          functions,
+        );
+        if (whenResult.status === "indeterminate") return whenResult;
+        if (whenResult.value) {
+          return evaluateValueInternal(
+            then,
+            context,
+            resolvers,
+            accumulator,
+            functions,
+          );
+        }
+      }
+      return evaluateValueInternal(
+        node.fallback,
+        context,
+        resolvers,
+        accumulator,
+        functions,
+      );
+    }
+    case "fold": {
+      const participating = await resolveParticipatingItems(
+        node.collection,
+        node.filter,
+        context,
+        resolvers,
+        functions,
+      );
+      const filterIndeterminateReason = firstFilterIndeterminate(participating);
+      if (filterIndeterminateReason !== undefined) {
+        return { status: "indeterminate", reason: filterIndeterminateReason };
+      }
+      const includedItems = participating
+        .filter(({ filterOutcome }) => filterOutcome === "include")
+        .map(({ item }) => item);
+
+      if (node.combiner.mode === "reduce") {
+        // Unlike some/every's OR/AND absorption, `reduce` has no absorbing value at all: `initial` and every participating item's `combine` step must each resolve definitely, or the whole fold is indeterminate -- see the `fold` section of README.md. `initial` is evaluated with the accumulator reset to undefined (the same treatment as a filter/item sub-node below), then threaded as the real running accumulator into each `combine` step in turn.
+        const initialResult = await evaluateValueInternal(
+          node.combiner.initial,
+          context,
+          resolvers,
+          undefined,
+          functions,
+        );
+        if (initialResult.status === "indeterminate") return initialResult;
+        let runningAccumulator = initialResult.value;
+        for (const item of includedItems) {
+          const stepResult = await evaluateValueInternal(
+            node.combiner.combine,
+            item,
+            resolvers,
+            runningAccumulator,
+            functions,
+          );
+          if (stepResult.status === "indeterminate") return stepResult;
+          runningAccumulator = stepResult.value;
+        }
+        return definite(runningAccumulator);
+      }
+
+      // max/min: the "unseeded" variant of reduce -- there is no largest/smallest real number to seed a running extremum with, so the first participating item's own projected value seeds the running result directly, and every later item's is compared against it via `compareValues` (reusing `compare`'s own ordering semantics rather than reinventing them). An empty (post-filter) collection is domain-error, the same category as division by zero, since there is no first item to seed from -- unlike `reduce`, which always has a real seed (`initial`) and needs no such case.
+      if (includedItems.length === 0) {
+        return indeterminate(
+          "domain-error",
+          `'${node.combiner.mode}' has no participating items to seed a running result from`,
+        );
+      }
+      const dominatesOp: ComparisonOperator =
+        node.combiner.mode === "max" ? "gt" : "lt";
+      let runningExtremum: ComputedValue | undefined;
+      for (const item of includedItems) {
+        const itemResult = await evaluateValueInternal(
+          node.combiner.item,
+          item,
+          resolvers,
+          undefined,
+          functions,
+        );
+        if (itemResult.status === "indeterminate") return itemResult;
+        if (runningExtremum === undefined) {
+          runningExtremum = itemResult.value;
+          continue;
+        }
+        const comparison = compareValues(
+          dominatesOp,
+          itemResult.value,
+          runningExtremum,
+        );
+        if (comparison.status === "indeterminate") return comparison;
+        if (comparison.value) runningExtremum = itemResult.value;
+      }
+      if (runningExtremum === undefined) {
+        throw new Error(
+          "unreachable: max/min over a non-empty participating list produced no running result",
+        );
+      }
+      return definite(runningExtremum);
+    }
+    case "delegate": {
+      if (resolvers.resolveDelegate === undefined) {
+        return indeterminate(
+          "wrong-type",
+          `no delegate handler registered for external system '${node.system}'`,
+        );
+      }
+      const resolution = await resolvers.resolveDelegate(
+        node.system,
+        node.payload,
+        context,
+      );
+      if (!resolution.found) {
+        return indeterminate(
+          "not-found",
+          `delegate handler for external system '${node.system}' reported no value`,
+        );
+      }
+      return definite(resolution.value);
+    }
     default:
-      throw new Error(`not yet implemented: ${node.kind}`);
+      throw new Error("unreachable expression node kind");
   }
 }
 
