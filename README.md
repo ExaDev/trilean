@@ -4,6 +4,59 @@ A serialisable (JSON) representation of two related tree structures — a **pred
 
 Typical use: representing business rules, eligibility conditions, pricing formulae, or validation logic as data (JSON) that can be stored, transmitted, edited by non-developers via a UI, and evaluated identically wherever it lands — a browser, a server, a batch job — without recompiling anything.
 
+## Getting started
+
+```sh
+npm install json-operators
+# or
+pnpm add json-operators
+```
+
+The package ships as dual ESM and CJS builds, is isomorphic (no assumptions about a Node, browser, or Workers runtime — see [Design principles](#design-principles)), and has zero runtime dependencies beyond [Zod](https://zod.dev).
+
+```ts
+import { evaluatePredicate, type PredicateNode, type Resolvers } from "json-operators";
+
+const node: PredicateNode = {
+  kind: "compare",
+  op: "gt",
+  left: { kind: "reference", key: "age" },
+  right: { kind: "numberLiteral", value: 18 },
+};
+
+const resolvers: Resolvers = {
+  async resolveValue(key, context) {
+    const record = context as Record<string, unknown>;
+    return key === "age" && "age" in record
+      ? { found: true, value: { kind: "number", value: record.age as number } }
+      : { found: false };
+  },
+  async resolveLookup() {
+    return { found: false };
+  },
+  async resolveCollection() {
+    return [];
+  },
+};
+
+await evaluatePredicate(node, { age: 21 }, resolvers);
+// => { status: "definite", value: true }
+```
+
+See [Evaluator entry points](#evaluator-entry-points) and [Resolvers](#resolvers) for the full contract, and the [Worked example](#worked-example) for a larger tree combining boolean logic, a formula, and an aggregation.
+
+## Build, test, and lint
+
+```sh
+pnpm install
+pnpm build          # tsdown -> dist/, then generates schemas/json-operators.schema.json
+pnpm test           # unit suite, against src/
+pnpm test:smoke     # asserts the built dist/ exports resolve correctly in both ESM and CJS
+pnpm test:workers   # runs the evaluator inside a real Cloudflare Workers isolate
+pnpm lint
+pnpm typecheck
+```
+
 ## Provenance
 
 This design was produced by a clean-room (Chinese-wall) process. An examiner role with prior exposure to existing, unrelated proprietary/confidential schema designs (not named here, out of respect for the confidentiality obligations attached to that exposure) wrote a code-free functional specification describing only observed behaviour and requirements — no source code, no copied identifiers, comment text, or structure, and no attributable specifics of any originating system, company, product, or industry. That specification was reviewed against a scrubbing checklist to confirm it contained function rather than expression, then handed, as the entire and only input, to a separately-instantiated implementer with no access to whatever the examiner had seen. Everything below this point — every type name, every worked example, every design decision not explicitly forced by the specification — is that implementer's independent work.
@@ -148,6 +201,16 @@ const JsonValueSchema: z.ZodType<JsonValue> = z.lazy(() =>
 ```
 
 Node schemas are `z.discriminatedUnion("kind", [...])` over per-kind `z.object` shapes, following the concrete definitions below. A generated JSON Schema document (produced once, as a build step, via `z.toJSONSchema(PredicateNodeSchema)` / `z.toJSONSchema(ExpressionNodeSchema)`) is what a non-TypeScript consumer or an authoring UI would target.
+
+### Performance
+
+A consumer that parses and evaluates many trees at high throughput can opt into Zod 4.5's compiled-schema fast path by importing `zod/compile` once, at their own application's entry point:
+
+```ts
+import "zod/compile";
+```
+
+This package deliberately does **not** import it itself — `zod/compile` has global side effects on the Zod runtime, which would contradict this package's own `sideEffects: false` declaration and could surprise a consumer who never asked for it. Opting in (or not) is left entirely to whoever embeds the package.
 
 ## The predicate tree
 
