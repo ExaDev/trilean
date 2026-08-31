@@ -2,3 +2,7 @@ allowBuilds:
   esbuild: true
   workerd: true
 minimumReleaseAge: 60
+# @exadev/eslint-config is an org-owned devDependency, not a third-party supply-chain
+# risk -- exempted so a just-published fix (verified and published by us) doesn't have to wait out the cooldown meant for external packages.
+minimumReleaseAgeExclude:
+  - "@exadev/eslint-config"

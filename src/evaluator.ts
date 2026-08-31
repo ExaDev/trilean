@@ -501,7 +501,6 @@ interface ResolvedCollectionItem {
 async function resolveParticipatingItems(
   collection: JsonValue,
   filter: PredicateNode | undefined,
-  // eslint-disable-next-line exadev/prefer-readonly-object-param -- see EvaluationContext's own doc comment in resolvers.ts
   context: EvaluationContext,
   resolvers: Readonly<Resolvers>,
   functions: Readonly<FunctionRegistry>,
@@ -541,7 +540,6 @@ function firstFilterIndeterminate(
 
 async function evaluatePredicateInternal(
   node: PredicateNode,
-  // eslint-disable-next-line exadev/prefer-readonly-object-param -- see EvaluationContext's own doc comment in resolvers.ts
   context: EvaluationContext,
   resolvers: Readonly<Resolvers>,
   accumulator: ComputedValue | undefined,
@@ -772,7 +770,6 @@ async function evaluatePredicateInternal(
 
 async function evaluateValueInternal(
   node: ExpressionNode,
-  // eslint-disable-next-line exadev/prefer-readonly-object-param -- see EvaluationContext's own doc comment in resolvers.ts
   context: EvaluationContext,
   resolvers: Readonly<Resolvers>,
   accumulator: ComputedValue | undefined,
@@ -1064,13 +1061,11 @@ export function createEvaluator({
 }): {
   evaluatePredicate: (
     node: PredicateNode,
-    // eslint-disable-next-line exadev/prefer-readonly-object-param -- see EvaluationContext's own doc comment in resolvers.ts
     context: EvaluationContext,
     resolvers: Readonly<Resolvers>,
   ) => Promise<Evaluation<boolean>>;
   evaluateValue: (
     node: ExpressionNode,
-    // eslint-disable-next-line exadev/prefer-readonly-object-param -- see EvaluationContext's own doc comment in resolvers.ts
     context: EvaluationContext,
     resolvers: Readonly<Resolvers>,
   ) => Promise<Evaluation<ComputedValue>>;
