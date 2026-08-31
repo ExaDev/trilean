@@ -1,10 +1,11 @@
-// Verifies the built package (dist/), not src/ -- the one thing the unit suite can never catch is an `exports` map misconfiguration, since unit tests import src/ directly and never go through package.json's `exports` resolution at all. Runs the same assertions against both the ESM entry (dist/index.js, native `import`) and the CJS entry (dist/index.cjs) to prove the dual-format build genuinely works both ways, plus one deep-import subpath (dist/tree.{js,cjs}) to prove the "./*" wildcard export resolves to real files. Node's ESM loader can dynamically `import()` a well-formed CJS module directly (see cjs-module-lexer), which is what loads the .cjs entries below -- this keeps every binding a genuinely typed dynamic import (real module resolution against dist/*.d.cts) rather than an untyped `require()`/`createRequire()` call.
+// Verifies the built package (dist/), not src/ -- the one thing the unit suite can never catch is an `exports` map misconfiguration, since unit tests import src/ directly and never go through package.json's `exports` resolution at all. Runs the same assertions against both the ESM entry (dist/index.js) and the CJS entry (dist/index.cjs) to prove the dual-format build genuinely works both ways, plus one deep-import subpath (dist/tree.{js,cjs}) to prove the "./*" wildcard export resolves to real files. The `import()` bindings below are typed against the built dist/*.d.ts and dist/*.d.cts, which is what makes every assertion in this file type-checked rather than `any`; what they do not establish is that dist/*.cjs is loadable as CommonJS at all, which is why a separate block loads those entries through Node's own require() -- see its own comment for why the distinction matters.
 //
-// This file is allowed ordinary Node APIs (node:fs) despite the rest of the package being isomorphic: it is test/ tooling that runs the already-built output, not runtime src/, and isomorphism is only enforced within src/ (see eslint.config.ts's `runtimeSrcExemptions`/`no-restricted-imports` scoping).
+// This file is allowed ordinary Node APIs (node:fs, node:module) despite the rest of the package being isomorphic: it is test/ tooling that runs the already-built output, not runtime src/, and isomorphism is only enforced within src/ (see eslint.config.ts's `runtimeSrcExemptions`/`no-restricted-imports` scoping).
 //
 // A member of tsconfig.node.json's program like every other test/**/*.ts file, importing straight from the built dist/*.js and dist/*.cjs paths -- turbo's "_typecheck" and "_lint" tasks both depend on "_build" (see turbo.json), so dist/ genuinely exists by the time either tsc or eslint's typed rules resolve these imports.
 
 import { readFileSync } from "node:fs";
+import { createRequire } from "node:module";
 import { describe, expect, it } from "vitest";
 import type * as IndexModule from "../dist/index.js";
 import type * as TreeModule from "../dist/tree.js";
@@ -56,6 +57,12 @@ const expectedIndexExports: readonly [
   ["presenceOf", "function"],
 ];
 
+// The deep-import subpath's surface, kept as one typed list for the same reason as expectedIndexExports above: both the import()-based assertions and the require()-based ones below check the same names, and `keyof typeof TreeModule` makes a rename fail at typecheck time rather than silently thinning what either checks.
+const expectedTreeExports: readonly (keyof typeof TreeModule)[] = [
+  "PredicateNodeSchema",
+  "ExpressionNodeSchema",
+];
+
 describe.each([
   ["ESM (dist/index.js)", esmIndex],
   ["CJS (dist/index.cjs)", cjsIndex],
@@ -72,12 +79,33 @@ describe.each([
   ["ESM (dist/tree.js)", esmTree],
   ["CJS (dist/tree.cjs)", cjsTree],
 ])("built deep-import subpath -- %s", (_label, moduleExports) => {
-  it("exports PredicateNodeSchema as an object", () => {
-    expect(typeof moduleExports.PredicateNodeSchema).toBe("object");
+  it.each(expectedTreeExports)("exports %s as an object", (exportName) => {
+    expect(typeof moduleExports[exportName]).toBe("object");
+  });
+});
+
+// Vitest resolves a plain `import()` through Vite's own module runner rather than through a Node loader, and Vite transforms ESM syntax found inside a .cjs file without complaint -- so every import()-based assertion above still passes against a dist/index.cjs that Node itself rejects with "SyntaxError: Unexpected token 'export'". Node's require() is the only thing here that exercises the CommonJS loader a real consumer would use, so the .cjs entries are additionally loaded through it. Without this block, a dual-format build whose CJS half is not actually CommonJS leaves this whole tier green.
+describe("CommonJS entries loaded through Node's own require()", () => {
+  const requireCjs = createRequire(import.meta.url);
+
+  it("dist/index.cjs loads as CommonJS and exposes every expected export", () => {
+    const loaded = asPlainRecord(
+      requireCjs("../dist/index.cjs"),
+      "expected require('../dist/index.cjs') to return a module object",
+    );
+    for (const [exportName, expectedType] of expectedIndexExports) {
+      expect(typeof loaded[exportName]).toBe(expectedType);
+    }
   });
 
-  it("exports ExpressionNodeSchema as an object", () => {
-    expect(typeof moduleExports.ExpressionNodeSchema).toBe("object");
+  it("dist/tree.cjs loads as CommonJS and exposes both node-tree schemas", () => {
+    const loaded = asPlainRecord(
+      requireCjs("../dist/tree.cjs"),
+      "expected require('../dist/tree.cjs') to return a module object",
+    );
+    for (const exportName of expectedTreeExports) {
+      expect(typeof loaded[exportName]).toBe("object");
+    }
   });
 });
 
