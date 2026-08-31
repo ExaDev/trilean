@@ -1,5 +1,7 @@
 # trilean
 
+> /ˈtraɪ.li.ən/ (TRY-lee-ən) — rhymes with "boolean".
+
 A serialisable (JSON) representation of two related tree structures — a **predicate tree** (truth-valued) and an **expression tree** (value-valued) — together with an evaluator for both. The package is deliberately domain-agnostic: the schema layer never assumes anything about where data actually comes from. Every point of contact with a consumer's real data is an injected, opaque resolver function supplied by whoever embeds the package.
 
 Typical use: representing business rules, eligibility conditions, pricing formulae, or validation logic as data (JSON) that can be stored, transmitted, edited by non-developers via a UI, and evaluated identically wherever it lands — a browser, a server, a batch job — without recompiling anything.
