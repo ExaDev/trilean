@@ -86,6 +86,11 @@ export default [
       linterOptions: { noInlineConfig: false },
     },
     {
+      // src/resolvers.ts and src/evaluator.ts each pass EvaluationContext (= unknown) as a parameter. exadev/prefer-readonly-object-param's "flat object" check passes vacuously for any property-less type, including unknown, so it wraps these in Readonly<...> -- but Readonly<unknown> is not unknown (TypeScript's mapped-type machinery collapses it to {}, which rejects undefined, a value EvaluationContext is explicitly allowed to be). A confirmed upstream rule bug; each affected line carries its own eslint-disable-next-line rather than switching the rule off file-wide, so it stays enforced for every other (genuinely flat) parameter in these two files.
+      files: ["src/resolvers.ts", "src/evaluator.ts"],
+      linterOptions: { noInlineConfig: false },
+    },
+    {
       files: ["**/*.test.ts"],
       rules: {
         "@typescript-eslint/no-empty-function": [

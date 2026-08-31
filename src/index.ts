@@ -21,6 +21,11 @@ export {
 
 export type { EvaluationContext, Resolution, Resolvers } from "./resolvers";
 
+export type { FunctionRegistry } from "./functions";
+export { emptyFunctionRegistry } from "./functions";
+
+export { createEvaluator, evaluatePredicate, evaluateValue } from "./evaluator";
+
 export type {
   AccumulatorNode,
   AllOfNode,
