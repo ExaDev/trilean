@@ -190,7 +190,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-      # Deliberately no id-token: write here -- GitHub Packages has no OIDC trusted-publishing exchange, and holding id-token: write makes pnpm attempt (and fail) that exchange anyway, which then breaks its fallback to the GITHUB_TOKEN this job actually authenticates with.
+      # Deliberately no id-token: write here -- GitHub Packages exposes no OIDC trusted-publishing exchange to present an identity to, so this job authenticates with the GITHUB_TOKEN written to ~/.npmrc below instead. The provenance step further down removes the only other thing that would demand an OIDC token.
     env:
       NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -211,6 +211,9 @@ jobs:
       - name: Rewrite the registry for the GitHub Packages mirror
         # publishConfig.registry has to be overridden explicitly: without it, pnpm publish would target registry.npmjs.org -- the registry the primary, unscoped npm publish already used in the release job above -- instead of GitHub Packages.
         run: npm pkg set publishConfig.registry="https://npm.pkg.github.com"
+      - name: Drop provenance for the GitHub Packages mirror
+        # npm honours publishConfig.provenance against whatever registry it is publishing to, and signing a provenance statement needs an OIDC token this job deliberately holds no permission to mint -- so leaving the field set fails the publish outright with 'Provenance generation in GitHub Actions requires "write" access to the "id-token" permission', before a single byte is uploaded. Granting that permission is not the fix: sigstore provenance is an npmjs.org feature GitHub Packages does not host, so the mirror would be signing an attestation none of its consumers could ever resolve. The primary npm publish in the release job above keeps provenance, which is where it means something.
+        run: npm pkg delete publishConfig.provenance
       - name: Configure the GitHub Packages auth token for publish only
         run: echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> ~/.npmrc
       - run: pnpm publish --access public --no-git-checks
