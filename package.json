@@ -28,7 +28,7 @@
       "import": "./dist/*.js",
       "require": "./dist/*.cjs"
     },
-    "./schema.json": "./schemas/json-operators.schema.json"
+    "./schemas/*.schema.json": "./schemas/*.schema.json"
   },
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
