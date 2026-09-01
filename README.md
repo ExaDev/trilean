@@ -590,16 +590,16 @@ A real implementation may memoise a candidate's single evaluation rather than ru
 This is exactly the same composition-not-new-logic treatment already given to `xor`/`sum`/`coalesce` above — nothing stops application code from defining its own named builder functions the same way, for whatever domain-specific composed queries come up repeatedly in a given consumer's own rules.
 
 ```ts
-/** isRecentlyActive(30) reads as "the item's lastActiveAt instant is within the last 30 days" — a small, named composition over compare/arithmetic, exactly the same "assembles ordinary nodes" treatment sum/coalesce already get above. */
+/** isRecentlyActive(30) reads as "the item's lastActiveAt instant is within the last 30 days" — a small, named composition over compare/arithmetic, exactly the same "assembles ordinary nodes" treatment sum/coalesce already get above. Built as `now + (-days)` rather than `now - days`: per "Temporal values" above, `instant - duration` is not a defined cross-kind combination, only `instant + duration` is, so negating the duration first is how this reaches the same "days ago" instant using only defined operators. */
 const isRecentlyActive = (days: number): PredicateNode => ({
   kind: "compare",
   op: "gt",
   left: { kind: "reference", key: "lastActiveAt" },
   right: {
     kind: "arithmetic",
-    op: "subtract",
+    op: "add",
     left: { kind: "reference", key: "now" },
-    right: { kind: "durationLiteral", value: days, unit: "d" },
+    right: { kind: "negate", operand: { kind: "durationLiteral", value: days, unit: "d" } },
   },
 });
 ```
