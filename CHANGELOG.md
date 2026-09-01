@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/ExaDev/trilean/compare/v1.0.13...v1.1.0) (2026-09-01)
+
+
+### Features
+
+* add conditional hit policies, coalesce, and treeReference ([aba4ebe](https://github.com/ExaDev/trilean/commit/aba4ebe9729154fc25bf9456b181ad3733d6ce9e))
+
 ## [1.0.13](https://github.com/ExaDev/trilean/compare/v1.0.12...v1.0.13) (2026-09-01)
 
 ## [1.0.12](https://github.com/ExaDev/trilean/compare/v1.0.11...v1.0.12) (2026-09-01)
