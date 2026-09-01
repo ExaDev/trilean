@@ -1,7 +1,7 @@
 {
   "name": "trilean",
   "version": "1.0.8",
-  "description": "Consumer-agnostic, three-valued predicate/expression evaluation trees over injected resolvers -- no assumptions about consumer data, no I/O of its own.",
+  "description": "Three-valued predicate and expression evaluation trees, stored as JSON and evaluated against injected resolvers, for business rules, eligibility checks, pricing formulae, and REST API search filters that need to be editable without redeploying.",
   "type": "module",
   "repository": {
     "type": "git",
