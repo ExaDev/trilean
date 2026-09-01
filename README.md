@@ -188,7 +188,7 @@ These hold across every part of the design below, and any implementation change 
 
 - **No assumptions about consumer data.** The only places this package touches real data are three named resolver contracts (see [Resolvers](#resolvers)). The schema stores *what to pass* to a resolver, never any resolver logic itself, and never interprets the meaning of an opaque key, table identifier, or collection reference.
 - **Three outcomes, never two.** Every evaluation produces a definite result or an indeterminate result carrying a reason — never a bare `boolean`/`number`, and never a thrown exception for a data-quality problem. See [The evaluation model](#the-evaluation-model).
-- **Derived constructs are compositions, not new logic.** Anything describable as "some other primitive, wired together" is implemented that way, so its correctness is inherited rather than requiring separate proof. See [Derived connectives](#derived-connectives), [Derived aggregates](#derived-aggregates), and [Derived values](#derived-values).
+- **Derived constructs are compositions, not new logic.** Anything describable as "some other primitive, wired together" is implemented that way, so its correctness is inherited rather than requiring separate proof. See [Derived connectives](#derived-connectives), [Derived aggregates](#derived-aggregates), [Derived values](#derived-values), and [Defining your own named presets](#defining-your-own-named-presets).
 - **One schema, mechanically derived artefacts.** A single canonical type definition produces the runtime validator and the portable wire-format schema; they cannot drift apart because there is only one source. See [Schema strategy](#schema-strategy).
 - **Generic examples only.** Every example in this document uses invented, placeholder field names (`temperature`, `orderTotal`, `isActive`, `x`, `y`, `amount`, `items`) with no resemblance to any particular company, product, or industry's real data model.
 
@@ -586,6 +586,29 @@ Built right-to-left over the full candidate list via `reduceRight`, needing no s
 Falling through to the next candidate therefore happens only on `exists`'s own `false` — a genuinely absent value (`not-found`) — never on a candidate that resolved to something merely unusable (`wrong-type`/`domain-error`): `exists` already draws exactly that line, and `coalesce` inherits it unmodified rather than re-deciding it. This is the one behaviour a naive reimplementation is likely to get backwards (treating *any* indeterminate candidate as "try the next one"), so it is worth stating explicitly rather than leaving it to be inferred from the composition alone.
 
 A real implementation may memoise a candidate's single evaluation rather than running its resolver twice — once for the `exists` probe, once again for `then` — exactly the same performance caveat [Derived aggregates](#derived-aggregates)'s `presenceOf` already documents for its own `memberOf` probe; resolvers are pure functions of their inputs throughout this design, so this is a performance choice, not a correctness one.
+
+### Defining your own named presets
+
+This is exactly the same composition-not-new-logic treatment already given to `xor`/`sum`/`coalesce` above — nothing stops application code from defining its own named builder functions the same way, for whatever domain-specific composed queries come up repeatedly in a given consumer's own rules.
+
+```ts
+/** isRecentlyActive(30) reads as "the item's lastActiveAt instant is within the last 30 days" — a small, named composition over compare/arithmetic, exactly the same "assembles ordinary nodes" treatment sum/coalesce already get above. */
+const isRecentlyActive = (days: number): PredicateNode => ({
+  kind: "compare",
+  op: "gt",
+  left: { kind: "reference", key: "lastActiveAt" },
+  right: {
+    kind: "arithmetic",
+    op: "subtract",
+    left: { kind: "reference", key: "now" },
+    right: { kind: "durationLiteral", value: days, unit: "d" },
+  },
+});
+```
+
+A UI surfacing these to an end user treats each one as a named preset in a node-picker — a label ("Recently active") plus whatever parameters the builder function takes (`days`) — and splices the expanded tree in at the point the user picked it, exactly as if they'd hand-built that subtree themselves; nothing about the resulting PredicateNode/ExpressionNode distinguishes a preset-sourced subtree from a manually-authored one.
+
+This is the "bake in at authoring time" half of the picture: a preset's own definition lives in application code, expanded once, at the moment a user picks it, into an ordinary static subtree. [`treeReference`](#treereference) is the complementary half — a *live*, centrally-editable reference, resolved fresh on every evaluation rather than expanded once at authoring time. Choosing between them is exactly the choice between "this composition is fixed application logic" (a named preset, this section) and "this composition is itself data someone should be able to edit without a deploy" (a treeReference).
 
 ### `delegate`
 
