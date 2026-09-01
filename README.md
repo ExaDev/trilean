@@ -421,7 +421,8 @@ type ExpressionNode =
   | { kind: "booleanLiteral"; value: boolean }
   | { kind: "instantLiteral"; value: string }
   | { kind: "durationLiteral"; value: number; unit: DurationUnit }
-  | { kind: "complexLiteral"; re: number; im: number; unit?: Unit }
+  | { kind: "complexLiteral"; re: number; im: number; unit?: Unit }              // rectangular
+  | { kind: "complexLiteral"; magnitude: number; phase: number; unit?: Unit }    // polar -- see Complex values
   | { kind: "reference"; key: JsonValue; unit?: Unit }
   | { kind: "arithmetic"; op: ArithmeticOperator; left: ExpressionNode; right: ExpressionNode }
   | { kind: "negate"; operand: ExpressionNode }
@@ -438,7 +439,7 @@ A `textLiteral` kind is included even though it is not separately enumerated as 
 
 ### Literals
 
-`numberLiteral`, `textLiteral`, `booleanLiteral`, `instantLiteral` (an ISO-8601 timestamp string), `durationLiteral` (a magnitude plus a `DurationUnit`), and `complexLiteral` (a real and an imaginary component, plus an optional `Unit`) are always definite by construction — a literal node never itself produces an indeterminate outcome.
+`numberLiteral`, `textLiteral`, `booleanLiteral`, `instantLiteral` (an ISO-8601 timestamp string), `durationLiteral` (a magnitude plus a `DurationUnit`), and `complexLiteral` (either a real and an imaginary component, or a magnitude and a phase, plus an optional `Unit` — see [Complex values](#complex-values)) are always definite by construction — a literal node never itself produces an indeterminate outcome.
 
 ### `reference`
 
@@ -479,6 +480,8 @@ Any other arithmetic combination touching an `instant` or `duration` (adding two
 3. **Rectangular is what the operators actually need.** `add`/`subtract` are component-wise in it; `multiply`, `divide`, `negate`, and integer `power` all have standard closed forms in it. Polar's advantage — multiplication and division as one product of magnitudes and one sum of angles — does not extend to addition at all, which would have to convert back and forth.
 
 The magnitude-and-phase view stays reachable through four exported conversion helpers rather than a second encoding: `complexFromPolar(magnitude, phase, unit?)` and `complexLiteralFromPolar(magnitude, phase, unit?)` build a value or a literal node from polar terms, and `complexMagnitude(value)` and `complexPhase(value)` read them back out — the magnitude as a real number in the value's own unit, the phase as a dimensionless real number of radians. Conversions at the edges, one representation in the middle.
+
+**The wire-format literal accepts either authoring form, structurally discriminated.** `ComputedValue`'s own `complex` kind stays exactly the single rectangular shape described above — nothing about it changes. But the `complexLiteral` *node* is a plain union of two shapes, `{ kind: "complexLiteral", re, im, unit? }` and `{ kind: "complexLiteral", magnitude, phase, unit? }`, told apart by which fields are present rather than by a `form` tag, since both still share the one literal `kind`. This is not a second encoding of `ComputedValue` reappearing through the back door — it exists only at the authoring boundary, for whichever of the two forms is natural for a given domain to write directly into JSON rather than hand-computing a conversion before ever constructing the tree, and the evaluator normalises whichever form was used to the single rectangular `ComputedValue` immediately, before any arithmetic, comparison, or negation ever runs. A rectangular literal and a polar literal representing the same underlying number are therefore indistinguishable from that point on: they evaluate to the identical `ComputedValue` and compare `eq` to one another exactly as two rectangular literals with the same components would.
 
 **Arithmetic.**
 
