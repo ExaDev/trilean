@@ -322,7 +322,28 @@ export const DelegateNodeSchema = z.object({
 });
 export type DelegateNode = z.infer<typeof DelegateNodeSchema>;
 
-export const ExpressionNodeSchema = z.discriminatedUnion("kind", [
+/**
+ * The wire-format literal counterpart to computed-value.ts's `ComplexValueSchema`: authored as EITHER rectangular (`re`/`im`) OR polar (`magnitude`/`phase`, in radians), discriminated structurally rather than by a `form` tag, for the same reason -- `z.discriminatedUnion("kind", [...])` cannot host two members sharing one literal `kind: "complexLiteral"` value. `ExpressionNodeSchema` below wraps this plain union alongside its own existing discriminated union rather than folding `complexLiteral` into it. See the "Complex values" section of README.md.
+ */
+export const ComplexRectangularLiteralNodeSchema = z.strictObject({
+  kind: z.literal("complexLiteral"),
+  re: z.number(),
+  im: z.number(),
+  unit: UnitSchema.optional(),
+});
+export const ComplexPolarLiteralNodeSchema = z.strictObject({
+  kind: z.literal("complexLiteral"),
+  magnitude: z.number(),
+  phase: z.number(),
+  unit: UnitSchema.optional(),
+});
+export const ComplexLiteralNodeSchema = z.union([
+  ComplexRectangularLiteralNodeSchema,
+  ComplexPolarLiteralNodeSchema,
+]);
+export type ComplexLiteralNode = z.infer<typeof ComplexLiteralNodeSchema>;
+
+const CoreExpressionNodeSchema = z.discriminatedUnion("kind", [
   NumberLiteralNodeSchema,
   TextLiteralNodeSchema,
   InstantLiteralNodeSchema,
@@ -337,5 +358,10 @@ export const ExpressionNodeSchema = z.discriminatedUnion("kind", [
   AccumulatorNodeSchema,
   DelegateNodeSchema,
   TreeReferenceNodeSchema,
+]);
+
+export const ExpressionNodeSchema = z.union([
+  CoreExpressionNodeSchema,
+  ComplexLiteralNodeSchema,
 ]);
 export type ExpressionNode = z.infer<typeof ExpressionNodeSchema>;

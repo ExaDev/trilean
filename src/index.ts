@@ -9,13 +9,22 @@ export {
   indeterminate,
 } from "./evaluation";
 
-export type { ComputedValue, DurationUnit, Unit } from "./computed-value";
+export type {
+  ComplexValue,
+  ComputedValue,
+  DurationUnit,
+  Unit,
+} from "./computed-value";
 export {
+  ComplexPolarSchema,
+  ComplexRectangularSchema,
+  ComplexValueSchema,
   ComputedValueSchema,
   DurationUnitSchema,
   UnitSchema,
   combineUnitsForDivide,
   combineUnitsForMultiply,
+  toRectangular,
   unitsEqual,
 } from "./computed-value";
 
@@ -55,6 +64,7 @@ export type {
   CallNode,
   CompareNode,
   ComparisonOperator,
+  ComplexLiteralNode,
   ConditionalCase,
   ConditionalNode,
   DelegateNode,
@@ -91,6 +101,7 @@ export {
   CallNodeSchema,
   CompareNodeSchema,
   ComparisonOperatorSchema,
+  ComplexLiteralNodeSchema,
   ConditionalCaseSchema,
   ConditionalNodeSchema,
   DelegateNodeSchema,
