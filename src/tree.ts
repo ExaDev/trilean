@@ -213,13 +213,36 @@ export const DurationLiteralNodeSchema = z.object({
 });
 export type DurationLiteralNode = z.infer<typeof DurationLiteralNodeSchema>;
 
-/** The rectangular-form literal, mirroring the `complex` computed-value kind's own single canonical representation exactly (see the "Complex values" section of README.md); `complexLiteralFromPolar` in complex.ts builds one of these from a magnitude and a phase for the domains that reason that way. */
-export const ComplexLiteralNodeSchema = z.object({
+/**
+ * The wire-format literal accepts either of the two authoring forms real-world complex data arrives in, discriminated structurally rather than by a `form` tag: rectangular (`re`/`im`), matching the `complex` computed-value kind's own single canonical representation exactly (see the "Complex values" section of README.md), or polar (`magnitude`/`phase`, in radians), for the domains that reason that way natively and would otherwise have to hand-compute the conversion before ever constructing the tree. `strictObject` on both members is what makes the two forms mutually exclusive on the wire -- a plain `object` would silently strip an unrecognised field rather than reject a payload that mixes both.
+ *
+ * The evaluator normalises whichever form was authored into the single rectangular `ComputedValue` immediately on evaluation (see the `complexLiteral` case in evaluator.ts), so nothing downstream of that -- arithmetic, `compare`, `memberOf`, `negate` -- ever sees a polar value; they keep consuming the one canonical `complex` shape unchanged.
+ */
+export const ComplexRectangularLiteralNodeSchema = z.strictObject({
   kind: z.literal("complexLiteral"),
   re: z.number(),
   im: z.number(),
   unit: UnitSchema.optional(),
 });
+export type ComplexRectangularLiteralNode = z.infer<
+  typeof ComplexRectangularLiteralNodeSchema
+>;
+
+export const ComplexPolarLiteralNodeSchema = z.strictObject({
+  kind: z.literal("complexLiteral"),
+  magnitude: z.number(),
+  phase: z.number(),
+  unit: UnitSchema.optional(),
+});
+export type ComplexPolarLiteralNode = z.infer<
+  typeof ComplexPolarLiteralNodeSchema
+>;
+
+/** Both literal forms share the one literal `kind: "complexLiteral"` value, which is exactly why this is a plain `z.union` rather than a `z.discriminatedUnion` -- `z.discriminatedUnion` requires a unique discriminant literal per member and throws ("Duplicate discriminator value") the moment two members share one. `ExpressionNodeSchema` below folds this plain union in alongside its own discriminated union of every other kind, rather than trying to host it as a normal member. */
+export const ComplexLiteralNodeSchema = z.union([
+  ComplexRectangularLiteralNodeSchema,
+  ComplexPolarLiteralNodeSchema,
+]);
 export type ComplexLiteralNode = z.infer<typeof ComplexLiteralNodeSchema>;
 
 export const ReferenceNodeSchema = z.object({
@@ -337,13 +360,13 @@ export const DelegateNodeSchema = z.object({
 });
 export type DelegateNode = z.infer<typeof DelegateNodeSchema>;
 
-export const ExpressionNodeSchema = z.discriminatedUnion("kind", [
+/** Every expression node kind except `complexLiteral`, which cannot be a member of this same discriminated union alongside its own two forms (see `ComplexLiteralNodeSchema` above) -- folded back in below via a plain `z.union` rather than `z.discriminatedUnion`. */
+const CoreExpressionNodeSchema = z.discriminatedUnion("kind", [
   NumberLiteralNodeSchema,
   TextLiteralNodeSchema,
   BooleanLiteralNodeSchema,
   InstantLiteralNodeSchema,
   DurationLiteralNodeSchema,
-  ComplexLiteralNodeSchema,
   ReferenceNodeSchema,
   ArithmeticNodeSchema,
   NegateNodeSchema,
@@ -354,5 +377,10 @@ export const ExpressionNodeSchema = z.discriminatedUnion("kind", [
   AccumulatorNodeSchema,
   DelegateNodeSchema,
   TreeReferenceNodeSchema,
+]);
+
+export const ExpressionNodeSchema = z.union([
+  CoreExpressionNodeSchema,
+  ComplexLiteralNodeSchema,
 ]);
 export type ExpressionNode = z.infer<typeof ExpressionNodeSchema>;

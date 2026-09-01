@@ -1,3 +1,4 @@
+import { complexFromPolar } from "./complex";
 import type { ComputedValue, DurationUnit, Unit } from "./computed-value";
 import {
   combineUnitsForDivide,
@@ -1145,12 +1146,16 @@ async function evaluateValueInternal(
         unit: node.unit,
       });
     case "complexLiteral":
-      return definite({
-        kind: "complex",
-        re: node.re,
-        im: node.im,
-        unit: node.unit,
-      });
+      // Whichever authoring form was used (see the "Complex values" section of README.md), normalise to the single rectangular `ComputedValue` immediately -- nothing downstream (arithmetic, compare, memberOf, negate) ever sees a polar-authored value.
+      if ("re" in node) {
+        return definite({
+          kind: "complex",
+          re: node.re,
+          im: node.im,
+          unit: node.unit,
+        });
+      }
+      return definite(complexFromPolar(node.magnitude, node.phase, node.unit));
     case "arithmetic": {
       const [left, right] = await Promise.all([
         evaluateValueInternal(
