@@ -8,7 +8,7 @@
 
 A serialisable (JSON) representation of two related tree structures — a **predicate tree** (truth-valued) and an **expression tree** (value-valued) — together with an evaluator for both. The package is deliberately domain-agnostic: the schema layer never assumes anything about where data actually comes from. Every point of contact with a consumer's real data is an injected, opaque resolver function supplied by whoever embeds the package.
 
-Typical use: representing business rules, eligibility conditions, pricing formulae, or validation logic as data (JSON) that can be stored, transmitted, edited by non-developers via a UI, and evaluated identically wherever it lands — a browser, a server, a batch job — without recompiling anything.
+Typical use: representing business rules, eligibility conditions, pricing formulas, or validation logic as data (JSON) that can be stored, transmitted, edited by non-developers via a UI, and evaluated identically wherever it lands — a browser, a server, a batch job — without recompiling anything.
 
 ## Getting started
 
@@ -741,7 +741,7 @@ Two variations show the propagation rules in action without changing the tree at
 
 ## Out of scope
 
-This package is a representation-plus-evaluator for conditions and formulae over already-available (or resolver-obtained) data. It deliberately does not include:
+This package is a representation-plus-evaluator for conditions and formulas over already-available (or resolver-obtained) data. It deliberately does not include:
 
 - **Symbolic algebra.** It cannot solve an expression for an unknown quantity, symbolically simplify an expression, or perform symbolic differentiation or integration. A consumer needing any of that is expected to translate the pure-arithmetic portion of an expression tree into the input format of existing, general-purpose symbolic-mathematics software — several mature, freely available options already exist — and let that external system do the symbolic work. This package's job stops at representing and numerically evaluating a tree, not manipulating it symbolically.
 - **Complex-number or phasor arithmetic.** Every numeric value in this design is real-valued. Some domains occasionally need calculations naturally expressed with complex numbers; rather than extending the core numeric model to support that — a far larger and more invasive change than adding one more named function — the recommended approach is the same delegation escape hatch described under [`delegate`](#delegate): hand the relevant subtree, unevaluated, to an external system built for that kind of mathematics, several of which already exist as mature, freely available tooling.
