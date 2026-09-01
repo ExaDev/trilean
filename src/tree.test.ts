@@ -5,6 +5,7 @@ import {
   AndNodeSchema,
   AnyOfNodeSchema,
   ArithmeticNodeSchema,
+  BooleanLiteralNodeSchema,
   CallNodeSchema,
   CompareNodeSchema,
   ConditionalNodeSchema,
@@ -267,6 +268,17 @@ describe("expression tree", () => {
     ).toBe(false);
   });
 
+  it("booleanLiteral: parses a minimal node and rejects a non-boolean value", () => {
+    const valid = { kind: "booleanLiteral", value: true };
+    expect(BooleanLiteralNodeSchema.parse(valid)).toEqual(valid);
+    expect(
+      BooleanLiteralNodeSchema.safeParse({
+        kind: "booleanLiteral",
+        value: "true",
+      }).success,
+    ).toBe(false);
+  });
+
   it("instantLiteral: parses a minimal node and rejects a non-string value", () => {
     const valid = { kind: "instantLiteral", value: "2026-08-30T00:00:00Z" };
     expect(InstantLiteralNodeSchema.parse(valid)).toEqual(valid);
@@ -453,6 +465,7 @@ describe("expression tree", () => {
     const samples = [
       numberLiteral,
       { kind: "textLiteral", value: "a" },
+      { kind: "booleanLiteral", value: true },
       { kind: "instantLiteral", value: "2026-08-30T00:00:00Z" },
       { kind: "durationLiteral", value: 1, unit: "d" },
       { kind: "reference", key: "x" },
