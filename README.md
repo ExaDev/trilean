@@ -62,6 +62,8 @@ pnpm lint
 pnpm typecheck
 ```
 
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the git hooks, the release process, and the constraints an implementation change must preserve.
+
 ## Design principles
 
 These hold across every part of the design below, and any implementation change must preserve them:
