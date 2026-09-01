@@ -218,25 +218,59 @@ describe.each([
   },
 );
 
-/** A discriminated-union branch as generated JSON Schema shape: `{ properties: { kind: { const: "..." } } }`. */
-function extractKindConst(branch: unknown): string {
+/** A runtime `.options` entry that is itself a leaf node schema (a `z.object`/`z.strictObject` with a literal `kind` discriminant), as opposed to a nested union -- returns that leaf's own `kind` literal, or `undefined` if `option` isn't shaped this way. */
+function readKindLiteral(option: unknown): string | undefined {
+  if (!isPlainRecord(option)) return undefined;
+  const shape = option.shape;
+  if (!isPlainRecord(shape)) return undefined;
+  const kind = shape.kind;
+  if (!isPlainRecord(kind)) return undefined;
+  const value = kind.value;
+  return typeof value === "string" ? value : undefined;
+}
+
+/** A runtime `.options` entry that is itself a union (`ZodDiscriminatedUnion` or `ZodUnion`) rather than a leaf object schema -- recognised structurally by its own `.options` array, the same property every zod union type (discriminated or plain) exposes. */
+function hasOptionsArray(
+  value: unknown,
+): value is { options: readonly unknown[] } {
+  if (!isPlainRecord(value)) return false;
+  return Array.isArray(value.options);
+}
+
+/** Every `kind` a runtime union schema (`PredicateNodeSchema`/`ExpressionNodeSchema`, as built) actually accepts, read off its own `.options`. Recurses when an option is itself a nested union rather than a flat object -- built `ExpressionNodeSchema` is `z.union([CoreExpressionNodeSchema, ComplexLiteralNodeSchema])` (see `extractKindConst` below), so its own top-level `.options` are two further unions, not flat leaf schemas. Mirrors test/integration/json-schema-consistency.test.ts's own `discriminantKinds`, duplicated here rather than imported to keep this file self-contained (see this file's own top comment). */
+function runtimeDiscriminantKinds(schema: {
+  options: readonly unknown[];
+}): string[] {
+  return schema.options.flatMap((option): string[] => {
+    const kind = readKindLiteral(option);
+    if (kind !== undefined) return [kind];
+    if (hasOptionsArray(option)) return runtimeDiscriminantKinds(option);
+    throw new Error(
+      "unreachable: union option has neither a 'kind' literal shape nor a nested .options array",
+    );
+  });
+}
+
+/** A discriminated-union branch as generated JSON Schema shape: `{ properties: { kind: { const: "..." } } }` -- or, since built `ExpressionNodeSchema` is a plain union wrapping a nested discriminated union and a further nested union (rect/polar `complexLiteral`, which can't share one discriminant value inside a single discriminatedUnion -- see README.md's "Complex values" section), a branch that is itself another `oneOf`/`anyOf` list, recursed into rather than assumed to be a flat leaf. */
+function extractKindConst(branch: unknown): string[] {
   const branchRecord = asPlainRecord(
     branch,
     "expected a JSON Schema object for a discriminated-union branch",
   );
-  const properties = asPlainRecord(
-    branchRecord.properties,
-    "expected a 'properties' object on a discriminated-union branch",
-  );
-  const kindSchema = asPlainRecord(
-    properties.kind,
-    "expected a 'kind' property schema on a discriminated-union branch",
-  );
-  const constValue = kindSchema.const;
-  if (typeof constValue !== "string") {
-    throw new Error("expected a string 'const' on the 'kind' property schema");
+  const properties = branchRecord.properties;
+  if (isPlainRecord(properties)) {
+    const kindSchema = properties.kind;
+    if (isPlainRecord(kindSchema) && typeof kindSchema.const === "string") {
+      return [kindSchema.const];
+    }
   }
-  return constValue;
+  const nested = branchRecord.oneOf ?? branchRecord.anyOf;
+  if (!Array.isArray(nested)) {
+    throw new Error(
+      "expected a 'kind' const on a discriminated-union branch, or a nested 'oneOf'/'anyOf' branch list",
+    );
+  }
+  return nested.flatMap((entry) => extractKindConst(entry));
 }
 
 function generatedKinds(nodeDefinition: unknown): string[] {
@@ -244,13 +278,13 @@ function generatedKinds(nodeDefinition: unknown): string[] {
     nodeDefinition,
     "expected the generated node definition to be a JSON Schema object",
   );
-  const oneOf = definition.oneOf;
-  if (!Array.isArray(oneOf)) {
+  const branches = definition.oneOf ?? definition.anyOf;
+  if (!Array.isArray(branches)) {
     throw new Error(
-      "expected the generated node definition to have a 'oneOf' branch list",
+      "expected the generated node definition to have a 'oneOf' or 'anyOf' branch list",
     );
   }
-  return oneOf.map(extractKindConst).sort();
+  return branches.flatMap((branch) => extractKindConst(branch)).sort();
 }
 
 function collectRefs(value: unknown, found = new Set<string>()): Set<string> {
@@ -382,7 +416,8 @@ describe("generated schemas/trilean.schema.json", () => {
       "expected $defs.ExpressionNode to be a JSON object",
     );
     expect(Array.isArray(predicateNode.oneOf)).toBe(true);
-    expect(Array.isArray(expressionNode.oneOf)).toBe(true);
+    // ExpressionNode's own top level is a plain `z.union` (not a `z.discriminatedUnion`), wrapping the core discriminated union alongside the `complexLiteral` rect/polar union -- see README.md's "Complex values" section -- so it converts to `anyOf`, not `oneOf`, unlike PredicateNode above, which is untouched by this and stays a single flat discriminated union.
+    expect(Array.isArray(expressionNode.anyOf)).toBe(true);
   });
 
   it("is self-contained: every $ref resolves to a definition inside the document", () => {
@@ -406,9 +441,9 @@ describe("generated schemas/trilean.schema.json", () => {
   ])(
     "%s's generated 'kind' consts are exactly the built package's own %s options",
     (definitionName, schemaExportName) => {
-      const runtimeKinds = esmIndex[schemaExportName].options
-        .map((option) => option.shape.kind.value)
-        .sort();
+      const runtimeKinds = runtimeDiscriminantKinds(
+        esmIndex[schemaExportName],
+      ).sort();
       const document = asPlainRecord(
         schemaDocument,
         "expected the generated schema document to be a JSON object",

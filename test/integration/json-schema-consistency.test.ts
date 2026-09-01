@@ -14,37 +14,60 @@ function isPlainRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
-/** Every `kind` this schema's discriminated union actually accepts -- read off the schema's own `.options`/literal shape, never a hand-maintained literal array that could silently drift from the real type. */
-function discriminantKinds(
-  schema: typeof PredicateNodeSchema | typeof ExpressionNodeSchema,
-): string[] {
-  return schema.options.map((option) => option.shape.kind.value);
+/** An `.options` entry that is itself a leaf node schema (a `z.object`/`z.strictObject` with a literal `kind` discriminant), as opposed to a nested union -- returns that leaf's own `kind` literal, or `undefined` if `option` isn't shaped this way. */
+function readKindLiteral(option: unknown): string | undefined {
+  if (!isPlainRecord(option)) return undefined;
+  const shape = option.shape;
+  if (!isPlainRecord(shape)) return undefined;
+  const kind = shape.kind;
+  if (!isPlainRecord(kind)) return undefined;
+  const value = kind.value;
+  return typeof value === "string" ? value : undefined;
 }
 
-/** A discriminated-union branch as generated JSON Schema shape: `{ properties: { kind: { const: "..." } } }`. Narrowed step by step via plain type guards, per this repo's `object -> Record<string, unknown>` narrowing convention, rather than an `as` assertion on zod's own loosely-typed JSON Schema output. Throwing rather than returning a placeholder is what makes a degenerate branch (no `properties`, no `kind`, no `const`) a test failure instead of a silently-tolerated hole. */
-function extractKindConst(branch: unknown): string {
+/** An `.options` entry that is itself a union (`ZodDiscriminatedUnion` or `ZodUnion`) rather than a leaf object schema -- recognised structurally by its own `.options` array, the same property every zod union type (discriminated or plain) exposes. */
+function hasOptionsArray(
+  value: unknown,
+): value is { options: readonly unknown[] } {
+  if (!isPlainRecord(value)) return false;
+  return Array.isArray(value.options);
+}
+
+/**
+ * Every `kind` this schema's union actually accepts -- read off the schema's own `.options`/literal shape, never a hand-maintained literal array that could silently drift from the real type. Recurses when an option is itself a nested union rather than a flat object: `ExpressionNodeSchema` is `z.union([CoreExpressionNodeSchema, ComplexLiteralNodeSchema])` (a plain union wrapping a discriminated union and a further nested union, since `z.discriminatedUnion` cannot host two `complexLiteral` members sharing one literal discriminant -- see the "Complex values" section of README.md), so its own top-level `.options` are two further unions, not flat leaf schemas. `PredicateNodeSchema` is untouched by this and stays a single flat discriminated union, but recursing costs nothing extra for it -- every one of its options resolves a `kind` literal on the first call.
+ */
+function discriminantKinds(schema: { options: readonly unknown[] }): string[] {
+  return schema.options.flatMap((option): string[] => {
+    const kind = readKindLiteral(option);
+    if (kind !== undefined) return [kind];
+    if (hasOptionsArray(option)) return discriminantKinds(option);
+    throw new Error(
+      "unreachable: union option has neither a 'kind' literal shape nor a nested .options array",
+    );
+  });
+}
+
+/** A discriminated-union branch as generated JSON Schema shape: `{ properties: { kind: { const: "..." } } }` -- or, since `ExpressionNodeSchema` is now a plain union wrapping a nested discriminated union and a further nested union (see `discriminantKinds` above), a branch that is itself another `oneOf`/`anyOf` list, recursed into rather than assumed to be a flat leaf. Narrowed step by step via plain type guards, per this repo's `object -> Record<string, unknown>` narrowing convention, rather than an `as` assertion on zod's own loosely-typed JSON Schema output. Throwing rather than returning a placeholder is what makes a genuinely degenerate branch (no `properties`, no `kind`, no `const`, and no `oneOf`/`anyOf` either) a test failure instead of a silently-tolerated hole. */
+function extractKindConst(branch: unknown): string[] {
   if (!isPlainRecord(branch)) {
     throw new Error(
       "expected a JSON Schema object for a discriminated-union branch",
     );
   }
   const properties = branch.properties;
-  if (!isPlainRecord(properties)) {
+  if (isPlainRecord(properties)) {
+    const kind = properties.kind;
+    if (isPlainRecord(kind) && typeof kind.const === "string") {
+      return [kind.const];
+    }
+  }
+  const nested = branch.oneOf ?? branch.anyOf;
+  if (!Array.isArray(nested)) {
     throw new Error(
-      "expected a 'properties' object on a discriminated-union branch",
+      "expected a 'kind' const on a discriminated-union branch, or a nested 'oneOf'/'anyOf' branch list",
     );
   }
-  const kind = properties.kind;
-  if (!isPlainRecord(kind)) {
-    throw new Error(
-      "expected a 'kind' property schema on a discriminated-union branch",
-    );
-  }
-  const constValue = kind.const;
-  if (typeof constValue !== "string") {
-    throw new Error("expected a string 'const' on the 'kind' property schema");
-  }
-  return constValue;
+  return nested.flatMap((entry) => extractKindConst(entry));
 }
 
 function extractGeneratedKinds(nodeDefinition: unknown): string[] {
@@ -53,13 +76,13 @@ function extractGeneratedKinds(nodeDefinition: unknown): string[] {
       "expected the generated node definition to be a JSON Schema object",
     );
   }
-  const oneOf = nodeDefinition.oneOf;
-  if (!Array.isArray(oneOf)) {
+  const branches = nodeDefinition.oneOf ?? nodeDefinition.anyOf;
+  if (!Array.isArray(branches)) {
     throw new Error(
-      "expected the generated node definition to have a 'oneOf' branch list",
+      "expected the generated node definition to have a 'oneOf' or 'anyOf' branch list",
     );
   }
-  return oneOf.map(extractKindConst);
+  return branches.flatMap((branch) => extractKindConst(branch));
 }
 
 function collectRefs(value: unknown, found = new Set<string>()): Set<string> {

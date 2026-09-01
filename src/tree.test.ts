@@ -300,7 +300,7 @@ describe("expression tree", () => {
     ).toBe(false);
   });
 
-  it("complexLiteral: parses with and without an optional unit, and rejects a node carrying only one component", () => {
+  it("complexLiteral: parses a rectangular value with and without an optional unit, and rejects a node carrying only one rectangular component", () => {
     const withoutUnit = { kind: "complexLiteral", re: 3, im: 4 };
     const withUnit = { kind: "complexLiteral", re: 3, im: 4, unit: { V: 1 } };
     expect(ComplexLiteralNodeSchema.parse(withoutUnit)).toEqual(withoutUnit);
@@ -308,6 +308,52 @@ describe("expression tree", () => {
     expect(
       ComplexLiteralNodeSchema.safeParse({ kind: "complexLiteral", re: 3 })
         .success,
+    ).toBe(false);
+  });
+
+  it("complexLiteral: also parses a polar value (magnitude/phase) with and without an optional unit, and rejects a node carrying only one polar component", () => {
+    const withoutUnit = { kind: "complexLiteral", magnitude: 5, phase: 1.2 };
+    const withUnit = {
+      kind: "complexLiteral",
+      magnitude: 5,
+      phase: 1.2,
+      unit: { V: 1 },
+    };
+    expect(ComplexLiteralNodeSchema.parse(withoutUnit)).toEqual(withoutUnit);
+    expect(ComplexLiteralNodeSchema.parse(withUnit)).toEqual(withUnit);
+    expect(
+      ComplexLiteralNodeSchema.safeParse({
+        kind: "complexLiteral",
+        magnitude: 5,
+      }).success,
+    ).toBe(false);
+  });
+
+  it("complexLiteral: rejects both rectangular and polar fields provided at once", () => {
+    expect(
+      ComplexLiteralNodeSchema.safeParse({
+        kind: "complexLiteral",
+        re: 1,
+        im: 2,
+        magnitude: 3,
+        phase: 4,
+      }).success,
+    ).toBe(false);
+  });
+
+  it("complexLiteral: rejects neither rectangular nor polar fields provided", () => {
+    expect(
+      ComplexLiteralNodeSchema.safeParse({ kind: "complexLiteral" }).success,
+    ).toBe(false);
+  });
+
+  it("complexLiteral: rejects a mixed payload (one rectangular field, one polar field)", () => {
+    expect(
+      ComplexLiteralNodeSchema.safeParse({
+        kind: "complexLiteral",
+        re: 1,
+        phase: 2,
+      }).success,
     ).toBe(false);
   });
 
@@ -481,6 +527,7 @@ describe("expression tree", () => {
       { kind: "instantLiteral", value: "2026-08-30T00:00:00Z" },
       { kind: "durationLiteral", value: 1, unit: "d" },
       { kind: "complexLiteral", re: 1, im: -1 },
+      { kind: "complexLiteral", magnitude: 1, phase: Math.PI / 2 },
       { kind: "reference", key: "x" },
       {
         kind: "arithmetic",

@@ -105,6 +105,57 @@ describe("complexLiteral", () => {
       unit: { V: 1, A: -1 },
     });
   });
+
+  it("normalises a polar literal to rectangular on evaluation, preserving the optional unit", async () => {
+    const result = await evaluateValue(
+      {
+        kind: "complexLiteral",
+        magnitude: 1,
+        phase: Math.PI / 2,
+        unit: { V: 1 },
+      },
+      undefined,
+      resolvers,
+    );
+    expect(result.status).toBe("definite");
+    if (result.status !== "definite") return;
+    expect(result.value.kind).toBe("complex");
+    if (result.value.kind !== "complex") return;
+    expect(result.value.re).toBeCloseTo(0);
+    expect(result.value.im).toBeCloseTo(1);
+    expect(result.value.unit).toEqual({ V: 1 });
+  });
+
+  it("eq: a rectangular literal and a polar literal representing the same underlying complex number compare as equal", async () => {
+    const result = await evaluatePredicate(
+      {
+        kind: "compare",
+        op: "eq",
+        left: { kind: "complexLiteral", re: 2, im: 0 },
+        right: { kind: "complexLiteral", magnitude: 2, phase: 0 },
+      },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(result, true);
+  });
+
+  it("memberOf: a rectangular operand matches a candidate list containing a polar literal representing the same number", async () => {
+    const result = await evaluatePredicate(
+      {
+        kind: "memberOf",
+        op: "in",
+        operand: { kind: "complexLiteral", re: 1, im: 0 },
+        candidates: [
+          { kind: "complexLiteral", re: 0, im: 1 },
+          { kind: "complexLiteral", magnitude: 1, phase: 0 },
+        ],
+      },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(result, true);
+  });
 });
 
 describe("reference", () => {
