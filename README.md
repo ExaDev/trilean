@@ -49,6 +49,86 @@ await evaluatePredicate(node, { age: 21 }, resolvers);
 
 See [Evaluator entry points](#evaluator-entry-points) and [Resolvers](#resolvers) for the full contract, and the [Worked example](#worked-example) for a larger tree combining boolean logic, a formula, and an aggregation.
 
+### A nested filter for a REST API search endpoint
+
+A search endpoint's filter criteria are exactly the kind of thing this package is for: nested boolean logic, stored as JSON, that a client can construct, a non-developer can edit via a UI, and a server evaluates per record without ever hardcoding the filter or redeploying when it changes.
+
+```ts
+import { evaluatePredicate, type PredicateNode, type Resolvers } from "trilean";
+
+interface Order {
+  status: string;
+  orderTotal: number;
+  category: string;
+}
+
+// status equals "active" AND (orderTotal > 100 OR category is a preferred one) --
+// two levels of nesting: an "or" inside the right branch of an "and".
+const activeHighValueOrPreferredCategory: PredicateNode = {
+  kind: "and",
+  left: {
+    kind: "textCompare",
+    op: "equals",
+    left: { kind: "reference", key: "status" },
+    right: { kind: "textLiteral", value: "active" },
+  },
+  right: {
+    kind: "or",
+    left: {
+      kind: "compare",
+      op: "gt",
+      left: { kind: "reference", key: "orderTotal" },
+      right: { kind: "numberLiteral", value: 100 },
+    },
+    right: {
+      kind: "memberOf",
+      op: "in",
+      operand: { kind: "reference", key: "category" },
+      candidates: [
+        { kind: "textLiteral", value: "electronics" },
+        { kind: "textLiteral", value: "books" },
+      ],
+    },
+  },
+};
+
+const orderResolvers: Resolvers = {
+  async resolveValue(key, context) {
+    const order = context as Order;
+    switch (key) {
+      case "status":
+        return { found: true, value: { kind: "text", value: order.status } };
+      case "orderTotal":
+        return { found: true, value: { kind: "number", value: order.orderTotal } };
+      case "category":
+        return { found: true, value: { kind: "text", value: order.category } };
+      default:
+        return { found: false };
+    }
+  },
+  async resolveLookup() {
+    return { found: false };
+  },
+  async resolveCollection() {
+    return [];
+  },
+};
+
+const orders: Order[] = [
+  { status: "active", orderTotal: 42, category: "electronics" },
+  { status: "active", orderTotal: 150, category: "garden" },
+  { status: "cancelled", orderTotal: 200, category: "electronics" },
+];
+
+const results = await Promise.all(
+  orders.map((order) => evaluatePredicate(activeHighValueOrPreferredCategory, order, orderResolvers)),
+);
+const matching = orders.filter((_, i) => results[i]?.status === "definite" && results[i]?.value === true);
+// => the first two orders match; the cancelled one doesn't reach the "or" at all, since "and" absorbs on its left operand's definite false
+```
+
+See [`and`/`or`](#not-and-or), [`compare`](#compare), [`textCompare`](#textcompare), and [`memberOf`](#memberof) for the full node-kind reference.
+
 ## Build, test, and lint
 
 ```sh
