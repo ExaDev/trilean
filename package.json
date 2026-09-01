@@ -1,6 +1,6 @@
 {
   "name": "trilean",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Consumer-agnostic, three-valued predicate/expression evaluation trees over injected resolvers -- no assumptions about consumer data, no I/O of its own.",
   "type": "module",
   "repository": {
