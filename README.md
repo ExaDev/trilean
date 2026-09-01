@@ -205,6 +205,8 @@ const JsonValueSchema: z.ZodType<JsonValue> = z.lazy(() =>
 
 Node schemas are `z.discriminatedUnion("kind", [...])` over per-kind `z.object` shapes, following the concrete definitions below. A generated JSON Schema document (produced once, as a build step, via `z.toJSONSchema(PredicateNodeSchema)` / `z.toJSONSchema(ExpressionNodeSchema)`) is what a non-TypeScript consumer or an authoring UI would target.
 
+The generated document carries a version-pinned `$id` — a jsDelivr URL naming the exact published version, e.g. `https://cdn.jsdelivr.net/npm/trilean@1.2.3/schemas/trilean.schema.json` — so a consumer's own rule file can point its `$schema` at a fixed target rather than a moving one. The file is also RFC 8785 (JSON Canonicalization Scheme) canonical: keys sorted recursively, no whitespace between tokens, deterministic byte-for-byte output for the same input. This makes the file hashable, which is useful for verifying a downloaded copy against this package's own SBOM and build-provenance attestations (see the release workflow).
+
 ### Performance
 
 A consumer that parses and evaluates many trees at high throughput can opt into Zod 4.5's compiled-schema fast path by importing `zod/compile` once, at their own application's entry point:
