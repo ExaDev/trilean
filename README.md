@@ -189,6 +189,7 @@ These hold across every part of the design below, and any implementation change 
 - **No assumptions about consumer data.** The only places this package touches real data are three named resolver contracts (see [Resolvers](#resolvers)). The schema stores *what to pass* to a resolver, never any resolver logic itself, and never interprets the meaning of an opaque key, table identifier, or collection reference.
 - **Three outcomes, never two.** Every evaluation produces a definite result or an indeterminate result carrying a reason — never a bare `boolean`/`number`, and never a thrown exception for a data-quality problem. See [The evaluation model](#the-evaluation-model).
 - **Derived constructs are compositions, not new logic.** Anything describable as "some other primitive, wired together" is implemented that way, so its correctness is inherited rather than requiring separate proof. See [Derived connectives](#derived-connectives), [Derived aggregates](#derived-aggregates), and [Derived values](#derived-values).
+- **A numeric extension is in scope if it stays within closed-form evaluation.** `complex` (see [Complex values](#complex-values)) extends the existing real-valued numeric model exactly the way a new `call` registry function would — a bigger addition, but the same *kind* of addition, not a new evaluation paradigm. Only a genuinely different kind of computation (symbolic algebra, batch diagnostics) stays behind `delegate`; see [Out of scope](#out-of-scope).
 - **One schema, mechanically derived artefacts.** A single canonical type definition produces the runtime validator and the portable wire-format schema; they cannot drift apart because there is only one source. See [Schema strategy](#schema-strategy).
 - **Generic examples only.** Every example in this document uses invented, placeholder field names (`temperature`, `orderTotal`, `isActive`, `x`, `y`, `amount`, `items`) with no resemblance to any particular company, product, or industry's real data model.
 
@@ -367,7 +368,7 @@ The N-ary forms of `and`/`or`: given an ordered list of operands (rather than ex
 
 ### `compare`
 
-A relational-comparison leaf: compares two computed values using `gt`/`gte`/`lt`/`lte`/`eq`/`neq`. **Both `left` and `right` are `ExpressionNode`** — either side may be a plain literal/reference or an arbitrary formula from the expression tree; the comparison is symmetric, and an implementation that only allows a formula on one side is incomplete. Valid operand kinds are `number` (matching units required — see [Units](#units)), `instant`, or `duration`; comparing across different computed-value kinds, or comparing two numbers with incompatible units, is `wrong-type`.
+A relational-comparison leaf: compares two computed values using `gt`/`gte`/`lt`/`lte`/`eq`/`neq`. **Both `left` and `right` are `ExpressionNode`** — either side may be a plain literal/reference or an arbitrary formula from the expression tree; the comparison is symmetric, and an implementation that only allows a formula on one side is incomplete. Valid operand kinds are `number` (matching units required — see [Units](#units)), `instant`, `duration`, or `complex` (`eq`/`neq` only — see [Complex values](#complex-values)); comparing across different computed-value kinds, or comparing two numbers with incompatible units, is `wrong-type`.
 
 ### `textCompare`
 
@@ -401,7 +402,9 @@ type ComputedValue =
   | { kind: "number"; value: number; unit?: Unit }
   | { kind: "text"; value: string }
   | { kind: "instant"; value: string }   // ISO-8601 timestamp
-  | { kind: "duration"; value: number; unit: DurationUnit };
+  | { kind: "duration"; value: number; unit: DurationUnit }
+  | { kind: "complex"; re: number; im: number; unit?: Unit }         // rectangular form
+  | { kind: "complex"; magnitude: number; phase: number; unit?: Unit }; // polar form (phase in radians)
 
 type ArithmeticOperator = "add" | "subtract" | "multiply" | "divide" | "power" | "modulo";
 
@@ -417,6 +420,8 @@ type ExpressionNode =
   | { kind: "textLiteral"; value: string }
   | { kind: "instantLiteral"; value: string }
   | { kind: "durationLiteral"; value: number; unit: DurationUnit }
+  | { kind: "complexLiteral"; re: number; im: number; unit?: Unit }         // rectangular form
+  | { kind: "complexLiteral"; magnitude: number; phase: number; unit?: Unit } // polar form (phase in radians)
   | { kind: "reference"; key: JsonValue; unit?: Unit }
   | { kind: "arithmetic"; op: ArithmeticOperator; left: ExpressionNode; right: ExpressionNode }
   | { kind: "negate"; operand: ExpressionNode }
@@ -462,6 +467,18 @@ A named function applied to an ordered list of `ExpressionNode` arguments. The s
 - `instant + duration → instant` (and `duration + instant → instant`)
 
 Any other arithmetic combination touching an `instant` or `duration` (adding two instants, multiplying a duration by an instant, comparing an instant against a plain number, and so on) is `wrong-type`. A reference implementation normalises `duration` values to a single base unit (milliseconds) internally before combining two durations of different `DurationUnit`s, then reports the result in whichever unit the node's own context calls for.
+
+### Complex values
+
+A `complex` computed value (and its literal counterpart, `complexLiteral`) can be authored as **either** rectangular (`re`/`im`) **or** polar (`magnitude`/`phase`, in radians), discriminated **structurally** by which fields are present, not by an extra `form` tag. This is a deliberate schema-design constraint rather than a stylistic choice: `z.discriminatedUnion("kind", [...])` cannot host two members sharing one literal discriminant value (`kind: "complex"` twice), so `ComputedValueSchema` and `ExpressionNodeSchema` are each a plain `z.union` of their existing core discriminated union alongside a further nested union of the two complex shapes, rather than one flat discriminated union throughout. `complex` is modelled as a genuine two-branch union — not a single object with optional fields plus a runtime check — specifically so the type is exhaustively narrowable (a plain `if ("re" in value)` correctly discriminates the two shapes with no assertion) and so the shipped JSON Schema faithfully reflects the constraint (rejecting a payload that supplies both rectangular and polar fields, or neither) rather than silently accepting a malformed value.
+
+Every operation normalises a `complex` operand to rectangular form first, via `toRectangular` — the same "normalise to one base representation before combining" treatment [Temporal values](#temporal-values) above already gives a `duration`, normalising every `DurationUnit` to milliseconds before combining two durations of different units. A polar value is normalised on the fly for each operation rather than stored in a canonical form; there is no requirement that a `complex` value be re-serialised as rectangular after evaluation.
+
+`add`/`subtract`/`multiply`/`divide` all support mixed `complex`/`number` operands: a plain `number` widens to `complex` (imaginary part `0`, same unit) before the operation runs, so `5 + (1+2i)` evaluates the same as `(5+0i) + (1+2i)`. `add`/`subtract` require identical units, exactly as they do for two plain `number`s; `multiply`/`divide` combine units by the same dimensional analysis `number` arithmetic already uses. Dividing by a zero-magnitude complex number is `domain-error`, the same category as ordinary division by zero.
+
+`power` against a `complex` base is defined **only** for a real, integer, dimensionless `number` exponent — computed as repeated multiplication, with a negative exponent inverting the final result — not the general complex-exponent (`z^w`) formula, which would need a complex logarithm and is out of scope for this design (see [`call`](#call) or [`delegate`](#delegate) for a consumer that needs it). A non-integer or complex exponent against a `complex` base is `wrong-type`. `modulo` is not defined for `complex` values at all.
+
+`compare`'s ordering operators (`gt`/`gte`/`lt`/`lte`) are `wrong-type` against `complex` operands — complex numbers have no natural ordering — leaving only `eq`/`neq`, decided by rectangular-form equality (respecting units, exactly as `compare`'s numeric `eq` already does). `memberOf`'s membership test extends the same equality to `complex` candidates, kind-agnostic across every computed-value kind exactly as it already was before this design.
 
 ### `lookup`
 
@@ -713,7 +730,7 @@ How each reason category can arise, per node kind. "Propagates" means: an indete
 | `and` | propagates, **unless** the other operand is definitely `false` (absorbs) | as `not-found` | as `not-found` |
 | `or` | propagates, **unless** the other operand is definitely `true` (absorbs) | as `not-found` | as `not-found` |
 | `allOf` / `anyOf` | as `and`/`or`, extended pairwise across the list | as `and`/`or` | as `and`/`or` |
-| `compare` | either operand not found | operand kinds differ, or units incompatible, or kind is not `number`/`instant`/`duration` | never directly (comparison itself has no domain restriction) |
+| `compare` | either operand not found | operand kinds differ, or units incompatible, or kind is not `number`/`instant`/`duration`/`complex`, or an ordering operator (`gt`/`gte`/`lt`/`lte`) is used against `complex` operands | never directly (comparison itself has no domain restriction) |
 | `textCompare` | either operand not found | either operand is not `text` | never directly |
 | `memberOf` | `operand` not found, or (with no definite match found) a scanned candidate not found | `operand`/a candidate resolves to an incompatible kind or unit, with no definite match found among the rest | never directly |
 | `exists` | never — converts operand `not-found` to definite `false` | never — converts operand `wrong-type`/`domain-error` to definite `true` | never — see `wrong-type` column |
@@ -815,10 +832,9 @@ Two variations show the propagation rules in action without changing the tree at
 This package is a representation-plus-evaluator for conditions and formulas over already-available (or resolver-obtained) data. It deliberately does not include:
 
 - **Symbolic algebra.** It cannot solve an expression for an unknown quantity, symbolically simplify an expression, or perform symbolic differentiation or integration. A consumer needing any of that is expected to translate the pure-arithmetic portion of an expression tree into the input format of existing, general-purpose symbolic-mathematics software — several mature, freely available options already exist — and let that external system do the symbolic work. This package's job stops at representing and numerically evaluating a tree, not manipulating it symbolically.
-- **Complex-number or phasor arithmetic.** Every numeric value in this design is real-valued. Some domains occasionally need calculations naturally expressed with complex numbers; rather than extending the core numeric model to support that — a far larger and more invasive change than adding one more named function — the recommended approach is the same delegation escape hatch described under [`delegate`](#delegate): hand the relevant subtree, unevaluated, to an external system built for that kind of mathematics, several of which already exist as mature, freely available tooling.
-- **Batch unresolvable-reference reporting.** This design deliberately has no node kind for asking "which of these references, across a whole batch, are unresolvable" as a single evaluation — only the [`exists`](#exists) leaf's one-at-a-time true/false/false-on-absence check. A tool that wants to report a *list* of every missing reference (for an authoring UI validating a tree before it's saved, say) is expected to build that on top of `exists` — walk the references of interest and evaluate an `exists` leaf over each — at the authoring/tooling layer, rather than this package growing a bespoke aggregate-diagnostic node kind for it. This is a deliberate boundary, not an oversight: it keeps the evaluation tree itself limited to producing one `Evaluation` per node, and leaves "collect many such results and report on them together" to whatever sits above the evaluator, exactly like symbolic algebra and complex-number arithmetic above are left to whatever sits beside it.
+- **Batch unresolvable-reference reporting.** This design deliberately has no node kind for asking "which of these references, across a whole batch, are unresolvable" as a single evaluation — only the [`exists`](#exists) leaf's one-at-a-time true/false/false-on-absence check. A tool that wants to report a *list* of every missing reference (for an authoring UI validating a tree before it's saved, say) is expected to build that on top of `exists` — walk the references of interest and evaluate an `exists` leaf over each — at the authoring/tooling layer, rather than this package growing a bespoke aggregate-diagnostic node kind for it. This is a deliberate boundary, not an oversight: it keeps the evaluation tree itself limited to producing one `Evaluation` per node, and leaves "collect many such results and report on them together" to whatever sits above the evaluator, exactly like symbolic algebra above is left to whatever sits beside it.
 
-This package does not name or depend on any specific external tool for either of the two delegation cases above — it only defines the shape of the hand-off (an opaque payload plus a named destination system).
+This package does not name or depend on any specific external tool for the delegation case above — it only defines the shape of the hand-off (an opaque payload plus a named destination system).
 
 ## Prior art
 
