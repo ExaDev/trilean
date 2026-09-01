@@ -193,6 +193,12 @@ export const TextLiteralNodeSchema = z.object({
 });
 export type TextLiteralNode = z.infer<typeof TextLiteralNodeSchema>;
 
+export const BooleanLiteralNodeSchema = z.object({
+  kind: z.literal("booleanLiteral"),
+  value: z.boolean(),
+});
+export type BooleanLiteralNode = z.infer<typeof BooleanLiteralNodeSchema>;
+
 export const InstantLiteralNodeSchema = z.object({
   kind: z.literal("instantLiteral"),
   /** ISO-8601 timestamp. */
@@ -325,6 +331,7 @@ export type DelegateNode = z.infer<typeof DelegateNodeSchema>;
 export const ExpressionNodeSchema = z.discriminatedUnion("kind", [
   NumberLiteralNodeSchema,
   TextLiteralNodeSchema,
+  BooleanLiteralNodeSchema,
   InstantLiteralNodeSchema,
   DurationLiteralNodeSchema,
   ReferenceNodeSchema,

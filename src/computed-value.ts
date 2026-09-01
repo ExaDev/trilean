@@ -14,6 +14,7 @@ export const ComputedValueSchema = z.discriminatedUnion("kind", [
     unit: UnitSchema.optional(),
   }),
   z.object({ kind: z.literal("text"), value: z.string() }),
+  z.object({ kind: z.literal("boolean"), value: z.boolean() }),
   /** ISO-8601 timestamp. */
   z.object({ kind: z.literal("instant"), value: z.string() }),
   z.object({

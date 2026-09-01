@@ -60,6 +60,15 @@ describe("literals", () => {
     expectDefinite(result, { kind: "text", value: "active" });
   });
 
+  it("booleanLiteral is always definite", async () => {
+    const result = await evaluateValue(
+      { kind: "booleanLiteral", value: true },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(result, { kind: "boolean", value: true });
+  });
+
   it("instantLiteral is always definite", async () => {
     const result = await evaluateValue(
       { kind: "instantLiteral", value: "2026-01-01T00:00:00.000Z" },
@@ -395,6 +404,18 @@ describe("negate", () => {
       {
         kind: "negate",
         operand: { kind: "instantLiteral", value: "2026-01-01T00:00:00.000Z" },
+      },
+      undefined,
+      resolvers,
+    );
+    expectIndeterminate(result, "wrong-type");
+  });
+
+  it("is wrong-type on a boolean, not a thrown exception (regression test: applyNegate previously fell through to its unreachable default and threw)", async () => {
+    const result = await evaluateValue(
+      {
+        kind: "negate",
+        operand: { kind: "booleanLiteral", value: true },
       },
       undefined,
       resolvers,
@@ -767,6 +788,93 @@ describe("compare", () => {
     );
     expectIndeterminate(result, "not-found");
   });
+
+  it("eq between two booleanLiterals is definitely true when equal", async () => {
+    const result = await evaluatePredicate(
+      {
+        kind: "compare",
+        op: "eq",
+        left: { kind: "booleanLiteral", value: true },
+        right: { kind: "booleanLiteral", value: true },
+      },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(result, true);
+  });
+
+  it("eq between two booleanLiterals is definitely false when unequal", async () => {
+    const result = await evaluatePredicate(
+      {
+        kind: "compare",
+        op: "eq",
+        left: { kind: "booleanLiteral", value: true },
+        right: { kind: "booleanLiteral", value: false },
+      },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(result, false);
+  });
+
+  it("neq between two booleanLiterals is definitely true when unequal", async () => {
+    const result = await evaluatePredicate(
+      {
+        kind: "compare",
+        op: "neq",
+        left: { kind: "booleanLiteral", value: true },
+        right: { kind: "booleanLiteral", value: false },
+      },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(result, true);
+  });
+
+  it("neq between two booleanLiterals is definitely false when equal", async () => {
+    const result = await evaluatePredicate(
+      {
+        kind: "compare",
+        op: "neq",
+        left: { kind: "booleanLiteral", value: true },
+        right: { kind: "booleanLiteral", value: true },
+      },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(result, false);
+  });
+
+  it.each(["gt", "gte", "lt", "lte"] as const)(
+    "%s between two booleanLiterals is wrong-type -- booleans have no natural ordering",
+    async (op) => {
+      const result = await evaluatePredicate(
+        {
+          kind: "compare",
+          op,
+          left: { kind: "booleanLiteral", value: true },
+          right: { kind: "booleanLiteral", value: false },
+        },
+        undefined,
+        resolvers,
+      );
+      expectIndeterminate(result, "wrong-type");
+    },
+  );
+
+  it("is wrong-type when comparing a boolean against a non-boolean kind", async () => {
+    const result = await evaluatePredicate(
+      {
+        kind: "compare",
+        op: "eq",
+        left: { kind: "booleanLiteral", value: true },
+        right: { kind: "numberLiteral", value: 1 },
+      },
+      undefined,
+      resolvers,
+    );
+    expectIndeterminate(result, "wrong-type");
+  });
 });
 
 describe("textCompare", () => {
@@ -1078,6 +1186,37 @@ describe("memberOf", () => {
         op: "in",
         operand: { kind: "numberLiteral", value: 5, unit: { m: 1 } },
         candidates: [{ kind: "numberLiteral", value: 5, unit: { s: 1 } }],
+      },
+      undefined,
+      resolvers,
+    );
+    expectIndeterminate(result, "wrong-type");
+  });
+
+  it("a boolean operand matches a boolean candidate list by equality", async () => {
+    const result = await evaluatePredicate(
+      {
+        kind: "memberOf",
+        op: "in",
+        operand: { kind: "booleanLiteral", value: true },
+        candidates: [
+          { kind: "booleanLiteral", value: false },
+          { kind: "booleanLiteral", value: true },
+        ],
+      },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(result, true);
+  });
+
+  it("a boolean operand is wrong-type against a candidate of an incompatible kind, never a plain non-match", async () => {
+    const result = await evaluatePredicate(
+      {
+        kind: "memberOf",
+        op: "in",
+        operand: { kind: "booleanLiteral", value: true },
+        candidates: [{ kind: "numberLiteral", value: 1 }],
       },
       undefined,
       resolvers,
@@ -2345,7 +2484,7 @@ describe("call", () => {
   });
 });
 
-/** README.md's own "Worked example" (§ Worked example), verbatim: `isActive equals 1` AND `sum(items.amount) > x + y`, where the sum is exactly the `fold` tree the `sum` derived-aggregate builder assembles. Both variations from the README are included, exercising the propagation rules the worked example is there to demonstrate -- absorption via `and`'s definitely-false right operand, versus a missing reference surfacing all the way to the top because `true` is not absorbing for `and`. */
+/** README.md's own "Worked example" (§ Worked example), verbatim: `isActive is true` AND `sum(items.amount) > x + y`, where the sum is exactly the `fold` tree the `sum` derived-aggregate builder assembles. Both variations from the README are included, exercising the propagation rules the worked example is there to demonstrate -- absorption via `and`'s definitely-false right operand, versus a missing reference surfacing all the way to the top because `true` is not absorbing for `and`. */
 describe("golden example (README Worked example)", () => {
   const goldenExampleResolvers: Resolvers = {
     resolveValue: async (key, context) => {
@@ -2357,6 +2496,12 @@ describe("golden example (README Worked example)", () => {
         return Promise.resolve({ found: false });
       }
       const value = context[key];
+      if (typeof value === "boolean") {
+        return Promise.resolve({
+          found: true,
+          value: { kind: "boolean", value },
+        });
+      }
       return Promise.resolve(
         typeof value === "number"
           ? { found: true, value: { kind: "number", value } }
@@ -2379,7 +2524,7 @@ describe("golden example (README Worked example)", () => {
       kind: "compare",
       op: "eq",
       left: { kind: "reference", key: "isActive" },
-      right: { kind: "numberLiteral", value: 1 },
+      right: { kind: "booleanLiteral", value: true },
     },
     right: {
       kind: "compare",
@@ -2407,9 +2552,9 @@ describe("golden example (README Worked example)", () => {
     },
   };
 
-  it("base case: isActive=1, sum(items.amount)=21 > x+y=15 => definitely true", async () => {
+  it("base case: isActive is true, sum(items.amount)=21 > x+y=15 => definitely true", async () => {
     const data = {
-      isActive: 1,
+      isActive: true,
       x: 10,
       y: 5,
       items: [{ amount: 8 }, { amount: 12 }, { amount: 1 }],
@@ -2419,14 +2564,14 @@ describe("golden example (README Worked example)", () => {
   });
 
   it("empty items: the sum-over-empty identity (0) is not > 15, and false absorbs regardless of the left branch", async () => {
-    const data = { isActive: 1, x: 10, y: 5, items: [] as unknown[] };
+    const data = { isActive: true, x: 10, y: 5, items: [] as unknown[] };
     const result = await evaluatePredicate(node, data, goldenExampleResolvers);
     expect(result).toEqual({ status: "definite", value: false });
   });
 
   it("missing x: not-found surfaces to the top, since true is not absorbing for and", async () => {
     const data = {
-      isActive: 1,
+      isActive: true,
       y: 5,
       items: [{ amount: 8 }, { amount: 12 }, { amount: 1 }],
     };
