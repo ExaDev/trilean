@@ -1,3 +1,14 @@
+# [1.2.0](https://github.com/ExaDev/trilean/compare/v1.1.0...v1.2.0) (2026-09-01)
+
+
+### Features
+
+* accept polar authoring for complex literals, normalised to rectangular on evaluation ([d36ff46](https://github.com/ExaDev/trilean/commit/d36ff46e631040f2eef45cee941ad1bd0fcca86c))
+* add a boolean ComputedValue kind, evaluated by compare/memberOf ([0040043](https://github.com/ExaDev/trilean/commit/0040043ee10de6f158cf47a742f244678c1f9460))
+* add a complex computed-value kind and complexLiteral node ([3d4d47f](https://github.com/ExaDev/trilean/commit/3d4d47faf28857e7858d684b5803c685d9154b8f))
+* add booleanLiteral node to the expression tree schema ([107fe9d](https://github.com/ExaDev/trilean/commit/107fe9d25f51885031ede5697b59c7e76978d4c3))
+* add polar builders and accessors for complex values ([18b7439](https://github.com/ExaDev/trilean/commit/18b74393e9e8b4319c0e97937ff2fcffce2e4412))
+
 # [1.1.0](https://github.com/ExaDev/trilean/compare/v1.0.13...v1.1.0) (2026-09-01)
 
 
