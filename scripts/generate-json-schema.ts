@@ -100,7 +100,8 @@ if (canonicalJson === undefined) {
   );
 }
 
+// Written with no trailing newline, so the file's bytes are exactly the JCS form of its own content and nothing else. That identity -- canonicalize(JSON.parse(file)) === file -- is the point of canonicalizing a published artefact at all: it lets any consumer re-derive the file's own SHA-256 from the parsed document alone, which a stray byte outside the canonical form would silently break. Nothing here wants the usual POSIX final newline: schemas/ is gitignored and eslint-ignored (see eslint.config.ts), and the file is machine-read by JSON Schema tooling rather than edited.
 mkdirSync(schemasDir, { recursive: true });
-writeFileSync(outputPath, `${canonicalJson}\n`, "utf8");
+writeFileSync(outputPath, canonicalJson, "utf8");
 
 console.log(`Wrote combined JSON Schema document to ${outputPath}`);

@@ -365,14 +365,14 @@ describe("generated schemas/trilean.schema.json", () => {
     );
   });
 
-  // Proves the shipped file is actually RFC 8785 (JCS) canonical, not merely "some JSON was written": re-canonicalizing the parsed document's own content, via the same "canonicalize" package the generator writes with, must reproduce the file on disk exactly. A generator that canonicalized only part of the document, or that drifted from the canonicalize package's own output (a hand-rolled sort, say), would still pass every other assertion in this describe block -- JSON.parse doesn't care about key order or whitespace -- so only a byte-for-byte comparison against the real file catches it.
-  it("is RFC 8785 (JCS) canonical: re-canonicalizing its parsed content reproduces the file on disk exactly", () => {
+  // Proves the shipped file is actually RFC 8785 (JCS) canonical, not merely "some JSON was written": re-canonicalizing the parsed document's own content must reproduce the file on disk byte for byte, with no trailing newline to fudge past. A generator that canonicalized only part of the document, or that drifted from the canonicalize package's own output (a hand-rolled sort, say), would still pass every other assertion in this describe block -- JSON.parse doesn't care about key order or whitespace -- so only a byte-for-byte comparison against the real file catches it. This identity is also the property a consumer relies on to re-derive the file's own SHA-256 from its parsed content when checking a download against this package's SBOM and provenance attestations.
+  it("is RFC 8785 (JCS) canonical: re-canonicalizing its parsed content reproduces the file on disk byte for byte", () => {
     const recanonicalized = canonicalize(schemaDocument);
     if (recanonicalized === undefined) {
       throw new Error(
         "canonicalize() produced no output for the parsed schema document",
       );
     }
-    expect(`${recanonicalized}\n`).toBe(rawSchemaFile);
+    expect(recanonicalized).toBe(rawSchemaFile);
   });
 });
