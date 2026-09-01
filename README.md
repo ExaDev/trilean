@@ -367,7 +367,7 @@ The N-ary forms of `and`/`or`: given an ordered list of operands (rather than ex
 
 ### `compare`
 
-A relational-comparison leaf: compares two computed values using `gt`/`gte`/`lt`/`lte`/`eq`/`neq`. **Both `left` and `right` are `ExpressionNode`** — either side may be a plain literal/reference or an arbitrary formula from the expression tree; the comparison is symmetric, and an implementation that only allows a formula on one side is incomplete. Valid operand kinds are `number` (matching units required — see [Units](#units)), `instant`, or `duration`; comparing across different computed-value kinds, or comparing two numbers with incompatible units, is `wrong-type`.
+A relational-comparison leaf: compares two computed values using `gt`/`gte`/`lt`/`lte`/`eq`/`neq`. **Both `left` and `right` are `ExpressionNode`** — either side may be a plain literal/reference or an arbitrary formula from the expression tree; the comparison is symmetric, and an implementation that only allows a formula on one side is incomplete. Valid operand kinds are `number` (matching units required — see [Units](#units)), `instant`, `duration`, or `boolean`; comparing across different computed-value kinds, or comparing two numbers with incompatible units, is `wrong-type`. `boolean` only supports `eq`/`neq` — there is no natural ordering for a truth value, so `gt`/`gte`/`lt`/`lte` are `wrong-type` for a `boolean` operand.
 
 ### `textCompare`
 
@@ -400,6 +400,7 @@ type DurationUnit = "ms" | "s" | "min" | "h" | "d";
 type ComputedValue =
   | { kind: "number"; value: number; unit?: Unit }
   | { kind: "text"; value: string }
+  | { kind: "boolean"; value: boolean }
   | { kind: "instant"; value: string }   // ISO-8601 timestamp
   | { kind: "duration"; value: number; unit: DurationUnit };
 
@@ -415,6 +416,7 @@ type HitPolicy = "first" | "unique";
 type ExpressionNode =
   | { kind: "numberLiteral"; value: number; unit?: Unit }
   | { kind: "textLiteral"; value: string }
+  | { kind: "booleanLiteral"; value: boolean }
   | { kind: "instantLiteral"; value: string }
   | { kind: "durationLiteral"; value: number; unit: DurationUnit }
   | { kind: "reference"; key: JsonValue; unit?: Unit }
@@ -433,7 +435,7 @@ A `textLiteral` kind is included even though it is not separately enumerated as 
 
 ### Literals
 
-`numberLiteral`, `textLiteral`, `instantLiteral` (an ISO-8601 timestamp string), and `durationLiteral` (a magnitude plus a `DurationUnit`) are always definite by construction — a literal node never itself produces an indeterminate outcome.
+`numberLiteral`, `textLiteral`, `booleanLiteral`, `instantLiteral` (an ISO-8601 timestamp string), and `durationLiteral` (a magnitude plus a `DurationUnit`) are always definite by construction — a literal node never itself produces an indeterminate outcome.
 
 ### `reference`
 
@@ -547,7 +549,7 @@ const average = (collection: JsonValue, item: ExpressionNode, filter?: Predicate
 
 `sum` needs no per-item probe beyond `item` itself: it is a literal `reduce` seeded at `0`, adding each participating item's projected value to the running total, and it already goes indeterminate if `item` fails to resolve for any participating item — no separate mechanism needed, since `item`'s value is exactly what gets added.
 
-`count` takes an optional third argument, `probe`, and this is where it matters that `filter` and a probe are not the same thing. `filter` *excludes* an item from participating — a filtered-out item's absence is invisible in the final result, exactly as if it had never been in the collection at all. A `probe` does the opposite: it doesn't decide whether an item participates, it makes the *whole count* indeterminate if it fails to resolve for *any* participating item, surfacing "I cannot give you a trustworthy count" rather than silently reporting a smaller, technically-successful count for the same underlying data-quality problem — precisely the distinction the rest of this document's indeterminate-outcome model exists to preserve (see [The evaluation model](#the-evaluation-model)). `count(collection, filter)` with no `probe` is a plain `reduce` seeded at `0` that adds `1` per participating item, with no indeterminacy of its own beyond `filter`'s. `count(collection, filter, probe)` instead adds `presenceOf(probe)` per participating item — a small helper built entirely from already-established primitives, with no restriction on `probe`'s kind: it tests `probe` for membership in the single-element list `[probe]`, so a `memberOf` "in" test against itself is trivially true whenever `probe` resolves to a definite value of *any* kind (`memberOf`'s equality is already kind-agnostic across `number`/`text`/`instant`/`duration` — see [`memberOf`](#memberof)), and exactly `probe`'s own indeterminate outcome otherwise, per `memberOf`'s own "evaluate `operand` first" rule. A `conditional` then turns that boolean into the number `1`; its `fallback` is never reached, since a definite `probe` always equals itself. (A real implementation may memoise `probe`'s single evaluation rather than running the resolver twice for `operand` and its one `candidates` entry — resolvers are pure functions of their inputs throughout this design, so this is a performance choice, not a correctness one.)
+`count` takes an optional third argument, `probe`, and this is where it matters that `filter` and a probe are not the same thing. `filter` *excludes* an item from participating — a filtered-out item's absence is invisible in the final result, exactly as if it had never been in the collection at all. A `probe` does the opposite: it doesn't decide whether an item participates, it makes the *whole count* indeterminate if it fails to resolve for *any* participating item, surfacing "I cannot give you a trustworthy count" rather than silently reporting a smaller, technically-successful count for the same underlying data-quality problem — precisely the distinction the rest of this document's indeterminate-outcome model exists to preserve (see [The evaluation model](#the-evaluation-model)). `count(collection, filter)` with no `probe` is a plain `reduce` seeded at `0` that adds `1` per participating item, with no indeterminacy of its own beyond `filter`'s. `count(collection, filter, probe)` instead adds `presenceOf(probe)` per participating item — a small helper built entirely from already-established primitives, with no restriction on `probe`'s kind: it tests `probe` for membership in the single-element list `[probe]`, so a `memberOf` "in" test against itself is trivially true whenever `probe` resolves to a definite value of *any* kind (`memberOf`'s equality is already kind-agnostic across `number`/`text`/`boolean`/`instant`/`duration` — see [`memberOf`](#memberof)), and exactly `probe`'s own indeterminate outcome otherwise, per `memberOf`'s own "evaluate `operand` first" rule. A `conditional` then turns that boolean into the number `1`; its `fallback` is never reached, since a definite `probe` always equals itself. (A real implementation may memoise `probe`'s single evaluation rather than running the resolver twice for `operand` and its one `candidates` entry — resolvers are pure functions of their inputs throughout this design, so this is a performance choice, not a correctness one.)
 
 `average` is `sum` divided by `count` over the same `collection`/`filter`, with no `probe` — `sum`'s own `item` already forces every participating item's projected value to resolve, so `average`'s numerator is already indeterminate under exactly the condition a `count` probe exists to detect, with nothing left to duplicate. Nothing new to verify for the empty-collection case either: division's own already-established rule (zero divisor is `domain-error`) is *why* `average` over an empty collection is `domain-error`, since `count` over an empty collection is `0` and `sum(...)/0` already means exactly that.
 
@@ -734,7 +736,7 @@ How each reason category can arise, per node kind. "Propagates" means: an indete
 
 A single condition combining a boolean tree, a comparison leaf whose value side is itself a formula, a fold/aggregation node, and all three resolver contracts in use — every name below is a generic placeholder.
 
-**Rule:** "`isActive` is true, and the sum of `amount` across the `items` collection is greater than `x + y`." `isActive` is modelled as the number `1` for true — the computed-value model has no native boolean kind, so a boolean data point is represented however best suits the consumer, here as a numeric flag compared for equality. The `fold` below is exactly what the [`sum`](#derived-aggregates) builder produces — shown here as the literal tree it assembles, to keep the resolver trace below concrete.
+**Rule:** "`isActive` is true, and the sum of `amount` across the `items` collection is greater than `x + y`." `isActive` is a `boolean` computed value, compared for equality against the literal `true`. The `fold` below is exactly what the [`sum`](#derived-aggregates) builder produces — shown here as the literal tree it assembles, to keep the resolver trace below concrete.
 
 ```json
 {
@@ -743,7 +745,7 @@ A single condition combining a boolean tree, a comparison leaf whose value side 
     "kind": "compare",
     "op": "eq",
     "left": { "kind": "reference", "key": "isActive" },
-    "right": { "kind": "numberLiteral", "value": 1 }
+    "right": { "kind": "booleanLiteral", "value": true }
   },
   "right": {
     "kind": "compare",
@@ -776,7 +778,7 @@ A minimal set of resolvers backing this against a plain in-memory record:
 
 ```ts
 const data = {
-  isActive: 1,
+  isActive: true,
   x: 10,
   y: 5,
   items: [{ amount: 8 }, { amount: 12 }, { amount: 1 }],
@@ -786,7 +788,9 @@ const resolvers: Resolvers = {
   async resolveValue(key, context) {
     const record = context as Record<string, unknown>;
     if (typeof key !== "string" || !(key in record)) return { found: false };
-    return { found: true, value: { kind: "number", value: record[key] as number } };
+    const value = record[key];
+    if (typeof value === "boolean") return { found: true, value: { kind: "boolean", value } };
+    return { found: true, value: { kind: "number", value: value as number } };
   },
   async resolveLookup() {
     return { found: false }; // unused by this example
@@ -800,7 +804,7 @@ const resolvers: Resolvers = {
 
 Tracing the evaluation against `data` as the root `EvaluationContext`:
 
-1. `compare eq` (left branch): `resolveValue("isActive", data)` → `{ found: true, value: { kind: "number", value: 1 } }`; compared against `numberLiteral 1` → definite `true`.
+1. `compare eq` (left branch): `resolveValue("isActive", data)` → `{ found: true, value: { kind: "boolean", value: true } }`; compared against `booleanLiteral true` → definite `true`.
 2. `fold` (`reduce`, seeded at `0`): `resolveCollection("items", data)` → three items. The accumulator starts at `0`; for each item in turn, `combine` evaluates `accumulator + reference("amount")` with that single item as context — `resolveValue("amount", item)` → `8`, `12`, `1`, all definite — stepping the accumulator `0 → 8 → 20 → 21`. Final accumulator → `21`.
 3. `arithmetic add`: `resolveValue("x", data)` → `10`; `resolveValue("y", data)` → `5`. Sum → `15`.
 4. `compare gt` (right branch): `21 > 15` → definite `true`.

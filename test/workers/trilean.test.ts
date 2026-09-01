@@ -24,7 +24,7 @@ function isUnknownArray(value: unknown): value is unknown[] {
  * The same README.md "Worked example" fixture as src/golden-examples.test.ts (imported, not duplicated, so the two suites can never silently drift apart), re-run here inside the real Cloudflare Workers runtime (workerd) via the `workers` vitest project. Passing here turns "isomorphic" from an assertion into a runtime-checked fact for the evaluator itself, not merely for the Zod schemas.
  */
 describe("golden example (README.md worked example) under workerd", () => {
-  it("base case: isActive eq 1 AND sum(items.amount) via reduce fold > x + y -> definite true", async () => {
+  it("base case: isActive eq true AND sum(items.amount) via reduce fold > x + y -> definite true", async () => {
     const result = await evaluatePredicate(
       goldenExampleTree,
       goldenExampleData,
@@ -43,7 +43,7 @@ describe("golden example (README.md worked example) under workerd", () => {
   });
 
   it("x missing from data variation -> indeterminate not-found (and does NOT absorb here)", async () => {
-    // Unlike the empty-items case above, the left operand (isActive eq 1) is definitely true here, and true is not an absorbing value for AND -- so the right operand's not-found propagates all the way to the top instead of being rescued.
+    // Unlike the empty-items case above, the left operand (isActive eq true) is definitely true here, and true is not an absorbing value for AND -- so the right operand's not-found propagates all the way to the top instead of being rescued.
     const result = await evaluatePredicate(
       goldenExampleTree,
       goldenExampleDataMissingX,

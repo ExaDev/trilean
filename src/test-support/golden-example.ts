@@ -12,7 +12,7 @@ function isUnknownArray(value: unknown): value is unknown[] {
 }
 
 /**
- * The exact worked example from README.md's "Worked example" section: `isActive` equals `1` AND `sum(items.amount)` -- the literal `fold` tree the `sum` derived-aggregate builder assembles -- is greater than `x + y`. Exported here, rather than defined separately in each consuming test file, so the unit-project gate (src/golden-examples.test.ts) and the Cloudflare Workers re-run (test/workers/trilean.test.ts) share one byte-identical fixture and can never silently drift apart.
+ * The exact worked example from README.md's "Worked example" section: `isActive` equals `true` AND `sum(items.amount)` -- the literal `fold` tree the `sum` derived-aggregate builder assembles -- is greater than `x + y`. Exported here, rather than defined separately in each consuming test file, so the unit-project gate (src/golden-examples.test.ts) and the Cloudflare Workers re-run (test/workers/trilean.test.ts) share one byte-identical fixture and can never silently drift apart.
  */
 export const goldenExampleTree: PredicateNode = {
   kind: "and",
@@ -20,7 +20,7 @@ export const goldenExampleTree: PredicateNode = {
     kind: "compare",
     op: "eq",
     left: { kind: "reference", key: "isActive" },
-    right: { kind: "numberLiteral", value: 1 },
+    right: { kind: "booleanLiteral", value: true },
   },
   right: {
     kind: "compare",
@@ -59,6 +59,12 @@ export const goldenExampleResolvers: Resolvers = {
       return Promise.resolve({ found: false });
     }
     const value = context[key];
+    if (typeof value === "boolean") {
+      return Promise.resolve({
+        found: true,
+        value: { kind: "boolean", value },
+      });
+    }
     return Promise.resolve(
       typeof value === "number"
         ? { found: true, value: { kind: "number", value } }
@@ -77,7 +83,7 @@ export const goldenExampleResolvers: Resolvers = {
 
 /** Base-case backing data, exactly as given in README.md's "Worked example" section. */
 export const goldenExampleData = {
-  isActive: 1,
+  isActive: true,
   x: 10,
   y: 5,
   items: [{ amount: 8 }, { amount: 12 }, { amount: 1 }],
@@ -85,20 +91,20 @@ export const goldenExampleData = {
 
 /** Variation 1: `items` resolves to `[]` -- the `sum`-over-empty identity (`0`) is not greater than `x + y`, feeding through to `and`'s own absorbing `false`. Typed via an explicit variable annotation, rather than an `as unknown[]` assertion on the empty array literal, so `items` is `unknown[]` without a cast. */
 export const goldenExampleDataEmptyItems: {
-  isActive: number;
+  isActive: boolean;
   x: number;
   y: number;
   items: unknown[];
 } = {
-  isActive: 1,
+  isActive: true,
   x: 10,
   y: 5,
   items: [],
 };
 
-/** Variation 2: `x` is missing from the data. `and` has no rescuing value on this side: the left operand (`isActive eq 1`) is definitely `true`, not `false`, so it cannot absorb the right operand's indeterminacy the way variation 1's `false` does above. */
+/** Variation 2: `x` is missing from the data. `and` has no rescuing value on this side: the left operand (`isActive eq true`) is definitely `true`, not `false`, so it cannot absorb the right operand's indeterminacy the way variation 1's `false` does above. */
 export const goldenExampleDataMissingX = {
-  isActive: 1,
+  isActive: true,
   y: 5,
   items: [{ amount: 8 }, { amount: 12 }, { amount: 1 }],
 };
