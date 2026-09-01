@@ -36,6 +36,10 @@
     "_build": {
       "inputs": ["src/**", "tsdown.config.ts", "package.json", "scripts/**"],
       "outputs": ["dist/**", "schemas/**"]
+    },
+    "_prepush": {
+      "dependsOn": ["_lint", "_typecheck", "_test", "_test:integration", "_test:smoke", "_test:workers"],
+      "outputs": []
     }
   }
 }

@@ -68,6 +68,8 @@
     "_test:smoke": "vitest run --project smoke",
     "test:workers": "turbo run _test:workers",
     "_test:workers": "vitest run --project workers",
+    "prepush": "turbo run _prepush",
+    "_prepush": "true",
     "prepublishOnly": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run test:integration && pnpm run build && pnpm run test:smoke && publint && attw --pack",
     "prepare": "husky",
     "release": "semantic-release"
