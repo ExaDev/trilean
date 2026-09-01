@@ -188,7 +188,7 @@ These hold across every part of the design below, and any implementation change 
 
 - **No assumptions about consumer data.** The only places this package touches real data are three named resolver contracts (see [Resolvers](#resolvers)). The schema stores *what to pass* to a resolver, never any resolver logic itself, and never interprets the meaning of an opaque key, table identifier, or collection reference.
 - **Three outcomes, never two.** Every evaluation produces a definite result or an indeterminate result carrying a reason — never a bare `boolean`/`number`, and never a thrown exception for a data-quality problem. See [The evaluation model](#the-evaluation-model).
-- **Derived constructs are compositions, not new logic.** Anything describable as "some other primitive, wired together" is implemented that way, so its correctness is inherited rather than requiring separate proof. See [Derived connectives](#derived-connectives) and [Derived aggregates](#derived-aggregates).
+- **Derived constructs are compositions, not new logic.** Anything describable as "some other primitive, wired together" is implemented that way, so its correctness is inherited rather than requiring separate proof. See [Derived connectives](#derived-connectives), [Derived aggregates](#derived-aggregates), and [Derived values](#derived-values).
 - **One schema, mechanically derived artefacts.** A single canonical type definition produces the runtime validator and the portable wire-format schema; they cannot drift apart because there is only one source. See [Schema strategy](#schema-strategy).
 - **Generic examples only.** Every example in this document uses invented, placeholder field names (`temperature`, `orderTotal`, `isActive`, `x`, `y`, `amount`, `items`) with no resemblance to any particular company, product, or industry's real data model.
 
@@ -353,7 +353,8 @@ type PredicateNode =
   | { kind: "memberOf"; op: MembershipOperator; operand: ExpressionNode; candidates: ExpressionNode[] }
   | { kind: "exists"; operand: ExpressionNode }
   | { kind: "some"; collection: JsonValue; item: PredicateNode; filter?: PredicateNode }
-  | { kind: "every"; collection: JsonValue; item: PredicateNode; filter?: PredicateNode };
+  | { kind: "every"; collection: JsonValue; item: PredicateNode; filter?: PredicateNode }
+  | { kind: "treeReference"; key: JsonValue };
 ```
 
 ### `not`, `and`, `or`
@@ -409,6 +410,8 @@ type FoldCombiner =
   | { mode: "min"; item: ExpressionNode }
   | { mode: "reduce"; initial: ExpressionNode; combine: ExpressionNode };
 
+type HitPolicy = "first" | "unique";
+
 type ExpressionNode =
   | { kind: "numberLiteral"; value: number; unit?: Unit }
   | { kind: "textLiteral"; value: string }
@@ -419,10 +422,11 @@ type ExpressionNode =
   | { kind: "negate"; operand: ExpressionNode }
   | { kind: "call"; fn: string; args: ExpressionNode[] }
   | { kind: "lookup"; table: JsonValue; keys: ExpressionNode[] }
-  | { kind: "conditional"; cases: { when: PredicateNode; then: ExpressionNode }[]; fallback: ExpressionNode }
+  | { kind: "conditional"; hitPolicy?: HitPolicy; cases: { when: PredicateNode; then: ExpressionNode }[]; fallback: ExpressionNode }
   | { kind: "fold"; collection: JsonValue; filter?: PredicateNode; combiner: FoldCombiner }
   | { kind: "accumulator" }
-  | { kind: "delegate"; system: string; payload: JsonValue };
+  | { kind: "delegate"; system: string; payload: JsonValue }
+  | { kind: "treeReference"; key: JsonValue };
 ```
 
 A `textLiteral` kind is included even though it is not separately enumerated as its own top-level construct, because `textCompare`'s symmetry requirement (either side may be an arbitrary computed value, per the section above) is meaningless without a way to write a constant string or pattern — matching a field against the fixed text `"active"`, or against a fixed regular expression, needs a text constant on one side. This is a structural consequence of the symmetry already required for text matching, not an added feature.
@@ -465,7 +469,16 @@ Resolves a single value from a named external table-like source, keyed by one or
 
 ### `conditional`
 
-A piecewise/conditional-value node: an ordered, possibly-empty list of `{ when, then }` cases plus a required `fallback`. Evaluates to the `then` of the first case whose `when` predicate is definitely `true`; if no case matches, evaluates to `fallback`. If evaluating a `when` predicate produces an indeterminate outcome **before any earlier case has matched**, the whole `conditional` node's own result is that same indeterminate outcome (reason preserved) — evaluation does not skip past an unknown guard to try the next one, because doing so could silently pick a later branch that only looks correct because an earlier one couldn't actually be checked.
+A piecewise/conditional-value node: an ordered, possibly-empty list of `{ when, then }` cases plus a required `fallback`. An optional `hitPolicy` field (`"first"` or `"unique"`) decides how cases are read; absent is treated as `"first"` — the exact, unchanged behaviour of every tree serialised before this field existed, not a masked-bug fallback.
+
+**`hitPolicy: "first"`** (the default). Evaluates to the `then` of the first case whose `when` predicate is definitely `true`; if no case matches, evaluates to `fallback`. If evaluating a `when` predicate produces an indeterminate outcome **before any earlier case has matched**, the whole `conditional` node's own result is that same indeterminate outcome (reason preserved) — evaluation does not skip past an unknown guard to try the next one, because doing so could silently pick a later branch that only looks correct because an earlier one couldn't actually be checked.
+
+**`hitPolicy: "unique"`** asserts that at most one case is expected to match, and treats two or more matches as a data error rather than silently taking the first. Every case's `when` is evaluated concurrently (there is no "earlier case" to short-circuit on), then resolved in this order:
+
+1. **Two or more cases are definitely `true`** — `domain-error` ("more than one case matched under the 'unique' hit policy"), regardless of any other case's own indeterminacy. This mirrors `memberOf`/`some`/`every`'s existing absorption: a confirmed outcome (here, "there is a genuine ambiguity") cannot be undone by an unrelated case's data problem.
+2. Otherwise, **any case's `when` is indeterminate** — the whole node is indeterminate with that reason (first such candidate, in declared case order, per [The evaluation model](#the-evaluation-model)'s tie-break rule). This is deliberately **not** absorbed by a single already-confirmed match, unlike step 1 above and unlike `memberOf`/`some`/`every`'s own absorption: an unresolved case might still turn out to be a second match, so "exactly one match so far" cannot be trusted as final until every other case is known to not also match.
+3. Otherwise, **exactly one case is definitely `true`** — evaluate and return that case's `then`. No other case's `then` is ever evaluated.
+4. Otherwise (zero matches, and nothing indeterminate) — evaluate and return `fallback`, exactly as `"first"` already does.
 
 ### `fold`
 
@@ -538,9 +551,57 @@ const average = (collection: JsonValue, item: ExpressionNode, filter?: Predicate
 
 `average` is `sum` divided by `count` over the same `collection`/`filter`, with no `probe` — `sum`'s own `item` already forces every participating item's projected value to resolve, so `average`'s numerator is already indeterminate under exactly the condition a `count` probe exists to detect, with nothing left to duplicate. Nothing new to verify for the empty-collection case either: division's own already-established rule (zero divisor is `domain-error`) is *why* `average` over an empty collection is `domain-error`, since `count` over an empty collection is `0` and `sum(...)/0` already means exactly that.
 
+### Derived values
+
+`coalesce` is never its own evaluated node kind — it is a builder function that assembles an ordinary `conditional`, the same treatment [Derived connectives](#derived-connectives) and [Derived aggregates](#derived-aggregates) already give `xor`/`nand`/`nor`/`implies`/`iff`/`none`/`sum`/`count`/`average`: correctness is inherited from the mechanism it's built from, rather than needing its own independent implementation that could silently drift from it.
+
+```ts
+const coalesce = (
+  first: ExpressionNode,
+  second: ExpressionNode,
+  ...rest: ExpressionNode[]
+): ExpressionNode =>
+  [first, second, ...rest].reduceRight(
+    (fallback, candidate): ExpressionNode => ({
+      kind: "conditional",
+      cases: [{ when: { kind: "exists", operand: candidate }, then: candidate }],
+      fallback,
+    }),
+  );
+```
+
+Built right-to-left over the full candidate list via `reduceRight`, needing no seed value: `first`/`second` are required arguments (rather than accepting a single `ExpressionNode[]`), which guarantees the list always has at least two elements, so the no-initial-value overload of `reduceRight` never hits an empty array.
+
+**Worked correctness check.** `coalesce`'s only interesting behaviour — whether a given candidate is skipped past or propagated — reduces entirely to what its single `exists` probe reports, per [`exists`](#exists)'s and [`conditional`](#conditional)'s own already-established rules:
+
+| A candidate's own evaluation | `exists(candidate)` | The `conditional` case | `coalesce` evaluates to |
+|---|---|---|---|
+| A definite value | definite `true` | matches | The candidate's value (re-evaluated as `then`, same result) |
+| Indeterminate, `not-found` | definite `false` | does not match | The next candidate (the enclosing `fallback`), evaluated fresh |
+| Indeterminate, `wrong-type` | definite `true` | matches | The candidate's own `wrong-type` result (re-evaluated as `then`) |
+| Indeterminate, `domain-error` | definite `true` | matches | The candidate's own `domain-error` result (re-evaluated as `then`) |
+
+Falling through to the next candidate therefore happens only on `exists`'s own `false` — a genuinely absent value (`not-found`) — never on a candidate that resolved to something merely unusable (`wrong-type`/`domain-error`): `exists` already draws exactly that line, and `coalesce` inherits it unmodified rather than re-deciding it. This is the one behaviour a naive reimplementation is likely to get backwards (treating *any* indeterminate candidate as "try the next one"), so it is worth stating explicitly rather than leaving it to be inferred from the composition alone.
+
+A real implementation may memoise a candidate's single evaluation rather than running its resolver twice — once for the `exists` probe, once again for `then` — exactly the same performance caveat [Derived aggregates](#derived-aggregates)'s `presenceOf` already documents for its own `memberOf` probe; resolvers are pure functions of their inputs throughout this design, so this is a performance choice, not a correctness one.
+
 ### `delegate`
 
 An explicitly-named external system plus an arbitrary, unevaluated JSON payload, standing in for the whole node without this package attempting to evaluate it itself — see [Out of scope](#out-of-scope). Evaluating a `delegate` node is not part of this package's own evaluation semantics. The reference evaluator accepts an optional delegate handler per external system name; if none is registered for the named `system`, evaluating the node is indeterminate (`wrong-type`, "no delegate handler registered for external system '<name>'"). Consumers who want a `delegate` node to actually resolve are expected either to register a handler, or to pre-process the tree — walk it, find delegation nodes, invoke the named external system out of band, and substitute the result as a literal — before the tree ever reaches this package's evaluator.
+
+### `treeReference`
+
+A reference to a whole other tree, identified by an opaque `key` (see [Resolvers](#resolvers)) — the only node kind valid from *both* a `PredicateNode` and an `ExpressionNode` position: the exact same schema is appended as the last member of each of the two discriminated unions above, not two separately-declared copies that happen to look alike. Unlike [`delegate`](#delegate), which hands the whole node off to an *external* system this package never evaluates, `treeReference` resolves to *another tree of this same schema* and evaluates it with this same evaluator — a sub-rule reference, not an escape hatch.
+
+`resolveTree` is optional on `Resolvers`, for the same reason `resolveDelegate` is: a well-defined indeterminate result on absence, not a masked bug, and an additive, non-breaking interface change for every consumer implemented before this node kind existed. If no `resolveTree` is registered, evaluating a `treeReference` node is `wrong-type` ("no tree resolver registered for treeReference nodes"). If the resolver reports no match, the result is `not-found`.
+
+A resolved tree is never merely trusted — it is re-validated with a fresh `PredicateNodeSchema`/`ExpressionNodeSchema` parse (`PredicateNodeSchema` from a predicate-position reference, `ExpressionNodeSchema` from an expression-position one) before evaluation proceeds, exactly the same discipline the top-level tree itself is subject to when it first arrives at this package. A resolver fetching "a named rule from storage" is very often surfacing the same non-developer-authored JSON the top-level tree already is, with no static guarantee it still matches the schema; a failed parse is `wrong-type`.
+
+`context` and the enclosing fold's `accumulator` both pass through a `treeReference` unchanged — the referenced tree shares the caller's evaluation scope, like a subroutine call, not a nested evaluation with its own fresh context. There is deliberately no mechanism to override the context at a `treeReference` boundary; a consumer wanting that already has [`delegate`](#delegate).
+
+**Cycle and depth protection.** A tree that references itself, directly or through a longer chain, is guarded by two independent, layered checks rather than one: a cycle detector tracks every `key` (by its `JSON.stringify`'d form) already on the current reference chain, and reports `domain-error` ("circular treeReference detected") the moment a repeat is seen; a fixed depth cap separately reports `domain-error` ("...exceeds the maximum depth") on a long *acyclic* chain the cycle detector alone would never catch. Neither check is a substitute for the other.
+
+**A known, accepted design consequence.** `resolveTree` has no built-in way to know whether a given `key` is being resolved from a predicate-position or an expression-position reference — the same is already true of `reference.key` and `lookup.table`, neither of which carries a type discriminator either. A consumer needing to disambiguate structures their own key accordingly (e.g. `{ kind: "predicate", id: "..." }` as the `JsonValue` itself) rather than this schema growing a bespoke field for it.
 
 ## Collections
 
@@ -564,11 +625,15 @@ An item whose `filter` is itself indeterminate is never silently included or exc
 
 ## Resolvers
 
-Three independent points of extension, each supplied separately by the embedding consumer, each treated by the schema as pure data to hand over — never as resolver logic living inside the schema itself:
+Three core, required points of extension, plus two further independent optional ones, each supplied separately by the embedding consumer, each treated by the schema as pure data to hand over — never as resolver logic living inside the schema itself:
 
 ```ts
 type Resolution =
   | { found: true; value: ComputedValue }
+  | { found: false };
+
+type TreeResolution =
+  | { found: true; node: JsonValue }
   | { found: false };
 
 interface Resolvers {
@@ -583,10 +648,15 @@ interface Resolvers {
 
   /** Optional, separate from the three core contracts — see the `delegate` node kind. */
   resolveDelegate?(system: string, payload: JsonValue, context: EvaluationContext): Promise<Resolution>;
+
+  /** Optional, separate from the three core contracts — see the `treeReference` node kind. */
+  resolveTree?(key: JsonValue, context: EvaluationContext): Promise<TreeResolution>;
 }
 ```
 
-`resolveCollection` takes no narrowing parameter of its own: it always returns the full candidate list for the given reference, and narrowing which of those candidates actually take part is handled uniformly, after resolution, by the `filter` mechanism described under [Pre-filtering which items participate](#pre-filtering-which-items-participate) — no resolver needs a bespoke narrowing argument for this. It also returns a plain array rather than a `Resolution` envelope: a collection's "nothing here" state is unambiguously an empty array, unlike a single value's absence, which needs an explicit flag to distinguish "there is genuinely nothing here" from any value the resolver might otherwise legitimately return. Each resolver may itself be asynchronous, independently of the others. None of the three needs to know anything about the other two; a consumer implementing all three (and, optionally, the delegate handler) is free to have them share underlying data-access logic, but the schema and evaluator never require or assume that they do.
+`resolveCollection` takes no narrowing parameter of its own: it always returns the full candidate list for the given reference, and narrowing which of those candidates actually take part is handled uniformly, after resolution, by the `filter` mechanism described under [Pre-filtering which items participate](#pre-filtering-which-items-participate) — no resolver needs a bespoke narrowing argument for this. It also returns a plain array rather than a `Resolution` envelope: a collection's "nothing here" state is unambiguously an empty array, unlike a single value's absence, which needs an explicit flag to distinguish "there is genuinely nothing here" from any value the resolver might otherwise legitimately return. Each resolver may itself be asynchronous, independently of the others. None of the three core resolvers needs to know anything about the other two, or about either optional one; a consumer implementing all five is free to have them share underlying data-access logic, but the schema and evaluator never require or assume that they do.
+
+`resolveTree` returns a `TreeResolution`, deliberately shaped like `Resolution` but distinct from it: `node` carries opaque JSON — the referenced tree, re-validated by the evaluator rather than trusted (see [`treeReference`](#treereference)) — where `Resolution`'s `value` carries an already-typed `ComputedValue`. It is otherwise the same "found" envelope for the same reason: a `treeReference`'s absence needs to be distinguishable from any tree the resolver might otherwise legitimately return, exactly as a `reference`'s absence needs to be distinguishable from any value. `resolveDelegate` and `resolveTree` solve different problems and are never a substitute for one another: `resolveDelegate` hands a payload to an *external* system this package never evaluates; `resolveTree` hands back *more of this same schema*, for this same evaluator to keep evaluating.
 
 ## Evaluator entry points
 
@@ -654,10 +724,11 @@ How each reason category can arise, per node kind. "Propagates" means: an indete
 | `negate` | operand not found | operand not `number`/`duration` | never directly |
 | `call` | any argument not found | unregistered function name, or an argument of the wrong kind for that function | argument outside the function's valid domain (e.g. negative input to `squareRoot`) |
 | `lookup` | any key not found, or resolver reports no match | a key expression resolves to the wrong kind for that table | never directly |
-| `conditional` | an unmatched guard's own evaluation is `not-found`, before any earlier guard matched | as `not-found`; also the chosen branch's own result if it is `wrong-type` | as `not-found`; also the chosen branch's own result if it is `domain-error` |
+| `conditional` | `"first"`: an unmatched guard's own evaluation is `not-found`, before any earlier guard matched.<br>`"unique"`: any case's `when` is `not-found`, unless 2+ cases already definitely matched (see `domain-error`, which then takes priority).<br>Both: also the chosen branch's (`then`/`fallback`) own result if it is `not-found`. | Same pattern as `not-found`, substituting `wrong-type` throughout (guard evaluation and chosen branch alike). | `"unique"` only: 2+ cases are definitely `true` — see [`conditional`](#conditional)'s absorption order.<br>Both: same pattern as `not-found`, substituting `domain-error` (guard evaluation and chosen branch alike). |
 | `fold` | any participating item's `filter`, `item`, or `combine` evaluation is `not-found`; or a `reduce`'s `initial` is `not-found` | any participating item's `filter`, `item`, or `combine` evaluation is `wrong-type`; or a `reduce`'s `initial` is `wrong-type` | empty (post-filter) collection with `max`/`min` (no first item to seed from); or any participating item's `item`/`combine` evaluation is `domain-error`; or a `reduce`'s `initial` is `domain-error` |
 | `accumulator` | never | used outside a reduce fold's `combine` expression | never |
 | `delegate` | never (no resolution attempted without a handler) | no handler registered for the named `system` | never |
+| `treeReference` | resolver reports no match | no `resolveTree` registered; or the resolved node fails schema validation | a circular reference is detected; or the reference chain exceeds the maximum depth |
 
 ## Worked example
 
