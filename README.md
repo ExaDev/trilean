@@ -62,12 +62,6 @@ pnpm lint
 pnpm typecheck
 ```
 
-## Provenance
-
-This design was produced by a clean-room (Chinese-wall) process. An examiner role with prior exposure to existing, unrelated proprietary/confidential schema designs (not named here, out of respect for the confidentiality obligations attached to that exposure) wrote a code-free functional specification describing only observed behaviour and requirements — no source code, no copied identifiers, comment text, or structure, and no attributable specifics of any originating system, company, product, or industry. That specification was reviewed against a scrubbing checklist to confirm it contained function rather than expression, then handed, as the entire and only input, to a separately-instantiated implementer with no access to whatever the examiner had seen. Everything below this point — every type name, every worked example, every design decision not explicitly forced by the specification — is that implementer's independent work.
-
-Every worked example in this document uses invented, generic field names for exactly this reason: nothing about the actual formulae, data model, or terminology of whatever the examiner had prior exposure to should be recoverable from it.
-
 ## Design principles
 
 These hold across every part of the design below, and any implementation change must preserve them:
