@@ -490,6 +490,11 @@ const fixtures: readonly Fixture[] = [
     { kind: "durationLiteral", value: 1, unit: "min" },
     isDefinite,
   ),
+  expr(
+    "complexLiteral: never indeterminate",
+    { kind: "complexLiteral", re: 1, im: -1 },
+    isDefinite,
+  ),
 
   // reference
   expr(
