@@ -60,6 +60,15 @@ describe("literals", () => {
     expectDefinite(result, { kind: "text", value: "active" });
   });
 
+  it("booleanLiteral is always definite", async () => {
+    const result = await evaluateValue(
+      { kind: "booleanLiteral", value: true },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(result, { kind: "boolean", value: true });
+  });
+
   it("instantLiteral is always definite", async () => {
     const result = await evaluateValue(
       { kind: "instantLiteral", value: "2026-01-01T00:00:00.000Z" },
@@ -402,6 +411,15 @@ describe("negate", () => {
     expectIndeterminate(result, "wrong-type");
   });
 
+  it("is wrong-type on a boolean -- negate has no logical-NOT meaning here", async () => {
+    const result = await evaluateValue(
+      { kind: "negate", operand: { kind: "booleanLiteral", value: true } },
+      undefined,
+      resolvers,
+    );
+    expectIndeterminate(result, "wrong-type");
+  });
+
   it("propagates an indeterminate operand", async () => {
     const result = await evaluateValue(
       { kind: "negate", operand: { kind: "reference", key: "missing" } },
@@ -656,6 +674,45 @@ describe("compare", () => {
     },
   );
 
+  it.each([
+    { op: "eq", left: true, right: true, expected: true },
+    { op: "eq", left: true, right: false, expected: false },
+    { op: "neq", left: true, right: false, expected: true },
+    { op: "neq", left: true, right: true, expected: false },
+  ] as const)(
+    "boolean $op($left, $right) => $expected",
+    async ({ op, left, right, expected }) => {
+      const result = await evaluatePredicate(
+        {
+          kind: "compare",
+          op,
+          left: { kind: "booleanLiteral", value: left },
+          right: { kind: "booleanLiteral", value: right },
+        },
+        undefined,
+        resolvers,
+      );
+      expectDefinite(result, expected);
+    },
+  );
+
+  it.each(["gt", "gte", "lt", "lte"] as const)(
+    "%s is wrong-type for boolean operands -- no natural ordering",
+    async (op) => {
+      const result = await evaluatePredicate(
+        {
+          kind: "compare",
+          op,
+          left: { kind: "booleanLiteral", value: true },
+          right: { kind: "booleanLiteral", value: false },
+        },
+        undefined,
+        resolvers,
+      );
+      expectIndeterminate(result, "wrong-type");
+    },
+  );
+
   it("compares instants by parsed timestamp ordering", async () => {
     const result = await evaluatePredicate(
       {
@@ -691,6 +748,20 @@ describe("compare", () => {
         op: "eq",
         left: { kind: "numberLiteral", value: 1 },
         right: { kind: "textLiteral", value: "1" },
+      },
+      undefined,
+      resolvers,
+    );
+    expectIndeterminate(result, "wrong-type");
+  });
+
+  it("is wrong-type when comparing a boolean against a number", async () => {
+    const result = await evaluatePredicate(
+      {
+        kind: "compare",
+        op: "eq",
+        left: { kind: "booleanLiteral", value: true },
+        right: { kind: "numberLiteral", value: 1 },
       },
       undefined,
       resolvers,
@@ -955,6 +1026,49 @@ describe("memberOf", () => {
       resolvers,
     );
     expectDefinite(result, false);
+  });
+
+  it("boolean operands participate under the same kind-agnostic equality rule as every other kind", async () => {
+    const matchResult = await evaluatePredicate(
+      {
+        kind: "memberOf",
+        op: "in",
+        operand: { kind: "booleanLiteral", value: true },
+        candidates: [
+          { kind: "booleanLiteral", value: false },
+          { kind: "booleanLiteral", value: true },
+        ],
+      },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(matchResult, true);
+
+    const nonMatchResult = await evaluatePredicate(
+      {
+        kind: "memberOf",
+        op: "in",
+        operand: { kind: "booleanLiteral", value: true },
+        candidates: [{ kind: "booleanLiteral", value: false }],
+      },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(nonMatchResult, false);
+  });
+
+  it("is wrong-type when a boolean operand is compared against a non-boolean candidate for membership", async () => {
+    const result = await evaluatePredicate(
+      {
+        kind: "memberOf",
+        op: "in",
+        operand: { kind: "booleanLiteral", value: true },
+        candidates: [{ kind: "numberLiteral", value: 1 }],
+      },
+      undefined,
+      resolvers,
+    );
+    expectIndeterminate(result, "wrong-type");
   });
 
   it("a definite match short-circuits the result past a later indeterminate candidate", async () => {

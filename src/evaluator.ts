@@ -142,6 +142,22 @@ function compareValues(
         "wrong-type",
         "text values are not comparable via 'compare'; use 'textCompare'",
       );
+    case "boolean":
+      if (right.kind !== "boolean") {
+        return indeterminate(
+          "wrong-type",
+          `cannot compare a 'boolean' value with a '${right.kind}' value`,
+        );
+      }
+      if (op !== "eq" && op !== "neq") {
+        return indeterminate(
+          "wrong-type",
+          `booleans have no natural ordering; '${op}' is only defined for 'eq'/'neq'`,
+        );
+      }
+      return definite(
+        op === "eq" ? left.value === right.value : left.value !== right.value,
+      );
     case "instant": {
       if (right.kind !== "instant") {
         return indeterminate(
@@ -244,6 +260,14 @@ function computeMembershipMatch(
         );
       }
       return definite(operand.value === candidate.value);
+    case "boolean":
+      if (candidate.kind !== "boolean") {
+        return indeterminate(
+          "wrong-type",
+          `cannot compare a 'boolean' value with a '${candidate.kind}' value for membership`,
+        );
+      }
+      return definite(operand.value === candidate.value);
     case "instant": {
       if (candidate.kind !== "instant") {
         return indeterminate(
@@ -297,6 +321,7 @@ function applyNegate(operand: ComputedValue): Evaluation<ComputedValue> {
       });
     case "text":
     case "instant":
+    case "boolean":
       return indeterminate(
         "wrong-type",
         `cannot negate a '${operand.kind}' value`,
@@ -934,6 +959,8 @@ async function evaluateValueInternal(
       return definite({ kind: "number", value: node.value, unit: node.unit });
     case "textLiteral":
       return definite({ kind: "text", value: node.value });
+    case "booleanLiteral":
+      return definite({ kind: "boolean", value: node.value });
     case "instantLiteral":
       return definite({ kind: "instant", value: node.value });
     case "durationLiteral":
