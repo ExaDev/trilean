@@ -2,6 +2,7 @@ import type { ComputedValue, DurationUnit, Unit } from "./computed-value";
 import {
   combineUnitsForDivide,
   combineUnitsForMultiply,
+  toRectangular,
   unitsEqual,
 } from "./computed-value";
 import {
@@ -169,6 +170,31 @@ function compareValues(
           toMilliseconds(right.value, right.unit),
         ),
       );
+    case "complex": {
+      if (right.kind !== "complex") {
+        return indeterminate(
+          "wrong-type",
+          `cannot compare a 'complex' value with a '${right.kind}' value`,
+        );
+      }
+      if (op !== "eq" && op !== "neq") {
+        return indeterminate(
+          "wrong-type",
+          `'${op}' is not defined for 'complex' values -- complex numbers have no natural ordering; use 'eq'/'neq'`,
+        );
+      }
+      if (!unitsEqual(left.unit, right.unit)) {
+        return indeterminate(
+          "wrong-type",
+          "cannot compare complex numbers with incompatible units",
+        );
+      }
+      const leftRect = toRectangular(left);
+      const rightRect = toRectangular(right);
+      const isEqual =
+        leftRect.re === rightRect.re && leftRect.im === rightRect.im;
+      return definite(op === "eq" ? isEqual : !isEqual);
+    }
     default:
       throw new Error("unreachable computed-value kind");
   }
@@ -270,6 +296,26 @@ function computeMembershipMatch(
         toMilliseconds(operand.value, operand.unit) ===
           toMilliseconds(candidate.value, candidate.unit),
       );
+    case "complex": {
+      if (candidate.kind !== "complex") {
+        return indeterminate(
+          "wrong-type",
+          `cannot compare a 'complex' value with a '${candidate.kind}' value for membership`,
+        );
+      }
+      if (!unitsEqual(operand.unit, candidate.unit)) {
+        return indeterminate(
+          "wrong-type",
+          "cannot compare complex numbers with incompatible units for membership",
+        );
+      }
+      const operandRect = toRectangular(operand);
+      const candidateRect = toRectangular(candidate);
+      return definite(
+        operandRect.re === candidateRect.re &&
+          operandRect.im === candidateRect.im,
+      );
+    }
     default:
       throw new Error("unreachable computed-value kind");
   }
@@ -295,6 +341,15 @@ function applyNegate(operand: ComputedValue): Evaluation<ComputedValue> {
         value: -operand.value,
         unit: operand.unit,
       });
+    case "complex": {
+      const rect = toRectangular(operand);
+      return definite({
+        kind: "complex",
+        re: -rect.re,
+        im: -rect.im,
+        unit: operand.unit,
+      });
+    }
     case "text":
     case "instant":
       return indeterminate(
@@ -424,6 +479,126 @@ function applyArithmeticOnDurations(
   }
 }
 
+/** Binary arithmetic between two `complex` operands, each normalised to rectangular form first via `toRectangular` -- the same "normalise, then combine" treatment `applyArithmeticOnDurations` above already gives `duration`. `add`/`subtract` require identical units (mirroring `applyArithmeticOnNumbers`'s own rule); `multiply`/`divide` combine units by dimensional analysis the same way. `power`/`modulo` are never reached here -- `applyArithmetic`'s own dispatcher intercepts both before calling this function, `power` routing to `applyComplexPower` and `modulo` reporting `wrong-type` directly, since neither has a general two-`complex`-operand definition. */
+function applyArithmeticOnComplex(
+  op: ArithmeticOperator,
+  left: Extract<ComputedValue, { kind: "complex" }>,
+  right: Extract<ComputedValue, { kind: "complex" }>,
+): Evaluation<ComputedValue> {
+  const leftRect = toRectangular(left);
+  const rightRect = toRectangular(right);
+  switch (op) {
+    case "add":
+      if (!unitsEqual(left.unit, right.unit)) {
+        return indeterminate(
+          "wrong-type",
+          "cannot add complex numbers with incompatible units",
+        );
+      }
+      return definite({
+        kind: "complex",
+        re: leftRect.re + rightRect.re,
+        im: leftRect.im + rightRect.im,
+        unit: left.unit,
+      });
+    case "subtract":
+      if (!unitsEqual(left.unit, right.unit)) {
+        return indeterminate(
+          "wrong-type",
+          "cannot subtract complex numbers with incompatible units",
+        );
+      }
+      return definite({
+        kind: "complex",
+        re: leftRect.re - rightRect.re,
+        im: leftRect.im - rightRect.im,
+        unit: left.unit,
+      });
+    case "multiply":
+      return definite({
+        kind: "complex",
+        re: leftRect.re * rightRect.re - leftRect.im * rightRect.im,
+        im: leftRect.re * rightRect.im + leftRect.im * rightRect.re,
+        unit: combineUnitsForMultiply(left.unit, right.unit),
+      });
+    case "divide": {
+      const denominator = rightRect.re ** 2 + rightRect.im ** 2;
+      if (denominator === 0) {
+        return indeterminate(
+          "domain-error",
+          "division by a zero-magnitude complex number",
+        );
+      }
+      return definite({
+        kind: "complex",
+        re:
+          (leftRect.re * rightRect.re + leftRect.im * rightRect.im) /
+          denominator,
+        im:
+          (leftRect.im * rightRect.re - leftRect.re * rightRect.im) /
+          denominator,
+        unit: combineUnitsForDivide(left.unit, right.unit),
+      });
+    }
+    case "power":
+    case "modulo":
+      throw new Error(
+        "unreachable: 'power'/'modulo' are intercepted before applyArithmeticOnComplex, in applyArithmetic's own dispatcher",
+      );
+    default:
+      throw new Error("unreachable arithmetic operator");
+  }
+}
+
+/** `power` against a `complex` base: only defined for a real, integer, dimensionless exponent, computed as repeated multiplication (a negative exponent inverting the final result via one `divide` by the multiplicative identity `1 + 0i`) rather than the general complex-exponent (`z^w`) formula, which would need a complex logarithm and is out of scope for this design -- see the "Complex values" section of README.md. */
+function applyComplexPower(
+  base: Extract<ComputedValue, { kind: "complex" }>,
+  exponent: Extract<ComputedValue, { kind: "number" }>,
+): Evaluation<ComputedValue> {
+  if (!isDimensionless(exponent.unit)) {
+    return indeterminate(
+      "wrong-type",
+      "'power' requires a dimensionless exponent",
+    );
+  }
+  if (!Number.isInteger(exponent.value)) {
+    return indeterminate(
+      "wrong-type",
+      "'power' against a 'complex' base is only defined for an integer exponent",
+    );
+  }
+  const magnitude = Math.abs(exponent.value);
+  const one: Extract<ComputedValue, { kind: "complex" }> = {
+    kind: "complex",
+    re: 1,
+    im: 0,
+    unit: {},
+  };
+  // Explicitly typed as the full `rect | polar` union, not inferred from `one` -- assigning an object literal to a `let` without its own annotation narrows TypeScript's inference to the literal's own matching union member (here, just the rectangular shape) rather than keeping the wider declared type, which would then reject a later `result = <the polar-shaped multiply result>` even though it is a perfectly valid `Complex` value.
+  let result: Extract<ComputedValue, { kind: "complex" }> = one;
+  for (let i = 0; i < magnitude; i++) {
+    const stepResult = applyArithmeticOnComplex("multiply", result, base);
+    if (stepResult.status === "indeterminate") return stepResult;
+    if (stepResult.value.kind !== "complex") {
+      throw new Error("unreachable: complex multiply always returns complex");
+    }
+    result = stepResult.value;
+  }
+  if (exponent.value >= 0) return definite(result);
+  return applyArithmeticOnComplex("divide", one, result);
+}
+
+/** Widens a `number` operand to `complex` (imaginary part `0`, same unit) so mixed `complex`/`number` arithmetic (e.g. `5 + (1+2i)`) can be expressed as a single `complex`/`complex` operation via `applyArithmeticOnComplex` -- returns `undefined` for any other kind, which the caller reports as `wrong-type`. */
+function toComplexOperand(
+  value: ComputedValue,
+): Extract<ComputedValue, { kind: "complex" }> | undefined {
+  if (value.kind === "complex") return value;
+  if (value.kind === "number") {
+    return { kind: "complex", re: value.value, im: 0, unit: value.unit };
+  }
+  return undefined;
+}
+
 /**
  * Dispatches `arithmetic` by operand kind. The three cross-kind temporal combinations this design defines (`instant - instant`, `instant + duration`, `duration + instant`) are checked explicitly first, in that order, against the exact operator each requires; any other combination touching an `instant` is `wrong-type` (see "Temporal values" in README.md -- e.g. adding two instants, or subtracting a `duration` from an `instant`, are deliberately *not* defined). Same-kind `duration`/`duration` combinations are delegated to `applyArithmeticOnDurations`; a `duration` paired with anything other than an `instant` or another `duration` is `wrong-type`. Everything remaining requires two `number` operands.
  */
@@ -475,6 +650,32 @@ function applyArithmetic(
       "wrong-type",
       `arithmetic operator '${op}' is not defined between a '${left.kind}' and a '${right.kind}' value`,
     );
+  }
+  if (left.kind === "complex" || right.kind === "complex") {
+    if (op === "power") {
+      if (left.kind !== "complex" || right.kind !== "number") {
+        return indeterminate(
+          "wrong-type",
+          "'power' is only defined for a 'complex' base with a real 'number' exponent",
+        );
+      }
+      return applyComplexPower(left, right);
+    }
+    if (op === "modulo") {
+      return indeterminate(
+        "wrong-type",
+        "'modulo' is not defined for 'complex' values",
+      );
+    }
+    const leftComplex = toComplexOperand(left);
+    const rightComplex = toComplexOperand(right);
+    if (leftComplex === undefined || rightComplex === undefined) {
+      return indeterminate(
+        "wrong-type",
+        `arithmetic operator '${op}' is not defined between a '${left.kind}' and a '${right.kind}' value`,
+      );
+    }
+    return applyArithmeticOnComplex(op, leftComplex, rightComplex);
   }
   if (left.kind !== "number") {
     return indeterminate(
@@ -942,6 +1143,22 @@ async function evaluateValueInternal(
         value: node.value,
         unit: node.unit,
       });
+    case "complexLiteral": {
+      if ("re" in node) {
+        return definite({
+          kind: "complex",
+          re: node.re,
+          im: node.im,
+          unit: node.unit,
+        });
+      }
+      return definite({
+        kind: "complex",
+        magnitude: node.magnitude,
+        phase: node.phase,
+        unit: node.unit,
+      });
+    }
     case "arithmetic": {
       const [left, right] = await Promise.all([
         evaluateValueInternal(

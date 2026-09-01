@@ -347,6 +347,16 @@ const fixtures: readonly Fixture[] = [
     { kind: "compare", op: "eq", left: divideByZero, right: numberLiteral(1) },
     isDomainError,
   ),
+  pred(
+    "compare: wrong-type when an ordering operator (not eq/neq) is used against complex operands",
+    {
+      kind: "compare",
+      op: "gt",
+      left: { kind: "complexLiteral", re: 1, im: 2 },
+      right: { kind: "complexLiteral", re: 3, im: 4 },
+    },
+    isWrongType,
+  ),
 
   // textCompare
   pred(

@@ -80,6 +80,24 @@ describe("literals", () => {
     );
     expectDefinite(result, { kind: "duration", value: 5, unit: "min" });
   });
+
+  it("complexLiteral (rectangular form) is always definite", async () => {
+    const result = await evaluateValue(
+      { kind: "complexLiteral", re: 3, im: -4, unit: { m: 1 } },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(result, { kind: "complex", re: 3, im: -4, unit: { m: 1 } });
+  });
+
+  it("complexLiteral (polar form) is always definite", async () => {
+    const result = await evaluateValue(
+      { kind: "complexLiteral", magnitude: 1, phase: 2 },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(result, { kind: "complex", magnitude: 1, phase: 2 });
+  });
 });
 
 describe("reference", () => {
@@ -410,6 +428,35 @@ describe("negate", () => {
     );
     expectIndeterminate(result, "not-found");
   });
+
+  it("negates a rectangular complex literal, preserving its unit", async () => {
+    const result = await evaluateValue(
+      {
+        kind: "negate",
+        operand: { kind: "complexLiteral", re: 3, im: -4, unit: { m: 1 } },
+      },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(result, { kind: "complex", re: -3, im: 4, unit: { m: 1 } });
+  });
+
+  it("negates a polar complex literal, normalising the result to rectangular form", async () => {
+    const result = await evaluateValue(
+      {
+        kind: "negate",
+        operand: { kind: "complexLiteral", magnitude: 2, phase: 0 },
+      },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(result, {
+      kind: "complex",
+      re: -2,
+      im: -0,
+      unit: undefined,
+    });
+  });
 });
 
 describe("temporal arithmetic -- the four well-defined combination rules", () => {
@@ -625,6 +672,204 @@ describe("temporal arithmetic -- wrong-type violations", () => {
   });
 });
 
+describe("complex arithmetic", () => {
+  it("add requires identical unit maps", async () => {
+    const result = await evaluateValue(
+      {
+        kind: "arithmetic",
+        op: "add",
+        left: { kind: "complexLiteral", re: 1, im: 2, unit: { m: 1 } },
+        right: { kind: "complexLiteral", re: 3, im: 4, unit: { m: 1 } },
+      },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(result, { kind: "complex", re: 4, im: 6, unit: { m: 1 } });
+  });
+
+  it("subtract is wrong-type on mismatched units", async () => {
+    const result = await evaluateValue(
+      {
+        kind: "arithmetic",
+        op: "subtract",
+        left: { kind: "complexLiteral", re: 1, im: 2, unit: { m: 1 } },
+        right: { kind: "complexLiteral", re: 3, im: 4, unit: { s: 1 } },
+      },
+      undefined,
+      resolvers,
+    );
+    expectIndeterminate(result, "wrong-type");
+  });
+
+  it("multiply: (1+2i)(3+4i) = -5+10i, a known identity", async () => {
+    const result = await evaluateValue(
+      {
+        kind: "arithmetic",
+        op: "multiply",
+        left: { kind: "complexLiteral", re: 1, im: 2 },
+        right: { kind: "complexLiteral", re: 3, im: 4 },
+      },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(result, { kind: "complex", re: -5, im: 10, unit: {} });
+  });
+
+  it("multiply: i * i = -1, the defining identity of the imaginary unit", async () => {
+    const result = await evaluateValue(
+      {
+        kind: "arithmetic",
+        op: "multiply",
+        left: { kind: "complexLiteral", re: 0, im: 1 },
+        right: { kind: "complexLiteral", re: 0, im: 1 },
+      },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(result, { kind: "complex", re: -1, im: 0, unit: {} });
+  });
+
+  it("divide: (1+i)/(1-i) = i, a known identity", async () => {
+    const result = await evaluateValue(
+      {
+        kind: "arithmetic",
+        op: "divide",
+        left: { kind: "complexLiteral", re: 1, im: 1 },
+        right: { kind: "complexLiteral", re: 1, im: -1 },
+      },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(result, { kind: "complex", re: 0, im: 1, unit: {} });
+  });
+
+  it("divide by a zero-magnitude complex number is domain-error", async () => {
+    const result = await evaluateValue(
+      {
+        kind: "arithmetic",
+        op: "divide",
+        left: { kind: "complexLiteral", re: 1, im: 2 },
+        right: { kind: "complexLiteral", re: 0, im: 0 },
+      },
+      undefined,
+      resolvers,
+    );
+    expectIndeterminate(result, "domain-error");
+  });
+
+  it("a number operand widens to complex for mixed arithmetic: 5 + (1+2i) = 6+2i", async () => {
+    const result = await evaluateValue(
+      {
+        kind: "arithmetic",
+        op: "add",
+        left: { kind: "numberLiteral", value: 5 },
+        right: { kind: "complexLiteral", re: 1, im: 2 },
+      },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(result, { kind: "complex", re: 6, im: 2 });
+  });
+
+  it("combines a rectangular operand and a polar operand representing the same number in one operation", async () => {
+    const result = await evaluateValue(
+      {
+        kind: "arithmetic",
+        op: "add",
+        left: { kind: "complexLiteral", re: 1, im: 2 },
+        right: { kind: "complexLiteral", magnitude: 1, phase: 0 },
+      },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(result, { kind: "complex", re: 2, im: 2 });
+  });
+
+  it("power: a positive integer exponent is repeated multiplication -- i^2 = -1", async () => {
+    const result = await evaluateValue(
+      {
+        kind: "arithmetic",
+        op: "power",
+        left: { kind: "complexLiteral", re: 0, im: 1 },
+        right: { kind: "numberLiteral", value: 2 },
+      },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(result, { kind: "complex", re: -1, im: 0, unit: {} });
+  });
+
+  it("power: a negative integer exponent inverts the result -- i^-1 = -i", async () => {
+    const result = await evaluateValue(
+      {
+        kind: "arithmetic",
+        op: "power",
+        left: { kind: "complexLiteral", re: 0, im: 1 },
+        right: { kind: "numberLiteral", value: -1 },
+      },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(result, { kind: "complex", re: 0, im: -1, unit: {} });
+  });
+
+  it("power: a zero exponent is the multiplicative identity, regardless of the base", async () => {
+    const result = await evaluateValue(
+      {
+        kind: "arithmetic",
+        op: "power",
+        left: { kind: "complexLiteral", re: 2, im: 3 },
+        right: { kind: "numberLiteral", value: 0 },
+      },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(result, { kind: "complex", re: 1, im: 0, unit: {} });
+  });
+
+  it("power: a non-integer exponent is wrong-type against a complex base", async () => {
+    const result = await evaluateValue(
+      {
+        kind: "arithmetic",
+        op: "power",
+        left: { kind: "complexLiteral", re: 1, im: 2 },
+        right: { kind: "numberLiteral", value: 0.5 },
+      },
+      undefined,
+      resolvers,
+    );
+    expectIndeterminate(result, "wrong-type");
+  });
+
+  it("power: a complex exponent is wrong-type -- only a real number exponent is defined", async () => {
+    const result = await evaluateValue(
+      {
+        kind: "arithmetic",
+        op: "power",
+        left: { kind: "complexLiteral", re: 1, im: 2 },
+        right: { kind: "complexLiteral", re: 2, im: 0 },
+      },
+      undefined,
+      resolvers,
+    );
+    expectIndeterminate(result, "wrong-type");
+  });
+
+  it("modulo is wrong-type for complex values", async () => {
+    const result = await evaluateValue(
+      {
+        kind: "arithmetic",
+        op: "modulo",
+        left: { kind: "complexLiteral", re: 1, im: 2 },
+        right: { kind: "complexLiteral", re: 3, im: 4 },
+      },
+      undefined,
+      resolvers,
+    );
+    expectIndeterminate(result, "wrong-type");
+  });
+});
+
 describe("compare", () => {
   it.each([
     { op: "gt", left: 5, right: 3, expected: true },
@@ -766,6 +1011,90 @@ describe("compare", () => {
       resolvers,
     );
     expectIndeterminate(result, "not-found");
+  });
+
+  it("eq: two rectangular complex values with the same components are equal", async () => {
+    const result = await evaluatePredicate(
+      {
+        kind: "compare",
+        op: "eq",
+        left: { kind: "complexLiteral", re: 1, im: 2 },
+        right: { kind: "complexLiteral", re: 1, im: 2 },
+      },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(result, true);
+  });
+
+  it("eq: a rectangular value and a polar value representing the same underlying complex number are equal", async () => {
+    const result = await evaluatePredicate(
+      {
+        kind: "compare",
+        op: "eq",
+        left: { kind: "complexLiteral", re: 2, im: 0 },
+        right: { kind: "complexLiteral", magnitude: 2, phase: 0 },
+      },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(result, true);
+  });
+
+  it("neq: two complex values with different components are not equal", async () => {
+    const result = await evaluatePredicate(
+      {
+        kind: "compare",
+        op: "neq",
+        left: { kind: "complexLiteral", re: 1, im: 2 },
+        right: { kind: "complexLiteral", re: 1, im: 3 },
+      },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(result, true);
+  });
+
+  it("an ordering operator (gt/gte/lt/lte) is wrong-type against complex operands -- complex numbers have no natural ordering", async () => {
+    const result = await evaluatePredicate(
+      {
+        kind: "compare",
+        op: "gt",
+        left: { kind: "complexLiteral", re: 1, im: 2 },
+        right: { kind: "complexLiteral", re: 0, im: 0 },
+      },
+      undefined,
+      resolvers,
+    );
+    expectIndeterminate(result, "wrong-type");
+  });
+
+  it("is wrong-type when comparing a complex value against a non-complex value", async () => {
+    const result = await evaluatePredicate(
+      {
+        kind: "compare",
+        op: "eq",
+        left: { kind: "complexLiteral", re: 1, im: 2 },
+        right: { kind: "numberLiteral", value: 1 },
+      },
+      undefined,
+      resolvers,
+    );
+    expectIndeterminate(result, "wrong-type");
+  });
+
+  it("is wrong-type when two complex values have incompatible units", async () => {
+    const result = await evaluatePredicate(
+      {
+        kind: "compare",
+        op: "eq",
+        left: { kind: "complexLiteral", re: 1, im: 2, unit: { m: 1 } },
+        right: { kind: "complexLiteral", re: 1, im: 2, unit: { s: 1 } },
+      },
+      undefined,
+      resolvers,
+    );
+    expectIndeterminate(result, "wrong-type");
   });
 });
 
@@ -1083,6 +1412,23 @@ describe("memberOf", () => {
       resolvers,
     );
     expectIndeterminate(result, "wrong-type");
+  });
+
+  it("matches a rectangular operand against a candidate list including a polar value representing the same number", async () => {
+    const result = await evaluatePredicate(
+      {
+        kind: "memberOf",
+        op: "in",
+        operand: { kind: "complexLiteral", re: 1, im: 0 },
+        candidates: [
+          { kind: "complexLiteral", re: 0, im: 1 },
+          { kind: "complexLiteral", magnitude: 1, phase: 0 },
+        ],
+      },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(result, true);
   });
 });
 

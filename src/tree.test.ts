@@ -7,6 +7,7 @@ import {
   ArithmeticNodeSchema,
   CallNodeSchema,
   CompareNodeSchema,
+  ComplexLiteralNodeSchema,
   ConditionalNodeSchema,
   DelegateNodeSchema,
   DurationLiteralNodeSchema,
@@ -287,6 +288,48 @@ describe("expression tree", () => {
     ).toBe(false);
   });
 
+  it("complexLiteral: parses a valid rectangular value and a valid polar value", () => {
+    const rectangular = { kind: "complexLiteral", re: 1, im: 2 };
+    const polar = { kind: "complexLiteral", magnitude: 1, phase: 2 };
+    expect(ComplexLiteralNodeSchema.parse(rectangular)).toEqual(rectangular);
+    expect(ComplexLiteralNodeSchema.parse(polar)).toEqual(polar);
+  });
+
+  it("complexLiteral: rejects both rectangular and polar fields provided at once", () => {
+    expect(
+      ComplexLiteralNodeSchema.safeParse({
+        kind: "complexLiteral",
+        re: 1,
+        im: 2,
+        magnitude: 3,
+        phase: 4,
+      }).success,
+    ).toBe(false);
+  });
+
+  it("complexLiteral: rejects neither rectangular nor polar fields provided", () => {
+    expect(
+      ComplexLiteralNodeSchema.safeParse({ kind: "complexLiteral" }).success,
+    ).toBe(false);
+  });
+
+  it("complexLiteral: rejects a partial rectangular payload (re without im)", () => {
+    expect(
+      ComplexLiteralNodeSchema.safeParse({ kind: "complexLiteral", re: 1 })
+        .success,
+    ).toBe(false);
+  });
+
+  it("complexLiteral: rejects a mixed payload (one rectangular field, one polar field)", () => {
+    expect(
+      ComplexLiteralNodeSchema.safeParse({
+        kind: "complexLiteral",
+        re: 1,
+        phase: 2,
+      }).success,
+    ).toBe(false);
+  });
+
   it("reference: parses with and without an optional unit, and rejects an unrecognised unit shape", () => {
     const valid = { kind: "reference", key: "x" };
     expect(ReferenceNodeSchema.parse(valid)).toEqual(valid);
@@ -455,6 +498,8 @@ describe("expression tree", () => {
       { kind: "textLiteral", value: "a" },
       { kind: "instantLiteral", value: "2026-08-30T00:00:00Z" },
       { kind: "durationLiteral", value: 1, unit: "d" },
+      { kind: "complexLiteral", re: 1, im: 2 },
+      { kind: "complexLiteral", magnitude: 1, phase: 2 },
       { kind: "reference", key: "x" },
       {
         kind: "arithmetic",
