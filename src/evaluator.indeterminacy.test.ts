@@ -343,6 +343,26 @@ const fixtures: readonly Fixture[] = [
     isWrongType,
   ),
   pred(
+    "compare: wrong-type when a boolean is compared against a non-boolean kind",
+    {
+      kind: "compare",
+      op: "eq",
+      left: { kind: "booleanLiteral", value: true },
+      right: numberLiteral(1),
+    },
+    isWrongType,
+  ),
+  pred(
+    "compare: wrong-type on gt/gte/lt/lte against booleans -- only eq/neq are defined for them",
+    {
+      kind: "compare",
+      op: "gt",
+      left: { kind: "booleanLiteral", value: true },
+      right: { kind: "booleanLiteral", value: false },
+    },
+    isWrongType,
+  ),
+  pred(
     "compare: never generates its own domain-error, but still carries one through from an operand",
     { kind: "compare", op: "eq", left: divideByZero, right: numberLiteral(1) },
     isDomainError,
