@@ -1,8 +1,9 @@
+import { cloudflareTest } from "@cloudflare/vitest-pool-workers";
 import { defineConfig } from "vitest/config";
 
-// Coverage is a Vitest "unsupported option" inside a project config -- it can only be defined once, here in the root config, and applies across the whole run regardless of which project(s) are selected. It was previously (incorrectly) nested inside vitest.unit.config.ts, where Vitest silently ignored it and fell back to its own default istanbul reporters instead of the text/html/lcov/cobertura list actually wanted.
+// Coverage is a Vitest "unsupported option" inside a project config -- it can only be defined once, here in the root config, and applies across the whole run regardless of which project(s) are selected.
 //
-// Each project is a real config file path, not an inline object -- Vitest's `test.projects` only loads inline entries as bare test-level overrides; a genuine vite-level option (the workers project's `plugins`) is silently dropped for inline project entries and only a real project config file goes through Vite's normal config-loading/merge path.
+// Every project is defined inline rather than as a separate config file: a project entry is itself a full Vite `UserConfig` (Vitest augments Vite's own `UserConfig` type with a `test` field -- see vitest's node/types/vite.ts), so a top-level Vite option such as `plugins` on an inline entry is honoured exactly as it would be in a standalone config file. The workers project below relies on this directly for its `cloudflareTest` plugin registration.
 export default defineConfig({
   test: {
     coverage: {
@@ -12,10 +13,36 @@ export default defineConfig({
       reporter: ["text", "html", "lcov", "cobertura"],
     },
     projects: [
-      "./vitest.unit.config.ts",
-      "./vitest.integration.config.ts",
-      "./vitest.smoke.config.ts",
-      "./vitest.workers.config.ts",
+      {
+        test: {
+          name: "unit",
+          include: ["src/**/*.test.ts"],
+        },
+      },
+      {
+        // Multi-kind composition tests against the public API surface (src/index.ts) -- proving node kinds genuinely cooperate as a system, not merely that each is individually correct in isolation (the unit project's own job). See test/integration/*.test.ts.
+        test: {
+          name: "integration",
+          include: ["test/integration/**/*.test.ts"],
+        },
+      },
+      {
+        // Checks the built package rather than src/: dist/'s ESM and CJS entry points resolved through package.json's own `exports` map, and the generated schemas/trilean.schema.json. The `_test:smoke` turbo task depends on `_build`, so the output under test is always rebuilt from current source rather than whatever dist/ happened to be left lying around. See test/smoke.test.ts.
+        test: {
+          name: "smoke",
+          include: ["test/smoke.test.ts"],
+        },
+      },
+      {
+        // Runs the test/workers suite under the real Cloudflare Workers runtime (workerd) via @cloudflare/vitest-pool-workers' cloudflareTest plugin. trilean's evaluator is designed to carry zero Node-API usage; this config turns that design property into a runtime-checked fact rather than an assertion -- if any module (or zod itself) touched a Node-only API, the workerd isolate would throw instead of the test passing.
+        plugins: [
+          cloudflareTest({ wrangler: { configPath: "./wrangler.jsonc" } }),
+        ],
+        test: {
+          name: "workers",
+          include: ["test/workers/**/*.test.ts"],
+        },
+      },
     ],
   },
 });

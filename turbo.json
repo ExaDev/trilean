@@ -13,24 +13,24 @@
       "outputs": [".eslintcache"]
     },
     "_test": {
-      "inputs": ["src/**", "vitest.config.ts", "vitest.unit.config.ts", "package.json"],
+      "inputs": ["src/**", "vitest.config.ts", "package.json"],
       "outputs": []
     },
     "_test:coverage": {
-      "inputs": ["src/**", "vitest.config.ts", "vitest.unit.config.ts", "package.json"],
+      "inputs": ["src/**", "vitest.config.ts", "package.json"],
       "outputs": ["coverage/**"]
     },
     "_test:integration": {
-      "inputs": ["src/**", "package.json", "vitest.config.ts", "vitest.integration.config.ts", "test/integration/**"],
+      "inputs": ["src/**", "package.json", "vitest.config.ts", "test/integration/**"],
       "outputs": []
     },
     "_test:smoke": {
       "dependsOn": ["_build"],
-      "inputs": ["src/**", "tsdown.config.ts", "package.json", "vitest.config.ts", "vitest.smoke.config.ts", "test/smoke.test.ts"],
+      "inputs": ["src/**", "tsdown.config.ts", "package.json", "vitest.config.ts", "test/smoke.test.ts"],
       "outputs": []
     },
     "_test:workers": {
-      "inputs": ["src/**", "package.json", "vitest.config.ts", "vitest.workers.config.ts", "wrangler.jsonc", "test/workers/**"],
+      "inputs": ["src/**", "package.json", "vitest.config.ts", "wrangler.jsonc", "test/workers/**"],
       "outputs": []
     },
     "_build": {
