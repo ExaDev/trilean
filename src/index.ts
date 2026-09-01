@@ -102,6 +102,8 @@ export {
   CompareNodeSchema,
   ComparisonOperatorSchema,
   ComplexLiteralNodeSchema,
+  ComplexPolarLiteralNodeSchema,
+  ComplexRectangularLiteralNodeSchema,
   ConditionalCaseSchema,
   ConditionalNodeSchema,
   DelegateNodeSchema,
