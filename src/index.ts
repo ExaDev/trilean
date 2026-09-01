@@ -44,6 +44,12 @@ export {
 } from "./derived-connectives";
 export { average, count, presenceOf, sum } from "./derived-aggregates";
 export { coalesce } from "./derived-values";
+export {
+  complexFromPolar,
+  complexLiteralFromPolar,
+  complexMagnitude,
+  complexPhase,
+} from "./complex";
 
 export type {
   AccumulatorNode,
@@ -56,6 +62,7 @@ export type {
   CallNode,
   CompareNode,
   ComparisonOperator,
+  ComplexLiteralNode,
   ConditionalCase,
   ConditionalNode,
   DelegateNode,
@@ -93,6 +100,7 @@ export {
   CallNodeSchema,
   CompareNodeSchema,
   ComparisonOperatorSchema,
+  ComplexLiteralNodeSchema,
   ConditionalCaseSchema,
   ConditionalNodeSchema,
   DelegateNodeSchema,
