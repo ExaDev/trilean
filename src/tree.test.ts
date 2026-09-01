@@ -8,6 +8,7 @@ import {
   BooleanLiteralNodeSchema,
   CallNodeSchema,
   CompareNodeSchema,
+  ComplexLiteralNodeSchema,
   ConditionalNodeSchema,
   DelegateNodeSchema,
   DurationLiteralNodeSchema,
@@ -299,6 +300,17 @@ describe("expression tree", () => {
     ).toBe(false);
   });
 
+  it("complexLiteral: parses with and without an optional unit, and rejects a node carrying only one component", () => {
+    const withoutUnit = { kind: "complexLiteral", re: 3, im: 4 };
+    const withUnit = { kind: "complexLiteral", re: 3, im: 4, unit: { V: 1 } };
+    expect(ComplexLiteralNodeSchema.parse(withoutUnit)).toEqual(withoutUnit);
+    expect(ComplexLiteralNodeSchema.parse(withUnit)).toEqual(withUnit);
+    expect(
+      ComplexLiteralNodeSchema.safeParse({ kind: "complexLiteral", re: 3 })
+        .success,
+    ).toBe(false);
+  });
+
   it("reference: parses with and without an optional unit, and rejects an unrecognised unit shape", () => {
     const valid = { kind: "reference", key: "x" };
     expect(ReferenceNodeSchema.parse(valid)).toEqual(valid);
@@ -468,6 +480,7 @@ describe("expression tree", () => {
       { kind: "booleanLiteral", value: true },
       { kind: "instantLiteral", value: "2026-08-30T00:00:00Z" },
       { kind: "durationLiteral", value: 1, unit: "d" },
+      { kind: "complexLiteral", re: 1, im: -1 },
       { kind: "reference", key: "x" },
       {
         kind: "arithmetic",
