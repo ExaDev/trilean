@@ -213,6 +213,15 @@ export const DurationLiteralNodeSchema = z.object({
 });
 export type DurationLiteralNode = z.infer<typeof DurationLiteralNodeSchema>;
 
+/** The rectangular-form literal, mirroring the `complex` computed-value kind's own single canonical representation exactly (see the "Complex values" section of README.md); `complexLiteralFromPolar` in complex.ts builds one of these from a magnitude and a phase for the domains that reason that way. */
+export const ComplexLiteralNodeSchema = z.object({
+  kind: z.literal("complexLiteral"),
+  re: z.number(),
+  im: z.number(),
+  unit: UnitSchema.optional(),
+});
+export type ComplexLiteralNode = z.infer<typeof ComplexLiteralNodeSchema>;
+
 export const ReferenceNodeSchema = z.object({
   kind: z.literal("reference"),
   key: JsonValueSchema,
@@ -334,6 +343,7 @@ export const ExpressionNodeSchema = z.discriminatedUnion("kind", [
   BooleanLiteralNodeSchema,
   InstantLiteralNodeSchema,
   DurationLiteralNodeSchema,
+  ComplexLiteralNodeSchema,
   ReferenceNodeSchema,
   ArithmeticNodeSchema,
   NegateNodeSchema,

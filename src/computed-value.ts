@@ -22,6 +22,13 @@ export const ComputedValueSchema = z.discriminatedUnion("kind", [
     value: z.number(),
     unit: DurationUnitSchema,
   }),
+  /** Stored canonically in rectangular form -- `re` + `im`i -- rather than as a magnitude and phase, and with no `form` discriminant offering both: see the "Complex values" section of README.md for why one canonical form is the whole point, and `complex.ts` for the polar builder/accessor helpers that make the other form reachable without a second encoding of the same value. */
+  z.object({
+    kind: z.literal("complex"),
+    re: z.number(),
+    im: z.number(),
+    unit: UnitSchema.optional(),
+  }),
 ]);
 export type ComputedValue = z.infer<typeof ComputedValueSchema>;
 
