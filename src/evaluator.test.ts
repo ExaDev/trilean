@@ -127,6 +127,25 @@ describe("reference", () => {
     );
     expectIndeterminate(result, "wrong-type");
   });
+
+  it("resolves a boolean value with no schema change beyond the ComputedValue union itself -- reference carries no kind restriction of its own", async () => {
+    const booleanResolvers: Resolvers = {
+      ...resolvers,
+      resolveValue: async (key, context) =>
+        key === "active"
+          ? Promise.resolve({
+              found: true,
+              value: { kind: "boolean", value: true },
+            })
+          : resolvers.resolveValue(key, context),
+    };
+    const result = await evaluateValue(
+      { kind: "reference", key: "active" },
+      undefined,
+      booleanResolvers,
+    );
+    expectDefinite(result, { kind: "boolean", value: true });
+  });
 });
 
 /** `arithmetic`'s own indeterminate-propagation table -- contrast this against `and`/`or`'s absorption (see truth-tables.test.ts and `combineAnd`/`combineOr` in evaluator.ts): arithmetic has no absorbing value at all, so a definite operand on one side never rescues an indeterminate operand on the other, unlike OR's absorbing `true` or AND's absorbing `false`. */
@@ -1518,6 +1537,29 @@ describe("lookup", () => {
       lookupResolvers,
     );
     expectIndeterminate(result, "not-found");
+  });
+
+  it("resolves a boolean value with no schema change beyond the ComputedValue union itself -- lookup carries no kind restriction of its own", async () => {
+    const booleanLookupResolvers: Resolvers = {
+      ...lookupResolvers,
+      resolveLookup: async (table, keys, context) =>
+        table === "eligibility"
+          ? Promise.resolve({
+              found: true,
+              value: { kind: "boolean", value: true },
+            })
+          : lookupResolvers.resolveLookup(table, keys, context),
+    };
+    const result = await evaluateValue(
+      {
+        kind: "lookup",
+        table: "eligibility",
+        keys: [{ kind: "reference", key: "region" }],
+      },
+      undefined,
+      booleanLookupResolvers,
+    );
+    expectDefinite(result, { kind: "boolean", value: true });
   });
 });
 
