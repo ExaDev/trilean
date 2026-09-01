@@ -855,13 +855,55 @@ describe("complex arithmetic", () => {
     expectIndeterminate(result, "wrong-type");
   });
 
-  it("modulo is wrong-type for complex values", async () => {
+  it("modulo is domain-error for complex values -- no operator is defined for them at all", async () => {
     const result = await evaluateValue(
       {
         kind: "arithmetic",
         op: "modulo",
         left: { kind: "complexLiteral", re: 1, im: 2 },
         right: { kind: "complexLiteral", re: 3, im: 4 },
+      },
+      undefined,
+      resolvers,
+    );
+    expectIndeterminate(result, "domain-error");
+  });
+
+  it("power: a unit-ed complex base is wrong-type, mirroring the real-number power path's dimensionless-base requirement", async () => {
+    const result = await evaluateValue(
+      {
+        kind: "arithmetic",
+        op: "power",
+        left: { kind: "complexLiteral", re: 2, im: 3, unit: { m: 1 } },
+        right: { kind: "numberLiteral", value: 2 },
+      },
+      undefined,
+      resolvers,
+    );
+    expectIndeterminate(result, "wrong-type");
+  });
+
+  it("power: a unit-ed exponent is wrong-type against a complex base", async () => {
+    const result = await evaluateValue(
+      {
+        kind: "arithmetic",
+        op: "power",
+        left: { kind: "complexLiteral", re: 2, im: 3 },
+        right: { kind: "numberLiteral", value: 2, unit: { m: 1 } },
+      },
+      undefined,
+      resolvers,
+    );
+    expectIndeterminate(result, "wrong-type");
+  });
+
+  it("is wrong-type when a complex operand is combined with a non-numeric, non-complex value", async () => {
+    const result = await evaluateValue(
+      {
+        kind: "arithmetic",
+        op: "add",
+        left: { kind: "complexLiteral", re: 1, im: 2 },
+        right: { kind: "textLiteral", value: "active" },
       },
       undefined,
       resolvers,
@@ -1429,6 +1471,34 @@ describe("memberOf", () => {
       resolvers,
     );
     expectDefinite(result, true);
+  });
+
+  it("is wrong-type when comparing a complex operand against a non-complex candidate for membership", async () => {
+    const result = await evaluatePredicate(
+      {
+        kind: "memberOf",
+        op: "in",
+        operand: { kind: "complexLiteral", re: 1, im: 0 },
+        candidates: [{ kind: "numberLiteral", value: 1 }],
+      },
+      undefined,
+      resolvers,
+    );
+    expectIndeterminate(result, "wrong-type");
+  });
+
+  it("is wrong-type when two complex values have incompatible units for membership", async () => {
+    const result = await evaluatePredicate(
+      {
+        kind: "memberOf",
+        op: "in",
+        operand: { kind: "complexLiteral", re: 1, im: 0, unit: { m: 1 } },
+        candidates: [{ kind: "complexLiteral", re: 1, im: 0, unit: { s: 1 } }],
+      },
+      undefined,
+      resolvers,
+    );
+    expectIndeterminate(result, "wrong-type");
   });
 });
 
