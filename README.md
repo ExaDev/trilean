@@ -1,5 +1,7 @@
 # trilean
 
+[![GitHub](https://img.shields.io/badge/GitHub-181717?logo=github&logoColor=white)](https://github.com/ExaDev/trilean) [![npm](https://img.shields.io/badge/npm-CB3837?logo=npm&logoColor=white)](https://www.npmjs.com/package/trilean) [![Release](https://img.shields.io/github/v/release/ExaDev/trilean)](https://github.com/ExaDev/trilean/releases/latest) [![CI](https://img.shields.io/github/actions/workflow/status/ExaDev/trilean/ci.yml?branch=main)](https://github.com/ExaDev/trilean/actions)
+
 > /ˈtraɪ.li.ən/ (TRY-lee-ən) — rhymes with "boolean".
 
 A serialisable (JSON) representation of two related tree structures — a **predicate tree** (truth-valued) and an **expression tree** (value-valued) — together with an evaluator for both. The package is deliberately domain-agnostic: the schema layer never assumes anything about where data actually comes from. Every point of contact with a consumer's real data is an injected, opaque resolver function supplied by whoever embeds the package.
