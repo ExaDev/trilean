@@ -479,7 +479,7 @@ function applyArithmeticOnDurations(
   }
 }
 
-/** Binary arithmetic between two `complex` operands, each normalised to rectangular form first via `toRectangular` -- the same "normalise, then combine" treatment `applyArithmeticOnDurations` above already gives `duration`. `add`/`subtract` require identical units (mirroring `applyArithmeticOnNumbers`'s own rule); `multiply`/`divide` combine units by dimensional analysis the same way. `power`/`modulo` are never reached here -- `applyArithmetic`'s own dispatcher intercepts both before calling this function, `power` routing to `applyComplexPower` and `modulo` reporting `wrong-type` directly, since neither has a general two-`complex`-operand definition. */
+/** Binary arithmetic between two `complex` operands, each normalised to rectangular form first via `toRectangular` -- the same "normalise, then combine" treatment `applyArithmeticOnDurations` above already gives `duration`. `add`/`subtract` require identical units (mirroring `applyArithmeticOnNumbers`'s own rule); `multiply`/`divide` combine units by dimensional analysis the same way. `power`/`modulo` are never reached here -- `applyArithmetic`'s own dispatcher intercepts both before calling this function, `power` routing to `applyComplexPower` and `modulo` reporting `domain-error` directly, since neither has a general two-`complex`-operand definition. */
 function applyArithmeticOnComplex(
   op: ArithmeticOperator,
   left: Extract<ComputedValue, { kind: "complex" }>,
@@ -550,15 +550,15 @@ function applyArithmeticOnComplex(
   }
 }
 
-/** `power` against a `complex` base: only defined for a real, integer, dimensionless exponent, computed as repeated multiplication (a negative exponent inverting the final result via one `divide` by the multiplicative identity `1 + 0i`) rather than the general complex-exponent (`z^w`) formula, which would need a complex logarithm and is out of scope for this design -- see the "Complex values" section of README.md. */
+/** `power` against a `complex` base: only defined for a real, integer, dimensionless exponent against a dimensionless base -- computed as repeated multiplication (a negative exponent inverting the final result via one `divide` by the multiplicative identity `1 + 0i`) rather than the general complex-exponent (`z^w`) formula, which would need a complex logarithm and is out of scope for this design -- see the "Complex values" section of README.md. The dimensionless-base requirement mirrors `applyArithmeticOnNumbers`'s own `power` case exactly (both operands must be dimensionless there too), per `isDimensionless`'s own doc comment: `power`/`modulo` have no defined unit-combination rule in this design, so both paths scope the operation to dimensionless operands rather than one path inventing a unit-scaling semantics the other doesn't have. */
 function applyComplexPower(
   base: Extract<ComputedValue, { kind: "complex" }>,
   exponent: Extract<ComputedValue, { kind: "number" }>,
 ): Evaluation<ComputedValue> {
-  if (!isDimensionless(exponent.unit)) {
+  if (!isDimensionless(base.unit) || !isDimensionless(exponent.unit)) {
     return indeterminate(
       "wrong-type",
-      "'power' requires a dimensionless exponent",
+      "'power' requires dimensionless operands",
     );
   }
   if (!Number.isInteger(exponent.value)) {
@@ -662,8 +662,9 @@ function applyArithmetic(
       return applyComplexPower(left, right);
     }
     if (op === "modulo") {
+      // `domain-error`, not `wrong-type`, per issue #2's own acceptance criteria: "the same treatment already given to any operator outside its mathematical domain" -- a deliberate classification choice, not the general "operator undefined for this kind" pattern `compare`'s ordering operators use against `complex` elsewhere in this same design.
       return indeterminate(
-        "wrong-type",
+        "domain-error",
         "'modulo' is not defined for 'complex' values",
       );
     }
