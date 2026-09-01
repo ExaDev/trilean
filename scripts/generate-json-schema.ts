@@ -12,9 +12,10 @@
 //
 // No try/catch anywhere in this script -- any failure (a Zod throw, a filesystem error) crashes it loudly with a non-zero exit, matching this project's standing "never silently swallow a failure" convention.
 
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import canonicalize from "canonicalize";
 import { z } from "zod";
 import { ExpressionNodeSchema, PredicateNodeSchema } from "../dist/tree.js";
 
@@ -22,6 +23,21 @@ const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(here, "..");
 const schemasDir = join(repoRoot, "schemas");
 const outputPath = join(schemasDir, "trilean.schema.json");
+
+function isPlainRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+// Read straight from the repo's own package.json rather than hardcoding a version, per this repo's JSON.parse boundary convention (parse to `unknown`, narrow with a type guard, throw rather than mask a malformed or missing field with a fallback).
+const packageJsonPath = join(repoRoot, "package.json");
+const packageJson: unknown = JSON.parse(readFileSync(packageJsonPath, "utf8"));
+if (!isPlainRecord(packageJson)) {
+  throw new Error(`expected ${packageJsonPath} to parse to a JSON object`);
+}
+const packageVersion = packageJson.version;
+if (typeof packageVersion !== "string") {
+  throw new Error(`expected ${packageJsonPath} to have a string "version"`);
+}
 
 const registry = z.registry<z.core.JSONSchemaMeta>();
 registry.add(PredicateNodeSchema, { id: "PredicateNode" });
@@ -59,8 +75,12 @@ const expressionNodeDef: z.core.JSONSchema.JSONSchema = {
 delete expressionNodeDef.$schema;
 delete expressionNodeDef.$id;
 
+// Version-pinned (never "latest"): jsDelivr serves files straight out of a published npm package by version, so this identifies the exact schema shipped in this specific published version, not a moving target a later release could silently change out from under an existing consumer's $ref.
+const schemaId = `https://cdn.jsdelivr.net/npm/trilean@${packageVersion}/schemas/trilean.schema.json`;
+
 const combined: z.core.JSONSchema.JSONSchema = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
+  $id: schemaId,
   $defs: {
     PredicateNode: predicateNodeDef,
     ExpressionNode: expressionNodeDef,
@@ -72,7 +92,15 @@ const combined: z.core.JSONSchema.JSONSchema = {
   ],
 };
 
+// RFC 8785 (JSON Canonicalization Scheme) output: lexicographically sorted keys at every nesting level and ECMA-262-precise number serialisation, via the "canonicalize" package rather than a hand-rolled sort -- RFC 8785's number rule (ECMA-262 7.1.12.1 plus its Note 2 enhancement) has edge cases a naive reimplementation gets wrong. A single compact line with no inter-token whitespace is an inherent, deliberate consequence of genuine JCS compliance, not pretty-printing lost by accident. `combined` is always a plain object, never `undefined`, so `canonicalize` always returns a string for it; the check below is a real invariant guard, not a defensive fallback.
+const canonicalJson = canonicalize(combined);
+if (canonicalJson === undefined) {
+  throw new Error(
+    "canonicalize() produced no output for the combined JSON Schema document.",
+  );
+}
+
 mkdirSync(schemasDir, { recursive: true });
-writeFileSync(outputPath, `${JSON.stringify(combined, null, 2)}\n`, "utf8");
+writeFileSync(outputPath, `${canonicalJson}\n`, "utf8");
 
 console.log(`Wrote combined JSON Schema document to ${outputPath}`);
