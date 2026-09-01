@@ -56,6 +56,7 @@ const expectedIndexExports: readonly [
   ["count", "function"],
   ["average", "function"],
   ["presenceOf", "function"],
+  ["coalesce", "function"],
 ];
 
 // The deep-import subpath's surface, kept as one typed list for the same reason as expectedIndexExports above: both the import()-based assertions and the require()-based ones below check the same names, and `keyof typeof TreeModule` makes a rename fail at typecheck time rather than silently thinning what either checks.

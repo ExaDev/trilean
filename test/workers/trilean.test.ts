@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { evaluatePredicate } from "../../src/evaluator";
+import { coalesce } from "../../src/derived-values";
+import { evaluatePredicate, evaluateValue } from "../../src/evaluator";
 import {
   goldenExampleData,
   goldenExampleDataEmptyItems,
@@ -7,7 +8,8 @@ import {
   goldenExampleResolvers,
   goldenExampleTree,
 } from "../../src/test-support/golden-example";
-import type { PredicateNode } from "../../src/tree";
+import type { ExpressionNode, PredicateNode } from "../../src/tree";
+import type { JsonValue } from "../../src/json-value";
 import type { Resolvers } from "../../src/resolvers";
 
 function isPlainRecord(value: unknown): value is Record<string, unknown> {
@@ -277,5 +279,136 @@ describe("units-aware arithmetic (multiply/divide across differently unit-tagged
       resolvers,
     );
     expect(result).toEqual({ status: "definite", value: true });
+  });
+});
+
+/**
+ * `treeReference`, `conditional`'s `"unique"` hit policy, and `coalesce` under workerd -- proving isomorphism for the three most recently added features, not just for the evaluator's pre-existing surface above. Composed together in one tree (a treeReference to a "unique"-hit-policy conditional whose matching case's value flows into a coalesce), the same discipline test/integration/tree-reference.test.ts and src/derived-values.test.ts already apply against source, run here for real inside the workerd isolate.
+ */
+describe("treeReference, conditional's 'unique' hit policy, and coalesce under workerd", () => {
+  const namedRules: Record<string, JsonValue> = {
+    tierRateLookup: {
+      kind: "conditional",
+      hitPolicy: "unique",
+      cases: [
+        {
+          when: {
+            kind: "textCompare",
+            op: "equals",
+            left: { kind: "reference", key: "tier" },
+            right: { kind: "textLiteral", value: "gold" },
+          },
+          then: { kind: "numberLiteral", value: 0.2 },
+        },
+        {
+          when: {
+            kind: "textCompare",
+            op: "equals",
+            left: { kind: "reference", key: "tier" },
+            right: { kind: "textLiteral", value: "platinum" },
+          },
+          then: { kind: "numberLiteral", value: 0.3 },
+        },
+      ],
+      fallback: { kind: "numberLiteral", value: 0 },
+    },
+  };
+
+  const resolvers: Resolvers = {
+    resolveValue: async (key, context) => {
+      if (
+        !isPlainRecord(context) ||
+        typeof key !== "string" ||
+        !(key in context)
+      ) {
+        return Promise.resolve({ found: false });
+      }
+      const value = context[key];
+      if (typeof value === "number") {
+        return Promise.resolve({
+          found: true,
+          value: { kind: "number", value },
+        });
+      }
+      if (typeof value === "string") {
+        return Promise.resolve({ found: true, value: { kind: "text", value } });
+      }
+      return Promise.resolve({ found: false });
+    },
+    resolveLookup: async () => Promise.resolve({ found: false }),
+    resolveCollection: async () => Promise.resolve([]),
+    resolveTree: async (key) => {
+      const node = typeof key === "string" ? namedRules[key] : undefined;
+      if (node === undefined) return Promise.resolve({ found: false });
+      return Promise.resolve({ found: true, node });
+    },
+  };
+
+  it("a gold-tier customer's rate resolves through the referenced 'unique'-hit-policy rule", async () => {
+    const result = await evaluateValue(
+      { kind: "treeReference", key: "tierRateLookup" },
+      { tier: "gold" },
+      resolvers,
+    );
+    expect(result).toEqual({
+      status: "definite",
+      value: { kind: "number", value: 0.2 },
+    });
+  });
+
+  it("two matching cases under 'unique' absorb to a domain-error, even reached via treeReference", async () => {
+    const bothMatch: JsonValue = {
+      kind: "conditional",
+      hitPolicy: "unique",
+      cases: [
+        {
+          when: {
+            kind: "compare",
+            op: "eq",
+            left: { kind: "numberLiteral", value: 1 },
+            right: { kind: "numberLiteral", value: 1 },
+          },
+          then: { kind: "numberLiteral", value: 10 },
+        },
+        {
+          when: {
+            kind: "compare",
+            op: "eq",
+            left: { kind: "numberLiteral", value: 2 },
+            right: { kind: "numberLiteral", value: 2 },
+          },
+          then: { kind: "numberLiteral", value: 20 },
+        },
+      ],
+      fallback: { kind: "numberLiteral", value: 0 },
+    };
+    const twoMatchResolvers: Resolvers = {
+      ...resolvers,
+      resolveTree: async (key) =>
+        key === "bothMatch"
+          ? Promise.resolve({ found: true, node: bothMatch })
+          : Promise.resolve({ found: false }),
+    };
+    const result = await evaluateValue(
+      { kind: "treeReference", key: "bothMatch" },
+      {},
+      twoMatchResolvers,
+    );
+    expect(result.status).toBe("indeterminate");
+    if (result.status === "indeterminate") {
+      expect(result.reason.code).toBe("domain-error");
+    }
+  });
+
+  it("coalesce falls through a not-found preferred discount code to a guaranteed fallback value", async () => {
+    const tree: ExpressionNode = coalesce(
+      { kind: "reference", key: "promoDiscount" },
+      { kind: "numberLiteral", value: 0.05 },
+    );
+    const result = await evaluateValue(tree, {}, resolvers);
+    expect(result).toEqual({
+      status: "definite",
+      value: { kind: "number", value: 0.05 },
+    });
   });
 });

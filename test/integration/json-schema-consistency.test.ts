@@ -104,6 +104,12 @@ describe("every node kind survives JSON Schema conversion from source", () => {
     ).sort();
     expect(actual).toEqual(expected);
   });
+
+  // The two checks above only ever compare a schema's conversion against its own options, so neither can prove that a single schema object was genuinely reused across *both* unions -- `treeReference` is the first node kind in this codebase valid from both a PredicateNode and an ExpressionNode position, the same TreeReferenceNodeSchema appended as the last member of each.
+  it("treeReference is present in both the predicate and expression discriminant sets", () => {
+    expect(discriminantKinds(PredicateNodeSchema)).toContain("treeReference");
+    expect(discriminantKinds(ExpressionNodeSchema)).toContain("treeReference");
+  });
 });
 
 /**

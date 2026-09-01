@@ -36,6 +36,9 @@ export const ArithmeticOperatorSchema = z.enum([
 ]);
 export type ArithmeticOperator = z.infer<typeof ArithmeticOperatorSchema>;
 
+export const HitPolicySchema = z.enum(["first", "unique"]);
+export type HitPolicy = z.infer<typeof HitPolicySchema>;
+
 // --- The predicate tree --- Every recursive/cross-tree field is a getter rather than a plain property: z.object() keeps getter-backed shape entries lazy, so a getter may forward-reference a `const` (PredicateNodeSchema, ExpressionNodeSchema) declared later in this same module without hitting the TDZ -- by the time any getter is actually invoked (parsing, or JSON Schema generation), the whole module has finished loading and every schema exists. Explicit return-type annotations (`typeof X`, `z.ZodArray<typeof X>`, `z.ZodOptional<typeof X>`) break the otherwise-circular type inference this mutual recursion would require.
 
 export const NotNodeSchema = z.object({
@@ -152,6 +155,13 @@ export const EveryNodeSchema = z.object({
 });
 export type EveryNode = z.infer<typeof EveryNodeSchema>;
 
+/** Shared by both trees -- the only node kind valid in both PredicateNodeSchema's and ExpressionNodeSchema's own discriminated unions, appended as the last member of each below. Declared once, here, ahead of the predicate union that needs it first; the expression union further down references this exact same schema object again rather than declaring its own copy. See the `treeReference` section of README.md. */
+export const TreeReferenceNodeSchema = z.object({
+  kind: z.literal("treeReference"),
+  key: JsonValueSchema,
+});
+export type TreeReferenceNode = z.infer<typeof TreeReferenceNodeSchema>;
+
 export const PredicateNodeSchema = z.discriminatedUnion("kind", [
   NotNodeSchema,
   AndNodeSchema,
@@ -164,6 +174,7 @@ export const PredicateNodeSchema = z.discriminatedUnion("kind", [
   ExistsNodeSchema,
   SomeNodeSchema,
   EveryNodeSchema,
+  TreeReferenceNodeSchema,
 ]);
 export type PredicateNode = z.infer<typeof PredicateNodeSchema>;
 
@@ -253,6 +264,8 @@ export type ConditionalCase = z.infer<typeof ConditionalCaseSchema>;
 
 export const ConditionalNodeSchema = z.object({
   kind: z.literal("conditional"),
+  /** Absent means `"first"` -- the exact, unchanged behaviour of every tree serialised before this field existed. A deliberate, meaningful default, not a masked-bug fallback; see the `conditional` section of README.md for `"unique"`'s own absorption rules. */
+  hitPolicy: HitPolicySchema.optional(),
   get cases(): z.ZodArray<typeof ConditionalCaseSchema> {
     return z.array(ConditionalCaseSchema);
   },
@@ -323,5 +336,6 @@ export const ExpressionNodeSchema = z.discriminatedUnion("kind", [
   FoldNodeSchema,
   AccumulatorNodeSchema,
   DelegateNodeSchema,
+  TreeReferenceNodeSchema,
 ]);
 export type ExpressionNode = z.infer<typeof ExpressionNodeSchema>;

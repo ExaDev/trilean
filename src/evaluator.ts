@@ -15,12 +15,14 @@ import type { FunctionRegistry } from "./functions";
 import { emptyFunctionRegistry } from "./functions";
 import type { JsonValue } from "./json-value";
 import type { EvaluationContext, Resolvers } from "./resolvers";
-import type {
-  ArithmeticOperator,
-  ComparisonOperator,
-  ExpressionNode,
-  PredicateNode,
-  TextComparisonOperator,
+import {
+  type ArithmeticOperator,
+  type ComparisonOperator,
+  type ExpressionNode,
+  type PredicateNode,
+  type TextComparisonOperator,
+  ExpressionNodeSchema,
+  PredicateNodeSchema,
 } from "./tree";
 
 /**
@@ -489,6 +491,9 @@ function applyArithmetic(
   return applyArithmeticOnNumbers(op, left, right);
 }
 
+/** A defense-in-depth guard against a long acyclic `treeReference` chain exhausting the call stack -- distinct from, and layered on top of, the cycle detector below (`visitedTreeKeys`), which catches an actual repeat immediately and more precisely. */
+const MAX_TREE_REFERENCE_DEPTH = 100;
+
 /** A collection candidate paired with its own pre-filter outcome: `"include"`/`"exclude"` when `filter` resolved definitely, or the filter's own indeterminate `Evaluation` when it did not (there is no third, definite-but-neither branch -- see `resolveParticipatingItems` below). */
 interface ResolvedCollectionItem {
   readonly item: unknown;
@@ -504,6 +509,8 @@ async function resolveParticipatingItems(
   context: EvaluationContext,
   resolvers: Readonly<Resolvers>,
   functions: Readonly<FunctionRegistry>,
+  visitedTreeKeys: ReadonlySet<string>,
+  treeReferenceDepth: number,
 ): Promise<ResolvedCollectionItem[]> {
   const candidates = await resolvers.resolveCollection(collection, context);
   return Promise.all(
@@ -515,6 +522,8 @@ async function resolveParticipatingItems(
         resolvers,
         undefined,
         functions,
+        visitedTreeKeys,
+        treeReferenceDepth,
       );
       if (filterResult.status === "indeterminate") {
         return { item, filterOutcome: filterResult };
@@ -544,6 +553,8 @@ async function evaluatePredicateInternal(
   resolvers: Readonly<Resolvers>,
   accumulator: ComputedValue | undefined,
   functions: Readonly<FunctionRegistry>,
+  visitedTreeKeys: ReadonlySet<string>,
+  treeReferenceDepth: number,
 ): Promise<Evaluation<boolean>> {
   switch (node.kind) {
     case "not": {
@@ -553,6 +564,8 @@ async function evaluatePredicateInternal(
         resolvers,
         accumulator,
         functions,
+        visitedTreeKeys,
+        treeReferenceDepth,
       );
       if (operand.status === "indeterminate") return operand;
       return definite(!operand.value);
@@ -565,6 +578,8 @@ async function evaluatePredicateInternal(
           resolvers,
           accumulator,
           functions,
+          visitedTreeKeys,
+          treeReferenceDepth,
         ),
         evaluatePredicateInternal(
           node.right,
@@ -572,6 +587,8 @@ async function evaluatePredicateInternal(
           resolvers,
           accumulator,
           functions,
+          visitedTreeKeys,
+          treeReferenceDepth,
         ),
       ]);
       return combineAnd(left, right);
@@ -584,6 +601,8 @@ async function evaluatePredicateInternal(
           resolvers,
           accumulator,
           functions,
+          visitedTreeKeys,
+          treeReferenceDepth,
         ),
         evaluatePredicateInternal(
           node.right,
@@ -591,6 +610,8 @@ async function evaluatePredicateInternal(
           resolvers,
           accumulator,
           functions,
+          visitedTreeKeys,
+          treeReferenceDepth,
         ),
       ]);
       return combineOr(left, right);
@@ -604,6 +625,8 @@ async function evaluatePredicateInternal(
             resolvers,
             accumulator,
             functions,
+            visitedTreeKeys,
+            treeReferenceDepth,
           ),
         ),
       );
@@ -621,6 +644,8 @@ async function evaluatePredicateInternal(
             resolvers,
             accumulator,
             functions,
+            visitedTreeKeys,
+            treeReferenceDepth,
           ),
         ),
       );
@@ -637,6 +662,8 @@ async function evaluatePredicateInternal(
           resolvers,
           accumulator,
           functions,
+          visitedTreeKeys,
+          treeReferenceDepth,
         ),
         evaluateValueInternal(
           node.right,
@@ -644,6 +671,8 @@ async function evaluatePredicateInternal(
           resolvers,
           accumulator,
           functions,
+          visitedTreeKeys,
+          treeReferenceDepth,
         ),
       ]);
       if (left.status === "indeterminate") return left;
@@ -658,6 +687,8 @@ async function evaluatePredicateInternal(
           resolvers,
           accumulator,
           functions,
+          visitedTreeKeys,
+          treeReferenceDepth,
         ),
         evaluateValueInternal(
           node.right,
@@ -665,6 +696,8 @@ async function evaluatePredicateInternal(
           resolvers,
           accumulator,
           functions,
+          visitedTreeKeys,
+          treeReferenceDepth,
         ),
       ]);
       if (left.status === "indeterminate") return left;
@@ -678,6 +711,8 @@ async function evaluatePredicateInternal(
         resolvers,
         accumulator,
         functions,
+        visitedTreeKeys,
+        treeReferenceDepth,
       );
       if (operandResult.status === "indeterminate") return operandResult;
 
@@ -690,6 +725,8 @@ async function evaluatePredicateInternal(
             resolvers,
             accumulator,
             functions,
+            visitedTreeKeys,
+            treeReferenceDepth,
           );
           if (candidateResult.status === "indeterminate") {
             return candidateResult;
@@ -718,6 +755,8 @@ async function evaluatePredicateInternal(
         resolvers,
         accumulator,
         functions,
+        visitedTreeKeys,
+        treeReferenceDepth,
       );
       // The data point resolved to *something* unless it was flatly not-found; a resolved-but-unusable value (wrong-type/domain-error) still counts as existing. `exists` is never itself indeterminate.
       if (
@@ -736,6 +775,8 @@ async function evaluatePredicateInternal(
         context,
         resolvers,
         functions,
+        visitedTreeKeys,
+        treeReferenceDepth,
       );
       // A filter-excluded item contributes no vote at all (as if never in the collection); a filter-indeterminate item contributes its own indeterminate vote, letting a different item's clean match still absorb it -- contrast with `fold`, which has no absorbing value and goes indeterminate outright on the same condition.
       const votes = (
@@ -753,6 +794,8 @@ async function evaluatePredicateInternal(
                 resolvers,
                 undefined,
                 functions,
+                visitedTreeKeys,
+                treeReferenceDepth,
               );
             },
           ),
@@ -762,6 +805,47 @@ async function evaluatePredicateInternal(
       const combine = node.kind === "some" ? combineOr : combineAnd;
       const identity = node.kind === "some" ? definite(false) : definite(true);
       return votes.reduce<Evaluation<boolean>>(combine, identity);
+    }
+    case "treeReference": {
+      if (resolvers.resolveTree === undefined) {
+        return indeterminate(
+          "wrong-type",
+          "no tree resolver registered for treeReference nodes",
+        );
+      }
+      const keyString = JSON.stringify(node.key);
+      if (visitedTreeKeys.has(keyString)) {
+        return indeterminate("domain-error", "circular treeReference detected");
+      }
+      if (treeReferenceDepth >= MAX_TREE_REFERENCE_DEPTH) {
+        return indeterminate(
+          "domain-error",
+          `treeReference chain exceeds the maximum depth of ${MAX_TREE_REFERENCE_DEPTH.toString()}`,
+        );
+      }
+      const resolution = await resolvers.resolveTree(node.key, context);
+      if (!resolution.found) {
+        return indeterminate(
+          "not-found",
+          "treeReference key did not resolve to a tree",
+        );
+      }
+      const parsed = PredicateNodeSchema.safeParse(resolution.node);
+      if (!parsed.success) {
+        return indeterminate(
+          "wrong-type",
+          "the referenced tree is not a valid PredicateNode",
+        );
+      }
+      return evaluatePredicateInternal(
+        parsed.data,
+        context,
+        resolvers,
+        accumulator,
+        functions,
+        new Set([...visitedTreeKeys, keyString]),
+        treeReferenceDepth + 1,
+      );
     }
     default:
       throw new Error("unreachable predicate node kind");
@@ -774,6 +858,8 @@ async function evaluateValueInternal(
   resolvers: Readonly<Resolvers>,
   accumulator: ComputedValue | undefined,
   functions: Readonly<FunctionRegistry>,
+  visitedTreeKeys: ReadonlySet<string>,
+  treeReferenceDepth: number,
 ): Promise<Evaluation<ComputedValue>> {
   switch (node.kind) {
     case "reference": {
@@ -818,6 +904,8 @@ async function evaluateValueInternal(
             resolvers,
             accumulator,
             functions,
+            visitedTreeKeys,
+            treeReferenceDepth,
           ),
         ),
       );
@@ -862,6 +950,8 @@ async function evaluateValueInternal(
           resolvers,
           accumulator,
           functions,
+          visitedTreeKeys,
+          treeReferenceDepth,
         ),
         evaluateValueInternal(
           node.right,
@@ -869,6 +959,8 @@ async function evaluateValueInternal(
           resolvers,
           accumulator,
           functions,
+          visitedTreeKeys,
+          treeReferenceDepth,
         ),
       ]);
       // Unlike `and`/`or` (see `combineAnd`/`combineOr` above), arithmetic has no absorbing value: any indeterminate operand always makes the whole node indeterminate, regardless of what the other operand would have been, tie-broken left before right per the tie-break rule.
@@ -883,6 +975,8 @@ async function evaluateValueInternal(
         resolvers,
         accumulator,
         functions,
+        visitedTreeKeys,
+        treeReferenceDepth,
       );
       if (operand.status === "indeterminate") return operand;
       return applyNegate(operand.value);
@@ -897,6 +991,8 @@ async function evaluateValueInternal(
             resolvers,
             accumulator,
             functions,
+            visitedTreeKeys,
+            treeReferenceDepth,
           ),
         ),
       );
@@ -919,32 +1015,92 @@ async function evaluateValueInternal(
       return definite(resolution.value);
     }
     case "conditional": {
-      // Strictly sequential, not concurrent: a for...of loop with early return on the first definite match, or the first indeterminate guard, is required behaviour -- evaluation must never skip past an unresolved guard to try a later case that might only look correct because an earlier one couldn't actually be checked (see the `conditional` section of README.md).
-      for (const { when, then } of node.cases) {
-        const whenResult = await evaluatePredicateInternal(
-          when,
-          context,
-          resolvers,
-          accumulator,
-          functions,
-        );
-        if (whenResult.status === "indeterminate") return whenResult;
-        if (whenResult.value) {
-          return evaluateValueInternal(
-            then,
+      const hitPolicy = node.hitPolicy ?? "first";
+      if (hitPolicy === "first") {
+        // Strictly sequential, not concurrent: a for...of loop with early return on the first definite match, or the first indeterminate guard, is required behaviour -- evaluation must never skip past an unresolved guard to try a later case that might only look correct because an earlier one couldn't actually be checked (see the `conditional` section of README.md).
+        for (const { when, then } of node.cases) {
+          const whenResult = await evaluatePredicateInternal(
+            when,
             context,
             resolvers,
             accumulator,
             functions,
+            visitedTreeKeys,
+            treeReferenceDepth,
           );
+          if (whenResult.status === "indeterminate") return whenResult;
+          if (whenResult.value) {
+            return evaluateValueInternal(
+              then,
+              context,
+              resolvers,
+              accumulator,
+              functions,
+              visitedTreeKeys,
+              treeReferenceDepth,
+            );
+          }
         }
+        return evaluateValueInternal(
+          node.fallback,
+          context,
+          resolvers,
+          accumulator,
+          functions,
+          visitedTreeKeys,
+          treeReferenceDepth,
+        );
+      }
+
+      // "unique": every case's `when` is evaluated concurrently -- the same concurrency allOf/anyOf/memberOf's own candidates already use, since resolvers are pure functions of their inputs throughout this design. Absorption is then applied in a strict, non-commutative order: two-or-more confirmed matches is itself an absorbing outcome (mirroring memberOf/some/every's "a confirmed outcome cannot be undone by an unrelated element's data problem"), checked BEFORE any indeterminate case is allowed to poison the result -- but, unlike memberOf/some/every, a single confirmed match does NOT by itself absorb a remaining indeterminate case: that unresolved case might yet turn out to be a second match, which "unique" cannot rule out without knowing its real value, so exactly-one-match is only safe to return once every other case is also known, definitely, not to match.
+      const evaluatedCases = await Promise.all(
+        node.cases.map(async ({ when, then }) => ({
+          then,
+          whenResult: await evaluatePredicateInternal(
+            when,
+            context,
+            resolvers,
+            accumulator,
+            functions,
+            visitedTreeKeys,
+            treeReferenceDepth,
+          ),
+        })),
+      );
+      const matches = evaluatedCases.filter(
+        ({ whenResult }) =>
+          whenResult.status === "definite" && whenResult.value,
+      );
+      if (matches.length >= 2) {
+        return indeterminate(
+          "domain-error",
+          "more than one case matched under the 'unique' hit policy",
+        );
+      }
+      const reason = firstIndeterminate(
+        ...evaluatedCases.map(({ whenResult }) => whenResult),
+      );
+      if (reason !== undefined) return { status: "indeterminate", reason };
+      const [match] = matches;
+      if (match === undefined) {
+        return evaluateValueInternal(
+          node.fallback,
+          context,
+          resolvers,
+          accumulator,
+          functions,
+          visitedTreeKeys,
+          treeReferenceDepth,
+        );
       }
       return evaluateValueInternal(
-        node.fallback,
+        match.then,
         context,
         resolvers,
         accumulator,
         functions,
+        visitedTreeKeys,
+        treeReferenceDepth,
       );
     }
     case "fold": {
@@ -954,6 +1110,8 @@ async function evaluateValueInternal(
         context,
         resolvers,
         functions,
+        visitedTreeKeys,
+        treeReferenceDepth,
       );
       const filterIndeterminateReason = firstFilterIndeterminate(participating);
       if (filterIndeterminateReason !== undefined) {
@@ -971,6 +1129,8 @@ async function evaluateValueInternal(
           resolvers,
           undefined,
           functions,
+          visitedTreeKeys,
+          treeReferenceDepth,
         );
         if (initialResult.status === "indeterminate") return initialResult;
         let runningAccumulator = initialResult.value;
@@ -981,6 +1141,8 @@ async function evaluateValueInternal(
             resolvers,
             runningAccumulator,
             functions,
+            visitedTreeKeys,
+            treeReferenceDepth,
           );
           if (stepResult.status === "indeterminate") return stepResult;
           runningAccumulator = stepResult.value;
@@ -1005,6 +1167,8 @@ async function evaluateValueInternal(
           resolvers,
           undefined,
           functions,
+          visitedTreeKeys,
+          treeReferenceDepth,
         );
         if (itemResult.status === "indeterminate") return itemResult;
         if (runningExtremum === undefined) {
@@ -1046,6 +1210,47 @@ async function evaluateValueInternal(
       }
       return definite(resolution.value);
     }
+    case "treeReference": {
+      if (resolvers.resolveTree === undefined) {
+        return indeterminate(
+          "wrong-type",
+          "no tree resolver registered for treeReference nodes",
+        );
+      }
+      const keyString = JSON.stringify(node.key);
+      if (visitedTreeKeys.has(keyString)) {
+        return indeterminate("domain-error", "circular treeReference detected");
+      }
+      if (treeReferenceDepth >= MAX_TREE_REFERENCE_DEPTH) {
+        return indeterminate(
+          "domain-error",
+          `treeReference chain exceeds the maximum depth of ${MAX_TREE_REFERENCE_DEPTH.toString()}`,
+        );
+      }
+      const resolution = await resolvers.resolveTree(node.key, context);
+      if (!resolution.found) {
+        return indeterminate(
+          "not-found",
+          "treeReference key did not resolve to a tree",
+        );
+      }
+      const parsed = ExpressionNodeSchema.safeParse(resolution.node);
+      if (!parsed.success) {
+        return indeterminate(
+          "wrong-type",
+          "the referenced tree is not a valid ExpressionNode",
+        );
+      }
+      return evaluateValueInternal(
+        parsed.data,
+        context,
+        resolvers,
+        accumulator,
+        functions,
+        new Set([...visitedTreeKeys, keyString]),
+        treeReferenceDepth + 1,
+      );
+    }
     default:
       throw new Error("unreachable expression node kind");
   }
@@ -1072,9 +1277,25 @@ export function createEvaluator({
 } {
   return {
     evaluatePredicate: async (node, context, resolvers) =>
-      evaluatePredicateInternal(node, context, resolvers, undefined, functions),
+      evaluatePredicateInternal(
+        node,
+        context,
+        resolvers,
+        undefined,
+        functions,
+        new Set(),
+        0,
+      ),
     evaluateValue: async (node, context, resolvers) =>
-      evaluateValueInternal(node, context, resolvers, undefined, functions),
+      evaluateValueInternal(
+        node,
+        context,
+        resolvers,
+        undefined,
+        functions,
+        new Set(),
+        0,
+      ),
   };
 }
 

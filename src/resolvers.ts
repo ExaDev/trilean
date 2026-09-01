@@ -9,8 +9,12 @@ export type EvaluationContext = unknown;
 export type Resolution =
   { found: true; value: ComputedValue } | { found: false };
 
+/** The `resolveTree` counterpart to `Resolution`: `found: true` carries the referenced tree as opaque JSON, re-validated by the evaluator (see the `treeReference` node kind) rather than trusted as already-shaped `PredicateNode`/`ExpressionNode`. */
+export type TreeResolution =
+  { found: true; node: JsonValue } | { found: false };
+
 /**
- * Three independent points of extension, each supplied separately by the embedding consumer, each treated as pure data to hand over -- never as resolver logic living inside the schema itself. Plain TypeScript interfaces, not Zod schemas: resolvers are never serialised, only ever supplied in-process at evaluation time.
+ * Three core, required points of extension, plus two further independent optional ones (`resolveDelegate`, `resolveTree`), each supplied separately by the embedding consumer, each treated as pure data to hand over -- never as resolver logic living inside the schema itself. Plain TypeScript interfaces, not Zod schemas: resolvers are never serialised, only ever supplied in-process at evaluation time.
  */
 export interface Resolvers {
   /** Resolver 1 -- a single opaque key to a single value (`reference`). */
@@ -38,4 +42,10 @@ export interface Resolvers {
     payload: JsonValue,
     context: EvaluationContext,
   ) => Promise<Resolution>;
+
+  /** Optional, separate from the three core contracts -- see the `treeReference` node kind. Absence is `wrong-type`, the same deliberate-absence treatment as an unregistered `resolveDelegate`, not a masked bug -- and keeps this an additive, non-breaking interface change for every existing consumer. */
+  resolveTree?: (
+    key: JsonValue,
+    context: EvaluationContext,
+  ) => Promise<TreeResolution>;
 }

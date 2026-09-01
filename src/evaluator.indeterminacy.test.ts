@@ -123,6 +123,7 @@ const memberOfProbeValue = 5;
 const reduceInitialSeed = 5;
 const laterConditionalCaseValue = 3;
 const untouchedReduceInitial = 42;
+const uniqueHitPolicyThirdCaseValue = 3;
 
 // --- Fixture machinery ---
 
@@ -904,6 +905,75 @@ describe("conditional: must not skip an unresolved guard", () => {
   });
 });
 
+describe("conditional: 'unique' hit policy", () => {
+  it("2+ definite matches absorbs -- domain-error, even with a third case that is itself indeterminate", async () => {
+    const result = await evaluateValue(
+      {
+        kind: "conditional",
+        hitPolicy: "unique",
+        cases: [
+          { when: trueGuard, then: numberLiteral(1) },
+          { when: trueGuard, then: numberLiteral(2) },
+          {
+            when: missingGuard,
+            then: numberLiteral(uniqueHitPolicyThirdCaseValue),
+          },
+        ],
+        fallback: numberLiteral(0),
+      },
+      undefined,
+      baseResolvers,
+    );
+    expect(result.status).toBe("indeterminate");
+    if (result.status === "indeterminate") {
+      expect(result.reason.code).toBe("domain-error");
+    }
+  });
+
+  it("exactly one definite match plus one indeterminate case does NOT absorb -- the whole node is indeterminate, not the match's then", async () => {
+    const result = await evaluateValue(
+      {
+        kind: "conditional",
+        hitPolicy: "unique",
+        cases: [
+          { when: trueGuard, then: numberLiteral(1) },
+          { when: missingGuard, then: numberLiteral(2) },
+        ],
+        fallback: numberLiteral(0),
+      },
+      undefined,
+      baseResolvers,
+    );
+    expect(result.status).toBe("indeterminate");
+    if (result.status === "indeterminate") {
+      expect(result.reason.code).toBe("not-found");
+    }
+  });
+
+  it("a when that is itself wrong-type propagates that reason, not domain-error", async () => {
+    const wrongTypeGuard: PredicateNode = {
+      kind: "compare",
+      op: "eq",
+      left: { kind: "textLiteral", value: "x" },
+      right: numberLiteral(1),
+    };
+    const result = await evaluateValue(
+      {
+        kind: "conditional",
+        hitPolicy: "unique",
+        cases: [{ when: wrongTypeGuard, then: numberLiteral(1) }],
+        fallback: numberLiteral(0),
+      },
+      undefined,
+      baseResolvers,
+    );
+    expect(result.status).toBe("indeterminate");
+    if (result.status === "indeterminate") {
+      expect(result.reason.code).toBe("wrong-type");
+    }
+  });
+});
+
 describe("fold: reduce vs max/min over an empty collection", () => {
   it("reduce evaluates to initial directly, without ever evaluating combine", async () => {
     let combineEvaluations = 0;
@@ -1007,6 +1077,98 @@ describe("delegate: missing-handler message", () => {
     if (result.status === "indeterminate") {
       expect(result.reason.code).toBe("wrong-type");
       expect(result.reason.message).toContain("external-pricing-engine");
+    }
+  });
+});
+
+describe("treeReference: reason-code coverage", () => {
+  it("wrong-type: no resolveTree resolver registered", async () => {
+    const result = await evaluatePredicate(
+      { kind: "treeReference", key: "any" },
+      undefined,
+      baseResolvers,
+    );
+    expect(result.status).toBe("indeterminate");
+    if (result.status === "indeterminate") {
+      expect(result.reason.code).toBe("wrong-type");
+    }
+  });
+
+  it("not-found: the registered resolver reports absence", async () => {
+    const treeResolvers: Resolvers = {
+      ...baseResolvers,
+      resolveTree: async () => Promise.resolve({ found: false }),
+    };
+    const result = await evaluatePredicate(
+      { kind: "treeReference", key: "any" },
+      undefined,
+      treeResolvers,
+    );
+    expect(result.status).toBe("indeterminate");
+    if (result.status === "indeterminate") {
+      expect(result.reason.code).toBe("not-found");
+    }
+  });
+
+  it("wrong-type: the resolved value fails to parse against the expected schema", async () => {
+    const treeResolvers: Resolvers = {
+      ...baseResolvers,
+      resolveTree: async () =>
+        Promise.resolve({ found: true, node: { kind: "nonsense" } }),
+    };
+    const result = await evaluatePredicate(
+      { kind: "treeReference", key: "any" },
+      undefined,
+      treeResolvers,
+    );
+    expect(result.status).toBe("indeterminate");
+    if (result.status === "indeterminate") {
+      expect(result.reason.code).toBe("wrong-type");
+    }
+  });
+
+  it("domain-error: a key already on the current reference chain (cycle)", async () => {
+    const treeResolvers: Resolvers = {
+      ...baseResolvers,
+      resolveTree: async () =>
+        Promise.resolve({
+          found: true,
+          node: { kind: "treeReference", key: "self" },
+        }),
+    };
+    const result = await evaluatePredicate(
+      { kind: "treeReference", key: "self" },
+      undefined,
+      treeResolvers,
+    );
+    expect(result.status).toBe("indeterminate");
+    if (result.status === "indeterminate") {
+      expect(result.reason.code).toBe("domain-error");
+      expect(result.reason.message).toBe("circular treeReference detected");
+    }
+  });
+
+  it("domain-error: the chain already reached the maximum depth", async () => {
+    const treeResolvers: Resolvers = {
+      ...baseResolvers,
+      resolveTree: async (key) =>
+        Promise.resolve({
+          found: true,
+          node: {
+            kind: "treeReference",
+            key: `${typeof key === "string" ? key : "chain"}-next`,
+          },
+        }),
+    };
+    const result = await evaluatePredicate(
+      { kind: "treeReference", key: "chain-0" },
+      undefined,
+      treeResolvers,
+    );
+    expect(result.status).toBe("indeterminate");
+    if (result.status === "indeterminate") {
+      expect(result.reason.code).toBe("domain-error");
+      expect(result.reason.message).toContain("maximum depth");
     }
   });
 });

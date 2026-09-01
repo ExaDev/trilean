@@ -19,7 +19,12 @@ export {
   unitsEqual,
 } from "./computed-value";
 
-export type { EvaluationContext, Resolution, Resolvers } from "./resolvers";
+export type {
+  EvaluationContext,
+  Resolution,
+  Resolvers,
+  TreeResolution,
+} from "./resolvers";
 
 export type { FunctionRegistry } from "./functions";
 export { emptyFunctionRegistry } from "./functions";
@@ -38,6 +43,7 @@ export {
   xor,
 } from "./derived-connectives";
 export { average, count, presenceOf, sum } from "./derived-aggregates";
+export { coalesce } from "./derived-values";
 
 export type {
   AccumulatorNode,
@@ -58,6 +64,7 @@ export type {
   ExpressionNode,
   FoldCombiner,
   FoldNode,
+  HitPolicy,
   InstantLiteralNode,
   LookupNode,
   MemberOfNode,
@@ -72,6 +79,7 @@ export type {
   TextCompareNode,
   TextComparisonOperator,
   TextLiteralNode,
+  TreeReferenceNode,
 } from "./tree";
 export {
   AccumulatorNodeSchema,
@@ -92,6 +100,7 @@ export {
   ExpressionNodeSchema,
   FoldCombinerSchema,
   FoldNodeSchema,
+  HitPolicySchema,
   InstantLiteralNodeSchema,
   LookupNodeSchema,
   MemberOfNodeSchema,
@@ -106,4 +115,5 @@ export {
   TextCompareNodeSchema,
   TextComparisonOperatorSchema,
   TextLiteralNodeSchema,
+  TreeReferenceNodeSchema,
 } from "./tree";

@@ -15,6 +15,7 @@ import {
   ExpressionNodeSchema,
   FoldCombinerSchema,
   FoldNodeSchema,
+  HitPolicySchema,
   InstantLiteralNodeSchema,
   LookupNodeSchema,
   MemberOfNodeSchema,
@@ -27,6 +28,7 @@ import {
   SomeNodeSchema,
   TextCompareNodeSchema,
   TextLiteralNodeSchema,
+  TreeReferenceNodeSchema,
 } from "./tree";
 
 const numberLiteral = { kind: "numberLiteral", value: 1 } as const;
@@ -193,6 +195,14 @@ describe("predicate tree", () => {
     ).toBe(false);
   });
 
+  it("treeReference: parses a minimal node and rejects a missing key", () => {
+    const valid = { kind: "treeReference", key: "eligibility-rule" };
+    expect(PredicateNodeSchema.parse(valid)).toEqual(valid);
+    expect(
+      PredicateNodeSchema.safeParse({ kind: "treeReference" }).success,
+    ).toBe(false);
+  });
+
   it("round-trips every predicate kind through the top-level discriminated union", () => {
     const samples = [
       { kind: "not", operand: { kind: "exists", operand: numberLiteral } },
@@ -227,6 +237,7 @@ describe("predicate tree", () => {
         collection: "items",
         item: { kind: "exists", operand: numberLiteral },
       },
+      { kind: "treeReference", key: "eligibility-rule" },
     ];
     for (const sample of samples)
       expect(PredicateNodeSchema.parse(sample)).toEqual(sample);
@@ -346,6 +357,48 @@ describe("expression tree", () => {
     ).toBe(false);
   });
 
+  it('conditional: hitPolicy is optional and defaults to undefined (not `"first"`) when absent, accepts `"first"`/`"unique"`, and rejects any other string', () => {
+    const withoutHitPolicy = {
+      kind: "conditional",
+      cases: [],
+      fallback: numberLiteral,
+    };
+    const parsed = ConditionalNodeSchema.parse(withoutHitPolicy);
+    expect(parsed.hitPolicy).toBeUndefined();
+    expect(
+      ConditionalNodeSchema.parse({ ...withoutHitPolicy, hitPolicy: "first" })
+        .hitPolicy,
+    ).toBe("first");
+    expect(
+      ConditionalNodeSchema.parse({ ...withoutHitPolicy, hitPolicy: "unique" })
+        .hitPolicy,
+    ).toBe("unique");
+    expect(
+      ConditionalNodeSchema.safeParse({
+        ...withoutHitPolicy,
+        hitPolicy: "priority",
+      }).success,
+    ).toBe(false);
+  });
+
+  it('HitPolicySchema: accepts `"first"`/`"unique"` and rejects any other value', () => {
+    expect(HitPolicySchema.parse("first")).toBe("first");
+    expect(HitPolicySchema.parse("unique")).toBe("unique");
+    expect(HitPolicySchema.safeParse("collect").success).toBe(false);
+  });
+
+  it("treeReference: parses a minimal node, rejects a missing key, and is the same schema object valid from a PredicateNode position too", () => {
+    const valid = { kind: "treeReference", key: "pricing-formula" };
+    expect(TreeReferenceNodeSchema.parse(valid)).toEqual(valid);
+    expect(
+      TreeReferenceNodeSchema.safeParse({ kind: "treeReference" }).success,
+    ).toBe(false);
+    expect(ExpressionNodeSchema.parse(valid)).toEqual(valid);
+    expect(
+      ExpressionNodeSchema.safeParse({ kind: "treeReference" }).success,
+    ).toBe(false);
+  });
+
   it("fold: parses each combiner mode, with and without an optional filter, and rejects an unrecognised combiner mode", () => {
     const maxValid = {
       kind: "fold",
@@ -420,6 +473,7 @@ describe("expression tree", () => {
       },
       { kind: "accumulator" },
       { kind: "delegate", system: "symbolic-math", payload: null },
+      { kind: "treeReference", key: "pricing-formula" },
     ];
     for (const sample of samples)
       expect(ExpressionNodeSchema.parse(sample)).toEqual(sample);
