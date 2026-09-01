@@ -111,3 +111,40 @@ describe("complex values compose through a whole tree", () => {
     }
   });
 });
+
+describe("a complexLiteral authored in polar form composes through a whole tree exactly like a rectangular one", () => {
+  it("combines a polar-authored literal with a resolver-supplied complex value via arithmetic", async () => {
+    // secondSample (1 - 2i) plus a polar-authored unit real number (magnitude 1, phase 0 -> 1 + 0i): 2 - 2i.
+    const tree: ExpressionNode = {
+      kind: "arithmetic",
+      op: "add",
+      left: { kind: "reference", key: "secondSample" },
+      right: { kind: "complexLiteral", magnitude: 1, phase: 0 },
+    };
+    const result = await evaluateValue(tree, undefined, resolvers);
+    expect(result).toEqual({
+      status: "definite",
+      value: { kind: "complex", re: 2, im: -2 },
+    });
+  });
+
+  it("reaches the same ordering comparison through a polar-authored operand as through a rectangular one", async () => {
+    // firstSample's own re/im (see the resolver above) -- named individually so Math.atan2's arguments below aren't bare call-site literals (firstSample (3 + 4i) has magnitude exactly 5).
+    const firstSampleRealPart = 3;
+    const firstSampleImaginaryPart = 4;
+    const polarEquivalent: ExpressionNode = {
+      kind: "complexLiteral",
+      magnitude: 5,
+      phase: Math.atan2(firstSampleImaginaryPart, firstSampleRealPart),
+    };
+    const rule: PredicateNode = {
+      kind: "compare",
+      op: "gt",
+      left: { kind: "call", fn: "magnitude", args: [polarEquivalent] },
+      right: { kind: "numberLiteral", value: 4 },
+    };
+    await expect(
+      evaluatePredicate(rule, undefined, resolvers),
+    ).resolves.toEqual({ status: "definite", value: true });
+  });
+});
