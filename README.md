@@ -51,7 +51,44 @@ See [Evaluator entry points](#evaluator-entry-points) and [Resolvers](#resolvers
 
 ### A nested filter for a REST API search endpoint
 
-A search endpoint's filter criteria are exactly the kind of thing this package is for: nested boolean logic, stored as JSON, that a client can construct, a non-developer can edit via a UI, and a server evaluates per record without ever hardcoding the filter or redeploying when it changes.
+A search endpoint's filter criteria are exactly the kind of thing this package is for: nested boolean logic, stored as JSON, that a client can construct, a non-developer can edit via a UI, and a server evaluates per record without ever hardcoding the filter or redeploying when it changes. There is no query-string DSL to parse and no ORM query-builder to translate into — the request body already is the tree:
+
+```http
+POST /orders/search HTTP/1.1
+Content-Type: application/json
+
+{
+  "filter": {
+    "kind": "and",
+    "left": {
+      "kind": "textCompare",
+      "op": "equals",
+      "left": { "kind": "reference", "key": "status" },
+      "right": { "kind": "textLiteral", "value": "active" }
+    },
+    "right": {
+      "kind": "or",
+      "left": {
+        "kind": "compare",
+        "op": "gt",
+        "left": { "kind": "reference", "key": "orderTotal" },
+        "right": { "kind": "numberLiteral", "value": 100 }
+      },
+      "right": {
+        "kind": "memberOf",
+        "op": "in",
+        "operand": { "kind": "reference", "key": "category" },
+        "candidates": [
+          { "kind": "textLiteral", "value": "electronics" },
+          { "kind": "textLiteral", "value": "books" }
+        ]
+      }
+    }
+  }
+}
+```
+
+`status equals "active" AND (orderTotal > 100 OR category is a preferred one)` — two levels of nesting: an `or` inside the right branch of an `and`. The server parses that body's `filter` field as a `PredicateNode` and evaluates it, unmodified, against each candidate order:
 
 ```ts
 import { evaluatePredicate, type PredicateNode, type Resolvers } from "trilean";
@@ -62,9 +99,8 @@ interface Order {
   category: string;
 }
 
-// status equals "active" AND (orderTotal > 100 OR category is a preferred one) --
-// two levels of nesting: an "or" inside the right branch of an "and".
-const activeHighValueOrPreferredCategory: PredicateNode = {
+// The parsed `filter` field from the request body above.
+const filter: PredicateNode = {
   kind: "and",
   left: {
     kind: "textCompare",
@@ -121,7 +157,7 @@ const orders: Order[] = [
 ];
 
 const results = await Promise.all(
-  orders.map((order) => evaluatePredicate(activeHighValueOrPreferredCategory, order, orderResolvers)),
+  orders.map((order) => evaluatePredicate(filter, order, orderResolvers)),
 );
 const matching = orders.filter((_, i) => results[i]?.status === "definite" && results[i]?.value === true);
 // => the first two orders match; the cancelled one doesn't reach the "or" at all, since "and" absorbs on its left operand's definite false
