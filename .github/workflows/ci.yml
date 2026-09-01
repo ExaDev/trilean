@@ -145,18 +145,12 @@ jobs:
       published: ${{ steps.before.outputs.version != steps.after.outputs.version }}
       version: ${{ steps.after.outputs.version }}
     steps:
-      # main requires status checks to merge, and the default GITHUB_TOKEN has no bypass for that -- @semantic-release/git's own push of the release commit is a direct push to main, so it needs a token from an actor the branch ruleset explicitly allows to bypass (see ExaDev/.github and this repo's own ruleset). Everything else in this job (release notes, GitHub Release creation, issue/PR comments, OIDC npm publish) keeps using secrets.GITHUB_TOKEN below, unaffected -- only checkout's own git credentials need the elevated token, since that's what the later `git push` inherits.
-      - name: Generate a token for the release push
-        id: app-token
-        uses: actions/create-github-app-token@v2
-        with:
-          app-id: "4473709"
-          private-key: ${{ secrets.AUTOMERGE_APP_PRIVATE_KEY }}
+      # Internal/semantic-release-workspace's own release job needs a GitHub App token here because main requires status checks to merge there, and the default GITHUB_TOKEN has no bypass for that -- @semantic-release/git's release-commit push is a direct push to main, so it needs an actor the branch ruleset explicitly allows through. Confirmed directly (gh api repos/ExaDev/trilean/branches/main/protection -> "Branch not protected", zero repo-level rulesets) that this repo has no such protection, so there is nothing for GITHUB_TOKEN to be blocked by -- using it here avoids depending on a secret (AUTOMERGE_APP_PRIVATE_KEY) that was never configured for this repo. If main later gains required-status-check protection matching the other repos' convention, this push will start failing the same way the App-token version was built to avoid, and the App-token step will need reinstating.
       - uses: actions/checkout@v7
         with:
           # semantic-release analyses the full commit history since the last release.
           fetch-depth: 0
-          token: ${{ steps.app-token.outputs.token }}
+          token: ${{ secrets.GITHUB_TOKEN }}
       - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v7
         with:
