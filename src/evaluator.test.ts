@@ -127,12 +127,19 @@ describe("complexLiteral", () => {
   });
 
   it("eq: a rectangular literal and a polar literal representing the same underlying complex number compare as equal", async () => {
+    // A deliberately non-trivial phase (not a multiple of pi/2), with the rectangular side computed from the raw trig formula independently of the evaluator/complexFromPolar under test -- a sin/cos swap, or a bug that ignored `phase` entirely, would each produce a rectangular value that differs from this one, unlike phase 0's trivial identity.
+    const arbitraryPhase = 0.7;
+    const magnitude = 2;
     const result = await evaluatePredicate(
       {
         kind: "compare",
         op: "eq",
-        left: { kind: "complexLiteral", re: 2, im: 0 },
-        right: { kind: "complexLiteral", magnitude: 2, phase: 0 },
+        left: {
+          kind: "complexLiteral",
+          re: magnitude * Math.cos(arbitraryPhase),
+          im: magnitude * Math.sin(arbitraryPhase),
+        },
+        right: { kind: "complexLiteral", magnitude, phase: arbitraryPhase },
       },
       undefined,
       resolvers,
@@ -141,14 +148,21 @@ describe("complexLiteral", () => {
   });
 
   it("memberOf: a rectangular operand matches a candidate list containing a polar literal representing the same number", async () => {
+    // Same non-trivial-phase, independently-computed-rectangular reasoning as the `eq` test above applies here.
+    const arbitraryPhase = 0.7;
+    const magnitude = 1;
     const result = await evaluatePredicate(
       {
         kind: "memberOf",
         op: "in",
-        operand: { kind: "complexLiteral", re: 1, im: 0 },
+        operand: {
+          kind: "complexLiteral",
+          re: magnitude * Math.cos(arbitraryPhase),
+          im: magnitude * Math.sin(arbitraryPhase),
+        },
         candidates: [
           { kind: "complexLiteral", re: 0, im: 1 },
-          { kind: "complexLiteral", magnitude: 1, phase: 0 },
+          { kind: "complexLiteral", magnitude, phase: arbitraryPhase },
         ],
       },
       undefined,
