@@ -43,6 +43,16 @@ jobs:
           node-version: '22'
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      # turbo's local filesystem cache, keyed per task/job. A job whose inputs (per turbo.json) are unchanged since a prior run on this lockfile/pipeline generation replays that task's recorded result -- including its declared outputs (e.g. dist/**, .eslintcache) -- instead of re-running eslint/tsc/tsdown/vitest.
+      #
+      # hashFiles(pnpm-lock.yaml, turbo.json) puts the dependency set and the task graph itself into the key, so either changing starts a fresh cache lineage rather than inheriting a stale one; github.run_id keeps every run's own save key unique. actions/cache treats a key as immutable -- a save under a key that already exists is silently skipped -- so without run_id, only the very first run for a given lockfile/turbo.json pair would ever actually save anything, and no later run could repair or extend a cache left behind by a partially failed one. The two-level restore-keys then prefers a cache from the same lockfile/turbo.json generation and only falls back to the newest cache for this task when that generation has no entry yet.
+      - uses: actions/cache@v6
+        with:
+          path: .turbo
+          key: turbo-lint-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-${{ github.run_id }}
+          restore-keys: |
+            turbo-lint-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-
+            turbo-lint-${{ runner.os }}-
       - run: pnpm lint
 
   typecheck:
@@ -57,6 +67,13 @@ jobs:
           node-version: '22'
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - uses: actions/cache@v6
+        with:
+          path: .turbo
+          key: turbo-typecheck-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-${{ github.run_id }}
+          restore-keys: |
+            turbo-typecheck-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-
+            turbo-typecheck-${{ runner.os }}-
       # turbo's _typecheck task depends on _build, so this already builds dist/ before type-checking. attw (are-the-types-wrong) needs that same dist/, which is why it runs straight after with no separate build step.
       - run: pnpm typecheck
       - run: pnpm exec attw --pack
@@ -76,6 +93,13 @@ jobs:
           node-version: '22'
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - uses: actions/cache@v6
+        with:
+          path: .turbo
+          key: turbo-test-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-${{ github.run_id }}
+          restore-keys: |
+            turbo-test-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-
+            turbo-test-${{ runner.os }}-
       - run: pnpm test:coverage
       - name: Upload coverage report
         # Code Quality requires the org on GitHub Team/Enterprise Cloud, which ExaDev is not yet on, so the upload call itself will fail until that changes -- fail-on-error: false keeps that failure a log annotation instead of gating the release job below on a feature we can't turn on yet. Also guarded against fork PRs, which never hold the code-quality: write permission to upload.
@@ -99,6 +123,13 @@ jobs:
           node-version: '22'
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - uses: actions/cache@v6
+        with:
+          path: .turbo
+          key: turbo-test-integration-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-${{ github.run_id }}
+          restore-keys: |
+            turbo-test-integration-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-
+            turbo-test-integration-${{ runner.os }}-
       - run: pnpm test:integration
 
   test-smoke:
@@ -113,6 +144,13 @@ jobs:
           node-version: '22'
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - uses: actions/cache@v6
+        with:
+          path: .turbo
+          key: turbo-test-smoke-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-${{ github.run_id }}
+          restore-keys: |
+            turbo-test-smoke-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-
+            turbo-test-smoke-${{ runner.os }}-
       - run: pnpm test:smoke
 
   test-workers:
@@ -128,6 +166,13 @@ jobs:
           cache: pnpm
       # pnpm install builds the workerd binary (allowBuilds in pnpm-workspace.yaml), so this runs the evaluator inside a real Cloudflare Workers isolate -- enforcing zero Node-only API usage at runtime rather than by assertion.
       - run: pnpm install --frozen-lockfile
+      - uses: actions/cache@v6
+        with:
+          path: .turbo
+          key: turbo-test-workers-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-${{ github.run_id }}
+          restore-keys: |
+            turbo-test-workers-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-
+            turbo-test-workers-${{ runner.os }}-
       - run: pnpm test:workers
 
   release:
@@ -158,6 +203,13 @@ jobs:
           cache: pnpm
           # registry-url is deliberately absent. Setting it makes setup-node write an .npmrc containing an _authToken line, and that line wins over the OIDC token exchange -- so the setting that looks like it configures the registry is exactly the one that would stop trusted publishing working.
       - run: pnpm install --frozen-lockfile
+      - uses: actions/cache@v6
+        with:
+          path: .turbo
+          key: turbo-release-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-${{ github.run_id }}
+          restore-keys: |
+            turbo-release-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-
+            turbo-release-${{ runner.os }}-
       - name: Read pre-release version
         id: before
         run: echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
@@ -198,6 +250,13 @@ jobs:
           cache: pnpm
           # Deliberately NOT setup-node's own registry-url/scope inputs: those write an @exadev:registry=https://npm.pkg.github.com/ *install-time* scope-to-registry mapping into .npmrc, which would redirect this package's own @exadev-scoped devDependency installs (e.g. @exadev/eslint-config, published only to the default registry) through GitHub Packages too, breaking `pnpm install` below. publishConfig.registry (set explicitly below) already fully determines pnpm publish's *target* registry on its own; only the host-scoped auth token below is genuinely needed, added after install so install never sees any @exadev scope mapping at all.
       - run: pnpm install --frozen-lockfile
+      - uses: actions/cache@v6
+        with:
+          path: .turbo
+          key: turbo-publish-github-packages-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-${{ github.run_id }}
+          restore-keys: |
+            turbo-publish-github-packages-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-
+            turbo-publish-github-packages-${{ runner.os }}-
       - run: pnpm build
       - name: Rewrite the package name for the GitHub Packages mirror
         # trilean itself stays unscoped on npmjs.org (see package.json's own "name"), but GitHub Packages' npm registry structurally requires every package it hosts to be scoped to the owning org -- an unscoped `trilean` publish there is rejected outright. This job's own package.json rewrite (never committed -- it runs against the checkout's working tree only) is what lets the same build ship under both names without the primary npm publish above ever carrying the @exadev scope.
@@ -232,6 +291,13 @@ jobs:
           node-version: '22'
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - uses: actions/cache@v6
+        with:
+          path: .turbo
+          key: turbo-attest-npm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-${{ github.run_id }}
+          restore-keys: |
+            turbo-attest-npm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-
+            turbo-attest-npm-${{ runner.os }}-
       - run: pnpm build
       # Pack into a directory of its own, separate from dist/ (tsdown's raw build output). The attestation subject has to be the artefact that actually ships -- attesting dist/ itself would mix in files that never leave the repo, producing digests that match nothing a consumer can download.
       - run: pnpm pack --pack-destination release-artifact
@@ -266,6 +332,13 @@ jobs:
           node-version: '22'
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - uses: actions/cache@v6
+        with:
+          path: .turbo
+          key: turbo-attest-github-packages-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-${{ github.run_id }}
+          restore-keys: |
+            turbo-attest-github-packages-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-
+            turbo-attest-github-packages-${{ runner.os }}-
       - run: pnpm build
       # The GitHub Packages mirror ships under a different name (see publish-github-packages) and is therefore a genuinely different artefact from the one attest-npm covers above -- attesting only the unscoped tarball would leave the scoped mirror with no provenance a consumer could verify. This job's own attest@v4 attestations land in this repository's own attestation store regardless of which registry the tarball is later published to, so no id-token/OIDC conflict with publish-github-packages' own npm-registry auth exists here.
       - name: Rewrite the package name to match the GitHub Packages mirror
