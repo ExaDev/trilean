@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/ExaDev/trilean/compare/v1.3.0...v1.4.0) (2026-09-03)
+
+
+### Features
+
+* **ci:** notify novus-power/hive on release via repository_dispatch ([b8932b2](https://github.com/ExaDev/trilean/commit/b8932b2b396f4dc3e0c5def2dc686ebfa86de44d))
+
 # [1.3.0](https://github.com/ExaDev/trilean/compare/v1.2.0...v1.3.0) (2026-09-03)
 
 
