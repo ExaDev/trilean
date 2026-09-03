@@ -1,0 +1,100 @@
+{
+  "name": "trilean-sql",
+  "version": "0.0.0",
+  "description": "Compiles a trilean predicate tree into a parameterised SQL WHERE fragment, pushing three-valued logic down onto the database's own NULL propagation instead of evaluating it in process.",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExaDev/trilean.git",
+    "directory": "packages/trilean-sql"
+  },
+  "homepage": "https://github.com/ExaDev/trilean/tree/main/packages/trilean-sql",
+  "bugs": {
+    "url": "https://github.com/ExaDev/trilean/issues"
+  },
+  "exports": {
+    ".": {
+      "types": {
+        "import": "./dist/index.d.ts",
+        "require": "./dist/index.d.cts"
+      },
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./*": {
+      "types": {
+        "import": "./dist/*.d.ts",
+        "require": "./dist/*.d.cts"
+      },
+      "import": "./dist/*.js",
+      "require": "./dist/*.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true,
+    "registry": "https://registry.npmjs.org/"
+  },
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "trilean": "workspace:^"
+  },
+  "scripts": {
+    "build": "turbo run _build",
+    "_build": "tsdown",
+    "lint": "turbo run _lint",
+    "_lint": "eslint . --fix --cache --max-warnings 0",
+    "typecheck": "turbo run _typecheck _typecheck:attw",
+    "_typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.node.json",
+    "_typecheck:attw": "attw --pack",
+    "test": "turbo run _test",
+    "_test": "vitest run --project unit",
+    "test:coverage": "turbo run _test:coverage",
+    "_test:coverage": "vitest run --project unit --coverage",
+    "test:integration": "turbo run _test:integration",
+    "_test:integration": "vitest run --project integration",
+    "prepush": "turbo run _prepush",
+    "_prepush": "true",
+    "prepublishOnly": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run test:integration && pnpm run build && publint && attw --pack"
+  },
+  "keywords": [
+    "sql",
+    "postgres",
+    "predicate",
+    "three-valued-logic",
+    "query-builder",
+    "predicate-pushdown",
+    "trilean",
+    "rules-engine"
+  ],
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
+    "@exadev/eslint-config": "^2.10.2",
+    "@testcontainers/postgresql": "^12.1.0",
+    "@types/node": "^26.4.0",
+    "@types/pg": "^8.15.6",
+    "@vitest/coverage-v8": "^4.1.11",
+    "eslint": "^10.9.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.6",
+    "globals": "^17.11.0",
+    "pg": "^8.16.3",
+    "prettier": "^3.9.6",
+    "publint": "^0.3.24",
+    "tsdown": "^0.22.14",
+    "turbo": "^2.10.12",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.68.0",
+    "vitest": "^4.1.11"
+  }
+}
