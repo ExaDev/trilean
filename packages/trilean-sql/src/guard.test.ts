@@ -181,6 +181,51 @@ describe("references the compiler cannot map", () => {
       ),
     ).toMatchObject({ kind: "numberLiteral", path: "$.right" });
   });
+
+  it("refuses a NaN number literal, which the two engines compare oppositely", () => {
+    expect(
+      findUnpushableNodeKind(
+        {
+          kind: "compare",
+          op: "eq",
+          left: { kind: "reference", key: "age" },
+          right: { kind: "numberLiteral", value: Number.NaN },
+        },
+        subjectOptions,
+      ),
+    ).toMatchObject({ kind: "numberLiteral", path: "$.right" });
+  });
+
+  it("refuses a NaN candidate inside a memberOf, not only a comparison operand", () => {
+    expect(
+      findUnpushableNodeKind(
+        {
+          kind: "memberOf",
+          op: "in",
+          operand: { kind: "reference", key: "age" },
+          candidates: [
+            { kind: "numberLiteral", value: 1 },
+            { kind: "numberLiteral", value: Number.NaN },
+          ],
+        },
+        subjectOptions,
+      ),
+    ).toMatchObject({ kind: "numberLiteral", path: "$.candidates[1]" });
+  });
+
+  it("allows an infinity, which both engines order and compare identically", () => {
+    expect(
+      findUnpushableNodeKind(
+        {
+          kind: "compare",
+          op: "gt",
+          left: { kind: "numberLiteral", value: Number.POSITIVE_INFINITY },
+          right: { kind: "reference", key: "age" },
+        },
+        subjectOptions,
+      ),
+    ).toBeUndefined();
+  });
 });
 
 describe("operand kinds trilean and PostgreSQL would answer differently", () => {
