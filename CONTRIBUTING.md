@@ -3,7 +3,7 @@
 `pnpm install` sets up git hooks automatically (`prepare: husky`). From then on:
 
 - **Pre-commit** lints and auto-fixes staged files (`lint-staged`).
-- **commit-msg** validates the message against [Conventional Commits](https://www.conventionalcommits.org/), enforced by commitlint. The allowed types and the release level each one triggers are defined once, in `release.config.ts`'s `commitTypes` (commitlint imports the same list, so a type can never pass one check and fail the other). As a rule: `feat` releases minor, a breaking-change footer/`!` releases major, everything else (`fix`, `refactor`, `docs`, `test`, `chore`, …) releases patch.
+- **commit-msg** validates the message against [Conventional Commits](https://www.conventionalcommits.org/), enforced by commitlint. The allowed types, the release level each one triggers, and its changelog heading are defined once, in `release-workspace.config.ts`'s `commitTypes` (commitlint imports the same list, so a type can never pass one check and fail the other). As a rule: `feat` releases minor, a breaking-change footer/`!` releases major, everything else (`fix`, `refactor`, `docs`, `test`, `chore`, …) releases patch.
 - **Pre-push** runs the `unit` project (fast) to catch obvious breakage before it reaches CI, which runs the full matrix — `integration`, `smoke`, and `workers` included.
 
 ## Before opening a PR
@@ -18,4 +18,6 @@
 
 ## Releases
 
-Merging to `main` runs `semantic-release` in CI: it decides the version bump from the commit types since the last release, publishes to npm, tags, and writes `CHANGELOG.md`. Never hand-bump `package.json`'s version or edit `CHANGELOG.md` directly — both are overwritten by the next release.
+Merging to `main` runs [`@exadev/semantic-release-workspace`](https://www.npmjs.com/package/@exadev/semantic-release-workspace) in CI, which runs semantic-release once per package. Each package is analysed against only the commits that touched its own directory, so its version tracks its own history and a change to one package never bumps another. A release publishes to npm, tags as `<name>@<version>`, and writes that package's own `CHANGELOG.md`.
+
+Never hand-bump a `package.json` version or edit a `CHANGELOG.md` directly — both are overwritten by the next release. A commit's *scope* is free text and does not route it anywhere; what decides which package releases is which files the commit changed.
