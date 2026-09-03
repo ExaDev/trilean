@@ -45,6 +45,11 @@ export {
 export { average, count, presenceOf, sum } from "./derived-aggregates";
 export { coalesce } from "./derived-values";
 export {
+  hierarchicalGlobPattern,
+  prefixPattern,
+  wildcardPattern,
+} from "./derived-patterns";
+export {
   complexFromPolar,
   complexLiteralFromPolar,
   complexMagnitude,
