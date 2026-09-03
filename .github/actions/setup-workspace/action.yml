@@ -1,0 +1,45 @@
+name: Setup workspace
+description: Set up pnpm + Node, install the workspace from the frozen lockfile, restore turbo's local cache, then run a command. Requires checkout before use.
+
+inputs:
+  task:
+    description: Task identifier, used for the step name and as part of the turbo cache key (lint, typecheck, test, build, release).
+    required: true
+  command:
+    description: Shell command to execute after install.
+    required: true
+  github-token:
+    description: GitHub token for commands that need it (e.g. the release orchestrator).
+    required: false
+    default: ""
+
+runs:
+  using: composite
+  steps:
+    - uses: pnpm/action-setup@v6
+
+    - uses: actions/setup-node@v7
+      with:
+        # A single source of truth for the whole workspace, rather than a version literal repeated in every job. registry-url is deliberately absent everywhere: setting it makes setup-node write an .npmrc containing an _authToken line, and that line wins over the OIDC token exchange -- so the setting that looks like it configures the registry is exactly the one that would stop trusted publishing working.
+        node-version-file: .tool-versions
+        cache: pnpm
+
+    - run: pnpm install --frozen-lockfile
+      shell: bash
+
+    # turbo's local filesystem cache, keyed per task. A package whose inputs (per turbo.json) are unchanged since a prior run on this lockfile/pipeline generation replays that task's recorded result -- including its declared outputs (e.g. dist/**, .eslintcache) -- instead of re-running tsdown/tsc/eslint/vitest.
+    #
+    # hashFiles(pnpm-lock.yaml, turbo.json) puts the dependency set and the task graph itself into the key, so either changing starts a fresh cache lineage rather than inheriting a stale one; github.run_id keeps every run's own save key unique. actions/cache treats a key as immutable -- a save under a key that already exists is silently skipped -- so without run_id, only the very first run for a given lockfile/turbo.json pair would ever actually save anything, and no later run could repair or extend a cache left behind by a partially failed one. The two-level restore-keys then prefers a cache from the same lockfile/turbo.json generation and only falls back to the newest cache for this task when that generation has no entry yet.
+    - uses: actions/cache@v6
+      with:
+        path: .turbo
+        key: turbo-${{ inputs.task }}-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-${{ github.run_id }}
+        restore-keys: |
+          turbo-${{ inputs.task }}-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-
+          turbo-${{ inputs.task }}-${{ runner.os }}-
+
+    - name: Run ${{ inputs.task }}
+      run: ${{ inputs.command }}
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
