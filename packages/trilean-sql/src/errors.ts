@@ -9,6 +9,8 @@ export class TrileanSqlError extends Error {
 /**
  * A node the compiler refuses to translate. The compiler never degrades: there is no "best effort" fragment, no silently dropped conjunct, and no approximation that answers differently from the in-process evaluator. Either the whole tree compiles to SQL that agrees with `evaluatePredicate` on every row, or this is thrown and the caller evaluates in process instead.
  *
+ * That guarantee is about the tree's *structure*, and it stops at two things whose meaning is a property of the operand's own content rather than of any node kind: a `matches`/`notMatches` pattern, which the server matches under PostgreSQL's regular-expression language rather than ECMAScript's, and an `instantLiteral` string the two engines parse differently or that PostgreSQL cannot parse at all (which fails as a query error at execution time, not as this exception). Both are covered in README.md; neither is detectable by a walk over node kinds.
+ *
  * `nodeKind` is the offending node's own `kind`, `path` locates it inside the tree, and `reason` says why it is not pushable -- which is not always about the kind alone (a `reference` carrying a `unit`, or a `compare` whose operands are statically of different kinds, are both refused despite `reference` and `compare` being supported kinds).
  */
 export class UnsupportedNodeError extends TrileanSqlError {
