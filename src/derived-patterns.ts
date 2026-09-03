@@ -9,10 +9,10 @@ const REGEX_SYNTAX_CHARACTERS = "^$\\.*+?()[]{}|/";
 
 /** `[\s\S]*` rather than `.*` because the compiled string carries no flags of its own: `.` excludes line terminators unless the `s` flag is set, and `textCompare`'s evaluator compiles the pattern with `new RegExp(right.value)` and no flags at all. A character class covering both `\s` and `\S` is the flag-free spelling of "any character", so the same string behaves identically wherever it is compiled. */
 const ANY_CHARACTERS = "[\\s\\S]*";
-/** A hierarchical glob's single `*`: any run of characters that stays inside one `/`-delimited segment. */
-const ANY_CHARACTERS_WITHIN_SEGMENT = "[^/]*";
-/** A hierarchical glob's `?`: exactly one character, still constrained to a single segment. */
-const ANY_CHARACTER_WITHIN_SEGMENT = "[^/]";
+/** A hierarchical glob's single `*`: any run of characters that stays inside one `/`-delimited segment. The separator is written `\/` rather than a bare `/` because `v`-mode reserves `/` as a `ClassSetReservedPunctuator` and rejects it unescaped inside a character class -- a bare `[^/]` is a `SyntaxError` under `v`, while `[^\/]` compiles identically under `v`, `u` and no flags at all, which is the portability `REGEX_SYNTAX_CHARACTERS` already promises for every literal character. */
+const ANY_CHARACTERS_WITHIN_SEGMENT = "[^\\/]*";
+/** A hierarchical glob's `?`: exactly one character, still constrained to a single segment. Escaped for the same `v`-mode reason as `ANY_CHARACTERS_WITHIN_SEGMENT` above. */
+const ANY_CHARACTER_WITHIN_SEGMENT = "[^\\/]";
 
 function escapeRegexLiteral(character: string): string {
   return REGEX_SYNTAX_CHARACTERS.includes(character)
