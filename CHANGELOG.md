@@ -1,3 +1,15 @@
+# [1.3.0](https://github.com/ExaDev/trilean/compare/v1.2.0...v1.3.0) (2026-09-03)
+
+
+### Bug Fixes
+
+* escape the separator in a hierarchical glob's within-segment classes ([0f9481b](https://github.com/ExaDev/trilean/commit/0f9481b92a8924101bf765a3124066ed72de971a))
+
+
+### Features
+
+* add prefix, wildcard, and hierarchical glob pattern builders ([6e0fbd4](https://github.com/ExaDev/trilean/commit/6e0fbd4dda6bd0c2ff1340c8b78f9805d9ef132a))
+
 # [1.2.0](https://github.com/ExaDev/trilean/compare/v1.1.0...v1.2.0) (2026-09-01)
 
 
