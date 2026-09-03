@@ -32,6 +32,8 @@ export const commitTypes: readonly CommitType[] = [
  *
  * The orchestrator discovers every package from pnpm-workspace.yaml, orders them so a package releases only after each workspace sibling it depends on has, and runs semantic-release per package with the commit list path-filtered to that package's own directory and its tags in `name@version` form. So each package's version tracks its own history: `packages/trilean` continues from the version its own `trilean@x.y.z` tags record, and a package added later starts its own sequence without disturbing it.
  *
+ * That tag format is what carries a package's version across from before the workspace existed, and it is not the format a single-package release used: `v1.3.0` then, `trilean@1.3.0` now. A package brought in from a repository of its own therefore needs a tag in the new format created at the commit its last old-format tag names -- semantic-release derives the previous version from the last tag matching the format it is configured with, and finds nothing at all without one, so the package would restart at 1.0.0 and its first publish would collide with a version the registry already holds. `trilean@1.3.0` exists for exactly that reason and points at the same commit as `v1.3.0`.
+ *
  * `commitStrategy: "single"` produces one commit for the whole run -- every version bump, changelog write, and dependency-range rewrite together -- instead of one commit per released package plus one per bump. @semantic-release/git is deliberately absent from the plugin list because of it: that plugin's own prepare step would make exactly the per-package commit this mode exists to replace, and the orchestrator rejects the combination outright rather than producing both.
  */
 const config: Pick<
