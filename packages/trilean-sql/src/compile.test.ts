@@ -404,4 +404,58 @@ describe("refusal", () => {
       }),
     ).toThrow(UnsupportedNodeError);
   });
+
+  it.each([
+    ["some", { kind: "some", collection: "xs", item: ageOver }] satisfies [
+      string,
+      PredicateNode,
+    ],
+    ["every", { kind: "every", collection: "xs", item: ageOver }] satisfies [
+      string,
+      PredicateNode,
+    ],
+    [
+      "fold",
+      {
+        kind: "compare",
+        op: "gt",
+        left: {
+          kind: "fold",
+          collection: "xs",
+          combiner: {
+            mode: "max",
+            item: { kind: "numberLiteral", value: LOWER_BOUND },
+          },
+        },
+        right: { kind: "numberLiteral", value: UPPER_BOUND },
+      },
+    ] satisfies [string, PredicateNode],
+  ])(
+    "refuses a '%s' buried several levels down rather than dropping that branch",
+    (kind, unsupported) => {
+      // The failure mode this rules out is the dangerous one: a branch the compiler has no translation for quietly contributing nothing to the fragment, leaving a WHERE clause strictly more permissive than the tree it claims to stand for. The burial is deliberate -- under an `and`, then an `anyOf`, then a `not` -- because a check that only looks at the root would pass every one of these.
+      let thrown: unknown;
+      try {
+        compile({
+          kind: "and",
+          left: ageOver,
+          right: {
+            kind: "anyOf",
+            operands: [
+              { kind: "exists", operand: { kind: "reference", key: "note" } },
+              { kind: "not", operand: unsupported },
+            ],
+          },
+        });
+      } catch (error) {
+        thrown = error;
+      }
+
+      expect(thrown).toBeInstanceOf(UnsupportedNodeError);
+      if (!(thrown instanceof UnsupportedNodeError))
+        throw new Error("unreachable");
+      expect(thrown.nodeKind).toBe(kind);
+      expect(thrown.path).toContain("$.right.operands[1].operand");
+    },
+  );
 });
