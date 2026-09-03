@@ -88,6 +88,15 @@ function findUnpushableExpression(
             "a unit-tagged number is only comparable with an operand of the same unit, and SQL has no unit to compare",
         };
       }
+      // NaN is the one double-precision value the two engines disagree about. trilean compares numbers with `===`, under which NaN is equal to nothing including itself; PostgreSQL defines NaN as equal to itself and greater than every other double, so `NaN = NaN` there is TRUE and selects every row of a table this predicate should have matched none of. Infinities are deliberately not refused alongside it: both engines order them identically and compare them equal to themselves, so they translate faithfully. Reachable despite `NumberLiteralNodeSchema` rejecting NaN, because this compiler's input is the inferred `PredicateNode` type -- TypeScript's `number` includes NaN -- and a tree built in code rather than parsed never meets that schema.
+      if (Number.isNaN(node.value)) {
+        return {
+          kind: node.kind,
+          path,
+          reason:
+            "NaN is equal to nothing in trilean, not even itself, whereas PostgreSQL defines NaN as equal to itself and greater than every other double",
+        };
+      }
       return undefined;
     case "textLiteral":
     case "booleanLiteral":
