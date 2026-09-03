@@ -1,3 +1,9 @@
+## [1.0.1](https://github.com/ExaDev/trilean/compare/trilean-sql%401.0.0...trilean-sql%401.0.1) (2026-09-03)
+
+### Tests
+
+* **trilean-sql:** check the same compiled fragments against PGlite, which needs no Docker ([d11ca6e](https://github.com/ExaDev/trilean/commit/d11ca6eb901e63e3ea27fd6493ab62649f6c423c))
+
 ## 1.0.0 (2026-09-03)
 
 ### Features
