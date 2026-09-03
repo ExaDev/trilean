@@ -85,14 +85,26 @@ jobs:
         with:
           task: test
           command: pnpm test:coverage $TURBO_FLAGS
-      - name: Upload coverage report
-        # Code Quality requires the org on GitHub Team/Enterprise Cloud, which ExaDev is not yet on, so the upload call itself will fail until that changes -- fail-on-error: false keeps that failure a log annotation instead of gating the release job below on a feature we can't turn on yet. Also guarded against fork PRs, which never hold the code-quality: write permission to upload.
-        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+      # One upload per package, each labelled by the package whose coverage it is, since the action takes a single report file rather than a set.
+      #
+      # Both are conditional on their own report existing, which is not defensive: `pnpm test:coverage` runs through turbo with $TURBO_FLAGS, which carries --affected on a pull request, so a package no commit in the PR touched legitimately does not run and legitimately writes no report. `fail-on-error` does not cover that case -- it governs the upload call, while a missing input file fails the action before it gets that far -- so without the hashFiles guard a PR confined to one package fails this job on the other package's absent report.
+      #
+      # Code Quality requires the org on GitHub Team/Enterprise Cloud, which ExaDev is not yet on, so the upload call itself will fail until that changes -- fail-on-error: false keeps that failure a log annotation instead of gating the release job below on a feature we can't turn on yet. Also guarded against fork PRs, which never hold the code-quality: write permission to upload.
+      - name: Upload coverage report (trilean)
+        if: (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && hashFiles('packages/trilean/coverage/cobertura-coverage.xml') != ''
         uses: actions/upload-code-coverage@v1
         with:
           file: packages/trilean/coverage/cobertura-coverage.xml
           language: typescript
-          label: unit
+          label: unit-trilean
+          fail-on-error: false
+      - name: Upload coverage report (trilean-sql)
+        if: (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && hashFiles('packages/trilean-sql/coverage/cobertura-coverage.xml') != ''
+        uses: actions/upload-code-coverage@v1
+        with:
+          file: packages/trilean-sql/coverage/cobertura-coverage.xml
+          language: typescript
+          label: unit-trilean-sql
           fail-on-error: false
 
   test-integration:
