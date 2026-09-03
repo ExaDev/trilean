@@ -1,6 +1,6 @@
 {
   "name": "trilean-sql",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Compiles a trilean predicate tree into a parameterised SQL WHERE fragment, pushing three-valued logic down onto the database's own NULL propagation instead of evaluating it in process.",
   "type": "module",
   "repository": {
