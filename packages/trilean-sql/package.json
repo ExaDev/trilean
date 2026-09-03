@@ -79,6 +79,7 @@
   ],
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
+    "@electric-sql/pglite": "^0.5.8",
     "@exadev/eslint-config": "^2.10.2",
     "@testcontainers/postgresql": "^12.1.0",
     "@types/node": "^26.4.0",
