@@ -1,44 +1,118 @@
 {
   "$schema": "https://turborepo.com/schema.json",
-  "globalDependencies": ["pnpm-lock.yaml"],
+  "globalDependencies": [
+    "pnpm-lock.yaml",
+    ".tool-versions",
+    "prettier.config.ts",
+    "tsconfig.base.json"
+  ],
+
+  // Every task name is the underscore-prefixed one the package already used for its real command (`_build` runs tsdown; the package's own `build` script is `turbo run _build`). Running the public names from here instead would make turbo invoke those wrapper scripts, which invoke turbo again -- the recursive-call case Turborepo's own docs warn against. The wrapper scripts stay in place and stay usable from inside a single package, but the root pipeline reaches straight past them to the leaf commands.
+  //
+  // Every task declares `^_build`, its dependencies' builds: a workspace sibling is a symlink whose dist/ exists only once its own build has run, and tsc, type-aware eslint, and vitest all resolve imports through it. With one package that edge is inert today; it is declared so the first sibling added is ordered correctly rather than racing.
+  //
+  // `_typecheck`, `_lint` and `_test:smoke` additionally depend on the package's OWN `_build`, which is not the same thing and is not optional here: test/smoke.test.ts and scripts/generate-json-schema.ts both import from ../dist/ by relative path, so tsc, eslint's typed rules, and the smoke suite itself all need this package's dist/ present before they run.
   "tasks": {
+    "_build": {
+      "dependsOn": ["^_build"],
+      // scripts/** covers the JSON-schema generation step that runs as part of the build; package.json is an input because that generation reads it.
+      "inputs": ["src/**", "tsdown.config.ts", "scripts/**", "package.json"],
+      // schemas/** is the build's second output, alongside tsdown's dist/.
+      "outputs": ["dist/**", "schemas/**"]
+    },
     "_typecheck": {
-      "dependsOn": ["_build"],
+      "dependsOn": ["^_build", "_build"],
       "inputs": ["$TURBO_DEFAULT$", "tsconfig.json", "tsconfig.node.json"],
       "outputs": []
     },
-    "_lint": {
+    // attw --pack inspects the package's own dist/ against its own package.json exports map, so it depends on this package's own `_build` rather than on `^_build` alone. It was previously a bare `pnpm exec attw --pack` step in ci.yml's Typecheck job, run after `pnpm typecheck` purely to reuse the dist/ that task had left behind; as a task it is cached and ordered like everything else.
+    "_typecheck:attw": {
       "dependsOn": ["_build"],
+      "inputs": ["package.json"],
+      "outputs": []
+    },
+    "_lint": {
+      "dependsOn": ["^_build", "_build"],
       "inputs": ["$TURBO_DEFAULT$", "eslint.config.ts"],
       "outputs": [".eslintcache"]
     },
     "_test": {
+      "dependsOn": ["^_build"],
       "inputs": ["src/**", "vitest.config.ts", "package.json"],
       "outputs": []
     },
     "_test:coverage": {
+      "dependsOn": ["^_build"],
       "inputs": ["src/**", "vitest.config.ts", "package.json"],
       "outputs": ["coverage/**"]
     },
     "_test:integration": {
-      "inputs": ["src/**", "package.json", "vitest.config.ts", "test/integration/**"],
+      "dependsOn": ["^_build"],
+      "inputs": [
+        "src/**",
+        "package.json",
+        "vitest.config.ts",
+        "test/integration/**"
+      ],
       "outputs": []
     },
     "_test:smoke": {
-      "dependsOn": ["_build"],
-      "inputs": ["src/**", "tsdown.config.ts", "package.json", "vitest.config.ts", "test/smoke.test.ts"],
+      "dependsOn": ["^_build", "_build"],
+      "inputs": [
+        "src/**",
+        "tsdown.config.ts",
+        "package.json",
+        "vitest.config.ts",
+        "test/smoke.test.ts"
+      ],
+      // Deliberately empty rather than dist/**: dist/ is `_build`'s output, and two tasks claiming the same output directory means a cache replay of one can overwrite the other's. The smoke run itself produces nothing worth caching.
       "outputs": []
     },
     "_test:workers": {
-      "inputs": ["src/**", "package.json", "vitest.config.ts", "wrangler.jsonc", "test/workers/**"],
+      "dependsOn": ["^_build"],
+      "inputs": [
+        "src/**",
+        "package.json",
+        "vitest.config.ts",
+        "wrangler.jsonc",
+        "test/workers/**"
+      ],
       "outputs": []
     },
-    "_build": {
-      "inputs": ["src/**", "tsdown.config.ts", "package.json", "scripts/**"],
-      "outputs": ["dist/**", "schemas/**"]
-    },
     "_prepush": {
-      "dependsOn": ["_lint", "_typecheck", "_test", "_test:integration", "_test:smoke", "_test:workers"],
+      "dependsOn": [
+        "_lint",
+        "_typecheck",
+        "_typecheck:attw",
+        "_test",
+        "_test:integration",
+        "_test:smoke",
+        "_test:workers"
+      ],
+      "outputs": []
+    },
+
+    // The workspace root's own tooling files (eslint.config.ts, commitlint.config.ts, lint-staged.config.ts, release-workspace.config.ts) are held to the same lint and typecheck gates as package code. Registered as root tasks so `turbo run _lint` and `turbo run _typecheck` cover them without a separate command.
+    "//#_lint": {
+      "inputs": [
+        "eslint.config.ts",
+        "prettier.config.ts",
+        "commitlint.config.ts",
+        "lint-staged.config.ts",
+        "release-workspace.config.ts",
+        "tsconfig.json"
+      ],
+      "outputs": [".eslintcache"]
+    },
+    "//#_typecheck": {
+      "inputs": [
+        "eslint.config.ts",
+        "prettier.config.ts",
+        "commitlint.config.ts",
+        "lint-staged.config.ts",
+        "release-workspace.config.ts",
+        "tsconfig.json"
+      ],
       "outputs": []
     }
   }

@@ -1,0 +1,10 @@
+{
+  // The workspace root's own tooling configs, which are Node programs rather than library source: ESLint's and Prettier's configs, commitlint's, lint-staged's, and the release orchestrator's. packages/trilean has its own pair of tsconfigs and is not part of this program.
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2024"],
+    "types": ["node"]
+  },
+  // A glob rather than a hand-listed set: a config file absent from every program is not a silent no-op, type-aware ESLint fails on it outright with "not found in any of the provided project(s)", so adding one must not also require an edit here.
+  "include": ["*.config.ts"]
+}

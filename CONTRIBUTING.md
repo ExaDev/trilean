@@ -8,13 +8,13 @@
 
 ## Before opening a PR
 
-`pnpm run prepublishOnly` runs the same gate CI enforces: lint, typecheck, `unit` + `integration` tests, build, `smoke` test, `publint`, and `attw --pack`. It does not run the `workers` project — run `pnpm test:workers` separately for any change touching `src/` (evaluator, schemas, resolvers), since that's what actually proves the isomorphism constraint below rather than merely asserting it.
+`pnpm --dir packages/trilean run prepublishOnly` runs the same gate CI enforces for that package: lint, typecheck, `unit` + `integration` tests, build, `smoke` test, `publint`, and `attw --pack`. It does not run the `workers` project — run `pnpm test:workers` separately for any change touching `src/` (evaluator, schemas, resolvers), since that's what actually proves the isomorphism constraint below rather than merely asserting it.
 
 ## Constraints a change must preserve
 
-- **Isomorphism.** `src/**/*.ts` must never import a `node:*` module or reference `Buffer` — enforced by `eslint.config.ts`'s isomorphism guard and runtime-checked by the `workers` project running the evaluator inside a real Cloudflare Workers isolate (`test/workers/`, `wrangler.jsonc`). A change that needs a Node API belongs in a script or test file, never in `src/`.
-- **[Design principles](README.md#design-principles).** No assumptions about consumer data, three evaluation outcomes never two, derived constructs built as compositions rather than new logic, one schema with mechanically derived artefacts. These hold across the whole design; an implementation change that would violate one needs the principle itself revisited first, not a quiet exception.
-- **Generated files are never hand-edited.** `schemas/trilean.schema.json` is produced by `scripts/generate-json-schema.ts` as part of `pnpm build` and is gitignored — if the shipped schema looks wrong, fix the Zod schema or the generator script, not the output.
+- **Isomorphism.** `packages/trilean/src/**/*.ts` must never import a `node:*` module or reference `Buffer` — enforced by that package's own `eslint.config.ts` isomorphism guard and runtime-checked by the `workers` project running the evaluator inside a real Cloudflare Workers isolate (`packages/trilean/test/workers/`, `packages/trilean/wrangler.jsonc`). A change that needs a Node API belongs in a script or test file, never in `src/`.
+- **[Design principles](packages/trilean/README.md#design-principles).** No assumptions about consumer data, three evaluation outcomes never two, derived constructs built as compositions rather than new logic, one schema with mechanically derived artefacts. These hold across the whole design; an implementation change that would violate one needs the principle itself revisited first, not a quiet exception.
+- **Generated files are never hand-edited.** `packages/trilean/schemas/trilean.schema.json` is produced by `packages/trilean/scripts/generate-json-schema.ts` as part of `pnpm build` and is gitignored — if the shipped schema looks wrong, fix the Zod schema or the generator script, not the output.
 
 ## Releases
 

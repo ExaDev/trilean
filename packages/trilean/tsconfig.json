@@ -1,18 +1,7 @@
 {
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "target": "ES2024",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "verbatimModuleSyntax": true,
-    "isolatedModules": true,
-    "esModuleInterop": true,
-    "noEmit": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
+    // No "node" types and a WebWorker lib: this is the isomorphism gate, so a Node-only global referenced from runtime src/ fails to compile here rather than at some consumer's runtime.
     "lib": ["ES2024", "WebWorker"],
     "types": [],
     "resolveJsonModule": true

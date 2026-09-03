@@ -1,8 +1,24 @@
+packages:
+  - "packages/*"
+
+# pnpm 11 defaults this to false, which means a dependency on a sibling package resolves from the npm registry even when the workspace holds a version satisfying the range. Setting it true links a sibling whenever the declared range is satisfied by the workspace version, and falls back to the registry when it is not. There is one package here today, so nothing exercises it yet -- it is set now so the first sibling added is linked rather than silently downloaded.
+linkWorkspacePackages: true
+
+# workerd (the Cloudflare Workers runtime @cloudflare/vitest-pool-workers drives the workers test suite through) and esbuild (its bundler) both ship native binaries installed via a postinstall script -- pnpm 11 ignores those by default, so allow them explicitly.
 allowBuilds:
   esbuild: true
   workerd: true
+
+# 60 minutes. pnpm reads workspace-level settings only from the workspace root, so this file is the one place they can take effect at all.
 minimumReleaseAge: 60
-# @exadev/eslint-config is an org-owned devDependency, not a third-party supply-chain
-# risk -- exempted so a just-published fix (verified and published by us) doesn't have to wait out the cooldown meant for external packages.
+
+# Bare package names (no @version), per pnpm's own documented syntax (https://pnpm.io/settings#minimumreleaseageexclude). Both are org-owned packages published only by their own semantic-release CI with npm OIDC trusted publishing, so a version-agnostic exemption is a deliberate, low-risk choice rather than an entry needing an edit on every release.
 minimumReleaseAgeExclude:
   - "@exadev/eslint-config"
+  - "@exadev/semantic-release-workspace"
+
+overrides:
+  # release-workspace.config.ts's generateNotes step uses the conventionalcommits preset, whose templates call a helper that only conventional-changelog-writer@9 or newer provides. @semantic-release/release-notes-generator depends on conventional-changelog-writer@^8, so without this the preset loads and then throws from inside handlebars at render time -- the preset itself detects the too-old writer and registers a helper whose only job is to raise "requires conventional-changelog-writer@9 or newer". Scoped to release-notes-generator rather than global because it is the only consumer that renders with the writer at all: @semantic-release/commit-analyzer declares the same dependency but never imports it, using only the preset's whatBump.
+  #
+  # This override is what lets the changelog use the conventionalcommits preset at all. The single-package release config this replaces worked around the same bug by generating notes with the angular preset instead, which loses the per-type section headings.
+  "@semantic-release/release-notes-generator>conventional-changelog-writer": 9.2.1

@@ -5,9 +5,10 @@
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ExaDev/trilean.git"
+    "url": "git+https://github.com/ExaDev/trilean.git",
+    "directory": "packages/trilean"
   },
-  "homepage": "https://github.com/ExaDev/trilean#readme",
+  "homepage": "https://github.com/ExaDev/trilean/tree/main/packages/trilean",
   "bugs": {
     "url": "https://github.com/ExaDev/trilean/issues"
   },
@@ -47,7 +48,6 @@
     "node": ">=20"
   },
   "license": "MIT",
-  "packageManager": "pnpm@11.6.0",
   "dependencies": {
     "zod": "^4.5.4"
   },
@@ -56,8 +56,9 @@
     "_build": "tsdown && tsx scripts/generate-json-schema.ts",
     "lint": "turbo run _lint",
     "_lint": "eslint . --fix --cache --max-warnings 0",
-    "typecheck": "turbo run _typecheck",
+    "typecheck": "turbo run _typecheck _typecheck:attw",
     "_typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.node.json",
+    "_typecheck:attw": "attw --pack",
     "test": "turbo run _test",
     "_test": "vitest run --project unit",
     "test:coverage": "turbo run _test:coverage",
@@ -70,9 +71,7 @@
     "_test:workers": "vitest run --project workers",
     "prepush": "turbo run _prepush",
     "_prepush": "true",
-    "prepublishOnly": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run test:integration && pnpm run build && pnpm run test:smoke && publint && attw --pack",
-    "prepare": "husky",
-    "release": "semantic-release"
+    "prepublishOnly": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run test:integration && pnpm run build && pnpm run test:smoke && publint && attw --pack"
   },
   "keywords": [
     "json",
@@ -87,16 +86,7 @@
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
     "@cloudflare/vitest-pool-workers": "^0.22.0",
-    "@commitlint/cli": "^21.2.2",
-    "@commitlint/config-conventional": "^21.2.2",
-    "@eslint/js": "^10.0.1",
     "@exadev/eslint-config": "^2.10.2",
-    "@semantic-release/changelog": "^7.0.0",
-    "@semantic-release/commit-analyzer": "^13.0.1",
-    "@semantic-release/git": "^11.0.1",
-    "@semantic-release/github": "^12.0.9",
-    "@semantic-release/npm": "^13.1.5",
-    "@semantic-release/release-notes-generator": "^14.1.1",
     "@types/node": "^26.4.0",
     "@vitest/coverage-v8": "^4.1.11",
     "canonicalize": "^4.0.0",
@@ -104,11 +94,8 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.6",
     "globals": "^17.11.0",
-    "husky": "^9.1.7",
-    "lint-staged": "^17.4.1",
     "prettier": "^3.9.6",
     "publint": "^0.3.24",
-    "semantic-release": "^25.0.9",
     "tsdown": "^0.22.14",
     "tsx": "^4.23.13",
     "turbo": "^2.10.12",
