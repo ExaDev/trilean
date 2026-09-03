@@ -9,7 +9,10 @@ linkWorkspacePackages: true
 # workerd (the Cloudflare Workers runtime @cloudflare/vitest-pool-workers drives the workers test suite through) and esbuild (its bundler) both need theirs: the script is how each fetches its own platform's binary, and neither runs at all without it.
 #
 # The three refused below arrive under testcontainers, which packages/trilean-sql's integration suite uses to start PostgreSQL. Each script is optional to the way this workspace uses the package: ssh2 and its cpu-features helper build native acceleration for SSH transports, and testcontainers reaches Docker over a local socket rather than SSH; protobufjs's script only regenerates bundled artefacts the published tarball already contains. Refusing them keeps a test-only dependency chain from executing arbitrary code at install time.
+#
+# better-sqlite3 is the engine packages/trilean-sql's SQLite integration suite executes its compiled fragments against, and it is a native addon: its install script is what fetches, or failing that builds, the binding the module cannot load without. Refusing it would leave the package installed and unloadable rather than merely unoptimised.
 allowBuilds:
+  better-sqlite3: true
   cpu-features: false
   esbuild: true
   protobufjs: false
