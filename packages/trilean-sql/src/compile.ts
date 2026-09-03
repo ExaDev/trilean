@@ -8,11 +8,12 @@ import { InvalidColumnError, UnsupportedNodeError } from "./errors";
 import { findUnpushableNodeKind } from "./guard";
 import type {
   CompiledSql,
+  DialectConfig,
   SqlColumnBinding,
   SqlCompileOptions,
   SqlParamType,
 } from "./options";
-import { POSTGRES_TYPE_NAME } from "./options";
+import { DIALECT_CONFIG } from "./options";
 
 const COMPARISON_SQL: Readonly<Record<ComparisonOperator, string>> = {
   gt: ">",
@@ -23,20 +24,26 @@ const COMPARISON_SQL: Readonly<Record<ComparisonOperator, string>> = {
   neq: "<>",
 };
 
-/** `~` and `!~` are PostgreSQL's own regular-expression match operators, so a pattern is matched by the database rather than shipped back to be matched in process. See the "Regular expressions" caveat in README.md: PostgreSQL's advanced regular expressions and ECMAScript's are close but not the same language. */
-const TEXT_COMPARISON_SQL: Readonly<Record<TextComparisonOperator, string>> = {
-  equals: "=",
-  notEquals: "<>",
-  matches: "~",
-  notMatches: "!~",
-};
+/**
+ * The operator each `textCompare` op emits, for one dialect.
+ *
+ * `=` and `<>` are ANSI-standard equality and identical everywhere; only the two pattern operators are the dialect's own. Built as a complete record rather than resolved per node so that a `TextComparisonOperator` added to trilean later is a compile error here, instead of an undefined operator spliced into the emitted SQL.
+ */
+function textComparisonSqlFor(
+  dialect: Readonly<DialectConfig>,
+): Readonly<Record<TextComparisonOperator, string>> {
+  return {
+    equals: "=",
+    notEquals: "<>",
+    matches: dialect.matches,
+    notMatches: dialect.notMatches,
+  };
+}
 
 /**
- * The SQL type a literal placeholder is cast to: the one implied by the literal's own trilean kind.
+ * The value kind a literal placeholder is rendered for: the one implied by the literal's own trilean kind. What a dialect does with it -- PostgreSQL casts the placeholder to the corresponding type, SQLite ignores it -- is `DialectConfig.placeholder`'s business.
  *
- * Casting every placeholder means a fragment's meaning never depends on how a particular driver decided to infer an untyped parameter, and it is what makes a comparison between two literals (`$1 < $2`, which PostgreSQL rejects outright as having undeterminable parameter types) compile to something executable at all.
- *
- * A mapped column's declared `paramType` deliberately does not override this. It cannot differ: the guard has already refused any comparison whose operand kinds disagree, and each declared kind maps to the same PostgreSQL type as the literal kind it must then match. Consulting it here would be a branch that can never change the output.
+ * A mapped column's declared `paramType` deliberately does not override this. It cannot differ: the guard has already refused any comparison whose operand kinds disagree, and each declared kind implies the same SQL type as the literal kind it must then match. Consulting it here would be a branch that can never change the output.
  */
 const PARAM_TYPE_OF_LITERAL: Readonly<
   Record<
@@ -52,6 +59,9 @@ const PARAM_TYPE_OF_LITERAL: Readonly<
 
 interface CompileContext {
   readonly options: SqlCompileOptions;
+  /** Resolved once per compilation rather than looked up per node, alongside the `columnFor` memoisation, since the dialect cannot change mid-tree. */
+  readonly dialect: Readonly<DialectConfig>;
+  readonly textComparison: Readonly<Record<TextComparisonOperator, string>>;
   readonly params: unknown[];
 }
 
@@ -61,11 +71,11 @@ function placeholder(
   castTo: SqlParamType,
 ): string {
   context.params.push(value);
-  return `$${String(context.params.length)}::${POSTGRES_TYPE_NAME[castTo]}`;
+  return context.dialect.placeholder(context.params.length, castTo);
 }
 
 /**
- * Renders a column as a PostgreSQL identifier: each dot-separated segment double-quoted, with any embedded double quote doubled.
+ * Renders a column as a SQL identifier: each dot-separated segment double-quoted, with any embedded double quote doubled. Double-quoting is ANSI-standard and means the same thing in both dialects, so this needs no per-dialect branch.
  *
  * A column name cannot be a bind parameter -- it is part of the statement's structure, not its data -- so it is the one caller-supplied string that reaches the SQL text. Quoting it unconditionally is what keeps that safe: the doubling makes even a name containing `"; DROP TABLE ...` a single, inert identifier that simply does not exist. Quoting also means a name is taken literally rather than case-folded, so `columnFor` must return the column's real, case-exact name.
  */
@@ -173,15 +183,16 @@ function compilePredicate(
     case "textCompare": {
       const left = compileExpression(node.left, context);
       const right = compileExpression(node.right, context);
-      return `(${left} ${TEXT_COMPARISON_SQL[node.op]} ${right})`;
+      return `(${left} ${context.textComparison[node.op]} ${right})`;
     }
     case "memberOf": {
       const operand = compileExpression(node.operand, context);
       if (node.candidates.length === 0) {
-        // `IN ()` is a syntax error, and the two constants it would be tempting to fold to are both wrong: an empty `in` is false and an empty `notIn` is true only once the operand itself is known, and stay unknown while it is NULL. These two forms reproduce that exactly -- `NULL IS NULL AND NULL` is NULL while `<value> IS NULL AND NULL` is FALSE, and the `notIn` form is its mirror image -- which a bare FALSE/TRUE would not, most visibly under a surrounding NOT.
+        // `IN ()` is a syntax error, and the two constants it would be tempting to fold to are both wrong: an empty `in` is false and an empty `notIn` is true only once the operand itself is known, and stay unknown while it is NULL. These two forms reproduce that exactly -- `NULL IS NULL AND NULL` is NULL while `<value> IS NULL AND NULL` is FALSE, and the `notIn` form is its mirror image -- which a bare FALSE/TRUE would not, most visibly under a surrounding NOT. The suffix is the dialect's own boolean annotation on that bare NULL, empty for a dialect with no boolean type to annotate.
+        const nullLiteral = `NULL${context.dialect.emptyMemberOfNullSuffix}`;
         return node.op === "in"
-          ? `(${operand} IS NULL AND NULL::boolean)`
-          : `(${operand} IS NOT NULL OR NULL::boolean)`;
+          ? `(${operand} IS NULL AND ${nullLiteral})`
+          : `(${operand} IS NOT NULL OR ${nullLiteral})`;
       }
       const candidates = node.candidates
         .map((candidate) => compileExpression(candidate, context))
@@ -200,7 +211,7 @@ function compilePredicate(
 }
 
 /**
- * Compiles a trilean predicate tree into a parameterised PostgreSQL boolean expression.
+ * Compiles a trilean predicate tree into a parameterised boolean expression in the dialect `options` names.
  *
  * Three-valued logic is not reimplemented on top of SQL; it is delegated to it. SQL's `AND`, `OR` and `NOT` over `TRUE`/`FALSE`/`NULL` are Kleene's strong three-valued tables, which are the same tables trilean's own `combineAnd`, `combineOr` and `not` implement, and a comparison against a NULL column yields `NULL` exactly where the evaluator would have returned `indeterminate` from an unresolved reference. A row excluded by `WHERE` because its condition was unknown is therefore excluded for the same reason, and by the same rule, as a subject the evaluator declines to judge. No indeterminacy column, sentinel value or `CASE` scaffolding is emitted, because none is needed.
  *
@@ -229,6 +240,12 @@ export function compilePredicateNode(
   const unpushable = findUnpushableNodeKind(node, memoised);
   if (unpushable !== undefined) throw new UnsupportedNodeError(unpushable);
 
-  const context: CompileContext = { options: memoised, params: [] };
+  const dialect = DIALECT_CONFIG[options.dialect];
+  const context: CompileContext = {
+    options: memoised,
+    dialect,
+    textComparison: textComparisonSqlFor(dialect),
+    params: [],
+  };
   return { sql: compilePredicate(node, context), params: context.params };
 }

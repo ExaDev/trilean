@@ -1,21 +1,24 @@
 /** The declared SQL value kind of a mapped column. `"timestamp"` names trilean's `instant` kind, whose values are ISO-8601 strings. */
 export type SqlParamType = "text" | "number" | "boolean" | "timestamp";
 
+/** The SQL dialects this compiler emits. A dialect is named rather than inferred: the same tree compiles to different text for each, and a caller that never said which one it meant would be relying on whichever happened to be the default. */
+export type SqlDialect = "postgres" | "sqlite";
+
 /** What a `reference` node's key maps onto in the target schema. */
 export interface SqlColumnBinding {
   /** The column, optionally qualified with a table or schema by dots (`"orders.total"`). Each dot-separated segment is emitted as its own double-quoted identifier, so a segment may contain any character except a dot itself. */
   column: string;
   /**
-   * The column's value kind, if the caller knows it. Optional, and worth supplying: it is the only thing that lets the compiler check a comparison against the column for the kind mismatches trilean itself treats as `wrong-type` -- comparing a text column with `compare` rather than `textCompare`, ordering a boolean, comparing a number against an instant. Left undeclared, those comparisons compile, and PostgreSQL may coerce its way to a definite answer where trilean would have returned indeterminate.
+   * The column's value kind, if the caller knows it. Optional, and worth supplying: it is the only thing that lets the compiler check a comparison against the column for the kind mismatches trilean itself treats as `wrong-type` -- comparing a text column with `compare` rather than `textCompare`, ordering a boolean, comparing a number against an instant. Left undeclared, those comparisons compile, and the database may coerce its way to a definite answer where trilean would have returned indeterminate.
    *
-   * It does not affect the emitted SQL, only whether the comparison is emitted at all. Every literal placeholder is already cast to the type its own trilean kind implies, and a comparison that survives the check is one whose operand kinds agree, so there is nothing left for the column's declared kind to change.
+   * It does not affect the emitted SQL, only whether the comparison is emitted at all. Every literal placeholder is already cast to the type its own trilean kind implies (in the dialects that cast at all), and a comparison that survives the check is one whose operand kinds agree, so there is nothing left for the column's declared kind to change.
    */
   paramType?: SqlParamType;
 }
 
 export interface SqlCompileOptions {
-  /** PostgreSQL is the only dialect implemented. It is a required field rather than a default so that adding a second dialect later is a new value here, not a change of behaviour for callers who never said which one they meant. */
-  dialect: "postgres";
+  /** Which dialect to emit. It is a required field rather than a default so that a caller states the engine it is compiling for, instead of inheriting whichever one this package happened to implement first. */
+  dialect: SqlDialect;
   /**
    * Maps a `reference` node's key onto a column. Called once per reference occurrence.
    *
@@ -27,7 +30,7 @@ export interface SqlCompileOptions {
 export interface CompiledSql {
   /** A self-contained boolean expression, always parenthesised, suitable for dropping straight into a `WHERE` clause (or a `CHECK`, a `HAVING`, or a filtered index predicate). It carries no `WHERE` keyword of its own. */
   sql: string;
-  /** Positional parameters, in `$1`-first order, to pass alongside `sql`. Every caller-supplied literal in the tree is here; none is ever written into `sql`. */
+  /** Positional parameters, in emission order, to pass alongside `sql`. Every caller-supplied literal in the tree is here; none is ever written into `sql`. */
   params: unknown[];
 }
 
@@ -37,4 +40,41 @@ export const POSTGRES_TYPE_NAME: Readonly<Record<SqlParamType, string>> = {
   number: "double precision",
   boolean: "boolean",
   timestamp: "timestamptz",
+};
+
+/**
+ * Everything about the emitted SQL that is a property of the dialect rather than of the tree.
+ *
+ * It is deliberately this small. Most of what the compiler emits is ANSI-standard and identical in both engines -- the six comparison operators, `=` and `<>` for `textCompare`'s `equals`/`notEquals`, `AND`/`OR`/`NOT`, `IN`/`NOT IN`, `IS NOT NULL`, and double-quoted identifiers with an embedded quote doubled -- so branching on the dialect anywhere else would be a branch that can never change the output. Three things genuinely differ, and they are the three fields below.
+ */
+export interface DialectConfig {
+  /** The regular-expression match operator `textCompare`'s `matches` compiles to. */
+  matches: string;
+  /** The negated regular-expression match operator `textCompare`'s `notMatches` compiles to. */
+  notMatches: string;
+  /** Renders the `index`-th (1-based) bind placeholder, for a literal whose own trilean kind implies `castTo`. A dialect that does not need the cast ignores both arguments. */
+  placeholder: (index: number, castTo: SqlParamType) => string;
+  /** Appended to the bare `NULL` in the two forms an empty `memberOf` candidate list compiles to, for a dialect that needs the resulting expression annotated with a boolean type. */
+  emptyMemberOfNullSuffix: string;
+}
+
+export const DIALECT_CONFIG: Readonly<Record<SqlDialect, DialectConfig>> = {
+  postgres: {
+    // PostgreSQL's own regular-expression match operators, so a pattern is matched by the server rather than shipped back to be matched in process. See the "Regular expressions" caveat in README.md: PostgreSQL's advanced regular expressions and ECMAScript's are close but not the same language.
+    matches: "~",
+    notMatches: "!~",
+    // Casting every placeholder means a fragment's meaning never depends on how a particular driver decided to infer an untyped parameter, and it is what makes a comparison between two literals (`$1 < $2`, which PostgreSQL rejects outright as having undeterminable parameter types) compile to something executable at all.
+    placeholder: (index, castTo) =>
+      `$${String(index)}::${POSTGRES_TYPE_NAME[castTo]}`,
+    emptyMemberOfNullSuffix: "::boolean",
+  },
+  sqlite: {
+    // SQLite has no built-in regular-expression support: `REGEXP` is reserved syntax for a `regexp(pattern, value)` function the connection must register itself, and an unregistered one fails loudly at query time with "no such function: REGEXP" rather than answering wrongly. See the "Regular expressions" section in README.md for the registration the SQLite dialect therefore requires of its caller.
+    matches: "REGEXP",
+    notMatches: "NOT REGEXP",
+    // SQLite parameters are dynamically typed and positional-by-order, so there is neither a number to write nor a type to cast to. A bare `?` is correct for every literal kind this compiler emits, including a comparison between two literals, which SQLite answers without needing either side annotated.
+    placeholder: () => "?",
+    // SQLite has no boolean type to annotate: `NULL` alone already carries the three-valued behaviour the empty-`memberOf` forms depend on.
+    emptyMemberOfNullSuffix: "",
+  },
 };

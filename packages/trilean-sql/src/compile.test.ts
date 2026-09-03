@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 import { compilePredicateNode } from "./compile";
 import { InvalidColumnError, UnsupportedNodeError } from "./errors";
 import type { SqlCompileOptions } from "./options";
-import { subjectOptions } from "./test-support/columns";
+import { sqliteSubjectOptions, subjectOptions } from "./test-support/columns";
 
 function compile(
   node: PredicateNode,
@@ -458,4 +458,150 @@ describe("refusal", () => {
       expect(thrown.path).toContain("$.right.operands[1].operand");
     },
   );
+});
+
+describe("the sqlite dialect", () => {
+  function compileSqlite(node: PredicateNode) {
+    return compile(node, sqliteSubjectOptions);
+  }
+
+  it("renders every placeholder as a bare '?', with no number and no cast", () => {
+    // SQLite binds by position in emission order rather than by an index written into the text, and it has no type to cast a parameter to. Asserted across a nested tree because the numbering is exactly what a bare '?' drops: the three parameters below are told apart only by the order they appear in.
+    expect(
+      compileSqlite({
+        kind: "allOf",
+        operands: [
+          {
+            kind: "compare",
+            op: "gt",
+            left: { kind: "reference", key: "age" },
+            right: { kind: "numberLiteral", value: LOWER_BOUND },
+          },
+          {
+            kind: "memberOf",
+            op: "in",
+            operand: { kind: "reference", key: "name" },
+            candidates: [
+              { kind: "textLiteral", value: "b" },
+              { kind: "textLiteral", value: "c" },
+            ],
+          },
+        ],
+      }),
+    ).toEqual({
+      sql: '(("age" > ?) AND ("name" IN (?, ?)))',
+      params: [LOWER_BOUND, "b", "c"],
+    });
+  });
+
+  it("compares two literals without either side needing a type", () => {
+    // The case PostgreSQL cannot execute uncast at all. SQLite answers it from the bound values themselves, so there is nothing to annotate.
+    expect(
+      compileSqlite({
+        kind: "compare",
+        op: "lt",
+        left: { kind: "numberLiteral", value: 1 },
+        right: { kind: "numberLiteral", value: 2 },
+      }),
+    ).toEqual({ sql: "(? < ?)", params: [1, 2] });
+  });
+
+  it("renders an instant literal as a plain parameter, with no timestamp type to cast to", () => {
+    expect(
+      compileSqlite({
+        kind: "compare",
+        op: "gte",
+        left: { kind: "reference", key: "joined" },
+        right: { kind: "instantLiteral", value: "2020-01-01T00:00:00+02:00" },
+      }),
+    ).toEqual({
+      sql: '("joined" >= ?)',
+      params: ["2020-01-01T00:00:00+02:00"],
+    });
+  });
+
+  it.each([
+    ["equals", "="],
+    ["notEquals", "<>"],
+    ["matches", "REGEXP"],
+    ["notMatches", "NOT REGEXP"],
+  ] as const)("compiles textCompare '%s' to '%s'", (op, sqlOperator) => {
+    // `=` and `<>` are ANSI-standard and identical to the PostgreSQL dialect's; only the two pattern operators differ, and SQLite's are the reserved REGEXP syntax for a function the connection registers itself.
+    expect(
+      compileSqlite({
+        kind: "textCompare",
+        op,
+        left: { kind: "reference", key: "name" },
+        right: { kind: "textLiteral", value: "^a" },
+      }),
+    ).toEqual({ sql: `("name" ${sqlOperator} ?)`, params: ["^a"] });
+  });
+
+  it("compiles an empty candidate list without a boolean annotation on the NULL", () => {
+    // SQLite has no boolean type to annotate, and the annotation is not what the encoding depends on: the integration suite executes both of these and gets the same three-valued answers the `::boolean` forms give PostgreSQL.
+    expect(
+      compileSqlite({
+        kind: "memberOf",
+        op: "in",
+        operand: { kind: "reference", key: "name" },
+        candidates: [],
+      }),
+    ).toEqual({ sql: '("name" IS NULL AND NULL)', params: [] });
+
+    expect(
+      compileSqlite({
+        kind: "memberOf",
+        op: "notIn",
+        operand: { kind: "reference", key: "name" },
+        candidates: [],
+      }),
+    ).toEqual({ sql: '("name" IS NOT NULL OR NULL)', params: [] });
+  });
+
+  it("emits the dialect-neutral structure identically to PostgreSQL", () => {
+    // Everything the two dialects share, in one tree: the connectives, the six comparison operators, `IS NOT NULL`, `NOT IN`, and double-quoted identifiers. The only difference between this expectation and the PostgreSQL one is the placeholders.
+    const node: PredicateNode = {
+      kind: "not",
+      operand: {
+        kind: "and",
+        left: ageOver,
+        right: {
+          kind: "or",
+          left: { kind: "exists", operand: { kind: "reference", key: "note" } },
+          right: {
+            kind: "memberOf",
+            op: "notIn",
+            operand: { kind: "reference", key: "age" },
+            candidates: [{ kind: "numberLiteral", value: EXCLUDED_AGE }],
+          },
+        },
+      },
+    };
+
+    expect(compileSqlite(node).sql).toBe(
+      '(NOT (("age" > ?) AND (("note" IS NOT NULL) OR ("age" NOT IN (?)))))',
+    );
+    expect(compile(node).sql).toBe(
+      '(NOT (("age" > $1::double precision) AND (("note" IS NOT NULL) OR ("age" NOT IN ($2::double precision)))))',
+    );
+  });
+
+  it("quotes and neutralises identifiers exactly as the PostgreSQL dialect does", () => {
+    // Double-quoting with an embedded quote doubled is ANSI-standard, so the injection defence is the same string in both dialects rather than a per-dialect rule.
+    const hostile: SqlCompileOptions = {
+      dialect: "sqlite",
+      columnFor: () => ({ column: 'note"; DROP TABLE subjects; --' }),
+    };
+    expect(
+      compile(
+        { kind: "exists", operand: { kind: "reference", key: "anything" } },
+        hostile,
+      ).sql,
+    ).toBe('("note""; DROP TABLE subjects; --" IS NOT NULL)');
+  });
+
+  it("compiles an empty allOf and anyOf to the same identities", () => {
+    expect(compileSqlite({ kind: "allOf", operands: [] }).sql).toBe("(TRUE)");
+    expect(compileSqlite({ kind: "anyOf", operands: [] }).sql).toBe("(FALSE)");
+  });
 });

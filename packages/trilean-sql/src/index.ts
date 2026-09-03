@@ -2,6 +2,7 @@ export type {
   CompiledSql,
   SqlColumnBinding,
   SqlCompileOptions,
+  SqlDialect,
   SqlParamType,
 } from "./options";
 
