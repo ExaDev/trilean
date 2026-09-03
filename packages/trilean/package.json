@@ -1,6 +1,6 @@
 {
   "name": "trilean",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Three-valued predicate and expression evaluation trees, stored as JSON and evaluated against injected resolvers, for domain logic — business rules, eligibility checks, formulas, search filters, and more — that needs to be data instead of code.",
   "type": "module",
   "repository": {

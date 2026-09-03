@@ -1,3 +1,13 @@
+## [1.4.1](https://github.com/ExaDev/trilean/compare/trilean%401.4.0...trilean%401.4.1) (2026-09-03)
+
+### Code Refactoring
+
+* **workspace:** move the package into packages/trilean ([5465b9b](https://github.com/ExaDev/trilean/commit/5465b9bb0ca701e049b58b8dcf86fbf2a4d37e92))
+
+### Build System
+
+* **workspace:** make the repository a pnpm workspace with a turbo pipeline ([ecc1403](https://github.com/ExaDev/trilean/commit/ecc1403946a4f502e17aa5d4945effdda0b85c3d))
+
 # [1.4.0](https://github.com/ExaDev/trilean/compare/v1.3.0...v1.4.0) (2026-09-03)
 
 
