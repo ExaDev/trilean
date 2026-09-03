@@ -1,13 +1,25 @@
 name: CI
 
+# One workflow for the whole workspace. Every check runs its task across the workspace through turbo from the repository root, rather than against a single package directory, so adding a package needs no edit here.
+
 on:
   push:
     branches: [main]
   pull_request:
   workflow_dispatch:
 
+# A new push to a pull request supersedes that PR's in-flight run. A push to main never cancels: the release job publishes to npm and pushes tags mid-run, and cancelling it partway leaves real work half-done.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 permissions:
   contents: read
+
+env:
+  # On a pull request, restrict every turbo task to the packages the branch actually changed (and their dependents); on main, run the whole workspace so the caches the next run restores from are complete and the release gate covers everything. --affected compares against the base branch, so the checkouts below use fetch-depth: 0.
+  TURBO_FLAGS: ${{ github.event_name == 'pull_request' && '--affected' || '' }}
+  TURBO_SCM_BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || '' }}
 
 jobs:
   commitlint:
@@ -21,7 +33,7 @@ jobs:
       - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v7
         with:
-          node-version: '22'
+          node-version-file: .tool-versions
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - name: Validate the last commit with commitlint
@@ -34,79 +46,51 @@ jobs:
   lint:
     name: Lint
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
-      - uses: pnpm/action-setup@v6
-      - uses: actions/setup-node@v7
         with:
-          node-version: '22'
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      # turbo's local filesystem cache, keyed per task/job. A job whose inputs (per turbo.json) are unchanged since a prior run on this lockfile/pipeline generation replays that task's recorded result -- including its declared outputs (e.g. dist/**, .eslintcache) -- instead of re-running eslint/tsc/tsdown/vitest.
-      #
-      # hashFiles(pnpm-lock.yaml, turbo.json) puts the dependency set and the task graph itself into the key, so either changing starts a fresh cache lineage rather than inheriting a stale one; github.run_id keeps every run's own save key unique. actions/cache treats a key as immutable -- a save under a key that already exists is silently skipped -- so without run_id, only the very first run for a given lockfile/turbo.json pair would ever actually save anything, and no later run could repair or extend a cache left behind by a partially failed one. The two-level restore-keys then prefers a cache from the same lockfile/turbo.json generation and only falls back to the newest cache for this task when that generation has no entry yet.
-      - uses: actions/cache@v6
+          fetch-depth: 0
+      - uses: ./.github/actions/setup-workspace
         with:
-          path: .turbo
-          key: turbo-lint-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-${{ github.run_id }}
-          restore-keys: |
-            turbo-lint-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-
-            turbo-lint-${{ runner.os }}-
-      - run: pnpm lint
+          task: lint
+          command: pnpm lint $TURBO_FLAGS
 
   typecheck:
     name: Typecheck
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
-      - uses: pnpm/action-setup@v6
-      - uses: actions/setup-node@v7
         with:
-          node-version: '22'
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - uses: actions/cache@v6
+          fetch-depth: 0
+      - uses: ./.github/actions/setup-workspace
         with:
-          path: .turbo
-          key: turbo-typecheck-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-${{ github.run_id }}
-          restore-keys: |
-            turbo-typecheck-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-
-            turbo-typecheck-${{ runner.os }}-
-      # turbo's _typecheck task depends on _build, so this already builds dist/ before type-checking. attw (are-the-types-wrong) needs that same dist/, which is why it runs straight after with no separate build step.
-      - run: pnpm typecheck
-      - run: pnpm exec attw --pack
+          task: typecheck
+          # _typecheck:attw (attw --pack per published package, checking each package's declared types resolve under every module resolution mode) is one of the tasks `pnpm typecheck` runs through turbo, depending on that package's own _build -- no separate build step or bare `pnpm exec attw --pack` needed to give it a dist/ to inspect.
+          command: pnpm typecheck $TURBO_FLAGS
 
   test:
     name: Test
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     permissions:
       contents: read
       code-quality: write # to upload the cobertura coverage report below
     steps:
       - uses: actions/checkout@v7
-      - uses: pnpm/action-setup@v6
-      - uses: actions/setup-node@v7
         with:
-          node-version: '22'
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - uses: actions/cache@v6
+          fetch-depth: 0
+      - uses: ./.github/actions/setup-workspace
         with:
-          path: .turbo
-          key: turbo-test-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-${{ github.run_id }}
-          restore-keys: |
-            turbo-test-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-
-            turbo-test-${{ runner.os }}-
-      - run: pnpm test:coverage
+          task: test
+          command: pnpm test:coverage $TURBO_FLAGS
       - name: Upload coverage report
         # Code Quality requires the org on GitHub Team/Enterprise Cloud, which ExaDev is not yet on, so the upload call itself will fail until that changes -- fail-on-error: false keeps that failure a log annotation instead of gating the release job below on a feature we can't turn on yet. Also guarded against fork PRs, which never hold the code-quality: write permission to upload.
         if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
         uses: actions/upload-code-coverage@v1
         with:
-          file: coverage/cobertura-coverage.xml
+          file: packages/trilean/coverage/cobertura-coverage.xml
           language: typescript
           label: unit
           fail-on-error: false
@@ -114,83 +98,73 @@ jobs:
   test-integration:
     name: Integration test
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
-      - uses: pnpm/action-setup@v6
-      - uses: actions/setup-node@v7
         with:
-          node-version: '22'
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - uses: actions/cache@v6
+          fetch-depth: 0
+      - uses: ./.github/actions/setup-workspace
         with:
-          path: .turbo
-          key: turbo-test-integration-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-${{ github.run_id }}
-          restore-keys: |
-            turbo-test-integration-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-
-            turbo-test-integration-${{ runner.os }}-
-      - run: pnpm test:integration
+          task: test-integration
+          command: pnpm test:integration $TURBO_FLAGS
 
   test-smoke:
     name: Smoke test
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
-      - uses: pnpm/action-setup@v6
-      - uses: actions/setup-node@v7
         with:
-          node-version: '22'
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - uses: actions/cache@v6
+          fetch-depth: 0
+      - uses: ./.github/actions/setup-workspace
         with:
-          path: .turbo
-          key: turbo-test-smoke-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-${{ github.run_id }}
-          restore-keys: |
-            turbo-test-smoke-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-
-            turbo-test-smoke-${{ runner.os }}-
-      - run: pnpm test:smoke
+          task: test-smoke
+          command: pnpm test:smoke $TURBO_FLAGS
 
   test-workers:
     name: Workers runtime test
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
-      - uses: pnpm/action-setup@v6
-      - uses: actions/setup-node@v7
         with:
-          node-version: '22'
-          cache: pnpm
-      # pnpm install builds the workerd binary (allowBuilds in pnpm-workspace.yaml), so this runs the evaluator inside a real Cloudflare Workers isolate -- enforcing zero Node-only API usage at runtime rather than by assertion.
-      - run: pnpm install --frozen-lockfile
-      - uses: actions/cache@v6
+          fetch-depth: 0
+      # The install inside the composite action builds the workerd binary (allowBuilds in pnpm-workspace.yaml), so this runs the evaluator inside a real Cloudflare Workers isolate -- enforcing zero Node-only API usage at runtime rather than by assertion.
+      - uses: ./.github/actions/setup-workspace
         with:
-          path: .turbo
-          key: turbo-test-workers-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-${{ github.run_id }}
-          restore-keys: |
-            turbo-test-workers-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-
-            turbo-test-workers-${{ runner.os }}-
-      - run: pnpm test:workers
+          task: test-workers
+          command: pnpm test:workers $TURBO_FLAGS
 
   release:
     name: Release
-    needs: [commitlint, lint, typecheck, test, test-integration, test-smoke, test-workers]
+    needs:
+      [
+        commitlint,
+        lint,
+        typecheck,
+        test,
+        test-integration,
+        test-smoke,
+        test-workers,
+      ]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    # Two pushes to main close together must never run this job at the same time: the orchestrator pushes release commits, tags and dependency bumps to main mid-run, and semantic-release's own stale-checkout guard refuses to publish the moment it sees a commit on main this checkout does not have. Queue the second run behind the first rather than cancelling either -- cancelling mid-release would leave a published package with no committed version bump.
+    concurrency:
+      group: release-workspace
+      cancel-in-progress: false
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     permissions:
-      contents: write # to push the release commit/tag and create the GitHub Release
+      contents: write # to push the release commit and tags, and create GitHub Releases
       issues: write # to comment on released issues
       pull-requests: write # to comment on released pull requests
       id-token: write # OIDC identity for npm trusted publishing (no NPM_TOKEN)
     outputs:
-      published: ${{ steps.before.outputs.version != steps.after.outputs.version }}
-      version: ${{ steps.after.outputs.version }}
+      released: ${{ steps.released.outputs.released }}
+      version: ${{ steps.released.outputs.version }}
+      tag: ${{ steps.released.outputs.tag }}
     steps:
-      # main's ruleset requires every change to land via a pull request, and the default GITHUB_TOKEN has no bypass for that -- @semantic-release/git's release-commit push is a direct push to main, so it needs a token from an actor the ruleset explicitly allows through instead. The org-wide "exadev" GitHub App (installed with access to every ExaDev repo, unlike the documents.js-family repos' own narrower, selected-repository app) is that actor, added as an Integration bypass_actor on this repo's ruleset.
+      # main's ruleset requires every change to land via a pull request, and the default GITHUB_TOKEN has no bypass for that -- the orchestrator's release commit is a direct push to main, so it needs a token from an actor the ruleset explicitly allows through instead. The org-wide "exadev" GitHub App is that actor, added as an Integration bypass_actor on this repo's ruleset.
       - name: Generate a token for the release push
         id: app-token
         uses: actions/create-github-app-token@v2
@@ -199,39 +173,48 @@ jobs:
           private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
       - uses: actions/checkout@v7
         with:
-          # semantic-release analyses the full commit history since the last release.
+          # ref: main, not the bare event SHA. The orchestrator pushes to the current branch by name, so a detached HEAD stops the run with a WorkspaceStateError rather than pushing HEAD:HEAD; naming the branch is what makes checkout attach HEAD to it. fetch-depth: 0 because each package's release range is analysed from its own last matching tag.
+          ref: main
           fetch-depth: 0
           token: ${{ steps.app-token.outputs.token }}
       - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v7
         with:
-          node-version: '22'
+          node-version-file: .tool-versions
           cache: pnpm
           # registry-url is deliberately absent. Setting it makes setup-node write an .npmrc containing an _authToken line, and that line wins over the OIDC token exchange -- so the setting that looks like it configures the registry is exactly the one that would stop trusted publishing working.
       - run: pnpm install --frozen-lockfile
-      - uses: actions/cache@v6
-        with:
-          path: .turbo
-          key: turbo-release-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-${{ github.run_id }}
-          restore-keys: |
-            turbo-release-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-
-            turbo-release-${{ runner.os }}-
-      - name: Read pre-release version
-        id: before
-        run: echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
       - name: Upgrade npm for OIDC trusted publishing (needs npm CLI >=11.5.1)
         run: npm install -g npm@latest
-      - name: Release
-        # HUSKY=0 so the commit-msg hook never fires against the automated release commit.
-        run: HUSKY=0 pnpm exec semantic-release
+      - name: Record the tags present before the orchestrator runs
+        # The orchestrator creates each package's `name@version` tag in this same checkout as it releases, so diffing the remote's tags across the release step is the exact record of what this run released. Written to RUNNER_TEMP, not the working tree: the single-commit strategy discovers what it touched via `git status` and requires a clean tree to start from, so a scratch file inside the checkout would fail that check every run.
+        run: git ls-remote --tags origin | sed 's|.*refs/tags/||' | grep -v '\^{}' | sort > "$RUNNER_TEMP/release-tags-before.txt"
+      - name: Release every package that changed, in dependency order
+        # The orchestrator discovers the workspace from pnpm-workspace.yaml, orders packages topologically, and runs semantic-release per package with commits path-filtered to that package's own directory and tags in `name@version` form. HUSKY=0 so local git hooks never fire against the automated commit.
+        run: HUSKY=0 pnpm release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # npm publish provenance for every package the run publishes, matching each package.json's own publishConfig.provenance.
+          NPM_CONFIG_PROVENANCE: "true"
           # Blanked, not omitted -- an inherited NPM_TOKEN/NODE_AUTH_TOKEN from a workflow-level env block, reusable workflow, or composite action would otherwise be used in preference to the OIDC exchange.
-          NPM_TOKEN: ''
-          NODE_AUTH_TOKEN: ''
-      - name: Read post-release version
-        id: after
-        run: echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+          NPM_TOKEN: ""
+          NODE_AUTH_TOKEN: ""
+      - name: Collect what this run released
+        id: released
+        # The post-release jobs below mirror and attest the one published package, so they need its tag and version rather than a matrix. A tag that appeared during the release step and names this package is that record; nothing new means nothing released, and every downstream job skips.
+        run: |
+          git ls-remote --tags origin | sed 's|.*refs/tags/||' | grep -v '\^{}' | sort > "$RUNNER_TEMP/release-tags-after.txt"
+          TAG=$(comm -13 "$RUNNER_TEMP/release-tags-before.txt" "$RUNNER_TEMP/release-tags-after.txt" | grep '^trilean@' || true)
+          if [ -z "$TAG" ]; then
+            echo "released=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::No new trilean tag; nothing was released by this run."
+            exit 0
+          fi
+          {
+            echo "released=true"
+            echo "tag=$TAG"
+            echo "version=${TAG##*@}"
+          } >> "$GITHUB_OUTPUT"
 
   notify-hive:
     name: Notify novus-power/hive
@@ -264,9 +247,9 @@ jobs:
   publish-github-packages:
     name: Publish mirror to GitHub Packages
     needs: release
-    if: needs.release.outputs.published == 'true'
+    if: needs.release.outputs.released == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     permissions:
       contents: read
       packages: write
@@ -276,41 +259,39 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: main # the release commit semantic-release just pushed
+          # The tag, not main: a queued release run could have pushed further commits and tags to main between this run's release job finishing and this job starting, and the tag points at the exact release commit whose packages/trilean is the released state.
+          ref: ${{ needs.release.outputs.tag }}
       - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v7
         with:
-          node-version: '22'
+          node-version-file: .tool-versions
           cache: pnpm
-          # Deliberately NOT setup-node's own registry-url/scope inputs: those write an @exadev:registry=https://npm.pkg.github.com/ *install-time* scope-to-registry mapping into .npmrc, which would redirect this package's own @exadev-scoped devDependency installs (e.g. @exadev/eslint-config, published only to the default registry) through GitHub Packages too, breaking `pnpm install` below. publishConfig.registry (set explicitly below) already fully determines pnpm publish's *target* registry on its own; only the host-scoped auth token below is genuinely needed, added after install so install never sees any @exadev scope mapping at all.
+          # Deliberately NOT setup-node's own registry-url/scope inputs: those write an @exadev:registry=https://npm.pkg.github.com/ *install-time* scope-to-registry mapping into .npmrc, which would redirect this workspace's own @exadev-scoped devDependency installs (@exadev/eslint-config, @exadev/semantic-release-workspace, published only to the default registry) through GitHub Packages too, breaking `pnpm install` below. publishConfig.registry (set explicitly below) already fully determines pnpm publish's *target* registry on its own; only the host-scoped auth token below is genuinely needed, added after install so install never sees any @exadev scope mapping at all.
       - run: pnpm install --frozen-lockfile
-      - uses: actions/cache@v6
-        with:
-          path: .turbo
-          key: turbo-publish-github-packages-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-${{ github.run_id }}
-          restore-keys: |
-            turbo-publish-github-packages-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-
-            turbo-publish-github-packages-${{ runner.os }}-
       - run: pnpm build
       - name: Rewrite the package name for the GitHub Packages mirror
-        # trilean itself stays unscoped on npmjs.org (see package.json's own "name"), but GitHub Packages' npm registry structurally requires every package it hosts to be scoped to the owning org -- an unscoped `trilean` publish there is rejected outright. This job's own package.json rewrite (never committed -- it runs against the checkout's working tree only) is what lets the same build ship under both names without the primary npm publish above ever carrying the @exadev scope.
+        # trilean itself stays unscoped on npmjs.org (see the package's own "name"), but GitHub Packages' npm registry structurally requires every package it hosts to be scoped to the owning org -- an unscoped `trilean` publish there is rejected outright. This job's own package.json rewrite (never committed -- it runs against the checkout's working tree only) is what lets the same build ship under both names without the primary npm publish ever carrying the @exadev scope.
+        working-directory: packages/trilean
         run: npm pkg set name="@exadev/trilean"
       - name: Rewrite the registry for the GitHub Packages mirror
         # publishConfig.registry has to be overridden explicitly: without it, pnpm publish would target registry.npmjs.org -- the registry the primary, unscoped npm publish already used in the release job above -- instead of GitHub Packages.
+        working-directory: packages/trilean
         run: npm pkg set publishConfig.registry="https://npm.pkg.github.com"
       - name: Drop provenance for the GitHub Packages mirror
         # npm honours publishConfig.provenance against whatever registry it is publishing to, and signing a provenance statement needs an OIDC token this job deliberately holds no permission to mint -- so leaving the field set fails the publish outright with 'Provenance generation in GitHub Actions requires "write" access to the "id-token" permission', before a single byte is uploaded. Granting that permission is not the fix: sigstore provenance is an npmjs.org feature GitHub Packages does not host, so the mirror would be signing an attestation none of its consumers could ever resolve. The primary npm publish in the release job above keeps provenance, which is where it means something.
+        working-directory: packages/trilean
         run: npm pkg delete publishConfig.provenance
       - name: Configure the GitHub Packages auth token for publish only
         run: echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> ~/.npmrc
-      - run: pnpm publish --access public --no-git-checks
+      - working-directory: packages/trilean
+        run: pnpm publish --access public --no-git-checks
 
   attest-npm:
     name: Attest SBOM and build provenance (npm)
     needs: release
-    if: needs.release.outputs.published == 'true'
+    if: needs.release.outputs.released == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     permissions:
       contents: read
       id-token: write
@@ -318,40 +299,35 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: main # the release commit semantic-release just pushed
+          ref: ${{ needs.release.outputs.tag }} # the release commit the orchestrator tagged, not whatever main has moved on to by now
       - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v7
         with:
-          node-version: '22'
+          node-version-file: .tool-versions
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - uses: actions/cache@v6
-        with:
-          path: .turbo
-          key: turbo-attest-npm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-${{ github.run_id }}
-          restore-keys: |
-            turbo-attest-npm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-
-            turbo-attest-npm-${{ runner.os }}-
       - run: pnpm build
       # Pack into a directory of its own, separate from dist/ (tsdown's raw build output). The attestation subject has to be the artefact that actually ships -- attesting dist/ itself would mix in files that never leave the repo, producing digests that match nothing a consumer can download.
-      - run: pnpm pack --pack-destination release-artifact
-      - run: pnpm sbom --sbom-format spdx --prod > release-artifact/sbom.spdx.json
+      - working-directory: packages/trilean
+        run: pnpm pack --pack-destination release-artifact
+      - working-directory: packages/trilean
+        run: pnpm sbom --sbom-format spdx --prod > release-artifact/sbom.spdx.json
       - name: Attest SBOM
         uses: actions/attest@v4
         with:
-          subject-path: release-artifact/*.tgz
-          sbom-path: release-artifact/sbom.spdx.json
+          subject-path: packages/trilean/release-artifact/*.tgz
+          sbom-path: packages/trilean/release-artifact/sbom.spdx.json
       - name: Attest build provenance
         uses: actions/attest@v4
         with:
-          subject-path: release-artifact/*.tgz
+          subject-path: packages/trilean/release-artifact/*.tgz
 
   attest-github-packages:
     name: Attest SBOM and build provenance (GitHub Packages)
     needs: release
-    if: needs.release.outputs.published == 'true'
+    if: needs.release.outputs.released == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     permissions:
       contents: read
       id-token: write
@@ -359,32 +335,28 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: main # the release commit semantic-release just pushed
+          ref: ${{ needs.release.outputs.tag }} # the release commit the orchestrator tagged, not whatever main has moved on to by now
       - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v7
         with:
-          node-version: '22'
+          node-version-file: .tool-versions
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - uses: actions/cache@v6
-        with:
-          path: .turbo
-          key: turbo-attest-github-packages-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-${{ github.run_id }}
-          restore-keys: |
-            turbo-attest-github-packages-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-
-            turbo-attest-github-packages-${{ runner.os }}-
       - run: pnpm build
       # The GitHub Packages mirror ships under a different name (see publish-github-packages) and is therefore a genuinely different artefact from the one attest-npm covers above -- attesting only the unscoped tarball would leave the scoped mirror with no provenance a consumer could verify. This job's own attest@v4 attestations land in this repository's own attestation store regardless of which registry the tarball is later published to, so no id-token/OIDC conflict with publish-github-packages' own npm-registry auth exists here.
       - name: Rewrite the package name to match the GitHub Packages mirror
+        working-directory: packages/trilean
         run: npm pkg set name="@exadev/trilean"
-      - run: pnpm pack --pack-destination release-artifact
-      - run: pnpm sbom --sbom-format spdx --prod > release-artifact/sbom.spdx.json
+      - working-directory: packages/trilean
+        run: pnpm pack --pack-destination release-artifact
+      - working-directory: packages/trilean
+        run: pnpm sbom --sbom-format spdx --prod > release-artifact/sbom.spdx.json
       - name: Attest SBOM
         uses: actions/attest@v4
         with:
-          subject-path: release-artifact/*.tgz
-          sbom-path: release-artifact/sbom.spdx.json
+          subject-path: packages/trilean/release-artifact/*.tgz
+          sbom-path: packages/trilean/release-artifact/sbom.spdx.json
       - name: Attest build provenance
         uses: actions/attest@v4
         with:
-          subject-path: release-artifact/*.tgz
+          subject-path: packages/trilean/release-artifact/*.tgz
