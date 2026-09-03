@@ -282,16 +282,41 @@ describe("derived = composition, not separate logic", () => {
     });
   });
 
-  it("compiles to a flag-free, fully anchored pattern that stays valid under a u-flagged RegExp", () => {
+  it("compiles to a flag-free, fully anchored pattern that stays valid unflagged and under both a u- and a v-flagged RegExp", () => {
     const compiled = [
       compiledPattern(prefixPattern(subject, "a.b/c")),
       compiledPattern(wildcardPattern(subject, String.raw`a.b/c\**`)),
       compiledPattern(hierarchicalGlobPattern(subject, "a.b/**/c?")),
+      // The within-segment classes on their own: `*` and `?` are the only constructs that emit one, and a glob is far likelier to consist of nothing else than to also carry the literals above.
+      compiledPattern(hierarchicalGlobPattern(subject, "*")),
+      compiledPattern(hierarchicalGlobPattern(subject, "?")),
+      compiledPattern(hierarchicalGlobPattern(subject, "*/?")),
     ];
     for (const pattern of compiled) {
       expect(pattern.startsWith("^")).toBe(true);
       expect(pattern.endsWith("$")).toBe(true);
+      // `v` is checked alongside `u` because the two disagree about what a character class may contain: `v` reserves `/` as a ClassSetReservedPunctuator, so a bare `[^/]` compiles unflagged and under `u` but is a SyntaxError under `v`. Checking `u` alone would let exactly that through.
+      expect(() => new RegExp(pattern)).not.toThrow();
       expect(() => new RegExp(pattern, "u")).not.toThrow();
+      expect(() => new RegExp(pattern, "v")).not.toThrow();
+    }
+  });
+
+  it("escapes the separator inside a hierarchical glob's within-segment character classes, which a v-flagged RegExp rejects unescaped", () => {
+    expect(compiledPattern(hierarchicalGlobPattern(subject, "*"))).toBe(
+      "^[^\\/]*$",
+    );
+    expect(compiledPattern(hierarchicalGlobPattern(subject, "?"))).toBe(
+      "^[^\\/]$",
+    );
+    // The escape is purely a syntactic requirement of `v` mode: it must not change what the class actually matches under any flag.
+    for (const flag of ["", "u", "v"]) {
+      const single = new RegExp(
+        compiledPattern(hierarchicalGlobPattern(subject, "a/*")),
+        flag,
+      );
+      expect(single.test("a/b")).toBe(true);
+      expect(single.test("a/b/c")).toBe(false);
     }
   });
 
