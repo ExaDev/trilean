@@ -87,7 +87,7 @@
     "@types/node": "^26.4.0",
     "@types/pg": "^8.15.6",
     "@vitest/coverage-v8": "^4.1.11",
-    "better-sqlite3": "^12.11.1",
+    "better-sqlite3": "^13.0.3",
     "eslint": "^10.9.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.6",
