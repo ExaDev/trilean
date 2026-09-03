@@ -138,9 +138,9 @@ Left undeclared, these compile, and the divergence is real but invisible. That i
 
 The unit suite asserts compiled SQL text and parameter arrays per node kind. It cannot, on its own, establish anything about three-valued behaviour: `("age" > $1)` is only indeterminate-preserving because of what PostgreSQL's planner does with a `NULL` age, which is a fact about PostgreSQL rather than about the string.
 
-So the integration suite (`pnpm test:integration`) starts a real PostgreSQL server in an ephemeral container, seeds a table whose rows carry real `NULL`s, and for every case executes the compiled fragment as a `WHERE` clause *and* evaluates the same tree through trilean's own `evaluatePredicate` once per row, asserting the two agree on which rows match and which do not. Agreement on absence matters as much as on presence: the case that distinguishes three-valued logic from two-valued is the row that appears in neither a predicate nor its negation.
+So the integration suite (`pnpm test:integration`) seeds a table whose rows carry real `NULL`s, and for every case executes the compiled fragment as a `WHERE` clause *and* evaluates the same tree through trilean's own `evaluatePredicate` once per row, asserting the two agree on which rows match and which do not. Agreement on absence matters as much as on presence: the case that distinguishes three-valued logic from two-valued is the row that appears in neither a predicate nor its negation.
 
-It needs a working Docker daemon.
+That suite runs case for case against two engines. `postgres.test.ts` uses a real PostgreSQL server started as an ephemeral container, and needs a working Docker daemon. `pglite.test.ts` uses [PGlite](https://pglite.dev), which is PostgreSQL itself compiled to WebAssembly and run in process rather than a reimplementation of it, and needs nothing beyond Node — so the parity claim above is measurable on any machine, Docker or not, and PGlite is a verified target of the `postgres` dialect rather than an assumed one.
 
 ## Licence
 
