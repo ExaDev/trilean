@@ -9,6 +9,7 @@ The pnpm workspace holding the trilean packages. This file describes the reposit
 | Package | Directory | Published as |
 | --- | --- | --- |
 | [trilean](packages/trilean/README.md) | `packages/trilean` | [`trilean`](https://www.npmjs.com/package/trilean) on npm, [`@exadev/trilean`](https://github.com/ExaDev/trilean/pkgs/npm/trilean) on GitHub Packages |
+| [trilean-sql](packages/trilean-sql/README.md) | `packages/trilean-sql` | [`trilean-sql`](https://www.npmjs.com/package/trilean-sql) on npm |
 
 Each package is versioned, released, and published independently of every other, from its own commit history. There is no lockstep version shared across the workspace.
 
@@ -35,7 +36,8 @@ The `pnpm <task>` scripts are thin wrappers over `turbo run _<task>`; the unders
 ```
 .                       workspace root: tooling config, the task pipeline, release orchestration
 ├── packages/
-│   └── trilean/        the published library, with its own README, CHANGELOG, and configs
+│   ├── trilean/        the evaluation library, with its own README, CHANGELOG, and configs
+│   └── trilean-sql/    the SQL compiler over trilean's predicate trees, likewise self-contained
 ├── pnpm-workspace.yaml package globs and pnpm's install-time settings
 ├── turbo.json          the task pipeline every package's tasks are ordered and cached by
 ├── tsconfig.base.json  the compiler options every package extends
