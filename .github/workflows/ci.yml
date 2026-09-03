@@ -167,7 +167,7 @@ jobs:
       # main's ruleset requires every change to land via a pull request, and the default GITHUB_TOKEN has no bypass for that -- the orchestrator's release commit is a direct push to main, so it needs a token from an actor the ruleset explicitly allows through instead. The org-wide "exadev" GitHub App is that actor, added as an Integration bypass_actor on this repo's ruleset.
       - name: Generate a token for the release push
         id: app-token
-        uses: actions/create-github-app-token@v2
+        uses: actions/create-github-app-token@v3
         with:
           app-id: ${{ secrets.GH_APP_ID }}
           private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
@@ -228,7 +228,7 @@ jobs:
       # ExaSpot, unlike the org-wide 'exadev' App used for the release push above, is installed specifically on novus-power/hive (a different org from ExaDev) rather than org-wide -- owner has to be given explicitly since the App's own installation context otherwise defaults to this workflow's own repository owner (ExaDev), not novus-power.
       - name: Generate a token for cross-org dispatch to novus-power/hive
         id: app-token
-        uses: actions/create-github-app-token@v2
+        uses: actions/create-github-app-token@v3
         with:
           app-id: "4816274"
           private-key: ${{ secrets.HIVE_DISPATCH_APP_PRIVATE_KEY }}

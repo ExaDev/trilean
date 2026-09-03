@@ -18,7 +18,7 @@ jobs:
     steps:
       - name: Fetch Dependabot metadata
         id: metadata
-        uses: dependabot/fetch-metadata@v2
+        uses: dependabot/fetch-metadata@v3
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
       - name: Decide whether to auto-merge
@@ -33,7 +33,7 @@ jobs:
           fi
       - name: Generate a token for the merge
         id: app-token
-        uses: actions/create-github-app-token@v2
+        uses: actions/create-github-app-token@v3
         with:
           app-id: "4473709"
           private-key: ${{ secrets.AUTOMERGE_APP_PRIVATE_KEY }}
