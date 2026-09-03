@@ -1,3 +1,5 @@
+import { UnknownDialectError } from "./errors";
+
 /** The declared SQL value kind of a mapped column. `"timestamp"` names trilean's `instant` kind, whose values are ISO-8601 strings. */
 export type SqlParamType = "text" | "number" | "boolean" | "timestamp";
 
@@ -78,3 +80,16 @@ export const DIALECT_CONFIG: Readonly<Record<SqlDialect, DialectConfig>> = {
     emptyMemberOfNullSuffix: "",
   },
 };
+
+/**
+ * Refuses a dialect this version does not implement, before anything indexes a per-dialect table with it.
+ *
+ * Both entry points check their own argument, because both are reachable with a name the type describes but cannot enforce -- a dialect is exactly the sort of value that arrives as a configuration string asserted into the union at the boundary. Left unchecked, that name is not caught anywhere: the compiler reads an operator off `undefined` and throws a `TypeError` naming an internal field, and the guard, whose tables are only consulted for a node it actually objects to, answers "pushable" for a tree the compiler then fails on -- the one thing `findUnpushableNodeKind` exists to decide, decided wrongly.
+ *
+ * `DIALECT_CONFIG` is the list, rather than a second constant, so implementing a dialect cannot leave this behind.
+ */
+export function assertImplementedDialect(dialect: SqlDialect): void {
+  if (!Object.hasOwn(DIALECT_CONFIG, dialect)) {
+    throw new UnknownDialectError(dialect, Object.keys(DIALECT_CONFIG));
+  }
+}
