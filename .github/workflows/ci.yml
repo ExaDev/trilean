@@ -233,6 +233,34 @@ jobs:
         id: after
         run: echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
 
+  notify-hive:
+    name: Notify novus-power/hive
+    needs: release
+    if: needs.release.outputs.published == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      # ExaSpot, unlike the org-wide 'exadev' App used for the release push above, is installed specifically on novus-power/hive (a different org from ExaDev) rather than org-wide -- owner has to be given explicitly since the App's own installation context otherwise defaults to this workflow's own repository owner (ExaDev), not novus-power.
+      - name: Generate a token for cross-org dispatch to novus-power/hive
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: "4816274"
+          private-key: ${{ secrets.HIVE_DISPATCH_APP_PRIVATE_KEY }}
+          owner: novus-power
+          repositories: |
+            hive
+      - name: Dispatch sibling-released event to novus-power/hive
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          gh api "repos/novus-power/hive/dispatches" \
+            -f event_type=sibling-released \
+            -F "client_payload[package]=trilean" \
+            -F "client_payload[version]=${{ needs.release.outputs.version }}"
+
   publish-github-packages:
     name: Publish mirror to GitHub Packages
     needs: release
