@@ -14,5 +14,6 @@ export { compilePredicateNode } from "./compile";
 export {
   InvalidColumnError,
   TrileanSqlError,
+  UnknownDialectError,
   UnsupportedNodeError,
 } from "./errors";

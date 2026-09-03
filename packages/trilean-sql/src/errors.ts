@@ -36,6 +36,27 @@ export class UnsupportedNodeError extends TrileanSqlError {
 }
 
 /**
+ * A dialect this version does not implement.
+ *
+ * `SqlDialect` is a closed union, so a caller who names a dialect in TypeScript source cannot reach this. A dialect read from configuration and asserted into the type at the boundary can, which is the case it exists for: without it the unimplemented name surfaces later as an internal `TypeError` from a table lookup that found nothing, naming neither the dialect nor the field it was reached from. Refusing by name at the entry point is the same convention `InvalidColumnError` applies to a `columnFor` result and the node walk applies to an unrecognised kind -- an input the type system describes but cannot enforce is checked once, where it arrives.
+ *
+ * `dialect` is the offending name and `implemented` lists the ones this version does compile.
+ */
+export class UnknownDialectError extends TrileanSqlError {
+  readonly dialect: string;
+  readonly implemented: readonly string[];
+
+  constructor(dialect: string, implemented: readonly string[]) {
+    super(
+      `unknown dialect ${JSON.stringify(dialect)}: this version compiles ${implemented.map((name) => JSON.stringify(name)).join(", ")}`,
+    );
+    this.name = "UnknownDialectError";
+    this.dialect = dialect;
+    this.implemented = implemented;
+  }
+}
+
+/**
  * A `columnFor` result whose `column` cannot be rendered as a SQL identifier.
  *
  * A column name is an identifier, not a value, so it is the one part of the emitted SQL that cannot be parameterised -- it has to be written into the statement text. It is always emitted double-quoted with any embedded quote doubled, which makes an arbitrary string safe, so this is not the injection defence; it rejects the two shapes that quoting cannot rescue into a valid identifier, an empty name and an empty dot-separated segment.

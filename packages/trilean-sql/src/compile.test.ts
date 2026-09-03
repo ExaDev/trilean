@@ -1,8 +1,13 @@
 import type { PredicateNode } from "trilean";
 import { describe, expect, it, vi } from "vitest";
 import { compilePredicateNode } from "./compile";
-import { InvalidColumnError, UnsupportedNodeError } from "./errors";
-import type { SqlCompileOptions } from "./options";
+import {
+  InvalidColumnError,
+  UnknownDialectError,
+  UnsupportedNodeError,
+} from "./errors";
+import { findUnpushableNodeKind } from "./guard";
+import type { SqlCompileOptions, SqlDialect } from "./options";
 import { sqliteSubjectOptions, subjectOptions } from "./test-support/columns";
 
 function compile(
@@ -603,5 +608,64 @@ describe("the sqlite dialect", () => {
   it("compiles an empty allOf and anyOf to the same identities", () => {
     expect(compileSqlite({ kind: "allOf", operands: [] }).sql).toBe("(TRUE)");
     expect(compileSqlite({ kind: "anyOf", operands: [] }).sql).toBe("(FALSE)");
+  });
+});
+
+describe("a dialect this version does not implement", () => {
+  // `SqlDialect` is closed, so this is what a caller reading the name from configuration and asserting it into the union at the boundary reaches -- the only way an unimplemented name gets this far, and the reason the assertion is here rather than in the source under test.
+  const unimplemented = "mysql" as SqlDialect;
+  const mysqlOptions: SqlCompileOptions = {
+    dialect: unimplemented,
+    columnFor: () => ({ column: "age", paramType: "number" }),
+  };
+
+  const anyTree: PredicateNode = {
+    kind: "compare",
+    op: "gt",
+    left: { kind: "reference", key: "age" },
+    right: { kind: "numberLiteral", value: ADULT_AGE },
+  };
+
+  it("is refused by name, not as an internal error from an empty table lookup", () => {
+    expect(() => compilePredicateNode(anyTree, mysqlOptions)).toThrow(
+      UnknownDialectError,
+    );
+    expect(() => compilePredicateNode(anyTree, mysqlOptions)).toThrow(
+      /unknown dialect "mysql": this version compiles "postgres", "sqlite"/,
+    );
+  });
+
+  it("carries the offending name and the implemented ones as fields", () => {
+    try {
+      compilePredicateNode(anyTree, mysqlOptions);
+      expect.unreachable("compiling an unimplemented dialect must throw");
+    } catch (error) {
+      expect(error).toBeInstanceOf(UnknownDialectError);
+      expect(error).toMatchObject({
+        dialect: "mysql",
+        implemented: ["postgres", "sqlite"],
+      });
+    }
+  });
+
+  it("is refused before the tree is walked, so the dialect is what gets reported", () => {
+    // A tree the guard would object to on its own. The dialect is the earlier problem and has to be the one named, since every refusal reason the walk could produce describes an engine that is not the one asked for.
+    expect(() =>
+      compilePredicateNode(
+        {
+          kind: "compare",
+          op: "eq",
+          left: { kind: "reference", key: "age" },
+          right: { kind: "numberLiteral", value: Number.NaN },
+        },
+        mysqlOptions,
+      ),
+    ).toThrow(UnknownDialectError);
+  });
+
+  it("never reports such a tree as pushable, which would promise a compilation that cannot happen", () => {
+    expect(() => findUnpushableNodeKind(anyTree, mysqlOptions)).toThrow(
+      UnknownDialectError,
+    );
   });
 });

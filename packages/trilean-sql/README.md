@@ -126,6 +126,8 @@ Two things a SQLite caller has to supply that a PostgreSQL caller does not, both
 - **A `REGEXP` function**, if the tree uses `matches` or `notMatches`. See [Regular expressions](#regular-expressions).
 - **Booleans bound as `0`/`1`.** SQLite has no boolean type, and drivers do not agree on whether a JS boolean is bindable at all — better-sqlite3 rejects one outright (*"SQLite3 can only bind numbers, strings, bigints, buffers, and null"*). `params` carries the tree's own literals unchanged in every dialect, so converting them is the binding caller's job: `params.map((v) => (typeof v === "boolean" ? Number(v) : v))`.
 
+A dialect this version does not implement is refused by name, from `compilePredicateNode` and `findUnpushableNodeKind` alike, with `UnknownDialectError`. `SqlDialect` is a closed union so TypeScript source cannot reach that, but a dialect read from configuration and asserted into the union at the boundary can, and reporting such a tree as pushable would promise a compilation that cannot happen.
+
 Instants are the one place to be deliberate rather than merely careful. SQLite has no timestamp type either, so an `instantLiteral` is compared as text against whatever text the column holds. Offset-bearing ISO-8601 in a single common offset (`2020-01-01T00:00:00Z`) sorts chronologically as a string and compares correctly; mixed offsets, or a format that is not ISO-8601, do not. This is the SQLite counterpart of the PostgreSQL session-time-zone caveat under [Refusal](#refusal), and the same advice resolves both.
 
 ## Refusal

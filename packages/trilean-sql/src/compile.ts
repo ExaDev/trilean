@@ -13,7 +13,7 @@ import type {
   SqlCompileOptions,
   SqlParamType,
 } from "./options";
-import { DIALECT_CONFIG } from "./options";
+import { assertImplementedDialect, DIALECT_CONFIG } from "./options";
 
 const COMPARISON_SQL: Readonly<Record<ComparisonOperator, string>> = {
   gt: ">",
@@ -217,6 +217,7 @@ function compilePredicate(
  *
  * Every caller-supplied literal becomes a bind parameter. Nothing but structure, operators, and quoted column identifiers is ever written into the returned `sql`.
  *
+ * @throws {UnknownDialectError} if `options.dialect` names a dialect this version does not implement.
  * @throws {UnsupportedNodeError} if any node in the tree is one this compiler will not translate -- see `findUnpushableNodeKind`, which this runs first and which a caller can run itself to choose between pushdown and in-process evaluation without provoking an exception.
  * @throws {InvalidColumnError} if `columnFor` returns a column that cannot be rendered as an identifier.
  */
@@ -224,6 +225,9 @@ export function compilePredicateNode(
   node: PredicateNode,
   options: Readonly<SqlCompileOptions>,
 ): CompiledSql {
+  // Before the walk rather than after it, so an unimplemented dialect is reported as itself rather than as whichever node the guard happened to object to first under another dialect's rules.
+  assertImplementedDialect(options.dialect);
+
   // `columnFor` is called by the guard walk and again while compiling, so it is memoised for the duration of one compilation -- a caller's mapping may be a lookup of real cost, and it must not matter how many times the compiler happens to ask.
   const bindings = new Map<string, SqlColumnBinding>();
   const memoised: SqlCompileOptions = {
