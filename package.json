@@ -1,0 +1,60 @@
+{
+  "name": "trilean-monorepo",
+  "private": true,
+  "description": "Workspace root for the trilean ecosystem. Never published -- it exists to hold the workspace, the task pipeline, the shared tooling configuration, and the release orchestration.",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExaDev/trilean.git"
+  },
+  "homepage": "https://github.com/ExaDev/trilean#readme",
+  "bugs": {
+    "url": "https://github.com/ExaDev/trilean/issues"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "pnpm@11.6.0",
+  "scripts": {
+    "build": "turbo run _build",
+    "lint": "turbo run _lint",
+    "_lint": "eslint . --fix --cache --max-warnings 0",
+    "typecheck": "turbo run _typecheck _typecheck:attw",
+    "_typecheck": "tsc -p tsconfig.json",
+    "test": "turbo run _test",
+    "test:coverage": "turbo run _test:coverage",
+    "test:integration": "turbo run _test:integration",
+    "test:smoke": "turbo run _test:smoke",
+    "test:workers": "turbo run _test:workers",
+    "prepush": "turbo run _prepush",
+    "release": "semantic-release-workspace release --config release-workspace.config.ts",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^21.2.2",
+    "@commitlint/config-conventional": "^21.2.2",
+    "@eslint/js": "^10.0.1",
+    "@exadev/eslint-config": "^2.10.2",
+    "@exadev/semantic-release-workspace": "^1.2.1",
+    "@semantic-release/changelog": "^7.0.0",
+    "@semantic-release/commit-analyzer": "^13.0.1",
+    "@semantic-release/git": "^11.0.1",
+    "@semantic-release/github": "^12.0.9",
+    "@semantic-release/npm": "^13.1.5",
+    "@semantic-release/release-notes-generator": "^14.1.1",
+    "@types/node": "^26.4.0",
+    "conventional-changelog-conventionalcommits": "^10.4.0",
+    "eslint": "^10.9.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.6",
+    "globals": "^17.11.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.4.1",
+    "prettier": "^3.9.6",
+    "semantic-release": "^25.0.9",
+    "turbo": "^2.10.12",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.68.0"
+  }
+}
