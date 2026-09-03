@@ -188,7 +188,7 @@ These hold across every part of the design below, and any implementation change 
 
 - **No assumptions about consumer data.** The only places this package touches real data are three named resolver contracts (see [Resolvers](#resolvers)). The schema stores *what to pass* to a resolver, never any resolver logic itself, and never interprets the meaning of an opaque key, table identifier, or collection reference.
 - **Three outcomes, never two.** Every evaluation produces a definite result or an indeterminate result carrying a reason — never a bare `boolean`/`number`, and never a thrown exception for a data-quality problem. See [The evaluation model](#the-evaluation-model).
-- **Derived constructs are compositions, not new logic.** Anything describable as "some other primitive, wired together" is implemented that way, so its correctness is inherited rather than requiring separate proof. See [Derived connectives](#derived-connectives), [Derived aggregates](#derived-aggregates), [Derived values](#derived-values), and [Defining your own named presets](#defining-your-own-named-presets).
+- **Derived constructs are compositions, not new logic.** Anything describable as "some other primitive, wired together" is implemented that way, so its correctness is inherited rather than requiring separate proof. See [Derived connectives](#derived-connectives), [Derived aggregates](#derived-aggregates), [Derived values](#derived-values), [Pattern-matching builders](#pattern-matching-builders), and [Defining your own named presets](#defining-your-own-named-presets).
 - **One schema, mechanically derived artefacts.** A single canonical type definition produces the runtime validator and the portable wire-format schema; they cannot drift apart because there is only one source. See [Schema strategy](#schema-strategy).
 - **A numeric extension that stays closed-form is in scope; a different kind of computation is not.** When something the current numeric model does not cover comes up, the test is whether evaluating it is still closed-form numeric evaluation — no solving, no simplification, no code execution. If it is, it belongs here, however unlike the existing kinds it looks: [Complex values](#complex-values) were once listed under [Out of scope](#out-of-scope) on a sizing judgement that turned out to be wrong, since complex arithmetic is exactly the closed-form evaluation this evaluator already does for every other kind. What stays behind [`delegate`](#delegate) is a genuinely different *kind* of computation — symbolic algebra, arbitrary external computation — not merely a kind of number the model has not reached yet.
 - **Generic examples only.** Every example in this document uses invented, placeholder field names (`temperature`, `orderTotal`, `isActive`, `x`, `y`, `amount`, `items`) with no resemblance to any particular company, product, or industry's real data model.
@@ -373,6 +373,38 @@ A relational-comparison leaf: compares two computed values using `gt`/`gte`/`lt`
 ### `textCompare`
 
 A text-matching leaf, symmetric in the same way as `compare`: both `left` and `right` are `ExpressionNode`, and either may be a literal or an arbitrary formula. `equals`/`notEquals` are exact string equality; `matches`/`notMatches` interpret `right` as a pattern (an ECMAScript-style regular expression) tested against `left`'s text. Both operands must resolve to the `text` computed-value kind; anything else is `wrong-type`. A "small fixed category" value (e.g. a status label) is simply a `text` computed value from this leaf's point of view — no separate category kind exists.
+
+### Pattern-matching builders
+
+`matches` already covers arbitrary pattern matching, but writing the regular expression by hand is where the common, narrower cases go wrong: getting the escape-then-convert ordering backwards either stops wildcards working or silently reinterprets a literal asterisk in real data as one. Three builder functions compile a pattern string into an ordinary `textCompare` node instead — never a new node kind, never an evaluator branch, exactly the same composition-not-new-logic treatment [Derived connectives](#derived-connectives), [Derived aggregates](#derived-aggregates), and [Derived values](#derived-values) already give `xor`/`sum`/`coalesce`:
+
+```ts
+const command: ExpressionNode = { kind: "reference", key: "command" };
+const path: ExpressionNode = { kind: "reference", key: "path" };
+
+// Matches "ls" and "ls -la", never "lsof".
+prefixPattern(command, "ls");
+// Matches "git add file" and, by the trailing-wildcard convenience below, bare "git".
+wildcardPattern(command, "git *");
+// Matches "workspace/report.txt", but not "workspace/archive/report.txt".
+hierarchicalGlobPattern(path, "workspace/*");
+```
+
+Each returns an ordinary predicate node — `prefixPattern(command, "ls")` is exactly `{ kind: "textCompare", op: "matches", left: command, right: { kind: "textLiteral", value: "^ls(?: [\\s\\S]*)?$" } }`. Compilation happens once, when the tree is built, so what is stored and serialised is a `textCompare` tree indistinguishable from one written out by hand — a consumer that never calls a builder loses nothing, and a serialised tree carries no dependency on the builder that produced it.
+
+The three are separate dialects, deliberately not one function with a mode argument, because they answer different questions and mixing them silently changes what a pattern means:
+
+| Builder | `*` | `**` | `?` | Escapes | Intended for |
+|---|---|---|---|---|---|
+| `prefixPattern` | literal | literal | literal | none — the prefix is a plain literal throughout | Command/label prefixes where `"ls"` must match `"ls"` and `"ls -la"` but never `"lsof"` |
+| `wildcardPattern` | any characters | (two wildcards in a row) | literal | `\*` for a literal asterisk, `\\` for a literal backslash | Flat strings with no internal hierarchy |
+| `hierarchicalGlobPattern` | any characters within one `/`-delimited segment | any characters across segments | one character within a segment | none — a backslash is a literal backslash | Path- or category-tree-shaped values |
+
+Two behaviours in `wildcardPattern` are worth stating rather than leaving to be inferred. Its pattern is trimmed before compiling. And a pattern whose **only** unescaped wildcard is a trailing `" *"` also matches the bare prefix, so `"git *"` matches `"git"` as well as `"git add file"` — the convenience does not apply to `"git * *"`, where both wildcards are still required.
+
+The compiled pattern is a fully anchored, flag-free string: "any character" is spelled `[\s\S]` rather than `.`, because the stored pattern carries no `s` flag and nothing downstream can add one, and the only characters escaped are ECMAScript's own `SyntaxCharacter` set plus `/`, which are exactly the escapes that stay valid under a `u`/`v`-flagged `RegExp` as well as an unflagged one. A compiled pattern is therefore portable in the strongest available sense — it means the same thing wherever it is compiled, including pasted verbatim into a `/.../` literal.
+
+Three-valued behaviour is inherited unchanged from [`textCompare`](#textcompare) and needs no separate proof: an unresolvable subject is indeterminate rather than a non-match, and a non-`text` subject is `wrong-type` — a compiled pattern never turns a data problem into a definite `false`.
 
 ### `memberOf`
 

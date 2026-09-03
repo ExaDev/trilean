@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { coalesce } from "../../src/derived-values";
+import {
+  hierarchicalGlobPattern,
+  prefixPattern,
+  wildcardPattern,
+} from "../../src/derived-patterns";
 import { evaluatePredicate, evaluateValue } from "../../src/evaluator";
 import {
   goldenExampleData,
@@ -410,5 +415,58 @@ describe("treeReference, conditional's 'unique' hit policy, and coalesce under w
       status: "definite",
       value: { kind: "number", value: 0.05 },
     });
+  });
+});
+
+/**
+ * The three pattern builders compile a pattern string to a regular-expression string and nothing else -- no Node API is involved even indirectly -- but "no Node API is involved" is exactly the kind of claim this tier exists to turn from an assertion into a runtime-checked fact, so the compiled output is matched here under workerd rather than only under Vitest's own Node-hosted unit project.
+ */
+describe("pattern-matching builders under workerd", () => {
+  const patternResolvers: Resolvers = {
+    resolveValue: async (key, context) =>
+      Promise.resolve(
+        key === "subject" && typeof context === "string"
+          ? { found: true, value: { kind: "text", value: context } }
+          : { found: false },
+      ),
+    resolveLookup: async () => Promise.resolve({ found: false }),
+    resolveCollection: async () => Promise.resolve([]),
+  };
+
+  const subject: ExpressionNode = { kind: "reference", key: "subject" };
+
+  it("prefixPattern enforces a word boundary rather than a bare startsWith", async () => {
+    const tree = prefixPattern(subject, "ls");
+    expect(await evaluatePredicate(tree, "ls -la", patternResolvers)).toEqual({
+      status: "definite",
+      value: true,
+    });
+    expect(await evaluatePredicate(tree, "lsof", patternResolvers)).toEqual({
+      status: "definite",
+      value: false,
+    });
+  });
+
+  it("wildcardPattern keeps an escaped asterisk literal while an unescaped one still wildcards", async () => {
+    const tree = wildcardPattern(subject, String.raw`\**`);
+    expect(await evaluatePredicate(tree, "*beta", patternResolvers)).toEqual({
+      status: "definite",
+      value: true,
+    });
+    expect(await evaluatePredicate(tree, "beta", patternResolvers)).toEqual({
+      status: "definite",
+      value: false,
+    });
+  });
+
+  it("hierarchicalGlobPattern distinguishes one segment from every segment", async () => {
+    const single = hierarchicalGlobPattern(subject, "workspace/*");
+    const across = hierarchicalGlobPattern(subject, "workspace/**");
+    expect(
+      await evaluatePredicate(single, "workspace/a/b", patternResolvers),
+    ).toEqual({ status: "definite", value: false });
+    expect(
+      await evaluatePredicate(across, "workspace/a/b", patternResolvers),
+    ).toEqual({ status: "definite", value: true });
   });
 });
