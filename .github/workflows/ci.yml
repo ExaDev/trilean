@@ -172,9 +172,8 @@ jobs:
       pull-requests: write # to comment on released pull requests
       id-token: write # OIDC identity for npm trusted publishing (no NPM_TOKEN)
     outputs:
-      released: ${{ steps.released.outputs.released }}
-      version: ${{ steps.released.outputs.version }}
-      tag: ${{ steps.released.outputs.tag }}
+      # A JSON array of every package this run released -- [{name, version, tag}, ...], [] when nothing released. An empty include list makes a consuming matrix job's own matrix invalid rather than skipping it, so every downstream job's `if:` checks this against '[]' explicitly rather than relying on the matrix alone.
+      matrix: ${{ steps.released.outputs.matrix }}
     steps:
       # main's ruleset requires every change to land via a pull request, and the default GITHUB_TOKEN has no bypass for that -- the orchestrator's release commit is a direct push to main, so it needs a token from an actor the ruleset explicitly allows through instead. The org-wide "exadev" GitHub App is that actor, added as an Integration bypass_actor on this repo's ruleset.
       - name: Generate a token for the release push
@@ -213,25 +212,32 @@ jobs:
           NODE_AUTH_TOKEN: ""
       - name: Collect what this run released
         id: released
-        # The post-release jobs below mirror and attest the one published package, so they need its tag and version rather than a matrix. A tag that appeared during the release step and names this package is that record; nothing new means nothing released, and every downstream job skips.
+        # Builds the one matrix every post-release job below fans out over: one leg per package this run actually released. A new `name@version` tag is the record of a real release -- diffing tags across the release step, not grepping for one hardcoded package name, is what makes this generic across however many packages the workspace holds. `name` is everything before the tag's last `@`, matching how the orchestrator names its tags; the package.json at packages/$name is where the version comes from, since the orchestrator has already committed the released version by the time this step runs.
         run: |
           git ls-remote --tags origin | sed 's|.*refs/tags/||' | grep -v '\^{}' | sort > "$RUNNER_TEMP/release-tags-after.txt"
-          TAG=$(comm -13 "$RUNNER_TEMP/release-tags-before.txt" "$RUNNER_TEMP/release-tags-after.txt" | grep '^trilean@' || true)
-          if [ -z "$TAG" ]; then
-            echo "released=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::No new trilean tag; nothing was released by this run."
-            exit 0
+          comm -13 "$RUNNER_TEMP/release-tags-before.txt" "$RUNNER_TEMP/release-tags-after.txt" > "$RUNNER_TEMP/release-tags-new.txt"
+          MATRIX='[]'
+          while read -r TAG; do
+            [ -n "$TAG" ] || continue
+            NAME=${TAG%@*}
+            PKG="packages/$NAME"
+            if [ ! -f "$PKG/package.json" ]; then
+              echo "::warning::tag $TAG has no package at $PKG; skipping every post-release step for it"
+              continue
+            fi
+            VERSION=$(jq -r '.version' "$PKG/package.json")
+            MATRIX=$(echo "$MATRIX" | jq -c --arg name "$NAME" --arg version "$VERSION" --arg tag "$TAG" \
+              '. + [{name: $name, version: $version, tag: $tag}]')
+          done < "$RUNNER_TEMP/release-tags-new.txt"
+          if [ "$MATRIX" = "[]" ]; then
+            echo "::notice::No new package tag; nothing was released by this run."
           fi
-          {
-            echo "released=true"
-            echo "tag=$TAG"
-            echo "version=${TAG##*@}"
-          } >> "$GITHUB_OUTPUT"
+          echo "matrix=$MATRIX" >> "$GITHUB_OUTPUT"
 
   notify-hive:
     name: Notify novus-power/hive
     needs: release
-    if: needs.release.outputs.released == 'true'
+    if: needs.release.outputs.matrix != '[]'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
@@ -247,19 +253,30 @@ jobs:
           owner: novus-power
           repositories: |
             hive
-      - name: Dispatch sibling-released event to novus-power/hive
+      - name: Dispatch a sibling-released event per released package
+        # A single job looping the matrix, not `strategy: matrix` -- this is one lightweight API call per package, not a job worth a whole runner each. hive's own instant-update receiver filters this down to whichever package(s) it actually depends on, so every released package is dispatched unfiltered rather than hardcoding which one hive currently uses -- hive picking up a dependency on another package in this workspace later needs no change here.
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          RELEASE_MATRIX: ${{ needs.release.outputs.matrix }}
         run: |
-          gh api "repos/novus-power/hive/dispatches" \
-            -f event_type=sibling-released \
-            -F "client_payload[package]=trilean" \
-            -F "client_payload[version]=${{ needs.release.outputs.version }}"
+          echo "$RELEASE_MATRIX" | jq -c '.[]' | while read -r pkg; do
+            name=$(echo "$pkg" | jq -r .name)
+            version=$(echo "$pkg" | jq -r .version)
+            gh api "repos/novus-power/hive/dispatches" \
+              -f event_type=sibling-released \
+              -F "client_payload[package]=$name" \
+              -F "client_payload[version]=$version"
+          done
 
   publish-github-packages:
-    name: Publish mirror to GitHub Packages
+    name: Publish mirror to GitHub Packages (${{ matrix.name }})
     needs: release
-    if: needs.release.outputs.released == 'true'
+    if: needs.release.outputs.matrix != '[]'
+    strategy:
+      # An empty include list is an invalid matrix, not a job skip -- the `if:` above is what actually prevents this job running when nothing released; by the time the matrix itself is evaluated, needs.release.outputs.matrix is guaranteed non-empty.
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.release.outputs.matrix) }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
@@ -271,8 +288,8 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          # The tag, not main: a queued release run could have pushed further commits and tags to main between this run's release job finishing and this job starting, and the tag points at the exact release commit whose packages/trilean is the released state.
-          ref: ${{ needs.release.outputs.tag }}
+          # This leg's own tag, not main: a queued release run could have pushed further commits and tags to main between this run's release job finishing and this job starting, and the tag points at the exact release commit whose packages/<name> is the released state.
+          ref: ${{ matrix.tag }}
       - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v7
         with:
@@ -282,26 +299,30 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
       - name: Rewrite the package name for the GitHub Packages mirror
-        # trilean itself stays unscoped on npmjs.org (see the package's own "name"), but GitHub Packages' npm registry structurally requires every package it hosts to be scoped to the owning org -- an unscoped `trilean` publish there is rejected outright. This job's own package.json rewrite (never committed -- it runs against the checkout's working tree only) is what lets the same build ship under both names without the primary npm publish ever carrying the @exadev scope.
-        working-directory: packages/trilean
-        run: npm pkg set name="@exadev/trilean"
+        # Every package in this workspace stays unscoped on npmjs.org (see each package's own "name"), but GitHub Packages' npm registry structurally requires every package it hosts to be scoped to the owning org -- an unscoped publish there is rejected outright. This job's own package.json rewrite (never committed -- it runs against the checkout's working tree only) is what lets the same build ship under both names without the primary npm publish ever carrying the @exadev scope.
+        working-directory: packages/${{ matrix.name }}
+        run: npm pkg set name="@exadev/${{ matrix.name }}"
       - name: Rewrite the registry for the GitHub Packages mirror
         # publishConfig.registry has to be overridden explicitly: without it, pnpm publish would target registry.npmjs.org -- the registry the primary, unscoped npm publish already used in the release job above -- instead of GitHub Packages.
-        working-directory: packages/trilean
+        working-directory: packages/${{ matrix.name }}
         run: npm pkg set publishConfig.registry="https://npm.pkg.github.com"
       - name: Drop provenance for the GitHub Packages mirror
         # npm honours publishConfig.provenance against whatever registry it is publishing to, and signing a provenance statement needs an OIDC token this job deliberately holds no permission to mint -- so leaving the field set fails the publish outright with 'Provenance generation in GitHub Actions requires "write" access to the "id-token" permission', before a single byte is uploaded. Granting that permission is not the fix: sigstore provenance is an npmjs.org feature GitHub Packages does not host, so the mirror would be signing an attestation none of its consumers could ever resolve. The primary npm publish in the release job above keeps provenance, which is where it means something.
-        working-directory: packages/trilean
+        working-directory: packages/${{ matrix.name }}
         run: npm pkg delete publishConfig.provenance
       - name: Configure the GitHub Packages auth token for publish only
         run: echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> ~/.npmrc
-      - working-directory: packages/trilean
+      - working-directory: packages/${{ matrix.name }}
         run: pnpm publish --access public --no-git-checks
 
   attest-npm:
-    name: Attest SBOM and build provenance (npm)
+    name: Attest SBOM and build provenance (npm, ${{ matrix.name }})
     needs: release
-    if: needs.release.outputs.released == 'true'
+    if: needs.release.outputs.matrix != '[]'
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.release.outputs.matrix) }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
@@ -311,7 +332,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: ${{ needs.release.outputs.tag }} # the release commit the orchestrator tagged, not whatever main has moved on to by now
+          ref: ${{ matrix.tag }} # this leg's own release commit the orchestrator tagged, not whatever main has moved on to by now
       - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v7
         with:
@@ -320,24 +341,28 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
       # Pack into a directory of its own, separate from dist/ (tsdown's raw build output). The attestation subject has to be the artefact that actually ships -- attesting dist/ itself would mix in files that never leave the repo, producing digests that match nothing a consumer can download.
-      - working-directory: packages/trilean
+      - working-directory: packages/${{ matrix.name }}
         run: pnpm pack --pack-destination release-artifact
-      - working-directory: packages/trilean
+      - working-directory: packages/${{ matrix.name }}
         run: pnpm sbom --sbom-format spdx --prod > release-artifact/sbom.spdx.json
       - name: Attest SBOM
         uses: actions/attest@v4
         with:
-          subject-path: packages/trilean/release-artifact/*.tgz
-          sbom-path: packages/trilean/release-artifact/sbom.spdx.json
+          subject-path: packages/${{ matrix.name }}/release-artifact/*.tgz
+          sbom-path: packages/${{ matrix.name }}/release-artifact/sbom.spdx.json
       - name: Attest build provenance
         uses: actions/attest@v4
         with:
-          subject-path: packages/trilean/release-artifact/*.tgz
+          subject-path: packages/${{ matrix.name }}/release-artifact/*.tgz
 
   attest-github-packages:
-    name: Attest SBOM and build provenance (GitHub Packages)
+    name: Attest SBOM and build provenance (GitHub Packages, ${{ matrix.name }})
     needs: release
-    if: needs.release.outputs.released == 'true'
+    if: needs.release.outputs.matrix != '[]'
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.release.outputs.matrix) }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
@@ -347,7 +372,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: ${{ needs.release.outputs.tag }} # the release commit the orchestrator tagged, not whatever main has moved on to by now
+          ref: ${{ matrix.tag }} # this leg's own release commit the orchestrator tagged, not whatever main has moved on to by now
       - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v7
         with:
@@ -357,18 +382,18 @@ jobs:
       - run: pnpm build
       # The GitHub Packages mirror ships under a different name (see publish-github-packages) and is therefore a genuinely different artefact from the one attest-npm covers above -- attesting only the unscoped tarball would leave the scoped mirror with no provenance a consumer could verify. This job's own attest@v4 attestations land in this repository's own attestation store regardless of which registry the tarball is later published to, so no id-token/OIDC conflict with publish-github-packages' own npm-registry auth exists here.
       - name: Rewrite the package name to match the GitHub Packages mirror
-        working-directory: packages/trilean
-        run: npm pkg set name="@exadev/trilean"
-      - working-directory: packages/trilean
+        working-directory: packages/${{ matrix.name }}
+        run: npm pkg set name="@exadev/${{ matrix.name }}"
+      - working-directory: packages/${{ matrix.name }}
         run: pnpm pack --pack-destination release-artifact
-      - working-directory: packages/trilean
+      - working-directory: packages/${{ matrix.name }}
         run: pnpm sbom --sbom-format spdx --prod > release-artifact/sbom.spdx.json
       - name: Attest SBOM
         uses: actions/attest@v4
         with:
-          subject-path: packages/trilean/release-artifact/*.tgz
-          sbom-path: packages/trilean/release-artifact/sbom.spdx.json
+          subject-path: packages/${{ matrix.name }}/release-artifact/*.tgz
+          sbom-path: packages/${{ matrix.name }}/release-artifact/sbom.spdx.json
       - name: Attest build provenance
         uses: actions/attest@v4
         with:
-          subject-path: packages/trilean/release-artifact/*.tgz
+          subject-path: packages/${{ matrix.name }}/release-artifact/*.tgz
