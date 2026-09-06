@@ -47,7 +47,8 @@
   },
   "license": "MIT",
   "dependencies": {
-    "trilean": "workspace:^"
+    "trilean": "workspace:^",
+    "trilean-regex": "workspace:^"
   },
   "scripts": {
     "build": "turbo run _build",

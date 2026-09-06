@@ -386,6 +386,83 @@ describe("textCompare", () => {
   });
 });
 
+/**
+ * The equivalence claim `portableMatches`/`portableNotMatches` exist for, measured against real SQLite: compile a tree using a `trilean-regex` pattern, execute the translated `GLOB` wildcard against a real connection, and compare against `trilean-regex`'s own NFA matcher (via `evaluatePredicate`), not against `matches`/`notMatches`'s ECMAScript path. Unlike the `matches` suite above, no function registration is needed: `GLOB` is a core SQLite feature, which is the whole point of a portable grammar existing for this dialect at all.
+ *
+ * Every pattern below is deliberately within the reachable subset `portable-pattern.ts` documents (a literal run, `.`, a star of `.`, an edge anchor, a safe character class) -- a pattern outside it is refused by the guard before compilation, which `guard.test.ts`/`compile.test.ts` already cover as unit tests; this file measures only what a *pushed-down* fragment actually does once it reaches a real engine.
+ */
+describe("portableMatches/portableNotMatches (trilean-regex, translated to a GLOB wildcard)", () => {
+  it("matches a start-anchored literal prefix", async () => {
+    await expect(
+      agreeingRows({
+        kind: "textCompare",
+        op: "portableMatches",
+        left: { kind: "reference", key: "name" },
+        right: { kind: "textLiteral", value: "^gr" },
+      }),
+    ).resolves.toEqual(["grace"]);
+  });
+
+  it("matches an end-anchored literal suffix", async () => {
+    await expect(
+      agreeingRows({
+        kind: "textCompare",
+        op: "portableMatches",
+        left: { kind: "reference", key: "name" },
+        right: { kind: "textLiteral", value: "a$" },
+      }),
+    ).resolves.toEqual(["ada"]);
+  });
+
+  it("matches '.' as exactly one wildcard character", async () => {
+    await expect(
+      agreeingRows({
+        kind: "textCompare",
+        op: "portableMatches",
+        left: { kind: "reference", key: "name" },
+        right: { kind: "textLiteral", value: "^a.a$" },
+      }),
+    ).resolves.toEqual(["ada"]);
+  });
+
+  it("matches a safe, non-negated character class", async () => {
+    await expect(
+      agreeingRows({
+        kind: "textCompare",
+        op: "portableMatches",
+        left: { kind: "reference", key: "name" },
+        right: { kind: "textLiteral", value: "^[ag]" },
+      }),
+    ).resolves.toEqual(["ada", "grace"]);
+  });
+
+  it("portableNotMatches is the negation, and still leaves an unresolved name unknown", async () => {
+    await expect(
+      agreeingRows({
+        kind: "textCompare",
+        op: "portableNotMatches",
+        left: { kind: "reference", key: "name" },
+        right: { kind: "textLiteral", value: "^a" },
+      }),
+    ).resolves.toEqual(["grace", "lin"]);
+  });
+
+  it("fails to compile rather than answering wrongly when the pattern is outside GLOB's reachable subset", () => {
+    // No query is ever executed here -- unlike the REGEXP case above, this is a compile-time refusal (the guard's, run by compilePredicateNode itself), not a runtime one. Included in this file rather than only as a unit test to state plainly, next to the fragments that do compile, which shapes do not.
+    expect(() =>
+      compilePredicateNode(
+        {
+          kind: "textCompare",
+          op: "portableMatches",
+          left: { kind: "reference", key: "name" },
+          right: { kind: "textLiteral", value: "ada|grace" },
+        },
+        sqliteSubjectOptions,
+      ),
+    ).toThrow(/GLOB has no alternation operator/);
+  });
+});
+
 describe("memberOf", () => {
   it("matches a candidate list", async () => {
     await expect(

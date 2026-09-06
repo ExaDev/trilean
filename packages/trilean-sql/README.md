@@ -102,7 +102,7 @@ Passing `options` widens the check: without them the walk is purely structural; 
 | `and`, `or`, `not` | `AND`, `OR`, `NOT` | same |
 | `allOf`, `anyOf` | n-ary `AND`, `OR`; empty operands become each connective's identity, `TRUE` and `FALSE`, matching the evaluator's own fold | same |
 | `compare` | `>`, `>=`, `<`, `<=`, `=`, `<>` | same |
-| `textCompare` | `=`, `<>`; `matches`/`notMatches` only once `postgresRegexpPushdown` opts in, otherwise refused (see [Regular expressions](#regular-expressions)) | `=`, `<>`, and `REGEXP` / `NOT REGEXP` |
+| `textCompare` | `=`, `<>`; `matches`/`notMatches` only once `postgresRegexpPushdown` opts in, otherwise refused (see [Regular expressions](#regular-expressions)); `~`/`!~` against a translated pattern for `portableMatches`/`portableNotMatches`, no opt-in needed | `=`, `<>`; `REGEXP`/`NOT REGEXP` for `matches`/`notMatches`; `GLOB`/`NOT GLOB` against a translated pattern for `portableMatches`/`portableNotMatches` |
 | `memberOf` | `IN` / `NOT IN`, one parameter per candidate | same |
 | `exists` | `IS NOT NULL` | same |
 | `reference` | the mapped column, as a quoted identifier | same |
@@ -190,6 +190,32 @@ db.function("regexp", (pattern, text) =>
 Both details are load-bearing rather than stylistic. Returning `null` for a NULL argument is what keeps the third value intact: SQLite does not propagate NULL through a user function on its own, so one answering `0` for a NULL value would make `NOT REGEXP` answer `TRUE` for a row whose value is unknown — the two-valued collapse this package exists to avoid. Returning `1`/`0` rather than a JS boolean is what better-sqlite3 accepts; a boolean is rejected from a user function (*"returned an invalid value"*) for the same reason it is rejected as a bound parameter.
 
 Some SQLite-wire-compatible targets have no way to register a function at all — Cloudflare D1's Workers Binding API is the motivating case, with no hook for it in its API and [cloudflare/workers-sdk#2802](https://github.com/cloudflare/workers-sdk/issues/2802) still open. Against a target like that, the registration above is simply not possible, and compiling `matches`/`notMatches` to `REGEXP`/`NOT REGEXP` anyway produces SQL that always fails at query execution with `no such function: REGEXP` rather than failing at compile time the way every other unpushable shape does. Set `sqliteRegexpAvailable: false` in `SqlCompileOptions` for a target like this, and the SQLite dialect refuses `matches`/`notMatches` with `UnsupportedNodeError` — and `findUnpushableNodeKind` reports them unpushable — at compile time instead, so the caller falls back to in-process evaluation the same way it would for any other unpushable node. It defaults to `true`, so a caller with a registered function (better-sqlite3, say) sees no change. It has no effect under the `postgres` dialect, which never needs a registered function in the first place.
+
+`portableMatches`/`portableNotMatches` below need neither flag: D1 is exactly the target `GLOB` was chosen for, since it needs no function registration at all, and PostgreSQL's own translation is proven equivalent by this package's integration tests rather than passed through and hoped to be portable, so there is no divergence for `postgresRegexpPushdown` to gate.
+
+## `portableMatches`/`portableNotMatches`
+
+`matches`/`notMatches` above carry a real cost: PostgreSQL's advanced regular expressions and ECMAScript's are close but not identical languages, and SQLite has no regular-expression support to push down to at all, `REGEXP` registration notwithstanding. [`trilean-regex`](https://www.npmjs.com/package/trilean-regex) exists to close both gaps with a small grammar that is a true regular language — no backreferences, no lookaround — and `portableMatches`/`portableNotMatches` are the two `textCompare` operators that use it instead of native regex syntax.
+
+The pattern (`textCompare`'s `right` operand) must be a **compile-time literal** — a bare `textLiteral`, never a column reference or a computed expression. This is a structural requirement, not a stylistic preference: translating a pattern into a dialect's own syntax happens once, in JavaScript, while `compilePredicateNode` runs, and there is nothing to translate if the pattern is only known per row at query time. A non-literal pattern is refused by the guard with a reason naming this directly, the same as any other unpushable shape.
+
+**PostgreSQL** translates the parsed pattern into PostgreSQL's own Advanced Regular Expression syntax and binds it to `~`/`!~` — the same operators `matches`/`notMatches` already use, but now matched against a pattern PostgreSQL itself defines the syntax of, rather than one written for ECMAScript and hoped to be close enough. Every construct in `trilean-regex`'s grammar translates structurally (confirmed against a real PostgreSQL 17 server in `test/integration/postgres.test.ts`, including `.`, whose default newline-matching behaviour agrees with `trilean-regex`'s own despite reading otherwise from PostgreSQL's prose documentation alone). The one genuine limit is PostgreSQL's own: a bounded repetition (`{n}`/`{n,m}`) whose bound exceeds 255 has no PostgreSQL-native equivalent and is refused.
+
+**SQLite** translates the pattern into a `GLOB` wildcard pattern and binds it to `GLOB`/`NOT GLOB` — a core SQLite feature needing no function registration, which is the whole reason a portable grammar is worth having for this dialect at all. `GLOB`'s wildcard vocabulary is much narrower than a regular language, though, so only a reachable subset translates: literal runs, `.` as `?`, a star of `.` as `*`, an anchor at the very start/end of the whole pattern (translated into a leading/trailing `*` standing in for "the rest, unconstrained," reproducing `portableMatches`'s own substring-search default), and a character class that is neither negated nor contains `]`/`^`/`-`/`[` as a member (SQLite's own documentation does not confirm an escape mechanism for those inside a bracket expression, so this compiler does not guess at one). Alternation, bounded/optional/one-or-more repetition, and anything using an unsafe class member are refused, falling back to in-process evaluation. `LIKE` is never used as a target even for the wildcard shapes it could express: it is case-insensitive for ASCII by default, while `trilean-regex` matching is always case-sensitive; `GLOB` matches that exactly.
+
+```ts
+const { sql, params } = compilePredicateNode(
+  {
+    kind: "textCompare",
+    op: "portableMatches",
+    left: { kind: "reference", key: "code" },
+    right: { kind: "textLiteral", value: "^ENA-[0-9].*$" },
+  },
+  { dialect: "sqlite", columnFor },
+);
+// sql:    ("code" GLOB ?)
+// params: ["ENA-[0-9]*"]
+```
 
 ## Tests
 

@@ -303,6 +303,74 @@ describe("operand kinds trilean and PostgreSQL would answer differently", () => 
     ).toMatchObject({ kind: "textCompare", path: "$" });
   });
 
+  it("allows a portableMatches pattern within both dialects' reachable subsets", () => {
+    expect(
+      findUnpushableNodeKind(
+        {
+          kind: "textCompare",
+          op: "portableMatches",
+          left: { kind: "reference", key: "name" },
+          right: { kind: "textLiteral", value: "^a.*c$" },
+        },
+        subjectOptions,
+      ),
+    ).toBeUndefined();
+    expect(
+      findUnpushableNodeKind(
+        {
+          kind: "textCompare",
+          op: "portableMatches",
+          left: { kind: "reference", key: "name" },
+          right: { kind: "textLiteral", value: "^a.*c$" },
+        },
+        sqliteSubjectOptions,
+      ),
+    ).toBeUndefined();
+  });
+
+  it("refuses a portableMatches pattern that is not a compile-time literal", () => {
+    const result = findUnpushableNodeKind(
+      {
+        kind: "textCompare",
+        op: "portableMatches",
+        left: { kind: "reference", key: "name" },
+        right: { kind: "reference", key: "note" },
+      },
+      subjectOptions,
+    );
+    expect(result).toMatchObject({ kind: "textCompare", path: "$" });
+    expect(result?.reason).toContain(
+      "must be a literal, known at compile time",
+    );
+  });
+
+  it("refuses a portableMatches pattern that is not valid trilean-regex syntax", () => {
+    expect(
+      findUnpushableNodeKind(
+        {
+          kind: "textCompare",
+          op: "portableMatches",
+          left: { kind: "reference", key: "name" },
+          right: { kind: "textLiteral", value: "(a)" },
+        },
+        subjectOptions,
+      ),
+    ).toMatchObject({ kind: "textCompare", path: "$.right" });
+  });
+
+  it("refuses a portableMatches pattern outside SQLite's GLOB-reachable subset, but allows the identical pattern for PostgreSQL", () => {
+    const alternation = {
+      kind: "textCompare" as const,
+      op: "portableMatches" as const,
+      left: { kind: "reference" as const, key: "name" },
+      right: { kind: "textLiteral" as const, value: "cat|dog" },
+    };
+    expect(
+      findUnpushableNodeKind(alternation, sqliteSubjectOptions),
+    ).toMatchObject({ kind: "textCompare", path: "$.right" });
+    expect(findUnpushableNodeKind(alternation, subjectOptions)).toBeUndefined();
+  });
+
   it("refuses a memberOf whose candidates are not all of the operand's kind", () => {
     expect(
       findUnpushableNodeKind(
