@@ -10,7 +10,10 @@ import { evaluatePredicate } from "trilean";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { compilePredicateNode } from "../../src/compile";
 import type { SqlCompileOptions } from "../../src/options";
-import { subjectOptions } from "../../src/test-support/columns";
+import {
+  subjectOptions,
+  subjectOptionsWithPostgresRegexp,
+} from "../../src/test-support/columns";
 
 /**
  * The same measured claim as `postgres.test.ts`, against PGlite instead of a server in a container.
@@ -132,8 +135,11 @@ afterAll(async () => {
   await db.close();
 });
 
-async function selectMatching(node: PredicateNode): Promise<string[]> {
-  const compiled = compilePredicateNode(node, subjectOptions);
+async function selectMatching(
+  node: PredicateNode,
+  options: Readonly<SqlCompileOptions> = subjectOptions,
+): Promise<string[]> {
+  const compiled = compilePredicateNode(node, options);
   const result = await db.query<{ id: string }>(
     `SELECT id FROM subjects WHERE ${compiled.sql} ORDER BY id`,
     compiled.params,
@@ -156,10 +162,13 @@ async function evaluatorMatching(node: PredicateNode): Promise<string[]> {
   return matched.sort();
 }
 
-/** Runs the tree both ways and asserts they agree, then hands back the row set so a case can also state what that set should be. Agreement alone would be satisfied by both being wrong in the same way, so every caller asserts the expected ids too. */
-async function agreeingRows(node: PredicateNode): Promise<string[]> {
+/** Runs the tree both ways and asserts they agree, then hands back the row set so a case can also state what that set should be. Agreement alone would be satisfied by both being wrong in the same way, so every caller asserts the expected ids too. `options` defaults to `subjectOptions`; a case exercising `matches`/`notMatches` passes `subjectOptionsWithPostgresRegexp`, since pushdown of those two is refused by default. */
+async function agreeingRows(
+  node: PredicateNode,
+  options: Readonly<SqlCompileOptions> = subjectOptions,
+): Promise<string[]> {
   const [viaSql, viaEvaluator] = await Promise.all([
-    selectMatching(node),
+    selectMatching(node, options),
     evaluatorMatching(node),
   ]);
   expect(viaSql).toEqual(viaEvaluator);
@@ -267,26 +276,46 @@ describe("exists", () => {
 });
 
 describe("textCompare", () => {
-  it("matches a pattern with PostgreSQL's own regular-expression operator", async () => {
+  it("matches a pattern with PostgreSQL's own regular-expression operator, once postgresRegexpPushdown opts into it", async () => {
     await expect(
-      agreeingRows({
-        kind: "textCompare",
-        op: "matches",
-        left: { kind: "reference", key: "name" },
-        right: { kind: "textLiteral", value: "^(a|g)" },
-      }),
+      agreeingRows(
+        {
+          kind: "textCompare",
+          op: "matches",
+          left: { kind: "reference", key: "name" },
+          right: { kind: "textLiteral", value: "^(a|g)" },
+        },
+        subjectOptionsWithPostgresRegexp,
+      ),
     ).resolves.toEqual(["ada", "grace"]);
   });
 
-  it("leaves a NULL operand unknown under a negated match", async () => {
+  it("leaves a NULL operand unknown under a negated match, once postgresRegexpPushdown opts into it", async () => {
     await expect(
-      agreeingRows({
-        kind: "textCompare",
-        op: "notMatches",
-        left: { kind: "reference", key: "name" },
-        right: { kind: "textLiteral", value: "^a" },
-      }),
+      agreeingRows(
+        {
+          kind: "textCompare",
+          op: "notMatches",
+          left: { kind: "reference", key: "name" },
+          right: { kind: "textLiteral", value: "^a" },
+        },
+        subjectOptionsWithPostgresRegexp,
+      ),
     ).resolves.toEqual(["grace", "lin"]);
+  });
+
+  it("refuses 'matches' by default, falling back to in-process evaluation", () => {
+    expect(() =>
+      compilePredicateNode(
+        {
+          kind: "textCompare",
+          op: "matches",
+          left: { kind: "reference", key: "name" },
+          right: { kind: "textLiteral", value: "^(a|g)" },
+        },
+        subjectOptions,
+      ),
+    ).toThrow(/postgresRegexpPushdown/);
   });
 });
 
@@ -479,6 +508,8 @@ describe("a tree deep enough to mix every supported kind", () => {
       ],
     };
 
-    await expect(agreeingRows(node)).resolves.toEqual(["ada", "grace"]);
+    await expect(
+      agreeingRows(node, subjectOptionsWithPostgresRegexp),
+    ).resolves.toEqual(["ada", "grace"]);
   });
 });

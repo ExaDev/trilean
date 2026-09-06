@@ -362,6 +362,19 @@ function findUnpushablePredicate(
           };
         }
       }
+      // PostgreSQL is the one dialect with a real server-side regular-expression operator to push `matches`/`notMatches` to, and the one whose regular-expression dialect (POSIX ARE) is a fixed property of the server rather than something a caller supplies -- unlike SQLite's REGEXP, which a caller registers and can therefore give exactly trilean's own ECMAScript semantics. ARE and ECMAScript diverge in ways that are not always a syntax error the guard could catch structurally: the same pattern text compiles and executes under both and can still answer a different set of rows for the same data (see `postgresRegexpPushdown`'s own doc comment in options.ts for concrete examples), so this is refused by default rather than left to the per-kind walk above, which has no way to see into a pattern's content.
+      const dialect = options?.dialect ?? "postgres";
+      if (
+        dialect === "postgres" &&
+        (node.op === "matches" || node.op === "notMatches") &&
+        options?.postgresRegexpPushdown !== true
+      ) {
+        return {
+          kind: node.kind,
+          path,
+          reason: `'${node.op}' matches trilean's own ECMAScript 'RegExp' against the pattern, whereas PostgreSQL's '~'/'!~' would match it under PostgreSQL's own regular-expression dialect (POSIX ARE) -- a different language that can silently answer a different set of rows for the same pattern and data (for example, PostgreSQL's '.' matches a newline by default where ECMAScript's does not, and PostgreSQL's '\\w' follows the database's locale where ECMAScript's is ASCII-only) -- so this is refused unless 'postgresRegexpPushdown' is explicitly set 'true'`,
+        };
+      }
       return undefined;
     }
     case "memberOf": {

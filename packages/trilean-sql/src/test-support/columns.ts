@@ -31,3 +31,9 @@ export const sqliteSubjectOptions: SqlCompileOptions = {
   dialect: "sqlite",
   columnFor: columnForSubject,
 };
+
+/** `subjectOptions` with PostgreSQL regular-expression pushdown opted into, for the tests that exercise `matches`/`notMatches` compiling to `~`/`!~` rather than the default refusal. See `postgresRegexpPushdown`'s own doc comment in options.ts. */
+export const subjectOptionsWithPostgresRegexp: SqlCompileOptions = {
+  ...subjectOptions,
+  postgresRegexpPushdown: true,
+};

@@ -1,7 +1,11 @@
 import type { ExpressionNode, PredicateNode } from "trilean";
 import { describe, expect, it, vi } from "vitest";
 import { findUnpushableNodeKind } from "./guard";
-import { sqliteSubjectOptions, subjectOptions } from "./test-support/columns";
+import {
+  sqliteSubjectOptions,
+  subjectOptions,
+  subjectOptionsWithPostgresRegexp,
+} from "./test-support/columns";
 
 const ageOver: PredicateNode = {
   kind: "compare",
@@ -21,7 +25,7 @@ describe("supported trees", () => {
           left: { kind: "exists", operand: { kind: "reference", key: "note" } },
           right: {
             kind: "textCompare",
-            op: "matches",
+            op: "equals",
             left: { kind: "reference", key: "name" },
             right: { kind: "textLiteral", value: "^a" },
           },
@@ -370,10 +374,10 @@ describe("sqliteRegexpAvailable", () => {
     },
   );
 
-  it("has no effect on the postgres dialect, which never needs it", () => {
+  it("has no effect on the postgres dialect, which has its own separate postgresRegexpPushdown gate", () => {
     expect(
       findUnpushableNodeKind(patternMatch, {
-        ...subjectOptions,
+        ...subjectOptionsWithPostgresRegexp,
         sqliteRegexpAvailable: false,
       }),
     ).toBeUndefined();
@@ -391,6 +395,56 @@ describe("sqliteRegexpAvailable", () => {
         ...sqliteSubjectOptions,
         sqliteRegexpAvailable: false,
       }),
+    ).toBeUndefined();
+  });
+});
+
+describe("PostgreSQL regular-expression pushdown", () => {
+  const matchesNode: PredicateNode = {
+    kind: "textCompare",
+    op: "matches",
+    left: { kind: "reference", key: "name" },
+    right: { kind: "textLiteral", value: "^a" },
+  };
+
+  it("refuses 'matches' against PostgreSQL by default", () => {
+    expect(findUnpushableNodeKind(matchesNode, subjectOptions)).toMatchObject({
+      kind: "textCompare",
+      path: "$",
+    });
+  });
+
+  it("refuses 'notMatches' against PostgreSQL by default", () => {
+    expect(
+      findUnpushableNodeKind(
+        { ...matchesNode, op: "notMatches" },
+        subjectOptions,
+      ),
+    ).toMatchObject({ kind: "textCompare", path: "$" });
+  });
+
+  it("refuses 'matches' against PostgreSQL with no options at all, since the default dialect is PostgreSQL and the default is refusal", () => {
+    expect(findUnpushableNodeKind(matchesNode)).toMatchObject({
+      kind: "textCompare",
+      path: "$",
+    });
+  });
+
+  it("allows 'matches' against PostgreSQL once postgresRegexpPushdown is set true", () => {
+    expect(
+      findUnpushableNodeKind(matchesNode, subjectOptionsWithPostgresRegexp),
+    ).toBeUndefined();
+  });
+
+  it("allows 'matches' against SQLite unconditionally, since this gate is specific to PostgreSQL's own regular-expression dialect", () => {
+    expect(
+      findUnpushableNodeKind(matchesNode, sqliteSubjectOptions),
+    ).toBeUndefined();
+  });
+
+  it("does not refuse 'equals'/'notEquals' textCompare nodes, which carry no pattern", () => {
+    expect(
+      findUnpushableNodeKind({ ...matchesNode, op: "equals" }, subjectOptions),
     ).toBeUndefined();
   });
 });
