@@ -1,6 +1,6 @@
 # trilean
 
-[![GitHub](https://img.shields.io/badge/GitHub-181717?logo=github&logoColor=white)](https://github.com/ExaDev/trilean) [![npm](https://img.shields.io/badge/npm-CB3837?logo=npm&logoColor=white)](https://www.npmjs.com/package/trilean) [![Release](https://img.shields.io/github/v/release/ExaDev/trilean)](https://github.com/ExaDev/trilean/releases/latest) [![CI](https://img.shields.io/github/actions/workflow/status/ExaDev/trilean/ci.yml?branch=main)](https://github.com/ExaDev/trilean/actions)
+[![GitHub](https://img.shields.io/badge/GitHub-181717?logo=github&logoColor=white)](https://github.com/ExaDev/trilean) [![npm](https://img.shields.io/badge/npm-CB3837?logo=npm&logoColor=white)](https://www.npmjs.com/package/trilean) [![Release](https://img.shields.io/github/v/release/ExaDev/trilean?filter=trilean@*&label=release)](https://github.com/ExaDev/trilean/releases?q=trilean%40) [![CI](https://img.shields.io/github/actions/workflow/status/ExaDev/trilean/ci.yml?branch=main)](https://github.com/ExaDev/trilean/actions)
 
 > /ˈtraɪ.li.ən/ (TRY-lee-ən) — rhymes with "boolean".
 >

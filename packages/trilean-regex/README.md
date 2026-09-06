@@ -1,5 +1,7 @@
 # trilean-regex
 
+[![GitHub](https://img.shields.io/badge/GitHub-181717?logo=github&logoColor=white)](https://github.com/ExaDev/trilean) [![npm](https://img.shields.io/badge/npm-CB3837?logo=npm&logoColor=white)](https://www.npmjs.com/package/trilean-regex) [![Release](https://img.shields.io/github/v/release/ExaDev/trilean?filter=trilean-regex@*&label=release)](https://github.com/ExaDev/trilean/releases?q=trilean-regex%40) [![CI](https://img.shields.io/github/actions/workflow/status/ExaDev/trilean/ci.yml?branch=main)](https://github.com/ExaDev/trilean/actions)
+
 A portable regular-expression grammar -- a true regular language, with its own parser and a Thompson-construction reference matcher -- so a pattern means the same thing wherever it runs: in process here, and pushed down to a database's own engine by [`trilean-sql`](../trilean-sql).
 
 ## Why a new grammar

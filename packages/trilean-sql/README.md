@@ -1,5 +1,7 @@
 # trilean-sql
 
+[![GitHub](https://img.shields.io/badge/GitHub-181717?logo=github&logoColor=white)](https://github.com/ExaDev/trilean) [![npm](https://img.shields.io/badge/npm-CB3837?logo=npm&logoColor=white)](https://www.npmjs.com/package/trilean-sql) [![Release](https://img.shields.io/github/v/release/ExaDev/trilean?filter=trilean-sql@*&label=release)](https://github.com/ExaDev/trilean/releases?q=trilean-sql%40) [![CI](https://img.shields.io/github/actions/workflow/status/ExaDev/trilean/ci.yml?branch=main)](https://github.com/ExaDev/trilean/actions)
+
 Compiles a [trilean](https://www.npmjs.com/package/trilean) predicate tree into a parameterised SQL `WHERE` fragment, so a rule stored as data can be evaluated by the database over a whole table instead of in process, one subject at a time.
 
 ```sh

@@ -1,15 +1,16 @@
 # trilean workspace
 
-[![GitHub](https://img.shields.io/badge/GitHub-181717?logo=github&logoColor=white)](https://github.com/ExaDev/trilean) [![npm](https://img.shields.io/badge/npm-CB3837?logo=npm&logoColor=white)](https://www.npmjs.com/package/trilean) [![Release](https://img.shields.io/github/v/release/ExaDev/trilean)](https://github.com/ExaDev/trilean/releases/latest) [![CI](https://img.shields.io/github/actions/workflow/status/ExaDev/trilean/ci.yml?branch=main)](https://github.com/ExaDev/trilean/actions)
+[![GitHub](https://img.shields.io/badge/GitHub-181717?logo=github&logoColor=white)](https://github.com/ExaDev/trilean) [![CI](https://img.shields.io/github/actions/workflow/status/ExaDev/trilean/ci.yml?branch=main)](https://github.com/ExaDev/trilean/actions)
 
-The pnpm workspace holding the trilean packages. This file describes the repository; for the library itself — what it is, how the evaluation model works, and the full API — see [`packages/trilean/README.md`](packages/trilean/README.md).
+The pnpm workspace holding the trilean packages. Each package is versioned, released, and published independently, so there is no single workspace-wide npm/release badge to show here — see each package's own README (linked below) for its own badges. This file describes the repository; for the library itself — what it is, how the evaluation model works, and the full API — see [`packages/trilean/README.md`](packages/trilean/README.md).
 
 ## Packages
 
 | Package | Directory | Published as |
 | --- | --- | --- |
 | [trilean](packages/trilean/README.md) | `packages/trilean` | [`trilean`](https://www.npmjs.com/package/trilean) on npm, [`@exadev/trilean`](https://github.com/ExaDev/trilean/pkgs/npm/trilean) on GitHub Packages |
-| [trilean-sql](packages/trilean-sql/README.md) | `packages/trilean-sql` | [`trilean-sql`](https://www.npmjs.com/package/trilean-sql) on npm |
+| [trilean-sql](packages/trilean-sql/README.md) | `packages/trilean-sql` | [`trilean-sql`](https://www.npmjs.com/package/trilean-sql) on npm, [`@exadev/trilean-sql`](https://github.com/ExaDev/trilean/pkgs/npm/trilean-sql) on GitHub Packages |
+| [trilean-regex](packages/trilean-regex/README.md) | `packages/trilean-regex` | [`trilean-regex`](https://www.npmjs.com/package/trilean-regex) on npm, [`@exadev/trilean-regex`](https://github.com/ExaDev/trilean/pkgs/npm/trilean-regex) on GitHub Packages |
 
 Each package is versioned, released, and published independently of every other, from its own commit history. There is no lockstep version shared across the workspace.
 
@@ -37,7 +38,8 @@ The `pnpm <task>` scripts are thin wrappers over `turbo run _<task>`; the unders
 .                       workspace root: tooling config, the task pipeline, release orchestration
 ├── packages/
 │   ├── trilean/        the evaluation library, with its own README, CHANGELOG, and configs
-│   └── trilean-sql/    the SQL compiler over trilean's predicate trees, likewise self-contained
+│   ├── trilean-sql/    the SQL compiler over trilean's predicate trees, likewise self-contained
+│   └── trilean-regex/  the portable regex grammar trilean-sql pushes down where it can, likewise self-contained
 ├── pnpm-workspace.yaml package globs and pnpm's install-time settings
 ├── turbo.json          the task pipeline every package's tasks are ordered and cached by
 ├── tsconfig.base.json  the compiler options every package extends
