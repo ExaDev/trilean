@@ -45,7 +45,18 @@ const config: Pick<
   plugins: [
     "@semantic-release/changelog",
     ["@semantic-release/npm", { npmPublish: true }],
-    "@semantic-release/github",
+    // successComment overrides @semantic-release/github's own default ("This PR is included in version ${nextRelease.version}"), which names only a bare version with no package -- meaningless on a PR that several independently-versioned packages can release from at once, where the same PR gets one such comment per package that released. `nextRelease.gitTag` is this orchestrator's own `name@version` tag format (see this file's own header comment), so the comment now names which package's release it is, not just which version.
+    [
+      "@semantic-release/github",
+      {
+        successComment: `:tada: This <%= issue.pull_request ? 'PR is included' : 'issue has been resolved' %> in **<%= nextRelease.gitTag %>** :tada:
+<% if (releases.length > 0) { %>
+The release is available on:
+<% releases.forEach((release) => { %>- [<%= release.name %>](<%= release.url %>)
+<% }); %><% } %>
+Your **[semantic-release](https://github.com/semantic-release/semantic-release)** bot :package::rocket:`,
+      },
+    ],
   ],
   analyzeCommits: {
     preset: "conventionalcommits",
