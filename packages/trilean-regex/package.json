@@ -1,6 +1,6 @@
 {
   "name": "trilean-regex",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A portable regular-expression grammar -- a true regular language, with a Thompson-construction reference matcher -- so a pattern means the same thing in process and wherever trilean-sql can push it down to a database's own engine.",
   "type": "module",
   "repository": {

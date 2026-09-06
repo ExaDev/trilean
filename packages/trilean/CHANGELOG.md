@@ -1,3 +1,14 @@
+## [1.5.1](https://github.com/ExaDev/trilean/compare/trilean%401.5.0...trilean%401.5.1) (2026-09-06)
+
+### Documentation
+
+* scope each package README's release badge to its own tag ([c8cb954](https://github.com/ExaDev/trilean/commit/c8cb95459799faec8acd01e8ed0e171a37227ddc))
+
+
+### Dependencies
+
+- Updated trilean-regex to 1.0.1 (declared as `workspace:^`, resolved by pnpm at publish time)
+
 ## [1.5.0](https://github.com/ExaDev/trilean/compare/trilean%401.4.1...trilean%401.5.0) (2026-09-06)
 
 ### Features

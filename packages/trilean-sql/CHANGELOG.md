@@ -1,3 +1,15 @@
+## [2.1.1](https://github.com/ExaDev/trilean/compare/trilean-sql%402.1.0...trilean-sql%402.1.1) (2026-09-06)
+
+### Documentation
+
+* scope each package README's release badge to its own tag ([c8cb954](https://github.com/ExaDev/trilean/commit/c8cb95459799faec8acd01e8ed0e171a37227ddc))
+
+
+### Dependencies
+
+- Updated trilean-regex to 1.0.1 (declared as `workspace:^`, resolved by pnpm at publish time)
+- Updated trilean to 1.5.1 (declared as `workspace:^`, resolved by pnpm at publish time)
+
 ## [2.1.0](https://github.com/ExaDev/trilean/compare/trilean-sql%402.0.0...trilean-sql%402.1.0) (2026-09-06)
 
 ### Features
