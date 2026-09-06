@@ -68,6 +68,10 @@ export interface DialectConfig {
   matches: string;
   /** The negated regular-expression match operator `textCompare`'s `notMatches` compiles to. */
   notMatches: string;
+  /** The operator `textCompare`'s `portableMatches` compiles to, once its `trilean-regex` pattern has been translated into this dialect's own pattern syntax (see `portable-pattern.ts`). PostgreSQL reuses its native regex operator (`~`) here, since a translated pattern is still POSIX ARE text; SQLite uses `GLOB` instead of `REGEXP`, since the translation targets GLOB wildcards, not a regex engine. */
+  portableMatches: string;
+  /** The negated counterpart of `portableMatches`. */
+  portableNotMatches: string;
   /** Renders the `index`-th (1-based) bind placeholder, for a literal whose own trilean kind implies `castTo`. A dialect that does not need the cast ignores both arguments. */
   placeholder: (index: number, castTo: SqlParamType) => string;
   /** Appended to the bare `NULL` in the two forms an empty `memberOf` candidate list compiles to, for a dialect that needs the resulting expression annotated with a boolean type. */
@@ -79,6 +83,9 @@ export const DIALECT_CONFIG: Readonly<Record<SqlDialect, DialectConfig>> = {
     // PostgreSQL's own regular-expression match operators, so a pattern is matched by the server rather than shipped back to be matched in process. See the "Regular expressions" caveat in README.md: PostgreSQL's advanced regular expressions and ECMAScript's are close but not the same language.
     matches: "~",
     notMatches: "!~",
+    // Same operators as matches/notMatches: a portableMatches pattern is translated into PostgreSQL's own Advanced Regular Expression syntax (see portable-pattern.ts) before it ever reaches this operator, so from PostgreSQL's point of view it is an ordinary '~'/'!~' match against a pattern PostgreSQL itself defines the syntax of.
+    portableMatches: "~",
+    portableNotMatches: "!~",
     // Casting every placeholder means a fragment's meaning never depends on how a particular driver decided to infer an untyped parameter, and it is what makes a comparison between two literals (`$1 < $2`, which PostgreSQL rejects outright as having undeterminable parameter types) compile to something executable at all.
     placeholder: (index, castTo) =>
       `$${String(index)}::${POSTGRES_TYPE_NAME[castTo]}`,
@@ -88,6 +95,9 @@ export const DIALECT_CONFIG: Readonly<Record<SqlDialect, DialectConfig>> = {
     // SQLite has no built-in regular-expression support: `REGEXP` is reserved syntax for a `regexp(pattern, value)` function the connection must register itself, and an unregistered one fails loudly at query time with "no such function: REGEXP" rather than answering wrongly. See the "Regular expressions" section in README.md for the registration the SQLite dialect therefore requires of its caller.
     matches: "REGEXP",
     notMatches: "NOT REGEXP",
+    // GLOB, not REGEXP: a portableMatches pattern is translated into SQLite's own GLOB wildcard syntax (see portable-pattern.ts), which is a core SQLite feature needing no function registration -- the whole reason a portable grammar is worth having for this dialect at all. GLOB is also case-sensitive, matching trilean-regex's own case-sensitive semantics exactly, unlike LIKE.
+    portableMatches: "GLOB",
+    portableNotMatches: "NOT GLOB",
     // SQLite parameters are dynamically typed and positional-by-order, so there is neither a number to write nor a type to cast to. A bare `?` is correct for every literal kind this compiler emits, including a comparison between two literals, which SQLite answers without needing either side annotated.
     placeholder: () => "?",
     // SQLite has no boolean type to annotate: `NULL` alone already carries the three-valued behaviour the empty-`memberOf` forms depend on.

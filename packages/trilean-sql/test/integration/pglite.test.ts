@@ -319,6 +319,63 @@ describe("textCompare", () => {
   });
 });
 
+/**
+ * The same equivalence claim as `postgres.test.ts`'s own `portableMatches`/`portableNotMatches` suite, against PGlite instead of a server in a container -- see this file's own top-of-file comment for why keeping the two near-verbatim, rather than sharing a parameterised harness, is what actually establishes agreement rather than assuming it.
+ */
+describe("portableMatches/portableNotMatches (trilean-regex, translated to PostgreSQL's own syntax)", () => {
+  it("matches a start-anchored literal prefix", async () => {
+    await expect(
+      agreeingRows({
+        kind: "textCompare",
+        op: "portableMatches",
+        left: { kind: "reference", key: "name" },
+        right: { kind: "textLiteral", value: "^gr" },
+      }),
+    ).resolves.toEqual(["grace"]);
+  });
+
+  it("matches a bounded-repetition character class", async () => {
+    await expect(
+      agreeingRows({
+        kind: "textCompare",
+        op: "portableMatches",
+        left: { kind: "reference", key: "name" },
+        right: { kind: "textLiteral", value: "^[a-z]{3,4}$" },
+      }),
+    ).resolves.toEqual(["ada", "lin"]);
+  });
+
+  it("matches an alternation", async () => {
+    await expect(
+      agreeingRows({
+        kind: "textCompare",
+        op: "portableMatches",
+        left: { kind: "reference", key: "name" },
+        right: { kind: "textLiteral", value: "^(?:ada|lin)$" },
+      }),
+    ).resolves.toEqual(["ada", "lin"]);
+  });
+
+  it("portableNotMatches is the negation, and still leaves an unresolved name unknown", async () => {
+    await expect(
+      agreeingRows({
+        kind: "textCompare",
+        op: "portableNotMatches",
+        left: { kind: "reference", key: "name" },
+        right: { kind: "textLiteral", value: "^a" },
+      }),
+    ).resolves.toEqual(["grace", "lin"]);
+  });
+
+  it("PGlite's own bare '.' already matches a newline under '~', exactly like trilean-regex's own '.', so this compiler translates it unchanged", async () => {
+    const result = await db.query<{ result: boolean }>(
+      "SELECT ($1::text ~ $2::text) AS result",
+      ["a\nc", "a.c"],
+    );
+    expect(result.rows[0]?.result).toBe(true);
+  });
+});
+
 describe("memberOf", () => {
   it("matches a candidate list", async () => {
     await expect(

@@ -1,6 +1,11 @@
 import type { ExpressionNode, PredicateNode } from "trilean";
+import { parseRegex } from "trilean-regex";
 import type { SqlCompileOptions, SqlDialect, SqlParamType } from "./options";
 import { assertImplementedDialect } from "./options";
+import {
+  renderPostgresPattern,
+  renderSqliteGlobPattern,
+} from "./portable-pattern";
 
 /** Where the walk stopped, and why. `kind` is the offending node's own `kind` even when the objection is not to the kind itself. */
 export interface UnpushableNode {
@@ -362,7 +367,7 @@ function findUnpushablePredicate(
           };
         }
       }
-      // PostgreSQL is the one dialect with a real server-side regular-expression operator to push `matches`/`notMatches` to, and the one whose regular-expression dialect (POSIX ARE) is a fixed property of the server rather than something a caller supplies -- unlike SQLite's REGEXP, which a caller registers and can therefore give exactly trilean's own ECMAScript semantics. ARE and ECMAScript diverge in ways that are not always a syntax error the guard could catch structurally: the same pattern text compiles and executes under both and can still answer a different set of rows for the same data (see `postgresRegexpPushdown`'s own doc comment in options.ts for concrete examples), so this is refused by default rather than left to the per-kind walk above, which has no way to see into a pattern's content.
+      // PostgreSQL is the one dialect with a real server-side regular-expression operator to push `matches`/`notMatches` to, and the one whose regular-expression dialect (POSIX ARE) is a fixed property of the server rather than something a caller supplies -- unlike SQLite's REGEXP, which a caller registers and can therefore give exactly trilean's own ECMAScript semantics. ARE and ECMAScript diverge in ways that are not always a syntax error the guard could catch structurally: the same pattern text compiles and executes under both and can still answer a different set of rows for the same data (see `postgresRegexpPushdown`'s own doc comment in options.ts for concrete examples), so this is refused by default rather than left to the per-kind walk above, which has no way to see into a pattern's content. None of this applies to portableMatches/portableNotMatches below: their pattern is translated into each dialect's own syntax and proven equivalent by this package's own integration tests, not passed through sight unseen, so there is no divergence for a flag to gate.
       const dialect = options?.dialect ?? "postgres";
       if (
         dialect === "postgres" &&
@@ -374,6 +379,31 @@ function findUnpushablePredicate(
           path,
           reason: `'${node.op}' matches trilean's own ECMAScript 'RegExp' against the pattern, whereas PostgreSQL's '~'/'!~' would match it under PostgreSQL's own regular-expression dialect (POSIX ARE) -- a different language that can silently answer a different set of rows for the same pattern and data (for example, PostgreSQL's '.' matches a newline by default where ECMAScript's does not, and PostgreSQL's '\\w' follows the database's locale where ECMAScript's is ASCII-only) -- so this is refused unless 'postgresRegexpPushdown' is explicitly set 'true'`,
         };
+      }
+      if (node.op === "portableMatches" || node.op === "portableNotMatches") {
+        // Unlike matches/notMatches, whose pattern text is bound as a parameter and matched by the server under its own regex language sight unseen, a portableMatches/portableNotMatches pattern is translated into this dialect's own syntax in JavaScript, at compile time (see portable-pattern.ts) -- which is only possible when the pattern is known at compile time in the first place.
+        if (node.right.kind !== "textLiteral") {
+          return {
+            kind: node.kind,
+            path,
+            reason:
+              "a 'portableMatches'/'portableNotMatches' pattern must be a literal, known at compile time -- translating it into this dialect's own pattern syntax happens once, at compile time, not per row",
+          };
+        }
+        try {
+          const ast = parseRegex(node.right.value);
+          if (dialect === "postgres") {
+            renderPostgresPattern(ast);
+          } else {
+            renderSqliteGlobPattern(ast);
+          }
+        } catch (error) {
+          return {
+            kind: node.kind,
+            path: `${path}.right`,
+            reason: error instanceof Error ? error.message : String(error),
+          };
+        }
       }
       return undefined;
     }

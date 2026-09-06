@@ -232,6 +232,60 @@ describe("textCompare", () => {
       }),
     ).toEqual({ sql: '("name" = "note")', params: [] });
   });
+
+  it.each([
+    ["portableMatches", "~"],
+    ["portableNotMatches", "!~"],
+  ] as const)(
+    "compiles '%s' to '%s' against the pattern translated into PostgreSQL's own syntax",
+    (op, sqlOperator) => {
+      expect(
+        compile({
+          kind: "textCompare",
+          op,
+          left: { kind: "reference", key: "name" },
+          right: { kind: "textLiteral", value: "^a\\dc$" },
+        }),
+      ).toEqual({
+        sql: `("name" ${sqlOperator} $1::text)`,
+        // '\d' expands to a '[0-9]' character-class node in trilean-regex's own AST (see shorthand-classes.ts) before this compiler ever sees it, so the bound pattern is that expansion, not the original source text.
+        params: ["^a[0-9]c$"],
+      });
+    },
+  );
+
+  it("refuses portableMatches whose pattern is not a compile-time literal", () => {
+    expect(() =>
+      compile({
+        kind: "textCompare",
+        op: "portableMatches",
+        left: { kind: "reference", key: "name" },
+        right: { kind: "reference", key: "note" },
+      }),
+    ).toThrow(/must be a literal, known at compile time/);
+  });
+
+  it("refuses portableMatches whose pattern is not valid trilean-regex syntax", () => {
+    expect(() =>
+      compile({
+        kind: "textCompare",
+        op: "portableMatches",
+        left: { kind: "reference", key: "name" },
+        right: { kind: "textLiteral", value: "(a)" },
+      }),
+    ).toThrow(/capturing groups are not supported/);
+  });
+
+  it("refuses portableMatches whose pattern's bound exceeds PostgreSQL's 0-255 limit", () => {
+    expect(() =>
+      compile({
+        kind: "textCompare",
+        op: "portableMatches",
+        left: { kind: "reference", key: "name" },
+        right: { kind: "textLiteral", value: "a{256}" },
+      }),
+    ).toThrow(/permit a bound of at most 255/);
+  });
 });
 
 describe("memberOf", () => {
@@ -579,6 +633,38 @@ describe("the sqlite dialect", () => {
         right: { kind: "textLiteral", value: "^a" },
       }),
     ).toEqual({ sql: `("name" ${sqlOperator} ?)`, params: ["^a"] });
+  });
+
+  it.each([
+    ["portableMatches", "GLOB"],
+    ["portableNotMatches", "NOT GLOB"],
+  ] as const)(
+    "compiles '%s' to '%s' against the pattern translated into a GLOB wildcard",
+    (op, sqlOperator) => {
+      expect(
+        compileSqlite({
+          kind: "textCompare",
+          op,
+          left: { kind: "reference", key: "name" },
+          right: { kind: "textLiteral", value: "^a.*c$" },
+        }),
+      ).toEqual({
+        sql: `("name" ${sqlOperator} ?)`,
+        params: ["a*c"],
+      });
+    },
+  );
+
+  it("refuses a portableMatches pattern outside GLOB's reachable subset", () => {
+    // Alternation has no GLOB equivalent at all (see portable-pattern.ts's own reachable-subset doc comment) -- this falls back to in-process evaluation rather than compiling to something that answers a different question.
+    expect(() =>
+      compileSqlite({
+        kind: "textCompare",
+        op: "portableMatches",
+        left: { kind: "reference", key: "name" },
+        right: { kind: "textLiteral", value: "cat|dog" },
+      }),
+    ).toThrow(/GLOB has no alternation operator/);
   });
 
   it("compiles an empty candidate list without a boolean annotation on the NULL", () => {

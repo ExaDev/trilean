@@ -201,6 +201,9 @@ importers:
       trilean:
         specifier: workspace:^
         version: link:../trilean
+      trilean-regex:
+        specifier: workspace:^
+        version: link:../trilean-regex
     devDependencies:
       '@arethetypeswrong/cli':
         specifier: ^0.18.5

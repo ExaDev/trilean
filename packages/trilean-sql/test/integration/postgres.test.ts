@@ -322,6 +322,64 @@ describe("textCompare", () => {
   });
 });
 
+/**
+ * The equivalence claim `portableMatches`/`portableNotMatches` exist for, measured the same way as the rest of this file: compile a tree using a `trilean-regex` pattern, execute the translated PostgreSQL syntax against the real server, and compare against trilean's own evaluator -- which for these two operators means `trilean-regex`'s own NFA matcher (see `compareText` in evaluator.ts), not native `RegExp`. Agreement here is evidence about `portable-pattern.ts`'s translation, not a re-run of the `matches`/`notMatches` suite above with different operator names.
+ */
+describe("portableMatches/portableNotMatches (trilean-regex, translated to PostgreSQL's own syntax)", () => {
+  it("matches a start-anchored literal prefix", async () => {
+    await expect(
+      agreeingRows({
+        kind: "textCompare",
+        op: "portableMatches",
+        left: { kind: "reference", key: "name" },
+        right: { kind: "textLiteral", value: "^gr" },
+      }),
+    ).resolves.toEqual(["grace"]);
+  });
+
+  it("matches a bounded-repetition character class", async () => {
+    await expect(
+      agreeingRows({
+        kind: "textCompare",
+        op: "portableMatches",
+        left: { kind: "reference", key: "name" },
+        right: { kind: "textLiteral", value: "^[a-z]{3,4}$" },
+      }),
+    ).resolves.toEqual(["ada", "lin"]);
+  });
+
+  it("matches an alternation", async () => {
+    await expect(
+      agreeingRows({
+        kind: "textCompare",
+        op: "portableMatches",
+        left: { kind: "reference", key: "name" },
+        right: { kind: "textLiteral", value: "^(?:ada|lin)$" },
+      }),
+    ).resolves.toEqual(["ada", "lin"]);
+  });
+
+  it("portableNotMatches is the negation, and still leaves an unresolved name unknown", async () => {
+    await expect(
+      agreeingRows({
+        kind: "textCompare",
+        op: "portableNotMatches",
+        left: { kind: "reference", key: "name" },
+        right: { kind: "textLiteral", value: "^a" },
+      }),
+    ).resolves.toEqual(["grace", "lin"]);
+  });
+
+  it("PostgreSQL's own bare '.' already matches a newline under '~', exactly like trilean-regex's own '.', so this compiler translates it unchanged", async () => {
+    // Measured directly against the server rather than trusted from documentation prose alone (see portable-pattern.ts's own doc comment on renderPostgresPattern for why): PostgreSQL's prose reads, out of context, as though '.' excludes a newline by default, but under the plain '~'/'!~' operators this compiler emits, it does not.
+    const result = await client.query<{ result: boolean }>(
+      "SELECT ($1::text ~ $2::text) AS result",
+      ["a\nc", "a.c"],
+    );
+    expect(result.rows[0]?.result).toBe(true);
+  });
+});
+
 describe("memberOf", () => {
   it("matches a candidate list", async () => {
     await expect(

@@ -2,10 +2,16 @@ import type {
   ComparisonOperator,
   ExpressionNode,
   PredicateNode,
+  TextCompareNode,
   TextComparisonOperator,
 } from "trilean";
+import { parseRegex } from "trilean-regex";
 import { InvalidColumnError, UnsupportedNodeError } from "./errors";
 import { findUnpushableNodeKind } from "./guard";
+import {
+  renderPostgresPattern,
+  renderSqliteGlobPattern,
+} from "./portable-pattern";
 import type {
   CompiledSql,
   DialectConfig,
@@ -37,6 +43,8 @@ function textComparisonSqlFor(
     notEquals: "<>",
     matches: dialect.matches,
     notMatches: dialect.notMatches,
+    portableMatches: dialect.portableMatches,
+    portableNotMatches: dialect.portableNotMatches,
   };
 }
 
@@ -124,6 +132,33 @@ function refuse(kind: string, layer: "expression" | "predicate"): never {
   });
 }
 
+/**
+ * Compiles a `portableMatches`/`portableNotMatches` node's pattern operand: parses `node.right`'s text as a `trilean-regex` pattern and translates it into this compilation's own dialect's native pattern syntax (see `portable-pattern.ts`), binding the *translated* string as the placeholder rather than the original pattern text -- from the database's point of view this is an ordinary match against a pattern in its own syntax, not `trilean-regex`'s.
+ *
+ * `findUnpushableNodeKind` already ran this exact parse-and-translate step before compilation started and refused the tree if it threw (see `guard.ts`), so a throw reaching here means the guard's allow-list has drifted from what this function actually accepts -- wrapped into `UnsupportedNodeError` as the same "passed the pushability check but has no compiler branch" safety net `refuse` provides elsewhere in this file, not an outcome reachable through this module's own public API.
+ */
+function compilePortablePattern(
+  node: TextCompareNode,
+  context: CompileContext,
+): string {
+  if (node.right.kind !== "textLiteral")
+    return refuse(node.right.kind, "expression");
+  try {
+    const ast = parseRegex(node.right.value);
+    const translated =
+      context.options.dialect === "postgres"
+        ? renderPostgresPattern(ast)
+        : renderSqliteGlobPattern(ast);
+    return placeholder(context, translated, "text");
+  } catch (error) {
+    throw new UnsupportedNodeError({
+      kind: node.right.kind,
+      path: "$.right",
+      reason: error instanceof Error ? error.message : String(error),
+    });
+  }
+}
+
 function compileExpression(
   node: ExpressionNode,
   context: CompileContext,
@@ -182,7 +217,10 @@ function compilePredicate(
     }
     case "textCompare": {
       const left = compileExpression(node.left, context);
-      const right = compileExpression(node.right, context);
+      const right =
+        node.op === "portableMatches" || node.op === "portableNotMatches"
+          ? compilePortablePattern(node, context)
+          : compileExpression(node.right, context);
       return `(${left} ${context.textComparison[node.op]} ${right})`;
     }
     case "memberOf": {
