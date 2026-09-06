@@ -470,3 +470,59 @@ describe("pattern-matching builders under workerd", () => {
     ).toEqual({ status: "definite", value: true });
   });
 });
+
+/**
+ * `portableMatches`/`portableNotMatches` route through `trilean-regex`'s own parser and NFA matcher instead of native `RegExp` (see `compareText` in evaluator.ts) -- a dependency this package did not have before. Running it here, inside the real Cloudflare Workers isolate, is what turns "trilean-regex is isomorphic" from a lint-guard promise (its own eslint.config.ts bans Node builtin imports and the Buffer global) into the same runtime-checked fact the rest of this file establishes for the evaluator itself.
+ */
+describe("portableMatches/portableNotMatches under workerd", () => {
+  const pattern: PredicateNode = {
+    kind: "textCompare",
+    op: "portableMatches",
+    left: { kind: "reference", key: "code" },
+    right: { kind: "textLiteral", value: "^ENA-\\d{4,6}$" },
+  };
+
+  const resolvers: Resolvers = {
+    resolveValue: async (key: JsonValue) =>
+      Promise.resolve(
+        key === "code"
+          ? { found: true, value: { kind: "text", value: "ENA-12345" } }
+          : { found: false },
+      ),
+    resolveLookup: () => {
+      throw new Error("no tree in this suite uses a lookup");
+    },
+    resolveCollection: () => {
+      throw new Error("no tree in this suite uses a collection");
+    },
+  };
+
+  it("portableMatches matches via trilean-regex's own compiled NFA", async () => {
+    expect(await evaluatePredicate(pattern, undefined, resolvers)).toEqual({
+      status: "definite",
+      value: true,
+    });
+  });
+
+  it("portableNotMatches is the negation, still inside the isolate", async () => {
+    const negated: PredicateNode = { ...pattern, op: "portableNotMatches" };
+    expect(await evaluatePredicate(negated, undefined, resolvers)).toEqual({
+      status: "definite",
+      value: false,
+    });
+  });
+
+  it("an invalid trilean-regex pattern resolves wrong-type rather than throwing out of the isolate", async () => {
+    const invalid: PredicateNode = {
+      kind: "textCompare",
+      op: "portableMatches",
+      left: { kind: "reference", key: "code" },
+      right: { kind: "textLiteral", value: "(a)" },
+    };
+    const result = await evaluatePredicate(invalid, undefined, resolvers);
+    expect(result.status).toBe("indeterminate");
+    if (result.status === "indeterminate") {
+      expect(result.reason.code).toBe("wrong-type");
+    }
+  });
+});

@@ -86,6 +86,9 @@ importers:
 
   packages/trilean:
     dependencies:
+      trilean-regex:
+        specifier: workspace:^
+        version: link:../trilean-regex
       zod:
         specifier: ^4.5.4
         version: 4.5.4

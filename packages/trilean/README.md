@@ -340,7 +340,7 @@ A `PredicateNode` evaluates to `Evaluation<boolean>` — true, false, or indeter
 
 ```ts
 type ComparisonOperator = "gt" | "gte" | "lt" | "lte" | "eq" | "neq";
-type TextComparisonOperator = "equals" | "notEquals" | "matches" | "notMatches";
+type TextComparisonOperator = "equals" | "notEquals" | "matches" | "notMatches" | "portableMatches" | "portableNotMatches";
 type MembershipOperator = "in" | "notIn";
 
 type PredicateNode =
@@ -373,6 +373,13 @@ A relational-comparison leaf: compares two computed values using `gt`/`gte`/`lt`
 ### `textCompare`
 
 A text-matching leaf, symmetric in the same way as `compare`: both `left` and `right` are `ExpressionNode`, and either may be a literal or an arbitrary formula. `equals`/`notEquals` are exact string equality; `matches`/`notMatches` interpret `right` as a pattern (an ECMAScript-style regular expression) tested against `left`'s text. Both operands must resolve to the `text` computed-value kind; anything else is `wrong-type`. A "small fixed category" value (e.g. a status label) is simply a `text` computed value from this leaf's point of view — no separate category kind exists.
+
+**`portableMatches`/`portableNotMatches`** answer the same question as `matches`/`notMatches` but interpret `right` as a pattern in [`trilean-regex`](https://www.npmjs.com/package/trilean-regex)'s own grammar instead of ECMAScript's — a genuine regular language (no backreferences, no lookaround), matched by that package's Thompson-construction NFA simulation rather than the host's native `RegExp` engine. Two consequences follow from that restriction, and are the reason to reach for the portable pair instead of the plain one:
+
+- **No catastrophic-backtracking risk.** An NFA simulation runs in time linear in the pattern's compiled state count and the input's length, regardless of the pattern's shape — there is no input a `portableMatches` pattern can be made to hang on the way a pathological ECMAScript pattern can hang `matches`.
+- **Provable pushdown equivalence.** Because the grammar is a true regular language, [`trilean-sql`](https://www.npmjs.com/package/trilean-sql)'s dialect compilers can translate a `portableMatches`/`portableNotMatches` pattern into a database's own `LIKE`/`GLOB`/native-regex operators and prove the translation agrees with this package's own evaluator row for row — the same "compile and measure agreement against the reference matcher" discipline `trilean-sql` already applies to everything else it compiles. `matches`/`notMatches` carry no such guarantee: what a SQL engine's own native regex operator accepts is a different language from ECMAScript's, and `trilean-sql` refuses to push either operator down for exactly that reason (see `trilean-sql`'s README).
+
+This is additive, not a redefinition: `matches`/`notMatches` keep their existing ECMAScript semantics unchanged, and nothing already written against them is affected. Reach for `portableMatches`/`portableNotMatches` specifically when a tree might be compiled to SQL (or when the backtracking-safety guarantee alone is worth the smaller grammar), and keep `matches`/`notMatches` for in-process-only trees that need ECMAScript's full expressiveness. An invalid `trilean-regex` pattern is `wrong-type`, exactly like an invalid ECMAScript pattern under `matches` — see `trilean-regex`'s own README for the grammar's precise definition and what it deliberately excludes.
 
 ### Pattern-matching builders
 
