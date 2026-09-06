@@ -1474,6 +1474,90 @@ describe("textCompare", () => {
     expectDefinite(result, true);
   });
 
+  it("portableMatches tests right's text as a trilean-regex pattern against left's text", async () => {
+    const result = await evaluatePredicate(
+      {
+        kind: "textCompare",
+        op: "portableMatches",
+        left: { kind: "textLiteral", value: "active-123" },
+        right: { kind: "textLiteral", value: "^active-\\d+$" },
+      },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(result, true);
+  });
+
+  it("portableMatches is false when the pattern does not match", async () => {
+    const result = await evaluatePredicate(
+      {
+        kind: "textCompare",
+        op: "portableMatches",
+        left: { kind: "textLiteral", value: "inactive" },
+        right: { kind: "textLiteral", value: "^active$" },
+      },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(result, false);
+  });
+
+  it("portableNotMatches is the negation of portableMatches", async () => {
+    const result = await evaluatePredicate(
+      {
+        kind: "textCompare",
+        op: "portableNotMatches",
+        left: { kind: "textLiteral", value: "inactive" },
+        right: { kind: "textLiteral", value: "^active$" },
+      },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(result, true);
+  });
+
+  it("an invalid trilean-regex pattern is wrong-type, not a thrown exception", async () => {
+    const result = await evaluatePredicate(
+      {
+        kind: "textCompare",
+        op: "portableMatches",
+        left: { kind: "textLiteral", value: "anything" },
+        right: { kind: "textLiteral", value: "(a)" },
+      },
+      undefined,
+      resolvers,
+    );
+    expectIndeterminate(result, "wrong-type");
+  });
+
+  it("portableMatches accepts only its own restricted grammar, rejecting an ECMAScript-only construct matches would accept", async () => {
+    // A lookahead is valid ECMAScript but not a construct trilean-regex's grammar defines -- see packages/trilean-regex/README.md's "Grammar" table. This is the load-bearing case distinguishing the two operator pairs: the same pattern text is accepted by 'matches' and rejected by 'portableMatches'.
+    const lookahead = { kind: "textLiteral" as const, value: "^(?=a)a$" };
+    const viaMatches = await evaluatePredicate(
+      {
+        kind: "textCompare",
+        op: "matches",
+        left: { kind: "textLiteral", value: "a" },
+        right: lookahead,
+      },
+      undefined,
+      resolvers,
+    );
+    expectDefinite(viaMatches, true);
+
+    const viaPortableMatches = await evaluatePredicate(
+      {
+        kind: "textCompare",
+        op: "portableMatches",
+        left: { kind: "textLiteral", value: "a" },
+        right: lookahead,
+      },
+      undefined,
+      resolvers,
+    );
+    expectIndeterminate(viaPortableMatches, "wrong-type");
+  });
+
   it("is wrong-type when the left operand is not text", async () => {
     const result = await evaluatePredicate(
       {

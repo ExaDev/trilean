@@ -18,6 +18,8 @@ export const TextComparisonOperatorSchema = z.enum([
   "notEquals",
   "matches",
   "notMatches",
+  "portableMatches",
+  "portableNotMatches",
 ]);
 export type TextComparisonOperator = z.infer<
   typeof TextComparisonOperatorSchema

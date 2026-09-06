@@ -1,3 +1,5 @@
+import type { CompiledPattern } from "trilean-regex";
+import { RegexParseError, compilePattern } from "trilean-regex";
 import { complexFromPolar } from "./complex";
 import type { ComputedValue, DurationUnit, Unit } from "./computed-value";
 import {
@@ -216,7 +218,7 @@ function compareValues(
   }
 }
 
-/** `textCompare`'s two operands must both resolve to the `text` computed-value kind -- any other kind, on either operand, is `wrong-type` (see the `textCompare` section of README.md). `equals`/`notEquals` are exact string equality; `matches`/`notMatches` interpret `right`'s text as an ECMAScript regular expression tested against `left`'s text. An invalid pattern is `wrong-type` rather than a thrown exception -- every data-quality problem stays inside the `Evaluation` result, per `Evaluation<T>`'s own doc comment in evaluation.ts. */
+/** `textCompare`'s two operands must both resolve to the `text` computed-value kind -- any other kind, on either operand, is `wrong-type` (see the `textCompare` section of README.md). `equals`/`notEquals` are exact string equality; `matches`/`notMatches` interpret `right`'s text as an ECMAScript regular expression tested against `left`'s text; `portableMatches`/`portableNotMatches` interpret it as a pattern in `trilean-regex`'s own restricted grammar instead, matched by that package's finite-automaton reference matcher rather than the host's native `RegExp` engine -- see the `textCompare` section of README.md for when to reach for the portable pair instead of the plain one. An invalid pattern is `wrong-type` rather than a thrown exception either way -- every data-quality problem stays inside the `Evaluation` result, per `Evaluation<T>`'s own doc comment in evaluation.ts. */
 function compareText(
   op: TextComparisonOperator,
   left: ComputedValue,
@@ -252,6 +254,22 @@ function compareText(
       }
       const isMatch = pattern.test(left.value);
       return definite(op === "matches" ? isMatch : !isMatch);
+    }
+    case "portableMatches":
+    case "portableNotMatches": {
+      let compiled: CompiledPattern;
+      try {
+        compiled = compilePattern(right.value);
+      } catch (error) {
+        const reason =
+          error instanceof RegexParseError ? error.message : String(error);
+        return indeterminate(
+          "wrong-type",
+          `'${right.value}' is not a valid trilean-regex pattern: ${reason}`,
+        );
+      }
+      const isMatch = compiled.test(left.value);
+      return definite(op === "portableMatches" ? isMatch : !isMatch);
     }
     default:
       throw new Error("unreachable text comparison operator");
