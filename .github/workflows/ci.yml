@@ -147,8 +147,10 @@ jobs:
           task: test-workers
           command: pnpm test:workers $TURBO_FLAGS
 
-  release:
-    name: Release
+  # Single stable branch-protection target aggregating every job that runs on every PR, so the required status check doesn't need updating whenever a job is added, renamed, or split.
+  required-checks:
+    name: Required Checks
+    if: always()
     needs:
       [
         commitlint,
@@ -159,6 +161,21 @@ jobs:
         test-smoke,
         test-workers,
       ]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: All required jobs passed
+        run: |
+          results="${{ join(needs.*.result, ' ') }}"
+          for result in $results; do
+            if [[ "$result" == "failure" || "$result" == "cancelled" ]]; then
+              exit 1
+            fi
+          done
+
+  release:
+    name: Release
+    needs: [required-checks]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     # Two pushes to main close together must never run this job at the same time: the orchestrator pushes release commits, tags and dependency bumps to main mid-run, and semantic-release's own stale-checkout guard refuses to publish the moment it sees a commit on main this checkout does not have. Queue the second run behind the first rather than cancelling either -- cancelling mid-release would leave a published package with no committed version bump.
     concurrency:
