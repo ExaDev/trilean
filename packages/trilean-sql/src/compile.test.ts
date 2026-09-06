@@ -611,6 +611,63 @@ describe("the sqlite dialect", () => {
   });
 });
 
+describe("sqliteRegexpAvailable", () => {
+  const patternMatch: PredicateNode = {
+    kind: "textCompare",
+    op: "matches",
+    left: { kind: "reference", key: "name" },
+    right: { kind: "textLiteral", value: "^a" },
+  };
+
+  it("still compiles to REGEXP when the flag is unset, preserving existing behaviour", () => {
+    expect(compile(patternMatch, sqliteSubjectOptions)).toEqual({
+      sql: '("name" REGEXP ?)',
+      params: ["^a"],
+    });
+  });
+
+  it("still compiles to REGEXP when the flag is explicitly true", () => {
+    expect(
+      compile(patternMatch, {
+        ...sqliteSubjectOptions,
+        sqliteRegexpAvailable: true,
+      }),
+    ).toEqual({ sql: '("name" REGEXP ?)', params: ["^a"] });
+  });
+
+  it("refuses matches/notMatches at compile time once the flag is false", () => {
+    const options: SqlCompileOptions = {
+      ...sqliteSubjectOptions,
+      sqliteRegexpAvailable: false,
+    };
+    expect(() => compile(patternMatch, options)).toThrow(UnsupportedNodeError);
+    expect(() =>
+      compile({ ...patternMatch, op: "notMatches" }, options),
+    ).toThrow(UnsupportedNodeError);
+  });
+
+  it("agrees with findUnpushableNodeKind rather than only compilePredicateNode's own check", () => {
+    const options: SqlCompileOptions = {
+      ...sqliteSubjectOptions,
+      sqliteRegexpAvailable: false,
+    };
+    expect(findUnpushableNodeKind(patternMatch, options)).toMatchObject({
+      kind: "textCompare",
+      path: "$",
+    });
+    expect(() => compile(patternMatch, options)).toThrow(UnsupportedNodeError);
+  });
+
+  it("has no effect on the postgres dialect, which matches natively with '~'", () => {
+    expect(
+      compile(patternMatch, {
+        ...subjectOptions,
+        sqliteRegexpAvailable: false,
+      }),
+    ).toEqual({ sql: '("name" ~ $1::text)', params: ["^a"] });
+  });
+});
+
 describe("a dialect this version does not implement", () => {
   // `SqlDialect` is closed, so this is what a caller reading the name from configuration and asserting it into the union at the boundary reaches -- the only way an unimplemented name gets this far, and the reason the assertion is here rather than in the source under test.
   const unimplemented = "mysql" as SqlDialect;

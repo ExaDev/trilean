@@ -369,6 +369,21 @@ describe("textCompare", () => {
       bare.close();
     }
   });
+
+  it("refuses matches at compile time, before ever reaching a connection, when sqliteRegexpAvailable is false", () => {
+    // The target this option exists for -- Cloudflare D1 and any other SQLite-wire-compatible engine with no way to register a function at all -- can never pass the previous test's registration step, so the failure above is not merely undesirable there, it is unavoidable. This is the same tree failing the same way, but caught at `compilePredicateNode` itself rather than surfacing as a query error against a real connection.
+    expect(() =>
+      compilePredicateNode(
+        {
+          kind: "textCompare",
+          op: "matches",
+          left: { kind: "reference", key: "name" },
+          right: { kind: "textLiteral", value: "^a" },
+        },
+        { ...sqliteSubjectOptions, sqliteRegexpAvailable: false },
+      ),
+    ).toThrow(/cannot compile 'textCompare'/i);
+  });
 });
 
 describe("memberOf", () => {
