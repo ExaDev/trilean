@@ -8,7 +8,11 @@ import {
 } from "./errors";
 import { findUnpushableNodeKind } from "./guard";
 import type { SqlCompileOptions, SqlDialect } from "./options";
-import { sqliteSubjectOptions, subjectOptions } from "./test-support/columns";
+import {
+  sqliteSubjectOptions,
+  subjectOptions,
+  subjectOptionsWithPostgresRegexp,
+} from "./test-support/columns";
 
 function compile(
   node: PredicateNode,
@@ -167,8 +171,6 @@ describe("textCompare", () => {
   it.each([
     ["equals", "="],
     ["notEquals", "<>"],
-    ["matches", "~"],
-    ["notMatches", "!~"],
   ] as const)("compiles '%s' to '%s'", (op, sqlOperator) => {
     expect(
       compile({
@@ -182,6 +184,43 @@ describe("textCompare", () => {
       params: ["^a"],
     });
   });
+
+  it.each([
+    ["matches", "~"],
+    ["notMatches", "!~"],
+  ] as const)(
+    "compiles '%s' to '%s' once postgresRegexpPushdown is set true",
+    (op, sqlOperator) => {
+      expect(
+        compile(
+          {
+            kind: "textCompare",
+            op,
+            left: { kind: "reference", key: "name" },
+            right: { kind: "textLiteral", value: "^a" },
+          },
+          subjectOptionsWithPostgresRegexp,
+        ),
+      ).toEqual({
+        sql: `("name" ${sqlOperator} $1::text)`,
+        params: ["^a"],
+      });
+    },
+  );
+
+  it.each(["matches", "notMatches"] as const)(
+    "refuses '%s' against PostgreSQL by default, since PostgreSQL matches it under its own regular-expression dialect rather than trilean's ECMAScript one",
+    (op) => {
+      expect(() =>
+        compile({
+          kind: "textCompare",
+          op,
+          left: { kind: "reference", key: "name" },
+          right: { kind: "textLiteral", value: "^a" },
+        }),
+      ).toThrow(UnsupportedNodeError);
+    },
+  );
 
   it("compares two columns without producing a parameter", () => {
     expect(
@@ -661,7 +700,7 @@ describe("sqliteRegexpAvailable", () => {
   it("has no effect on the postgres dialect, which matches natively with '~'", () => {
     expect(
       compile(patternMatch, {
-        ...subjectOptions,
+        ...subjectOptionsWithPostgresRegexp,
         sqliteRegexpAvailable: false,
       }),
     ).toEqual({ sql: '("name" ~ $1::text)', params: ["^a"] });

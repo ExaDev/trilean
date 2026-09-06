@@ -232,6 +232,7 @@ export function compilePredicateNode(
   const bindings = new Map<string, SqlColumnBinding>();
   const memoised: SqlCompileOptions = {
     dialect: options.dialect,
+    postgresRegexpPushdown: options.postgresRegexpPushdown,
     columnFor: (referenceKey) => {
       const cached = bindings.get(referenceKey);
       if (cached !== undefined) return cached;

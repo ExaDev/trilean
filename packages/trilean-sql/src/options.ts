@@ -28,11 +28,19 @@ export interface SqlCompileOptions {
    */
   columnFor: (referenceKey: string) => SqlColumnBinding;
   /**
-   * Whether the SQLite target can resolve a `regexp(pattern, value)` function for `textCompare`'s `matches`/`notMatches` to compile to. Ignored under the `postgres` dialect, which matches patterns with its own native `~`/`!~` operators and never needs this.
+   * Whether the SQLite target can resolve a `regexp(pattern, value)` function for `textCompare`'s `matches`/`notMatches` to compile to. Ignored under the `postgres` dialect, which has its own separate `postgresRegexpPushdown` gate below.
    *
    * Defaults to `true`, preserving the historical behaviour of always compiling to `REGEXP`/`NOT REGEXP`, which is correct for a driver a caller can register a function on (better-sqlite3, for instance). Set explicitly to `false` for a SQLite-wire-compatible target with no such registration hook -- Cloudflare D1 is the motivating case -- so `matches`/`notMatches` are refused by `UnsupportedNodeError` at compile time instead of compiling to SQL that fails at query execution with "no such function: REGEXP". See the "Regular expressions" section in README.md.
    */
   sqliteRegexpAvailable?: boolean;
+  /**
+   * Whether `matches`/`notMatches` may compile to PostgreSQL's own `~`/`!~` operators. Ignored under the SQLite dialect, whose `REGEXP` question is `sqliteRegexpAvailable`'s above.
+   *
+   * trilean's evaluator matches a pattern as an ECMAScript `RegExp`; PostgreSQL matches the same pattern text under its own regular-expression dialect (POSIX ARE plus extensions), a different language that is close but not identical. The divergence is not always a syntax error the compiler could catch ahead of time: `.` matches a newline under PostgreSQL's default but not ECMAScript's, and `\w`/`\d` follow the database's locale under PostgreSQL rather than ASCII -- both compile and execute cleanly under either engine and can still answer a different set of rows for the same data. Named groups (`(?<name>...)`), named backreferences (`\k<name>`) and Unicode property escapes (`\p{...}`) are ECMAScript syntax PostgreSQL's ARE does not have at all, so a pattern using them compiles here but fails as a PostgreSQL query error at execution time rather than as a compile-time refusal.
+   *
+   * Defaults to `false`: `matches`/`notMatches` are refused as unpushable and fall back to in-process evaluation, which is always correct because that is exactly the language the pattern is defined against. Set it to `true` only once every pattern that reaches this option is known to use nothing outside the portable syntax README.md's "Regular expressions" section describes -- it is one switch for the whole compilation, not a per-pattern one, so setting it accepts that same risk for every `matches`/`notMatches` node the tree contains.
+   */
+  postgresRegexpPushdown?: boolean;
 }
 
 export interface CompiledSql {

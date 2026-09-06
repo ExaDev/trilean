@@ -45,6 +45,9 @@ const columns = {
 
 const { sql, params } = compilePredicateNode(rule, {
   dialect: "postgres",
+  // `matches` is refused by default -- see "Regular expressions" -- and opted into here because
+  // "@example[.]com$" uses nothing outside the syntax portable between ECMAScript and PostgreSQL.
+  postgresRegexpPushdown: true,
   columnFor: (key) => {
     const binding = columns[key as keyof typeof columns];
     if (binding === undefined) throw new Error(`no column for ${key}`);
@@ -73,6 +76,8 @@ Returns `{ sql, params }`. Throws rather than approximating; see [Refusal](#refu
 
 `paramType` declares the column's value kind: `"text"`, `"number"`, `"boolean"`, or `"timestamp"` (trilean's `instant`). It is optional and worth supplying — it does not change the emitted SQL, but it is the only thing that lets the compiler detect the operand-kind mismatches described under [Refusal](#refusal). Without it, a comparison the database would coerce into a definite answer where trilean returns `indeterminate` compiles silently.
 
+`options.postgresRegexpPushdown`, `false` by default, governs whether `matches`/`notMatches` may compile to PostgreSQL's own `~`/`!~` at all. See [Regular expressions](#regular-expressions) for why the default refuses them.
+
 ### `findUnpushableNodeKind(node, options?)`
 
 Returns `{ kind, path, reason }` for the first node the compiler will not translate, or `undefined` if the whole tree is pushable. `compilePredicateNode` runs it first and throws on any result, so call it yourself only to *choose* between pushdown and in-process evaluation without provoking an exception:
@@ -97,7 +102,7 @@ Passing `options` widens the check: without them the walk is purely structural; 
 | `and`, `or`, `not` | `AND`, `OR`, `NOT` | same |
 | `allOf`, `anyOf` | n-ary `AND`, `OR`; empty operands become each connective's identity, `TRUE` and `FALSE`, matching the evaluator's own fold | same |
 | `compare` | `>`, `>=`, `<`, `<=`, `=`, `<>` | same |
-| `textCompare` | `=`, `<>`, and `~` / `!~` for `matches` / `notMatches` | `=`, `<>`, and `REGEXP` / `NOT REGEXP` |
+| `textCompare` | `=`, `<>`; `matches`/`notMatches` only once `postgresRegexpPushdown` opts in, otherwise refused (see [Regular expressions](#regular-expressions)) | `=`, `<>`, and `REGEXP` / `NOT REGEXP` |
 | `memberOf` | `IN` / `NOT IN`, one parameter per candidate | same |
 | `exists` | `IS NOT NULL` | same |
 | `reference` | the mapped column, as a quoted identifier | same |
@@ -136,7 +141,9 @@ The compiler never degrades. There is no best-effort fragment, no silently dropp
 
 The check is an allow-list walk rather than a deny-list, so a node kind added to trilean after this version was written is refused by default instead of falling through to whatever branch happened to be last.
 
-That guarantee is about the tree's structure, and it has two limits, both about the *content* of a string operand rather than any node's kind, and neither reachable by a walk over kinds. A `matches`/`notMatches` pattern is matched by the server in PostgreSQL's own regular-expression language, not ECMAScript's — see [Regular expressions](#regular-expressions), which is where the row-for-row claim actually stops. An `instantLiteral` is parsed by PostgreSQL rather than by `Date`, so one carrying no UTC offset is read in the *database session's* time zone where trilean reads it in the Node process's, and one PostgreSQL cannot parse at all raises a query error at execution time rather than this exception (trilean answers `indeterminate` for the same string). Pass instants as offset-bearing ISO-8601, which both read identically.
+That guarantee is about the tree's structure, and it has one remaining limit that is about the *content* of a string operand rather than any node's kind, and is not reachable by a walk over kinds: an `instantLiteral` is parsed by PostgreSQL rather than by `Date`, so one carrying no UTC offset is read in the *database session's* time zone where trilean reads it in the Node process's, and one PostgreSQL cannot parse at all raises a query error at execution time rather than this exception (trilean answers `indeterminate` for the same string). Pass instants as offset-bearing ISO-8601, which both read identically.
+
+A `matches`/`notMatches` pattern would be the same kind of limit — matched by the server in PostgreSQL's own regular-expression language, not ECMAScript's — which is why it is refused rather than pushed down by default; see [Regular expressions](#regular-expressions). Setting `postgresRegexpPushdown: true` opts back into that limit deliberately, for patterns already known to be portable.
 
 Every refusal below applies to both dialects. What changes with the dialect is the `reason` text, which names the mechanism that actually applies to the engine you are compiling for — a `findUnpushableNodeKind` call given no `options` has no dialect to read and describes PostgreSQL, the one these refusals were first derived against.
 
@@ -155,7 +162,16 @@ Left undeclared, these compile, and the divergence is real but invisible. That i
 
 ## Regular expressions
 
-Under PostgreSQL, `matches` and `notMatches` compile to `~` and `!~`, so the pattern is matched by the server. PostgreSQL's advanced regular expressions and ECMAScript's `RegExp` are close but not the same language: shorthand classes and lookahead exist in both, and much everyday pattern syntax is portable, but they are separate implementations with their own escapes, quantifier subtleties and matching rules. A pattern that relies on ECMAScript-specific behaviour may match differently once pushed down. Keep patterns to portable syntax, or evaluate them in process.
+Under PostgreSQL, `matches` and `notMatches` *can* compile to `~` and `!~`, so the pattern is matched by the server rather than in process — but only once `postgresRegexpPushdown: true` is passed in `SqlCompileOptions`. Left at its default (`false`, or simply omitted), both are refused by `findUnpushableNodeKind`/`compilePredicateNode` and the caller evaluates them in process instead, exactly like any other unpushable node.
+
+This is the one node kind refused by default for a reason that is not structural: trilean's evaluator matches a pattern as an ECMAScript `RegExp`, and PostgreSQL's `~`/`!~` match under PostgreSQL's own regular-expression dialect (POSIX Advanced Regular Expressions, "ARE"). The two are close — literals, character classes, basic quantifiers, alternation, non-greedy quantifiers, numbered backreferences, and even lookahead/lookbehind are portable — but they are separate implementations, and measuring them directly (PostgreSQL's own docs against MDN's `RegExp` reference, each point checked against a real PostgreSQL engine via PGlite rather than trusted from documentation alone) turns up real divergence in both directions:
+
+- **Silent divergence — the compiled fragment executes cleanly under both engines and still answers a different row set for the same pattern and data, with no error anywhere to catch it.** `.` matches a newline under PostgreSQL's default (newline-insensitive) mode; ECMAScript's `.` does not unless the pattern carries the `s` flag, which trilean's evaluator never sets (`new RegExp(pattern)`, no flags) — so `a.b` matches `"a\nb"` under PostgreSQL and not under trilean. `\w`/`\d`/`\s` (and their negations) are locale-dependent under PostgreSQL — in a UTF8 database, `\w` matches an accented letter like `é` — while ECMAScript's are ASCII-only by default (no `u` flag) — so `^\w+$` matches `"café"` under PostgreSQL and not under trilean. Neither is a syntax difference a validator could reject; the identical pattern text is valid and meaningful in both languages, just with different meaning.
+- **Loud divergence — the pattern compiles clean here and fails only when PostgreSQL executes the query.** Named capture groups (`(?<name>...)`) and named backreferences (`\k<name>`) are ECMAScript syntax with no ARE equivalent (`invalid regular expression: quantifier operand invalid` from PostgreSQL, since ARE reads `(?<` as the start of a lookbehind and then finds no valid lookbehind body). Unicode property escapes (`\p{...}`/`\P{...}`) are likewise ECMAScript-only (`invalid regular expression: invalid escape \ sequence`). Character class subtraction (`[a-z-[aeiou]]`, from other regex dialects, not valid ECMAScript either but sometimes reached for) also fails under ARE.
+
+Given the silent class exists at all, a validated "portable subset" of pattern syntax cannot close this gap on its own: the offending constructs here are not unusual syntax to ban, they are two of the most ordinary regex idioms there are (`.` and `\w`), and the difference is in what the database's locale and newline-handling settings mean, not in what characters appear in the pattern text. That is why this compiles to in-process evaluation by default rather than to a syntax-restricted pushdown — and why opting in with `postgresRegexpPushdown: true` is a deliberate, whole-compilation decision rather than a per-pattern one: it is only safe once every pattern reaching this option is known, by the caller, to avoid both the syntax PostgreSQL cannot parse at all and the constructs (`.` against data that may contain newlines, `\w`/`\d`/`\s` against data that may contain non-ASCII text) whose meaning quietly differs.
+
+Sources: PostgreSQL's own [pattern-matching documentation](https://www.postgresql.org/docs/current/functions-matching.html) (POSIX ARE support, its embedded-option flags, and its own comparison against XQuery's regular expressions); MDN's [regular expressions reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions) for ECMAScript's semantics; the divergence points above were each executed against a real PostgreSQL engine (`@electric-sql/pglite`) and Node's own `RegExp`, not inferred from documentation alone.
 
 Under SQLite there is no built-in regular-expression support at all. `REGEXP` is reserved syntax for a `regexp(pattern, value)` function the connection has to register itself — `X REGEXP Y` is exactly `regexp(Y, X)`, pattern first — and the dialect emits `REGEXP` / `NOT REGEXP` for the same two operators. An unregistered one is a query error, `no such function: REGEXP`, rather than a fragment that quietly matches nothing, so this is a documented environment requirement in the same class as the caveats above and not a hole in the compile-time guarantee. The upside is that the pattern is then matched by your own `RegExp`, so the ECMAScript-versus-server-dialect divergence above does not arise.
 
