@@ -1,3 +1,9 @@
+## [1.5.0](https://github.com/ExaDev/trilean/compare/trilean%401.4.1...trilean%401.5.0) (2026-09-06)
+
+### Features
+
+* **trilean:** add portableMatches/portableNotMatches text comparison operators ([9749731](https://github.com/ExaDev/trilean/commit/97497319c44173c833a8c5b79b42d2e39a39f65e))
+
 ## [1.4.1](https://github.com/ExaDev/trilean/compare/trilean%401.4.0...trilean%401.4.1) (2026-09-03)
 
 ### Code Refactoring

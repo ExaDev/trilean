@@ -1,3 +1,14 @@
+## [2.1.0](https://github.com/ExaDev/trilean/compare/trilean-sql%402.0.0...trilean-sql%402.1.0) (2026-09-06)
+
+### Features
+
+* **trilean-sql:** compile portableMatches/portableNotMatches to native SQL ([a03171a](https://github.com/ExaDev/trilean/commit/a03171abfdc99c26b5550938aa3d445b7d74ae70))
+
+
+### Dependencies
+
+- Updated trilean to 1.5.0 (declared as `workspace:^`, resolved by pnpm at publish time)
+
 ## [2.0.0](https://github.com/ExaDev/trilean/compare/trilean-sql%401.2.0...trilean-sql%402.0.0) (2026-09-06)
 
 ### ⚠ BREAKING CHANGES
