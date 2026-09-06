@@ -239,6 +239,7 @@ export function compilePredicateNode(
       bindings.set(referenceKey, binding);
       return binding;
     },
+    sqliteRegexpAvailable: options.sqliteRegexpAvailable,
   };
 
   const unpushable = findUnpushableNodeKind(node, memoised);

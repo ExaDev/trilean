@@ -27,6 +27,12 @@ export interface SqlCompileOptions {
    * Only string reference keys reach it: trilean allows any JSON value as a key, and a non-string one is refused as unpushable before this is called. Throwing from here is how a caller rejects a key it has no column for -- the exception propagates out of `compilePredicateNode` unchanged, rather than being wrapped or swallowed.
    */
   columnFor: (referenceKey: string) => SqlColumnBinding;
+  /**
+   * Whether the SQLite target can resolve a `regexp(pattern, value)` function for `textCompare`'s `matches`/`notMatches` to compile to. Ignored under the `postgres` dialect, which matches patterns with its own native `~`/`!~` operators and never needs this.
+   *
+   * Defaults to `true`, preserving the historical behaviour of always compiling to `REGEXP`/`NOT REGEXP`, which is correct for a driver a caller can register a function on (better-sqlite3, for instance). Set explicitly to `false` for a SQLite-wire-compatible target with no such registration hook -- Cloudflare D1 is the motivating case -- so `matches`/`notMatches` are refused by `UnsupportedNodeError` at compile time instead of compiling to SQL that fails at query execution with "no such function: REGEXP". See the "Regular expressions" section in README.md.
+   */
+  sqliteRegexpAvailable?: boolean;
 }
 
 export interface CompiledSql {

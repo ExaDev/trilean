@@ -123,7 +123,7 @@ What compiles, what is refused, and the row-for-row agreement with `evaluatePred
 
 Two things a SQLite caller has to supply that a PostgreSQL caller does not, both of which fail loudly rather than silently:
 
-- **A `REGEXP` function**, if the tree uses `matches` or `notMatches`. See [Regular expressions](#regular-expressions).
+- **A `REGEXP` function**, if the tree uses `matches` or `notMatches` — unless you set `sqliteRegexpAvailable: false`, in which case those two are refused at compile time instead. See [Regular expressions](#regular-expressions).
 - **Booleans bound as `0`/`1`.** SQLite has no boolean type, and drivers do not agree on whether a JS boolean is bindable at all — better-sqlite3 rejects one outright (*"SQLite3 can only bind numbers, strings, bigints, buffers, and null"*). `params` carries the tree's own literals unchanged in every dialect, so converting them is the binding caller's job: `params.map((v) => (typeof v === "boolean" ? Number(v) : v))`.
 
 A dialect this version does not implement is refused by name, from `compilePredicateNode` and `findUnpushableNodeKind` alike, with `UnknownDialectError`. `SqlDialect` is a closed union so TypeScript source cannot reach that, but a dialect read from configuration and asserted into the union at the boundary can, and reporting such a tree as pushable would promise a compilation that cannot happen.
@@ -172,6 +172,8 @@ db.function("regexp", (pattern, text) =>
 ```
 
 Both details are load-bearing rather than stylistic. Returning `null` for a NULL argument is what keeps the third value intact: SQLite does not propagate NULL through a user function on its own, so one answering `0` for a NULL value would make `NOT REGEXP` answer `TRUE` for a row whose value is unknown — the two-valued collapse this package exists to avoid. Returning `1`/`0` rather than a JS boolean is what better-sqlite3 accepts; a boolean is rejected from a user function (*"returned an invalid value"*) for the same reason it is rejected as a bound parameter.
+
+Some SQLite-wire-compatible targets have no way to register a function at all — Cloudflare D1's Workers Binding API is the motivating case, with no hook for it in its API and [cloudflare/workers-sdk#2802](https://github.com/cloudflare/workers-sdk/issues/2802) still open. Against a target like that, the registration above is simply not possible, and compiling `matches`/`notMatches` to `REGEXP`/`NOT REGEXP` anyway produces SQL that always fails at query execution with `no such function: REGEXP` rather than failing at compile time the way every other unpushable shape does. Set `sqliteRegexpAvailable: false` in `SqlCompileOptions` for a target like this, and the SQLite dialect refuses `matches`/`notMatches` with `UnsupportedNodeError` — and `findUnpushableNodeKind` reports them unpushable — at compile time instead, so the caller falls back to in-process evaluation the same way it would for any other unpushable node. It defaults to `true`, so a caller with a registered function (better-sqlite3, say) sees no change. It has no effect under the `postgres` dialect, which never needs a registered function in the first place.
 
 ## Tests
 

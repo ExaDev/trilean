@@ -331,6 +331,17 @@ function findUnpushablePredicate(
       return undefined;
     }
     case "textCompare": {
+      if (
+        (node.op === "matches" || node.op === "notMatches") &&
+        options?.dialect === "sqlite" &&
+        options.sqliteRegexpAvailable === false
+      ) {
+        return {
+          kind: node.kind,
+          path,
+          reason: `options.sqliteRegexpAvailable is false: the caller has stated no regexp(pattern, value) function can be registered on this SQLite target, so '${node.op}' would compile to SQL that fails at query execution time with "no such function: REGEXP" instead of at compile time`,
+        };
+      }
       const operands = [
         { node: node.left, path: `${path}.left` },
         { node: node.right, path: `${path}.right` },

@@ -332,6 +332,69 @@ describe("operand kinds trilean and PostgreSQL would answer differently", () => 
   });
 });
 
+describe("sqliteRegexpAvailable", () => {
+  const patternMatch: PredicateNode = {
+    kind: "textCompare",
+    op: "matches",
+    left: { kind: "reference", key: "name" },
+    right: { kind: "textLiteral", value: "^a" },
+  };
+
+  const negatedPatternMatch: PredicateNode = {
+    ...patternMatch,
+    op: "notMatches",
+  };
+
+  it.each([
+    ["unset", sqliteSubjectOptions],
+    ["true", { ...sqliteSubjectOptions, sqliteRegexpAvailable: true }],
+  ])(
+    "leaves matches/notMatches pushable when the flag is %s",
+    (_label, options) => {
+      expect(findUnpushableNodeKind(patternMatch, options)).toBeUndefined();
+      expect(
+        findUnpushableNodeKind(negatedPatternMatch, options),
+      ).toBeUndefined();
+    },
+  );
+
+  it.each([patternMatch, negatedPatternMatch])(
+    "refuses '%s' under sqlite once the flag is false",
+    (node) => {
+      expect(
+        findUnpushableNodeKind(node, {
+          ...sqliteSubjectOptions,
+          sqliteRegexpAvailable: false,
+        }),
+      ).toMatchObject({ kind: "textCompare", path: "$" });
+    },
+  );
+
+  it("has no effect on the postgres dialect, which never needs it", () => {
+    expect(
+      findUnpushableNodeKind(patternMatch, {
+        ...subjectOptions,
+        sqliteRegexpAvailable: false,
+      }),
+    ).toBeUndefined();
+  });
+
+  it("leaves an equals/notEquals textCompare pushable regardless of the flag", () => {
+    const equality: PredicateNode = {
+      kind: "textCompare",
+      op: "equals",
+      left: { kind: "reference", key: "name" },
+      right: { kind: "textLiteral", value: "ada" },
+    };
+    expect(
+      findUnpushableNodeKind(equality, {
+        ...sqliteSubjectOptions,
+        sqliteRegexpAvailable: false,
+      }),
+    ).toBeUndefined();
+  });
+});
+
 describe("refusal reasons are worded for the dialect they describe", () => {
   // Which trees are refused is a property of the divergence, not of the dialect: every pairing below is answered definitely by both engines and wrong-typed by trilean, so both dialects refuse all of them. What changes is the explanation, and each dialect's has to name the mechanism that actually applies to it -- a reason describing PostgreSQL's NaN ordering would be simply false about SQLite, which has no NaN at all.
 
