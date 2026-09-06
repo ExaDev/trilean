@@ -1,3 +1,9 @@
+## [1.2.0](https://github.com/ExaDev/trilean/compare/trilean-sql%401.1.0...trilean-sql%401.2.0) (2026-09-06)
+
+### Features
+
+* **trilean-sql:** refuse matches/notMatches at compile time when SQLite REGEXP is unavailable ([9aaec9b](https://github.com/ExaDev/trilean/commit/9aaec9b39e56d0610d151ecfd600c29d2f74e3eb))
+
 ## [1.1.0](https://github.com/ExaDev/trilean/compare/trilean-sql%401.0.1...trilean-sql%401.1.0) (2026-09-03)
 
 ### Features
