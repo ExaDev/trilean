@@ -1,3 +1,14 @@
+## [2.0.0](https://github.com/ExaDev/trilean/compare/trilean-sql%401.2.0...trilean-sql%402.0.0) (2026-09-06)
+
+### ⚠ BREAKING CHANGES
+
+* **trilean-sql:** matches/notMatches against the PostgreSQL dialect now throw
+  UnsupportedNodeError unless postgresRegexpPushdown is set true.
+
+### Bug Fixes
+
+* **trilean-sql:** refuse PostgreSQL regexp pushdown by default ([94c3c6c](https://github.com/ExaDev/trilean/commit/94c3c6c0c65b5952439c753412fb31ffe970e2fa))
+
 ## [1.2.0](https://github.com/ExaDev/trilean/compare/trilean-sql%401.1.0...trilean-sql%401.2.0) (2026-09-06)
 
 ### Features
