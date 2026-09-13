@@ -1,3 +1,10 @@
+## [2.1.2](https://github.com/ExaDev/trilean/compare/trilean-sql%402.1.1...trilean-sql%402.1.2) (2026-09-13)
+
+
+### Dependencies
+
+- Updated trilean to 1.6.0 (declared as `workspace:^`, resolved by pnpm at publish time)
+
 ## [2.1.1](https://github.com/ExaDev/trilean/compare/trilean-sql%402.1.0...trilean-sql%402.1.1) (2026-09-06)
 
 ### Documentation

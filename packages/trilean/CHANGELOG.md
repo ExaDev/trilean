@@ -1,3 +1,9 @@
+## [1.6.0](https://github.com/ExaDev/trilean/compare/trilean%401.5.1...trilean%401.6.0) (2026-09-13)
+
+### Features
+
+* **evaluator:** cap total node visits and recursion depth per evaluation call ([ae05bf7](https://github.com/ExaDev/trilean/commit/ae05bf727fd948d4e760426d142ef942601b4882))
+
 ## [1.5.1](https://github.com/ExaDev/trilean/compare/trilean%401.5.0...trilean%401.5.1) (2026-09-06)
 
 ### Documentation
