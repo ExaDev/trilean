@@ -1,5 +1,5 @@
 import { describe, it } from "vitest";
-import { evaluatePredicate, evaluateValue } from "./evaluator";
+import { evaluatePredicate, evaluateValue } from "./evaluator-factory";
 import type { ExpressionNode } from "./tree";
 import {
   expectDefinite,

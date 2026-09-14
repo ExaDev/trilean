@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { createEvaluator, evaluatePredicate, evaluateValue } from "./evaluator";
+import {
+  createEvaluator,
+  evaluatePredicate,
+  evaluateValue,
+} from "./evaluator-factory";
 import type { FunctionRegistry } from "./functions";
 import type { Resolvers } from "./resolvers";
 import type { PredicateNode } from "./tree";

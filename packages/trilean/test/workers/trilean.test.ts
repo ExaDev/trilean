@@ -5,7 +5,7 @@ import {
   prefixPattern,
   wildcardPattern,
 } from "../../src/derived-patterns";
-import { evaluatePredicate, evaluateValue } from "../../src/evaluator";
+import { evaluatePredicate, evaluateValue } from "../../src/evaluator-factory";
 import {
   goldenExampleData,
   goldenExampleDataEmptyItems,

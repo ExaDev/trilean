@@ -5,7 +5,7 @@ import {
   complexMagnitude,
   complexPhase,
 } from "./complex";
-import { evaluateValue } from "./evaluator";
+import { evaluateValue } from "./evaluator-factory";
 import type { Resolvers } from "./resolvers";
 import { ExpressionNodeSchema } from "./tree";
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { evaluateValue } from "./evaluator";
+import { evaluateValue } from "./evaluator-factory";
 import type { Resolvers } from "./resolvers";
 import {
   expectDefinite,
