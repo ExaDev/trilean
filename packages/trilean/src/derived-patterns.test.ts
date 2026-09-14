@@ -4,7 +4,7 @@ import {
   prefixPattern,
   wildcardPattern,
 } from "./derived-patterns";
-import { createEvaluator, evaluatePredicate } from "./evaluator";
+import { createEvaluator, evaluatePredicate } from "./evaluator-factory";
 import type { PredicateNode } from "./tree";
 import type { Resolvers } from "./resolvers";
 

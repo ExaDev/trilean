@@ -1,5 +1,5 @@
 import { describe, it } from "vitest";
-import { evaluateValue } from "./evaluator";
+import { evaluateValue } from "./evaluator-factory";
 import type { ExpressionNode } from "./tree";
 import {
   expectDefinite,
@@ -7,7 +7,7 @@ import {
   resolvers,
 } from "./evaluator-test-helpers";
 
-/** `arithmetic`'s own indeterminate-propagation table -- contrast this against `and`/`or`'s absorption (see truth-tables.test.ts and `combineAnd`/`combineOr` in evaluator.ts): arithmetic has no absorbing value at all, so a definite operand on one side never rescues an indeterminate operand on the other, unlike OR's absorbing `true` or AND's absorbing `false`. */
+/** `arithmetic`'s own indeterminate-propagation table -- contrast this against `and`/`or`'s absorption (see truth-tables.test.ts and `combineAnd`/`combineOr` in evaluator-operations.ts): arithmetic has no absorbing value at all, so a definite operand on one side never rescues an indeterminate operand on the other, unlike OR's absorbing `true` or AND's absorbing `false`. */
 describe("arithmetic indeterminate propagation (no absorbing value)", () => {
   const definiteOperand: ExpressionNode = { kind: "numberLiteral", value: 1 };
   const indeterminateOperand: ExpressionNode = {

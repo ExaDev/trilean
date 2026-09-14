@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { evaluatePredicate } from "./evaluator";
+import { evaluatePredicate } from "./evaluator-factory";
 import {
   goldenExampleData,
   goldenExampleDataEmptyItems,

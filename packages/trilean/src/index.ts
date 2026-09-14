@@ -29,7 +29,11 @@ export type {
 export type { FunctionRegistry } from "./functions";
 export { emptyFunctionRegistry } from "./functions";
 
-export { createEvaluator, evaluatePredicate, evaluateValue } from "./evaluator";
+export {
+  createEvaluator,
+  evaluatePredicate,
+  evaluateValue,
+} from "./evaluator-factory";
 
 export {
   and,

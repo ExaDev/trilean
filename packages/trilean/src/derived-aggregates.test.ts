@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { average, count, sum } from "./derived-aggregates";
-import { evaluateValue } from "./evaluator";
+import { evaluateValue } from "./evaluator-factory";
 import type { Evaluation } from "./evaluation";
 import type { ComputedValue } from "./computed-value";
 import type { ExpressionNode, PredicateNode } from "./tree";
