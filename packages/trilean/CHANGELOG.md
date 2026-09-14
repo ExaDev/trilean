@@ -1,3 +1,27 @@
+## [1.6.1](https://github.com/ExaDev/trilean/compare/trilean%401.6.0...trilean%401.6.1) (2026-09-14)
+
+### Bug Fixes
+
+* escape arrow notation's > in doc comments so TSDoc doesn't read it as HTML ([1f93d10](https://github.com/ExaDev/trilean/commit/1f93d1057c16ad456d9d0244ba1b874c394b7189))
+
+### Code Refactoring
+
+* **evaluator:** split arithmetic, budget, collection, and factory logic into dedicated modules ([54d226f](https://github.com/ExaDev/trilean/commit/54d226f86a2a3bba4b5646f3b343ebb0674943a3))
+
+### Tests
+
+* **evaluator:** split evaluator.indeterminacy.test.ts under the 800-line cap ([eb45ab3](https://github.com/ExaDev/trilean/commit/eb45ab3efad75c5aa317e5a666b5b47b3006b8e9))
+* **evaluator:** split evaluator.test.ts into topic-scoped files under the 800-line cap ([ca36bfb](https://github.com/ExaDev/trilean/commit/ca36bfbf82e7ebf52027562d6e6593300a6f8bb0))
+
+### Miscellaneous Chores
+
+* **deps:** pin @exadev/eslint-config to 2.12.1 across the workspace ([b8a548f](https://github.com/ExaDev/trilean/commit/b8a548f5c75eac7f26491c74d7add6fd72e5ce7f))
+
+
+### Dependencies
+
+- Updated trilean-regex to 1.0.2 (declared as `workspace:^`, resolved by pnpm at publish time)
+
 ## [1.6.0](https://github.com/ExaDev/trilean/compare/trilean%401.5.1...trilean%401.6.0) (2026-09-13)
 
 ### Features

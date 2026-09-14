@@ -1,3 +1,13 @@
+## [1.0.2](https://github.com/ExaDev/trilean/compare/trilean-regex%401.0.1...trilean-regex%401.0.2) (2026-09-14)
+
+### Bug Fixes
+
+* use backticks instead of JSDoc-style braces on [@throws](https://github.com/throws) tags ([b1e8213](https://github.com/ExaDev/trilean/commit/b1e82139ed9afb23a1cf16ab8899d4d3e5ec6780))
+
+### Miscellaneous Chores
+
+* **deps:** pin @exadev/eslint-config to 2.12.1 across the workspace ([b8a548f](https://github.com/ExaDev/trilean/commit/b8a548f5c75eac7f26491c74d7add6fd72e5ce7f))
+
 ## [1.0.1](https://github.com/ExaDev/trilean/compare/trilean-regex%401.0.0...trilean-regex%401.0.1) (2026-09-06)
 
 ### Documentation
