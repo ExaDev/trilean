@@ -475,8 +475,7 @@ class Parser {
  * Parses a pattern in this package's grammar (see README.md) into a `RegexNode` AST.
  *
  * Never returns a partial result: a pattern either parses completely, with nothing left over, or this throws `RegexParseError` naming exactly where parsing could not proceed.
- *
- * @throws {RegexParseError} if `pattern` is not a complete, valid pattern in this grammar.
+ * @throws `RegexParseError` if `pattern` is not a complete, valid pattern in this grammar.
  */
 export function parseRegex(pattern: string): RegexNode {
   const parser = new Parser(pattern);

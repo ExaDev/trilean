@@ -467,8 +467,7 @@ function findUnpushablePredicate(
  * Passing `options` widens the check: without them the walk is purely structural, and with them it also applies the operand-kind rules that depend on each mapped column's declared `paramType` (and therefore calls `columnFor`).
  *
  * Which nodes are refused does not depend on the dialect -- every divergence refused here is real in both -- so a structural walk given no `options` refuses exactly what a walk given them would. What `options` also settles is which engine each `reason` describes; with none to read a dialect from, the reasons describe PostgreSQL, the dialect these refusals were first derived against.
- *
- * @throws {UnknownDialectError} if `options` names a dialect this version does not implement. Reporting a tree as pushable is a promise that `compilePredicateNode` will compile it, and under a dialect that does not exist it cannot -- so this is refused here rather than left to surface from the compiler, which is the one caller this function's answer is for.
+ * @throws `UnknownDialectError` if `options` names a dialect this version does not implement. Reporting a tree as pushable is a promise that `compilePredicateNode` will compile it, and under a dialect that does not exist it cannot -- so this is refused here rather than left to surface from the compiler, which is the one caller this function's answer is for.
  */
 export function findUnpushableNodeKind(
   node: PredicateNode,

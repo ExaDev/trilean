@@ -88,8 +88,7 @@ export interface CompiledPattern {
  * Parses `pattern` (this package's grammar; see README.md) and compiles it to a reference matcher.
  *
  * Prefer this over `testPattern` when the same pattern will be tested against more than one input: it parses and compiles exactly once, and the returned `CompiledPattern.test` is then only the O(length x states) simulation.
- *
- * @throws {RegexParseError} if `pattern` is not a valid pattern in this grammar.
+ * @throws `RegexParseError` if `pattern` is not a valid pattern in this grammar.
  */
 export function compilePattern(pattern: string): CompiledPattern {
   const nfa = compileToNfa(parseRegex(pattern));
@@ -98,8 +97,7 @@ export function compilePattern(pattern: string): CompiledPattern {
 
 /**
  * Parses `pattern` and tests it against `input` in one call. Equivalent to `compilePattern(pattern).test(input)`, and exactly as cheap for a single test -- prefer `compilePattern` instead when the same pattern will be reused, so the parse and compile steps happen once rather than once per input.
- *
- * @throws {RegexParseError} if `pattern` is not a valid pattern in this grammar.
+ * @throws `RegexParseError` if `pattern` is not a valid pattern in this grammar.
  */
 export function testPattern(pattern: string, input: string): boolean {
   return compilePattern(pattern).test(input);
