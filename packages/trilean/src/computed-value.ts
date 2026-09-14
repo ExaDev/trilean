@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-/** Dimension symbol -> exponent, e.g. `{ m: 1, s: -1 }` for metres per second. A bare symbol like `"kg"` is shorthand for `{ kg: 1 }`. */
+/** Dimension symbol -\> exponent, e.g. `{ m: 1, s: -1 }` for metres per second. A bare symbol like `"kg"` is shorthand for `{ kg: 1 }`. */
 export const UnitSchema = z.record(z.string(), z.number());
 export type Unit = z.infer<typeof UnitSchema>;
 
