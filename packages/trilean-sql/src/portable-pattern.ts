@@ -85,8 +85,7 @@ function renderPostgresSubcomponent(node: RegexNode): string {
  * Translates a `trilean-regex` AST into PostgreSQL's own Advanced Regular Expression syntax, for binding as the pattern argument to `~`/`!~`.
  *
  * Every construct this grammar accepts translates structurally, `.` included: measured directly against a real PostgreSQL 17 server (see the "PostgreSQL's own engine treats '.' as matching a newline" case in `test/integration/postgres.test.ts`), PostgreSQL's `.` matches a newline by default in the mode this compiler's `~`/`!~` operators run under -- the same as this grammar's own `.` (see trilean-regex's README) -- so no rewriting is needed here. (PostgreSQL's own prose documentation reads, in isolation, as though newline-sensitive matching were the default; it is not the one this operator uses, and the fact was confirmed against the real server rather than trusted from the prose alone -- see the "Verify this assumption" principle this compiler otherwise applies to every other construct too.)
- *
- * @throws {PortablePatternUnsupportedError} if a bounded repetition exceeds PostgreSQL's own 0-255 bound limit.
+ * @throws `PortablePatternUnsupportedError` if a bounded repetition exceeds PostgreSQL's own 0-255 bound limit.
  */
 export function renderPostgresPattern(node: RegexNode): string {
   switch (node.kind) {
@@ -243,8 +242,7 @@ function planGlobBody(node: RegexNode): GlobPlan {
 
 /**
  * Translates a `trilean-regex` AST into a `GLOB` pattern, for binding as `GLOB`/`NOT GLOB`'s right-hand argument. See the "reachable subset" doc comment above for exactly what this does and does not translate.
- *
- * @throws {PortablePatternUnsupportedError} if `node` uses any construct outside the reachable subset.
+ * @throws `PortablePatternUnsupportedError` if `node` uses any construct outside the reachable subset.
  */
 export function renderSqliteGlobPattern(node: RegexNode): string {
   const plan = planGlobBody(node);

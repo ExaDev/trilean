@@ -254,10 +254,9 @@ function compilePredicate(
  * Three-valued logic is not reimplemented on top of SQL; it is delegated to it. SQL's `AND`, `OR` and `NOT` over `TRUE`/`FALSE`/`NULL` are Kleene's strong three-valued tables, which are the same tables trilean's own `combineAnd`, `combineOr` and `not` implement, and a comparison against a NULL column yields `NULL` exactly where the evaluator would have returned `indeterminate` from an unresolved reference. A row excluded by `WHERE` because its condition was unknown is therefore excluded for the same reason, and by the same rule, as a subject the evaluator declines to judge. No indeterminacy column, sentinel value or `CASE` scaffolding is emitted, because none is needed.
  *
  * Every caller-supplied literal becomes a bind parameter. Nothing but structure, operators, and quoted column identifiers is ever written into the returned `sql`.
- *
- * @throws {UnknownDialectError} if `options.dialect` names a dialect this version does not implement.
- * @throws {UnsupportedNodeError} if any node in the tree is one this compiler will not translate -- see `findUnpushableNodeKind`, which this runs first and which a caller can run itself to choose between pushdown and in-process evaluation without provoking an exception.
- * @throws {InvalidColumnError} if `columnFor` returns a column that cannot be rendered as an identifier.
+ * @throws `UnknownDialectError` if `options.dialect` names a dialect this version does not implement.
+ * @throws `UnsupportedNodeError` if any node in the tree is one this compiler will not translate -- see `findUnpushableNodeKind`, which this runs first and which a caller can run itself to choose between pushdown and in-process evaluation without provoking an exception.
+ * @throws `InvalidColumnError` if `columnFor` returns a column that cannot be rendered as an identifier.
  */
 export function compilePredicateNode(
   node: PredicateNode,
