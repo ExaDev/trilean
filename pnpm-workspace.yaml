@@ -32,3 +32,6 @@ overrides:
   #
   # This override is what lets the changelog use the conventionalcommits preset at all. The single-package release config this replaces worked around the same bug by generating notes with the angular preset instead, which loses the per-type section headings.
   "@semantic-release/release-notes-generator>conventional-changelog-writer": 9.2.1
+
+# Pin every future `pnpm add` to the resolved version instead of a caret range, matching the exact pins already used for @exadev/eslint-config and @exadev/semantic-release-workspace above.
+saveExact: true
