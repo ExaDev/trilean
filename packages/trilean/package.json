@@ -87,7 +87,7 @@
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
     "@cloudflare/vitest-pool-workers": "^0.22.0",
-    "@exadev/eslint-config": "^2.10.2",
+    "@exadev/eslint-config": "2.12.1",
     "@types/node": "^26.4.0",
     "@vitest/coverage-v8": "^4.1.11",
     "canonicalize": "^4.0.0",
