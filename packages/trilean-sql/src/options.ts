@@ -18,6 +18,15 @@ export interface SqlColumnBinding {
   paramType?: SqlParamType;
 }
 
+export interface SqlCollectionBinding {
+  /** The correlated child table, dot-qualified exactly like `SqlColumnBinding.column` -- each dot-separated segment is emitted as its own double-quoted identifier. */
+  table: string;
+  /** Raw boolean SQL relating one row of `table` to the outer row, e.g. `"attrs"."nodeId" = "graph_nodes"."id" AND "attrs"."attrName" = 'voltageLevel'`. Caller-authored rather than assembled from a join-column pair, because only the caller knows the real join shape -- a single FK, a composite key, or (the EAV driving case) an FK plus a literal discriminator. */
+  join: string;
+  /** Resolves a reference key *inside* this collection's `item`/`filter` -- swapped in for the outer `columnFor` while compiling them, mirroring how trilean's own evaluator re-points `EvaluationContext` at the collection item (see `evaluator.ts`'s `resolveParticipatingItems`). */
+  columnFor: (referenceKey: string) => SqlColumnBinding;
+}
+
 export interface SqlCompileOptions {
   /** Which dialect to emit. It is a required field rather than a default so that a caller states the engine it is compiling for, instead of inheriting whichever one this package happened to implement first. */
   dialect: SqlDialect;
@@ -27,6 +36,12 @@ export interface SqlCompileOptions {
    * Only string reference keys reach it: trilean allows any JSON value as a key, and a non-string one is refused as unpushable before this is called. Throwing from here is how a caller rejects a key it has no column for -- the exception propagates out of `compilePredicateNode` unchanged, rather than being wrapped or swallowed.
    */
   columnFor: (referenceKey: string) => SqlColumnBinding;
+  /**
+   * Maps a `some`/`every`/`fold` node's `collection` key onto a correlated table. Called once per collection occurrence.
+   *
+   * Only string collection keys reach it, for the same reason only string reference keys reach `columnFor`. A tree that never uses `some`, `every`, or `fold(max|min)` never calls this -- leaving it unset is fully backward compatible. A tree that does use one of those kinds without this set is refused with `UnsupportedNodeError`, the same refused outcome those kinds already had before this option existed. `fold(reduce)` is refused unconditionally regardless of this option: it threads an arbitrary combine expression through the collection in a caller-chosen order, which has no general SQL translation.
+   */
+  collectionFor?: (collectionKey: string) => SqlCollectionBinding;
   /**
    * Whether the SQLite target can resolve a `regexp(pattern, value)` function for `textCompare`'s `matches`/`notMatches` to compile to. Ignored under the `postgres` dialect, which has its own separate `postgresRegexpPushdown` gate below.
    *
