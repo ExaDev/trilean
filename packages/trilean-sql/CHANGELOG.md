@@ -1,3 +1,26 @@
+## [2.2.0](https://github.com/ExaDev/trilean/compare/trilean-sql%402.1.3...trilean-sql%402.2.0) (2026-09-15)
+
+### Features
+
+* **trilean-sql:** add collectionFor option for correlated-table references ([55aa3c3](https://github.com/ExaDev/trilean/commit/55aa3c3159d72cad69df1171f9226f2c256a5a9a))
+* **trilean-sql:** add InvalidCollectionTableError for a bad collectionFor table ([9702b26](https://github.com/ExaDev/trilean/commit/9702b26866a28a51e9cdedac1bdcfb41b55a54a6))
+* **trilean-sql:** compile fold max/min combiners ([eccdbe0](https://github.com/ExaDev/trilean/commit/eccdbe0295d4d7f6238ca289639f770384a8af77))
+* **trilean-sql:** compile some/every to a correlated subquery ([1a11e10](https://github.com/ExaDev/trilean/commit/1a11e10c9a70af8b8c1b8d27401651493a43792e))
+* **trilean-sql:** push some/every/fold(max|min) through the pushability guard ([1e5e4ae](https://github.com/ExaDev/trilean/commit/1e5e4aec04d43d9da975b77630cccc3dd2de2a72))
+
+### Documentation
+
+* **trilean-sql:** document collectionFor and the some/every/fold translation ([02d6176](https://github.com/ExaDev/trilean/commit/02d6176bc8fd0c18d26bb10b22c9c647d417f95d))
+
+### Tests
+
+* **trilean-sql:** cover some/every/fold SQL compilation ([cae18c4](https://github.com/ExaDev/trilean/commit/cae18c4932e40bb6ae19cf0f9f69acc326fa71ce))
+* **trilean-sql:** split compile.test.ts into topic-scoped files under the 800-line cap ([8165e4e](https://github.com/ExaDev/trilean/commit/8165e4e46d53816df91463d2f9b62a707c215098))
+* **trilean-sql:** split guard.test.ts into topic-scoped files under the 800-line cap ([833f914](https://github.com/ExaDev/trilean/commit/833f914997db5d38a6918be2208136cc1747fa09))
+* **trilean-sql:** split pglite.test.ts into topic-scoped files under the 800-line cap ([a08804e](https://github.com/ExaDev/trilean/commit/a08804e035b746e5d6e0535f7f1c58e8d9aa54d3))
+* **trilean-sql:** split postgres.test.ts into topic-scoped files under the 800-line cap ([4ade3cc](https://github.com/ExaDev/trilean/commit/4ade3ccfee75c1230dd2948d9e92b2fb1456c1a3))
+* **trilean-sql:** split sqlite.test.ts into topic-scoped files under the 800-line cap ([60b337f](https://github.com/ExaDev/trilean/commit/60b337fba5b1f1935c03a50704ba9a0f9f8a5fe7))
+
 ## [2.1.3](https://github.com/ExaDev/trilean/compare/trilean-sql%402.1.2...trilean-sql%402.1.3) (2026-09-14)
 
 ### Bug Fixes
