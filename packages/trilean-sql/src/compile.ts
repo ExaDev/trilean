@@ -1,12 +1,19 @@
 import type {
   ComparisonOperator,
+  EveryNode,
   ExpressionNode,
+  FoldNode,
   PredicateNode,
+  SomeNode,
   TextCompareNode,
   TextComparisonOperator,
 } from "trilean";
 import { parseRegex } from "trilean-regex";
-import { InvalidColumnError, UnsupportedNodeError } from "./errors";
+import {
+  InvalidCollectionTableError,
+  InvalidColumnError,
+  UnsupportedNodeError,
+} from "./errors";
 import { findUnpushableNodeKind } from "./guard";
 import {
   renderPostgresPattern,
@@ -15,6 +22,7 @@ import {
 import type {
   CompiledSql,
   DialectConfig,
+  SqlCollectionBinding,
   SqlColumnBinding,
   SqlCompileOptions,
   SqlParamType,
@@ -106,6 +114,27 @@ function quoteColumn(
     .join(".");
 }
 
+/**
+ * Renders a `collectionFor` result's `table` as a SQL identifier, the same way `quoteColumn` renders a column: each dot-separated segment double-quoted, with any embedded double quote doubled.
+ *
+ * Takes the already-resolved table string rather than the whole `SqlCollectionBinding`, since every call site here has already destructured it -- unlike `quoteColumn`, which reads `binding.column` itself because its own call site still has the whole `SqlColumnBinding` in hand.
+ */
+function quoteTable(collectionKey: string, table: string): string {
+  const segments = table.split(".");
+  if (segments.some((segment) => segment.length === 0)) {
+    throw new InvalidCollectionTableError(
+      collectionKey,
+      table,
+      table.length === 0
+        ? "the name is empty"
+        : "a dot-separated segment is empty",
+    );
+  }
+  return segments
+    .map((segment) => `"${segment.replaceAll('"', '""')}"`)
+    .join(".");
+}
+
 function bindingOf(
   context: CompileContext,
   node: ExpressionNode,
@@ -130,6 +159,40 @@ function refuse(kind: string, layer: "expression" | "predicate"): never {
     path: "$",
     reason: `the ${layer} passed the pushability check but has no compiler branch`,
   });
+}
+
+/**
+ * The shared setup for `some`/`every`/`fold`: resolves `node.collection` to a quoted correlated table via `options.collectionFor`, builds the `CompileContext` its `item`/`filter`/`combiner.item` should compile against (the outer `columnFor` swapped for the resolved binding's own, mirroring how trilean's own evaluator re-points `EvaluationContext` at the collection item), and compiles `filter` eagerly since every caller needs it.
+ *
+ * The `typeof node.collection !== "string" || options.collectionFor === undefined` check is a drift safety net, not the primary defence: `findUnpushableNodeKind` already refused a non-string collection or a missing `collectionFor` before compilation ever started (see `resolveCollectionForGuard` in guard.ts), so reaching it in a correct build means the guard's allow-list has drifted from what this file actually compiles -- the same class of safety net `refuse` provides everywhere else in this module.
+ */
+function compileCollection(
+  node: SomeNode | EveryNode | FoldNode,
+  context: CompileContext,
+  layer: "expression" | "predicate",
+): {
+  table: string;
+  join: string;
+  itemContext: CompileContext;
+  filterSql: string | undefined;
+} {
+  if (
+    typeof node.collection !== "string" ||
+    context.options.collectionFor === undefined
+  ) {
+    return refuse(node.kind, layer);
+  }
+  const binding = context.options.collectionFor(node.collection);
+  const table = quoteTable(node.collection, binding.table);
+  const itemContext: CompileContext = {
+    ...context,
+    options: { ...context.options, columnFor: binding.columnFor },
+  };
+  const filterSql =
+    node.filter === undefined
+      ? undefined
+      : compilePredicate(node.filter, itemContext);
+  return { table, join: binding.join, itemContext, filterSql };
 }
 
 /**
@@ -174,6 +237,7 @@ function compileExpression(
     case "booleanLiteral":
     case "instantLiteral":
       return placeholder(context, node.value, PARAM_TYPE_OF_LITERAL[node.kind]);
+    case "fold":
     case "durationLiteral":
     case "complexLiteral":
     case "arithmetic":
@@ -181,7 +245,6 @@ function compileExpression(
     case "call":
     case "lookup":
     case "conditional":
-    case "fold":
     case "accumulator":
     case "delegate":
     case "treeReference":
@@ -241,7 +304,35 @@ function compilePredicate(
       // `exists` is the one predicate trilean never returns indeterminate for, and `IS NOT NULL` is likewise the one comparison SQL never returns NULL from -- so this is an exact translation rather than a NULL-propagating one, and a NULL column under `exists` is FALSE here just as an unresolved reference is `definite(false)` there.
       return `(${compileExpression(node.operand, context)} IS NOT NULL)`;
     case "some":
-    case "every":
+    case "every": {
+      const { table, join, itemContext, filterSql } = compileCollection(
+        node,
+        context,
+        "predicate",
+      );
+      const itemSql = compilePredicate(node.item, itemContext);
+      const filterColumn = filterSql ?? "TRUE";
+      const participating =
+        `SELECT "filter_ok", "item_ok" FROM ` +
+        `(SELECT ${filterColumn} AS "filter_ok", ${itemSql} AS "item_ok" FROM ${table} WHERE ${join}) AS "t" ` +
+        `WHERE "filter_ok" IS NULL OR "filter_ok"`;
+      if (node.kind === "some") {
+        // A TRUE vote from any genuinely include+true item wins outright, matching the evaluator's OR-fold absorption (`combineOr`): a definite true absorbs an indeterminate vote from elsewhere in the same collection. Only once no row voted true does an indeterminate participant (a filter-indeterminate row, or one whose item evaluation is itself NULL) make the whole thing indeterminate; with neither, every vote was a clean false (or there were no participating rows at all, `some`'s own empty-collection identity), so the result is false.
+        return (
+          `(SELECT CASE ` +
+          `WHEN MAX(CASE WHEN "filter_ok" AND "item_ok" THEN 1 ELSE 0 END) = 1 THEN TRUE ` +
+          `WHEN MAX(CASE WHEN "filter_ok" IS NULL OR "item_ok" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ` +
+          `ELSE FALSE END FROM (${participating}) AS "v")`
+        );
+      }
+      // The mirror image for `every`'s AND-fold absorption (`combineAnd`): a definite false from any participating row wins outright regardless of any other row's indeterminacy, then an indeterminate participant makes the rest indeterminate, and only once neither has happened -- every vote true, or no participating rows at all, `every`'s own empty-collection identity -- is the result true.
+      return (
+        `(SELECT CASE ` +
+        `WHEN MAX(CASE WHEN "filter_ok" AND "item_ok" IS NOT NULL AND NOT "item_ok" THEN 1 ELSE 0 END) = 1 THEN FALSE ` +
+        `WHEN MAX(CASE WHEN "filter_ok" IS NULL OR "item_ok" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ` +
+        `ELSE TRUE END FROM (${participating}) AS "v")`
+      );
+    }
     case "treeReference":
       break;
   }
@@ -267,6 +358,9 @@ export function compilePredicateNode(
 
   // `columnFor` is called by the guard walk and again while compiling, so it is memoised for the duration of one compilation -- a caller's mapping may be a lookup of real cost, and it must not matter how many times the compiler happens to ask.
   const bindings = new Map<string, SqlColumnBinding>();
+  // `collectionFor` gets the identical treatment, for the identical reason -- called once by the guard walk (`resolveCollectionForGuard`) and again while compiling (`compileCollection`). Each resolved binding's own `columnFor` is memoised too, in its own per-collection-key `Map`, since it is itself just as liable to be a lookup of real cost and is likewise called at least twice per reference inside that collection's `item`/`filter`.
+  const collectionBindings = new Map<string, SqlCollectionBinding>();
+  const collectionFor = options.collectionFor;
   const memoised: SqlCompileOptions = {
     dialect: options.dialect,
     postgresRegexpPushdown: options.postgresRegexpPushdown,
@@ -278,6 +372,27 @@ export function compilePredicateNode(
       return binding;
     },
     sqliteRegexpAvailable: options.sqliteRegexpAvailable,
+    ...(collectionFor !== undefined && {
+      collectionFor: (collectionKey: string): SqlCollectionBinding => {
+        const cached = collectionBindings.get(collectionKey);
+        if (cached !== undefined) return cached;
+        const binding = collectionFor(collectionKey);
+        const columnBindings = new Map<string, SqlColumnBinding>();
+        const memoisedBinding: SqlCollectionBinding = {
+          table: binding.table,
+          join: binding.join,
+          columnFor: (referenceKey: string): SqlColumnBinding => {
+            const cachedColumn = columnBindings.get(referenceKey);
+            if (cachedColumn !== undefined) return cachedColumn;
+            const columnBinding = binding.columnFor(referenceKey);
+            columnBindings.set(referenceKey, columnBinding);
+            return columnBinding;
+          },
+        };
+        collectionBindings.set(collectionKey, memoisedBinding);
+        return memoisedBinding;
+      },
+    }),
   };
 
   const unpushable = findUnpushableNodeKind(node, memoised);
