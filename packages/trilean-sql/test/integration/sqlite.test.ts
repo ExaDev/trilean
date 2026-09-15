@@ -10,7 +10,10 @@ import { evaluatePredicate } from "trilean";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { compilePredicateNode } from "../../src/compile";
 import type { SqlCompileOptions } from "../../src/options";
-import { sqliteSubjectOptions } from "../../src/test-support/columns";
+import {
+  sqliteSubjectOptions,
+  sqliteSubjectOptionsWithTags,
+} from "../../src/test-support/columns";
 
 /**
  * The SQLite counterpart of `postgres.test.ts`, and the same claim measured rather than asserted: every case compiles a tree, executes the fragment as a real `WHERE` clause against a real SQLite connection, and compares the rows it returns against the rows trilean's own evaluator judges `definite(true)` for the same tree.
@@ -41,6 +44,18 @@ const COERCION_SCHEMA = `
     label        TEXT PRIMARY KEY,
     numeric_text TEXT,
     flag         INTEGER
+  );
+`;
+
+/**
+ * The one correlated child table the `some`/`every`/`fold` parity suite below needs, matching `sqliteSubjectOptionsWithTags`'s own `collectionFor` mapping (`src/test-support/columns.ts`): a subject's own tags, each carrying an optional `weight`. `"subjectId"` is quoted throughout -- schema, insert, and the mapping's own `join` string -- matching the same quoted-identifier convention the PostgreSQL/PGlite suites use for it.
+ */
+const TAGS_SCHEMA = `
+  CREATE TABLE subject_tags (
+    id          TEXT PRIMARY KEY,
+    "subjectId" TEXT NOT NULL,
+    tag         TEXT,
+    weight      REAL
   );
 `;
 
@@ -89,10 +104,34 @@ const SUBJECTS: readonly SubjectRow[] = [
   },
 ];
 
+interface TagRow {
+  id: string;
+  subjectId: string;
+  tag: string;
+  weight: number | null;
+}
+
+/**
+ * Every subject's own tags, seeded to exercise a distinct shape of participation each: `ada` has none (the empty-collection case); `grace`'s two weights (3, 9) straddle the `[RANGE_LOW, RANGE_HIGH]` window used below without either one falling inside it, and one alone fails `MATCH_THRESHOLD` while the other passes; `lin` pairs one clean, participating vote with one whose `weight` is unknown; `unknown` has a single tag whose `weight` is unknown, the sole-participant indeterminate case.
+ */
+const TAGS: readonly TagRow[] = [
+  { id: "t1", subjectId: "grace", tag: "junior", weight: 3 },
+  { id: "t2", subjectId: "grace", tag: "senior", weight: 9 },
+  { id: "t3", subjectId: "lin", tag: "solo", weight: 9 },
+  { id: "t4", subjectId: "lin", tag: "unsure", weight: null },
+  { id: "t5", subjectId: "unknown", tag: "pending", weight: null },
+];
+
+function isPlainRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
 /**
  * Resolves a reference key against one row, mapping a NULL column to `found: false`.
  *
  * That mapping is the correspondence the whole design rests on, and stating it in one place here is what makes the parity assertions below meaningful: the evaluator is being given exactly the knowledge SQLite has about the same row, so any disagreement between them is the compiler's, not the fixture's.
+ *
+ * `resolveValue` also has to answer for a reference *inside* a `some`/`every`/`fold` item or filter, where `context` is the collection item itself (a plain `{ tag, weight }` object, mirroring how `evaluatePredicate` re-points its own `EvaluationContext` there) rather than the outer subject row -- `context !== undefined` is what tells the two apart, since the root evaluation is always called with `context: undefined`.
  */
 function resolversFor(row: Readonly<SubjectRow>): Resolvers {
   const known: Record<string, ComputedValue | undefined> = {
@@ -110,7 +149,26 @@ function resolversFor(row: Readonly<SubjectRow>): Resolvers {
   };
 
   return {
-    resolveValue: async (key: JsonValue) => {
+    resolveValue: async (key: JsonValue, context: unknown) => {
+      if (context !== undefined) {
+        if (typeof key !== "string" || !isPlainRecord(context)) {
+          return Promise.resolve<Resolution>({ found: false });
+        }
+        const value = context[key];
+        if (typeof value === "number") {
+          return Promise.resolve<Resolution>({
+            found: true,
+            value: { kind: "number", value },
+          });
+        }
+        if (typeof value === "string") {
+          return Promise.resolve<Resolution>({
+            found: true,
+            value: { kind: "text", value },
+          });
+        }
+        return Promise.resolve<Resolution>({ found: false });
+      }
       const value = typeof key === "string" ? known[key] : undefined;
       return Promise.resolve<Resolution>(
         value === undefined ? { found: false } : { found: true, value },
@@ -119,8 +177,14 @@ function resolversFor(row: Readonly<SubjectRow>): Resolvers {
     resolveLookup: () => {
       throw new Error("no tree in this suite uses a lookup");
     },
-    resolveCollection: () => {
-      throw new Error("no tree in this suite uses a collection");
+    resolveCollection: async (collection: JsonValue) => {
+      if (collection !== "tags") return Promise.resolve([]);
+      return Promise.resolve(
+        TAGS.filter((tagRow) => tagRow.subjectId === row.id).map((tagRow) => ({
+          tag: tagRow.tag,
+          weight: tagRow.weight,
+        })),
+      );
     },
   };
 }
@@ -161,6 +225,7 @@ beforeAll(() => {
 
   db.exec(SCHEMA);
   db.exec(COERCION_SCHEMA);
+  db.exec(TAGS_SCHEMA);
 
   const insert = db.prepare(
     "INSERT INTO subjects (id, age, name, active, joined, note) VALUES (?, ?, ?, ?, ?, ?)",
@@ -182,14 +247,24 @@ beforeAll(() => {
   );
   insertCoercion.run("nine", "9", 1);
   insertCoercion.run("ten", "10", FALSE_AS_INTEGER);
+
+  const insertTag = db.prepare(
+    `INSERT INTO subject_tags (id, "subjectId", tag, weight) VALUES (?, ?, ?, ?)`,
+  );
+  for (const tagRow of TAGS) {
+    insertTag.run(tagRow.id, tagRow.subjectId, tagRow.tag, tagRow.weight);
+  }
 });
 
 afterAll(() => {
   db.close();
 });
 
-function selectMatching(node: PredicateNode): string[] {
-  const compiled = compilePredicateNode(node, sqliteSubjectOptions);
+function selectMatching(
+  node: PredicateNode,
+  options: Readonly<SqlCompileOptions> = sqliteSubjectOptions,
+): string[] {
+  const compiled = compilePredicateNode(node, options);
   const rows = db
     .prepare<unknown[], { id: string }>(
       `SELECT id FROM subjects WHERE ${compiled.sql} ORDER BY id`,
@@ -213,9 +288,12 @@ async function evaluatorMatching(node: PredicateNode): Promise<string[]> {
   return matched.sort();
 }
 
-/** Runs the tree both ways and asserts they agree, then hands back the row set so a case can also state what that set should be. Agreement alone would be satisfied by both being wrong in the same way, so every caller asserts the expected ids too. */
-async function agreeingRows(node: PredicateNode): Promise<string[]> {
-  const viaSql = selectMatching(node);
+/** Runs the tree both ways and asserts they agree, then hands back the row set so a case can also state what that set should be. Agreement alone would be satisfied by both being wrong in the same way, so every caller asserts the expected ids too. `options` defaults to `sqliteSubjectOptions`; the quantifier suite passes `sqliteSubjectOptionsWithTags` instead. */
+async function agreeingRows(
+  node: PredicateNode,
+  options: Readonly<SqlCompileOptions> = sqliteSubjectOptions,
+): Promise<string[]> {
+  const viaSql = selectMatching(node, options);
   const viaEvaluator = await evaluatorMatching(node);
   expect(viaSql).toEqual(viaEvaluator);
   return viaSql;
@@ -683,6 +761,193 @@ describe("the divergences the guard's refusals exist to prevent", () => {
       .prepare<[string, number], { answer: number }>("SELECT (? > ?) AS answer")
       .get("abc", COERCION_THRESHOLD);
     expect(crossKind?.answer).toBe(1);
+  });
+});
+
+describe("some/every/fold over a correlated collection", () => {
+  const MATCH_THRESHOLD = 5;
+  const RANGE_LOW = 6;
+  const RANGE_HIGH = 8;
+
+  const weightAboveThreshold: PredicateNode = {
+    kind: "compare",
+    op: "gte",
+    left: { kind: "reference", key: "weight" },
+    right: { kind: "numberLiteral", value: MATCH_THRESHOLD },
+  };
+
+  it("some: true the moment one participating tag among several votes true", async () => {
+    // grace's two tags are 3 (fails) and 9 (passes); a clean true vote wins outright.
+    await expect(
+      agreeingRows(
+        { kind: "some", collection: "tags", item: weightAboveThreshold },
+        sqliteSubjectOptionsWithTags,
+      ),
+    ).resolves.toContain("grace");
+  });
+
+  it("every: false the moment one participating tag among several votes false", async () => {
+    // The same two tags fail `every`: junior's weight of 3 is a definite false vote regardless of senior's true one.
+    await expect(
+      agreeingRows(
+        { kind: "every", collection: "tags", item: weightAboveThreshold },
+        sqliteSubjectOptionsWithTags,
+      ),
+    ).resolves.not.toContain("grace");
+  });
+
+  it("filter narrows which tags participate before item is even evaluated", async () => {
+    // Filtered to only the 'senior' tag, junior's own failing weight never gets a vote at all -- grace passes `every` here even though it fails the unfiltered version above.
+    const filtered: PredicateNode = {
+      kind: "every",
+      collection: "tags",
+      filter: {
+        kind: "textCompare",
+        op: "equals",
+        left: { kind: "reference", key: "tag" },
+        right: { kind: "textLiteral", value: "senior" },
+      },
+      item: weightAboveThreshold,
+    };
+    await expect(
+      agreeingRows(filtered, sqliteSubjectOptionsWithTags),
+    ).resolves.toContain("grace");
+  });
+
+  it("some/every over an empty collection reduce to each connective's own identity", async () => {
+    // ada has no tags at all: the empty-participating-set case, matching some/every's own anyOf/allOf-style fold identities.
+    await expect(
+      agreeingRows(
+        { kind: "some", collection: "tags", item: weightAboveThreshold },
+        sqliteSubjectOptionsWithTags,
+      ),
+    ).resolves.not.toContain("ada");
+    await expect(
+      agreeingRows(
+        { kind: "every", collection: "tags", item: weightAboveThreshold },
+        sqliteSubjectOptionsWithTags,
+      ),
+    ).resolves.toContain("ada");
+  });
+
+  it("some absorbs an indeterminate vote from a NULL-weighted tag alongside a clean true vote", async () => {
+    // lin's tags are 9 (passes) and an unknown weight (indeterminate); the clean true vote absorbs the indeterminate one under OR.
+    await expect(
+      agreeingRows(
+        { kind: "some", collection: "tags", item: weightAboveThreshold },
+        sqliteSubjectOptionsWithTags,
+      ),
+    ).resolves.toContain("lin");
+  });
+
+  it("some/every are indeterminate when the sole participating tag's weight is unknown", async () => {
+    // unknown's one tag has no weight at all: neither engine can vote, so the row is absent from both some and its negation, and likewise for every.
+    const some: PredicateNode = {
+      kind: "some",
+      collection: "tags",
+      item: weightAboveThreshold,
+    };
+    const every: PredicateNode = {
+      kind: "every",
+      collection: "tags",
+      item: weightAboveThreshold,
+    };
+    const somePresent = await agreeingRows(some, sqliteSubjectOptionsWithTags);
+    const someAbsent = await agreeingRows(
+      { kind: "not", operand: some },
+      sqliteSubjectOptionsWithTags,
+    );
+    expect(somePresent).not.toContain("unknown");
+    expect(someAbsent).not.toContain("unknown");
+
+    const everyPresent = await agreeingRows(
+      every,
+      sqliteSubjectOptionsWithTags,
+    );
+    const everyAbsent = await agreeingRows(
+      { kind: "not", operand: every },
+      sqliteSubjectOptionsWithTags,
+    );
+    expect(everyPresent).not.toContain("unknown");
+    expect(everyAbsent).not.toContain("unknown");
+  });
+
+  it("a per-row AND inside 'item' rules out the and-over-range hazard a naive split translation would fall into", async () => {
+    // grace's weights (3, 9) straddle [RANGE_LOW, RANGE_HIGH] without either single tag satisfying both bounds at once -- a compiler that pushed 'gte' and 'lte' down as two separate correlated checks, rather than one combined boolean per row, would wrongly answer true here.
+    const straddling: PredicateNode = {
+      kind: "some",
+      collection: "tags",
+      item: {
+        kind: "and",
+        left: {
+          kind: "compare",
+          op: "gte",
+          left: { kind: "reference", key: "weight" },
+          right: { kind: "numberLiteral", value: RANGE_LOW },
+        },
+        right: {
+          kind: "compare",
+          op: "lte",
+          left: { kind: "reference", key: "weight" },
+          right: { kind: "numberLiteral", value: RANGE_HIGH },
+        },
+      },
+    };
+    await expect(
+      agreeingRows(straddling, sqliteSubjectOptionsWithTags),
+    ).resolves.not.toContain("grace");
+  });
+
+  it("fold('max'/'min') aggregates the projected weight across participating tags", async () => {
+    const maxWeight: PredicateNode = {
+      kind: "compare",
+      op: "eq",
+      left: {
+        kind: "fold",
+        collection: "tags",
+        combiner: { mode: "max", item: { kind: "reference", key: "weight" } },
+      },
+      right: { kind: "numberLiteral", value: 9 },
+    };
+    const minWeight: PredicateNode = {
+      kind: "compare",
+      op: "eq",
+      left: {
+        kind: "fold",
+        collection: "tags",
+        combiner: { mode: "min", item: { kind: "reference", key: "weight" } },
+      },
+      right: { kind: "numberLiteral", value: 3 },
+    };
+    await expect(
+      agreeingRows(maxWeight, sqliteSubjectOptionsWithTags),
+    ).resolves.toContain("grace");
+    await expect(
+      agreeingRows(minWeight, sqliteSubjectOptionsWithTags),
+    ).resolves.toContain("grace");
+  });
+
+  it("fold('max') is indeterminate over an empty collection and over one whose sole participant is NULL", async () => {
+    const maxWeight: PredicateNode = {
+      kind: "compare",
+      op: "eq",
+      left: {
+        kind: "fold",
+        collection: "tags",
+        combiner: { mode: "max", item: { kind: "reference", key: "weight" } },
+      },
+      right: { kind: "numberLiteral", value: 9 },
+    };
+    const present = await agreeingRows(maxWeight, sqliteSubjectOptionsWithTags);
+    const absent = await agreeingRows(
+      { kind: "not", operand: maxWeight },
+      sqliteSubjectOptionsWithTags,
+    );
+    // ada (no tags at all) and unknown (one tag, unknown weight) can never resolve definitely either way.
+    expect(present).not.toContain("ada");
+    expect(present).not.toContain("unknown");
+    expect(absent).not.toContain("ada");
+    expect(absent).not.toContain("unknown");
   });
 });
 

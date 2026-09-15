@@ -1,4 +1,8 @@
-import type { SqlColumnBinding, SqlCompileOptions } from "../options";
+import type {
+  SqlCollectionBinding,
+  SqlColumnBinding,
+  SqlCompileOptions,
+} from "../options";
 
 /**
  * The schema the unit tests and every integration suite compile against, so a fragment asserted as a string in one is the same fragment executed against a real engine in the others.
@@ -36,4 +40,48 @@ export const sqliteSubjectOptions: SqlCompileOptions = {
 export const subjectOptionsWithPostgresRegexp: SqlCompileOptions = {
   ...subjectOptions,
   postgresRegexpPushdown: true,
+};
+
+/**
+ * The one correlated child table every integration suite seeds alongside `subjects`, purely to exercise `some`/`every`/`fold` against a real connection -- a subject's own tags, each carrying an optional `weight`. `tag` and `weight` both declare a `paramType`, matching `SUBJECT_COLUMNS`'s own convention of describing every column an integration suite actually compares by kind.
+ */
+export const SUBJECT_TAG_COLUMNS: Readonly<Record<string, SqlColumnBinding>> = {
+  tag: { column: "tag", paramType: "text" },
+  weight: { column: "weight", paramType: "number" },
+};
+
+function columnForSubjectTag(referenceKey: string): SqlColumnBinding {
+  const binding = SUBJECT_TAG_COLUMNS[referenceKey];
+  if (binding === undefined) {
+    throw new Error(`no column mapped for reference key '${referenceKey}'`);
+  }
+  return binding;
+}
+
+/** Maps the one collection key every integration suite's trees use, `"tags"`, onto `subject_tags`, correlated to the outer `subjects` row by `subjectId`. */
+export function collectionForSubjectTags(
+  collectionKey: string,
+): SqlCollectionBinding {
+  if (collectionKey !== "tags") {
+    throw new Error(
+      `no collection mapped for collection key '${collectionKey}'`,
+    );
+  }
+  return {
+    table: "subject_tags",
+    join: `"subject_tags"."subjectId" = "subjects"."id"`,
+    columnFor: columnForSubjectTag,
+  };
+}
+
+/** `subjectOptions` with `collectionFor` supplied, for the integration suites' `some`/`every`/`fold` parity tests. */
+export const subjectOptionsWithTags: SqlCompileOptions = {
+  ...subjectOptions,
+  collectionFor: collectionForSubjectTags,
+};
+
+/** The same mapping compiled for SQLite. */
+export const sqliteSubjectOptionsWithTags: SqlCompileOptions = {
+  ...sqliteSubjectOptions,
+  collectionFor: collectionForSubjectTags,
 };
