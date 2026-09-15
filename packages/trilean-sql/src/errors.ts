@@ -74,3 +74,22 @@ export class InvalidColumnError extends TrileanSqlError {
     this.column = column;
   }
 }
+
+/**
+ * A `collectionFor` result whose `table` cannot be rendered as a SQL identifier.
+ *
+ * Mirrors `InvalidColumnError` exactly, for the correlated table a `some`/`every`/`fold` node compiles against instead of a mapped column: `table` is likewise an identifier that has to be written into the statement text rather than bound as a parameter, so this rejects the same two shapes quoting cannot rescue -- an empty name and an empty dot-separated segment.
+ */
+export class InvalidCollectionTableError extends TrileanSqlError {
+  readonly collectionKey: string;
+  readonly table: string;
+
+  constructor(collectionKey: string, table: string, reason: string) {
+    super(
+      `collectionFor(${JSON.stringify(collectionKey)}) returned ${JSON.stringify(table)}, which is not a usable table identifier: ${reason}`,
+    );
+    this.name = "InvalidCollectionTableError";
+    this.collectionKey = collectionKey;
+    this.table = table;
+  }
+}
