@@ -237,7 +237,27 @@ function compileExpression(
     case "booleanLiteral":
     case "instantLiteral":
       return placeholder(context, node.value, PARAM_TYPE_OF_LITERAL[node.kind]);
-    case "fold":
+    case "fold": {
+      if (node.combiner.mode === "reduce")
+        return refuse(node.kind, "expression"); // guard already refused this; drift safety net
+      const { table, join, itemContext, filterSql } = compileCollection(
+        node,
+        context,
+        "expression",
+      );
+      const itemValueSql = compileExpression(node.combiner.item, itemContext);
+      const filterColumn = filterSql ?? "TRUE";
+      const participating =
+        `SELECT "filter_ok", "item_value" FROM ` +
+        `(SELECT ${filterColumn} AS "filter_ok", ${itemValueSql} AS "item_value" FROM ${table} WHERE ${join}) AS "t" ` +
+        `WHERE "filter_ok" IS NULL OR "filter_ok"`;
+      const aggregate = node.combiner.mode === "max" ? "MAX" : "MIN";
+      return (
+        `(SELECT CASE ` +
+        `WHEN MAX(CASE WHEN "filter_ok" IS NULL OR "item_value" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ` +
+        `ELSE ${aggregate}("item_value") END FROM (${participating}) AS "v")`
+      );
+    }
     case "durationLiteral":
     case "complexLiteral":
     case "arithmetic":
