@@ -80,6 +80,8 @@ Returns `{ sql, params }`. Throws rather than approximating; see [Refusal](#refu
 
 `options.postgresRegexpPushdown`, `false` by default, governs whether `matches`/`notMatches` may compile to PostgreSQL's own `~`/`!~` at all. See [Regular expressions](#regular-expressions) for why the default refuses them.
 
+`options.collectionFor(collectionKey)` maps a `some`/`every`/`fold` node's `collection` key onto `{ table, join, columnFor }` — see [Collections](#collections). Optional: a tree that never uses one of those kinds never calls it, and leaving it unset is fully backward compatible with every version before it existed.
+
 ### `findUnpushableNodeKind(node, options?)`
 
 Returns `{ kind, path, reason }` for the first node the compiler will not translate, or `undefined` if the whole tree is pushable. `compilePredicateNode` runs it first and throws on any result, so call it yourself only to *choose* between pushdown and in-process evaluation without provoking an exception:
@@ -95,7 +97,7 @@ Passing `options` widens the check: without them the walk is purely structural; 
 
 ### Errors
 
-`UnsupportedNodeError` (carrying `nodeKind`, `path`, `reason`) and `InvalidColumnError` (carrying `referenceKey`, `column`), both extending `TrileanSqlError`.
+`UnsupportedNodeError` (carrying `nodeKind`, `path`, `reason`), `InvalidColumnError` (carrying `referenceKey`, `column`) and `InvalidCollectionTableError` (carrying `collectionKey`, `table`), all extending `TrileanSqlError`.
 
 ## What compiles
 
@@ -107,6 +109,8 @@ Passing `options` widens the check: without them the walk is purely structural; 
 | `textCompare` | `=`, `<>`; `matches`/`notMatches` only once `postgresRegexpPushdown` opts in, otherwise refused (see [Regular expressions](#regular-expressions)); `~`/`!~` against a translated pattern for `portableMatches`/`portableNotMatches`, no opt-in needed | `=`, `<>`; `REGEXP`/`NOT REGEXP` for `matches`/`notMatches`; `GLOB`/`NOT GLOB` against a translated pattern for `portableMatches`/`portableNotMatches` |
 | `memberOf` | `IN` / `NOT IN`, one parameter per candidate | same |
 | `exists` | `IS NOT NULL` | same |
+| `some`, `every` | a correlated scalar subquery over `collectionFor`'s table, combining each participating row's own vote with `MAX`/`CASE` to match the evaluator's OR/AND-fold absorption exactly (see [Collections](#collections)); refused unless `collectionFor` maps the `collection` key | same |
+| `fold` (`max`/`min`) | the same correlated subquery, aggregating each participating item's own projected value with `MAX`/`MIN`, `NULL` the moment any participating item (or its `filter`) is indeterminate (see [Collections](#collections)); refused unless `collectionFor` maps the `collection` key. `fold` (`reduce`) is always refused — see [Refusal](#refusal) | same |
 | `reference` | the mapped column, as a quoted identifier | same |
 | `textLiteral`, `numberLiteral`, `booleanLiteral`, `instantLiteral` | a bind parameter, cast to `text`, `double precision`, `boolean`, `timestamptz` | a bare `?`, uncast |
 
@@ -115,6 +119,26 @@ Every literal in the tree becomes a parameter. Nothing but structure, operators 
 PostgreSQL placeholders are always cast. That is not decoration: PostgreSQL rejects `$1 < $2` outright because it cannot determine either parameter's type, and casting each placeholder to the type its own literal kind implies is what makes a fragment's meaning independent of how a particular driver decided to infer an untyped parameter. `timestamptz` rather than `timestamp`, because trilean's `instant` is an ISO-8601 string that may carry an offset and parsing one as a naive timestamp would silently discard it. SQLite placeholders carry neither a number nor a cast, because there is nothing to write: parameters bind by the order they appear, and there is no type to annotate. It answers a comparison between two bare `?` from the bound values themselves.
 
 An empty `memberOf` candidate list is worth a note, because `IN ()` is a syntax error and the two constants it is tempting to fold to are both wrong. An empty `in` is false and an empty `notIn` is true only once the operand itself is known, and both stay unknown while it is `NULL`. The compiled forms — `(x IS NULL AND NULL::boolean)` and `(x IS NOT NULL OR NULL::boolean)`, and the same two without the cast under SQLite, which has no boolean type to annotate — reproduce that exactly, which a bare `FALSE`/`TRUE` would not, most visibly under a surrounding `NOT`.
+
+## Collections
+
+`some`, `every`, and `fold` (`max`/`min`) range over a `collection` the caller's resolvers supply — in `trilean` itself an opaque key resolved to an arbitrary in-memory list at evaluation time, with no assumption it is this query's row set at all. This package can push one down only when the caller states that the collection *is* a correlated table: `options.collectionFor(collectionKey)` returns
+
+```ts
+interface SqlCollectionBinding {
+  table: string; // dot-qualified, quoted exactly like a mapped column's `column`
+  join: string; // raw boolean SQL relating one row of `table` to the outer row
+  columnFor: (referenceKey: string) => SqlColumnBinding; // resolves a reference *inside* item/filter
+}
+```
+
+`join` is caller-authored rather than assembled from a join-column pair, because only the caller knows the real join shape — a single foreign key, a composite key, or an entity-attribute-value table's foreign key plus a literal discriminator (`"attrs"."nodeId" = "graph_nodes"."id" AND "attrs"."attrName" = 'voltageLevel'`). `columnFor` is a second, independent mapping from the outer one: it resolves a reference inside the collection's own `item`/`filter`, exactly as trilean's own evaluator re-points its `EvaluationContext` at the collection item before evaluating either. A tree that never uses `some`, `every`, or `fold(max|min)` never calls `collectionFor` — leaving it unset is fully backward compatible. A tree that does use one of those kinds without it set is refused with `UnsupportedNodeError`, the same refused outcome those kinds had before this option existed.
+
+`some`/`every` compile to a correlated scalar subquery: `SELECT filter, item FROM table WHERE join`, filtered down to the participating rows (`filter IS NULL OR filter`, dropping only the rows `filter` excluded outright), then combined with `MAX`/`CASE` to match the evaluator's own OR/AND-fold absorption exactly — `some` is true the moment any participating row's `item` is true, regardless of another row's indeterminacy; indeterminate only once no row voted true and at least one participated indeterminately (an indeterminate `filter`, or an indeterminate `item`); false once neither, including an empty participating set (no rows, or every row filtered out), which is `some`'s own identity. `every` is the mirror image: false the moment any participating row's `item` is definitely false, indeterminate only once neither that nor "every row voted true" holds, and true — including on an empty participating set — otherwise.
+
+`fold(max|min)` compiles the same correlated subquery over the projected value instead of a predicate, and aggregates with `MAX`/`MIN` directly: `NULL` (indeterminate) the moment any participating row's `filter` or projected value is itself indeterminate — matching the evaluator's `firstFilterIndeterminate`/per-item short-circuit exactly, which has no absorbing value the way `some`/`every`'s OR/AND does — and the aggregate otherwise, including `NULL` from an empty participating set, matching the evaluator's own `domain-error` indeterminate for a fold with nothing to seed a running extremum from. `fold(reduce)` is always refused, with or without `collectionFor` set: it threads an arbitrary combine expression through the collection in a caller-chosen order, which has no general SQL translation.
+
+A `fold(max|min)` whose projected item is statically known to be text or boolean is refused, the same way a `compare` against one of those kinds is (see [Refusal](#refusal)): trilean's own ordering (`compareValues`) refuses to order either, for exactly one item it would happily return definite, but the moment a second item participates it goes indeterminate — a divergence undetectable from a fixed pair of operands the way `compare`'s is, since a collection's real cardinality is only known at query time, so it is refused unconditionally rather than only when two or more rows are proven to participate.
 
 ## Dialects
 
@@ -149,7 +173,7 @@ A `matches`/`notMatches` pattern would be the same kind of limit — matched by 
 
 Every refusal below applies to both dialects. What changes with the dialect is the `reason` text, which names the mechanism that actually applies to the engine you are compiling for — a `findUnpushableNodeKind` call given no `options` has no dialect to read and describes PostgreSQL, the one these refusals were first derived against.
 
-**Kinds this version does not translate.** `some`, `every`, `fold`: these range over a collection the caller's resolvers supply, which is not the query's row set. `lookup`, `call`, `delegate`, `treeReference`: each is resolved by something the database has no access to — the caller's resolvers, its function registry, an external system. `conditional`: not implemented here. `accumulator`: only meaningful inside a `reduce` fold. `arithmetic` and `negate`: these carry and combine units, and pushing them down would drop that dimensional analysis without saying so. `durationLiteral`: trilean compares durations by normalising both operands to milliseconds, with no column-level equivalent to normalise against. `complexLiteral`: neither engine has a complex type.
+**Kinds this version does not translate.** `some`, `every`, `fold(max|min)`: refused unless `options.collectionFor` maps the `collection` key onto a correlated table — see [Collections](#collections). `fold(reduce)`: always refused, `collectionFor` or not — it threads an arbitrary combine expression through the collection in a caller-chosen order, which has no general SQL translation. `lookup`, `call`, `delegate`, `treeReference`: each is resolved by something the database has no access to — the caller's resolvers, its function registry, an external system. `conditional`: not implemented here. `accumulator`: only meaningful inside a `reduce` fold. `arithmetic` and `negate`: these carry and combine units, and pushing them down would drop that dimensional analysis without saying so. `durationLiteral`: trilean compares durations by normalising both operands to milliseconds, with no column-level equivalent to normalise against. `complexLiteral`: neither engine has a complex type.
 
 **Shapes refused despite a supported kind.** A `reference` whose key is not a string, since there is nothing to map. A `reference` or `numberLiteral` carrying a `unit`: a unit on a reference asserts that the resolved value carries the same one, and a column has no unit for that assertion to be checked against. A `numberLiteral` of `NaN`, which trilean compares with `===` — under which NaN equals nothing including itself — and neither engine reproduces, for opposite reasons. PostgreSQL defines NaN as equal to itself and greater than every other double, so `NaN = NaN` selects every row there and none here. SQLite has no NaN at all and a driver binding one substitutes SQL `NULL`, so the same comparison is *indeterminate* there and matches nothing — which looks like agreement until you negate it, at which point trilean's definite `true` matches every row and SQLite's `NULL` still matches none. Infinities are not refused alongside it; every engine here orders them identically.
 
@@ -159,6 +183,7 @@ Every refusal below applies to both dialects. What changes with the dialect is t
 - An ordering `compare` (`gt`/`gte`/`lt`/`lte`) against a boolean. trilean has no order for booleans; PostgreSQL orders `false` before `true`, and SQLite orders the integers 0 and 1 it stores them as.
 - A `textCompare` against a non-text operand, which trilean treats as `wrong-type`.
 - Any comparison whose operands are of different declared kinds — a number against an instant, say. trilean calls that `wrong-type`; both engines may coerce one to the other and answer definitely.
+- A `fold(max|min)`'s projected item against text or boolean. trilean has no order for either (`compareValues` returns `wrong-type` the moment a second item is compared); `MAX`/`MIN` happily orders text lexicographically and booleans as `0`/`1` the moment two or more rows participate. Unlike the other pairings above, this one is refused unconditionally rather than only when a fixed pair of operands proves the mismatch, because a collection's real cardinality is only known at query time.
 
 Left undeclared, these compile, and the divergence is real but invisible. That is the whole argument for supplying `paramType`.
 
