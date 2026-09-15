@@ -1,6 +1,11 @@
 import type { ExpressionNode, PredicateNode } from "trilean";
 import { parseRegex } from "trilean-regex";
-import type { SqlCompileOptions, SqlDialect, SqlParamType } from "./options";
+import type {
+  SqlCollectionBinding,
+  SqlCompileOptions,
+  SqlDialect,
+  SqlParamType,
+} from "./options";
 import { assertImplementedDialect } from "./options";
 import {
   renderPostgresPattern,
@@ -100,10 +105,50 @@ function staticValueKindOf(
     : STATIC_KIND_OF_PARAM_TYPE[paramType];
 }
 
+/** What {@link resolveCollectionForGuard} hands back: either the resolved binding's own `columnFor`, wrapped so the caller can swap it in for the outer one while walking `item`/`filter`, or the same `UnpushableNode` shape every other refusal in this file returns. */
+type CollectionResolution =
+  { readonly itemOptions: SqlCompileOptions | undefined } | UnpushableNode;
+
+/**
+ * Resolves a `some`/`every`/`fold` node's `collection` onto the options a walk of its `item`/`filter` should use, or explains why it cannot be resolved.
+ *
+ * `options === undefined` is the one case that is not a refusal: a purely structural walk (no `options` at all) has no `columnFor` either, and every other options-dependent check in this file already answers "cannot tell, assume it passes" in that mode (see `staticValueKindOf`) -- refusing collection resolution specifically would make this the one exception to that convention rather than a consistent extension of it.
+ */
+function resolveCollectionForGuard(
+  kind: string,
+  collection: unknown,
+  path: string,
+  options: SqlCompileOptions | undefined,
+): CollectionResolution {
+  if (typeof collection !== "string") {
+    return {
+      kind,
+      path,
+      reason:
+        "only a string collection key can be mapped to a correlated table; this collection is a non-string JSON value",
+    };
+  }
+  if (options === undefined) return { itemOptions: undefined };
+  if (options.collectionFor === undefined) {
+    return {
+      kind,
+      path,
+      reason:
+        "no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation",
+    };
+  }
+  const binding: Readonly<SqlCollectionBinding> =
+    options.collectionFor(collection);
+  return {
+    itemOptions: { ...options, columnFor: binding.columnFor },
+  };
+}
+
 function findUnpushableExpression(
   node: ExpressionNode,
   path: string,
   divergence: Readonly<DialectDivergence>,
+  options: SqlCompileOptions | undefined,
 ): UnpushableNode | undefined {
   // Read before the switch narrows `node` to `never` in its default branch, where the kind is still what the report needs to name.
   const unrecognisedKind: string = node.kind;
@@ -182,13 +227,58 @@ function findUnpushableExpression(
         reason:
           "conditional evaluation is not implemented in this version of the compiler",
       };
-    case "fold":
-      return {
-        kind: node.kind,
+    case "fold": {
+      if (node.combiner.mode === "reduce") {
+        return {
+          kind: node.kind,
+          path,
+          reason:
+            "a 'reduce' fold threads an arbitrary combine expression through the collection in a caller-chosen order, which has no general SQL translation",
+        };
+      }
+      const resolved = resolveCollectionForGuard(
+        node.kind,
+        node.collection,
         path,
-        reason:
-          "a fold ranges over a collection the caller's resolvers supply, which is not this query's row set",
-      };
+        options,
+      );
+      if ("reason" in resolved) return resolved;
+      const { itemOptions } = resolved;
+      if (node.filter !== undefined) {
+        const unpushableFilter = findUnpushablePredicate(
+          node.filter,
+          `${path}.filter`,
+          itemOptions,
+          divergence,
+        );
+        if (unpushableFilter !== undefined) return unpushableFilter;
+      }
+      const itemPath = `${path}.combiner.item`;
+      const unpushableItem = findUnpushableExpression(
+        node.combiner.item,
+        itemPath,
+        divergence,
+        itemOptions,
+      );
+      if (unpushableItem !== undefined) return unpushableItem;
+      // A fold(max|min) orders participating items the same way `compare`'s gt/gte/lt/lte does, and trilean's own `compareValues` refuses to order text or booleans regardless of how many items end up participating at runtime -- see the ORDERING_OPERATORS/boolean check in the 'compare' case of findUnpushablePredicate below, which this mirrors. Unlike a single fixed pair of operands, cardinality here is only known at runtime (the resolver's own row count for this collection), so a divergence detectable for *any* possible cardinality has to be refused unconditionally: SQL's MAX/MIN would happily order text lexicographically or booleans as 0/1 the moment two or more rows participate, where trilean goes indeterminate ("wrong-type") the moment a second item is compared.
+      const itemKind = staticValueKindOf(node.combiner.item, itemOptions);
+      if (itemKind === "text") {
+        return {
+          kind: node.kind,
+          path: itemPath,
+          reason: `a '${node.combiner.mode}' fold orders participating items by comparing them, and trilean never orders text values ('compare' returns wrong-type for text; use 'textCompare') -- but ${divergence.textOrdering(itemPath)}`,
+        };
+      }
+      if (itemKind === "boolean") {
+        return {
+          kind: node.kind,
+          path: itemPath,
+          reason: `a '${node.combiner.mode}' fold orders participating items by comparing them, and booleans have no ordering in trilean -- whereas ${divergence.booleanOrdering}`,
+        };
+      }
+      return undefined;
+    }
     case "accumulator":
       return {
         kind: node.kind,
@@ -305,6 +395,7 @@ function findUnpushablePredicate(
           operand.node,
           operand.path,
           divergence,
+          options,
         );
         if (unpushable !== undefined) return unpushable;
       }
@@ -356,6 +447,7 @@ function findUnpushablePredicate(
           operand.node,
           operand.path,
           divergence,
+          options,
         );
         if (unpushable !== undefined) return unpushable;
         const staticKind = staticValueKindOf(operand.node, options);
@@ -420,6 +512,7 @@ function findUnpushablePredicate(
           operand.node,
           operand.path,
           divergence,
+          options,
         );
         if (unpushable !== undefined) return unpushable;
       }
@@ -430,15 +523,33 @@ function findUnpushablePredicate(
         node.operand,
         `${path}.operand`,
         divergence,
+        options,
       );
     case "some":
-    case "every":
-      return {
-        kind: node.kind,
+    case "every": {
+      const resolved = resolveCollectionForGuard(
+        node.kind,
+        node.collection,
         path,
-        reason:
-          "quantification ranges over a collection the caller's resolvers supply, which is not this query's row set",
-      };
+        options,
+      );
+      if ("reason" in resolved) return resolved;
+      const { itemOptions } = resolved;
+      const unpushableItem = findUnpushablePredicate(
+        node.item,
+        `${path}.item`,
+        itemOptions,
+        divergence,
+      );
+      if (unpushableItem !== undefined) return unpushableItem;
+      if (node.filter === undefined) return undefined;
+      return findUnpushablePredicate(
+        node.filter,
+        `${path}.filter`,
+        itemOptions,
+        divergence,
+      );
+    }
     case "treeReference":
       return {
         kind: node.kind,
