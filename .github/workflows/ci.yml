@@ -89,9 +89,9 @@ jobs:
       #
       # Both are conditional on their own report existing, which is not defensive: `pnpm test:coverage` runs through turbo with $TURBO_FLAGS, which carries --affected on a pull request, so a package no commit in the PR touched legitimately does not run and legitimately writes no report. `fail-on-error` does not cover that case -- it governs the upload call, while a missing input file fails the action before it gets that far -- so without the hashFiles guard a PR confined to one package fails this job on the other package's absent report.
       #
-      # Code Quality requires the org on GitHub Team/Enterprise Cloud, which ExaDev is not yet on, so the upload call itself will fail until that changes -- fail-on-error: false keeps that failure a log annotation instead of gating the release job below on a feature we can't turn on yet. Also guarded against fork PRs, which never hold the code-quality: write permission to upload.
+      # Code Quality is a billed GitHub feature that has to be enabled per repository, and it is not enabled here. With it off, the upload call fails with HTTP 403 and the action reports that as an error annotation on every run, even with fail-on-error: false. So each upload runs only when the repository variable CODE_QUALITY_ENABLED is 'true', which is the one thing to set when the feature is switched on. fail-on-error: false stays so that a later upload failure does not gate the release job below. Also guarded against fork PRs, which never hold the code-quality: write permission to upload.
       - name: Upload coverage report (trilean)
-        if: (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && hashFiles('packages/trilean/coverage/cobertura-coverage.xml') != ''
+        if: vars.CODE_QUALITY_ENABLED == 'true' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && hashFiles('packages/trilean/coverage/cobertura-coverage.xml') != ''
         uses: actions/upload-code-coverage@v1
         with:
           file: packages/trilean/coverage/cobertura-coverage.xml
@@ -99,7 +99,7 @@ jobs:
           label: unit-trilean
           fail-on-error: false
       - name: Upload coverage report (trilean-sql)
-        if: (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && hashFiles('packages/trilean-sql/coverage/cobertura-coverage.xml') != ''
+        if: vars.CODE_QUALITY_ENABLED == 'true' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && hashFiles('packages/trilean-sql/coverage/cobertura-coverage.xml') != ''
         uses: actions/upload-code-coverage@v1
         with:
           file: packages/trilean-sql/coverage/cobertura-coverage.xml
