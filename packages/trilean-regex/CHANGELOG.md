@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/ExaDev/trilean/compare/trilean-regex%401.0.2...trilean-regex%401.0.3) (2026-09-19)
+
+### Build System
+
+* **deps-dev:** bump tsdown from 0.22.14 to 0.23.0 ([b625cad](https://github.com/ExaDev/trilean/commit/b625cad7c7f59bd67076bef78976652035e830bf))
+* **deps-dev:** bump vitest to 5.0.1 in trilean-regex and trilean-sql ([d578062](https://github.com/ExaDev/trilean/commit/d578062867d7d0064acc4b988b4ddb9658f3ca77))
+
 ## [1.0.2](https://github.com/ExaDev/trilean/compare/trilean-regex%401.0.1...trilean-regex%401.0.2) (2026-09-14)
 
 ### Bug Fixes

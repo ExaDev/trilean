@@ -1,6 +1,6 @@
 {
   "name": "trilean",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "description": "Three-valued predicate and expression evaluation trees, stored as JSON and evaluated against injected resolvers, for domain logic — business rules, eligibility checks, formulas, search filters, and more — that needs to be data instead of code.",
   "type": "module",
   "repository": {
@@ -49,7 +49,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "trilean-regex": "1.0.2",
+    "trilean-regex": "1.0.3",
     "zod": "^4.5.4"
   },
   "scripts": {
