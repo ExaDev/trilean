@@ -35,7 +35,8 @@ jobs:
         id: app-token
         uses: actions/create-github-app-token@v3
         with:
-          app-id: "4473709"
+          # Public client ID of the Documents.js App (numeric id 4473709), the App whose private key is AUTOMERGE_APP_PRIVATE_KEY.
+          client-id: Iv23liuX19EFyXndAmkL
           private-key: ${{ secrets.AUTOMERGE_APP_PRIVATE_KEY }}
       - name: Enable auto-merge
         if: steps.decide.outputs.merge == 'true'
