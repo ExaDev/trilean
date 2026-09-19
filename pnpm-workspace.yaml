@@ -1,8 +1,13 @@
 packages:
   - "packages/*"
 
-# pnpm 11 defaults this to false, which means a dependency on a sibling package resolves from the npm registry even when the workspace holds a version satisfying the range. Setting it true links a sibling whenever the declared range is satisfied by the workspace version, and falls back to the registry when it is not. There is one package here today, so nothing exercises it yet -- it is set now so the first sibling added is linked rather than silently downloaded.
+# pnpm 11 defaults this to false, which means a dependency on a sibling package resolves from the npm registry even when the workspace holds a version satisfying the range. Setting it true links a sibling whenever the declared range is satisfied by the workspace version, and falls back to the registry when it is not.
 linkWorkspacePackages: true
+
+# Sibling dependencies are declared as plain exact versions, never with the `workspace:` protocol. The release publishes through `npm publish`, which copies the manifest verbatim and does not understand `workspace:`, so a `workspace:^` range would reach the registry as-is and make the package uninstallable for every consumer. `@exadev/semantic-release-workspace` maintains plain ranges itself, rewriting each dependent's range when the sibling releases, and linkWorkspacePackages above still symlinks the sibling locally whenever the workspace version satisfies it.
+#
+# pnpm's default for this setting is `rolling`, under which `pnpm add <sibling>` writes `workspace:^`. false makes it write the plain version instead, using saveExact below for the exact pin.
+saveWorkspaceProtocol: false
 
 # Every dependency in the tree that ships an install script, and whether it may run. pnpm 11 ignores install scripts unless listed, and fails the install outright while any is neither allowed nor refused -- so an entry is a decision recorded, not merely a permission granted, and `false` is as meaningful an answer as `true`.
 #
