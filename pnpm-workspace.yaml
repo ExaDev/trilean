@@ -15,9 +15,9 @@ saveWorkspaceProtocol: false
 #
 # The three refused below arrive under testcontainers, which packages/trilean-sql's integration suite uses to start PostgreSQL. Each script is optional to the way this workspace uses the package: ssh2 and its cpu-features helper build native acceleration for SSH transports, and testcontainers reaches Docker over a local socket rather than SSH; protobufjs's script only regenerates bundled artefacts the published tarball already contains. Refusing them keeps a test-only dependency chain from executing arbitrary code at install time.
 #
-# better-sqlite3 is the engine packages/trilean-sql's SQLite integration suite executes its compiled fragments against, and it is a native addon: its install script is what fetches, or failing that builds, the binding the module cannot load without. Refusing it would leave the package installed and unloadable rather than merely unoptimised.
+# better-sqlite3 is the engine packages/trilean-sql's SQLite integration suite executes its compiled fragments against, and it is a native addon. From version 13 it ships a prebuilt N-API binary per platform inside the package itself and loads it from there, so its install-time node-gyp rebuild is not needed on any platform that has one (macOS, Linux glibc and musl, Windows, on x64 and arm64). Refusing it keeps that compile, and the toolchain it would need, out of every install.
 allowBuilds:
-  better-sqlite3: true
+  better-sqlite3: false
   cpu-features: false
   esbuild: true
   protobufjs: false
