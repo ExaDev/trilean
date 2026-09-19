@@ -1,3 +1,14 @@
+## [2.2.1](https://github.com/ExaDev/trilean/compare/trilean-sql%402.2.0...trilean-sql%402.2.1) (2026-09-19)
+
+### Bug Fixes
+
+* declare sibling dependencies as plain versions so published manifests are installable ([087534c](https://github.com/ExaDev/trilean/commit/087534cdcb5f669facb158becbd8f25c6e50e97e))
+
+
+### Dependencies
+
+- Updated trilean to 1.6.2
+
 ## [2.2.0](https://github.com/ExaDev/trilean/compare/trilean-sql%402.1.3...trilean-sql%402.2.0) (2026-09-15)
 
 ### Features

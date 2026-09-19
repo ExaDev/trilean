@@ -1,3 +1,9 @@
+## [1.6.2](https://github.com/ExaDev/trilean/compare/trilean%401.6.1...trilean%401.6.2) (2026-09-19)
+
+### Bug Fixes
+
+* declare sibling dependencies as plain versions so published manifests are installable ([087534c](https://github.com/ExaDev/trilean/commit/087534cdcb5f669facb158becbd8f25c6e50e97e))
+
 ## [1.6.1](https://github.com/ExaDev/trilean/compare/trilean%401.6.0...trilean%401.6.1) (2026-09-14)
 
 ### Bug Fixes
