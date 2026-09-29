@@ -26,7 +26,8 @@ import {
   invokeRegisteredFunction,
 } from "./evaluator-operations";
 import type { FunctionRegistry } from "./functions";
-import type { EvaluationContext, Resolvers } from "./resolvers";
+import { type Task, all, wait } from "./evaluator-effect";
+import type { EvaluationContext, EvaluatorResolvers } from "./resolvers";
 import {
   type ComparisonOperator,
   type ExpressionNode,
@@ -39,22 +40,22 @@ import {
  * `evaluatePredicateInternal` and `evaluateValueInternal` below are co-located in this one file, rather than split across `predicate-evaluator.ts`/`value-evaluator.ts`, because they are mutually recursive: a predicate leaf (`compare`, `textCompare`, `memberOf`, `exists`) holds `ExpressionNode` operands, and an expression node (`conditional`'s `when`, a fold's `filter`) holds `PredicateNode` operands. Splitting them across modules would make each half import the other, and whichever module finished loading second would see the other's export as `undefined` at its own module-evaluation time -- a genuine circular-import TDZ hazard, not merely a style preference. `resolveParticipatingItems` (in `evaluator-collection.ts`) would share that same hazard if it imported `evaluatePredicateInternal` directly, since it calls back into it to evaluate each candidate's filter -- so it instead takes the evaluator as an injected `EvaluatePredicate` parameter (see that type's own doc comment), which is what lets it live in its own file with no circular dependency on this one. The pure, non-recursive value-combination logic (`combineAnd`/`compareValues`/`applyArithmetic` and their siblings) carries no such constraint either and lives in `evaluator-operations.ts`; the resource-limit infrastructure (`EvaluationBudget` and its constants), likewise self-contained, lives in `evaluator-budget.ts`.
  */
 
-export async function evaluatePredicateInternal(
+export function* evaluatePredicateInternal(
   node: PredicateNode,
   context: EvaluationContext,
-  resolvers: Readonly<Resolvers>,
+  resolvers: Readonly<EvaluatorResolvers>,
   accumulator: ComputedValue | undefined,
   functions: Readonly<FunctionRegistry>,
   visitedTreeKeys: ReadonlySet<string>,
   treeReferenceDepth: number,
   budget: Readonly<EvaluationBudget>,
   nestingDepth: number,
-): Promise<Evaluation<boolean>> {
+): Task<Evaluation<boolean>> {
   const budgetExceeded = budget.checkNode(nestingDepth);
   if (budgetExceeded !== undefined) return budgetExceeded;
   switch (node.kind) {
     case "not": {
-      const operand = await evaluatePredicateInternal(
+      const operand = yield* evaluatePredicateInternal(
         node.operand,
         context,
         resolvers,
@@ -69,7 +70,7 @@ export async function evaluatePredicateInternal(
       return definite(!operand.value);
     }
     case "and": {
-      const [left, right] = await Promise.all([
+      const [left, right] = yield* all([
         evaluatePredicateInternal(
           node.left,
           context,
@@ -96,7 +97,7 @@ export async function evaluatePredicateInternal(
       return combineAnd(left, right);
     }
     case "or": {
-      const [left, right] = await Promise.all([
+      const [left, right] = yield* all([
         evaluatePredicateInternal(
           node.left,
           context,
@@ -123,8 +124,8 @@ export async function evaluatePredicateInternal(
       return combineOr(left, right);
     }
     case "allOf": {
-      const operandResults = await Promise.all(
-        node.operands.map(async (operand) =>
+      const operandResults = yield* all(
+        node.operands.map((operand) =>
           evaluatePredicateInternal(
             operand,
             context,
@@ -144,8 +145,8 @@ export async function evaluatePredicateInternal(
       );
     }
     case "anyOf": {
-      const operandResults = await Promise.all(
-        node.operands.map(async (operand) =>
+      const operandResults = yield* all(
+        node.operands.map((operand) =>
           evaluatePredicateInternal(
             operand,
             context,
@@ -165,7 +166,7 @@ export async function evaluatePredicateInternal(
       );
     }
     case "compare": {
-      const [left, right] = await Promise.all([
+      const [left, right] = yield* all([
         evaluateValueInternal(
           node.left,
           context,
@@ -194,7 +195,7 @@ export async function evaluatePredicateInternal(
       return compareValues(node.op, left.value, right.value);
     }
     case "textCompare": {
-      const [left, right] = await Promise.all([
+      const [left, right] = yield* all([
         evaluateValueInternal(
           node.left,
           context,
@@ -223,7 +224,7 @@ export async function evaluatePredicateInternal(
       return compareText(node.op, left.value, right.value);
     }
     case "memberOf": {
-      const operandResult = await evaluateValueInternal(
+      const operandResult = yield* evaluateValueInternal(
         node.operand,
         context,
         resolvers,
@@ -237,9 +238,9 @@ export async function evaluatePredicateInternal(
       if (operandResult.status === "indeterminate") return operandResult;
 
       // Every candidate is evaluated concurrently; the scan below then walks the resolved outcomes in declared order, so a definite match short-circuits the *result* without ever needing to short-circuit the resolver calls themselves.
-      const candidateOutcomes = await Promise.all(
-        node.candidates.map(async (candidate): Promise<Evaluation<boolean>> => {
-          const candidateResult = await evaluateValueInternal(
+      const candidateOutcomes = yield* all(
+        node.candidates.map(function* (candidate): Task<Evaluation<boolean>> {
+          const candidateResult = yield* evaluateValueInternal(
             candidate,
             context,
             resolvers,
@@ -271,7 +272,7 @@ export async function evaluatePredicateInternal(
       return definite(node.op === "notIn");
     }
     case "exists": {
-      const operandResult = await evaluateValueInternal(
+      const operandResult = yield* evaluateValueInternal(
         node.operand,
         context,
         resolvers,
@@ -293,7 +294,7 @@ export async function evaluatePredicateInternal(
     }
     case "some":
     case "every": {
-      const participating = await resolveParticipatingItems(
+      const participating = yield* resolveParticipatingItems(
         evaluatePredicateInternal,
         node.collection,
         node.filter,
@@ -306,30 +307,26 @@ export async function evaluatePredicateInternal(
         nestingDepth + 1,
       );
       // A filter-excluded item contributes no vote at all (as if never in the collection); a filter-indeterminate item contributes its own indeterminate vote, letting a different item's clean match still absorb it -- contrast with `fold`, which has no absorbing value and goes indeterminate outright on the same condition.
-      const votes = (
-        await Promise.all(
-          participating.map(
-            async ({
-              item,
-              filterOutcome,
-            }): Promise<Evaluation<boolean> | undefined> => {
-              if (filterOutcome === "exclude") return undefined;
-              if (filterOutcome !== "include") return filterOutcome;
-              return evaluatePredicateInternal(
-                node.item,
-                item,
-                resolvers,
-                undefined,
-                functions,
-                visitedTreeKeys,
-                treeReferenceDepth,
-                budget,
-                nestingDepth + 1,
-              );
-            },
-          ),
-        )
-      ).filter((vote): vote is Evaluation<boolean> => vote !== undefined);
+      const votes = (yield* all(
+        participating.map(function* ({
+          item,
+          filterOutcome,
+        }): Task<Evaluation<boolean> | undefined> {
+          if (filterOutcome === "exclude") return undefined;
+          if (filterOutcome !== "include") return filterOutcome;
+          return yield* evaluatePredicateInternal(
+            node.item,
+            item,
+            resolvers,
+            undefined,
+            functions,
+            visitedTreeKeys,
+            treeReferenceDepth,
+            budget,
+            nestingDepth + 1,
+          );
+        }),
+      )).filter((vote): vote is Evaluation<boolean> => vote !== undefined);
       // `some` is an OR fold seeded at `false`; `every` an AND fold seeded at `true` -- exactly `anyOf`/`allOf`'s own pairwise fold, so an empty `votes` list (an empty collection, or every candidate filtered out) already reduces to `anyOf([])`/`allOf([])`'s own identity values with no separate empty-collection branch.
       const combine = node.kind === "some" ? combineOr : combineAnd;
       const identity = node.kind === "some" ? definite(false) : definite(true);
@@ -352,7 +349,7 @@ export async function evaluatePredicateInternal(
           `treeReference chain exceeds the maximum depth of ${MAX_TREE_REFERENCE_DEPTH.toString()}`,
         );
       }
-      const resolution = await resolvers.resolveTree(node.key, context);
+      const resolution = yield* wait(resolvers.resolveTree(node.key, context));
       if (!resolution.found) {
         return indeterminate(
           "not-found",
@@ -366,7 +363,7 @@ export async function evaluatePredicateInternal(
           "the referenced tree is not a valid PredicateNode",
         );
       }
-      return evaluatePredicateInternal(
+      return yield* evaluatePredicateInternal(
         parsed.data,
         context,
         resolvers,
@@ -383,22 +380,22 @@ export async function evaluatePredicateInternal(
   }
 }
 
-export async function evaluateValueInternal(
+export function* evaluateValueInternal(
   node: ExpressionNode,
   context: EvaluationContext,
-  resolvers: Readonly<Resolvers>,
+  resolvers: Readonly<EvaluatorResolvers>,
   accumulator: ComputedValue | undefined,
   functions: Readonly<FunctionRegistry>,
   visitedTreeKeys: ReadonlySet<string>,
   treeReferenceDepth: number,
   budget: Readonly<EvaluationBudget>,
   nestingDepth: number,
-): Promise<Evaluation<ComputedValue>> {
+): Task<Evaluation<ComputedValue>> {
   const budgetExceeded = budget.checkNode(nestingDepth);
   if (budgetExceeded !== undefined) return budgetExceeded;
   switch (node.kind) {
     case "reference": {
-      const resolution = await resolvers.resolveValue(node.key, context);
+      const resolution = yield* wait(resolvers.resolveValue(node.key, context));
       if (!resolution.found) {
         return indeterminate(
           "not-found",
@@ -419,8 +416,8 @@ export async function evaluateValueInternal(
       return definite(accumulator);
     }
     case "call": {
-      const argResults = await Promise.all(
-        node.args.map(async (arg) =>
+      const argResults = yield* all(
+        node.args.map((arg) =>
           evaluateValueInternal(
             arg,
             context,
@@ -467,7 +464,7 @@ export async function evaluateValueInternal(
       }
       return definite(complexFromPolar(node.magnitude, node.phase, node.unit));
     case "arithmetic": {
-      const [left, right] = await Promise.all([
+      const [left, right] = yield* all([
         evaluateValueInternal(
           node.left,
           context,
@@ -497,7 +494,7 @@ export async function evaluateValueInternal(
       return applyArithmetic(node.op, left.value, right.value);
     }
     case "negate": {
-      const operand = await evaluateValueInternal(
+      const operand = yield* evaluateValueInternal(
         node.operand,
         context,
         resolvers,
@@ -513,8 +510,8 @@ export async function evaluateValueInternal(
     }
     case "lookup": {
       // All keys are evaluated concurrently; any indeterminate key makes the whole lookup indeterminate immediately, with no `resolveLookup` call attempted at all -- see the `lookup` section of README.md.
-      const keyResults = await Promise.all(
-        node.keys.map(async (key) =>
+      const keyResults = yield* all(
+        node.keys.map((key) =>
           evaluateValueInternal(
             key,
             context,
@@ -533,10 +530,8 @@ export async function evaluateValueInternal(
         if (result.status === "indeterminate") return result;
         keyValues.push(result.value);
       }
-      const resolution = await resolvers.resolveLookup(
-        node.table,
-        keyValues,
-        context,
+      const resolution = yield* wait(
+        resolvers.resolveLookup(node.table, keyValues, context),
       );
       if (!resolution.found) {
         return indeterminate(
@@ -551,7 +546,7 @@ export async function evaluateValueInternal(
       if (hitPolicy === "first") {
         // Strictly sequential, not concurrent: a for...of loop with early return on the first definite match, or the first indeterminate guard, is required behaviour -- evaluation must never skip past an unresolved guard to try a later case that might only look correct because an earlier one couldn't actually be checked (see the `conditional` section of README.md).
         for (const { when, then } of node.cases) {
-          const whenResult = await evaluatePredicateInternal(
+          const whenResult = yield* evaluatePredicateInternal(
             when,
             context,
             resolvers,
@@ -564,7 +559,7 @@ export async function evaluateValueInternal(
           );
           if (whenResult.status === "indeterminate") return whenResult;
           if (whenResult.value) {
-            return evaluateValueInternal(
+            return yield* evaluateValueInternal(
               then,
               context,
               resolvers,
@@ -577,7 +572,7 @@ export async function evaluateValueInternal(
             );
           }
         }
-        return evaluateValueInternal(
+        return yield* evaluateValueInternal(
           node.fallback,
           context,
           resolvers,
@@ -591,10 +586,12 @@ export async function evaluateValueInternal(
       }
 
       // "unique": every case's `when` is evaluated concurrently -- the same concurrency allOf/anyOf/memberOf's own candidates already use, since resolvers are pure functions of their inputs throughout this design. Absorption is then applied in a strict, non-commutative order: two-or-more confirmed matches is itself an absorbing outcome (mirroring memberOf/some/every's "a confirmed outcome cannot be undone by an unrelated element's data problem"), checked BEFORE any indeterminate case is allowed to poison the result -- but, unlike memberOf/some/every, a single confirmed match does NOT by itself absorb a remaining indeterminate case: that unresolved case might yet turn out to be a second match, which "unique" cannot rule out without knowing its real value, so exactly-one-match is only safe to return once every other case is also known, definitely, not to match.
-      const evaluatedCases = await Promise.all(
-        node.cases.map(async ({ when, then }) => ({
+      const evaluatedCases = yield* all(
+        node.cases.map(function* ({
+          when,
           then,
-          whenResult: await evaluatePredicateInternal(
+        }): Task<{ then: ExpressionNode; whenResult: Evaluation<boolean> }> {
+          const whenResult = yield* evaluatePredicateInternal(
             when,
             context,
             resolvers,
@@ -604,8 +601,9 @@ export async function evaluateValueInternal(
             treeReferenceDepth,
             budget,
             nestingDepth + 1,
-          ),
-        })),
+          );
+          return { then, whenResult };
+        }),
       );
       const matches = evaluatedCases.filter(
         ({ whenResult }) =>
@@ -623,7 +621,7 @@ export async function evaluateValueInternal(
       if (reason !== undefined) return { status: "indeterminate", reason };
       const [match] = matches;
       if (match === undefined) {
-        return evaluateValueInternal(
+        return yield* evaluateValueInternal(
           node.fallback,
           context,
           resolvers,
@@ -635,7 +633,7 @@ export async function evaluateValueInternal(
           nestingDepth + 1,
         );
       }
-      return evaluateValueInternal(
+      return yield* evaluateValueInternal(
         match.then,
         context,
         resolvers,
@@ -648,7 +646,7 @@ export async function evaluateValueInternal(
       );
     }
     case "fold": {
-      const participating = await resolveParticipatingItems(
+      const participating = yield* resolveParticipatingItems(
         evaluatePredicateInternal,
         node.collection,
         node.filter,
@@ -670,7 +668,7 @@ export async function evaluateValueInternal(
 
       if (node.combiner.mode === "reduce") {
         // Unlike some/every's OR/AND absorption, `reduce` has no absorbing value at all: `initial` and every participating item's `combine` step must each resolve definitely, or the whole fold is indeterminate -- see the `fold` section of README.md. `initial` is evaluated with the accumulator reset to undefined (the same treatment as a filter/item sub-node below), then threaded as the real running accumulator into each `combine` step in turn.
-        const initialResult = await evaluateValueInternal(
+        const initialResult = yield* evaluateValueInternal(
           node.combiner.initial,
           context,
           resolvers,
@@ -684,7 +682,7 @@ export async function evaluateValueInternal(
         if (initialResult.status === "indeterminate") return initialResult;
         let runningAccumulator = initialResult.value;
         for (const item of includedItems) {
-          const stepResult = await evaluateValueInternal(
+          const stepResult = yield* evaluateValueInternal(
             node.combiner.combine,
             item,
             resolvers,
@@ -712,7 +710,7 @@ export async function evaluateValueInternal(
         node.combiner.mode === "max" ? "gt" : "lt";
       let runningExtremum: ComputedValue | undefined;
       for (const item of includedItems) {
-        const itemResult = await evaluateValueInternal(
+        const itemResult = yield* evaluateValueInternal(
           node.combiner.item,
           item,
           resolvers,
@@ -750,10 +748,8 @@ export async function evaluateValueInternal(
           `no delegate handler registered for external system '${node.system}'`,
         );
       }
-      const resolution = await resolvers.resolveDelegate(
-        node.system,
-        node.payload,
-        context,
+      const resolution = yield* wait(
+        resolvers.resolveDelegate(node.system, node.payload, context),
       );
       if (!resolution.found) {
         return indeterminate(
@@ -780,7 +776,7 @@ export async function evaluateValueInternal(
           `treeReference chain exceeds the maximum depth of ${MAX_TREE_REFERENCE_DEPTH.toString()}`,
         );
       }
-      const resolution = await resolvers.resolveTree(node.key, context);
+      const resolution = yield* wait(resolvers.resolveTree(node.key, context));
       if (!resolution.found) {
         return indeterminate(
           "not-found",
@@ -794,7 +790,7 @@ export async function evaluateValueInternal(
           "the referenced tree is not a valid ExpressionNode",
         );
       }
-      return evaluateValueInternal(
+      return yield* evaluateValueInternal(
         parsed.data,
         context,
         resolvers,

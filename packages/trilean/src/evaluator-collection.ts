@@ -3,21 +3,22 @@ import type { Evaluation, IndeterminateReason } from "./evaluation";
 import type { EvaluationBudget } from "./evaluator-budget";
 import type { FunctionRegistry } from "./functions";
 import type { JsonValue } from "./json-value";
-import type { EvaluationContext, Resolvers } from "./resolvers";
+import { type Task, all, wait } from "./evaluator-effect";
+import type { EvaluationContext, EvaluatorResolvers } from "./resolvers";
 import type { PredicateNode } from "./tree";
 
 /** `resolveParticipatingItems`'s own view of `evaluatePredicateInternal` -- the exact signature that function has in evaluator.ts, injected here rather than imported directly so this module has no dependency back on evaluator.ts. Evaluating a `filter` genuinely does need the full recursive predicate evaluator (a filter can itself be arbitrarily nested), but taking it as a parameter rather than an import means this collection-resolution logic and evaluator.ts's mutually-recursive `evaluatePredicateInternal`/`evaluateValueInternal` pair never import each other, so there is no circular-import hazard between the two files. */
 export type EvaluatePredicate = (
   node: PredicateNode,
   context: EvaluationContext,
-  resolvers: Readonly<Resolvers>,
+  resolvers: Readonly<EvaluatorResolvers>,
   accumulator: ComputedValue | undefined,
   functions: Readonly<FunctionRegistry>,
   visitedTreeKeys: ReadonlySet<string>,
   treeReferenceDepth: number,
   budget: Readonly<EvaluationBudget>,
   nestingDepth: number,
-) => Promise<Evaluation<boolean>>;
+) => Task<Evaluation<boolean>>;
 
 /** A collection candidate paired with its own pre-filter outcome: `"include"`/`"exclude"` when `filter` resolved definitely, or the filter's own indeterminate `Evaluation` when it did not (there is no third, definite-but-neither branch -- see `resolveParticipatingItems` below). */
 export interface ResolvedCollectionItem {
@@ -28,23 +29,25 @@ export interface ResolvedCollectionItem {
 /**
  * Collection resolution shared by the quantifiers (`some`/`every`) and by `fold` in evaluator.ts: resolves the opaque `collection` reference to its concrete candidate list via `resolvers.resolveCollection`, then evaluates each candidate's optional `filter` (via the injected `evaluatePredicate`, see `EvaluatePredicate`'s own doc comment) with that candidate as its own evaluation context and the accumulator reset to `undefined` -- see the README's "Evaluation context" and "Pre-filtering which items participate" sections. Deliberately stops short of deciding how an indeterminate filter combines with the rest of the surrounding node: `some`/`every` fold a filter-indeterminate item in as its own vote via the surrounding OR/AND absorption, while `fold` has no absorbing value at all and goes indeterminate outright on the same condition -- the two callers need genuinely different combination logic over these same per-item outcomes, so this helper only produces the outcomes and leaves combining them to the caller.
  */
-export async function resolveParticipatingItems(
+export function* resolveParticipatingItems(
   evaluatePredicate: EvaluatePredicate,
   collection: JsonValue,
   filter: PredicateNode | undefined,
   context: EvaluationContext,
-  resolvers: Readonly<Resolvers>,
+  resolvers: Readonly<EvaluatorResolvers>,
   functions: Readonly<FunctionRegistry>,
   visitedTreeKeys: ReadonlySet<string>,
   treeReferenceDepth: number,
   budget: Readonly<EvaluationBudget>,
   nestingDepth: number,
-): Promise<ResolvedCollectionItem[]> {
-  const candidates = await resolvers.resolveCollection(collection, context);
-  return Promise.all(
-    candidates.map(async (item): Promise<ResolvedCollectionItem> => {
+): Task<ResolvedCollectionItem[]> {
+  const candidates: unknown[] = yield* wait(
+    resolvers.resolveCollection(collection, context),
+  );
+  return yield* all(
+    candidates.map(function* (item): Task<ResolvedCollectionItem> {
       if (filter === undefined) return { item, filterOutcome: "include" };
-      const filterResult = await evaluatePredicate(
+      const filterResult = yield* evaluatePredicate(
         filter,
         item,
         resolvers,

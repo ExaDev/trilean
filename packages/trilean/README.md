@@ -818,6 +818,19 @@ const { evaluateValue } = createEvaluator({
 });
 ```
 
+### Synchronous evaluation
+
+When every resolver is a plain in-memory read, `createSyncEvaluator` builds the same pair with no promises at all, taking `SyncResolvers` (each resolver returns its result directly) and returning the `Evaluation` directly:
+
+```ts
+function createSyncEvaluator(options: { functions?: FunctionRegistry; maxNodes?: number; maxNestingDepth?: number }): {
+  evaluatePredicate: (node: PredicateNode, context: EvaluationContext, resolvers: SyncResolvers) => Evaluation<boolean>;
+  evaluateValue: (node: ExpressionNode, context: EvaluationContext, resolvers: SyncResolvers) => Evaluation<ComputedValue>;
+};
+```
+
+The node rules are written once and run by either driver, so the two evaluators agree on every node kind and every three-valued rule. A resolver that returns a promise (or any thenable) to a synchronous evaluator makes the evaluation throw a `TypeError`, since there is nothing to await it with. Because nothing is concurrent, independent operands (both sides of an `and`, the candidates of a `memberOf`, the items of a collection) are evaluated one after another; when a `maxNodes` or `maxNestingDepth` limit is exhausted partway through a tree, which operand meets it first can therefore differ from the asynchronous evaluator.
+
 ## Indeterminacy reference
 
 How each reason category can arise, per node kind. "Propagates" means: an indeterminate operand/sub-result, with no other rule overriding it, makes the whole node indeterminate with that same reason (subject to the tie-break rule in [The evaluation model](#the-evaluation-model) when more than one candidate reason is present, and to the absorbing-value exceptions called out explicitly below).
