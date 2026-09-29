@@ -1,3 +1,9 @@
+## [1.7.0](https://github.com/ExaDev/trilean/compare/trilean%401.6.3...trilean%401.7.0) (2026-09-29)
+
+### Features
+
+* **evaluator:** add a synchronous evaluator over synchronous resolvers ([7bce101](https://github.com/ExaDev/trilean/commit/7bce101f9b6ba3b0f5c9f91e048403583ff6c588))
+
 ## [1.6.3](https://github.com/ExaDev/trilean/compare/trilean%401.6.2...trilean%401.6.3) (2026-09-19)
 
 ### Build System
