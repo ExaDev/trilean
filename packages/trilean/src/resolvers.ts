@@ -49,3 +49,37 @@ export interface Resolvers {
     context: EvaluationContext,
   ) => Promise<TreeResolution>;
 }
+
+/**
+ * The resolvers of a synchronous evaluator (`createSyncEvaluator`): the same points of extension as `Resolvers`, each returning its result directly instead of a promise. A resolver of a synchronous evaluator that returns a promise anyway makes the evaluation throw, since it cannot be awaited.
+ */
+export interface SyncResolvers {
+  /** Synchronous counterpart of `Resolvers.resolveValue`. */
+  resolveValue: (key: JsonValue, context: EvaluationContext) => Resolution;
+
+  /** Synchronous counterpart of `Resolvers.resolveLookup`. */
+  resolveLookup: (
+    table: JsonValue,
+    keys: readonly ComputedValue[],
+    context: EvaluationContext,
+  ) => Resolution;
+
+  /** Synchronous counterpart of `Resolvers.resolveCollection`. */
+  resolveCollection: (
+    collection: JsonValue,
+    context: EvaluationContext,
+  ) => unknown[];
+
+  /** Synchronous counterpart of `Resolvers.resolveDelegate`. */
+  resolveDelegate?: (
+    system: string,
+    payload: JsonValue,
+    context: EvaluationContext,
+  ) => Resolution;
+
+  /** Synchronous counterpart of `Resolvers.resolveTree`. */
+  resolveTree?: (key: JsonValue, context: EvaluationContext) => TreeResolution;
+}
+
+/** What the shared node rules accept: either flavour of resolvers, since they only ever hand each result to `wait`. */
+export type EvaluatorResolvers = Resolvers | SyncResolvers;

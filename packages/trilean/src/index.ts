@@ -23,6 +23,7 @@ export type {
   EvaluationContext,
   Resolution,
   Resolvers,
+  SyncResolvers,
   TreeResolution,
 } from "./resolvers";
 
@@ -31,9 +32,11 @@ export { emptyFunctionRegistry } from "./functions";
 
 export {
   createEvaluator,
+  createSyncEvaluator,
   evaluatePredicate,
   evaluateValue,
 } from "./evaluator-factory";
+export type { EvaluatorOptions } from "./evaluator-factory";
 
 export {
   and,
