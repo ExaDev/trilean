@@ -1,3 +1,10 @@
+## [2.2.4](https://github.com/ExaDev/trilean/compare/trilean-sql%402.2.3...trilean-sql%402.2.4) (2026-09-29)
+
+
+### Dependencies
+
+- Updated trilean to 1.7.1
+
 ## [2.2.3](https://github.com/ExaDev/trilean/compare/trilean-sql%402.2.2...trilean-sql%402.2.3) (2026-09-29)
 
 

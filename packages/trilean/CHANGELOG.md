@@ -1,3 +1,9 @@
+## [1.7.1](https://github.com/ExaDev/trilean/compare/trilean%401.7.0...trilean%401.7.1) (2026-09-29)
+
+### Tests
+
+* guard the declaration shape that keeps tree schemas re-exportable ([e64ff50](https://github.com/ExaDev/trilean/commit/e64ff5070b4be69bf2323e908470ba01db7ddfe4))
+
 ## [1.7.0](https://github.com/ExaDev/trilean/compare/trilean%401.6.3...trilean%401.7.0) (2026-09-29)
 
 ### Features
