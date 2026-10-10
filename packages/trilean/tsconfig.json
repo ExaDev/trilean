@@ -1,11 +1,11 @@
 {
-  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     // No "node" types and a WebWorker lib: this is the isomorphism gate, so a Node-only global referenced from runtime src/ fails to compile here rather than at some consumer's runtime.
     "lib": ["ES2024", "WebWorker"],
-    "types": [],
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "types": []
   },
-  "include": ["src"],
-  "exclude": ["src/**/*.test.ts", "src/test-support/**/*.ts"]
+  "exclude": ["src/**/*.test.ts", "src/test-support/**/*.ts"],
+  "extends": "../../tsconfig.base.json",
+  "include": ["src"]
 }

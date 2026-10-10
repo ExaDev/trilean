@@ -1,35 +1,8 @@
 {
   "name": "trilean-monorepo",
-  "private": true,
   "description": "Workspace root for the trilean ecosystem. Never published -- it exists to hold the workspace, the task pipeline, the shared tooling configuration, and the release orchestration.",
-  "type": "module",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ExaDev/trilean.git"
-  },
-  "homepage": "https://github.com/ExaDev/trilean#readme",
   "bugs": {
     "url": "https://github.com/ExaDev/trilean/issues"
-  },
-  "engines": {
-    "node": ">=20"
-  },
-  "packageManager": "pnpm@12.4.1+sha512.2e81e399d73fe8390dab25e06aa788ab7a5908248d2f5a370f82b481147a6a7a367bf8048f9a6fdb6460f21a66f0542dedb8b94ca2c8723596741920b1656d4c",
-  "scripts": {
-    "build": "turbo run _build",
-    "lint": "turbo run _lint",
-    "_lint": "eslint . --fix --cache --max-warnings 0",
-    "typecheck": "turbo run _typecheck _typecheck:attw",
-    "_typecheck": "tsc -p tsconfig.json",
-    "test": "turbo run _test",
-    "test:coverage": "turbo run _test:coverage",
-    "test:integration": "turbo run _test:integration",
-    "test:smoke": "turbo run _test:smoke",
-    "test:workers": "turbo run _test:workers",
-    "prepush": "turbo run _prepush",
-    "release": "semantic-release-workspace release --config release-workspace.config.ts",
-    "prepare": "husky"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.2.2",
@@ -56,5 +29,32 @@
     "turbo": "^2.11.5",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.68.0"
-  }
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "homepage": "https://github.com/ExaDev/trilean#readme",
+  "license": "MIT",
+  "packageManager": "pnpm@12.4.1+sha512.2e81e399d73fe8390dab25e06aa788ab7a5908248d2f5a370f82b481147a6a7a367bf8048f9a6fdb6460f21a66f0542dedb8b94ca2c8723596741920b1656d4c",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExaDev/trilean.git"
+  },
+  "scripts": {
+    "_lint": "eslint . --fix --cache --max-warnings 0",
+    "_typecheck": "tsc -p tsconfig.json",
+    "build": "turbo run _build",
+    "lint": "turbo run _lint",
+    "prepare": "husky",
+    "prepush": "turbo run _prepush",
+    "release": "semantic-release-workspace release --config release-workspace.config.ts",
+    "test": "turbo run _test",
+    "test:coverage": "turbo run _test:coverage",
+    "test:integration": "turbo run _test:integration",
+    "test:smoke": "turbo run _test:smoke",
+    "test:workers": "turbo run _test:workers",
+    "typecheck": "turbo run _typecheck _typecheck:attw"
+  },
+  "type": "module"
 }

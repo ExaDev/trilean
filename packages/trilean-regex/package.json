@@ -1,16 +1,29 @@
 {
   "name": "trilean-regex",
-  "version": "1.0.3",
   "description": "A portable regular-expression grammar -- a true regular language, with a Thompson-construction reference matcher -- so a pattern means the same thing in process and wherever trilean-sql can push it down to a database's own engine.",
-  "type": "module",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ExaDev/trilean.git",
-    "directory": "packages/trilean-regex"
-  },
-  "homepage": "https://github.com/ExaDev/trilean/tree/main/packages/trilean-regex",
+  "version": "1.0.3",
   "bugs": {
     "url": "https://github.com/ExaDev/trilean/issues"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
+    "@exadev/eslint-config": "2.12.1",
+    "@types/node": "^26.4.0",
+    "@vitest/coverage-v8": "^5.0.0",
+    "eslint": "^10.9.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.6",
+    "globals": "^17.11.0",
+    "prettier": "^3.9.6",
+    "publint": "^0.3.24",
+    "tsdown": "^0.23.0",
+    "turbo": "^2.10.12",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.68.0",
+    "vitest": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=20"
   },
   "exports": {
     ".": {
@@ -30,63 +43,50 @@
       "require": "./dist/*.cjs"
     }
   },
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
+  "homepage": "https://github.com/ExaDev/trilean/tree/main/packages/trilean-regex",
+  "keywords": [
+    "finite-automaton",
+    "isomorphic",
+    "nfa",
+    "parser",
+    "regex",
+    "regular-expression",
+    "regular-language",
+    "trilean"
+  ],
+  "license": "MIT",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "publishConfig": {
     "access": "public",
     "provenance": true,
     "registry": "https://registry.npmjs.org/"
   },
-  "sideEffects": false,
-  "engines": {
-    "node": ">=20"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExaDev/trilean.git",
+    "directory": "packages/trilean-regex"
   },
-  "license": "MIT",
   "scripts": {
-    "build": "turbo run _build",
     "_build": "tsdown",
-    "lint": "turbo run _lint",
     "_lint": "eslint . --fix --cache --max-warnings 0",
-    "typecheck": "turbo run _typecheck _typecheck:attw",
+    "_prepush": "true",
+    "_test": "vitest run --project unit",
+    "_test:coverage": "vitest run --project unit --coverage",
     "_typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.node.json",
     "_typecheck:attw": "attw --pack",
-    "test": "turbo run _test",
-    "_test": "vitest run --project unit",
-    "test:coverage": "turbo run _test:coverage",
-    "_test:coverage": "vitest run --project unit --coverage",
+    "build": "turbo run _build",
+    "lint": "turbo run _lint",
+    "prepublishOnly": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run build && publint && attw --pack",
     "prepush": "turbo run _prepush",
-    "_prepush": "true",
-    "prepublishOnly": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run build && publint && attw --pack"
+    "test": "turbo run _test",
+    "test:coverage": "turbo run _test:coverage",
+    "typecheck": "turbo run _typecheck _typecheck:attw"
   },
-  "keywords": [
-    "regex",
-    "regular-expression",
-    "regular-language",
-    "finite-automaton",
-    "nfa",
-    "parser",
-    "trilean",
-    "isomorphic"
-  ],
-  "devDependencies": {
-    "@arethetypeswrong/cli": "^0.18.5",
-    "@exadev/eslint-config": "2.12.1",
-    "@types/node": "^26.4.0",
-    "@vitest/coverage-v8": "^5.0.0",
-    "eslint": "^10.9.1",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.6",
-    "globals": "^17.11.0",
-    "prettier": "^3.9.6",
-    "publint": "^0.3.24",
-    "tsdown": "^0.23.0",
-    "turbo": "^2.10.12",
-    "typescript": "^6.0.3",
-    "typescript-eslint": "^8.68.0",
-    "vitest": "^5.0.0"
-  }
+  "sideEffects": false,
+  "type": "module",
+  "types": "./dist/index.d.ts"
 }

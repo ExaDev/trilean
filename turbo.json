@@ -1,6 +1,6 @@
 {
-  "agentGuidance": false,
   "$schema": "https://turborepo.com/schema.json",
+  "agentGuidance": false,
   "globalDependencies": [
     "pnpm-lock.yaml",
     ".tool-versions",
@@ -14,6 +14,29 @@
   //
   // `_typecheck`, `_lint` and `_test:smoke` additionally depend on the package's OWN `_build`, which is not the same thing and is not optional here: test/smoke.test.ts and scripts/generate-json-schema.ts both import from ../dist/ by relative path, so tsc, eslint's typed rules, and the smoke suite itself all need this package's dist/ present before they run.
   "tasks": {
+    // The workspace root's own tooling files (eslint.config.ts, commitlint.config.ts, lint-staged.config.ts, release-workspace.config.ts) are held to the same lint and typecheck gates as package code. Registered as root tasks so `turbo run _lint` and `turbo run _typecheck` cover them without a separate command.
+    "//#_lint": {
+      "inputs": [
+        "eslint.config.ts",
+        "prettier.config.ts",
+        "commitlint.config.ts",
+        "lint-staged.config.ts",
+        "release-workspace.config.ts",
+        "tsconfig.json"
+      ],
+      "outputs": [".eslintcache"]
+    },
+    "//#_typecheck": {
+      "inputs": [
+        "eslint.config.ts",
+        "prettier.config.ts",
+        "commitlint.config.ts",
+        "lint-staged.config.ts",
+        "release-workspace.config.ts",
+        "tsconfig.json"
+      ],
+      "outputs": []
+    },
     "_build": {
       "dependsOn": ["^_build"],
       // scripts/** covers the JSON-schema generation step that runs as part of the build; package.json is an input because that generation reads it.
@@ -21,21 +44,22 @@
       // schemas/** is the build's second output, alongside tsdown's dist/.
       "outputs": ["dist/**", "schemas/**"]
     },
-    "_typecheck": {
-      "dependsOn": ["^_build", "_build"],
-      "inputs": ["$TURBO_DEFAULT$", "tsconfig.json", "tsconfig.node.json"],
-      "outputs": []
-    },
-    // attw --pack inspects the package's own dist/ against its own package.json exports map, so it depends on this package's own `_build` rather than on `^_build` alone. It was previously a bare `pnpm exec attw --pack` step in ci.yml's Typecheck job, run after `pnpm typecheck` purely to reuse the dist/ that task had left behind; as a task it is cached and ordered like everything else.
-    "_typecheck:attw": {
-      "dependsOn": ["_build"],
-      "inputs": ["package.json"],
-      "outputs": []
-    },
     "_lint": {
       "dependsOn": ["^_build", "_build"],
       "inputs": ["$TURBO_DEFAULT$", "eslint.config.ts"],
       "outputs": [".eslintcache"]
+    },
+    "_prepush": {
+      "dependsOn": [
+        "_lint",
+        "_typecheck",
+        "_typecheck:attw",
+        "_test",
+        "_test:integration",
+        "_test:smoke",
+        "_test:workers"
+      ],
+      "outputs": []
     },
     "_test": {
       "dependsOn": ["^_build"],
@@ -80,40 +104,15 @@
       ],
       "outputs": []
     },
-    "_prepush": {
-      "dependsOn": [
-        "_lint",
-        "_typecheck",
-        "_typecheck:attw",
-        "_test",
-        "_test:integration",
-        "_test:smoke",
-        "_test:workers"
-      ],
+    "_typecheck": {
+      "dependsOn": ["^_build", "_build"],
+      "inputs": ["$TURBO_DEFAULT$", "tsconfig.json", "tsconfig.node.json"],
       "outputs": []
     },
-
-    // The workspace root's own tooling files (eslint.config.ts, commitlint.config.ts, lint-staged.config.ts, release-workspace.config.ts) are held to the same lint and typecheck gates as package code. Registered as root tasks so `turbo run _lint` and `turbo run _typecheck` cover them without a separate command.
-    "//#_lint": {
-      "inputs": [
-        "eslint.config.ts",
-        "prettier.config.ts",
-        "commitlint.config.ts",
-        "lint-staged.config.ts",
-        "release-workspace.config.ts",
-        "tsconfig.json"
-      ],
-      "outputs": [".eslintcache"]
-    },
-    "//#_typecheck": {
-      "inputs": [
-        "eslint.config.ts",
-        "prettier.config.ts",
-        "commitlint.config.ts",
-        "lint-staged.config.ts",
-        "release-workspace.config.ts",
-        "tsconfig.json"
-      ],
+    // attw --pack inspects the package's own dist/ against its own package.json exports map, so it depends on this package's own `_build` rather than on `^_build` alone. It was previously a bare `pnpm exec attw --pack` step in ci.yml's Typecheck job, run after `pnpm typecheck` purely to reuse the dist/ that task had left behind; as a task it is cached and ordered like everything else.
+    "_typecheck:attw": {
+      "dependsOn": ["_build"],
+      "inputs": ["package.json"],
       "outputs": []
     }
   }
