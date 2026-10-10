@@ -1,5 +1,6 @@
 import { builtinModules } from "node:module";
 import { exadevConfig } from "@exadev/eslint-config";
+import { defineConfig } from "eslint/config";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 import globals from "globals";
 
@@ -16,8 +17,8 @@ const bareNodeBuiltinPattern = `^(${nodeBuiltinBaseModules.join("|")})(/.*)?$`;
 
 const runtimeSrcExemptions = ["src/**/*.test.ts", "src/test-support/**"];
 
-export default exadevConfig(
-  {},
+export default defineConfig(
+  ...exadevConfig(),
   {
     ignores: ["dist", "coverage", "node_modules", ".turbo", "schemas"],
   },
@@ -31,6 +32,7 @@ export default exadevConfig(
     },
   },
   {
+    files: ["**/*.{ts,tsx,mts,cts}"],
     rules: {
       "@typescript-eslint/consistent-type-imports": [
         "error",
@@ -82,6 +84,21 @@ export default exadevConfig(
         { allow: ["arrowFunctions", "asyncFunctions"] },
       ],
     },
+  },
+  // `count(collection, filter?, probe?)` is part of the published API, so its signature stays as released.
+  {
+    files: ["src/derived-aggregates.ts"],
+    rules: { "exadev/prefer-options-object-param": "off" },
+  },
+  // The recursive evaluator passes its state positionally on the hot path, so the call signature stays as it is.
+  {
+    files: ["src/evaluator.ts", "src/evaluator-collection.ts"],
+    rules: { "max-params": "off" },
+  },
+  // Each resumption of a task depends on the result of the one before it, so the async driver awaits them in turn.
+  {
+    files: ["src/evaluator-effect.ts"],
+    rules: { "no-await-in-loop": "off" },
   },
   eslintPluginPrettierRecommended,
 );

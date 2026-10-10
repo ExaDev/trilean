@@ -1,5 +1,6 @@
 import { builtinModules } from "node:module";
 import { exadevConfig } from "@exadev/eslint-config";
+import { defineConfig } from "eslint/config";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 import globals from "globals";
 
@@ -14,8 +15,8 @@ const nodeBuiltinBaseModules = [
 ].sort();
 const bareNodeBuiltinPattern = `^(${nodeBuiltinBaseModules.join("|")})(/.*)?$`;
 
-export default exadevConfig(
-  {},
+export default defineConfig(
+  ...exadevConfig(),
   {
     ignores: ["dist", "coverage", "node_modules", ".turbo"],
   },
@@ -29,6 +30,7 @@ export default exadevConfig(
     },
   },
   {
+    files: ["**/*.{ts,tsx,mts,cts}"],
     rules: {
       "@typescript-eslint/consistent-type-imports": [
         "error",
@@ -75,6 +77,16 @@ export default exadevConfig(
         { allow: ["arrowFunctions", "asyncFunctions"] },
       ],
     },
+  },
+  // The guard's helper keeps the positional signature its call sites already use.
+  {
+    files: ["src/guard.ts"],
+    rules: { "max-params": "off" },
+  },
+  // Fixture rows are seeded and evaluated one after another so their order is deterministic.
+  {
+    files: ["test/integration/*-test-support.ts"],
+    rules: { "no-await-in-loop": "off" },
   },
   eslintPluginPrettierRecommended,
 );

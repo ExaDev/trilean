@@ -1,12 +1,15 @@
 import { exadevConfig } from "@exadev/eslint-config";
+import { defineConfig } from "eslint/config";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 import globals from "globals";
 
-// Lints the workspace root's own files -- its TypeScript tooling configs and its prose and data -- and nothing else.
-//
-// packages/** stays ignored here. The package keeps its own eslint.config.ts, because file scoping, tsconfig wiring, and the isomorphism import bans are genuinely per-package concerns; a root run that also walked the package would apply this program's tsconfig to source files it does not contain.
-export default exadevConfig(
-  {},
+/**
+ * Lints the workspace root's own files -- its TypeScript tooling configs and its prose and data -- and nothing else.
+ *
+ * packages/** stays ignored here. The package keeps its own eslint.config.ts, because file scoping, tsconfig wiring, and the isomorphism import bans are genuinely per-package concerns; a root run that also walked the package would apply this program's tsconfig to source files it does not contain.
+ */
+export default defineConfig(
+  ...exadevConfig(),
   {
     ignores: [
       "packages/**",
@@ -28,6 +31,7 @@ export default exadevConfig(
     },
   },
   {
+    files: ["**/*.{ts,tsx,mts,cts}"],
     rules: {
       "@typescript-eslint/consistent-type-imports": [
         "error",

@@ -1,5 +1,6 @@
 import { builtinModules } from "node:module";
 import { exadevConfig } from "@exadev/eslint-config";
+import { defineConfig } from "eslint/config";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 import globals from "globals";
 
@@ -14,8 +15,8 @@ const nodeBuiltinBaseModules = [
 ].sort();
 const bareNodeBuiltinPattern = `^(${nodeBuiltinBaseModules.join("|")})(/.*)?$`;
 
-export default exadevConfig(
-  {},
+export default defineConfig(
+  ...exadevConfig(),
   {
     ignores: ["dist", "coverage", "node_modules", ".turbo"],
   },
@@ -29,6 +30,7 @@ export default exadevConfig(
     },
   },
   {
+    files: ["**/*.{ts,tsx,mts,cts}"],
     rules: {
       "@typescript-eslint/consistent-type-imports": [
         "error",
