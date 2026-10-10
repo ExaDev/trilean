@@ -1,3 +1,18 @@
+## [1.0.4](https://github.com/ExaDev/trilean/compare/trilean-regex%401.0.3...trilean-regex%401.0.4) (2026-10-10)
+
+### Styles
+
+* order JSON object keys alphanumerically ([e844e15](https://github.com/ExaDev/trilean/commit/e844e1591041da73e80759cabf36c6cbfe4f24ae))
+* separate statements and place comments as the shared config's rules require ([8e9130c](https://github.com/ExaDev/trilean/commit/8e9130cb8decd13348c47cbec9c51494d05c625a))
+
+### Tests
+
+* name each test file's kind in its filename ([025168e](https://github.com/ExaDev/trilean/commit/025168ede453a4a2e8a81790e48eb8035cef6d17))
+
+### Build System
+
+* **deps:** bump @exadev/eslint-config to 3.0.0 ([26722f6](https://github.com/ExaDev/trilean/commit/26722f683faa6fa5abb6177f27b47d4d773f214f))
+
 ## [1.0.3](https://github.com/ExaDev/trilean/compare/trilean-regex%401.0.2...trilean-regex%401.0.3) (2026-09-19)
 
 ### Build System
