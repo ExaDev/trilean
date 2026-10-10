@@ -10,7 +10,7 @@ import type { EvaluationContext, Resolvers } from "./resolvers";
 import type { ExpressionNode, PredicateNode } from "./tree";
 
 /**
- * Shared fixture machinery for the two split indeterminacy test files (evaluator.indeterminacy-table.test.ts, evaluator.indeterminacy-cases.test.ts): systematic, table-driven coverage of README.md's "Indeterminacy reference" section, one fixture per node-kind x reason-code combination that section documents, for every `PredicateNode`/`ExpressionNode` kind implemented. This complements, rather than replaces, the ad hoc behavioural tests already spread across the evaluator.*.test.ts files and truth-tables.test.ts.
+ * Shared fixture machinery for the two split indeterminacy test files (evaluator.indeterminacy-table.unit.test.ts, evaluator.indeterminacy-cases.unit.test.ts): systematic, table-driven coverage of README.md's "Indeterminacy reference" section, one fixture per node-kind x reason-code combination that section documents, for every `PredicateNode`/`ExpressionNode` kind implemented. This complements, rather than replaces, the ad hoc behavioural tests already spread across the evaluator.*.test.ts files and truth-tables.unit.test.ts.
  */
 
 export function isPlainRecord(

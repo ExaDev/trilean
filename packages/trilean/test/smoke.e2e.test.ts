@@ -24,7 +24,7 @@ function isUnknownArray(value: unknown): value is unknown[] {
   return Array.isArray(value);
 }
 
-/** Narrows to a plain JSON object or throws -- the built package's dist/ output and the generated schema document are both untyped `unknown` at their boundary, per this repo's `JSON.parse`/dynamic-import narrowing convention, so every access below goes through this rather than an `as` assertion. Throwing a descriptive Error rather than returning a placeholder is what makes a malformed built artefact a test failure instead of a silently-tolerated hole (mirrors test/integration/json-schema-consistency.test.ts's extractKindConst/extractGeneratedKinds). */
+/** Narrows to a plain JSON object or throws -- the built package's dist/ output and the generated schema document are both untyped `unknown` at their boundary, per this repo's `JSON.parse`/dynamic-import narrowing convention, so every access below goes through this rather than an `as` assertion. Throwing a descriptive Error rather than returning a placeholder is what makes a malformed built artefact a test failure instead of a silently-tolerated hole (mirrors test/integration/json-schema-consistency.integration.test.ts's extractKindConst/extractGeneratedKinds). */
 function asPlainRecord(
   value: unknown,
   message: string,
@@ -33,7 +33,7 @@ function asPlainRecord(
   return value;
 }
 
-// The full public surface: the evaluator entry points and factory, both node-tree schemas, and every derived connective/aggregate builder -- deliberately not asserting internal node-kind object schemas here, since those are covered by src/tree.test.ts against src/ directly. Declared as a typed tuple array, not a `Record`/`Object.entries()` pair, so each export name is checked against IndexModule's own keys at typecheck time -- a renamed or removed export fails here rather than producing a silently-`undefined` lookup at runtime.
+// The full public surface: the evaluator entry points and factory, both node-tree schemas, and every derived connective/aggregate builder -- deliberately not asserting internal node-kind object schemas here, since those are covered by src/tree.unit.test.ts against src/ directly. Declared as a typed tuple array, not a `Record`/`Object.entries()` pair, so each export name is checked against IndexModule's own keys at typecheck time -- a renamed or removed export fails here rather than producing a silently-`undefined` lookup at runtime.
 const expectedIndexExports: readonly [
   keyof typeof IndexModule,
   "function" | "object",
@@ -118,7 +118,7 @@ describe("CommonJS entries loaded through Node's own require()", () => {
   });
 });
 
-// Beyond "the exports exist and are the right typeof" above, this section actually RUNS a substantial composed-rule scenario -- fold's `max` combiner, `memberOf`, and the derived `implies` connective, composed together (adapted from test/integration/composed-rules.test.ts's own "fold's max combiner alongside memberOf and a derived connective" scenario) -- against both built entry points, proving the compiled output behaves identically to source for a realistic multi-kind tree, not only for the minimal golden example already covered by src/golden-examples.test.ts and test/workers/trilean.test.ts. The fixture is duplicated inline, rather than imported from test/integration, to keep this file self-contained (matching its existing style) and independent of TypeScript transpilation.
+// Beyond "the exports exist and are the right typeof" above, this section actually RUNS a substantial composed-rule scenario -- fold's `max` combiner, `memberOf`, and the derived `implies` connective, composed together (adapted from test/integration/composed-rules.integration.test.ts's own "fold's max combiner alongside memberOf and a derived connective" scenario) -- against both built entry points, proving the compiled output behaves identically to source for a realistic multi-kind tree, not only for the minimal golden example already covered by src/golden-examples.unit.test.ts and test/workers/trilean.e2e.test.ts. The fixture is duplicated inline, rather than imported from test/integration, to keep this file self-contained (matching its existing style) and independent of TypeScript transpilation.
 
 function makeAuctionResolvers(): IndexModule.Resolvers {
   return {
@@ -240,7 +240,7 @@ function hasOptionsArray(
   return Array.isArray(value.options);
 }
 
-/** Every `kind` a runtime union schema (`PredicateNodeSchema`/`ExpressionNodeSchema`, as built) actually accepts, read off its own `.options`. Recurses when an option is itself a nested union rather than a flat object -- built `ExpressionNodeSchema` is `z.union([CoreExpressionNodeSchema, ComplexLiteralNodeSchema])` (see `extractKindConst` below), so its own top-level `.options` are two further unions, not flat leaf schemas. Mirrors test/integration/json-schema-consistency.test.ts's own `discriminantKinds`, duplicated here rather than imported to keep this file self-contained (see this file's own top comment). */
+/** Every `kind` a runtime union schema (`PredicateNodeSchema`/`ExpressionNodeSchema`, as built) actually accepts, read off its own `.options`. Recurses when an option is itself a nested union rather than a flat object -- built `ExpressionNodeSchema` is `z.union([CoreExpressionNodeSchema, ComplexLiteralNodeSchema])` (see `extractKindConst` below), so its own top-level `.options` are two further unions, not flat leaf schemas. Mirrors test/integration/json-schema-consistency.integration.test.ts's own `discriminantKinds`, duplicated here rather than imported to keep this file self-contained (see this file's own top comment). */
 function runtimeDiscriminantKinds(schema: {
   options: readonly unknown[];
 }): string[] {

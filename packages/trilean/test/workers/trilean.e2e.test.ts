@@ -26,7 +26,7 @@ function isUnknownArray(value: unknown): value is unknown[] {
 }
 
 /**
- * The same README.md "Worked example" fixture as src/golden-examples.test.ts (imported, not duplicated, so the two suites can never silently drift apart), re-run here inside the real Cloudflare Workers runtime (workerd) via the `workers` vitest project. Passing here turns "isomorphic" from an assertion into a runtime-checked fact for the evaluator itself, not merely for the Zod schemas.
+ * The same README.md "Worked example" fixture as src/golden-examples.unit.test.ts (imported, not duplicated, so the two suites can never silently drift apart), re-run here inside the real Cloudflare Workers runtime (workerd) via the `workers` vitest project. Passing here turns "isomorphic" from an assertion into a runtime-checked fact for the evaluator itself, not merely for the Zod schemas.
  */
 describe("golden example (README.md worked example) under workerd", () => {
   it("base case: isActive eq true AND sum(items.amount) via reduce fold > x + y -> definite true", async () => {
@@ -62,7 +62,7 @@ describe("golden example (README.md worked example) under workerd", () => {
 });
 
 /**
- * Beyond the golden example's narrow AND + compare + reduce-fold path, this section runs a substantially broader composed tree -- allOf, anyOf, compare, textCompare, memberOf, some, every, fold (reduce), and conditional, all in one evaluation -- for real inside the same workerd isolate (adapted from test/integration/composed-rules.test.ts's own "membership eligibility" scenario), so the "isomorphic" guarantee is checked against genuinely more of the evaluator's surface, not only the one path the golden example covers. Duplicated inline, rather than imported from test/integration, to keep this file's dependency graph limited to src/ under the real workers runtime.
+ * Beyond the golden example's narrow AND + compare + reduce-fold path, this section runs a substantially broader composed tree -- allOf, anyOf, compare, textCompare, memberOf, some, every, fold (reduce), and conditional, all in one evaluation -- for real inside the same workerd isolate (adapted from test/integration/composed-rules.integration.test.ts's own "membership eligibility" scenario), so the "isomorphic" guarantee is checked against genuinely more of the evaluator's surface, not only the one path the golden example covers. Duplicated inline, rather than imported from test/integration, to keep this file's dependency graph limited to src/ under the real workers runtime.
  */
 describe("a substantially broader composed tree (allOf/anyOf/compare/textCompare/memberOf/some/every/fold/conditional) under workerd", () => {
   const approvedFilter: PredicateNode = {
@@ -288,7 +288,7 @@ describe("units-aware arithmetic (multiply/divide across differently unit-tagged
 });
 
 /**
- * `treeReference`, `conditional`'s `"unique"` hit policy, and `coalesce` under workerd -- proving isomorphism for the three most recently added features, not just for the evaluator's pre-existing surface above. Composed together in one tree (a treeReference to a "unique"-hit-policy conditional whose matching case's value flows into a coalesce), the same discipline test/integration/tree-reference.test.ts and src/derived-values.test.ts already apply against source, run here for real inside the workerd isolate.
+ * `treeReference`, `conditional`'s `"unique"` hit policy, and `coalesce` under workerd -- proving isomorphism for the three most recently added features, not just for the evaluator's pre-existing surface above. Composed together in one tree (a treeReference to a "unique"-hit-policy conditional whose matching case's value flows into a coalesce), the same discipline test/integration/tree-reference.integration.test.ts and src/derived-values.unit.test.ts already apply against source, run here for real inside the workerd isolate.
  */
 describe("treeReference, conditional's 'unique' hit policy, and coalesce under workerd", () => {
   const namedRules: Record<string, JsonValue> = {
