@@ -12,7 +12,7 @@
   //
   // Every task declares `^_build`, its dependencies' builds: a workspace sibling is a symlink whose dist/ exists only once its own build has run, and tsc, type-aware eslint, and vitest all resolve imports through it. With one package that edge is inert today; it is declared so the first sibling added is ordered correctly rather than racing.
   //
-  // `_typecheck`, `_lint` and `_test:smoke` additionally depend on the package's OWN `_build`, which is not the same thing and is not optional here: test/smoke.test.ts and scripts/generate-json-schema.ts both import from ../dist/ by relative path, so tsc, eslint's typed rules, and the smoke suite itself all need this package's dist/ present before they run.
+  // `_typecheck`, `_lint` and `_test:smoke` additionally depend on the package's OWN `_build`, which is not the same thing and is not optional here: test/smoke.e2e.test.ts and scripts/generate-json-schema.ts both import from ../dist/ by relative path, so tsc, eslint's typed rules, and the smoke suite itself all need this package's dist/ present before they run.
   "tasks": {
     // The workspace root's own tooling files (eslint.config.ts, commitlint.config.ts, lint-staged.config.ts, release-workspace.config.ts) are held to the same lint and typecheck gates as package code. Registered as root tasks so `turbo run _lint` and `turbo run _typecheck` cover them without a separate command.
     "//#_lint": {
@@ -88,7 +88,7 @@
         "tsdown.config.ts",
         "package.json",
         "vitest.config.ts",
-        "test/smoke.test.ts"
+        "test/smoke.e2e.test.ts"
       ],
       // Deliberately empty rather than dist/**: dist/ is `_build`'s output, and two tasks claiming the same output directory means a cache replay of one can overwrite the other's. The smoke run itself produces nothing worth caching.
       "outputs": []

@@ -18,7 +18,7 @@ import { sqliteSubjectOptions } from "../../src/test-support/columns";
  * Splitting the original single file by tested concern (predicates, edge cases, quantifiers) is purely a file-size matter -- vitest still gives each split file its own isolated module instance, so each one opens, seeds, and closes its own in-memory connection via the `beforeAll`/`afterAll` registered here, exactly as the unsplit file did for itself.
  */
 
-/** Exported for `sqlite.predicates.test.ts`'s own REGEXP-registration proofs, which need a second, bare connection sharing this same schema but not this file's registered `regexp` function or seeded rows. */
+/** Exported for `sqlite.predicates.integration.test.ts`'s own REGEXP-registration proofs, which need a second, bare connection sharing this same schema but not this file's registered `regexp` function or seeded rows. */
 export const SCHEMA = `
   CREATE TABLE subjects (
     id     TEXT PRIMARY KEY,
@@ -31,7 +31,7 @@ export const SCHEMA = `
 `;
 
 /**
- * A second, deliberately tiny table whose only purpose is the coercion proofs in `sqlite.edge-cases.test.ts`.
+ * A second, deliberately tiny table whose only purpose is the coercion proofs in `sqlite.edge-cases.integration.test.ts`.
  *
  * They need a column whose declared affinity does the coercing -- affinity is a property of a column, and two bound parameters compared against each other have none -- and they need values chosen so that the coerced answer and the honest one differ. Keeping them out of `subjects` leaves that fixture identical in shape to the PostgreSQL suite's, so a case comparing the two suites is comparing like with like.
  */
@@ -44,7 +44,7 @@ const COERCION_SCHEMA = `
 `;
 
 /**
- * The one correlated child table the `some`/`every`/`fold` parity suite in `sqlite.quantifiers.test.ts` needs, matching `sqliteSubjectOptionsWithTags`'s own `collectionFor` mapping (`src/test-support/columns.ts`): a subject's own tags, each carrying an optional `weight`. `"subjectId"` is quoted throughout -- schema, insert, and the mapping's own `join` string -- matching the same quoted-identifier convention the PostgreSQL/PGlite suites use for it.
+ * The one correlated child table the `some`/`every`/`fold` parity suite in `sqlite.quantifiers.integration.test.ts` needs, matching `sqliteSubjectOptionsWithTags`'s own `collectionFor` mapping (`src/test-support/columns.ts`): a subject's own tags, each carrying an optional `weight`. `"subjectId"` is quoted throughout -- schema, insert, and the mapping's own `join` string -- matching the same quoted-identifier convention the PostgreSQL/PGlite suites use for it.
  */
 const TAGS_SCHEMA = `
   CREATE TABLE subject_tags (
@@ -108,7 +108,7 @@ interface TagRow {
 }
 
 /**
- * Every subject's own tags, seeded to exercise a distinct shape of participation each: `ada` has none (the empty-collection case); `grace`'s two weights (3, 9) straddle the `[RANGE_LOW, RANGE_HIGH]` window used in `sqlite.quantifiers.test.ts` without either one falling inside it, and one alone fails `MATCH_THRESHOLD` while the other passes; `lin` pairs one clean, participating vote with one whose `weight` is unknown; `unknown` has a single tag whose `weight` is unknown, the sole-participant indeterminate case.
+ * Every subject's own tags, seeded to exercise a distinct shape of participation each: `ada` has none (the empty-collection case); `grace`'s two weights (3, 9) straddle the `[RANGE_LOW, RANGE_HIGH]` window used in `sqlite.quantifiers.integration.test.ts` without either one falling inside it, and one alone fails `MATCH_THRESHOLD` while the other passes; `lin` pairs one clean, participating vote with one whose `weight` is unknown; `unknown` has a single tag whose `weight` is unknown, the sole-participant indeterminate case.
  */
 const TAGS: readonly TagRow[] = [
   { id: "t1", subjectId: "grace", tag: "junior", weight: 3 },
@@ -286,7 +286,7 @@ export async function evaluatorMatching(
   return matched.sort();
 }
 
-/** Runs the tree both ways and asserts they agree, then hands back the row set so a case can also state what that set should be. Agreement alone would be satisfied by both being wrong in the same way, so every caller asserts the expected ids too. `options` defaults to `sqliteSubjectOptions`; `sqlite.quantifiers.test.ts` passes `sqliteSubjectOptionsWithTags` instead. */
+/** Runs the tree both ways and asserts they agree, then hands back the row set so a case can also state what that set should be. Agreement alone would be satisfied by both being wrong in the same way, so every caller asserts the expected ids too. `options` defaults to `sqliteSubjectOptions`; `sqlite.quantifiers.integration.test.ts` passes `sqliteSubjectOptionsWithTags` instead. */
 export async function agreeingRows(
   node: PredicateNode,
   options: Readonly<SqlCompileOptions> = sqliteSubjectOptions,

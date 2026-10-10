@@ -11,7 +11,7 @@ import {
 import type { Evaluation, PredicateNode, Resolvers } from "../../src/index";
 
 /**
- * The three pattern builders exercised as part of larger composed trees through the public API surface, against a resolver-backed multi-record dataset -- the tier that proves a compiled `textCompare` cooperates with quantifiers, connectives and per-item evaluation contexts as a system, rather than only matching correctly in isolation (see src/derived-patterns.test.ts for the exhaustive per-dialect coverage this builds on top of).
+ * The three pattern builders exercised as part of larger composed trees through the public API surface, against a resolver-backed multi-record dataset -- the tier that proves a compiled `textCompare` cooperates with quantifiers, connectives and per-item evaluation contexts as a system, rather than only matching correctly in isolation (see src/derived-patterns.unit.test.ts for the exhaustive per-dialect coverage this builds on top of).
  */
 
 interface Command {

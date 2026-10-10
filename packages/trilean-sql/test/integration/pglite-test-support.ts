@@ -30,7 +30,7 @@ const SCHEMA = `
 `;
 
 /**
- * The one correlated child table the `some`/`every`/`fold` parity suite in `pglite.quantifiers.test.ts` needs, matching `subjectOptionsWithTags`'s own `collectionFor` mapping (`src/test-support/columns.ts`): a subject's own tags, each carrying an optional `weight`. `"subjectId"` is quoted throughout -- schema, insert, and the mapping's own `join` string -- so its declared case survives PostgreSQL's default unquoted-identifier folding.
+ * The one correlated child table the `some`/`every`/`fold` parity suite in `pglite.quantifiers.integration.test.ts` needs, matching `subjectOptionsWithTags`'s own `collectionFor` mapping (`src/test-support/columns.ts`): a subject's own tags, each carrying an optional `weight`. `"subjectId"` is quoted throughout -- schema, insert, and the mapping's own `join` string -- so its declared case survives PostgreSQL's default unquoted-identifier folding.
  */
 const TAGS_SCHEMA = `
   CREATE TABLE subject_tags (
@@ -94,7 +94,7 @@ interface TagRow {
 }
 
 /**
- * Every subject's own tags, seeded to exercise a distinct shape of participation each: `ada` has none (the empty-collection case); `grace`'s two weights (3, 9) straddle the `[RANGE_LOW, RANGE_HIGH]` window used in `pglite.quantifiers.test.ts` without either one falling inside it, and one alone fails `MATCH_THRESHOLD` while the other passes; `lin` pairs one clean, participating vote with one whose `weight` is unknown; `unknown` has a single tag whose `weight` is unknown, the sole-participant indeterminate case.
+ * Every subject's own tags, seeded to exercise a distinct shape of participation each: `ada` has none (the empty-collection case); `grace`'s two weights (3, 9) straddle the `[RANGE_LOW, RANGE_HIGH]` window used in `pglite.quantifiers.integration.test.ts` without either one falling inside it, and one alone fails `MATCH_THRESHOLD` while the other passes; `lin` pairs one clean, participating vote with one whose `weight` is unknown; `unknown` has a single tag whose `weight` is unknown, the sole-participant indeterminate case.
  */
 const TAGS: readonly TagRow[] = [
   { id: "t1", subjectId: "grace", tag: "junior", weight: 3 },
