@@ -37,7 +37,8 @@ export const presenceOf = (probe: ExpressionNode): ExpressionNode => ({
       then: { kind: "numberLiteral", value: 1 },
     },
   ],
-  fallback: { kind: "numberLiteral", value: 0 }, // unreachable: a definite probe is always a member of the single-element list containing only itself
+  // unreachable: a definite probe is always a member of the single-element list containing only itself
+  fallback: { kind: "numberLiteral", value: 0 },
 });
 
 export const count = (

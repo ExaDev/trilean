@@ -87,6 +87,7 @@ function placeholder(
   castTo: SqlParamType,
 ): string {
   context.params.push(value);
+
   return context.dialect.placeholder(context.params.length, castTo);
 }
 
@@ -109,6 +110,7 @@ function quoteColumn(
         : "a dot-separated segment is empty",
     );
   }
+
   return segments
     .map((segment) => `"${segment.replaceAll('"', '""')}"`)
     .join(".");
@@ -130,6 +132,7 @@ function quoteTable(collectionKey: string, table: string): string {
         : "a dot-separated segment is empty",
     );
   }
+
   return segments
     .map((segment) => `"${segment.replaceAll('"', '""')}"`)
     .join(".");
@@ -142,6 +145,7 @@ function bindingOf(
   if (node.kind !== "reference" || typeof node.key !== "string") {
     return undefined;
   }
+
   return {
     referenceKey: node.key,
     binding: context.options.columnFor(node.key),
@@ -192,6 +196,7 @@ function compileCollection(
     node.filter === undefined
       ? undefined
       : compilePredicate(node.filter, itemContext);
+
   return { table, join: binding.join, itemContext, filterSql };
 }
 
@@ -212,6 +217,7 @@ function compilePortablePattern(
       context.options.dialect === "postgres"
         ? renderPostgresPattern(ast)
         : renderSqliteGlobPattern(ast);
+
     return placeholder(context, translated, "text");
   } catch (error) {
     throw new UnsupportedNodeError({
@@ -230,6 +236,7 @@ function compileExpression(
     case "reference": {
       const resolved = bindingOf(context, node);
       if (resolved === undefined) return refuse(node.kind, "expression");
+
       return quoteColumn(resolved.referenceKey, resolved.binding);
     }
     case "textLiteral":
@@ -239,7 +246,8 @@ function compileExpression(
       return placeholder(context, node.value, PARAM_TYPE_OF_LITERAL[node.kind]);
     case "fold": {
       if (node.combiner.mode === "reduce")
-        return refuse(node.kind, "expression"); // guard already refused this; drift safety net
+        // guard already refused this; drift safety net
+        return refuse(node.kind, "expression");
       const { table, join, itemContext, filterSql } = compileCollection(
         node,
         context,
@@ -252,6 +260,7 @@ function compileExpression(
         `(SELECT ${filterColumn} AS "filter_ok", ${itemValueSql} AS "item_value" FROM ${table} WHERE ${join}) AS "t" ` +
         `WHERE "filter_ok" IS NULL OR "filter_ok"`;
       const aggregate = node.combiner.mode === "max" ? "MAX" : "MIN";
+
       return (
         `(SELECT CASE ` +
         `WHEN MAX(CASE WHEN "filter_ok" IS NULL OR "item_value" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ` +
@@ -270,6 +279,7 @@ function compileExpression(
     case "treeReference":
       break;
   }
+
   return refuse(node.kind, "expression");
 }
 
@@ -291,11 +301,13 @@ function compilePredicate(
         return node.kind === "allOf" ? "(TRUE)" : "(FALSE)";
       }
       const joiner = node.kind === "allOf" ? " AND " : " OR ";
+
       return `(${node.operands.map((operand) => compilePredicate(operand, context)).join(joiner)})`;
     }
     case "compare": {
       const left = compileExpression(node.left, context);
       const right = compileExpression(node.right, context);
+
       return `(${left} ${COMPARISON_SQL[node.op]} ${right})`;
     }
     case "textCompare": {
@@ -304,6 +316,7 @@ function compilePredicate(
         node.op === "portableMatches" || node.op === "portableNotMatches"
           ? compilePortablePattern(node, context)
           : compileExpression(node.right, context);
+
       return `(${left} ${context.textComparison[node.op]} ${right})`;
     }
     case "memberOf": {
@@ -311,6 +324,7 @@ function compilePredicate(
       if (node.candidates.length === 0) {
         // `IN ()` is a syntax error, and the two constants it would be tempting to fold to are both wrong: an empty `in` is false and an empty `notIn` is true only once the operand itself is known, and stay unknown while it is NULL. These two forms reproduce that exactly -- `NULL IS NULL AND NULL` is NULL while `<value> IS NULL AND NULL` is FALSE, and the `notIn` form is its mirror image -- which a bare FALSE/TRUE would not, most visibly under a surrounding NOT. The suffix is the dialect's own boolean annotation on that bare NULL, empty for a dialect with no boolean type to annotate.
         const nullLiteral = `NULL${context.dialect.emptyMemberOfNullSuffix}`;
+
         return node.op === "in"
           ? `(${operand} IS NULL AND ${nullLiteral})`
           : `(${operand} IS NOT NULL OR ${nullLiteral})`;
@@ -318,6 +332,7 @@ function compilePredicate(
       const candidates = node.candidates
         .map((candidate) => compileExpression(candidate, context))
         .join(", ");
+
       return `(${operand} ${node.op === "in" ? "IN" : "NOT IN"} (${candidates}))`;
     }
     case "exists":
@@ -345,6 +360,7 @@ function compilePredicate(
           `ELSE FALSE END FROM (${participating}) AS "v")`
         );
       }
+
       // The mirror image for `every`'s AND-fold absorption (`combineAnd`): a definite false from any participating row wins outright regardless of any other row's indeterminacy, then an indeterminate participant makes the rest indeterminate, and only once neither has happened -- every vote true, or no participating rows at all, `every`'s own empty-collection identity -- is the result true.
       return (
         `(SELECT CASE ` +
@@ -356,6 +372,7 @@ function compilePredicate(
     case "treeReference":
       break;
   }
+
   return refuse(node.kind, "predicate");
 }
 
@@ -389,6 +406,7 @@ export function compilePredicateNode(
       if (cached !== undefined) return cached;
       const binding = options.columnFor(referenceKey);
       bindings.set(referenceKey, binding);
+
       return binding;
     },
     sqliteRegexpAvailable: options.sqliteRegexpAvailable,
@@ -406,10 +424,12 @@ export function compilePredicateNode(
             if (cachedColumn !== undefined) return cachedColumn;
             const columnBinding = binding.columnFor(referenceKey);
             columnBindings.set(referenceKey, columnBinding);
+
             return columnBinding;
           },
         };
         collectionBindings.set(collectionKey, memoisedBinding);
+
         return memoisedBinding;
       },
     }),
@@ -425,5 +445,6 @@ export function compilePredicateNode(
     textComparison: textComparisonSqlFor(dialect),
     params: [],
   };
+
   return { sql: compilePredicate(node, context), params: context.params };
 }

@@ -39,6 +39,7 @@ describe("delegate result flows through arithmetic and a conditional's fallback 
       if (typeof value === "string") {
         return Promise.resolve({ found: true, value: { kind: "text", value } });
       }
+
       return Promise.resolve({ found: false });
     },
     resolveLookup: async () => Promise.resolve({ found: false }),
@@ -53,6 +54,7 @@ describe("delegate result flows through arithmetic and a conditional's fallback 
         return Promise.resolve({ found: false });
       }
       const rate = taxRatesByRegion[context.region];
+
       return Promise.resolve(
         rate === undefined
           ? { found: false }
@@ -156,6 +158,7 @@ describe("delegate result feeds into a fold aggregation, resolved per participat
       if (typeof value === "string") {
         return Promise.resolve({ found: true, value: { kind: "text", value } });
       }
+
       return Promise.resolve({ found: false });
     },
     resolveLookup: async () => Promise.resolve({ found: false }),
@@ -164,6 +167,7 @@ describe("delegate result feeds into a fold aggregation, resolved per participat
         return Promise.resolve([]);
       }
       const items = context.lineItems;
+
       return Promise.resolve(isUnknownArray(items) ? items : []);
     },
     // Resolved per participating item -- each fold step's own context is the line item itself (see the fold/reduce section of README.md), so this handler reads the item's own `category` rather than anything from the outer order.
@@ -176,6 +180,7 @@ describe("delegate result feeds into a fold aggregation, resolved per participat
         return Promise.resolve({ found: false });
       }
       const rate = categoryRates[context.category];
+
       return Promise.resolve(
         rate === undefined
           ? { found: false }

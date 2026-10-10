@@ -50,6 +50,7 @@ function expectTruthValue(
 ): void {
   if (expected === "U") {
     expect(evaluation.status).toBe("indeterminate");
+
     return;
   }
   expect(evaluation).toEqual({ status: "definite", value: expected === "T" });
@@ -170,6 +171,7 @@ describe("none", () => {
           value: { kind: "number", value: context },
         });
       }
+
       return Promise.resolve({ found: false });
     },
     resolveLookup: async () => Promise.resolve({ found: false }),

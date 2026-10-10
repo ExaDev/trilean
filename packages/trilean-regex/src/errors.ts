@@ -5,6 +5,7 @@
  */
 export class RegexParseError extends Error {
   readonly pattern: string;
+
   readonly index: number;
 
   constructor(pattern: string, index: number, reason: string) {

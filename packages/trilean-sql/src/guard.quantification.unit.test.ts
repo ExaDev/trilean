@@ -13,6 +13,7 @@ describe("quantification over a collection", () => {
       if (collectionKey !== "tags") {
         throw new Error(`no collection mapped for '${collectionKey}'`);
       }
+
       return {
         table: "tags",
         join: `"tags"."subjectId" = "subjects"."id"`,

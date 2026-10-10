@@ -44,6 +44,7 @@ export function* resolveParticipatingItems(
   const candidates: unknown[] = yield* wait(
     resolvers.resolveCollection(collection, context),
   );
+
   return yield* all(
     candidates.map(function* (item): Task<ResolvedCollectionItem> {
       if (filter === undefined) return { item, filterOutcome: "include" };
@@ -61,6 +62,7 @@ export function* resolveParticipatingItems(
       if (filterResult.status === "indeterminate") {
         return { item, filterOutcome: filterResult };
       }
+
       return {
         item,
         filterOutcome: filterResult.value ? "include" : "exclude",
@@ -77,5 +79,6 @@ export function firstFilterIndeterminate(
     if (filterOutcome === "include" || filterOutcome === "exclude") continue;
     if (filterOutcome.status === "indeterminate") return filterOutcome.reason;
   }
+
   return undefined;
 }

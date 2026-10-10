@@ -22,6 +22,7 @@ function toComputed(value: unknown): Resolution {
   if (typeof value === "boolean") {
     return { found: true, value: { kind: "boolean", value } };
   }
+
   return { found: false };
 }
 
@@ -45,11 +46,13 @@ const syncResolvers: SyncResolvers = {
     if (table === "doubling" && first?.kind === "number") {
       return { found: true, value: { kind: "number", value: first.value * 2 } };
     }
+
     return { found: false };
   },
   resolveCollection: (collection, context) => {
     if (typeof collection !== "string" || !isPlainRecord(context)) return [];
     const items = context[collection];
+
     return isUnknownArray(items) ? items : [];
   },
   resolveDelegate: (system, payload) =>
@@ -83,6 +86,7 @@ const asyncResolvers: Resolvers = {
 const functions = {
   double: (args: readonly ComputedValue[]) => {
     const [first] = args;
+
     return first?.kind === "number"
       ? { kind: "number" as const, value: first.value * 2 }
       : { domainError: "double takes a number" };

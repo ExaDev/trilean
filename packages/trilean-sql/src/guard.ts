@@ -100,6 +100,7 @@ function staticValueKindOf(
   if (node.kind !== "reference") return STATIC_KIND_OF_LITERAL[node.kind];
   if (options === undefined || typeof node.key !== "string") return undefined;
   const paramType = options.columnFor(node.key).paramType;
+
   return paramType === undefined
     ? undefined
     : STATIC_KIND_OF_PARAM_TYPE[paramType];
@@ -139,6 +140,7 @@ function resolveCollectionForGuard(
   }
   const binding: Readonly<SqlCollectionBinding> =
     options.collectionFor(collection);
+
   return {
     itemOptions: { ...options, columnFor: binding.columnFor },
   };
@@ -170,6 +172,7 @@ function findUnpushableExpression(
             "a reference declaring a unit asserts that the resolved value carries that same unit, and a SQL column carries no unit for that assertion to be checked against",
         };
       }
+
       return undefined;
     }
     case "numberLiteral":
@@ -185,6 +188,7 @@ function findUnpushableExpression(
       if (Number.isNaN(node.value)) {
         return { kind: node.kind, path, reason: divergence.nan };
       }
+
       return undefined;
     case "textLiteral":
     case "booleanLiteral":
@@ -277,6 +281,7 @@ function findUnpushableExpression(
           reason: `a '${node.combiner.mode}' fold orders participating items by comparing them, and booleans have no ordering in trilean -- whereas ${divergence.booleanOrdering}`,
         };
       }
+
       return undefined;
     }
     case "accumulator":
@@ -301,6 +306,7 @@ function findUnpushableExpression(
     default: {
       // Unreachable while the switch above covers every ExpressionNode kind, and the assertion is what makes a kind added to trilean later a compile error here rather than a silent fall-through. The branch still returns rather than throwing, so a tree built by an older or newer trilean than this package was compiled against is reported as unpushable instead of crashing the walk.
       node satisfies never;
+
       return {
         kind: unrecognisedKind,
         path,
@@ -338,6 +344,7 @@ function findKindDivergence(
       reason: `trilean treats a comparison between a '${first.staticKind}' value (${first.path}) and a '${mismatched.staticKind}' value (${mismatched.path}) as wrong-type, whereas ${divergence.crossKindCoercion}`,
     };
   }
+
   return undefined;
 }
 
@@ -383,6 +390,7 @@ function findUnpushablePredicate(
         );
         if (unpushable !== undefined) return unpushable;
       }
+
       return undefined;
     }
     case "compare": {
@@ -424,6 +432,7 @@ function findUnpushablePredicate(
           };
         }
       }
+
       return undefined;
     }
     case "textCompare": {
@@ -497,6 +506,7 @@ function findUnpushablePredicate(
           };
         }
       }
+
       return undefined;
     }
     case "memberOf": {
@@ -516,6 +526,7 @@ function findUnpushablePredicate(
         );
         if (unpushable !== undefined) return unpushable;
       }
+
       return findKindDivergence(node.kind, path, operands, options, divergence);
     }
     case "exists":
@@ -543,6 +554,7 @@ function findUnpushablePredicate(
       );
       if (unpushableItem !== undefined) return unpushableItem;
       if (node.filter === undefined) return undefined;
+
       return findUnpushablePredicate(
         node.filter,
         `${path}.filter`,
@@ -559,6 +571,7 @@ function findUnpushablePredicate(
       };
     default: {
       node satisfies never;
+
       return {
         kind: unrecognisedKind,
         path,
@@ -586,6 +599,7 @@ export function findUnpushableNodeKind(
 ): UnpushableNode | undefined {
   const dialect = options?.dialect ?? "postgres";
   assertImplementedDialect(dialect);
+
   return findUnpushablePredicate(
     node,
     "$",

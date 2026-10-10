@@ -59,6 +59,7 @@ export async function runAsync<T>(task: Readonly<Runnable<T>>): Promise<T> {
         : await Promise.all(suspension.tasks.map(runAsync));
     step = task.next(result);
   }
+
   return step.value;
 }
 
@@ -82,5 +83,6 @@ export function runSync<T>(task: Readonly<Runnable<T>>): T {
     }
     step = task.next(result);
   }
+
   return step.value;
 }

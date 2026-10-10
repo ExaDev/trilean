@@ -22,6 +22,7 @@ function readKindLiteral(option: unknown): string | undefined {
   const kind = shape.kind;
   if (!isPlainRecord(kind)) return undefined;
   const value = kind.value;
+
   return typeof value === "string" ? value : undefined;
 }
 
@@ -30,6 +31,7 @@ function hasOptionsArray(
   value: unknown,
 ): value is { options: readonly unknown[] } {
   if (!isPlainRecord(value)) return false;
+
   return Array.isArray(value.options);
 }
 
@@ -67,6 +69,7 @@ function extractKindConst(branch: unknown): string[] {
       "expected a 'kind' const on a discriminated-union branch, or a nested 'oneOf'/'anyOf' branch list",
     );
   }
+
   return nested.flatMap((entry) => extractKindConst(entry));
 }
 
@@ -82,12 +85,14 @@ function extractGeneratedKinds(nodeDefinition: unknown): string[] {
       "expected the generated node definition to have a 'oneOf' or 'anyOf' branch list",
     );
   }
+
   return branches.flatMap((branch) => extractKindConst(branch));
 }
 
 function collectRefs(value: unknown, found = new Set<string>()): Set<string> {
   if (Array.isArray(value)) {
     for (const entry of value) collectRefs(entry, found);
+
     return found;
   }
   if (!isPlainRecord(value)) return found;
@@ -95,6 +100,7 @@ function collectRefs(value: unknown, found = new Set<string>()): Set<string> {
     if (key === "$ref" && typeof entry === "string") found.add(entry);
     else collectRefs(entry, found);
   }
+
   return found;
 }
 
@@ -108,6 +114,7 @@ function resolvesWithinDocument(document: unknown, ref: string): boolean {
     if (!isPlainRecord(current) || !Object.hasOwn(current, key)) return false;
     current = current[key];
   }
+
   return true;
 }
 

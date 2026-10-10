@@ -22,6 +22,7 @@ function columnForSubject(referenceKey: string): SqlColumnBinding {
   if (binding === undefined) {
     throw new Error(`no column mapped for reference key '${referenceKey}'`);
   }
+
   return binding;
 }
 
@@ -55,6 +56,7 @@ function columnForSubjectTag(referenceKey: string): SqlColumnBinding {
   if (binding === undefined) {
     throw new Error(`no column mapped for reference key '${referenceKey}'`);
   }
+
   return binding;
 }
 
@@ -67,6 +69,7 @@ export function collectionForSubjectTags(
       `no collection mapped for collection key '${collectionKey}'`,
     );
   }
+
   return {
     table: "subject_tags",
     join: `"subject_tags"."subjectId" = "subjects"."id"`,

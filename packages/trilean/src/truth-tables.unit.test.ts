@@ -38,6 +38,7 @@ function expectTruthValue(
 ): void {
   if (expected === "U") {
     expect(evaluation.status).toBe("indeterminate");
+
     return;
   }
   expect(evaluation).toEqual({ status: "definite", value: expected === "T" });

@@ -24,6 +24,7 @@ describe("evaluation resource limits", () => {
     for (let level = 0; level < depth; level += 1) {
       node = { kind: "not", operand: node };
     }
+
     return node;
   }
 
@@ -170,6 +171,7 @@ describe("golden example (README Worked example)", () => {
         return Promise.resolve({ found: false });
       }
       const value = context[key];
+
       return Promise.resolve(
         typeof value === "number"
           ? { found: true, value: { kind: "number", value } }
@@ -182,6 +184,7 @@ describe("golden example (README Worked example)", () => {
         return Promise.resolve([]);
       }
       const items = context.items;
+
       return Promise.resolve(isUnknownArray(items) ? items : []);
     },
   };

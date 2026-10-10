@@ -39,6 +39,7 @@ function closure(
         break;
     }
   }
+
   return result;
 }
 
@@ -54,6 +55,7 @@ function step(
     if (state?.kind !== "char") continue;
     if (state.test(codeUnit)) next.add(state.to);
   }
+
   return next;
 }
 
@@ -75,6 +77,7 @@ export function matchesNfa(nfa: CompiledNfa, input: string): boolean {
     current = closure(nfa, [...stepped], pos + 1, length);
     if (current.has(nfa.matchState)) return true;
   }
+
   return false;
 }
 
@@ -92,6 +95,7 @@ export interface CompiledPattern {
  */
 export function compilePattern(pattern: string): CompiledPattern {
   const nfa = compileToNfa(parseRegex(pattern));
+
   return { test: (input: string) => matchesNfa(nfa, input) };
 }
 

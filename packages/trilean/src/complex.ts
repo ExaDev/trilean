@@ -28,6 +28,7 @@ export const complexLiteralFromPolar = (
   unit?: Unit,
 ): ComplexLiteralNode => {
   const { re, im } = complexFromPolar(magnitude, phase, unit);
+
   return { kind: "complexLiteral", re, im, unit };
 };
 

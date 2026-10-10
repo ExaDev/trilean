@@ -32,6 +32,7 @@ const resolvers: Resolvers = {
         value: { kind: "number", value: 2 },
       });
     }
+
     return Promise.resolve({ found: false });
   },
   resolveLookup: async () => Promise.resolve({ found: false }),
@@ -45,6 +46,7 @@ const functions: FunctionRegistry = {
     if (arg?.kind !== "complex") {
       return { domainError: "expected a complex argument" };
     }
+
     return complexMagnitude(arg);
   },
 };

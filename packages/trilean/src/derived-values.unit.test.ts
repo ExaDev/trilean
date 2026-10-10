@@ -87,6 +87,7 @@ describe("coalesce", () => {
       ...resolvers,
       resolveValue: async (key, context) => {
         if (key === "later-candidate-marker") laterCandidateEvaluations += 1;
+
         return resolvers.resolveValue(key, context);
       },
     };
