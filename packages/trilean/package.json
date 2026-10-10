@@ -11,11 +11,11 @@
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
-    "@cloudflare/vitest-pool-workers": "^0.22.0",
+    "@cloudflare/vitest-plugin": "1.4.0",
     "@exadev/eslint-config": "3.0.0",
     "@types/node": "^26.4.0",
-    "@vitest/coverage-v8": "^4.1.11",
-    "canonicalize": "^4.0.0",
+    "@vitest/coverage-v8": "^5.0.3",
+    "canonicalize": "^5.1.0",
     "eslint": "^10.9.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.6",
@@ -27,7 +27,7 @@
     "turbo": "^2.10.12",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.68.0",
-    "vitest": "^4.1.11"
+    "vitest": "^5.0.3"
   },
   "engines": {
     "node": ">=20"
