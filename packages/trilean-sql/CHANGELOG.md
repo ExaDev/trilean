@@ -1,3 +1,15 @@
+## [2.2.6](https://github.com/ExaDev/trilean/compare/trilean-sql%402.2.5...trilean-sql%402.2.6) (2026-10-10)
+
+### Build System
+
+* **deps-dev:** move to vitest 5, the Workers plugin and canonicalize 5 ([f2274a4](https://github.com/ExaDev/trilean/commit/f2274a4a6f9b2fe13cc6ec1754190aedc041e8b3))
+
+
+### Dependencies
+
+- Updated trilean-regex to 1.0.5
+- Updated trilean to 1.7.3
+
 ## [2.2.5](https://github.com/ExaDev/trilean/compare/trilean-sql%402.2.4...trilean-sql%402.2.5) (2026-10-10)
 
 ### Styles
