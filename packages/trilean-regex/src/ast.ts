@@ -99,5 +99,6 @@ export function rangeContains(range: CharRange, unit: number): boolean {
 /** Whether `unit` is a member of a character class, honouring `negated`. */
 export function charClassMatches(node: CharClassNode, unit: number): boolean {
   const inRanges = node.ranges.some((range) => rangeContains(range, unit));
+
   return node.negated ? !inRanges : inRanges;
 }

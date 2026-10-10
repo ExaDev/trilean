@@ -55,6 +55,7 @@ const resolvers: Resolvers = {
         value: { kind: "text", value: context.target },
       });
     }
+
     return Promise.resolve({ found: false });
   },
   resolveLookup: async () => Promise.resolve({ found: false }),

@@ -36,5 +36,6 @@ export function firstIndeterminate(
   for (const result of results) {
     if (result?.status === "indeterminate") return result.reason;
   }
+
   return undefined;
 }

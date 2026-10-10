@@ -39,6 +39,7 @@ class NfaBuilder {
 
   private add(state: NfaState): number {
     this.states.push(state);
+
     return this.states.length - 1;
   }
 
@@ -69,6 +70,7 @@ class NfaBuilder {
   /** A fragment that matches the empty string unconditionally: both of a split's own branches dangle straight out, so whichever target they are later patched to is reached having consumed nothing. Used for `{0}`/`{0,0}` repetition, the one shape bounded repetition can produce that no other node kind already covers. */
   private emptyFrag(): Frag {
     const idx = this.add({ kind: "split", to1: -1, to2: -1 });
+
     return {
       start: idx,
       out: [
@@ -86,6 +88,7 @@ class NfaBuilder {
       const parts: RegexNode[] = [];
       for (let i = 0; i < min - 1; i += 1) parts.push(operand);
       parts.push({ kind: "plus", operand });
+
       return this.compileNode({ kind: "concat", operands: parts });
     }
     // {min,max}, both bounded: `min` mandatory copies, then (max - min) independently optional copies in sequence. Concatenated optionals of the same atom already produce exactly the counting language {0..(max-min)} repetitions -- each one independently consumes the atom or skips it, and NFA nondeterminism explores every combination -- so no further node kind is needed for the bounded tail.
@@ -95,6 +98,7 @@ class NfaBuilder {
       parts.push({ kind: "optional", operand });
     }
     if (parts.length === 0) return this.emptyFrag();
+
     return this.compileNode({ kind: "concat", operands: parts });
   }
 
@@ -107,10 +111,12 @@ class NfaBuilder {
           test: (unit) => unit === codeUnit,
           to: -1,
         });
+
         return { start: idx, out: [{ state: idx, field: "to" }] };
       }
       case "anyChar": {
         const idx = this.add({ kind: "char", test: () => true, to: -1 });
+
         return { start: idx, out: [{ state: idx, field: "to" }] };
       }
       case "charClass": {
@@ -119,14 +125,17 @@ class NfaBuilder {
           test: (unit) => charClassMatches(node, unit),
           to: -1,
         });
+
         return { start: idx, out: [{ state: idx, field: "to" }] };
       }
       case "anchorStart": {
         const idx = this.add({ kind: "anchorStart", to: -1 });
+
         return { start: idx, out: [{ state: idx, field: "to" }] };
       }
       case "anchorEnd": {
         const idx = this.add({ kind: "anchorEnd", to: -1 });
+
         return { start: idx, out: [{ state: idx, field: "to" }] };
       }
       case "concat": {
@@ -143,6 +152,7 @@ class NfaBuilder {
           this.patch(frag.out, next.start);
           frag = { start: frag.start, out: next.out };
         }
+
         return frag;
       }
       case "alternation": {
@@ -162,6 +172,7 @@ class NfaBuilder {
           });
           frag = { start: splitIdx, out: [...frag.out, ...next.out] };
         }
+
         return frag;
       }
       case "star": {
@@ -172,6 +183,7 @@ class NfaBuilder {
           to2: -1,
         });
         this.patch(inner.out, splitIdx);
+
         return { start: splitIdx, out: [{ state: splitIdx, field: "to2" }] };
       }
       case "plus": {
@@ -182,6 +194,7 @@ class NfaBuilder {
           to2: -1,
         });
         this.patch(inner.out, splitIdx);
+
         return { start: inner.start, out: [{ state: splitIdx, field: "to2" }] };
       }
       case "optional": {
@@ -191,6 +204,7 @@ class NfaBuilder {
           to1: inner.start,
           to2: -1,
         });
+
         return {
           start: splitIdx,
           out: [...inner.out, { state: splitIdx, field: "to2" }],
@@ -208,6 +222,7 @@ class NfaBuilder {
     const frag = this.compileNode(root);
     const matchState = this.add({ kind: "match" });
     this.patch(frag.out, matchState);
+
     return { states: this.states, start: frag.start, matchState };
   }
 }

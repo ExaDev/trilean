@@ -87,6 +87,7 @@ describe("conditional", () => {
       ...resolvers,
       resolveValue: async (key, context) => {
         if (key === "later-then-marker") laterThenEvaluations += 1;
+
         return resolvers.resolveValue(key, context);
       },
     };
@@ -123,6 +124,7 @@ describe("conditional", () => {
         ...resolvers,
         resolveValue: async (key, context) => {
           if (key === "second-then-marker") secondThenEvaluations += 1;
+
           return resolvers.resolveValue(key, context);
         },
       };
@@ -342,6 +344,7 @@ describe("conditional", () => {
         ...resolvers,
         resolveValue: async (key, context) => {
           if (key === "when-marker") whenEvaluationCount += 1;
+
           return resolvers.resolveValue(key, context);
         },
       };
@@ -686,6 +689,7 @@ describe("call", () => {
       if (arg?.kind !== "number") {
         return { domainError: "double requires a single number argument" };
       }
+
       return { kind: "number", value: arg.value + arg.value };
     },
   };

@@ -149,9 +149,11 @@ function resolversFor(row: Readonly<SubjectRow>): Resolvers {
             value: { kind: "text", value },
           });
         }
+
         return Promise.resolve<Resolution>({ found: false });
       }
       const value = typeof key === "string" ? known[key] : undefined;
+
       return Promise.resolve<Resolution>(
         value === undefined ? { found: false } : { found: true, value },
       );
@@ -161,6 +163,7 @@ function resolversFor(row: Readonly<SubjectRow>): Resolvers {
     },
     resolveCollection: async (collection: JsonValue) => {
       if (collection !== "tags") return Promise.resolve([]);
+
       return Promise.resolve(
         TAGS.filter((tagRow) => tagRow.subjectId === row.id).map((tagRow) => ({
           tag: tagRow.tag,
@@ -205,6 +208,7 @@ async function selectMatching(
     `SELECT id FROM subjects WHERE ${compiled.sql} ORDER BY id`,
     compiled.params,
   );
+
   return result.rows.map((row) => row.id);
 }
 
@@ -222,6 +226,7 @@ export async function evaluatorMatching(
       matched.push(row.id);
     }
   }
+
   return matched.sort();
 }
 
@@ -235,5 +240,6 @@ export async function agreeingRows(
     evaluatorMatching(node),
   ]);
   expect(viaSql).toEqual(viaEvaluator);
+
   return viaSql;
 }

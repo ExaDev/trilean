@@ -23,6 +23,7 @@ describe("lookup", () => {
           value: { kind: "number", value: 2 },
         });
       }
+
       return Promise.resolve({ found: false });
     },
     resolveLookup: async (table) =>
@@ -40,6 +41,7 @@ describe("lookup", () => {
       ...lookupResolvers,
       resolveLookup: async (table, keys, context) => {
         receivedKeys.push(...keys);
+
         return lookupResolvers.resolveLookup(table, keys, context);
       },
     };
@@ -119,6 +121,7 @@ describe("fold", () => {
       if (typeof value === "string") {
         return Promise.resolve({ found: true, value: { kind: "text", value } });
       }
+
       return Promise.resolve({ found: false });
     },
     resolveLookup: async () => Promise.resolve({ found: false }),
@@ -133,6 +136,7 @@ describe("fold", () => {
         ]);
       }
       if (collection === "empty") return Promise.resolve([]);
+
       return Promise.resolve([]);
     },
   };

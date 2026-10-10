@@ -23,6 +23,7 @@ function escapeRegexLiteral(character: string): string {
 /** A prefix match that respects word boundaries: the subject is either the prefix exactly, or the prefix followed by a space and anything at all. `"ls"` therefore matches `"ls"` and `"ls -la"` but never `"lsof"`. The prefix itself is a plain literal -- every character in it is escaped, so it carries no wildcard or escape syntax of its own. */
 function compilePrefixPattern(prefix: string): string {
   const escaped = Array.from(prefix, escapeRegexLiteral).join("");
+
   return `^${escaped}(?: ${ANY_CHARACTERS})?$`;
 }
 
@@ -60,6 +61,7 @@ function compileWildcardPattern(pattern: string): string {
     const trailingSpaceAndWildcard = ANY_CHARACTERS.length + 1;
     compiled = `${compiled.slice(0, -trailingSpaceAndWildcard)}(?: ${ANY_CHARACTERS})?`;
   }
+
   return `^${compiled}$`;
 }
 
@@ -87,6 +89,7 @@ function compileHierarchicalGlobPattern(pattern: string): string {
     compiled += escapeRegexLiteral(character);
     index += 1;
   }
+
   return `^${compiled}$`;
 }
 

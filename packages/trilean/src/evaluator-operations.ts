@@ -28,6 +28,7 @@ export function combineAnd(
   if (right.status === "definite" && !right.value) return definite(false);
   const reason = firstIndeterminate(left, right);
   if (reason !== undefined) return { status: "indeterminate", reason };
+
   return definite(true);
 }
 
@@ -40,6 +41,7 @@ export function combineOr(
   if (right.status === "definite" && right.value) return definite(true);
   const reason = firstIndeterminate(left, right);
   if (reason !== undefined) return { status: "indeterminate", reason };
+
   return definite(false);
 }
 
@@ -82,6 +84,7 @@ function toMilliseconds(value: number, unit: DurationUnit): number {
 /** `Date.parse` reports an unparseable timestamp as `NaN`, and every downstream use of that `NaN` then fails silently rather than loudly: every comparison against it is `false` (so `neq` between two unparseable instants would come back definitely `true`), a subtraction yields a `NaN`-magnitude duration, and `new Date(NaN).toISOString()` throws a `RangeError` outright -- a thrown exception for a data-quality problem, which this design never does (see `Evaluation<T>`'s own doc comment in evaluation.ts). An `instant` whose string will not parse is a value the operation cannot use, so every caller below reports it as `wrong-type`, exactly like any other unusable operand. */
 function toEpochMilliseconds(value: string): number | undefined {
   const epochMilliseconds = Date.parse(value);
+
   return Number.isNaN(epochMilliseconds) ? undefined : epochMilliseconds;
 }
 
@@ -103,6 +106,7 @@ function instantFromEpochMilliseconds(
       "the resulting instant falls outside the representable timestamp range",
     );
   }
+
   return definite({ kind: "instant", value: shifted.toISOString() });
 }
 
@@ -126,6 +130,7 @@ export function compareValues(
           "cannot compare numbers with incompatible units",
         );
       }
+
       return definite(applyComparisonOperator(op, left.value, right.value));
     case "text":
       return indeterminate(
@@ -145,6 +150,7 @@ export function compareValues(
           `booleans have no natural ordering; '${op}' is only defined for 'eq'/'neq'`,
         );
       }
+
       return definite(
         op === "eq" ? left.value === right.value : left.value !== right.value,
       );
@@ -159,6 +165,7 @@ export function compareValues(
       if (leftEpoch === undefined) return unparseableInstant(left.value);
       const rightEpoch = toEpochMilliseconds(right.value);
       if (rightEpoch === undefined) return unparseableInstant(right.value);
+
       return definite(applyComparisonOperator(op, leftEpoch, rightEpoch));
     }
     case "duration":
@@ -168,6 +175,7 @@ export function compareValues(
           `cannot compare a 'duration' value with a '${right.kind}' value`,
         );
       }
+
       return definite(
         applyComparisonOperator(
           op,
@@ -195,6 +203,7 @@ export function compareValues(
           "cannot compare complex values with incompatible units",
         );
       }
+
       return definite(
         op === "eq"
           ? left.re === right.re && left.im === right.im
@@ -240,6 +249,7 @@ export function compareText(
         );
       }
       const isMatch = pattern.test(left.value);
+
       return definite(op === "matches" ? isMatch : !isMatch);
     }
     case "portableMatches":
@@ -250,12 +260,14 @@ export function compareText(
       } catch (error) {
         const reason =
           error instanceof RegexParseError ? error.message : String(error);
+
         return indeterminate(
           "wrong-type",
           `'${right.value}' is not a valid trilean-regex pattern: ${reason}`,
         );
       }
       const isMatch = compiled.test(left.value);
+
       return definite(op === "portableMatches" ? isMatch : !isMatch);
     }
     default:
@@ -282,6 +294,7 @@ export function computeMembershipMatch(
           "cannot compare numbers with incompatible units for membership",
         );
       }
+
       return definite(operand.value === candidate.value);
     case "text":
       if (candidate.kind !== "text") {
@@ -290,6 +303,7 @@ export function computeMembershipMatch(
           `cannot compare a 'text' value with a '${candidate.kind}' value for membership`,
         );
       }
+
       return definite(operand.value === candidate.value);
     case "boolean":
       if (candidate.kind !== "boolean") {
@@ -298,6 +312,7 @@ export function computeMembershipMatch(
           `cannot compare a 'boolean' value with a '${candidate.kind}' value for membership`,
         );
       }
+
       return definite(operand.value === candidate.value);
     case "instant": {
       if (candidate.kind !== "instant") {
@@ -312,6 +327,7 @@ export function computeMembershipMatch(
       if (candidateEpoch === undefined) {
         return unparseableInstant(candidate.value);
       }
+
       return definite(operandEpoch === candidateEpoch);
     }
     case "duration":
@@ -321,6 +337,7 @@ export function computeMembershipMatch(
           `cannot compare a 'duration' value with a '${candidate.kind}' value for membership`,
         );
       }
+
       return definite(
         toMilliseconds(operand.value, operand.unit) ===
           toMilliseconds(candidate.value, candidate.unit),
@@ -338,6 +355,7 @@ export function computeMembershipMatch(
           "cannot compare complex values with incompatible units for membership",
         );
       }
+
       return definite(
         operand.re === candidate.re && operand.im === candidate.im,
       );
@@ -398,6 +416,7 @@ function applyArithmeticOnNumbers(
           "cannot add numbers with incompatible units",
         );
       }
+
       return definite({
         kind: "number",
         value: left.value + right.value,
@@ -410,6 +429,7 @@ function applyArithmeticOnNumbers(
           "cannot subtract numbers with incompatible units",
         );
       }
+
       return definite({
         kind: "number",
         value: left.value - right.value,
@@ -425,6 +445,7 @@ function applyArithmeticOnNumbers(
       if (right.value === 0) {
         return indeterminate("domain-error", "division by zero");
       }
+
       return definite({
         kind: "number",
         value: left.value / right.value,
@@ -450,6 +471,7 @@ function applyArithmeticOnNumbers(
           "zero raised to a negative power is a division by zero",
         );
       }
+
       return definite({ kind: "number", value: left.value ** right.value });
     case "modulo":
       if (!isDimensionless(left.unit) || !isDimensionless(right.unit)) {
@@ -461,6 +483,7 @@ function applyArithmeticOnNumbers(
       if (right.value === 0) {
         return indeterminate("domain-error", "modulo by zero");
       }
+
       return definite({ kind: "number", value: left.value % right.value });
     default:
       throw new Error("unreachable arithmetic operator");
@@ -508,6 +531,7 @@ function toComplexValue(
   value: Readonly<Extract<ComputedValue, { kind: "number" | "complex" }>>,
 ): Extract<ComputedValue, { kind: "complex" }> {
   if (value.kind === "complex") return value;
+
   return { kind: "complex", re: value.value, im: 0, unit: value.unit };
 }
 
@@ -538,6 +562,7 @@ function applyArithmeticOnComplex(
           "cannot add complex values with incompatible units",
         );
       }
+
       return definite({
         kind: "complex",
         re: left.re + right.re,
@@ -551,6 +576,7 @@ function applyArithmeticOnComplex(
           "cannot subtract complex values with incompatible units",
         );
       }
+
       return definite({
         kind: "complex",
         re: left.re - right.re,
@@ -566,6 +592,7 @@ function applyArithmeticOnComplex(
       if (divisorSquaredMagnitude === 0) {
         return indeterminate("domain-error", "division by zero");
       }
+
       return definite({
         kind: "complex",
         re: (left.re * right.re + left.im * right.im) / divisorSquaredMagnitude,
@@ -613,6 +640,7 @@ function applyComplexPower(
     repeatedProduct = multiplyComplexValues(repeatedProduct, complexBase);
   }
   if (exponent.value >= 0) return definite(repeatedProduct);
+
   // A negative exponent is the reciprocal of the positive one by definition, so it reuses the division above rather than re-deriving it -- which also means a zero base inherits that operator's own division-by-zero domain-error instead of needing its own check.
   return applyArithmeticOnComplex("divide", complexUnit, repeatedProduct);
 }
@@ -634,6 +662,7 @@ export function applyArithmetic(
     if (leftEpoch === undefined) return unparseableInstant(left.value);
     const rightEpoch = toEpochMilliseconds(right.value);
     if (rightEpoch === undefined) return unparseableInstant(right.value);
+
     return definite({
       kind: "duration",
       value: leftEpoch - rightEpoch,
@@ -643,6 +672,7 @@ export function applyArithmetic(
   if (left.kind === "instant" && right.kind === "duration" && op === "add") {
     const leftEpoch = toEpochMilliseconds(left.value);
     if (leftEpoch === undefined) return unparseableInstant(left.value);
+
     return instantFromEpochMilliseconds(
       leftEpoch + toMilliseconds(right.value, right.unit),
     );
@@ -650,6 +680,7 @@ export function applyArithmetic(
   if (left.kind === "duration" && right.kind === "instant" && op === "add") {
     const rightEpoch = toEpochMilliseconds(right.value);
     if (rightEpoch === undefined) return unparseableInstant(right.value);
+
     return instantFromEpochMilliseconds(
       rightEpoch + toMilliseconds(left.value, left.unit),
     );
@@ -683,6 +714,7 @@ export function applyArithmetic(
   }
   if (left.kind === "complex" || right.kind === "complex") {
     if (op === "power") return applyComplexPower(left, right);
+
     // Both operands are `number` or `complex` by this point, so promoting the real side is always possible; the result is complex whenever either operand is, regardless of what the components turn out to be.
     return applyArithmeticOnComplex(
       op,
@@ -690,6 +722,7 @@ export function applyArithmetic(
       toComplexValue(right),
     );
   }
+
   return applyArithmeticOnNumbers(op, left, right);
 }
 
@@ -712,6 +745,7 @@ export function checkReferenceUnit(
       "the resolved value's unit does not match the reference's expected unit",
     );
   }
+
   return undefined;
 }
 
@@ -732,5 +766,6 @@ export function invokeRegisteredFunction(
   if ("domainError" in outcome) {
     return indeterminate("domain-error", outcome.domainError);
   }
+
   return definite(outcome);
 }

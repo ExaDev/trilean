@@ -41,13 +41,16 @@ const resolvers: Resolvers = {
     if (typeof value === "string") {
       return Promise.resolve({ found: true, value: { kind: "text", value } });
     }
+
     return Promise.resolve({ found: false });
   },
   resolveLookup: async () => Promise.resolve({ found: false }),
   resolveCollection: async (collection) => {
     if (collection === "items") return Promise.resolve(itemsCollection);
     if (collection === "mixedCode") return Promise.resolve(mixedCodeCollection);
-    return Promise.resolve([]); // "empty", and anything else unrecognised
+
+    // "empty", and anything else unrecognised
+    return Promise.resolve([]);
   },
 };
 

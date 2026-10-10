@@ -13,6 +13,7 @@ function range(fromChar: string, toChar: string): CharRange {
 
 function single(char: string): CharRange {
   const codeUnit = codeOf(char);
+
   return { from: codeUnit, to: codeUnit };
 }
 

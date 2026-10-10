@@ -67,6 +67,7 @@ export function* evaluatePredicateInternal(
         nestingDepth + 1,
       );
       if (operand.status === "indeterminate") return operand;
+
       return definite(!operand.value);
     }
     case "and": {
@@ -94,6 +95,7 @@ export function* evaluatePredicateInternal(
           nestingDepth + 1,
         ),
       ]);
+
       return combineAnd(left, right);
     }
     case "or": {
@@ -121,6 +123,7 @@ export function* evaluatePredicateInternal(
           nestingDepth + 1,
         ),
       ]);
+
       return combineOr(left, right);
     }
     case "allOf": {
@@ -139,6 +142,7 @@ export function* evaluatePredicateInternal(
           ),
         ),
       );
+
       return operandResults.reduce<Evaluation<boolean>>(
         combineAnd,
         definite(true),
@@ -160,6 +164,7 @@ export function* evaluatePredicateInternal(
           ),
         ),
       );
+
       return operandResults.reduce<Evaluation<boolean>>(
         combineOr,
         definite(false),
@@ -192,6 +197,7 @@ export function* evaluatePredicateInternal(
       ]);
       if (left.status === "indeterminate") return left;
       if (right.status === "indeterminate") return right;
+
       return compareValues(node.op, left.value, right.value);
     }
     case "textCompare": {
@@ -221,6 +227,7 @@ export function* evaluatePredicateInternal(
       ]);
       if (left.status === "indeterminate") return left;
       if (right.status === "indeterminate") return right;
+
       return compareText(node.op, left.value, right.value);
     }
     case "memberOf": {
@@ -254,6 +261,7 @@ export function* evaluatePredicateInternal(
           if (candidateResult.status === "indeterminate") {
             return candidateResult;
           }
+
           return computeMembershipMatch(
             operandResult.value,
             candidateResult.value,
@@ -269,6 +277,7 @@ export function* evaluatePredicateInternal(
       // No definite match: indeterminate (first candidate's reason, per the tie-break rule) if any candidate was itself indeterminate or of an incompatible kind/unit; otherwise every candidate was a definite non-match. An empty `candidates` array falls straight through to this same definite non-match result, with no separate empty-list branch needed.
       const reason = firstIndeterminate(...candidateOutcomes);
       if (reason !== undefined) return { status: "indeterminate", reason };
+
       return definite(node.op === "notIn");
     }
     case "exists": {
@@ -290,6 +299,7 @@ export function* evaluatePredicateInternal(
       ) {
         return definite(false);
       }
+
       return definite(true);
     }
     case "some":
@@ -314,6 +324,7 @@ export function* evaluatePredicateInternal(
         }): Task<Evaluation<boolean> | undefined> {
           if (filterOutcome === "exclude") return undefined;
           if (filterOutcome !== "include") return filterOutcome;
+
           return yield* evaluatePredicateInternal(
             node.item,
             item,
@@ -330,6 +341,7 @@ export function* evaluatePredicateInternal(
       // `some` is an OR fold seeded at `false`; `every` an AND fold seeded at `true` -- exactly `anyOf`/`allOf`'s own pairwise fold, so an empty `votes` list (an empty collection, or every candidate filtered out) already reduces to `anyOf([])`/`allOf([])`'s own identity values with no separate empty-collection branch.
       const combine = node.kind === "some" ? combineOr : combineAnd;
       const identity = node.kind === "some" ? definite(false) : definite(true);
+
       return votes.reduce<Evaluation<boolean>>(combine, identity);
     }
     case "treeReference": {
@@ -363,6 +375,7 @@ export function* evaluatePredicateInternal(
           "the referenced tree is not a valid PredicateNode",
         );
       }
+
       return yield* evaluatePredicateInternal(
         parsed.data,
         context,
@@ -404,6 +417,7 @@ export function* evaluateValueInternal(
       }
       const unitError = checkReferenceUnit(node.unit, resolution.value);
       if (unitError !== undefined) return unitError;
+
       return definite(resolution.value);
     }
     case "accumulator": {
@@ -413,6 +427,7 @@ export function* evaluateValueInternal(
           "accumulator used outside a reduce fold's combine expression",
         );
       }
+
       return definite(accumulator);
     }
     case "call": {
@@ -436,6 +451,7 @@ export function* evaluateValueInternal(
         if (result.status === "indeterminate") return result;
         args.push(result.value);
       }
+
       return invokeRegisteredFunction(functions, node.fn, args);
     }
     case "numberLiteral":
@@ -462,6 +478,7 @@ export function* evaluateValueInternal(
           unit: node.unit,
         });
       }
+
       return definite(complexFromPolar(node.magnitude, node.phase, node.unit));
     case "arithmetic": {
       const [left, right] = yield* all([
@@ -491,6 +508,7 @@ export function* evaluateValueInternal(
       // Unlike `and`/`or` (see `combineAnd`/`combineOr` above), arithmetic has no absorbing value: any indeterminate operand always makes the whole node indeterminate, regardless of what the other operand would have been, tie-broken left before right per the tie-break rule.
       if (left.status === "indeterminate") return left;
       if (right.status === "indeterminate") return right;
+
       return applyArithmetic(node.op, left.value, right.value);
     }
     case "negate": {
@@ -506,6 +524,7 @@ export function* evaluateValueInternal(
         nestingDepth + 1,
       );
       if (operand.status === "indeterminate") return operand;
+
       return applyNegate(operand.value);
     }
     case "lookup": {
@@ -539,6 +558,7 @@ export function* evaluateValueInternal(
           `no match found in lookup table ${JSON.stringify(node.table)}`,
         );
       }
+
       return definite(resolution.value);
     }
     case "conditional": {
@@ -572,6 +592,7 @@ export function* evaluateValueInternal(
             );
           }
         }
+
         return yield* evaluateValueInternal(
           node.fallback,
           context,
@@ -602,6 +623,7 @@ export function* evaluateValueInternal(
             budget,
             nestingDepth + 1,
           );
+
           return { then, whenResult };
         }),
       );
@@ -633,6 +655,7 @@ export function* evaluateValueInternal(
           nestingDepth + 1,
         );
       }
+
       return yield* evaluateValueInternal(
         match.then,
         context,
@@ -696,6 +719,7 @@ export function* evaluateValueInternal(
           if (stepResult.status === "indeterminate") return stepResult;
           runningAccumulator = stepResult.value;
         }
+
         return definite(runningAccumulator);
       }
 
@@ -739,6 +763,7 @@ export function* evaluateValueInternal(
           "unreachable: max/min over a non-empty participating list produced no running result",
         );
       }
+
       return definite(runningExtremum);
     }
     case "delegate": {
@@ -757,6 +782,7 @@ export function* evaluateValueInternal(
           `delegate handler for external system '${node.system}' reported no value`,
         );
       }
+
       return definite(resolution.value);
     }
     case "treeReference": {
@@ -790,6 +816,7 @@ export function* evaluateValueInternal(
           "the referenced tree is not a valid ExpressionNode",
         );
       }
+
       return yield* evaluateValueInternal(
         parsed.data,
         context,

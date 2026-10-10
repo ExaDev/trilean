@@ -25,6 +25,7 @@ const resolvers: Resolvers = {
       return Promise.resolve({ found: false });
     }
     const value = context[key];
+
     return typeof value === "number"
       ? Promise.resolve({ found: true, value: { kind: "number", value } })
       : Promise.resolve({ found: false });
@@ -43,6 +44,7 @@ function requireNumberArg(
       domainError: `expected argument ${String(index)} to be a number`,
     };
   }
+
   return arg;
 }
 
@@ -58,17 +60,20 @@ const functions: FunctionRegistry = {
         domainError: "squareRoot of a negative number is not a real number",
       };
     }
+
     return { kind: "number", value: Math.sqrt(arg.value) };
   },
   absoluteValue: (args) => {
     const arg = requireNumberArg(args, 0);
     if ("domainError" in arg) return arg;
+
     return { kind: "number", value: Math.abs(arg.value) };
   },
   // A custom, domain-specific function -- not one of README.md's own starting examples -- proving the registry is genuinely open-ended, not limited to a fixed built-in set.
   toleranceBand: (args) => {
     const arg = requireNumberArg(args, 0);
     if ("domainError" in arg) return arg;
+
     return { kind: "number", value: Math.abs(arg.value) * TOLERANCE_RATIO };
   },
 };

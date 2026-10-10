@@ -27,6 +27,7 @@ export function createEvaluationBudget(
 ): EvaluationBudget {
   /** Total predicate/expression nodes visited so far across the whole call -- shared by every branch of an `and`/`or`/`allOf`/`anyOf`/fold/quantifier through the closure below, so it accumulates across the whole traversal rather than resetting per branch. */
   let nodesVisited = 0;
+
   return {
     checkNode(nestingDepth) {
       nodesVisited += 1;
@@ -43,6 +44,7 @@ export function createEvaluationBudget(
           `evaluation nesting depth exceeds the maximum of ${maxNestingDepth.toString()} (resource exhausted)`,
         );
       }
+
       return undefined;
     },
   };

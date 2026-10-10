@@ -210,8 +210,10 @@ describe("memberOf", () => {
         op: "in",
         operand: { kind: "numberLiteral", value: 5 },
         candidates: [
-          { kind: "textLiteral", value: "5" }, // incompatible kind -> wrong-type
-          { kind: "reference", key: "missing" }, // not-found
+          // incompatible kind -> wrong-type
+          { kind: "textLiteral", value: "5" },
+          // not-found
+          { kind: "reference", key: "missing" },
         ],
       },
       undefined,
@@ -226,6 +228,7 @@ describe("memberOf", () => {
       ...resolvers,
       resolveValue: async (key, context) => {
         if (key === "candidate-marker") candidateEvaluations += 1;
+
         return resolvers.resolveValue(key, context);
       },
     };
@@ -328,6 +331,7 @@ describe("some, every", () => {
       if (typeof value === "string") {
         return Promise.resolve({ found: true, value: { kind: "text", value } });
       }
+
       return Promise.resolve({ found: false });
     },
     resolveLookup: async () => Promise.resolve({ found: false }),
@@ -344,9 +348,11 @@ describe("some, every", () => {
       if (collection === "flagged") {
         return Promise.resolve([
           { flag: 1, amount: 100 },
-          { amount: 5 }, // no `flag` field -- the filter itself is indeterminate for this item
+          // no `flag` field -- the filter itself is indeterminate for this item
+          { amount: 5 },
         ]);
       }
+
       return Promise.resolve([]);
     },
   };

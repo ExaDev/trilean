@@ -45,6 +45,7 @@ type QuantifierSpec =
  */
 class Parser {
   private readonly pattern: string;
+
   private pos = 0;
 
   constructor(pattern: string) {
@@ -73,6 +74,7 @@ class Parser {
       );
     }
     this.pos += 1;
+
     return char;
   }
 
@@ -83,6 +85,7 @@ class Parser {
       this.advance();
       laterBranches.push(this.parseSequence());
     }
+
     return laterBranches.length === 0
       ? firstBranch
       : { kind: "alternation", branches: [firstBranch, ...laterBranches] };
@@ -97,6 +100,7 @@ class Parser {
     while (!this.atEnd() && !SEQUENCE_TERMINATORS.has(this.peek() ?? "")) {
       laterOperands.push(this.parseQuantified());
     }
+
     return laterOperands.length === 0
       ? firstOperand
       : { kind: "concat", operands: [firstOperand, ...laterOperands] };
@@ -113,6 +117,7 @@ class Parser {
           `an anchor ('${atom.kind === "anchorStart" ? "^" : "$"}') cannot be quantified`,
         );
       }
+
       return atom;
     }
     const quantifier = this.tryParseQuantifier();
@@ -152,8 +157,10 @@ class Parser {
       const savedPos = this.pos;
       const bound = this.tryParseBound();
       this.pos = savedPos;
+
       return bound !== undefined;
     }
+
     return false;
   }
 
@@ -161,21 +168,26 @@ class Parser {
     const c = this.peek();
     if (c === "*") {
       this.advance();
+
       return { kind: "star" };
     }
     if (c === "+") {
       this.advance();
+
       return { kind: "plus" };
     }
     if (c === "?") {
       this.advance();
+
       return { kind: "optional" };
     }
     if (c === "{") {
       const bound = this.tryParseBound();
       if (bound === undefined) return undefined;
+
       return { kind: "repeat", min: bound.min, max: bound.max };
     }
+
     return undefined;
   }
 
@@ -187,10 +199,12 @@ class Parser {
   private tryParseBound():
     { min: number; max: number | undefined } | undefined {
     const savedPos = this.pos;
-    this.pos += 1; // consume '{' speculatively
+    // consume '{' speculatively
+    this.pos += 1;
     const minDigits = this.readDigits();
     if (minDigits === "") {
       this.pos = savedPos;
+
       return undefined;
     }
     let maxDigits: string | undefined;
@@ -202,9 +216,11 @@ class Parser {
     }
     if (this.peek() !== "}") {
       this.pos = savedPos;
+
       return undefined;
     }
-    this.pos += 1; // consume '}'
+    // consume '}'
+    this.pos += 1;
     const min = Number.parseInt(minDigits, 10);
     const max = !hasComma
       ? min
@@ -218,6 +234,7 @@ class Parser {
         `quantifier range is backwards: {${minDigits}${hasComma ? "," + (maxDigits ?? "") : ""}} would require between ${String(min)} and ${String(max)} repetitions`,
       );
     }
+
     return { min, max };
   }
 
@@ -229,6 +246,7 @@ class Parser {
       digits += c;
       this.pos += 1;
     }
+
     return digits;
   }
 
@@ -243,14 +261,17 @@ class Parser {
     }
     if (c === "^") {
       this.advance();
+
       return { kind: "anchorStart" };
     }
     if (c === "$") {
       this.advance();
+
       return { kind: "anchorEnd" };
     }
     if (c === ".") {
       this.advance();
+
       return { kind: "anyChar" };
     }
     if (c === "(") return this.parseGroup();
@@ -264,12 +285,14 @@ class Parser {
       );
     }
     this.advance();
+
     return { kind: "literal", codeUnit: c.charCodeAt(0) };
   }
 
   private parseGroup(): RegexNode {
     const start = this.pos;
-    this.advance(); // '('
+    // '('
+    this.advance();
     if (this.peek() === "?" && this.peek(1) === ":") {
       this.advance();
       this.advance();
@@ -289,12 +312,14 @@ class Parser {
       );
     }
     this.advance();
+
     return inner;
   }
 
   private parseEscapedAtom(): RegexNode {
     const backslashPos = this.pos;
-    this.advance(); // '\'
+    // '\'
+    this.advance();
     if (this.atEnd()) {
       throw new RegexParseError(
         this.pattern,
@@ -326,7 +351,8 @@ class Parser {
 
   private parseCharClass(): RegexNode {
     const start = this.pos;
-    this.advance(); // '['
+    // '['
+    this.advance();
     let negated = false;
     if (this.peek() === "^") {
       this.advance();
@@ -354,6 +380,7 @@ class Parser {
       }
       ranges.push(...this.parseClassItem());
     }
+
     return { kind: "charClass", negated, ranges };
   }
 
@@ -388,6 +415,7 @@ class Parser {
           `unknown escape sequence '\\${escaped}'`,
         );
       }
+
       return this.parseOptionalRangeFrom(literal.charCodeAt(0));
     }
     if (c === undefined) {
@@ -398,6 +426,7 @@ class Parser {
       );
     }
     this.advance();
+
     return this.parseOptionalRangeFrom(c.charCodeAt(0));
   }
 
@@ -408,7 +437,8 @@ class Parser {
       this.peek(1) !== "]"
     ) {
       const hyphenPos = this.pos;
-      this.advance(); // '-'
+      // '-'
+      this.advance();
       const toCode = this.parseClassRangeEndpoint();
       if (toCode < fromCode) {
         throw new RegexParseError(
@@ -417,8 +447,10 @@ class Parser {
           `invalid range in character class: '${String.fromCharCode(fromCode)}-${String.fromCharCode(toCode)}' is reversed`,
         );
       }
+
       return [{ from: fromCode, to: toCode }];
     }
+
     return [{ from: fromCode, to: fromCode }];
   }
 
@@ -457,6 +489,7 @@ class Parser {
           `unknown escape sequence '\\${escaped}'`,
         );
       }
+
       return literal.charCodeAt(0);
     }
     if (c === undefined) {
@@ -467,6 +500,7 @@ class Parser {
       );
     }
     this.advance();
+
     return c.charCodeAt(0);
   }
 }
@@ -487,5 +521,6 @@ export function parseRegex(pattern: string): RegexNode {
       "unexpected character -- if this was meant literally, escape it with a backslash",
     );
   }
+
   return node;
 }

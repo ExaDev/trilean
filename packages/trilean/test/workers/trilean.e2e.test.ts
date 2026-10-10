@@ -190,6 +190,7 @@ describe("a substantially broader composed tree (allOf/anyOf/compare/textCompare
       if (typeof value === "string") {
         return Promise.resolve({ found: true, value: { kind: "text", value } });
       }
+
       return Promise.resolve({ found: false });
     },
     resolveLookup: async () => Promise.resolve({ found: false }),
@@ -201,6 +202,7 @@ describe("a substantially broader composed tree (allOf/anyOf/compare/textCompare
       ) {
         return Promise.resolve(context.orders);
       }
+
       return Promise.resolve([]);
     },
   };
@@ -268,6 +270,7 @@ describe("units-aware arithmetic (multiply/divide across differently unit-tagged
       }
       const value = context[key];
       if (typeof value !== "number") return Promise.resolve({ found: false });
+
       return Promise.resolve({
         found: true,
         value: { kind: "number", value, unit: unitByKey[key] },
@@ -338,6 +341,7 @@ describe("treeReference, conditional's 'unique' hit policy, and coalesce under w
       if (typeof value === "string") {
         return Promise.resolve({ found: true, value: { kind: "text", value } });
       }
+
       return Promise.resolve({ found: false });
     },
     resolveLookup: async () => Promise.resolve({ found: false }),
@@ -345,6 +349,7 @@ describe("treeReference, conditional's 'unique' hit policy, and coalesce under w
     resolveTree: async (key) => {
       const node = typeof key === "string" ? namedRules[key] : undefined;
       if (node === undefined) return Promise.resolve({ found: false });
+
       return Promise.resolve({ found: true, node });
     },
   };

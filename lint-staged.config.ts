@@ -18,6 +18,7 @@ function packageDirectoryOf(repoRelativePath: string): string | undefined {
   ) {
     return undefined;
   }
+
   return `${PACKAGES_DIR}${sep}${second}`;
 }
 
@@ -35,6 +36,7 @@ function groupByDirectory(
       existing.push(repoRelativePath);
     }
   }
+
   return grouped;
 }
 
@@ -44,6 +46,7 @@ const config: Configuration = {
       const pathsRelativeToDirectory = paths.map(
         (path) => `"${directory === "." ? path : relative(directory, path)}"`,
       );
+
       return `pnpm --dir ${directory} exec eslint --fix ${pathsRelativeToDirectory.join(" ")}`;
     }),
 };

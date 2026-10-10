@@ -27,6 +27,7 @@ describe("lookup: any-indeterminate-key short-circuit", () => {
       ...baseResolvers,
       resolveLookup: async (table, keys, context) => {
         resolveLookupCalls += 1;
+
         return baseResolvers.resolveLookup(table, keys, context);
       },
     };
@@ -47,6 +48,7 @@ describe("conditional: must not skip an unresolved guard", () => {
       ...baseResolvers,
       resolveValue: async (key, context) => {
         if (key === "later-case-marker") laterCaseEvaluations += 1;
+
         return baseResolvers.resolveValue(key, context);
       },
     };
@@ -152,6 +154,7 @@ describe("fold: reduce vs max/min over an empty collection", () => {
       ...baseResolvers,
       resolveValue: async (key, context) => {
         if (key === "combine-marker") combineEvaluations += 1;
+
         return baseResolvers.resolveValue(key, context);
       },
     };
@@ -370,6 +373,7 @@ describe("call: unregistered-name vs out-of-domain-argument distinction", () => 
           }
           if (arg.value === 0)
             return { domainError: "reciprocal of zero is undefined" };
+
           return { kind: "number", value: 1 / arg.value };
         },
       },

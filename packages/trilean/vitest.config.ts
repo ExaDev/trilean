@@ -1,9 +1,11 @@
 import { cloudflareTest } from "@cloudflare/vitest-pool-workers";
 import { defineConfig } from "vitest/config";
 
-// Coverage is a Vitest "unsupported option" inside a project config -- it can only be defined once, here in the root config, and applies across the whole run regardless of which project(s) are selected.
-//
-// Every project is defined inline rather than as a separate config file: a project entry is itself a full Vite `UserConfig` (Vitest augments Vite's own `UserConfig` type with a `test` field -- see vitest's node/types/vite.ts), so a top-level Vite option such as `plugins` on an inline entry is honoured exactly as it would be in a standalone config file. The workers project below relies on this directly for its `cloudflareTest` plugin registration.
+/**
+ * Coverage is a Vitest "unsupported option" inside a project config -- it can only be defined once, here in the root config, and applies across the whole run regardless of which project(s) are selected.
+ *
+ * Every project is defined inline rather than as a separate config file: a project entry is itself a full Vite `UserConfig` (Vitest augments Vite's own `UserConfig` type with a `test` field -- see vitest's node/types/vite.ts), so a top-level Vite option such as `plugins` on an inline entry is honoured exactly as it would be in a standalone config file. The workers project below relies on this directly for its `cloudflareTest` plugin registration.
+ */
 export default defineConfig({
   test: {
     coverage: {

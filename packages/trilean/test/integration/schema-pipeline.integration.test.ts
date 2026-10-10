@@ -29,6 +29,7 @@ const resolvers: Resolvers = {
       return Promise.resolve({ found: false });
     }
     const value = context[key];
+
     return typeof value === "number"
       ? Promise.resolve({ found: true, value: { kind: "number", value } })
       : Promise.resolve({ found: false });
@@ -192,6 +193,7 @@ describe("a deep, mutually recursive tree crosses the predicate/expression bound
       if (typeof value === "string") {
         return Promise.resolve({ found: true, value: { kind: "text", value } });
       }
+
       return Promise.resolve({ found: false });
     },
     resolveLookup: async () => Promise.resolve({ found: false }),
@@ -203,6 +205,7 @@ describe("a deep, mutually recursive tree crosses the predicate/expression bound
       ) {
         return Promise.resolve(context.shipments);
       }
+
       return Promise.resolve([]);
     },
   };
@@ -215,6 +218,7 @@ describe("a deep, mutually recursive tree crosses the predicate/expression bound
         `the deep fixture failed validation: ${validated.error.message}`,
       );
     }
+
     return validated.data;
   }
 
@@ -334,6 +338,7 @@ describe("a __proto__ key inside an opaque JsonValue payload", () => {
     for (const key of Object.keys(source)) {
       target[key] = source[key];
     }
+
     return target;
   }
 
@@ -342,6 +347,7 @@ describe("a __proto__ key inside an opaque JsonValue payload", () => {
     if (!isPlainRecord(parsed) || !isPlainRecord(parsed.payload)) {
       throw new Error("expected the fixture to parse to a record payload");
     }
+
     return parsed.payload;
   }
 
@@ -355,6 +361,7 @@ describe("a __proto__ key inside an opaque JsonValue payload", () => {
     if (!isPlainRecord(payload)) {
       throw new Error("expected the validated payload to be a record");
     }
+
     return payload;
   }
 

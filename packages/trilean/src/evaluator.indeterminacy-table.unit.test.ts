@@ -407,6 +407,7 @@ const fixtures: readonly Fixture[] = [
           }
           if (arg.value === 0)
             return { domainError: "reciprocal of zero is undefined" };
+
           return { kind: "number", value: 1 / arg.value };
         },
       },

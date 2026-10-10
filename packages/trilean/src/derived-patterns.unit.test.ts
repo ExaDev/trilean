@@ -37,6 +37,7 @@ async function matches(node: PredicateNode, text: string): Promise<boolean> {
   if (result.status !== "definite") {
     throw new Error("expected a definite match outcome");
   }
+
   return result.value;
 }
 
@@ -49,6 +50,7 @@ function compiledPattern(node: PredicateNode): string {
   if (node.right.kind !== "textLiteral") {
     throw new Error("expected a textLiteral pattern operand");
   }
+
   return node.right.value;
 }
 

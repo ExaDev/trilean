@@ -38,11 +38,13 @@ const POSTGRES_MAX_BOUND = 255;
 
 function escapePostgresLiteral(codeUnit: number): string {
   const char = String.fromCharCode(codeUnit);
+
   return POSTGRES_METACHARS.has(char) ? `\\${char}` : char;
 }
 
 function escapePostgresClassChar(codeUnit: number): string {
   const char = String.fromCharCode(codeUnit);
+
   return POSTGRES_CLASS_METACHARS.has(char) ? `\\${char}` : char;
 }
 
@@ -54,6 +56,7 @@ function renderPostgresClass(node: CharClassNode): string {
         : `${escapePostgresClassChar(range.from)}-${escapePostgresClassChar(range.to)}`,
     )
     .join("");
+
   return `[${node.negated ? "^" : ""}${body}]`;
 }
 
@@ -68,6 +71,7 @@ function renderPostgresBound(min: number, max: number | undefined): string {
   }
   if (max === undefined) return `{${String(min)},}`;
   if (max === min) return `{${String(min)}}`;
+
   return `{${String(min)},${String(max)}}`;
 }
 
@@ -78,6 +82,7 @@ function needsPostgresGrouping(node: RegexNode): boolean {
 
 function renderPostgresSubcomponent(node: RegexNode): string {
   const rendered = renderPostgresPattern(node);
+
   return needsPostgresGrouping(node) ? `(?:${rendered})` : rendered;
 }
 
@@ -141,11 +146,13 @@ function rangeContainsAnyOf(
   for (const codeUnit of codeUnits) {
     if (codeUnit >= range.from && codeUnit <= range.to) return true;
   }
+
   return false;
 }
 
 function escapeGlobLiteral(codeUnit: number): string {
   const char = String.fromCharCode(codeUnit);
+
   // GLOB has no backslash escape mechanism (confirmed: SQLite's own documentation describes none); wrapping a wildcard character in a single-member bracket expression is the standard glob(3)-style technique for matching it literally instead.
   return char === "*" || char === "?" || char === "[" ? `[${char}]` : char;
 }
@@ -172,6 +179,7 @@ function renderGlobClass(node: CharClassNode): string {
         : `${String.fromCharCode(range.from)}-${String.fromCharCode(range.to)}`,
     )
     .join("");
+
   return `[${body}]`;
 }
 
@@ -237,6 +245,7 @@ function planGlobBody(node: RegexNode): GlobPlan {
       );
     }
   }
+
   return { anchoredStart, anchoredEnd, body: operands };
 }
 
@@ -248,6 +257,7 @@ export function renderSqliteGlobPattern(node: RegexNode): string {
   const plan = planGlobBody(node);
   const body = plan.body.map((atom) => renderGlobAtom(atom)).join("");
   const withWildcards = `${plan.anchoredStart ? "" : "*"}${body}${plan.anchoredEnd ? "" : "*"}`;
+
   // Cosmetic only: collapses a run of consecutive unescaped '*' (e.g. from an unanchored pattern whose body itself starts or ends with 'star(anyChar)') into one. Never touches a '[*]' escape token, which contains no adjacent '*' pair.
   return withWildcards.replaceAll(/\*{2,}/g, "*");
 }

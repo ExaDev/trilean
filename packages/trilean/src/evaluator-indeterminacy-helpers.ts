@@ -53,6 +53,7 @@ export const baseResolvers: Resolvers = {
         });
       }
     }
+
     return Promise.resolve({ found: false });
   },
   resolveLookup: async (table) => {
@@ -62,6 +63,7 @@ export const baseResolvers: Resolvers = {
         value: { kind: "number", value: 100 },
       });
     }
+
     return Promise.resolve({ found: false });
   },
   resolveCollection: async (collection, context) => {
@@ -80,8 +82,10 @@ export const baseResolvers: Resolvers = {
     }
     if (collection === "values" && isPlainRecord(context)) {
       const values = context.values;
+
       return Promise.resolve(isUnknownArray(values) ? values : []);
     }
+
     return Promise.resolve([]);
   },
 };
@@ -187,6 +191,7 @@ export function pred(
   const { evaluatePredicate: evaluate } = functions
     ? createEvaluator({ functions })
     : { evaluatePredicate };
+
   return {
     description,
     expected,
@@ -204,6 +209,7 @@ export function expr(
   const { evaluateValue: evaluate } = functions
     ? createEvaluator({ functions })
     : { evaluateValue };
+
   return {
     description,
     expected,

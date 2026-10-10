@@ -65,18 +65,21 @@ export const goldenExampleResolvers: Resolvers = {
         value: { kind: "boolean", value },
       });
     }
+
     return Promise.resolve(
       typeof value === "number"
         ? { found: true, value: { kind: "number", value } }
         : { found: false },
     );
   },
-  resolveLookup: async () => Promise.resolve({ found: false }), // unused by this example
+  // unused by this example
+  resolveLookup: async () => Promise.resolve({ found: false }),
   resolveCollection: async (collection, context) => {
     if (collection !== "items" || !isPlainRecord(context)) {
       return Promise.resolve([]);
     }
     const items = context.items;
+
     return Promise.resolve(isUnknownArray(items) ? items : []);
   },
 };

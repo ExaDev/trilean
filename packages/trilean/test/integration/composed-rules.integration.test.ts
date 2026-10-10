@@ -163,6 +163,7 @@ describe("membership eligibility (allOf, anyOf, compare, textCompare, memberOf, 
       if (typeof value === "string") {
         return Promise.resolve({ found: true, value: { kind: "text", value } });
       }
+
       return Promise.resolve({ found: false });
     },
     resolveLookup: async () => Promise.resolve({ found: false }),
@@ -174,6 +175,7 @@ describe("membership eligibility (allOf, anyOf, compare, textCompare, memberOf, 
       ) {
         return Promise.resolve(context.orders);
       }
+
       return Promise.resolve([]);
     },
   };
@@ -236,6 +238,7 @@ describe("units-aware rate calculation (multiply/divide across differently unit-
       }
       const value = context[key];
       if (typeof value !== "number") return Promise.resolve({ found: false });
+
       return Promise.resolve({
         found: true,
         value: { kind: "number", value, unit: unitByKey[key] },
@@ -250,6 +253,7 @@ describe("units-aware rate calculation (multiply/divide across differently unit-
       ) {
         return Promise.resolve(context.parcels);
       }
+
       return Promise.resolve([]);
     },
   };
@@ -343,11 +347,13 @@ describe("units-aware rate calculation (multiply/divide across differently unit-
         ) {
           const raw = context.weightKg;
           if (typeof raw !== "number") return Promise.resolve({ found: false });
+
           return Promise.resolve({
             found: true,
             value: { kind: "number", value: raw, unit: { g: 1 } },
           });
         }
+
         return resolvers.resolveValue(key, context);
       },
     };
@@ -379,6 +385,7 @@ describe("temporal arithmetic with a quantifier and a conditional fallback (inst
       }
       const value = context[key];
       if (typeof value !== "string") return Promise.resolve({ found: false });
+
       return Promise.resolve({
         found: true,
         value: { kind: "instant", value },
@@ -393,6 +400,7 @@ describe("temporal arithmetic with a quantifier and a conditional fallback (inst
       ) {
         return Promise.resolve(context.sessions);
       }
+
       return Promise.resolve([]);
     },
   };
@@ -493,6 +501,7 @@ describe("fold's max combiner alongside memberOf and a derived connective (impli
       }
       const value = context[key];
       if (typeof value !== "number") return Promise.resolve({ found: false });
+
       return Promise.resolve({ found: true, value: { kind: "number", value } });
     },
     resolveLookup: async () => Promise.resolve({ found: false }),
@@ -504,6 +513,7 @@ describe("fold's max combiner alongside memberOf and a derived connective (impli
       ) {
         return Promise.resolve(context.bids);
       }
+
       return Promise.resolve([]);
     },
   };

@@ -39,6 +39,7 @@ function normalizeUnit(unit: Unit | undefined): Unit {
   for (const [dimension, exponent] of Object.entries(unit)) {
     if (exponent !== 0) normalized[dimension] = exponent;
   }
+
   return normalized;
 }
 
@@ -49,6 +50,7 @@ export function unitsEqual(a: Unit | undefined, b: Unit | undefined): boolean {
   const dimensionsA = Object.keys(normalizedA);
   const dimensionsB = Object.keys(normalizedB);
   if (dimensionsA.length !== dimensionsB.length) return false;
+
   return dimensionsA.every(
     (dimension) => normalizedA[dimension] === normalizedB[dimension],
   );
@@ -65,6 +67,7 @@ export function combineUnitsForMultiply(
   for (const [dimension, exponent] of Object.entries(normalizedB)) {
     combined[dimension] = (combined[dimension] ?? 0) + exponent;
   }
+
   return normalizeUnit(combined);
 }
 
@@ -79,5 +82,6 @@ export function combineUnitsForDivide(
   for (const [dimension, exponent] of Object.entries(normalizedB)) {
     combined[dimension] = (combined[dimension] ?? 0) - exponent;
   }
+
   return normalizeUnit(combined);
 }

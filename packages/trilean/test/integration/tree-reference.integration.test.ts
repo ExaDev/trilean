@@ -60,6 +60,7 @@ describe("treeReference composes reusable sub-rules into a larger tree", () => {
       if (typeof value === "string") {
         return Promise.resolve({ found: true, value: { kind: "text", value } });
       }
+
       return Promise.resolve({ found: false });
     },
     resolveLookup: async () => Promise.resolve({ found: false }),
@@ -67,6 +68,7 @@ describe("treeReference composes reusable sub-rules into a larger tree", () => {
     resolveTree: async (key) => {
       const node = typeof key === "string" ? namedRules[key] : undefined;
       if (node === undefined) return Promise.resolve({ found: false });
+
       return Promise.resolve({ found: true, node });
     },
   };
@@ -167,6 +169,7 @@ describe("treeReference detects a cycle across genuinely separate stored rules",
       const node =
         typeof key === "string" ? crossReferencingRules[key] : undefined;
       if (node === undefined) return Promise.resolve({ found: false });
+
       return Promise.resolve({ found: true, node });
     },
   };

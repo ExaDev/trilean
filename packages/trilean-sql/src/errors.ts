@@ -15,7 +15,9 @@ export class TrileanSqlError extends Error {
  */
 export class UnsupportedNodeError extends TrileanSqlError {
   readonly nodeKind: string;
+
   readonly path: string;
+
   readonly reason: string;
 
   constructor(
@@ -44,6 +46,7 @@ export class UnsupportedNodeError extends TrileanSqlError {
  */
 export class UnknownDialectError extends TrileanSqlError {
   readonly dialect: string;
+
   readonly implemented: readonly string[];
 
   constructor(dialect: string, implemented: readonly string[]) {
@@ -63,6 +66,7 @@ export class UnknownDialectError extends TrileanSqlError {
  */
 export class InvalidColumnError extends TrileanSqlError {
   readonly referenceKey: string;
+
   readonly column: string;
 
   constructor(referenceKey: string, column: string, reason: string) {
@@ -82,6 +86,7 @@ export class InvalidColumnError extends TrileanSqlError {
  */
 export class InvalidCollectionTableError extends TrileanSqlError {
   readonly collectionKey: string;
+
   readonly table: string;
 
   constructor(collectionKey: string, table: string, reason: string) {
