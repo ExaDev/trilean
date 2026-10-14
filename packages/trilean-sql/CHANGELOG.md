@@ -1,3 +1,15 @@
+## [2.2.11](https://github.com/ExaDev/trilean/compare/trilean-sql%402.2.10...trilean-sql%402.2.11) (2026-10-14)
+
+### Build System
+
+* **deps-dev:** bump @types/node from 26.4.1 to 26.6.4 ([37da38a](https://github.com/ExaDev/trilean/commit/37da38abbf1a3f009a294246632c0f937e8e1462))
+
+
+### Dependencies
+
+- Updated trilean-regex to 1.0.10
+- Updated trilean to 1.7.8
+
 ## [2.2.10](https://github.com/ExaDev/trilean/compare/trilean-sql%402.2.9...trilean-sql%402.2.10) (2026-10-14)
 
 ### Build System

@@ -1,3 +1,15 @@
+## [1.7.8](https://github.com/ExaDev/trilean/compare/trilean%401.7.7...trilean%401.7.8) (2026-10-14)
+
+### Build System
+
+* **deps-dev:** bump @types/node from 26.4.1 to 26.6.4 ([37da38a](https://github.com/ExaDev/trilean/commit/37da38abbf1a3f009a294246632c0f937e8e1462))
+* **deps:** bump zod from 4.5.4 to 4.6.5 ([a6e8823](https://github.com/ExaDev/trilean/commit/a6e8823cbc63b7b8b0bfb7bcaddc208720a9a6e5))
+
+
+### Dependencies
+
+- Updated trilean-regex to 1.0.10
+
 ## [1.7.7](https://github.com/ExaDev/trilean/compare/trilean%401.7.6...trilean%401.7.7) (2026-10-14)
 
 ### Build System
