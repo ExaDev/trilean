@@ -1,3 +1,9 @@
+## [1.0.6](https://github.com/ExaDev/trilean/compare/trilean-regex%401.0.5...trilean-regex%401.0.6) (2026-10-14)
+
+### Build System
+
+* **deps-dev:** bump publint from 0.3.24 to 0.3.25 ([b3fce10](https://github.com/ExaDev/trilean/commit/b3fce100b706432c123dc52386df3fd5ac2770d2))
+
 ## [1.0.5](https://github.com/ExaDev/trilean/compare/trilean-regex%401.0.4...trilean-regex%401.0.5) (2026-10-10)
 
 ### Build System

@@ -1,3 +1,15 @@
+## [2.2.7](https://github.com/ExaDev/trilean/compare/trilean-sql%402.2.6...trilean-sql%402.2.7) (2026-10-14)
+
+### Build System
+
+* **deps-dev:** bump publint from 0.3.24 to 0.3.25 ([b3fce10](https://github.com/ExaDev/trilean/commit/b3fce100b706432c123dc52386df3fd5ac2770d2))
+
+
+### Dependencies
+
+- Updated trilean-regex to 1.0.6
+- Updated trilean to 1.7.4
+
 ## [2.2.6](https://github.com/ExaDev/trilean/compare/trilean-sql%402.2.5...trilean-sql%402.2.6) (2026-10-10)
 
 ### Build System

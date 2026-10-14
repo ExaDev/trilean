@@ -1,3 +1,14 @@
+## [1.7.4](https://github.com/ExaDev/trilean/compare/trilean%401.7.3...trilean%401.7.4) (2026-10-14)
+
+### Build System
+
+* **deps-dev:** bump publint from 0.3.24 to 0.3.25 ([b3fce10](https://github.com/ExaDev/trilean/commit/b3fce100b706432c123dc52386df3fd5ac2770d2))
+
+
+### Dependencies
+
+- Updated trilean-regex to 1.0.6
+
 ## [1.7.3](https://github.com/ExaDev/trilean/compare/trilean%401.7.2...trilean%401.7.3) (2026-10-10)
 
 ### Build System
