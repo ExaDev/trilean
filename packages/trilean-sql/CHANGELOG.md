@@ -1,3 +1,15 @@
+## [2.2.8](https://github.com/ExaDev/trilean/compare/trilean-sql%402.2.7...trilean-sql%402.2.8) (2026-10-14)
+
+### Build System
+
+* **deps-dev:** bump eslint from 10.9.1 to 10.12.0 ([1a69cf8](https://github.com/ExaDev/trilean/commit/1a69cf884a8097faa52cde6758b57274bed92a6d))
+
+
+### Dependencies
+
+- Updated trilean-regex to 1.0.7
+- Updated trilean to 1.7.5
+
 ## [2.2.7](https://github.com/ExaDev/trilean/compare/trilean-sql%402.2.6...trilean-sql%402.2.7) (2026-10-14)
 
 ### Build System
