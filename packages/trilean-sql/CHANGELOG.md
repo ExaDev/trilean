@@ -1,3 +1,15 @@
+## [2.2.13](https://github.com/ExaDev/trilean/compare/trilean-sql%402.2.12...trilean-sql%402.2.13) (2026-10-14)
+
+### Build System
+
+* **deps-dev:** bump typescript-eslint from 8.69.0 to 8.71.1 ([7012530](https://github.com/ExaDev/trilean/commit/70125300f7cf1616d978379cf44e005f72a0ecab))
+
+
+### Dependencies
+
+- Updated trilean-regex to 1.0.11
+- Updated trilean to 1.7.9
+
 ## [2.2.12](https://github.com/ExaDev/trilean/compare/trilean-sql%402.2.11...trilean-sql%402.2.12) (2026-10-14)
 
 ### Build System
