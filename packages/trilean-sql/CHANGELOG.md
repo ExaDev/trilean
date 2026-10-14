@@ -1,3 +1,15 @@
+## [2.2.9](https://github.com/ExaDev/trilean/compare/trilean-sql%402.2.8...trilean-sql%402.2.9) (2026-10-14)
+
+### Build System
+
+* **deps-dev:** bump turbo from 2.10.12 to 2.11.7 ([2d1d052](https://github.com/ExaDev/trilean/commit/2d1d052c1915e4b7ac0fc492adeaa8ae7e58da49))
+
+
+### Dependencies
+
+- Updated trilean-regex to 1.0.8
+- Updated trilean to 1.7.6
+
 ## [2.2.8](https://github.com/ExaDev/trilean/compare/trilean-sql%402.2.7...trilean-sql%402.2.8) (2026-10-14)
 
 ### Build System
