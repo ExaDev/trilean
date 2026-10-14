@@ -1,3 +1,9 @@
+## [2.2.12](https://github.com/ExaDev/trilean/compare/trilean-sql%402.2.11...trilean-sql%402.2.12) (2026-10-14)
+
+### Build System
+
+* **deps-dev:** bump @testcontainers/postgresql from 12.1.0 to 12.2.0 ([a6f66e6](https://github.com/ExaDev/trilean/commit/a6f66e6b6d224a3cf0a60ccfab049ec6c1a95374))
+
 ## [2.2.11](https://github.com/ExaDev/trilean/compare/trilean-sql%402.2.10...trilean-sql%402.2.11) (2026-10-14)
 
 ### Build System
