@@ -1,3 +1,9 @@
+## [1.7.10](https://github.com/ExaDev/trilean/compare/trilean%401.7.9...trilean%401.7.10) (2026-10-15)
+
+### Build System
+
+* **deps-dev:** bump tsx from 4.23.13 to 4.23.15 ([b66ebdb](https://github.com/ExaDev/trilean/commit/b66ebdbc6967149dbec1362c5014754684233b39))
+
 ## [1.7.9](https://github.com/ExaDev/trilean/compare/trilean%401.7.8...trilean%401.7.9) (2026-10-14)
 
 ### Build System
