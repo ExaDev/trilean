@@ -1,3 +1,9 @@
+## [1.0.12](https://github.com/ExaDev/trilean/compare/trilean-regex%401.0.11...trilean-regex%401.0.12) (2026-10-15)
+
+### Build System
+
+* **deps-dev:** bump globals from 17.12.0 to 17.13.0 ([be14668](https://github.com/ExaDev/trilean/commit/be146680e59f84cac71afbc0122838fe0fbf863a))
+
 ## [1.0.11](https://github.com/ExaDev/trilean/compare/trilean-regex%401.0.10...trilean-regex%401.0.11) (2026-10-14)
 
 ### Build System

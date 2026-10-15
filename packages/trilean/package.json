@@ -1,12 +1,12 @@
 {
   "name": "trilean",
   "description": "Three-valued predicate and expression evaluation trees, stored as JSON and evaluated against injected resolvers, for domain logic — business rules, eligibility checks, formulas, search filters, and more — that needs to be data instead of code.",
-  "version": "1.7.10",
+  "version": "1.7.11",
   "bugs": {
     "url": "https://github.com/ExaDev/trilean/issues"
   },
   "dependencies": {
-    "trilean-regex": "1.0.11",
+    "trilean-regex": "1.0.12",
     "zod": "^4.6.5"
   },
   "devDependencies": {
