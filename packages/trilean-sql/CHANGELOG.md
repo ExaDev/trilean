@@ -1,3 +1,9 @@
+## [2.2.16](https://github.com/ExaDev/trilean/compare/trilean-sql%402.2.15...trilean-sql%402.2.16) (2026-10-15)
+
+### Build System
+
+* **deps-dev:** bump pg from 8.23.0 to 8.23.1 ([0252da0](https://github.com/ExaDev/trilean/commit/0252da004105659b0d0a08fe495053794104b262))
+
 ## [2.2.15](https://github.com/ExaDev/trilean/compare/trilean-sql%402.2.14...trilean-sql%402.2.15) (2026-10-15)
 
 ### Build System
