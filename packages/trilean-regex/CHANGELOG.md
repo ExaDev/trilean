@@ -1,3 +1,9 @@
+## [1.0.13](https://github.com/ExaDev/trilean/compare/trilean-regex%401.0.12...trilean-regex%401.0.13) (2026-10-16)
+
+### Build System
+
+* **deps-dev:** bump @types/node from 26.6.4 to 26.6.5 ([cce1ab0](https://github.com/ExaDev/trilean/commit/cce1ab00708c92b8735d6390bb111b63f0e8feb9))
+
 ## [1.0.12](https://github.com/ExaDev/trilean/compare/trilean-regex%401.0.11...trilean-regex%401.0.12) (2026-10-15)
 
 ### Build System
