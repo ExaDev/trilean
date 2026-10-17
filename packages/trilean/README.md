@@ -185,7 +185,7 @@ The result is printed as JSON in the `Evaluation` shape, a `definite` value or a
 
 The command has no table, delegate or tree store to hand a `lookup`, `delegate` or `treeReference` node. A `lookup` is `not-found` and a `delegate` or `treeReference` is `wrong-type`. A tree that folds or quantifies over a list the inputs do not hold exits `2` rather than treating the missing list as empty. That holds even when another operand would settle the answer: `and(false, some(...))` still exits `2`, because the synchronous evaluator asks for the collection before it combines the two. For trees that need a table, a delegate or a tree store, embed the library and supply the [resolvers](#resolvers) yourself.
 
-The same evaluation is available in code as `evaluateDocument`, with `parseInputs` and `createInputResolvers` for the named-value and list resolvers it uses.
+The same evaluation is available in code as `evaluateDocument`, with `parseInputs` and `createInputResolvers` for the named-value and list resolvers it uses. `createInputResolvers` takes the lists of items as its `collections` argument, and only items served by its own `resolveCollection` are scoped to an item: an embedder that composes resolvers, overriding `resolveCollection` to serve its own items while keeping its `resolveValue`, gets references inside a fold read from the top-level inputs, and scoping those items is the embedder's responsibility.
 
 ## Build, test, and lint
 

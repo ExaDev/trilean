@@ -35,7 +35,7 @@ const NOT_A_VALUE =
   "expected a finite number, text, boolean or a complete computed value";
 
 /**
- * The evaluation context while a `fold`, `some` or `every` is evaluating one item. `resolveCollection` wraps each element in one of these, and `resolveValue` reads names from an item only when its context is one, so scope follows what the resolver itself handed out and not the identity or shape of anything else. The class is not exported, so no list an embedder builds, and no value passed as a context, can be mistaken for an item or can escape being one.
+ * The evaluation context while a `fold`, `some` or `every` is evaluating one item. `resolveCollection` wraps each element in one of these, and `resolveValue` reads names from an item only when its context is one, so scope follows what the resolver itself handed out and not the identity or shape of anything else. The class is not exported, so no value passed as a context can be mistaken for an item. The guarantee is about this resolver's own `resolveCollection`: a list served by it is scoped, and the supported way to give it lists is the `collections` argument of `createInputResolvers`. An embedder that composes resolvers, spreading these and overriding `resolveCollection` to serve its own items while keeping this `resolveValue`, serves items that are not wrappers, and a fold over them reads names from the top-level inputs; scoping those items is the embedder's responsibility.
  */
 class ScopedItem {
   constructor(readonly values: InputItem) {}
