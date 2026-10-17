@@ -171,3 +171,34 @@ describe("memberOf over durations", () => {
     ).toBe(false);
   });
 });
+
+describe("durations too small or too close for a division to tell apart", () => {
+  it("orders the smallest subnormal against zero in a far larger unit", async () => {
+    const smallest = duration({ value: 5e-324, unit: "ms" });
+    const zero = duration({ value: 0, unit: "d" });
+
+    expect(await compareDurations("gt", smallest, zero)).toBe(true);
+    expect(await compareDurations("eq", smallest, zero)).toBe(false);
+    expect(await isMember(smallest, zero)).toBe(false);
+  });
+
+  it("orders two durations whose quotients round to the same double", async () => {
+    // 25959408 minutes is a little more than 18027.366666666665 days; both are 18027.366666666667 days once rounded.
+    const minutes = duration({ value: 25959408, unit: "min" });
+    const days = duration({ value: 18027.366666666665, unit: "d" });
+
+    expect(await compareDurations("gt", minutes, days)).toBe(true);
+    expect(await compareDurations("eq", minutes, days)).toBe(false);
+    expect(await isMember(minutes, days)).toBe(false);
+  });
+
+  it("still finds the same span written in two units equal", async () => {
+    expect(
+      await compareDurations(
+        "eq",
+        duration({ value: 1, unit: "d" }),
+        duration({ value: 86400000, unit: "ms" }),
+      ),
+    ).toBe(true);
+  });
+});
