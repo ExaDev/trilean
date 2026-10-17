@@ -27,7 +27,7 @@ export type {
   TreeResolution,
 } from "./resolvers";
 
-export type { FunctionRegistry } from "./functions";
+export type { FunctionFailure, FunctionRegistry } from "./functions";
 export { emptyFunctionRegistry } from "./functions";
 export { builtinFunctions } from "./builtin-functions";
 

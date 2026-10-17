@@ -558,7 +558,7 @@ const functions: FunctionRegistry = {
   magnitude: (args) =>
     args[0]?.kind === "complex"
       ? complexMagnitude(args[0])
-      : { domainError: "expected a complex argument" },
+      : { wrongType: "expected a complex argument" },
 };
 ```
 
@@ -812,8 +812,10 @@ Both are exported directly, bound to an empty function registry — under them, 
 ```ts
 type FunctionRegistry = Record<
   string,
-  (args: readonly ComputedValue[]) => ComputedValue | { domainError: string }
+  (args: readonly ComputedValue[]) => ComputedValue | FunctionFailure
 >;
+
+type FunctionFailure = { domainError: string } | { wrongType: string };
 
 function createEvaluator(options: { functions?: FunctionRegistry }): {
   evaluatePredicate: (node: PredicateNode, context: EvaluationContext, resolvers: Resolvers) => Promise<Evaluation<boolean>>;
@@ -821,14 +823,14 @@ function createEvaluator(options: { functions?: FunctionRegistry }): {
 };
 ```
 
-A registered function signals an argument outside its domain by *returning* `{ domainError: message }` rather than throwing, which is what keeps `call` inside the same three-outcome model as every other node kind (see [The evaluation model](#the-evaluation-model)); only the registry's own keys count as registered names, so a tree naming an inherited `Object.prototype` member is `wrong-type` like any other unregistered name.
+A registered function signals a failure by *returning* a `FunctionFailure` rather than throwing, which is what keeps `call` inside the same three-outcome model as every other node kind (see [The evaluation model](#the-evaluation-model)): `{ domainError: message }` for an argument of an acceptable kind outside the function's domain (`domain-error`), `{ wrongType: message }` for an argument the function cannot accept at all, such as the wrong kind or units that do not match (`wrong-type`). Only the registry's own keys count as registered names, so a tree naming an inherited `Object.prototype` member is `wrong-type` like any other unregistered name.
 
 ```ts
 const { evaluateValue } = createEvaluator({
   functions: {
     squareRoot: (args) => {
       const [arg] = args;
-      if (arg?.kind !== "number") return { domainError: "squareRoot requires one number argument" };
+      if (arg?.kind !== "number") return { wrongType: "squareRoot requires one number argument" };
       if (arg.value < 0) return { domainError: "squareRoot of a negative number is not a real number" };
       return { kind: "number", value: Math.sqrt(arg.value) };
     },
@@ -868,7 +870,7 @@ How each reason category can arise, per node kind. "Propagates" means: an indete
 | `reference` | resolver reports absence | resolver's value doesn't match an expected `unit`, or is used where an incompatible kind is required upstream | never directly |
 | `arithmetic` | either operand not found | operand not numeric (or temporal-kind mismatch — see [Temporal values](#temporal-values)), or unit mismatch on add/subtract, or a `power` exponent that is not a real integer over a `complex` operand (see [Complex values](#complex-values)) | zero divisor, `modulo` over a `complex` operand, a result that overflows the finite range, or any other documented domain violation for the operator |
 | `negate` | operand not found | operand not `number`/`duration`/`complex` | never directly |
-| `call` | any argument not found | unregistered function name, or an argument of the wrong kind for that function | argument outside the function's valid domain (e.g. negative input to `squareRoot`) |
+| `call` | any argument not found | unregistered function name, or an argument the function cannot accept (the wrong kind, or mismatched units) | argument outside the function's valid domain (e.g. negative input to `squareRoot`) |
 | `lookup` | any key not found, or resolver reports no match | a key expression resolves to the wrong kind for that table | never directly |
 | `conditional` | `"first"`: an unmatched guard's own evaluation is `not-found`, before any earlier guard matched.<br>`"unique"`: any case's `when` is `not-found`, unless 2+ cases already definitely matched (see `domain-error`, which then takes priority).<br>Both: also the chosen branch's (`then`/`fallback`) own result if it is `not-found`. | Same pattern as `not-found`, substituting `wrong-type` throughout (guard evaluation and chosen branch alike). | `"unique"` only: 2+ cases are definitely `true` — see [`conditional`](#conditional)'s absorption order.<br>Both: same pattern as `not-found`, substituting `domain-error` (guard evaluation and chosen branch alike). |
 | `fold` | any participating item's `filter`, `item`, or `combine` evaluation is `not-found`; or a `reduce`'s `initial` is `not-found` | any participating item's `filter`, `item`, or `combine` evaluation is `wrong-type`; or a `reduce`'s `initial` is `wrong-type` | empty (post-filter) collection with `max`/`min` (no first item to seed from); or any participating item's `item`/`combine` evaluation is `domain-error`; or a `reduce`'s `initial` is `domain-error` |
