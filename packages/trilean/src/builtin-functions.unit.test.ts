@@ -315,10 +315,68 @@ describe("logarithm", () => {
 describe("a result that is not a finite number", () => {
   const infinite = num({ value: Number.POSITIVE_INFINITY });
 
-  it.each(["minimum", "maximum", "absoluteValue", "round"])(
+  it.each(["minimum", "maximum", "absoluteValue", "round", "magnitude"])(
     "is a domain-error from %s even when the argument already was one",
     (name) => {
       expect(domainError(call(name, infinite))).toMatch(/not a finite number/);
     },
   );
+});
+
+describe("magnitude", () => {
+  it("is the absolute value of a real number, in its unit", () => {
+    expect(call("magnitude", num({ value: -2.5, unit: { A: 1 } }))).toEqual(
+      num({ value: 2.5, unit: { A: 1 } }),
+    );
+  });
+
+  it("is the modulus of a complex number, in the unit it carries", () => {
+    expect(
+      call("magnitude", {
+        kind: "complex",
+        re: 3,
+        im: -4,
+        unit: { V: 1 },
+      }),
+    ).toEqual(num({ value: 5, unit: { V: 1 } }));
+  });
+
+  it("is a domain-error where the modulus leaves the finite range", () => {
+    expect(
+      domainError(
+        call("magnitude", {
+          kind: "complex",
+          re: Number.MAX_VALUE,
+          im: Number.MAX_VALUE,
+        }),
+      ),
+    ).toMatch(/not a finite number/);
+  });
+
+  it("is a wrong-type for anything else or for a wrong count", () => {
+    expect(wrongType(call("magnitude", text))).toMatch(
+      /number or a complex number/,
+    );
+    expect(wrongType(call("magnitude"))).toMatch(/exactly one/);
+    expect(
+      wrongType(call("magnitude", num({ value: 1 }), num({ value: 2 }))),
+    ).toMatch(/exactly one/);
+  });
+});
+
+describe("phase", () => {
+  it("is the angle of a complex number in radians, dimensionless whatever its unit", () => {
+    expect(
+      call("phase", { kind: "complex", re: 0, im: 2, unit: { ohm: 1 } }),
+    ).toEqual(num({ value: Math.PI / 2 }));
+    expect(call("phase", { kind: "complex", re: -1, im: 0 })).toEqual(
+      num({ value: Math.PI }),
+    );
+  });
+
+  it("is a wrong-type for a real number, text or a wrong count", () => {
+    expect(wrongType(call("phase", num({ value: 1 })))).toMatch(/complex/);
+    expect(wrongType(call("phase", text))).toMatch(/complex/);
+    expect(wrongType(call("phase"))).toMatch(/exactly one/);
+  });
 });

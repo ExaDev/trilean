@@ -1,5 +1,6 @@
 import type { ComputedValue, Unit } from "./computed-value";
 import { unitsEqual } from "./computed-value";
+import { complexMagnitude, complexPhase } from "./complex";
 import type { FunctionFailure, FunctionRegistry } from "./functions";
 
 type NumberValue = Extract<ComputedValue, { kind: "number" }>;
@@ -118,11 +119,11 @@ function roundHalfAwayFromZero(value: number, places: number): number {
 }
 
 /**
- * The numeric functions a `call` node can name when an embedder has no registry of its own: `minimum` and `maximum` (one or more numbers in a shared unit), `absoluteValue`, `round` (half away from zero, with an optional count of decimal places), `squareRoot`, `exponential`, and `logarithm` (natural, or to an optional base). They take real numbers only: a complex value is refused by every one of them, `absoluteValue` included.
+ * The numeric functions a `call` node can name when an embedder has no registry of its own: `minimum` and `maximum` (one or more numbers in a shared unit), `absoluteValue`, `round` (half away from zero, with an optional count of decimal places), `squareRoot`, `exponential`, `logarithm` (natural, or to an optional base), and the two projections of a complex value onto the reals, `magnitude` and `phase`. Every function but those two takes real numbers only, and refuses a complex value; `magnitude` takes a real or a complex number, and `phase` a complex one.
  *
  * Failures split as the evaluator's own operators split. An argument a function cannot accept at all (the wrong kind, the wrong count, or units that do not fit) is a `wrongType`; an argument of the right kind outside the function's domain (a negative `squareRoot`, a `logarithm` of zero, a base of one, a fractional count of decimal places) or a result that is not a finite number is a `domainError`.
  *
- * Units follow the evaluator's rule that dimensions are never silently converted. `minimum`, `maximum`, `absoluteValue` and `round` keep the argument's unit (and the first two require all arguments to share one); `squareRoot` halves each dimension's exponent and refuses a unit whose exponents are not all even; `exponential` and `logarithm` accept only dimensionless numbers and return one.
+ * Units follow the evaluator's rule that dimensions are never silently converted. `minimum`, `maximum`, `absoluteValue`, `round` and `magnitude` keep the argument's unit (and the first two require all arguments to share one); `phase` returns a dimensionless angle in radians whatever unit its argument carries; `squareRoot` halves each dimension's exponent and refuses a unit whose exponents are not all even; `exponential` and `logarithm` accept only dimensionless numbers and return one.
  *
  * Frozen, so mutating the export cannot change what `evaluateDocument` resolves.
  */
@@ -234,5 +235,29 @@ export const builtinFunctions: FunctionRegistry = Object.freeze({
       "logarithm",
       Math.log(value.value) / Math.log(baseNumber),
     );
+  },
+  magnitude: (args) => {
+    const [arg] = args;
+    if (args.length !== 1) {
+      return { wrongType: "magnitude requires exactly one argument" };
+    }
+    if (arg?.kind === "complex") {
+      const { value, unit } = complexMagnitude(arg);
+
+      return finiteNumber("magnitude", value, unit);
+    }
+    if (arg?.kind !== "number") {
+      return { wrongType: "magnitude requires a number or a complex number" };
+    }
+
+    return finiteNumber("magnitude", Math.abs(arg.value), arg.unit);
+  },
+  phase: (args) => {
+    const [arg] = args;
+    if (args.length !== 1 || arg?.kind !== "complex") {
+      return { wrongType: "phase requires exactly one complex argument" };
+    }
+
+    return complexPhase(arg);
   },
 } satisfies FunctionRegistry);
