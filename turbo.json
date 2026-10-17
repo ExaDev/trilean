@@ -40,9 +40,15 @@
     "_build": {
       "dependsOn": ["^_build"],
       // scripts/** covers the JSON-schema generation step that runs as part of the build; package.json is an input because that generation reads it.
-      "inputs": ["src/**", "tsdown.config.ts", "scripts/**", "package.json"],
-      // schemas/** is the build's second output, alongside tsdown's dist/.
-      "outputs": ["dist/**", "schemas/**"]
+      "inputs": [
+        "src/**",
+        "cli/**",
+        "tsdown.config.ts",
+        "scripts/**",
+        "package.json"
+      ],
+      // schemas/** is the build's second output, alongside tsdown's dist/, and dist-cli/** is its third: the `trilean` command, built from cli/ by the same tsdown run.
+      "outputs": ["dist/**", "dist-cli/**", "schemas/**"]
     },
     "_lint": {
       "dependsOn": ["^_build", "_build"],
@@ -75,6 +81,7 @@
       "dependsOn": ["^_build"],
       "inputs": [
         "src/**",
+        "cli/**",
         "package.json",
         "vitest.config.ts",
         "test/integration/**"
@@ -85,10 +92,13 @@
       "dependsOn": ["^_build", "_build"],
       "inputs": [
         "src/**",
+        "cli/**",
         "tsdown.config.ts",
         "package.json",
         "vitest.config.ts",
-        "test/smoke.e2e.test.ts"
+        "test/smoke.e2e.test.ts",
+        "test/declaration-shape.e2e.test.ts",
+        "test/cli.e2e.test.ts"
       ],
       // Deliberately empty rather than dist/**: dist/ is `_build`'s output, and two tasks claiming the same output directory means a cache replay of one can overwrite the other's. The smoke run itself produces nothing worth caching.
       "outputs": []

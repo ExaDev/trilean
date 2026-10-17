@@ -7,6 +7,7 @@
   "exclude": [],
   "extends": "./tsconfig.json",
   "include": [
+    "cli/**/*.ts",
     "src/**/*.test.ts",
     "src/test-support/**/*.ts",
     "test/**/*.ts",
