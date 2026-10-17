@@ -34,13 +34,11 @@ export type InputsParseResult =
 const NOT_A_VALUE =
   "expected a finite number, text, boolean or a complete computed value";
 
-/** Every item this module has parsed, so a resolver can tell the item it is being asked about from any other evaluation context without trusting its shape. */
-const parsedItems = new WeakSet<object>();
-
-function isInputItem(context: unknown): context is InputItem {
-  return (
-    typeof context === "object" && context !== null && parsedItems.has(context)
-  );
+/**
+ * The evaluation context while a `fold`, `some` or `every` is evaluating one item. `resolveCollection` wraps each element in one of these, and `resolveValue` reads names from an item only when its context is one, so scope follows what the resolver itself handed out and not the identity or shape of anything else. The class is not exported, so no list an embedder builds, and no value passed as a context, can be mistaken for an item or can escape being one.
+ */
+class ScopedItem {
+  constructor(readonly values: InputItem) {}
 }
 
 interface ParsedItem {
@@ -67,7 +65,6 @@ function parseItem(label: string, raw: unknown): ParsedItem {
     }
   }
   if (issues.length > 0) return { item: undefined, issues };
-  parsedItems.add(item);
 
   return { item, issues };
 }
@@ -113,7 +110,7 @@ export function parseInputs(raw: unknown): InputsParseResult {
 }
 
 /**
- * Synchronous resolvers over named inputs and lists of items. A `reference` whose key is a string resolves to the value of that name: against the top-level inputs outside a `fold`, `some` or `every`, and against the current item alone inside one, since descending into a collection replaces the evaluation context with the item (an item does not see the top-level inputs, so a value an item needs is written into the item). Every other key, and every `lookup`, is `not-found`. `resolveCollection` returns the list of items the inputs hold under the collection's name, and throws for a collection the inputs do not hold: an empty list would silently change what a `fold`, `some` or `every` means, and a missing list is a mistake in the tree or the inputs, not an empty collection. `delegate` and `treeReference` nodes are left unresolved, so they are `wrong-type` like any node whose optional resolver is absent.
+ * Synchronous resolvers over named inputs and lists of items. A `reference` whose key is a string resolves to the value of that name: against the top-level inputs outside a `fold`, `some` or `every`, and against the current item alone inside one, since descending into a collection replaces the evaluation context with the item (an item does not see the top-level inputs, so a value an item needs is written into the item). Every other key, and every `lookup`, is `not-found`. `resolveCollection` returns the items the inputs hold under the collection's name, each wrapped so that only the wrapper this module created is read as an item (a list built by the embedder works the same as a parsed one), and throws for a collection the inputs do not hold: an empty list would silently change what a `fold`, `some` or `every` means, and a missing list is a mistake in the tree or the inputs, not an empty collection. `delegate` and `treeReference` nodes are left unresolved, so they are `wrong-type` like any node whose optional resolver is absent.
  */
 export function createInputResolvers(
   inputs: ReadonlyMap<string, ComputedValue>,
@@ -121,7 +118,7 @@ export function createInputResolvers(
 ): SyncResolvers {
   return {
     resolveValue: (key, context) => {
-      const scope = isInputItem(context) ? context : inputs;
+      const scope = context instanceof ScopedItem ? context.values : inputs;
       const value = typeof key === "string" ? scope.get(key) : undefined;
 
       return value === undefined ? { found: false } : { found: true, value };
@@ -138,7 +135,7 @@ export function createInputResolvers(
         );
       }
 
-      return [...items];
+      return items.map((values) => new ScopedItem(values));
     },
   };
 }

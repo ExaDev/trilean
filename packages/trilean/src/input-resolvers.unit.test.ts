@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 import type { ComputedValue } from "./computed-value";
+import { createSyncEvaluator } from "./evaluator-factory";
 import type { InputItem } from "./input-resolvers";
 import { createInputResolvers, parseInputs } from "./input-resolvers";
+import type { ExpressionNode } from "./tree";
 
 function parsedAll(raw: unknown): {
   inputs: ReadonlyMap<string, ComputedValue>;
@@ -194,5 +196,81 @@ describe("createInputResolvers over lists of items", () => {
     first.length = 0;
 
     expect(resolvers.resolveCollection("loads", undefined)).toHaveLength(2);
+  });
+});
+
+describe("createInputResolvers over lists the embedder built", () => {
+  const shadowing = 100;
+  const lookalikeValue = 7;
+  const num = (value: number): ComputedValue => ({ kind: "number", value });
+  const built = new Map<string, readonly InputItem[]>([
+    ["samples", [new Map([["a", num(1)]]), new Map([["a", num(2)]])]],
+  ]);
+  const sumOfA: ExpressionNode = {
+    kind: "fold",
+    collection: "samples",
+    combiner: {
+      mode: "reduce",
+      initial: { kind: "numberLiteral", value: 0 },
+      combine: {
+        kind: "arithmetic",
+        op: "add",
+        left: { kind: "accumulator" },
+        right: { kind: "reference", key: "a" },
+      },
+    },
+  };
+
+  function evaluateSum(topLevel: ReadonlyMap<string, ComputedValue>) {
+    return createSyncEvaluator({}).evaluateValue(
+      sumOfA,
+      undefined,
+      createInputResolvers(topLevel, built),
+    );
+  }
+
+  it("resolves a reference inside an item against that item, whatever built the list", () => {
+    expect(evaluateSum(new Map())).toEqual({
+      status: "definite",
+      value: { kind: "number", value: 3, unit: undefined },
+    });
+  });
+
+  it("never reads the top-level inputs for a reference inside an item", () => {
+    // A top-level a of 100 used to be read for every item, giving 200 where the items hold 1 and 2.
+    expect(evaluateSum(new Map([["a", num(shadowing)]]))).toEqual({
+      status: "definite",
+      value: { kind: "number", value: 3, unit: undefined },
+    });
+  });
+
+  it("gives the items the same scope as a parsed list", () => {
+    const resolvers = createInputResolvers(
+      new Map([["a", num(shadowing)]]),
+      built,
+    );
+    const [first] = resolvers.resolveCollection("samples", undefined);
+
+    expect(resolvers.resolveValue("a", first)).toEqual({
+      found: true,
+      value: num(1),
+    });
+    expect(resolvers.resolveValue("a", undefined)).toEqual({
+      found: true,
+      value: num(shadowing),
+    });
+  });
+
+  it("does not treat a map handed in as a context as an item", () => {
+    const resolvers = createInputResolvers(
+      new Map([["a", num(shadowing)]]),
+      built,
+    );
+    const lookalike = new Map([["a", num(lookalikeValue)]]);
+
+    expect(resolvers.resolveValue("a", lookalike)).toEqual({
+      found: true,
+      value: num(shadowing),
+    });
   });
 });
