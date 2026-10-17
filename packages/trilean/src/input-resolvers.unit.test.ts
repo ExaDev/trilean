@@ -278,7 +278,7 @@ describe("createInputResolvers over lists the embedder built", () => {
 
 describe("the public surface", () => {
   it("exports the item type that createInputResolvers and parseInputs take and return", () => {
-    // Compiles only while `InputItem` is exported from the package entry point, and is the same type the module declares.
+    // Compiles only while `InputItem` is exported from the package entry point, and shows a value of the exported type is accepted where the module's own type is expected.
     const sizeOf = (item: InputItem): number => item.size;
     const item: PublicInputItem = new Map<string, ComputedValue>();
 
