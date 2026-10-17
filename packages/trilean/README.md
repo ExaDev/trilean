@@ -524,7 +524,7 @@ A named function applied to an ordered list of `ExpressionNode` arguments. The s
 - `instant − instant → duration`
 - `instant + duration → instant` (and `duration + instant → instant`)
 
-Any other arithmetic combination touching an `instant` or `duration` (adding two instants, multiplying a duration by an instant, comparing an instant against a plain number, and so on) is `wrong-type`. A reference implementation normalises `duration` values to a single base unit (milliseconds) internally before combining two durations of different `DurationUnit`s, then reports the result in whichever unit the node's own context calls for. Comparing two durations (`compare`, `memberOf`) does not convert to milliseconds: it divides the finer one down into the coarser unit, which cannot overflow, so two different durations of days stay distinguishable at any magnitude a number can hold.
+Any other arithmetic combination touching an `instant` or `duration` (adding two instants, multiplying a duration by an instant, comparing an instant against a plain number, and so on) is `wrong-type`. A reference implementation normalises `duration` values to a single base unit (milliseconds) internally before combining two durations of different `DurationUnit`s, then reports the result in whichever unit the node's own context calls for. Comparing two durations (`compare`, `memberOf`) is exact for any two finite durations in any units, and does not convert to milliseconds: it divides the finer one down into the coarser unit, which cannot overflow, and when the two rounded values come out equal it settles the tie exactly from the numbers' binary expansions.
 
 ### Complex values
 
