@@ -149,6 +149,16 @@ describe("divideComplexComponents when the operands differ enormously in size", 
     ).toEqual({ re: 0, im: 0 });
   });
 
+  it("gives zero for a dividend of negative zeros without preserving their signs", () => {
+    const quotient = divide({
+      dividend: { re: -0, im: -0 },
+      divisor: { re: 1, im: 0 },
+    });
+
+    expect(Object.is(quotient.re, 0)).toBe(true);
+    expect(Object.is(quotient.im, 0)).toBe(true);
+  });
+
   it("returns zero when the quotient is below the smallest subnormal", () => {
     expect(
       divide({
