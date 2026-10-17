@@ -623,4 +623,71 @@ describe("trilean evaluate with lists of items and complex values", () => {
       expect(captured.stdout()).toBe("");
     });
   });
+
+  describe("the phase of a complex value", () => {
+    function phaseOf(tree: unknown, inputs: string) {
+      const captured = capture({
+        "t.json": JSON.stringify(tree),
+        "in.json": inputs,
+      });
+      const status = run(
+        ["evaluate", "t.json", "--inputs", "in.json"],
+        captured.io,
+      );
+
+      return { status, printed: JSON.parse(captured.stdout()) as unknown };
+    }
+    const phase = {
+      kind: "call",
+      fn: "phase",
+      args: [{ kind: "reference", key: "z" }],
+    };
+
+    it("is +pi for a negative real input written with a negative zero imaginary part", () => {
+      const { status, printed } = phaseOf(
+        phase,
+        '{"z":{"kind":"complex","re":-2,"im":-0}}',
+      );
+
+      expect(status).toBe(EXIT_DEFINITE);
+      expect(printed).toMatchObject({ value: { value: Math.PI } });
+    });
+
+    it("is +pi for the negation of a positive real, as it is for the input written directly", () => {
+      const { status, printed } = phaseOf(
+        {
+          kind: "call",
+          fn: "phase",
+          args: [
+            {
+              kind: "negate",
+              operand: { kind: "reference", key: "z" },
+            },
+          ],
+        },
+        '{"z":{"kind":"complex","re":2,"im":0}}',
+      );
+
+      expect(status).toBe(EXIT_DEFINITE);
+      expect(printed).toMatchObject({ value: { value: Math.PI } });
+    });
+
+    it("is 0 for the negation of zero", () => {
+      const { printed } = phaseOf(
+        {
+          kind: "call",
+          fn: "phase",
+          args: [
+            {
+              kind: "negate",
+              operand: { kind: "reference", key: "z" },
+            },
+          ],
+        },
+        '{"z":{"kind":"complex","re":0,"im":0}}',
+      );
+
+      expect(printed).toMatchObject({ value: { value: 0 } });
+    });
+  });
 });

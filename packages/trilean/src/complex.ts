@@ -39,8 +39,10 @@ export const complexMagnitude = (value: ComplexValue): NumberValue => ({
   unit: value.unit,
 });
 
-/** arg(z), as a dimensionless real number of radians: an angle is a ratio of two lengths, so it carries no unit of its own regardless of what the value it was read from carried. */
+/**
+ * arg(z), as a dimensionless real number of radians: an angle is a ratio of two lengths, so it carries no unit of its own regardless of what the value it was read from carried. The range is (-pi, pi]. `Math.atan2` reads the sign of a zero imaginary part, which would make a negative real number -pi when its zero is negative (as the negation of a positive real has) and +pi when it is not, although the two are the same number, and JSON writes both zeros as `0`. Adding `+0` turns `-0` into `+0` without changing any other value, so a negative real number is +pi whatever the sign of its zero, and zero is 0.
+ */
 export const complexPhase = (value: ComplexValue): NumberValue => ({
   kind: "number",
-  value: Math.atan2(value.im, value.re),
+  value: Math.atan2(value.im + 0, value.re + 0),
 });

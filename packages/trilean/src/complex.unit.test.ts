@@ -53,6 +53,18 @@ describe("complexMagnitude, complexPhase", () => {
     ).toEqual({ kind: "number", value: quarterTurn });
   });
 
+  it("reads a negative real number as +pi whatever the sign of its zero imaginary part, and zero as 0", () => {
+    expect(complexPhase({ kind: "complex", re: -2, im: -0 }).value).toBe(
+      Math.PI,
+    );
+    expect(complexPhase({ kind: "complex", re: -2, im: 0 }).value).toBe(
+      Math.PI,
+    );
+    expect(
+      Object.is(complexPhase({ kind: "complex", re: -0, im: -0 }).value, 0),
+    ).toBe(true);
+  });
+
   it("round-trips a magnitude and phase through the rectangular form", () => {
     const roundTripped = complexFromPolar(pythagoreanMagnitude, arbitraryPhase);
     expect(complexMagnitude(roundTripped).value).toBeCloseTo(
