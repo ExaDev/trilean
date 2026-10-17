@@ -604,7 +604,27 @@ function applyArithmeticOnComplex(
   }
 }
 
-/** `power` with a complex operand on either side, defined for exactly one case: a real integer exponent, evaluated as the repeated multiplication that integer exponentiation *is*, grouped by squaring so the work grows with the logarithm of the exponent rather than the exponent itself (see the "Complex values" section of README.md for why an arbitrary complex exponent stays out of scope). */
+/** `1 / value` for a non-zero complex value, carrying the inverse unit. */
+function reciprocalOf(
+  value: Readonly<Extract<ComputedValue, { kind: "complex" }>>,
+): Extract<ComputedValue, { kind: "complex" }> {
+  return {
+    kind: "complex",
+    ...divideComplexComponents({ re: 1, im: 0 }, value),
+    unit: combineUnitsForDivide({}, value.unit),
+  };
+}
+
+/** Whether a complex value is finite and not zero, which is what dividing by it needs. A positive power that has overflowed or underflowed to zero is neither, and cannot be inverted. */
+function isFiniteAndNonZero(
+  value: Readonly<Extract<ComputedValue, { kind: "complex" }>>,
+): boolean {
+  const larger = Math.max(Math.abs(value.re), Math.abs(value.im));
+
+  return Number.isFinite(larger) && larger > 0;
+}
+
+/** `power` with a complex operand on either side, defined for exactly one case: a real integer exponent, evaluated as the repeated multiplication that integer exponentiation *is*, grouped by squaring so the work grows with the logarithm of the exponent rather than the exponent itself, at the cost of a result that is typically a few times less accurate than a plain multiplication loop's (see the "Complex values" section of README.md for why an arbitrary complex exponent stays out of scope). */
 function applyComplexPower(
   base: Readonly<Extract<ComputedValue, { kind: "number" | "complex" }>>,
   exponent: Readonly<Extract<ComputedValue, { kind: "number" | "complex" }>>,
@@ -638,19 +658,23 @@ function applyComplexPower(
       }),
     );
   }
-  // A negative exponent raises the reciprocal to the positive one. Inverting first, rather than inverting the positive power, keeps a result that is representable but whose positive power is not (`(1e160)^-2` is a subnormal, while `(1e160)^2` overflows); it also inherits the zero base's division-by-zero domain-error, since zero has no reciprocal.
+  // A negative exponent is the reciprocal of the positive power, and that is how it is computed whenever the positive power is finite and not zero: one division after the powering, which loses the least precision. Otherwise the positive power overflowed or underflowed, and the reciprocal is taken first and raised to the positive exponent instead, which still gives a representable result when the positive power is not (`(1e160 + 1e160i)^-2` is a subnormal, whose positive power overflows). A zero base has no reciprocal either way, so it is a division by zero.
   if (complexBase.re === 0 && complexBase.im === 0) {
     return indeterminate("domain-error", "division by zero");
   }
-  const reciprocal: Extract<ComputedValue, { kind: "complex" }> = {
-    kind: "complex",
-    ...divideComplexComponents(complexUnit, complexBase),
-    unit: combineUnitsForDivide(complexUnit.unit, complexBase.unit),
-  };
+  const positivePower = powerByRepeatedSquaring({
+    base: complexBase,
+    exponent: -exponent.value,
+    identity: complexUnit,
+    multiply: multiplyComplexValues,
+  });
+  if (isFiniteAndNonZero(positivePower)) {
+    return definite(reciprocalOf(positivePower));
+  }
 
   return definite(
     powerByRepeatedSquaring({
-      base: reciprocal,
+      base: reciprocalOf(complexBase),
       exponent: -exponent.value,
       identity: complexUnit,
       multiply: multiplyComplexValues,

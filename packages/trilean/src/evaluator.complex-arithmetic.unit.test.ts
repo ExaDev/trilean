@@ -530,6 +530,31 @@ describe("complex power by repeated squaring", () => {
     },
   );
 
+  it.each(cases)(
+    "a negative exponent is exactly the reciprocal of the positive power when that is representable, for $base to the power -$exponent",
+    async ({ base, exponent }) => {
+      if (exponent === 0) return;
+      const inverted = await power({ base, exponent: -exponent });
+      const reciprocal = await evaluateValue(
+        {
+          kind: "arithmetic",
+          op: "divide",
+          left: { kind: "complexLiteral", ...unit },
+          right: {
+            kind: "arithmetic",
+            op: "power",
+            left: { kind: "complexLiteral", ...base },
+            right: { kind: "numberLiteral", value: exponent },
+          },
+        },
+        undefined,
+        resolvers,
+      );
+
+      expect(inverted).toEqual(reciprocal);
+    },
+  );
+
   it("returns for an exponent a multiplication loop could never finish", async () => {
     expectDefinite(await power({ base: unit, exponent: huge }), {
       kind: "complex",
@@ -571,6 +596,14 @@ describe("complex power by repeated squaring", () => {
     expect(value.re).toBeGreaterThan(0);
     expect(value.im).toBeLessThan(0);
     expect(value.re / -value.im).toBeCloseTo(1, precisionDigits);
+  });
+
+  it("gives exactly the value of the reciprocal for a base whose positive power overflows", async () => {
+    // (1e160 + 1e160i)^2 is 2e320i, which overflows; the result, -5e-321i, does not.
+    expectDefinite(
+      await power({ base: { re: 1e160, im: 1e160 }, exponent: -2 }),
+      { kind: "complex", re: 0, im: -5e-321, unit: {} },
+    );
   });
 
   it("keeps a negative power of a large base finite where its positive power would overflow", async () => {
