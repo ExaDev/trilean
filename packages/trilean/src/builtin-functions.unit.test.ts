@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { builtinFunctions } from "./builtin-functions";
 import type { ComputedValue, Unit } from "./computed-value";
+import type { FunctionFailure } from "./functions";
 
 /** Takes one object so a literal is an object-literal property value, which `no-magic-numbers` exempts, rather than a bare call argument. */
 function num({ value, unit }: { value: number; unit?: Unit }): ComputedValue {
@@ -12,7 +13,7 @@ function num({ value, unit }: { value: number; unit?: Unit }): ComputedValue {
 function call(
   name: string,
   ...args: readonly ComputedValue[]
-): ComputedValue | { domainError: string } {
+): ComputedValue | FunctionFailure {
   const fn = builtinFunctions[name];
   if (fn === undefined) throw new Error(`no built-in function ${name}`);
 
@@ -20,7 +21,7 @@ function call(
 }
 
 function domainError(
-  result: ComputedValue | { domainError: string },
+  result: ComputedValue | FunctionFailure,
 ): string | undefined {
   return "domainError" in result ? result.domainError : undefined;
 }

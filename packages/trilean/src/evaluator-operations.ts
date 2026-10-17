@@ -799,6 +799,9 @@ export function invokeRegisteredFunction(
   if ("domainError" in outcome) {
     return indeterminate("domain-error", outcome.domainError);
   }
+  if ("wrongType" in outcome) {
+    return indeterminate("wrong-type", outcome.wrongType);
+  }
 
   return definite(outcome);
 }
