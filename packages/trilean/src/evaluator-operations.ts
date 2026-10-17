@@ -12,7 +12,13 @@ import {
   firstIndeterminate,
   indeterminate,
 } from "./evaluation";
+import { divideComplexComponents } from "./complex-division";
+import {
+  compareDurations,
+  millisecondsPerDurationUnit,
+} from "./duration-order";
 import type { FunctionRegistry } from "./functions";
+import { powerByRepeatedSquaring } from "./integer-power";
 import type {
   ArithmeticOperator,
   ComparisonOperator,
@@ -68,15 +74,7 @@ function applyComparisonOperator(
   }
 }
 
-const millisecondsPerDurationUnit: Record<DurationUnit, number> = {
-  ms: 1,
-  s: 1000,
-  min: 60_000,
-  h: 3_600_000,
-  d: 86_400_000,
-};
-
-/** Normalises a `duration`'s magnitude to milliseconds, the common base unit for combining or comparing two `duration`s (or an `instant` and a `duration`) of potentially different `DurationUnit`s -- shared by `compareValues`'s own `duration` branch below and by the temporal arithmetic further down. */
+/** Normalises a `duration`'s magnitude to milliseconds, the common base unit for combining or comparing two `duration`s (or an `instant` and a `duration`) of potentially different `DurationUnit`s. It is used by the temporal arithmetic further down (comparison goes through `compareDurations` instead, which cannot overflow). */
 function toMilliseconds(value: number, unit: DurationUnit): number {
   return value * millisecondsPerDurationUnit[unit];
 }
@@ -168,7 +166,7 @@ export function compareValues(
 
       return definite(applyComparisonOperator(op, leftEpoch, rightEpoch));
     }
-    case "duration":
+    case "duration": {
       if (right.kind !== "duration") {
         return indeterminate(
           "wrong-type",
@@ -176,13 +174,11 @@ export function compareValues(
         );
       }
 
+      // The order is -1, 0 or 1, so comparing it with zero applies the operator to the durations themselves.
       return definite(
-        applyComparisonOperator(
-          op,
-          toMilliseconds(left.value, left.unit),
-          toMilliseconds(right.value, right.unit),
-        ),
+        applyComparisonOperator(op, compareDurations(left, right), 0),
       );
+    }
     // Complex operands stay kind-strict here, deliberately unlike `arithmetic`'s promotion of a real operand: arithmetic produces a value, so promoting loses nothing, whereas a comparison consumes two and this design already treats a kind difference between them as a modelling error worth surfacing (the same reason an `instant` is never compared against a plain `number`).
     case "complex":
       if (op !== "eq" && op !== "neq") {
@@ -330,7 +326,7 @@ export function computeMembershipMatch(
 
       return definite(operandEpoch === candidateEpoch);
     }
-    case "duration":
+    case "duration": {
       if (candidate.kind !== "duration") {
         return indeterminate(
           "wrong-type",
@@ -338,10 +334,8 @@ export function computeMembershipMatch(
         );
       }
 
-      return definite(
-        toMilliseconds(operand.value, operand.unit) ===
-          toMilliseconds(candidate.value, candidate.unit),
-      );
+      return definite(compareDurations(operand, candidate) === 0);
+    }
     case "complex":
       if (candidate.kind !== "complex") {
         return indeterminate(
@@ -535,7 +529,7 @@ function toComplexValue(
   return { kind: "complex", re: value.value, im: 0, unit: value.unit };
 }
 
-/** The complex product, as its own component-level helper rather than only a branch of the operator switch below, because `power`'s repeated multiplication needs exactly this and must not re-derive it. */
+/** The complex product, as its own component-level helper rather than only a branch of the operator switch below, because `power`'s exponentiation by squaring needs exactly this and must not re-derive it. */
 function multiplyComplexValues(
   left: Readonly<Extract<ComputedValue, { kind: "complex" }>>,
   right: Readonly<Extract<ComputedValue, { kind: "complex" }>>,
@@ -586,17 +580,16 @@ function applyArithmeticOnComplex(
     case "multiply":
       return definite(multiplyComplexValues(left, right));
     case "divide": {
-      // Multiplying both sides by the divisor's conjugate makes the denominator the real |divisor|^2, which is what turns a complex quotient into two ordinary real divisions.
-      const divisorSquaredMagnitude = right.re * right.re + right.im * right.im;
       // Zero is the one complex value with no reciprocal, and it is zero in *both* components -- a divisor with only a zero real part (a purely imaginary one) divides perfectly well.
-      if (divisorSquaredMagnitude === 0) {
+      if (right.re === 0 && right.im === 0) {
         return indeterminate("domain-error", "division by zero");
       }
+      const quotient = divideComplexComponents(left, right);
 
       return definite({
         kind: "complex",
-        re: (left.re * right.re + left.im * right.im) / divisorSquaredMagnitude,
-        im: (left.im * right.re - left.re * right.im) / divisorSquaredMagnitude,
+        re: quotient.re,
+        im: quotient.im,
         unit: combineUnitsForDivide(left.unit, right.unit),
       });
     }
@@ -611,7 +604,27 @@ function applyArithmeticOnComplex(
   }
 }
 
-/** `power` with a complex operand on either side, defined for exactly one case: a real integer exponent, evaluated as the repeated multiplication that integer exponentiation *is* (see the "Complex values" section of README.md for why an arbitrary complex exponent stays out of scope). */
+/** `1 / value` for a non-zero complex value, carrying the inverse unit. */
+function reciprocalOf(
+  value: Readonly<Extract<ComputedValue, { kind: "complex" }>>,
+): Extract<ComputedValue, { kind: "complex" }> {
+  return {
+    kind: "complex",
+    ...divideComplexComponents({ re: 1, im: 0 }, value),
+    unit: combineUnitsForDivide({}, value.unit),
+  };
+}
+
+/** Whether a complex value is finite and not zero, which is what dividing by it needs. A positive power that has overflowed or underflowed to zero is neither, and cannot be inverted. */
+function isFiniteAndNonZero(
+  value: Readonly<Extract<ComputedValue, { kind: "complex" }>>,
+): boolean {
+  const larger = Math.max(Math.abs(value.re), Math.abs(value.im));
+
+  return Number.isFinite(larger) && larger > 0;
+}
+
+/** `power` with a complex operand on either side, defined for exactly one case: a real integer exponent, evaluated as the repeated multiplication that integer exponentiation *is*, grouped by squaring so the work grows with the logarithm of the exponent rather than the exponent itself, at the cost of a result that is typically a few times less accurate than a plain multiplication loop's (see the "Complex values" section of README.md for why an arbitrary complex exponent stays out of scope). */
 function applyComplexPower(
   base: Readonly<Extract<ComputedValue, { kind: "number" | "complex" }>>,
   exponent: Readonly<Extract<ComputedValue, { kind: "number" | "complex" }>>,
@@ -635,20 +648,44 @@ function applyComplexPower(
     unit: {},
   };
   const complexBase = toComplexValue(base);
-  let repeatedProduct = complexUnit;
-  for (let applied = 0; applied < Math.abs(exponent.value); applied += 1) {
-    repeatedProduct = multiplyComplexValues(repeatedProduct, complexBase);
+  if (exponent.value >= 0) {
+    return definite(
+      powerByRepeatedSquaring({
+        base: complexBase,
+        exponent: exponent.value,
+        identity: complexUnit,
+        multiply: multiplyComplexValues,
+      }),
+    );
   }
-  if (exponent.value >= 0) return definite(repeatedProduct);
+  // A negative exponent is the reciprocal of the positive power, and that is how it is computed whenever the positive power is finite and not zero: one division after the powering, which loses the least precision. Otherwise the positive power overflowed or underflowed, and the reciprocal is taken first and raised to the positive exponent instead, which still gives a representable result when the positive power is not (`(1e160 + 1e160i)^-2` is a subnormal, whose positive power overflows). A zero base has no reciprocal either way, so it is a division by zero.
+  if (complexBase.re === 0 && complexBase.im === 0) {
+    return indeterminate("domain-error", "division by zero");
+  }
+  const positivePower = powerByRepeatedSquaring({
+    base: complexBase,
+    exponent: -exponent.value,
+    identity: complexUnit,
+    multiply: multiplyComplexValues,
+  });
+  if (isFiniteAndNonZero(positivePower)) {
+    return definite(reciprocalOf(positivePower));
+  }
 
-  // A negative exponent is the reciprocal of the positive one by definition, so it reuses the division above rather than re-deriving it -- which also means a zero base inherits that operator's own division-by-zero domain-error instead of needing its own check.
-  return applyArithmeticOnComplex("divide", complexUnit, repeatedProduct);
+  return definite(
+    powerByRepeatedSquaring({
+      base: reciprocalOf(complexBase),
+      exponent: -exponent.value,
+      identity: complexUnit,
+      multiply: multiplyComplexValues,
+    }),
+  );
 }
 
 /**
  * Dispatches `arithmetic` by operand kind. The three cross-kind temporal combinations this design defines (`instant - instant`, `instant + duration`, `duration + instant`) are checked explicitly first, in that order, against the exact operator each requires; any other combination touching an `instant` is `wrong-type` (see "Temporal values" in README.md -- e.g. adding two instants, or subtracting a `duration` from an `instant`, are deliberately *not* defined). Same-kind `duration`/`duration` combinations are delegated to `applyArithmeticOnDurations`; a `duration` paired with anything other than an `instant` or another `duration` is `wrong-type`. Everything remaining requires two `number` operands.
  */
-export function applyArithmetic(
+function applyArithmeticByKind(
   op: ArithmeticOperator,
   left: ComputedValue,
   right: ComputedValue,
@@ -726,6 +763,39 @@ export function applyArithmetic(
   return applyArithmeticOnNumbers(op, left, right);
 }
 
+/** Whether a computed value's numeric components are all finite. Only the kinds an arithmetic operator can produce carry one; any other kind has nothing to overflow. */
+function hasFiniteMagnitude(value: ComputedValue): boolean {
+  switch (value.kind) {
+    case "number":
+    case "duration":
+      return Number.isFinite(value.value);
+    case "complex":
+      return Number.isFinite(value.re) && Number.isFinite(value.im);
+    case "text":
+    case "boolean":
+    case "instant":
+      return true;
+    default:
+      throw new Error("unreachable computed-value kind");
+  }
+}
+
+/**
+ * `arithmetic`'s entry point: the result of `applyArithmeticByKind`, except that a definite result whose magnitude overflowed to `Infinity` (or became `NaN`) is a `domain-error` instead. A value of that kind is outside what `ComputedValue` can serialise (JSON writes it as `null`), and an operation pushed outside its valid domain is exactly the category division by zero already uses. Checking once here, after every operator and operand kind has produced its result, is what keeps each of them honest without repeating the check per operator.
+ */
+export function applyArithmetic(
+  op: ArithmeticOperator,
+  left: ComputedValue,
+  right: ComputedValue,
+): Evaluation<ComputedValue> {
+  const result = applyArithmeticByKind(op, left, right);
+  if (result.status === "definite" && !hasFiniteMagnitude(result.value)) {
+    return indeterminate("domain-error", "result is not a finite number");
+  }
+
+  return result;
+}
+
 /** `reference`'s optional expected-unit check: when `expectedUnit` is declared (from `node.unit`), the resolved value must be numeric (`number` or `complex`) and its own unit must match. Returns the `wrong-type` `Evaluation` to return immediately if the check fails, or `undefined` if the reference may resolve as-is. */
 export function checkReferenceUnit(
   expectedUnit: Unit | undefined,
@@ -765,6 +835,9 @@ export function invokeRegisteredFunction(
   const outcome = fn(args);
   if ("domainError" in outcome) {
     return indeterminate("domain-error", outcome.domainError);
+  }
+  if ("wrongType" in outcome) {
+    return indeterminate("wrong-type", outcome.wrongType);
   }
 
   return definite(outcome);

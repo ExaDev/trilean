@@ -2,6 +2,9 @@
   "name": "trilean",
   "description": "Three-valued predicate and expression evaluation trees, stored as JSON and evaluated against injected resolvers, for domain logic — business rules, eligibility checks, formulas, search filters, and more — that needs to be data instead of code.",
   "version": "1.7.12",
+  "bin": {
+    "trilean": "./dist-cli/trilean.mjs"
+  },
   "bugs": {
     "url": "https://github.com/ExaDev/trilean/issues"
   },
@@ -53,6 +56,7 @@
   },
   "files": [
     "dist",
+    "dist-cli",
     "schemas"
   ],
   "homepage": "https://github.com/ExaDev/trilean/tree/main/packages/trilean",

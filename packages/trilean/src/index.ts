@@ -27,8 +27,19 @@ export type {
   TreeResolution,
 } from "./resolvers";
 
-export type { FunctionRegistry } from "./functions";
+export type { FunctionFailure, FunctionRegistry } from "./functions";
 export { emptyFunctionRegistry } from "./functions";
+export { builtinFunctions } from "./builtin-functions";
+
+export type { InputsParseResult } from "./input-resolvers";
+export { createInputResolvers, parseInputs } from "./input-resolvers";
+
+export type {
+  DocumentEvaluation,
+  EvaluateDocumentOptions,
+  TreeKind,
+} from "./evaluate-document";
+export { evaluateDocument } from "./evaluate-document";
 
 export {
   createEvaluator,

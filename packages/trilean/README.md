@@ -167,14 +167,32 @@ const matching = orders.filter((_, i) => results[i]?.status === "definite" && re
 
 See [`and`/`or`](#not-and-or), [`compare`](#compare), [`textCompare`](#textcompare), and [`memberOf`](#memberof) for the full node-kind reference.
 
+## Command line
+
+The package ships a `trilean` command that evaluates a tree stored as JSON, for a shell script or an agent skill that holds its formulae as data and has no host program to embed the library in:
+
+```sh
+npx trilean evaluate formula.json --inputs inputs.json
+```
+
+`formula.json` is a predicate tree or an expression tree (`-` reads it from standard input; the tree and `--inputs` cannot both be `-`). The root's `kind` says which; only a root `treeReference`, valid in both, needs `--as predicate` or `--as expression`. `inputs.json` is an object of named values, one per `reference` key: a plain number, string or boolean, or a complete computed value when the input needs a unit, for example `{ "kind": "number", "value": 2, "unit": { "m": 1 } }`. Units are dimensional-exponent maps and are never converted, exactly as in the library. Numbers must be finite (`1e999` parses to infinity and is refused), a field a computed value does not define is dropped, and a repeated key in the JSON, like a repeated `--inputs` flag, takes the last value.
+
+The result is printed as JSON in the `Evaluation` shape, a `definite` value or an `indeterminate` reason (see [The evaluation model](#the-evaluation-model)). The exit status separates the three outcomes a script cares about: `0` for a definite result, `1` for an indeterminate one, `2` when no result was printed (bad usage, an unreadable file, JSON that is malformed, a tree or an input that fails validation, a tree that folds or quantifies over a collection, which the command has none to supply, or a result JSON cannot carry, which the built-in registry never produces). Everything that is not a result goes to standard error, the usage text included unless `--help` asked for it, and problems with the tree or an input are one `path: message` line each. A reader of standard output that closes early (`| true`) does not change the exit status or print an error.
+
+`call` nodes resolve against `builtinFunctions`, which the library also exports (frozen, so changing the export cannot change what the command resolves): `minimum` and `maximum` (one or more numbers sharing a unit), `absoluteValue`, `round` (halves away from zero, working on the decimal number as written, so `round(1.005, 2)` is `1.01`, with an optional count of decimal places, and a value too large to have a digit at that precision returned unchanged), `squareRoot`, `exponential`, and `logarithm` (natural, or to an optional base, exact for powers of 10 and 2). They take real numbers only: a complex value is refused by every one of them, `absoluteValue` included. They follow the unit rules above: `minimum`, `maximum`, `absoluteValue` and `round` keep the argument's unit, `squareRoot` halves each dimension's exponent and refuses an odd one, and `exponential` and `logarithm` accept dimensionless numbers only. An argument a function cannot accept (the wrong kind or count, or mismatched units, as in `minimum(1 m, 2)`) is `wrong-type`; an argument of the right kind outside the function's domain, or a result that is not a finite number, is `domain-error`; and any other name is `wrong-type`.
+
+Inputs are scalar, so the command has no collection, table, delegate or tree store to hand a `fold`, `some`, `every`, `lookup`, `delegate` or `treeReference` node. A `lookup` is `not-found`, a `delegate` or `treeReference` is `wrong-type`, and a tree that folds or quantifies over a collection exits `2` rather than treating the collection as empty. That holds even when another operand would settle the answer: `and(false, some(...))` still exits `2`, because the synchronous evaluator asks for the collection before it combines the two. For those trees, embed the library and supply the [resolvers](#resolvers) yourself.
+
+The same evaluation is available in code as `evaluateDocument`, with `parseInputs` and `createInputResolvers` for the named-input resolvers it uses.
+
 ## Build, test, and lint
 
 ```sh
 pnpm install
-pnpm build          # tsdown -> dist/, then generates schemas/trilean.schema.json
+pnpm build          # tsdown -> dist/ and the trilean command in dist-cli/, then generates schemas/trilean.schema.json
 pnpm test           # unit suite, against src/
 pnpm test:integration # multi-kind composition, schema-pipeline, and function-registry/delegate tests, against src/
-pnpm test:smoke     # builds first, then checks dist/ in both ESM and CJS plus the generated JSON Schema
+pnpm test:smoke     # builds first, then checks dist/ in both ESM and CJS, the generated JSON Schema and the built trilean command
 pnpm test:workers   # runs the evaluator inside a real Cloudflare Workers isolate
 pnpm lint
 pnpm typecheck
@@ -486,11 +504,11 @@ A reference to a single external value, identified by an opaque `key` whose mean
 
 ### `arithmetic`, `negate`
 
-Binary arithmetic (`add`/`subtract`/`multiply`/`divide`/`power`/`modulo`) and unary negation, each over `number` computed values by default, with the temporal exceptions listed under [Temporal values](#temporal-values) and the complex ones under [Complex values](#complex-values) below. `negate` is an explicit node — never sugar for "zero minus the value" — because it also applies to `duration` values (negating a duration reverses its direction) where "zero minus" has no natural literal-zero counterpart; over a `complex` value it flips both components. Division by zero, or any operator given an operand outside its mathematical domain, is `domain-error`; a non-numeric, non-temporal operand where a number was required is `wrong-type`; any operand that is itself indeterminate makes the whole node indeterminate, with no rescuing value on the other side (see [Three-valued propagation rules](#three-valued-propagation-rules)).
+Binary arithmetic (`add`/`subtract`/`multiply`/`divide`/`power`/`modulo`) and unary negation, each over `number` computed values by default, with the temporal exceptions listed under [Temporal values](#temporal-values) and the complex ones under [Complex values](#complex-values) below. `negate` is an explicit node — never sugar for "zero minus the value" — because it also applies to `duration` values (negating a duration reverses its direction) where "zero minus" has no natural literal-zero counterpart; over a `complex` value it flips both components. Division by zero, any operator given an operand outside its mathematical domain, or a result too large to represent (an overflow to infinity, which JSON cannot carry), is `domain-error`; a non-numeric, non-temporal operand where a number was required is `wrong-type`; any operand that is itself indeterminate makes the whole node indeterminate, with no rescuing value on the other side (see [Three-valued propagation rules](#three-valued-propagation-rules)).
 
 ### `call`
 
-A named function applied to an ordered list of `ExpressionNode` arguments. The set of named functions is intentionally open-ended and resolved through a function registry supplied at evaluator construction time — `minimum`, `maximum`, `absoluteValue`, `round`, `squareRoot`, and `logarithm` are starting examples, not an exhaustive list; new functions are added to the registry as concrete need arises. Calling an unregistered function name is `wrong-type` ("no function registered under this name"); calling a registered function with an argument outside its domain (e.g. `squareRoot` given a negative number) is `domain-error`.
+A named function applied to an ordered list of `ExpressionNode` arguments. The set of named functions is intentionally open-ended and resolved through a function registry supplied at evaluator construction time — `minimum`, `maximum`, `absoluteValue`, `round`, `squareRoot`, `exponential`, and `logarithm` are starting examples, not an exhaustive list (the ones the [command line](#command-line) offers are exported as `builtinFunctions`); new functions are added to the registry as concrete need arises. Calling an unregistered function name is `wrong-type` ("no function registered under this name"); calling a registered function with an argument outside its domain (e.g. `squareRoot` given a negative number) is `domain-error`.
 
 ### Units
 
@@ -506,7 +524,7 @@ A named function applied to an ordered list of `ExpressionNode` arguments. The s
 - `instant − instant → duration`
 - `instant + duration → instant` (and `duration + instant → instant`)
 
-Any other arithmetic combination touching an `instant` or `duration` (adding two instants, multiplying a duration by an instant, comparing an instant against a plain number, and so on) is `wrong-type`. A reference implementation normalises `duration` values to a single base unit (milliseconds) internally before combining two durations of different `DurationUnit`s, then reports the result in whichever unit the node's own context calls for.
+Any other arithmetic combination touching an `instant` or `duration` (adding two instants, multiplying a duration by an instant, comparing an instant against a plain number, and so on) is `wrong-type`. A reference implementation normalises `duration` values to a single base unit (milliseconds) internally before combining two durations of different `DurationUnit`s, then reports the result in whichever unit the node's own context calls for. Comparing two durations (`compare`, `memberOf`) is exact for any two finite durations in any units, and does not convert to milliseconds: it divides the finer one down into the coarser unit, which cannot overflow, and when the two rounded values come out equal it settles the tie exactly from the numbers' binary expansions.
 
 ### Complex values
 
@@ -525,8 +543,8 @@ The magnitude-and-phase view stays reachable through four exported conversion he
 **Arithmetic.**
 
 - `add`/`subtract` are component-wise, requiring **identical** dimensional-exponent maps exactly as real numbers do (see [Units](#units)).
-- `multiply`/`divide` are real complex multiplication and division — `(a + bi)(c + di) = (ac − bd) + (ad + bc)i`, and the corresponding quotient — never component-wise. Units combine by the same dimensional analysis real numbers use. A zero divisor means both components zero; a divisor with only a zero real part divides perfectly well.
-- `power` is defined for a **real integer exponent** and evaluated as the repeated multiplication that integer exponentiation is, with a negative exponent the reciprocal of the positive one. Like a real `power`, it requires dimensionless operands. An arbitrary complex exponent is a genuinely bigger question — it needs the complex logarithm, which is multivalued, so it needs a branch-cut convention this design has not chosen — and is deliberately out of scope for now: it is `wrong-type`, as is a non-integer real exponent, on the same reading of that code used throughout ("an answer exists, but this operator does not accept this operand" — compare `power`'s existing dimensionless-operands requirement, also `wrong-type`).
+- `multiply`/`divide` are real complex multiplication and division — `(a + bi)(c + di) = (ac − bd) + (ad + bc)i`, and the corresponding quotient — never component-wise. Both operands are first multiplied by one power of two, which leaves the quotient unchanged and brings the divisor's larger component to about a quarter, so a dividend and divisor anywhere in the range of a double divide correctly. A quotient too large for a double is `domain-error`, and one below the smallest subnormal is zero. Units combine by the same dimensional analysis real numbers use. A zero divisor means both components zero; a divisor with only a zero real part divides perfectly well.
+- `power` is defined for a **real integer exponent** and evaluated as the repeated multiplication that integer exponentiation is, grouped by squaring so the work grows with the logarithm of the exponent, at the cost of a result that is typically a few times less accurate than a plain multiplication loop's (squaring compounds a rounding error rather than letting it average out). A negative exponent is the reciprocal of the positive power, except where that power overflows or underflows, when the reciprocal is raised instead so a representable result is not lost. Like a real `power`, it requires dimensionless operands. An arbitrary complex exponent is a genuinely bigger question — it needs the complex logarithm, which is multivalued, so it needs a branch-cut convention this design has not chosen — and is deliberately out of scope for now: it is `wrong-type`, as is a non-integer real exponent, on the same reading of that code used throughout ("an answer exists, but this operator does not accept this operand" — compare `power`'s existing dimensionless-operands requirement, also `wrong-type`).
 - `modulo` is `domain-error`, not `wrong-type`: a remainder needs a canonical notion of how many whole divisors fit, and the complex plane has no ordering to supply one. There is no answer to accept, which is the same category as division by zero.
 
 **A real operand is promoted, never rejected.** Mixing a `number` with a `complex` in one `arithmetic` node works: every real number *is* a complex number with a zero imaginary part, so the promotion is exact, total, and canonical — unlike the temporal cross-kind combinations above, which had to be enumerated one by one precisely because no such embedding exists between an `instant` and a `duration`. Scaling a complex value by a real one, or offsetting it by a real constant, is the common case, and forcing every real literal in such a formula to be rewritten as a complex one would defeat the point. The result is `complex` whenever either operand is, even when the imaginary part comes out zero: a node's result kind follows its operand kinds, never the values that happen to flow through it.
@@ -540,7 +558,7 @@ const functions: FunctionRegistry = {
   magnitude: (args) =>
     args[0]?.kind === "complex"
       ? complexMagnitude(args[0])
-      : { domainError: "expected a complex argument" },
+      : { wrongType: "expected a complex argument" },
 };
 ```
 
@@ -794,8 +812,10 @@ Both are exported directly, bound to an empty function registry — under them, 
 ```ts
 type FunctionRegistry = Record<
   string,
-  (args: readonly ComputedValue[]) => ComputedValue | { domainError: string }
+  (args: readonly ComputedValue[]) => ComputedValue | FunctionFailure
 >;
+
+type FunctionFailure = { domainError: string } | { wrongType: string };
 
 function createEvaluator(options: { functions?: FunctionRegistry }): {
   evaluatePredicate: (node: PredicateNode, context: EvaluationContext, resolvers: Resolvers) => Promise<Evaluation<boolean>>;
@@ -803,14 +823,14 @@ function createEvaluator(options: { functions?: FunctionRegistry }): {
 };
 ```
 
-A registered function signals an argument outside its domain by *returning* `{ domainError: message }` rather than throwing, which is what keeps `call` inside the same three-outcome model as every other node kind (see [The evaluation model](#the-evaluation-model)); only the registry's own keys count as registered names, so a tree naming an inherited `Object.prototype` member is `wrong-type` like any other unregistered name.
+A registered function signals a failure by *returning* a `FunctionFailure` rather than throwing, which is what keeps `call` inside the same three-outcome model as every other node kind (see [The evaluation model](#the-evaluation-model)): `{ domainError: message }` for an argument of an acceptable kind outside the function's domain (`domain-error`), `{ wrongType: message }` for an argument the function cannot accept at all, such as the wrong kind or units that do not match (`wrong-type`). Only the registry's own keys count as registered names, so a tree naming an inherited `Object.prototype` member is `wrong-type` like any other unregistered name.
 
 ```ts
 const { evaluateValue } = createEvaluator({
   functions: {
     squareRoot: (args) => {
       const [arg] = args;
-      if (arg?.kind !== "number") return { domainError: "squareRoot requires one number argument" };
+      if (arg?.kind !== "number") return { wrongType: "squareRoot requires one number argument" };
       if (arg.value < 0) return { domainError: "squareRoot of a negative number is not a real number" };
       return { kind: "number", value: Math.sqrt(arg.value) };
     },
@@ -848,9 +868,9 @@ How each reason category can arise, per node kind. "Propagates" means: an indete
 | `some` / `every` | an item's `filter` or `item` sub-node reports not-found, and it is not absorbed by an already-decided item | as `not-found` | as `not-found` |
 | literals (`numberLiteral`, `textLiteral`, `instantLiteral`, `durationLiteral`, `complexLiteral`) | never | never | never |
 | `reference` | resolver reports absence | resolver's value doesn't match an expected `unit`, or is used where an incompatible kind is required upstream | never directly |
-| `arithmetic` | either operand not found | operand not numeric (or temporal-kind mismatch — see [Temporal values](#temporal-values)), or unit mismatch on add/subtract, or a `power` exponent that is not a real integer over a `complex` operand (see [Complex values](#complex-values)) | zero divisor, `modulo` over a `complex` operand, or any other documented domain violation for the operator |
+| `arithmetic` | either operand not found | operand not numeric (or temporal-kind mismatch — see [Temporal values](#temporal-values)), or unit mismatch on add/subtract, or a `power` exponent that is not a real integer over a `complex` operand (see [Complex values](#complex-values)) | zero divisor, `modulo` over a `complex` operand, a result that overflows the finite range, or any other documented domain violation for the operator |
 | `negate` | operand not found | operand not `number`/`duration`/`complex` | never directly |
-| `call` | any argument not found | unregistered function name, or an argument of the wrong kind for that function | argument outside the function's valid domain (e.g. negative input to `squareRoot`) |
+| `call` | any argument not found | unregistered function name, or an argument the function cannot accept (the wrong kind, or mismatched units) | argument outside the function's valid domain (e.g. negative input to `squareRoot`) |
 | `lookup` | any key not found, or resolver reports no match | a key expression resolves to the wrong kind for that table | never directly |
 | `conditional` | `"first"`: an unmatched guard's own evaluation is `not-found`, before any earlier guard matched.<br>`"unique"`: any case's `when` is `not-found`, unless 2+ cases already definitely matched (see `domain-error`, which then takes priority).<br>Both: also the chosen branch's (`then`/`fallback`) own result if it is `not-found`. | Same pattern as `not-found`, substituting `wrong-type` throughout (guard evaluation and chosen branch alike). | `"unique"` only: 2+ cases are definitely `true` — see [`conditional`](#conditional)'s absorption order.<br>Both: same pattern as `not-found`, substituting `domain-error` (guard evaluation and chosen branch alike). |
 | `fold` | any participating item's `filter`, `item`, or `combine` evaluation is `not-found`; or a `reduce`'s `initial` is `not-found` | any participating item's `filter`, `item`, or `combine` evaluation is `wrong-type`; or a `reduce`'s `initial` is `wrong-type` | empty (post-filter) collection with `max`/`min` (no first item to seed from); or any participating item's `item`/`combine` evaluation is `domain-error`; or a `reduce`'s `initial` is `domain-error` |

@@ -199,7 +199,7 @@ function findUnpushableExpression(
         kind: node.kind,
         path,
         reason:
-          "trilean compares durations by normalising both operands to milliseconds, which has no column-level equivalent to normalise against",
+          "trilean compares two durations in whichever unit each carries, and a column holds no unit to carry",
       };
     case "complexLiteral":
       return { kind: node.kind, path, reason: divergence.complexNumbers };

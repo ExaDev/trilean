@@ -1,4 +1,4 @@
-import { describe, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import { evaluateValue } from "./evaluator-factory";
 import {
   expectDefinite,
@@ -132,6 +132,101 @@ describe("arithmetic on complex values", () => {
     expectDefinite(result, { kind: "complex", re: 0, im: -2, unit: {} });
   });
 
+  describe("divide at extreme magnitudes", () => {
+    const huge = 1e200;
+    const tiny = 1e-200;
+    const quotientRe = 1.6;
+    const quotientIm = -1.2;
+    const precisionDigits = 12;
+    const quotientDigits = 14;
+
+    async function divide(
+      left: Readonly<{ re: number; im: number }>,
+      right: Readonly<{ re: number; im: number }>,
+    ) {
+      return evaluateValue(
+        {
+          kind: "arithmetic",
+          op: "divide",
+          left: { kind: "complexLiteral", ...left },
+          right: { kind: "complexLiteral", ...right },
+        },
+        undefined,
+        resolvers,
+      );
+    }
+
+    it("divides a large value by itself to exactly one, where |divisor|^2 would overflow", async () => {
+      expectDefinite(
+        await divide({ re: huge, im: huge }, { re: huge, im: huge }),
+        { kind: "complex", re: 1, im: 0, unit: {} },
+      );
+    });
+
+    it("divides by a tiny value without mistaking it for zero, where |divisor|^2 would underflow", async () => {
+      expectDefinite(await divide({ re: 1, im: 1 }, { re: tiny, im: tiny }), {
+        kind: "complex",
+        re: huge,
+        im: 0,
+        unit: {},
+      });
+    });
+
+    it("divides whichever component of the divisor is larger", async () => {
+      // (4 + 2i) / (1 + 2i) = ((4 + 4) + (2 - 8)i) / 5 = 1.6 - 1.2i; the imaginary part leads, so the other branch of the algorithm runs.
+      const result = await divide({ re: 4, im: 2 }, { re: 1, im: 2 });
+
+      expect(result).toMatchObject({ status: "definite" });
+      const value = result.status === "definite" ? result.value : undefined;
+      expect(value).toMatchObject({ kind: "complex" });
+      if (value?.kind === "complex") {
+        expect(value.re).toBeCloseTo(quotientRe, precisionDigits);
+        expect(value.im).toBeCloseTo(quotientIm, precisionDigits);
+      }
+    });
+
+    it("divides values near the top of the range by themselves to one", async () => {
+      expectDefinite(
+        await divide({ re: 1e308, im: 1e308 }, { re: 1e308, im: 1e308 }),
+        { kind: "complex", re: 1, im: 0, unit: {} },
+      );
+    });
+
+    it("gives a representable quotient there, not a zero that compares equal to zero", async () => {
+      const dividend = {
+        re: -6.562357840001232e306,
+        im: 1.1562475168118175e307,
+      };
+      const divisor = {
+        re: -4.145533667044553e307,
+        im: 1.7287855058139144e308,
+      };
+      const quotient = await divide(dividend, divisor);
+      const expected = { re: 0.07185287237270656, im: 0.02072942428658858 };
+
+      expect(quotient.status).toBe("definite");
+      const value = quotient.status === "definite" ? quotient.value : undefined;
+      if (value?.kind !== "complex")
+        throw new Error("expected a complex result");
+      expect(value.re).toBeCloseTo(expected.re, quotientDigits);
+      expect(value.im).toBeCloseTo(expected.im, quotientDigits);
+    });
+
+    it("still reports an exactly zero divisor as a division by zero", async () => {
+      const result = await divide({ re: 1, im: 1 }, { re: 0, im: 0 });
+
+      expectIndeterminate(result, "domain-error");
+      expect(result).toMatchObject({ reason: { message: "division by zero" } });
+    });
+
+    it("still reports a quotient too large to represent as a domain-error", async () => {
+      expectIndeterminate(
+        await divide({ re: huge, im: huge }, { re: tiny, im: tiny }),
+        "domain-error",
+      );
+    });
+  });
+
   it("modulo is domain-error -- there is no remainder on the complex plane", async () => {
     const result = await evaluateValue(
       {
@@ -148,7 +243,7 @@ describe("arithmetic on complex values", () => {
 });
 
 describe("complex power -- a real integer exponent only", () => {
-  it("raises to a positive integer exponent by repeated multiplication", async () => {
+  it("raises to a positive integer exponent", async () => {
     // (1 + i)^4 = ((1 + i)^2)^2 = (2i)^2 = -4.
     const result = await evaluateValue(
       {
@@ -337,5 +432,193 @@ describe("arithmetic mixing real and complex operands", () => {
       resolvers,
     );
     expectIndeterminate(result, "wrong-type");
+  });
+});
+
+describe("complex power by repeated squaring", () => {
+  interface Complex {
+    re: number;
+    im: number;
+  }
+
+  async function power({
+    base,
+    exponent,
+  }: Readonly<{
+    base: Complex;
+    exponent: number;
+  }>) {
+    return evaluateValue(
+      {
+        kind: "arithmetic",
+        op: "power",
+        left: { kind: "complexLiteral", ...base },
+        right: { kind: "numberLiteral", value: exponent },
+      },
+      undefined,
+      resolvers,
+    );
+  }
+
+  function complexResult(result: Awaited<ReturnType<typeof power>>): Complex {
+    if (result.status !== "definite" || result.value.kind !== "complex") {
+      throw new Error("expected a definite complex result");
+    }
+
+    return result.value;
+  }
+
+  /** The loop the implementation replaced: one multiplication per unit of the exponent. */
+  function repeatedProduct(base: Readonly<Complex>, exponent: number): Complex {
+    let re = 1;
+    let im = 0;
+    for (let applied = 0; applied < exponent; applied += 1) {
+      [re, im] = [re * base.re - im * base.im, re * base.im + im * base.re];
+    }
+
+    return { re, im };
+  }
+
+  /** Rows are objects so each literal is an object-literal property value, which `no-magic-numbers` exempts. */
+  const bases: Complex[] = [
+    { re: 1, im: 1 },
+    { re: 0.5, im: -1.5 },
+    { re: -2, im: 0.25 },
+  ];
+  const exponents = [
+    { exponent: 0 },
+    { exponent: 1 },
+    { exponent: 2 },
+    { exponent: 3 },
+    { exponent: 5 },
+    { exponent: 8 },
+    { exponent: 13 },
+  ];
+  const cases = bases.flatMap((base) =>
+    exponents.map(({ exponent }) => ({ base, exponent })),
+  );
+  const precisionDigits = 9;
+  const huge = 1e15;
+  const unit = { re: 1, im: 0 };
+
+  it.each(cases)(
+    "matches the repeated product for $base to the power $exponent",
+    async ({ base, exponent }) => {
+      const value = complexResult(await power({ base, exponent }));
+      const expected = repeatedProduct(base, exponent);
+
+      expect(value.re).toBeCloseTo(expected.re, precisionDigits);
+      expect(value.im).toBeCloseTo(expected.im, precisionDigits);
+    },
+  );
+
+  it.each(cases)(
+    "a negative exponent inverts the positive power for $base to the power -$exponent",
+    async ({ base, exponent }) => {
+      const value = complexResult(await power({ base, exponent: -exponent }));
+      const product = repeatedProduct(base, exponent);
+
+      // The inverse times the power is one.
+      expect(value.re * product.re - value.im * product.im).toBeCloseTo(
+        1,
+        precisionDigits,
+      );
+      expect(value.re * product.im + value.im * product.re).toBeCloseTo(
+        0,
+        precisionDigits,
+      );
+    },
+  );
+
+  it.each(cases)(
+    "a negative exponent is exactly the reciprocal of the positive power when that is representable, for $base to the power -$exponent",
+    async ({ base, exponent }) => {
+      if (exponent === 0) return;
+      const inverted = await power({ base, exponent: -exponent });
+      const reciprocal = await evaluateValue(
+        {
+          kind: "arithmetic",
+          op: "divide",
+          left: { kind: "complexLiteral", ...unit },
+          right: {
+            kind: "arithmetic",
+            op: "power",
+            left: { kind: "complexLiteral", ...base },
+            right: { kind: "numberLiteral", value: exponent },
+          },
+        },
+        undefined,
+        resolvers,
+      );
+
+      expect(inverted).toEqual(reciprocal);
+    },
+  );
+
+  it("returns for an exponent a multiplication loop could never finish", async () => {
+    expectDefinite(await power({ base: unit, exponent: huge }), {
+      kind: "complex",
+      ...unit,
+      unit: {},
+    });
+    expectDefinite(await power({ base: unit, exponent: -huge }), {
+      kind: "complex",
+      ...unit,
+      unit: {},
+    });
+  });
+
+  it("underflows a shrinking base to zero rather than looping", async () => {
+    expectDefinite(await power({ base: { re: 0.5, im: 0 }, exponent: huge }), {
+      kind: "complex",
+      re: 0,
+      im: 0,
+      unit: {},
+    });
+  });
+
+  it("reports a power that overflows as a domain-error, large exponent or not", async () => {
+    expectIndeterminate(
+      await power({ base: { re: 2, im: 0 }, exponent: huge }),
+      "domain-error",
+    );
+    expectIndeterminate(
+      await power({ base: { re: 1e200, im: 0 }, exponent: 2 }),
+      "domain-error",
+    );
+  });
+
+  it("inverts a base near the top of the range without losing the result to zero", async () => {
+    const value = complexResult(
+      await power({ base: { re: 1e308, im: 1e308 }, exponent: -1 }),
+    );
+
+    expect(value.re).toBeGreaterThan(0);
+    expect(value.im).toBeLessThan(0);
+    expect(value.re / -value.im).toBeCloseTo(1, precisionDigits);
+  });
+
+  it("gives exactly the value of the reciprocal for a base whose positive power overflows", async () => {
+    // (1e160 + 1e160i)^2 is 2e320i, which overflows; the result, -5e-321i, does not.
+    expectDefinite(
+      await power({ base: { re: 1e160, im: 1e160 }, exponent: -2 }),
+      { kind: "complex", re: 0, im: -5e-321, unit: {} },
+    );
+  });
+
+  it("keeps a negative power of a large base finite where its positive power would overflow", async () => {
+    // (1e160)^-2 is 1e-320, a subnormal; (1e160)^2 overflows, so inverting the positive power would lose it.
+    const value = complexResult(
+      await power({ base: { re: 1e160, im: 0 }, exponent: -2 }),
+    );
+
+    expect(value.re).toBeGreaterThan(0);
+  });
+
+  it("still reports a zero base with a negative exponent as a division by zero", async () => {
+    expectIndeterminate(
+      await power({ base: { re: 0, im: 0 }, exponent: -huge }),
+      "domain-error",
+    );
   });
 });

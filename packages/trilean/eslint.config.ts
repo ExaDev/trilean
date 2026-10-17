@@ -20,7 +20,14 @@ const runtimeSrcExemptions = ["src/**/*.test.ts", "src/test-support/**"];
 export default defineConfig(
   ...exadevConfig(),
   {
-    ignores: ["dist", "coverage", "node_modules", ".turbo", "schemas"],
+    ignores: [
+      "dist",
+      "dist-cli",
+      "coverage",
+      "node_modules",
+      ".turbo",
+      "schemas",
+    ],
   },
   {
     languageOptions: {
