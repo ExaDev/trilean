@@ -4,7 +4,7 @@ import type { ComputedValue } from "./computed-value";
 export type FunctionFailure = { domainError: string } | { wrongType: string };
 
 /**
- * Named functions available to a `call` expression node, supplied once at evaluator construction time (see `createEvaluator` in evaluator-factory.ts) rather than per evaluation call. A function reports a failure by returning a `FunctionFailure` rather than throwing -- this keeps `call` inside the same three-outcome model as every other node kind.
+ * Named functions available to a `call` expression node, supplied once at evaluator construction time (see `createEvaluator` in evaluator-factory.ts) rather than per evaluation call. A function reports a failure by returning a `FunctionFailure` rather than throwing, which keeps `call` inside the same three-outcome model as every other node kind.
  */
 export type FunctionRegistry = Record<
   string,
