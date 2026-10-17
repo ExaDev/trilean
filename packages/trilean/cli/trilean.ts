@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import packageJson from "../package.json" with { type: "json" };
 import { run } from "./run";
 
-// A reader that closes early (`| head -c0`) makes the next write fail with EPIPE. The result was computed either way, so that error is dropped and the exit status the command settled on stands; any other stdout error is still thrown.
+// A reader that closes early (`| true`) makes the next write fail with EPIPE. The result was computed either way, so that error is dropped and the exit status the command settled on stands; any other stdout error is still thrown.
 process.stdout.on("error", (error: NodeJS.ErrnoException) => {
   if (error.code !== "EPIPE") throw error;
 });

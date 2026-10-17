@@ -112,6 +112,9 @@ describe("trilean evaluate", () => {
     });
 
     expect(run(["evaluate", "t.json"], captured.io)).toBe(EXIT_REJECTED);
+    expect(captured.stderr()).toBe(
+      "(root): a treeReference is valid as a predicate and as an expression; pass --as predicate or --as expression\n",
+    );
     expect(run(["evaluate", "t.json", "--as", "predicate"], captured.io)).toBe(
       EXIT_INDETERMINATE,
     );
@@ -201,6 +204,32 @@ describe("trilean evaluate", () => {
     expect(run([], none.io)).toBe(EXIT_REJECTED);
     expect(none.stderr()).toMatch(/^Usage: trilean evaluate/);
     expect(none.stdout()).toBe("");
+  });
+
+  it("names standard input, not a dash, when it is not valid JSON", () => {
+    const captured = capture({ "-": "{" });
+
+    expect(run(["evaluate", "-"], captured.io)).toBe(EXIT_REJECTED);
+    expect(captured.stderr()).toMatch(/^standard input is not valid JSON: /);
+  });
+
+  it("names standard input, not a dash, when it cannot be read", () => {
+    const captured = capture({});
+
+    expect(run(["evaluate", "-"], captured.io)).toBe(EXIT_REJECTED);
+    expect(captured.stderr()).toMatch(/^cannot read standard input: /);
+  });
+
+  it("names standard input for inputs that are not valid JSON", () => {
+    const captured = capture({
+      "t.json": JSON.stringify({ kind: "numberLiteral", value: 1 }),
+      "-": "{",
+    });
+
+    expect(run(["evaluate", "t.json", "--inputs", "-"], captured.io)).toBe(
+      EXIT_REJECTED,
+    );
+    expect(captured.stderr()).toMatch(/^standard input is not valid JSON: /);
   });
 
   it("refuses to read both the tree and the inputs from standard input", () => {

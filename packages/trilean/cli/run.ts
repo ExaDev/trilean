@@ -11,6 +11,10 @@ export interface CliIo {
   version: string;
 }
 
+/** The command's wording for a root `treeReference` given without `--as`, in the same `path: message` form as the library's own issues. */
+const AMBIGUOUS_TREE_KIND =
+  "(root): a treeReference is valid as a predicate and as an expression; pass --as predicate or --as expression";
+
 /** The path that stands for standard input. */
 const STDIN = "-";
 
@@ -18,7 +22,7 @@ const STDIN = "-";
 export const EXIT_DEFINITE = 0;
 /** The command finished with an indeterminate result: the tree is well formed but its inputs or functions could not settle it. */
 export const EXIT_INDETERMINATE = 1;
-/** Nothing was evaluated: bad usage, an unreadable or malformed file, a tree that fails its schema, or an evaluation that could not run. */
+/** No result was printed: bad usage, an unreadable or malformed file, a tree that fails its schema, an evaluation that could not run, or a result JSON cannot carry. */
 export const EXIT_REJECTED = 2;
 
 const usage = `Usage: trilean evaluate <tree.json> [--inputs <inputs.json>] [--as predicate|expression]
@@ -32,10 +36,11 @@ Evaluates a trilean predicate or expression tree and prints the result as JSON.
   --as <kind>      predicate or expression; needed only when the root is a
                    treeReference, otherwise read from the root's kind
 
-Exit status: 0 for a definite result, 1 for an indeterminate one, 2 when nothing
-was evaluated: bad usage, an unreadable or invalid file, or a tree that folds or
-quantifies over a collection, which the command has none to supply. A lookup,
-delegate or treeReference it cannot resolve is an indeterminate result (1).
+Exit status: 0 for a definite result, 1 for an indeterminate one, 2 when no
+result was printed: bad usage, an unreadable or invalid file, a tree that folds
+or quantifies over a collection (the command has none to supply), or a result
+JSON cannot carry. A lookup, delegate or treeReference it cannot resolve is an
+indeterminate result (1).
 `;
 
 function isTreeKind(value: string): value is TreeKind {
@@ -46,13 +51,14 @@ function readJson(
   io: Readonly<CliIo>,
   path: string,
 ): { ok: true; value: unknown } | { ok: false; message: string } {
+  const name = path === STDIN ? "standard input" : path;
   let text: string;
   try {
     text = io.readText(path);
   } catch (error) {
     return {
       ok: false,
-      message: `cannot read ${path}: ${error instanceof Error ? error.message : String(error)}`,
+      message: `cannot read ${name}: ${error instanceof Error ? error.message : String(error)}`,
     };
   }
   try {
@@ -62,7 +68,7 @@ function readJson(
   } catch (error) {
     return {
       ok: false,
-      message: `${path} is not valid JSON: ${error instanceof Error ? error.message : String(error)}`,
+      message: `${name} is not valid JSON: ${error instanceof Error ? error.message : String(error)}`,
     };
   }
 }
@@ -128,7 +134,16 @@ export function run(args: readonly string[], io: Readonly<CliIo>): number {
       `evaluation could not run: ${error instanceof Error ? error.message : String(error)}`,
     ]);
   }
-  if (result.outcome === "rejected") return reject(io, result.issues);
+  if (result.outcome === "rejected") {
+    return reject(
+      io,
+      // The library names its `as` option; the command's flag is `--as`.
+      result.reason === "ambiguous-tree-kind"
+        ? [AMBIGUOUS_TREE_KIND]
+        : result.issues,
+    );
+  }
+  if (result.outcome === "unrepresentable") return reject(io, result.issues);
   io.writeStdout(`${JSON.stringify(result.evaluation, undefined, 2)}\n`);
 
   return result.evaluation.status === "definite"

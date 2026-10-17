@@ -25,7 +25,7 @@ describe("evaluateDocument's output check", () => {
     "rejects a definite result from %s that JSON would print as null",
     (fn) => {
       expect(evaluateDocument({ tree: call(fn) })).toEqual({
-        outcome: "rejected",
+        outcome: "unrepresentable",
         issues: ["(result): the value is not a finite number"],
       });
     },

@@ -115,6 +115,7 @@ describe("evaluateDocument", () => {
       }),
     ).toEqual({
       outcome: "rejected",
+      reason: "invalid",
       issues: [
         "right.value: Invalid input: expected string, received undefined",
       ],
@@ -134,8 +135,9 @@ describe("evaluateDocument", () => {
     const tree = { kind: "treeReference", key: "stored" };
     expect(evaluateDocument({ tree })).toEqual({
       outcome: "rejected",
+      reason: "ambiguous-tree-kind",
       issues: [
-        "(root): a treeReference is valid as a predicate and as an expression; pass --as predicate or --as expression",
+        '(root): a treeReference is valid as a predicate and as an expression; set `as` to "predicate" or "expression"',
       ],
     });
     expect(evaluateDocument({ tree, as: "predicate" })).toMatchObject({
@@ -158,6 +160,7 @@ describe("evaluateDocument", () => {
     expect(evaluateDocument({ tree: hypotenuse, inputs: { a: null } })).toEqual(
       {
         outcome: "rejected",
+        reason: "invalid",
         issues: [
           "inputs.a: expected a finite number, text, boolean or a complete computed value",
         ],
@@ -187,6 +190,7 @@ describe("evaluateDocument inputs that do not fit", () => {
       }),
     ).toEqual({
       outcome: "rejected",
+      reason: "invalid",
       issues: [
         "inputs.x: expected a finite number, text, boolean or a complete computed value",
       ],
