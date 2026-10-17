@@ -25,7 +25,8 @@ export const EXIT_INDETERMINATE = 1;
 /** No result was printed: bad usage, an unreadable or malformed file, a tree that fails its schema, an evaluation that could not run, or a result JSON cannot carry. */
 export const EXIT_REJECTED = 2;
 
-const usage = `Usage: trilean evaluate <tree.json> [--inputs <inputs.json>] [--as predicate|expression]
+const usage = `Usage: trilean evaluate <tree.json> [--inputs <inputs.json>]
+                      [--as predicate|expression] [--max-nodes <n>]
 
 Evaluates a trilean predicate or expression tree and prints the result as JSON.
 
@@ -34,15 +35,29 @@ Evaluates a trilean predicate or expression tree and prints the result as JSON.
                    number, string or boolean, or a complete computed value such
                    as {"kind":"number","value":2,"unit":{"m":1}} or a complex
                    one, {"kind":"complex","re":1,"im":2}. An array of objects of
-                   such values is a list of items for a fold, some or every
+                   such values is a list of items for a fold, some or every.
+                   The inputs are validated in full before evaluation starts
   --as <kind>      predicate or expression; needed only when the root is a
                    treeReference, otherwise read from the root's kind
+  --max-nodes <n>  the most nodes one evaluation may visit, a positive safe
+                   integer; the default is the evaluator's own. A fold visits
+                   its combine expression once per item, so a long list can
+                   need more. Past the limit the result is indeterminate
 
-Exit status: 0 for a definite result, 1 for an indeterminate one, 2 when no
-result was printed: bad usage, an unreadable or invalid file, a tree that folds
-or quantifies over a list the inputs do not hold, or a result JSON cannot carry. A lookup, delegate or treeReference it cannot resolve is an
-indeterminate result (1).
+Exit status: 0 for a definite result, 1 for an indeterminate one (running past
+the node limit included), 2 when no result was printed: bad usage, an
+unreadable or invalid file, a tree that folds or quantifies over a list the
+inputs do not hold, or a result JSON cannot carry. A lookup, delegate or
+treeReference it cannot resolve is an indeterminate result (1).
 `;
+
+/** `--max-nodes` takes a positive integer written in plain digits, small enough to be exact. */
+function parseMaxNodes(text: string): number | undefined {
+  if (!/^[1-9]\d*$/.test(text)) return undefined;
+  const value = Number(text);
+
+  return Number.isSafeInteger(value) ? value : undefined;
+}
 
 function isTreeKind(value: string): value is TreeKind {
   return value === "predicate" || value === "expression";
@@ -111,6 +126,14 @@ export function run(args: readonly string[], io: Readonly<CliIo>): number {
   if (as !== undefined && !isTreeKind(as)) {
     return reject(io, [`--as must be predicate or expression, not ${as}`]);
   }
+  const maxNodesText = parsed.values["max-nodes"];
+  const maxNodes =
+    maxNodesText === undefined ? undefined : parseMaxNodes(maxNodesText);
+  if (maxNodesText !== undefined && maxNodes === undefined) {
+    return reject(io, [
+      `--max-nodes must be a positive safe integer, not ${JSON.stringify(maxNodesText)}`,
+    ]);
+  }
   const inputsPath = parsed.values.inputs;
   if (treePath === STDIN && inputsPath === STDIN) {
     return reject(io, [
@@ -129,6 +152,7 @@ export function run(args: readonly string[], io: Readonly<CliIo>): number {
       tree: tree.value,
       inputs: inputs?.value,
       as,
+      maxNodes,
     });
   } catch (error) {
     return reject(io, [
@@ -153,7 +177,13 @@ export function run(args: readonly string[], io: Readonly<CliIo>): number {
 }
 
 function parseCommandLine(args: readonly string[]): {
-  values: { as?: string; inputs?: string; help?: boolean; version?: boolean };
+  values: {
+    as?: string;
+    inputs?: string;
+    "max-nodes"?: string;
+    help?: boolean;
+    version?: boolean;
+  };
   positionals: string[];
 } {
   return parseArgs({
@@ -162,6 +192,7 @@ function parseCommandLine(args: readonly string[]): {
     options: {
       as: { type: "string" },
       inputs: { type: "string" },
+      "max-nodes": { type: "string" },
       help: { type: "boolean", short: "h" },
       version: { type: "boolean", short: "v" },
     },
