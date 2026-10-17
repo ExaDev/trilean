@@ -76,9 +76,26 @@ const millisecondsPerDurationUnit: Record<DurationUnit, number> = {
   d: 86_400_000,
 };
 
-/** Normalises a `duration`'s magnitude to milliseconds, the common base unit for combining or comparing two `duration`s (or an `instant` and a `duration`) of potentially different `DurationUnit`s -- shared by `compareValues`'s own `duration` branch below and by the temporal arithmetic further down. */
+/** Normalises a `duration`'s magnitude to milliseconds, the common base unit for combining or comparing two `duration`s (or an `instant` and a `duration`) of potentially different `DurationUnit`s -- used by the temporal arithmetic further down (comparison goes through `toSharedDurationUnit` instead, which cannot overflow). */
 function toMilliseconds(value: number, unit: DurationUnit): number {
   return value * millisecondsPerDurationUnit[unit];
+}
+
+/**
+ * Two durations' magnitudes expressed in one shared unit, for comparison. The shared unit is the coarser of the two (so the finer one is divided down, and a division can never overflow), where converting both to milliseconds multiplies and overflows for any duration of days beyond roughly 1e300, making two different huge durations compare equal at infinity. Every unit is a whole multiple of every finer one, so each divisor is an exact integer and a duration compared with itself, or with the same span written in a finer unit, still compares equal.
+ */
+function toSharedDurationUnit(
+  left: Readonly<{ value: number; unit: DurationUnit }>,
+  right: Readonly<{ value: number; unit: DurationUnit }>,
+): { left: number; right: number } {
+  const leftSize = millisecondsPerDurationUnit[left.unit];
+  const rightSize = millisecondsPerDurationUnit[right.unit];
+  const sharedSize = Math.max(leftSize, rightSize);
+
+  return {
+    left: left.value / (sharedSize / leftSize),
+    right: right.value / (sharedSize / rightSize),
+  };
 }
 
 /** `Date.parse` reports an unparseable timestamp as `NaN`, and every downstream use of that `NaN` then fails silently rather than loudly: every comparison against it is `false` (so `neq` between two unparseable instants would come back definitely `true`), a subtraction yields a `NaN`-magnitude duration, and `new Date(NaN).toISOString()` throws a `RangeError` outright -- a thrown exception for a data-quality problem, which this design never does (see `Evaluation<T>`'s own doc comment in evaluation.ts). An `instant` whose string will not parse is a value the operation cannot use, so every caller below reports it as `wrong-type`, exactly like any other unusable operand. */
@@ -168,21 +185,17 @@ export function compareValues(
 
       return definite(applyComparisonOperator(op, leftEpoch, rightEpoch));
     }
-    case "duration":
+    case "duration": {
       if (right.kind !== "duration") {
         return indeterminate(
           "wrong-type",
           `cannot compare a 'duration' value with a '${right.kind}' value`,
         );
       }
+      const shared = toSharedDurationUnit(left, right);
 
-      return definite(
-        applyComparisonOperator(
-          op,
-          toMilliseconds(left.value, left.unit),
-          toMilliseconds(right.value, right.unit),
-        ),
-      );
+      return definite(applyComparisonOperator(op, shared.left, shared.right));
+    }
     // Complex operands stay kind-strict here, deliberately unlike `arithmetic`'s promotion of a real operand: arithmetic produces a value, so promoting loses nothing, whereas a comparison consumes two and this design already treats a kind difference between them as a modelling error worth surfacing (the same reason an `instant` is never compared against a plain `number`).
     case "complex":
       if (op !== "eq" && op !== "neq") {
@@ -330,18 +343,17 @@ export function computeMembershipMatch(
 
       return definite(operandEpoch === candidateEpoch);
     }
-    case "duration":
+    case "duration": {
       if (candidate.kind !== "duration") {
         return indeterminate(
           "wrong-type",
           `cannot compare a 'duration' value with a '${candidate.kind}' value for membership`,
         );
       }
+      const shared = toSharedDurationUnit(operand, candidate);
 
-      return definite(
-        toMilliseconds(operand.value, operand.unit) ===
-          toMilliseconds(candidate.value, candidate.unit),
-      );
+      return definite(shared.left === shared.right);
+    }
     case "complex":
       if (candidate.kind !== "complex") {
         return indeterminate(
