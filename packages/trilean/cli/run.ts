@@ -42,7 +42,9 @@ Evaluates a trilean predicate or expression tree and prints the result as JSON.
   --max-nodes <n>  the most nodes one evaluation may visit, a positive safe
                    integer; the default is the evaluator's own. A fold visits
                    its combine expression once per item, so a long list can
-                   need more. Past the limit the result is indeterminate
+                   need more. Past the limit the result is indeterminate.
+                   Raising it raises the worst-case work, which nested folds
+                   multiply, and the limit is the guard against a hostile tree
 
 Exit status: 0 for a definite result, 1 for an indeterminate one (running past
 the node limit included), 2 when no result was printed: bad usage, an
