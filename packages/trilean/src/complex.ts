@@ -4,7 +4,7 @@ import type { ComplexLiteralNode } from "./tree";
 /**
  * The `complex` computed-value kind stores one canonical representation, rectangular (`re` + `im`i), with no `form` discriminant offering a polar alternative alongside it -- see the "Complex values" section of README.md for the reasoning. These four helpers are what keep the magnitude-and-phase view reachable for the domains that reason that way, as conversions at the edges rather than a second encoding of the same value that every operator would then have to branch on.
  *
- * Phase is in radians throughout, measured from the positive real axis, matching `Math.atan2`'s own range of (-pi, pi].
+ * Phase is in radians throughout, measured from the positive real axis, in the range [-pi, pi] that `complexPhase` below states, which differs from `Math.atan2`'s only for a zero imaginary part of either sign.
  */
 
 type ComplexValue = Extract<ComputedValue, { kind: "complex" }>;
@@ -40,7 +40,7 @@ export const complexMagnitude = (value: ComplexValue): NumberValue => ({
 });
 
 /**
- * arg(z), as a dimensionless real number of radians: an angle is a ratio of two lengths, so it carries no unit of its own regardless of what the value it was read from carried. The range is (-pi, pi]. `Math.atan2` reads the sign of a zero imaginary part, which would make a negative real number -pi when its zero is negative (as the negation of a positive real has) and +pi when it is not, although the two are the same number, and JSON writes both zeros as `0`. Adding `+0` turns `-0` into `+0` without changing any other value, so a negative real number is +pi whatever the sign of its zero, and zero is 0.
+ * arg(z), as a dimensionless real number of radians: an angle is a ratio of two lengths, so it carries no unit of its own regardless of what the value it was read from carried. The range is [-pi, pi]: `Math.atan2` returns -pi for a negative real number whose imaginary part is `-0` and +pi when it is `+0`, although the two are the same number and JSON writes both zeros as `0`, and the closed range is what the result can be because a tiny negative imaginary part also rounds to exactly -pi (`phase(-1 - 1e-17i)` is -pi, the true angle being a hair inside). Adding `+0` turns `-0` into `+0` without changing any other value, so a signed zero never gives -pi: a negative real number is +pi whatever the sign of its zero, and zero is 0.
  */
 export const complexPhase = (value: ComplexValue): NumberValue => ({
   kind: "number",

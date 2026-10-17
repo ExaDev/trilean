@@ -374,13 +374,21 @@ describe("phase", () => {
     );
   });
 
-  it("is in the range (-pi, pi]: a negative real number is +pi whatever the sign of its zero imaginary part", () => {
+  it("is +pi for a negative real number whatever the sign of its zero imaginary part", () => {
     expect(call("phase", { kind: "complex", re: -2, im: 0 })).toEqual(
       num({ value: Math.PI }),
     );
     expect(call("phase", { kind: "complex", re: -2, im: -0 })).toEqual(
       num({ value: Math.PI }),
     );
+  });
+
+  it("rounds to exactly -pi for a tiny negative imaginary part, so the range is closed", () => {
+    for (const { im } of [{ im: -5e-324 }, { im: -1e-17 }]) {
+      expect(call("phase", { kind: "complex", re: -1, im })).toEqual(
+        num({ value: -Math.PI }),
+      );
+    }
   });
 
   it("is zero for a zero of either sign, and for a positive real number whatever the zero's sign", () => {
