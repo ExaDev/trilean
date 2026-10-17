@@ -167,14 +167,32 @@ const matching = orders.filter((_, i) => results[i]?.status === "definite" && re
 
 See [`and`/`or`](#not-and-or), [`compare`](#compare), [`textCompare`](#textcompare), and [`memberOf`](#memberof) for the full node-kind reference.
 
+## Command line
+
+The package ships a `trilean` command that evaluates a tree stored as JSON, for a shell script or an agent skill that holds its formulae as data and has no host program to embed the library in:
+
+```sh
+npx trilean evaluate formula.json --inputs inputs.json
+```
+
+`formula.json` is a predicate tree or an expression tree (`-` reads it from standard input). The root's `kind` says which; only a root `treeReference`, valid in both, needs `--as predicate` or `--as expression`. `inputs.json` is an object of named values, one per `reference` key: a plain number, string or boolean, or a complete computed value when the input needs a unit, for example `{ "kind": "number", "value": 2, "unit": { "m": 1 } }`. Units are dimensional-exponent maps and are never converted, exactly as in the library.
+
+The result is printed as JSON in the `Evaluation` shape, a `definite` value or an `indeterminate` reason (see [The evaluation model](#the-evaluation-model)). The exit status separates the three outcomes a script cares about: `0` for a definite result, `1` for an indeterminate one, `2` when nothing was evaluated (bad usage, an unreadable file, JSON that is malformed, a tree or an input that fails validation, or a tree that needs a resolver the command cannot supply). Problems with the tree are printed to standard error as one `path: message` line each.
+
+`call` nodes resolve against `builtinFunctions`, which the library also exports: `minimum` and `maximum` (one or more numbers sharing a unit), `absoluteValue`, `round` (halves away from zero, with an optional count of decimal places), `squareRoot`, `exponential`, and `logarithm` (natural, or to an optional base). They follow the unit rules above: `minimum`, `maximum`, `absoluteValue` and `round` keep the argument's unit, `squareRoot` halves each dimension's exponent and refuses an odd one, and `exponential` and `logarithm` accept dimensionless numbers only. A call outside a function's domain is `domain-error`, and any other name is `wrong-type`.
+
+Inputs are scalar, so the command has no collection, table, delegate or tree store to hand a `fold`, `some`, `every`, `lookup`, `delegate` or `treeReference` node. A `lookup` is `not-found`, a `delegate` or `treeReference` is `wrong-type`, and a tree that folds or quantifies over a collection exits `2` rather than treating the collection as empty. For those trees, embed the library and supply the [resolvers](#resolvers) yourself.
+
+The same evaluation is available in code as `evaluateDocument`, with `parseInputs` and `createInputResolvers` for the named-input resolvers it uses.
+
 ## Build, test, and lint
 
 ```sh
 pnpm install
-pnpm build          # tsdown -> dist/, then generates schemas/trilean.schema.json
+pnpm build          # tsdown -> dist/ and the trilean command in dist-cli/, then generates schemas/trilean.schema.json
 pnpm test           # unit suite, against src/
 pnpm test:integration # multi-kind composition, schema-pipeline, and function-registry/delegate tests, against src/
-pnpm test:smoke     # builds first, then checks dist/ in both ESM and CJS plus the generated JSON Schema
+pnpm test:smoke     # builds first, then checks dist/ in both ESM and CJS, the generated JSON Schema and the built trilean command
 pnpm test:workers   # runs the evaluator inside a real Cloudflare Workers isolate
 pnpm lint
 pnpm typecheck
@@ -490,7 +508,7 @@ Binary arithmetic (`add`/`subtract`/`multiply`/`divide`/`power`/`modulo`) and un
 
 ### `call`
 
-A named function applied to an ordered list of `ExpressionNode` arguments. The set of named functions is intentionally open-ended and resolved through a function registry supplied at evaluator construction time — `minimum`, `maximum`, `absoluteValue`, `round`, `squareRoot`, and `logarithm` are starting examples, not an exhaustive list; new functions are added to the registry as concrete need arises. Calling an unregistered function name is `wrong-type` ("no function registered under this name"); calling a registered function with an argument outside its domain (e.g. `squareRoot` given a negative number) is `domain-error`.
+A named function applied to an ordered list of `ExpressionNode` arguments. The set of named functions is intentionally open-ended and resolved through a function registry supplied at evaluator construction time — `minimum`, `maximum`, `absoluteValue`, `round`, `squareRoot`, and `logarithm` are starting examples, not an exhaustive list (the ones the [command line](#command-line) offers are exported as `builtinFunctions`); new functions are added to the registry as concrete need arises. Calling an unregistered function name is `wrong-type` ("no function registered under this name"); calling a registered function with an argument outside its domain (e.g. `squareRoot` given a negative number) is `domain-error`.
 
 ### Units
 
