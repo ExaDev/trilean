@@ -1,3 +1,14 @@
+## [2.2.18](https://github.com/ExaDev/trilean/compare/trilean-sql%402.2.17...trilean-sql%402.2.18) (2026-10-17)
+
+### Bug Fixes
+
+* **trilean-sql:** say what the duration refusal reason now means ([a169814](https://github.com/ExaDev/trilean/commit/a16981425a239e5cc88d3361de2750b78f496f3e))
+
+
+### Dependencies
+
+- Updated trilean to 1.8.0
+
 ## [2.2.17](https://github.com/ExaDev/trilean/compare/trilean-sql%402.2.16...trilean-sql%402.2.17) (2026-10-16)
 
 ### Build System

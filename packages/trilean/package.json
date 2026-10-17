@@ -1,7 +1,7 @@
 {
   "name": "trilean",
   "description": "Three-valued predicate and expression evaluation trees, stored as JSON and evaluated against injected resolvers, for domain logic — business rules, eligibility checks, formulas, search filters, and more — that needs to be data instead of code.",
-  "version": "1.7.12",
+  "version": "1.8.0",
   "bin": {
     "trilean": "./dist-cli/trilean.mjs"
   },

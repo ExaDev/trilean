@@ -1,3 +1,40 @@
+## [1.8.0](https://github.com/ExaDev/trilean/compare/trilean%401.7.12...trilean%401.8.0) (2026-10-17)
+
+### Features
+
+* **trilean:** add a trilean command that evaluates a JSON formula tree ([ca48b4a](https://github.com/ExaDev/trilean/commit/ca48b4a087bed3a34ab7208c9e05623443b14497))
+* **trilean:** add built-in numeric functions and a named-input evaluation entry point ([6f4b570](https://github.com/ExaDev/trilean/commit/6f4b5703963b82d5a2af0847c1c8ad1f2ff02b9c))
+* **trilean:** let a registered function report a wrong-type argument ([e8b22a5](https://github.com/ExaDev/trilean/commit/e8b22a5263c3b0fac3e3560053a7ec19f0f39ed5))
+
+### Bug Fixes
+
+* **trilean:** compare durations exactly for every pair of finite values ([1d2ee78](https://github.com/ExaDev/trilean/commit/1d2ee784163874c8b5ed7e7ba735cdbf0870f3e1))
+* **trilean:** compare durations without converting through milliseconds ([171e296](https://github.com/ExaDev/trilean/commit/171e29645081e4f7eeaeb55f503751cb90d258d4))
+* **trilean:** divide complex values correctly across the whole double range ([6446de4](https://github.com/ExaDev/trilean/commit/6446de4ebabb7c497e5083335df8c6f9ec2caed8))
+* **trilean:** divide complex values without overflowing or underflowing ([029bc6f](https://github.com/ExaDev/trilean/commit/029bc6fe9a83774f8cbe8680c7ef5e162f12d835))
+* **trilean:** divide complex values without rounding a subnormal quotient twice ([ae57153](https://github.com/ExaDev/trilean/commit/ae57153efe46352f6a5282ad2005684f78d4947e))
+* **trilean:** give evaluateDocument distinct outcomes and let the command word its own flags ([5e03a8a](https://github.com/ExaDev/trilean/commit/5e03a8af49a6890503c5be6b9d473f990463a53e))
+* **trilean:** invert a negative complex power last unless it overflows ([84bcd30](https://github.com/ExaDev/trilean/commit/84bcd309b102d457d181f0fc8a965f482ba7aeca))
+* **trilean:** make the built-in functions report accurate failures and round exactly ([cf53695](https://github.com/ExaDev/trilean/commit/cf53695335e66270b6f06574f9d5ea1f7fbca908))
+* **trilean:** order durations that are not finite as numbers are ([a754efb](https://github.com/ExaDev/trilean/commit/a754efbf46a5657fc2526ec3f05728cf4d339fa7))
+* **trilean:** raise complex values to an integer power by squaring ([d1258df](https://github.com/ExaDev/trilean/commit/d1258df90fb474a83de3e546361a72dee45e7ec1))
+* **trilean:** refuse a non-finite input number and share one record guard ([6334608](https://github.com/ExaDev/trilean/commit/6334608a36841e2e78c8f644fc43dc93de01351c))
+* **trilean:** refuse a non-representable result at the evaluateDocument boundary ([a3b82bb](https://github.com/ExaDev/trilean/commit/a3b82bb3b5617438b1750e23c58bc25c9d5b431f))
+* **trilean:** report an overflowing arithmetic result as a domain error ([00c01db](https://github.com/ExaDev/trilean/commit/00c01dbde0f51c692d4059372a25a03fd3cc2c51))
+* **trilean:** tighten the command's stdin, stderr and exit-status behaviour ([d8e4a07](https://github.com/ExaDev/trilean/commit/d8e4a0716a05f2c329cf1d1b279caac4d85a98c5))
+
+### Documentation
+
+* **trilean:** reword two comments written with a spaced double hyphen ([d6ccabf](https://github.com/ExaDev/trilean/commit/d6ccabf2d2a0374b9256e0a979bf951385b4b5b7))
+* **trilean:** state how the error of squaring grows with the exponent ([093a669](https://github.com/ExaDev/trilean/commit/093a669ee10f11cca27efdac2ed72be11802086e))
+* **trilean:** state the complex power error as an observation from samples ([d1b8a97](https://github.com/ExaDev/trilean/commit/d1b8a9773fca26e8c12a8f44152e5e74f953f477))
+* **trilean:** state the direction of the division scale factor and its limits ([b01ee4e](https://github.com/ExaDev/trilean/commit/b01ee4ed6526b1a05b85fd5de8a44cff9f40b0c7))
+* **trilean:** state the unrepresentable outcome in terms that stay true ([ac14285](https://github.com/ExaDev/trilean/commit/ac142859701e3c2dad3b524951fd0c843d8bc1dd))
+
+### Tests
+
+* **trilean:** cover non-finite arguments to the built-in functions ([40b4cf3](https://github.com/ExaDev/trilean/commit/40b4cf3c18bed4048acb1262a5bcca9f0df67939))
+
 ## [1.7.12](https://github.com/ExaDev/trilean/compare/trilean%401.7.11...trilean%401.7.12) (2026-10-16)
 
 ### Build System
