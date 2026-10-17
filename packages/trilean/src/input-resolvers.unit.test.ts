@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { ComputedValue } from "./computed-value";
 import { createSyncEvaluator } from "./evaluator-factory";
+import type { InputItem as PublicInputItem } from "./index";
 import type { InputItem } from "./input-resolvers";
 import { createInputResolvers, parseInputs } from "./input-resolvers";
 import type { ExpressionNode } from "./tree";
@@ -272,5 +273,15 @@ describe("createInputResolvers over lists the embedder built", () => {
       found: true,
       value: num(shadowing),
     });
+  });
+});
+
+describe("the public surface", () => {
+  it("exports the item type that createInputResolvers and parseInputs take and return", () => {
+    // Compiles only while `InputItem` is exported from the package entry point, and is the same type the module declares.
+    const sizeOf = (item: InputItem): number => item.size;
+    const item: PublicInputItem = new Map<string, ComputedValue>();
+
+    expect(sizeOf(item)).toBe(0);
   });
 });
