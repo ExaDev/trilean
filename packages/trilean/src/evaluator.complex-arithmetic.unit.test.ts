@@ -212,6 +212,32 @@ describe("arithmetic on complex values", () => {
       expect(value.im).toBeCloseTo(expected.im, quotientDigits);
     });
 
+    it("does not report a subnormal quotient as equal to zero", async () => {
+      const quotient = await evaluateValue(
+        {
+          kind: "arithmetic",
+          op: "divide",
+          left: {
+            kind: "complexLiteral",
+            re: -7.124494562846174e-209,
+            im: -8.343164103148207e-219,
+          },
+          right: {
+            kind: "complexLiteral",
+            re: 2.50063496577604e114,
+            im: -1.8086225038951245e105,
+          },
+        },
+        undefined,
+        resolvers,
+      );
+      const value = quotient.status === "definite" ? quotient.value : undefined;
+      if (value?.kind !== "complex")
+        throw new Error("expected a complex result");
+
+      expect(value.re).not.toBe(0);
+    });
+
     it("still reports an exactly zero divisor as a division by zero", async () => {
       const result = await divide({ re: 1, im: 1 }, { re: 0, im: 0 });
 
