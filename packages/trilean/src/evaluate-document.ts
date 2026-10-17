@@ -31,7 +31,13 @@ export type DocumentEvaluation =
       treeKind: "expression";
       evaluation: Evaluation<ComputedValue>;
     }
-  | { outcome: "rejected"; issues: readonly string[] };
+  | {
+      outcome: "rejected";
+      /** `ambiguous-tree-kind` is a root `treeReference` evaluated without `as`; every other rejection is `invalid`, a tree or an input that fails validation. */
+      reason: "invalid" | "ambiguous-tree-kind";
+      issues: readonly string[];
+    }
+  | { outcome: "unrepresentable"; issues: readonly string[] };
 
 const predicateKinds: ReadonlySet<string> = new Set(
   PredicateNodeSchema.options.map((option) => option.shape.kind.value),
@@ -39,6 +45,9 @@ const predicateKinds: ReadonlySet<string> = new Set(
 
 /** What a definite expression result that `ComputedValueSchema` refuses is reported as: the only way a result fails it is a non-finite number, which JSON would write as `null`. The evaluator's arithmetic and the built-in functions already keep one from forming, so this is the last check before a value leaves the document boundary, and it fails loudly rather than print a different value from the one computed. */
 const NOT_REPRESENTABLE = "(result): the value is not a finite number";
+
+const AMBIGUOUS_TREE_KIND =
+  '(root): a treeReference is valid as a predicate and as an expression; set `as` to "predicate" or "expression"';
 
 const evaluator = createSyncEvaluator({ functions: builtinFunctions });
 
@@ -70,15 +79,10 @@ function maxPathLength(issues: readonly z.core.$ZodIssue[]): number {
 function resolveTreeKind(
   tree: unknown,
   requested: TreeKind | undefined,
-): TreeKind | { issue: string } {
+): TreeKind | "ambiguous" {
   if (requested !== undefined) return requested;
   const kind = isPlainRecord(tree) ? tree.kind : undefined;
-  if (kind === "treeReference") {
-    return {
-      issue:
-        "(root): a treeReference is valid as a predicate and as an expression; pass --as predicate or --as expression",
-    };
-  }
+  if (kind === "treeReference") return "ambiguous";
 
   return typeof kind === "string" && predicateKinds.has(kind)
     ? "predicate"
@@ -86,7 +90,13 @@ function resolveTreeKind(
 }
 
 /**
- * Validates a tree and its named inputs and evaluates it with the built-in function registry (`builtinFunctions`), the evaluation the `trilean evaluate` command performs. The tree kind is read from the root node's `kind` unless `as` names it. A tree that fails its schema, or an input that is not a computed value, is `rejected` with one line per problem and nothing is evaluated; everything else is an `Evaluation`, definite or indeterminate. Resolution is limited to what `createInputResolvers` provides, and its collection error propagates for a tree that folds or quantifies over one.
+ * Validates a tree and its named inputs and evaluates it with the built-in function registry (`builtinFunctions`), the evaluation the `trilean evaluate` command performs. The tree kind is read from the root node's `kind` unless `as` names it. There are three outcomes:
+ *
+ * - `evaluated`: an `Evaluation`, definite or indeterminate.
+ * - `rejected`: nothing was evaluated, because a tree or an input failed validation (`invalid`) or a root `treeReference` was given without `as` (`ambiguous-tree-kind`). `issues` has one `path: message` line per problem.
+ * - `unrepresentable`: the tree was evaluated and the result is a number JSON cannot carry (`Infinity` or `NaN`), which would otherwise be printed as `null`. No current path reaches it: the evaluator's arithmetic and the built-in functions both turn such a result into a `domain-error`, so this is a guard on the document boundary for a registry change that stops doing so.
+ *
+ * Resolution is limited to what `createInputResolvers` provides, and its collection error propagates for a tree that folds or quantifies over one.
  */
 export function evaluateDocument({
   tree,
@@ -95,18 +105,27 @@ export function evaluateDocument({
 }: EvaluateDocumentOptions): DocumentEvaluation {
   const parsedInputs = parseInputs(inputs ?? {});
   if (!parsedInputs.ok) {
-    return { outcome: "rejected", issues: parsedInputs.issues };
+    return {
+      outcome: "rejected",
+      reason: "invalid",
+      issues: parsedInputs.issues,
+    };
   }
   const resolvers = createInputResolvers(parsedInputs.inputs);
   const treeKind = resolveTreeKind(tree, as);
-  if (typeof treeKind === "object") {
-    return { outcome: "rejected", issues: [treeKind.issue] };
+  if (treeKind === "ambiguous") {
+    return {
+      outcome: "rejected",
+      reason: "ambiguous-tree-kind",
+      issues: [AMBIGUOUS_TREE_KIND],
+    };
   }
   if (treeKind === "predicate") {
     const parsed = PredicateNodeSchema.safeParse(tree);
     if (!parsed.success) {
       return {
         outcome: "rejected",
+        reason: "invalid",
         issues: describeIssues(parsed.error.issues),
       };
     }
@@ -120,7 +139,11 @@ export function evaluateDocument({
   }
   const parsed = ExpressionNodeSchema.safeParse(tree);
   if (!parsed.success) {
-    return { outcome: "rejected", issues: describeIssues(parsed.error.issues) };
+    return {
+      outcome: "rejected",
+      reason: "invalid",
+      issues: describeIssues(parsed.error.issues),
+    };
   }
   const node: ExpressionNode = parsed.data;
   const evaluation = evaluator.evaluateValue(node, undefined, resolvers);
@@ -128,7 +151,7 @@ export function evaluateDocument({
     evaluation.status === "definite" &&
     !ComputedValueSchema.safeParse(evaluation.value).success
   ) {
-    return { outcome: "rejected", issues: [NOT_REPRESENTABLE] };
+    return { outcome: "unrepresentable", issues: [NOT_REPRESENTABLE] };
   }
 
   return { outcome: "evaluated", treeKind, evaluation };
