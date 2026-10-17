@@ -1,17 +1,19 @@
 import type { ComputedValue } from "./computed-value";
 import { ComputedValueSchema } from "./computed-value";
+import { isPlainRecord } from "./plain-record";
 import type { SyncResolvers } from "./resolvers";
 
-function isPlainRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
-}
-
-/** A plain JSON number, string or boolean is the unit-less value of that kind; anything else must already be a complete `ComputedValue` (the only way to supply units, durations, instants or complex values). */
+/** A plain JSON number, string or boolean is the unit-less value of that kind; anything else must already be a complete `ComputedValue` (the only way to supply units, durations, instants or complex values). Both routes end in `ComputedValueSchema`, so a number that is not finite (`1e999` parses to `Infinity`) is refused whichever way it was written, and a field the schema does not define is dropped rather than carried along. */
 function toComputedValue(raw: unknown): ComputedValue | undefined {
-  if (typeof raw === "number") return { kind: "number", value: raw };
-  if (typeof raw === "string") return { kind: "text", value: raw };
-  if (typeof raw === "boolean") return { kind: "boolean", value: raw };
-  const parsed = ComputedValueSchema.safeParse(raw);
+  const candidate: unknown =
+    typeof raw === "number"
+      ? { kind: "number", value: raw }
+      : typeof raw === "string"
+        ? { kind: "text", value: raw }
+        : typeof raw === "boolean"
+          ? { kind: "boolean", value: raw }
+          : raw;
+  const parsed = ComputedValueSchema.safeParse(candidate);
 
   return parsed.success ? parsed.data : undefined;
 }
@@ -36,7 +38,7 @@ export function parseInputs(raw: unknown): InputsParseResult {
     const computed = toComputedValue(value);
     if (computed === undefined) {
       issues.push(
-        `inputs.${name}: expected a number, text, boolean or a complete computed value`,
+        `inputs.${name}: expected a finite number, text, boolean or a complete computed value`,
       );
     } else {
       inputs.set(name, computed);

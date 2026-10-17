@@ -3,6 +3,7 @@ import type { Evaluation } from "./evaluation";
 import { createSyncEvaluator } from "./evaluator-factory";
 import { builtinFunctions } from "./builtin-functions";
 import { createInputResolvers, parseInputs } from "./input-resolvers";
+import { isPlainRecord } from "./plain-record";
 import type { ExpressionNode, PredicateNode } from "./tree";
 import { ExpressionNodeSchema, PredicateNodeSchema } from "./tree";
 import type { z } from "zod";
@@ -36,10 +37,6 @@ const predicateKinds: ReadonlySet<string> = new Set(
 );
 
 const evaluator = createSyncEvaluator({ functions: builtinFunctions });
-
-function isPlainRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
-}
 
 /** Turns zod's issues into `path: message` lines. A failed union wraps one list of issues per branch, each path relative to the union; the branch the input got furthest into (the deepest path) is the one it was meant to match, so only that branch's issues are reported, under the union's own path. */
 function describeIssues(
@@ -75,7 +72,7 @@ function resolveTreeKind(
   if (kind === "treeReference") {
     return {
       issue:
-        "a treeReference is valid as a predicate and as an expression: say which with `as`",
+        "(root): a treeReference is valid as a predicate and as an expression; pass --as predicate or --as expression",
     };
   }
 
