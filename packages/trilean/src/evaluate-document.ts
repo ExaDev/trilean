@@ -1,4 +1,5 @@
 import type { ComputedValue } from "./computed-value";
+import { ComputedValueSchema } from "./computed-value";
 import type { Evaluation } from "./evaluation";
 import { createSyncEvaluator } from "./evaluator-factory";
 import { builtinFunctions } from "./builtin-functions";
@@ -35,6 +36,9 @@ export type DocumentEvaluation =
 const predicateKinds: ReadonlySet<string> = new Set(
   PredicateNodeSchema.options.map((option) => option.shape.kind.value),
 );
+
+/** What a definite expression result that `ComputedValueSchema` refuses is reported as: the only way a result fails it is a non-finite number, which JSON would write as `null`. The evaluator's arithmetic and the built-in functions already keep one from forming, so this is the last check before a value leaves the document boundary, and it fails loudly rather than print a different value from the one computed. */
+const NOT_REPRESENTABLE = "(result): the value is not a finite number";
 
 const evaluator = createSyncEvaluator({ functions: builtinFunctions });
 
@@ -119,10 +123,13 @@ export function evaluateDocument({
     return { outcome: "rejected", issues: describeIssues(parsed.error.issues) };
   }
   const node: ExpressionNode = parsed.data;
+  const evaluation = evaluator.evaluateValue(node, undefined, resolvers);
+  if (
+    evaluation.status === "definite" &&
+    !ComputedValueSchema.safeParse(evaluation.value).success
+  ) {
+    return { outcome: "rejected", issues: [NOT_REPRESENTABLE] };
+  }
 
-  return {
-    outcome: "evaluated",
-    treeKind,
-    evaluation: evaluator.evaluateValue(node, undefined, resolvers),
-  };
+  return { outcome: "evaluated", treeKind, evaluation };
 }
