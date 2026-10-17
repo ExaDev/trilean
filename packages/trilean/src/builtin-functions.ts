@@ -123,7 +123,7 @@ function roundHalfAwayFromZero(value: number, places: number): number {
  *
  * Failures split as the evaluator's own operators split. An argument a function cannot accept at all (the wrong kind, the wrong count, or units that do not fit) is a `wrongType`; an argument of the right kind outside the function's domain (a negative `squareRoot`, a `logarithm` of zero, a base of one, a fractional count of decimal places) or a result that is not a finite number is a `domainError`.
  *
- * Units follow the evaluator's rule that dimensions are never silently converted. `minimum`, `maximum`, `absoluteValue`, `round` and `magnitude` keep the argument's unit (and the first two require all arguments to share one); `phase` returns a dimensionless angle in radians whatever unit its argument carries; `squareRoot` halves each dimension's exponent and refuses a unit whose exponents are not all even; `exponential` and `logarithm` accept only dimensionless numbers and return one.
+ * Units follow the evaluator's rule that dimensions are never silently converted. `minimum`, `maximum`, `absoluteValue`, `round` and `magnitude` keep the argument's unit (and the first two require all arguments to share one); `phase` returns a dimensionless angle in radians in the range (-pi, pi], whatever unit its argument carries, with a negative real number +pi whatever the sign of its zero imaginary part and zero 0 (a component that is not finite is a `domainError`); `squareRoot` halves each dimension's exponent and refuses a unit whose exponents are not all even; `exponential` and `logarithm` accept only dimensionless numbers and return one.
  *
  * Frozen, so mutating the export cannot change what `evaluateDocument` resolves.
  */
@@ -256,6 +256,10 @@ export const builtinFunctions: FunctionRegistry = Object.freeze({
     const [arg] = args;
     if (args.length !== 1 || arg?.kind !== "complex") {
       return { wrongType: "phase requires exactly one complex argument" };
+    }
+    if (!Number.isFinite(arg.re) || !Number.isFinite(arg.im)) {
+      // atan2 of finite components is always finite, so refusing a non-finite component here is the whole of the finite check; it has no overflow to catch afterwards, unlike `magnitude`.
+      return { domainError: "phase requires finite components" };
     }
 
     return complexPhase(arg);

@@ -374,6 +374,44 @@ describe("phase", () => {
     );
   });
 
+  it("is in the range (-pi, pi]: a negative real number is +pi whatever the sign of its zero imaginary part", () => {
+    expect(call("phase", { kind: "complex", re: -2, im: 0 })).toEqual(
+      num({ value: Math.PI }),
+    );
+    expect(call("phase", { kind: "complex", re: -2, im: -0 })).toEqual(
+      num({ value: Math.PI }),
+    );
+  });
+
+  it("is zero for a zero of either sign, and for a positive real number whatever the zero's sign", () => {
+    for (const re of [0, -0]) {
+      for (const im of [0, -0]) {
+        const result = call("phase", { kind: "complex", re, im });
+        const value = "value" in result ? result.value : undefined;
+
+        expect(Object.is(value, 0)).toBe(true);
+      }
+    }
+    expect(call("phase", { kind: "complex", re: 2, im: -0 })).toEqual(
+      num({ value: 0 }),
+    );
+  });
+
+  it("is a domain-error when a component is not finite, as the other built-ins are for a result that is not", () => {
+    for (const component of [
+      Number.NaN,
+      Number.POSITIVE_INFINITY,
+      Number.NEGATIVE_INFINITY,
+    ]) {
+      expect(
+        domainError(call("phase", { kind: "complex", re: component, im: 1 })),
+      ).toMatch(/finite/);
+      expect(
+        domainError(call("phase", { kind: "complex", re: 1, im: component })),
+      ).toMatch(/finite/);
+    }
+  });
+
   it("is a wrong-type for a real number, text or a wrong count", () => {
     expect(wrongType(call("phase", num({ value: 1 })))).toMatch(/complex/);
     expect(wrongType(call("phase", text))).toMatch(/complex/);
