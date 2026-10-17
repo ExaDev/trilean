@@ -35,11 +35,33 @@ describe("parseInputs", () => {
     expect(result).toEqual({
       ok: false,
       issues: [
-        "inputs.nothing: expected a number, text, boolean or a complete computed value",
-        "inputs.list: expected a number, text, boolean or a complete computed value",
-        "inputs.shape: expected a number, text, boolean or a complete computed value",
+        "inputs.nothing: expected a finite number, text, boolean or a complete computed value",
+        "inputs.list: expected a finite number, text, boolean or a complete computed value",
+        "inputs.shape: expected a finite number, text, boolean or a complete computed value",
       ],
     });
+  });
+
+  it.each([
+    ["a plain number", Number.POSITIVE_INFINITY],
+    ["a plain number", Number.NaN],
+    [
+      "the value of a complete computed value",
+      { kind: "number", value: Number.NEGATIVE_INFINITY },
+    ],
+  ])("refuses %s that is not finite", (_description, input) => {
+    expect(parseInputs({ x: input })).toEqual({
+      ok: false,
+      issues: [
+        "inputs.x: expected a finite number, text, boolean or a complete computed value",
+      ],
+    });
+  });
+
+  it("strips fields a computed value does not define", () => {
+    expect(
+      parsed({ x: { kind: "number", value: 1, comment: "ignored" } }).get("x"),
+    ).toEqual({ kind: "number", value: 1 });
   });
 
   it.each([null, [], "x", 1])("rejects %j as the inputs themselves", (raw) => {

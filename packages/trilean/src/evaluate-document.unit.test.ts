@@ -135,7 +135,7 @@ describe("evaluateDocument", () => {
     expect(evaluateDocument({ tree })).toEqual({
       outcome: "rejected",
       issues: [
-        "a treeReference is valid as a predicate and as an expression: say which with `as`",
+        "(root): a treeReference is valid as a predicate and as an expression; pass --as predicate or --as expression",
       ],
     });
     expect(evaluateDocument({ tree, as: "predicate" })).toMatchObject({
@@ -159,7 +159,7 @@ describe("evaluateDocument", () => {
       {
         outcome: "rejected",
         issues: [
-          "inputs.a: expected a number, text, boolean or a complete computed value",
+          "inputs.a: expected a finite number, text, boolean or a complete computed value",
         ],
       },
     );
@@ -174,6 +174,22 @@ describe("evaluateDocument", () => {
           combiner: { mode: "max", item: { kind: "numberLiteral", value: 1 } },
         },
       }),
-    ).toThrow();
+    ).toThrow(/scalar values only/);
+  });
+});
+
+describe("evaluateDocument inputs that do not fit", () => {
+  it("rejects a plain input number that is not finite", () => {
+    expect(
+      evaluateDocument({
+        tree: { kind: "reference", key: "x" },
+        inputs: { x: Number.POSITIVE_INFINITY },
+      }),
+    ).toEqual({
+      outcome: "rejected",
+      issues: [
+        "inputs.x: expected a finite number, text, boolean or a complete computed value",
+      ],
+    });
   });
 });
