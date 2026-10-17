@@ -18,6 +18,8 @@ export interface EvaluateDocumentOptions {
   inputs?: unknown;
   /** Which tree `tree` is. Needed only when its root is a `treeReference`, the one node kind valid in both. */
   as?: TreeKind;
+  /** The most nodes one evaluation may visit before it ends as an indeterminate result (see `createSyncEvaluator`); absent means the evaluator's default. A fold visits its combine expression once per item, so a long list needs a larger budget. The caller supplies a positive integer. */
+  maxNodes?: number;
 }
 
 export type DocumentEvaluation =
@@ -49,7 +51,7 @@ const NOT_REPRESENTABLE = "(result): the value is not a finite number";
 const AMBIGUOUS_TREE_KIND =
   '(root): a treeReference is valid as a predicate and as an expression; set `as` to "predicate" or "expression"';
 
-const evaluator = createSyncEvaluator({ functions: builtinFunctions });
+const defaultEvaluator = createSyncEvaluator({ functions: builtinFunctions });
 
 /** Turns zod's issues into `path: message` lines. A failed union wraps one list of issues per branch, each path relative to the union; the branch the input got furthest into (the deepest path) is the one it was meant to match, so only that branch's issues are reported, under the union's own path. */
 function describeIssues(
@@ -96,13 +98,20 @@ function resolveTreeKind(
  * - `rejected`: nothing was evaluated, because a tree or an input failed validation (`invalid`) or a root `treeReference` was given without `as` (`ambiguous-tree-kind`). `issues` has one `path: message` line per problem.
  * - `unrepresentable`: the tree was evaluated and the result is a number JSON cannot carry (`Infinity` or `NaN`), which would otherwise be printed as `null`. The built-in registry never produces one, and the evaluator's arithmetic turns an overflow into a `domain-error`, so this is a guard on the document boundary against a change that stops doing so.
  *
+ * The inputs are validated in full before anything is evaluated, every element of every list included, so a very long list is parsed and held in memory whatever the node budget (`maxNodes`) is.
+ *
  * Resolution is limited to what `createInputResolvers` provides: named values, and lists of items for a `fold`, `some` or `every`. A tree that names a collection the inputs do not hold throws that resolver's error, which propagates.
  */
 export function evaluateDocument({
   tree,
   inputs,
   as,
+  maxNodes,
 }: EvaluateDocumentOptions): DocumentEvaluation {
+  const evaluator =
+    maxNodes === undefined
+      ? defaultEvaluator
+      : createSyncEvaluator({ functions: builtinFunctions, maxNodes });
   const parsedInputs = parseInputs(inputs ?? {});
   if (!parsedInputs.ok) {
     return {

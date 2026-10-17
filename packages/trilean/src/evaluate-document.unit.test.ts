@@ -197,3 +197,36 @@ describe("evaluateDocument inputs that do not fit", () => {
     });
   });
 });
+
+describe("evaluateDocument maxNodes", () => {
+  const fiveNodes = {
+    kind: "arithmetic",
+    op: "add",
+    left: {
+      kind: "arithmetic",
+      op: "add",
+      left: { kind: "numberLiteral", value: 1 },
+      right: { kind: "numberLiteral", value: 2 },
+    },
+    right: { kind: "numberLiteral", value: 3 },
+  };
+  const budget = { enough: 5, tooFew: 4 };
+
+  it("refuses a tree larger than the budget with an indeterminate result", () => {
+    expect(
+      evaluateDocument({ tree: fiveNodes, maxNodes: budget.tooFew }),
+    ).toMatchObject({
+      outcome: "evaluated",
+      evaluation: { status: "indeterminate" },
+    });
+  });
+
+  it("evaluates the same tree when the budget covers it", () => {
+    expect(
+      evaluateDocument({ tree: fiveNodes, maxNodes: budget.enough }),
+    ).toMatchObject({
+      outcome: "evaluated",
+      evaluation: { status: "definite" },
+    });
+  });
+});

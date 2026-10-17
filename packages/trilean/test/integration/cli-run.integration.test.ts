@@ -493,4 +493,134 @@ describe("trilean evaluate with lists of items and complex values", () => {
       value: { kind: "number", value: 5 },
     });
   });
+
+  describe("the node budget", () => {
+    /** The loss-of-life sum over a load profile: two to the power of (hot-spot temperature minus 98) over 6, times the interval's hours, summed over the intervals. */
+    const ageingTree = JSON.stringify({
+      kind: "fold",
+      collection: "intervals",
+      combiner: {
+        mode: "reduce",
+        initial: { kind: "numberLiteral", value: 0 },
+        combine: {
+          kind: "arithmetic",
+          op: "add",
+          left: { kind: "accumulator" },
+          right: {
+            kind: "arithmetic",
+            op: "multiply",
+            left: {
+              kind: "arithmetic",
+              op: "power",
+              left: { kind: "numberLiteral", value: 2 },
+              right: {
+                kind: "arithmetic",
+                op: "divide",
+                left: {
+                  kind: "arithmetic",
+                  op: "subtract",
+                  left: { kind: "reference", key: "theta_h" },
+                  right: { kind: "numberLiteral", value: 98 },
+                },
+                right: { kind: "numberLiteral", value: 6 },
+              },
+            },
+            right: { kind: "reference", key: "hours" },
+          },
+        },
+      },
+    });
+    const minutesInADay = 1440;
+    const minutesPerHour = 60;
+    const hoursPerMinute = 1 / minutesPerHour;
+    const coolTemperature = 98;
+    const hotTemperature = 104;
+    const intervals = Array.from(
+      { length: minutesInADay },
+      (_unused, index) => ({
+        theta_h: index % 2 === 0 ? coolTemperature : hotTemperature,
+        hours: hoursPerMinute,
+      }),
+    );
+    const files = {
+      "life.json": ageingTree,
+      "day.json": JSON.stringify({ intervals }),
+    };
+    // Half the minutes at weight 1 and half at weight 2, over 1/60 hour each: 12 + 24 hours of ageing.
+    const expectedLoss = 36;
+    const precisionDigits = 9;
+
+    it("stops a day at one-minute resolution under the default budget", () => {
+      const captured = capture(files);
+
+      expect(
+        run(["evaluate", "life.json", "--inputs", "day.json"], captured.io),
+      ).toBe(EXIT_INDETERMINATE);
+      expect(captured.stdout()).toMatch(/exceeded the maximum of 10000 nodes/);
+    });
+
+    it("evaluates it with a raised budget", () => {
+      const captured = capture(files);
+
+      expect(
+        run(
+          [
+            "evaluate",
+            "life.json",
+            "--inputs",
+            "day.json",
+            "--max-nodes",
+            "100000",
+          ],
+          captured.io,
+        ),
+      ).toBe(EXIT_DEFINITE);
+      const printed: unknown = JSON.parse(captured.stdout());
+      expect(printed).toMatchObject({ status: "definite" });
+      const value =
+        typeof printed === "object" &&
+        printed !== null &&
+        "value" in printed &&
+        typeof printed.value === "object" &&
+        printed.value !== null &&
+        "value" in printed.value
+          ? printed.value.value
+          : undefined;
+      expect(value).toBeCloseTo(expectedLoss, precisionDigits);
+    });
+
+    it("lowers the budget as well as raising it", () => {
+      const captured = capture({
+        "t.json": JSON.stringify({ kind: "numberLiteral", value: 1 }),
+      });
+
+      expect(run(["evaluate", "t.json", "--max-nodes=10"], captured.io)).toBe(
+        EXIT_DEFINITE,
+      );
+    });
+
+    it.each([
+      "0",
+      "-1",
+      "1.5",
+      "abc",
+      "1e3",
+      "+5",
+      "",
+      " 5",
+      "9007199254740993",
+    ])("rejects --max-nodes=%j and says what it takes", (value) => {
+      const captured = capture({
+        "t.json": JSON.stringify({ kind: "numberLiteral", value: 1 }),
+      });
+
+      expect(
+        run(["evaluate", "t.json", `--max-nodes=${value}`], captured.io),
+      ).toBe(EXIT_REJECTED);
+      expect(captured.stderr()).toBe(
+        `--max-nodes must be a positive safe integer, not ${JSON.stringify(value)}\n`,
+      );
+      expect(captured.stdout()).toBe("");
+    });
+  });
 });
