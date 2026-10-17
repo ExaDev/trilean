@@ -14,7 +14,7 @@ export type TreeKind = "predicate" | "expression";
 export interface EvaluateDocumentOptions {
   /** The tree as parsed from JSON, not yet validated. */
   tree: unknown;
-  /** Named inputs as parsed from JSON (see `parseInputs`); absent means none. */
+  /** Named values and lists of items as parsed from JSON (see `parseInputs`); absent means none. */
   inputs?: unknown;
   /** Which tree `tree` is. Needed only when its root is a `treeReference`, the one node kind valid in both. */
   as?: TreeKind;
@@ -96,7 +96,7 @@ function resolveTreeKind(
  * - `rejected`: nothing was evaluated, because a tree or an input failed validation (`invalid`) or a root `treeReference` was given without `as` (`ambiguous-tree-kind`). `issues` has one `path: message` line per problem.
  * - `unrepresentable`: the tree was evaluated and the result is a number JSON cannot carry (`Infinity` or `NaN`), which would otherwise be printed as `null`. The built-in registry never produces one, and the evaluator's arithmetic turns an overflow into a `domain-error`, so this is a guard on the document boundary against a change that stops doing so.
  *
- * Resolution is limited to what `createInputResolvers` provides, and its collection error propagates for a tree that folds or quantifies over one.
+ * Resolution is limited to what `createInputResolvers` provides: named values, and lists of items for a `fold`, `some` or `every`. A tree that names a collection the inputs do not hold throws that resolver's error, which propagates.
  */
 export function evaluateDocument({
   tree,
@@ -111,7 +111,10 @@ export function evaluateDocument({
       issues: parsedInputs.issues,
     };
   }
-  const resolvers = createInputResolvers(parsedInputs.inputs);
+  const resolvers = createInputResolvers(
+    parsedInputs.inputs,
+    parsedInputs.collections,
+  );
   const treeKind = resolveTreeKind(tree, as);
   if (treeKind === "ambiguous") {
     return {
