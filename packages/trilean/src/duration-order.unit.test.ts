@@ -42,7 +42,7 @@ function exactOrder(left: Readonly<Duration>, right: Readonly<Duration>) {
   return leftSide > rightSide ? 1 : 0;
 }
 
-/** Named so the cases are the same on every run and no figure is a bare literal. A fifth of the cases are scaled into the subnormal range; each right-hand value is the same span as the left, moved by up to `ulpSpread` units in the last place either way. */
+/** Named so the cases are the same on every run and no figure is a bare literal. A fifth of the cases are scaled down by 2^-1000, which puts about 6% of all cases (those whose exponent is small enough) in the subnormal range; each right-hand value is the same span as the left, moved by up to `ulpSpread` units in the last place either way. */
 const settings = {
   seed: 7,
   cases: 3000,
@@ -51,6 +51,7 @@ const settings = {
   subnormalExponent: -1000,
   signShare: 0.5,
   ulpSpread: 3,
+  five: 5,
 };
 
 const units: DurationUnit[] = ["ms", "s", "min", "h", "d"];
@@ -73,17 +74,81 @@ function generator(seed: number) {
   };
 }
 
-/** The double a few units in the last place away, never below zero (the bit pattern below zero is a negative NaN, not a smaller number). */
 const bitWidth = 64;
 
+/** The first element of a one-element typed array, which is always there; the guard stands in for the `undefined` that indexed access is typed as having. */
+function onlyElement<T>(array: ArrayLike<T>): T {
+  const element = array[0];
+  if (element === undefined) throw new Error("expected a one-element array");
+
+  return element;
+}
+
+/** The double a few units in the last place away, never below zero (the bit pattern below zero is a negative NaN, not a smaller number). */
 function nudge(value: number, ulps: number): number {
   const buffer = new Float64Array([value]);
   const bits = new BigUint64Array(buffer.buffer);
-  const moved = BigInt.asIntN(bitWidth, bits[0] ?? BigInt(0)) + BigInt(ulps);
+  const moved = BigInt.asIntN(bitWidth, onlyElement(bits)) + BigInt(ulps);
   bits[0] = moved < BigInt(0) ? BigInt(0) : moved;
 
-  return buffer[0] ?? value;
+  return onlyElement(buffer);
 }
+
+/** A unit chosen by a random draw in [0, 1). */
+function pickUnit(draw: number): DurationUnit {
+  const unit = units[Math.floor(draw * units.length)];
+  if (unit === undefined) throw new Error("a draw in [0, 1) indexes a unit");
+
+  return unit;
+}
+
+describe("compareDurations with values that are not finite", () => {
+  const nan = Number.NaN;
+  const infinity = Number.POSITIVE_INFINITY;
+  const rows = units.flatMap((leftUnit) =>
+    units.map((rightUnit) => ({ leftUnit, rightUnit })),
+  );
+
+  it.each(rows)(
+    "leaves a NaN unordered against anything, $leftUnit against $rightUnit",
+    ({ leftUnit, rightUnit }) => {
+      const five = { value: settings.five, unit: rightUnit };
+      const notANumber = { value: nan, unit: leftUnit };
+
+      expect(compareDurations(notANumber, five)).toBeUndefined();
+      expect(compareDurations(five, notANumber)).toBeUndefined();
+      expect(
+        compareDurations(notANumber, { value: nan, unit: rightUnit }),
+      ).toBeUndefined();
+      expect(
+        compareDurations(notANumber, { value: infinity, unit: rightUnit }),
+      ).toBeUndefined();
+    },
+  );
+
+  it.each(rows)(
+    "finds equal infinities equal and orders them against finite values, $leftUnit against $rightUnit",
+    ({ leftUnit, rightUnit }) => {
+      const finite = { value: settings.five, unit: rightUnit };
+      const positive = { value: infinity, unit: leftUnit };
+      const negative = { value: -infinity, unit: leftUnit };
+
+      expect(
+        compareDurations(positive, { value: infinity, unit: rightUnit }),
+      ).toBe(0);
+      expect(
+        compareDurations(negative, { value: -infinity, unit: rightUnit }),
+      ).toBe(0);
+      expect(compareDurations(positive, finite)).toBe(1);
+      expect(compareDurations(finite, positive)).toBe(-1);
+      expect(compareDurations(negative, finite)).toBe(-1);
+      expect(compareDurations(finite, negative)).toBe(1);
+      expect(
+        compareDurations(positive, { value: -infinity, unit: rightUnit }),
+      ).toBe(1);
+    },
+  );
+});
 
 describe("compareDurations", () => {
   it.each([
@@ -124,8 +189,8 @@ describe("compareDurations", () => {
       ulpSpread,
     } = settings;
     for (let applied = 0; applied < cases; applied += 1) {
-      const leftUnit = units[Math.floor(random() * units.length)] ?? "ms";
-      const rightUnit = units[Math.floor(random() * units.length)] ?? "ms";
+      const leftUnit = pickUnit(random());
+      const rightUnit = pickUnit(random());
       const exponent =
         Math.floor(random() * 2 * exponentSpread) - exponentSpread;
       const subnormal = random() < subnormalShare ? 2 ** subnormalExponent : 1;

@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { evaluatePredicate } from "./evaluator-factory";
+import type { Resolution, Resolvers } from "./resolvers";
 import { resolvers } from "./evaluator-test-helpers";
 import type { ComparisonOperator, ExpressionNode } from "./tree";
 
@@ -183,7 +184,7 @@ describe("durations too small or too close for a division to tell apart", () => 
   });
 
   it("orders two durations whose quotients round to the same double", async () => {
-    // 25959408 minutes is a little more than 18027.366666666665 days; both are 18027.366666666667 days once rounded.
+    // 25959408 / 1440 rounds to 18027.366666666665, the same double as the literal below, so the rounded values tie. The exact span of the minutes is a little more than that double, which is a little below 18027.3666... days.
     const minutes = duration({ value: 25959408, unit: "min" });
     const days = duration({ value: 18027.366666666665, unit: "d" });
 
@@ -200,5 +201,111 @@ describe("durations too small or too close for a division to tell apart", () => 
         duration({ value: 86400000, unit: "ms" }),
       ),
     ).toBe(true);
+  });
+});
+
+describe("comparing durations that are not finite numbers", () => {
+  const values: Record<string, { value: number; unit: DurationUnit }> = {
+    nanSeconds: { value: Number.NaN, unit: "s" },
+    fiveSeconds: { value: 5, unit: "s" },
+    infiniteDays: { value: Number.POSITIVE_INFINITY, unit: "d" },
+    infiniteMilliseconds: { value: Number.POSITIVE_INFINITY, unit: "ms" },
+    negativeInfiniteHours: { value: Number.NEGATIVE_INFINITY, unit: "h" },
+  };
+  const valueResolvers: Resolvers = {
+    resolveValue: async (key) => {
+      const entry = typeof key === "string" ? values[key] : undefined;
+      const resolution: Resolution =
+        entry === undefined
+          ? { found: false }
+          : { found: true, value: { kind: "duration", ...entry } };
+
+      return Promise.resolve(resolution);
+    },
+    resolveLookup: async () => Promise.resolve({ found: false }),
+    resolveCollection: async () => Promise.resolve([]),
+  };
+
+  function reference(key: string): ExpressionNode {
+    return { kind: "reference", key };
+  }
+
+  async function compareReferences(
+    op: ComparisonOperator,
+    left: string,
+    right: string,
+  ) {
+    const result = await evaluatePredicate(
+      { kind: "compare", op, left: reference(left), right: reference(right) },
+      undefined,
+      valueResolvers,
+    );
+
+    return result.status === "definite" ? result.value : result.reason;
+  }
+
+  async function memberReferences(operand: string, candidate: string) {
+    const result = await evaluatePredicate(
+      {
+        kind: "memberOf",
+        op: "in",
+        operand: reference(operand),
+        candidates: [reference(candidate)],
+      },
+      undefined,
+      valueResolvers,
+    );
+
+    return result.status === "definite" ? result.value : result.reason;
+  }
+
+  it.each(["eq", "lt", "lte", "gt", "gte"] as const)(
+    "%s with a NaN on either side is false, as it is for numbers",
+    async (op) => {
+      expect(await compareReferences(op, "nanSeconds", "fiveSeconds")).toBe(
+        false,
+      );
+      expect(await compareReferences(op, "fiveSeconds", "nanSeconds")).toBe(
+        false,
+      );
+      expect(await compareReferences(op, "nanSeconds", "nanSeconds")).toBe(
+        false,
+      );
+    },
+  );
+
+  it("neq with a NaN is true, and a NaN is not a member of anything", async () => {
+    expect(await compareReferences("neq", "nanSeconds", "fiveSeconds")).toBe(
+      true,
+    );
+    expect(await memberReferences("nanSeconds", "nanSeconds")).toBe(false);
+    expect(await memberReferences("nanSeconds", "fiveSeconds")).toBe(false);
+  });
+
+  it("finds equal infinities equal whatever their units", async () => {
+    expect(
+      await compareReferences("eq", "infiniteDays", "infiniteMilliseconds"),
+    ).toBe(true);
+    expect(
+      await compareReferences("gt", "infiniteDays", "infiniteMilliseconds"),
+    ).toBe(false);
+    expect(await memberReferences("infiniteDays", "infiniteMilliseconds")).toBe(
+      true,
+    );
+  });
+
+  it("orders infinities against finite values and against each other", async () => {
+    expect(await compareReferences("gt", "infiniteDays", "fiveSeconds")).toBe(
+      true,
+    );
+    expect(
+      await compareReferences("lt", "negativeInfiniteHours", "fiveSeconds"),
+    ).toBe(true);
+    expect(
+      await compareReferences("lt", "negativeInfiniteHours", "infiniteDays"),
+    ).toBe(true);
+    expect(await compareReferences("gt", "fiveSeconds", "infiniteDays")).toBe(
+      false,
+    );
   });
 });

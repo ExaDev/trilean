@@ -74,7 +74,7 @@ function applyComparisonOperator(
   }
 }
 
-/** Normalises a `duration`'s magnitude to milliseconds, the common base unit for combining or comparing two `duration`s (or an `instant` and a `duration`) of potentially different `DurationUnit`s. It is used by the temporal arithmetic further down (comparison goes through `compareDurations` instead, which cannot overflow). */
+/** Converts a `duration`'s magnitude to milliseconds by multiplying, the base unit the temporal arithmetic below combines durations of different `DurationUnit`s in and shifts an `instant` by. Comparing two durations does not use it: `compareDurations` does that without converting, because this multiplication overflows for very large spans. */
 function toMilliseconds(value: number, unit: DurationUnit): number {
   return value * millisecondsPerDurationUnit[unit];
 }
@@ -108,7 +108,7 @@ function instantFromEpochMilliseconds(
   return definite({ kind: "instant", value: shifted.toISOString() });
 }
 
-/** `compare`'s two operands: valid kinds are `number` (matching units required), `instant` (ordered by parsed epoch millisecond), or `duration` (ordered by magnitude normalised to milliseconds) -- `text` is never valid here (see `textCompare`), and a kind mismatch between the two operands is `wrong-type`. Narrowing `right` against a literal `left.kind` case (rather than asserting it) is what lets both sides stay properly typed with no `as`. */
+/** `compare`'s two operands: valid kinds are `number` (matching units required), `instant` (ordered by parsed epoch millisecond), or `duration` (ordered by `compareDurations`, in whatever unit each carries, with a NaN unordered) -- `text` is never valid here (see `textCompare`), and a kind mismatch between the two operands is `wrong-type`. Narrowing `right` against a literal `left.kind` case (rather than asserting it) is what lets both sides stay properly typed with no `as`. */
 export function compareValues(
   op: ComparisonOperator,
   left: ComputedValue,
@@ -174,10 +174,10 @@ export function compareValues(
         );
       }
 
-      // The order is -1, 0 or 1, so comparing it with zero applies the operator to the durations themselves.
-      return definite(
-        applyComparisonOperator(op, compareDurations(left, right), 0),
-      );
+      const order = compareDurations(left, right);
+
+      // The order is -1, 0 or 1, so comparing it with zero applies the operator to the durations themselves. A NaN leaves them unordered, which compares as a NaN does.
+      return definite(applyComparisonOperator(op, order ?? Number.NaN, 0));
     }
     // Complex operands stay kind-strict here, deliberately unlike `arithmetic`'s promotion of a real operand: arithmetic produces a value, so promoting loses nothing, whereas a comparison consumes two and this design already treats a kind difference between them as a modelling error worth surfacing (the same reason an `instant` is never compared against a plain `number`).
     case "complex":
@@ -624,7 +624,7 @@ function isFiniteAndNonZero(
   return Number.isFinite(larger) && larger > 0;
 }
 
-/** `power` with a complex operand on either side, defined for exactly one case: a real integer exponent, evaluated as the repeated multiplication that integer exponentiation *is*, grouped by squaring so the work grows with the logarithm of the exponent rather than the exponent itself, at the cost of a result that is typically a few times less accurate than a plain multiplication loop's (see the "Complex values" section of README.md for why an arbitrary complex exponent stays out of scope). */
+/** `power` with a complex operand on either side, defined for exactly one case: a real integer exponent, evaluated as the repeated multiplication that integer exponentiation *is*, grouped by squaring so the work grows with the logarithm of the exponent rather than the exponent itself. The price is accuracy: the error of squaring grows in proportion to the exponent, so for large exponents the result is many times less accurate than a plain multiplication loop's (the "Complex values" section of README.md has the measurement, and explains why an arbitrary complex exponent stays out of scope). */
 function applyComplexPower(
   base: Readonly<Extract<ComputedValue, { kind: "number" | "complex" }>>,
   exponent: Readonly<Extract<ComputedValue, { kind: "number" | "complex" }>>,
