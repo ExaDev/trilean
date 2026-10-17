@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { CliIo } from "../../cli/run";
+import { DEFAULT_MAX_EVALUATION_NODES } from "../../src/evaluator-budget";
 import {
   EXIT_DEFINITE,
   EXIT_INDETERMINATE,
@@ -496,7 +497,7 @@ describe("trilean evaluate with lists of items and complex values", () => {
 
   describe("the node budget", () => {
     /** The loss-of-life sum over a load profile: two to the power of (hot-spot temperature minus 98) over 6, times the interval's hours, summed over the intervals. */
-    const ageingTree = JSON.stringify({
+    const ageing = {
       kind: "fold",
       collection: "intervals",
       combiner: {
@@ -529,7 +530,24 @@ describe("trilean evaluate with lists of items and complex values", () => {
           },
         },
       },
-    });
+    };
+    const ageingTree = JSON.stringify(ageing);
+    /** The objects in a parsed tree that are nodes, which is what the evaluator's budget counts visits to. */
+    function countNodes(value: unknown): number {
+      if (Array.isArray(value)) {
+        return value.reduce(
+          (sum: number, element) => sum + countNodes(element),
+          0,
+        );
+      }
+      if (typeof value !== "object" || value === null) return 0;
+      const own = "kind" in value ? 1 : 0;
+
+      return Object.values(value).reduce(
+        (sum: number, child) => sum + countNodes(child),
+        own,
+      );
+    }
     const minutesInADay = 1440;
     const minutesPerHour = 60;
     const hoursPerMinute = 1 / minutesPerHour;
@@ -546,6 +564,10 @@ describe("trilean evaluate with lists of items and complex values", () => {
       "life.json": ageingTree,
       "day.json": JSON.stringify({ intervals }),
     };
+    const combineNodes = countNodes(ageing.combiner.combine);
+    /** The fold and its initial value are visited once, and the combine expression once for every item. */
+    const nodesNeeded =
+      countNodes(ageing) + (intervals.length - 1) * combineNodes;
     // Half the minutes at weight 1 and half at weight 2, over 1/60 hour each: 12 + 24 hours of ageing.
     const expectedLoss = 36;
     const precisionDigits = 9;
@@ -556,7 +578,12 @@ describe("trilean evaluate with lists of items and complex values", () => {
       expect(
         run(["evaluate", "life.json", "--inputs", "day.json"], captured.io),
       ).toBe(EXIT_INDETERMINATE);
-      expect(captured.stdout()).toMatch(/exceeded the maximum of 10000 nodes/);
+      expect(nodesNeeded).toBeGreaterThan(DEFAULT_MAX_EVALUATION_NODES);
+      expect(captured.stdout()).toMatch(
+        new RegExp(
+          `exceeded the maximum of ${String(DEFAULT_MAX_EVALUATION_NODES)} nodes`,
+        ),
+      );
     });
 
     it("evaluates it with a raised budget", () => {
@@ -570,7 +597,7 @@ describe("trilean evaluate with lists of items and complex values", () => {
             "--inputs",
             "day.json",
             "--max-nodes",
-            "100000",
+            String(nodesNeeded),
           ],
           captured.io,
         ),
@@ -589,14 +616,51 @@ describe("trilean evaluate with lists of items and complex values", () => {
       expect(value).toBeCloseTo(expectedLoss, precisionDigits);
     });
 
-    it("lowers the budget as well as raising it", () => {
-      const captured = capture({
-        "t.json": JSON.stringify({ kind: "numberLiteral", value: 1 }),
-      });
+    it("stops the same tree one node short of what it needs", () => {
+      const captured = capture(files);
 
-      expect(run(["evaluate", "t.json", "--max-nodes=10"], captured.io)).toBe(
-        EXIT_DEFINITE,
+      expect(
+        run(
+          [
+            "evaluate",
+            "life.json",
+            "--inputs",
+            "day.json",
+            "--max-nodes",
+            String(nodesNeeded - 1),
+          ],
+          captured.io,
+        ),
+      ).toBe(EXIT_INDETERMINATE);
+      expect(captured.stdout()).toMatch(
+        new RegExp(`exceeded the maximum of ${String(nodesNeeded - 1)} nodes`),
       );
+    });
+
+    it("lowers the budget below the default as well as raising it", () => {
+      const captured = capture({
+        "t.json": JSON.stringify({
+          kind: "arithmetic",
+          op: "add",
+          left: { kind: "numberLiteral", value: 1 },
+          right: { kind: "numberLiteral", value: 2 },
+        }),
+      });
+      const treeNodes = 3;
+
+      expect(
+        run(
+          ["evaluate", "t.json", `--max-nodes=${String(treeNodes)}`],
+          captured.io,
+        ),
+      ).toBe(EXIT_DEFINITE);
+      const lowered = capture({ "t.json": captured.io.readText("t.json") });
+      expect(
+        run(
+          ["evaluate", "t.json", `--max-nodes=${String(treeNodes - 1)}`],
+          lowered.io,
+        ),
+      ).toBe(EXIT_INDETERMINATE);
     });
 
     it.each([
