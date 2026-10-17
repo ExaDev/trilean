@@ -1,6 +1,6 @@
 // Runs the built command (dist-cli/trilean.mjs) as a child process, the way `npx trilean` does, so what is checked is the shipped file: its shebang line, its bundled dependencies, its stdin handling and its exit status. The `bin` entry in package.json must name that same file, which is checked here too.
 
-import { spawnSync } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import { existsSync, readFileSync, statSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
@@ -77,5 +77,25 @@ describe("the trilean command", () => {
         : undefined;
 
     expect(runCli(["--version"]).stdout.trim()).toBe(version);
+  });
+
+  it("keeps quiet and keeps its exit status when the reader of standard output has gone", async () => {
+    const child = spawn(process.execPath, [binPath, "evaluate", "-"], {
+      stdio: ["pipe", "pipe", "pipe"],
+    });
+    let stderr = "";
+    child.stderr.setEncoding("utf8");
+    child.stderr.on("data", (chunk: string) => {
+      stderr += chunk;
+    });
+    // Closing the read end before the command writes makes its write fail with EPIPE.
+    child.stdout.destroy();
+    child.stdin.end(JSON.stringify({ kind: "reference", key: "absent" }));
+    const status = await new Promise<number | null>((resolve) => {
+      child.on("close", resolve);
+    });
+
+    expect(stderr).toBe("");
+    expect(status).toBe(1);
   });
 });

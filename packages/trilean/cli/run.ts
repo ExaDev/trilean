@@ -11,6 +11,9 @@ export interface CliIo {
   version: string;
 }
 
+/** The path that stands for standard input. */
+const STDIN = "-";
+
 /** The command finished with a definite result. */
 export const EXIT_DEFINITE = 0;
 /** The command finished with an indeterminate result: the tree is well formed but its inputs or functions could not settle it. */
@@ -30,8 +33,9 @@ Evaluates a trilean predicate or expression tree and prints the result as JSON.
                    treeReference, otherwise read from the root's kind
 
 Exit status: 0 for a definite result, 1 for an indeterminate one, 2 when nothing
-was evaluated (bad usage, unreadable or invalid files, or a tree that needs a
-collection, delegate or treeReference resolver the command cannot supply).
+was evaluated: bad usage, an unreadable or invalid file, or a tree that folds or
+quantifies over a collection, which the command has none to supply. A lookup,
+delegate or treeReference it cannot resolve is an indeterminate result (1).
 `;
 
 function isTreeKind(value: string): value is TreeKind {
@@ -64,7 +68,7 @@ function readJson(
 }
 
 function reject(io: Readonly<CliIo>, lines: readonly string[]): number {
-  io.writeStderr(`${lines.join("\n")}\n`);
+  io.writeStderr(`${lines.join("\n").trimEnd()}\n`);
 
   return EXIT_REJECTED;
 }
@@ -86,11 +90,12 @@ export function run(args: readonly string[], io: Readonly<CliIo>): number {
 
     return EXIT_DEFINITE;
   }
-  if (parsed.values.help === true || parsed.positionals.length === 0) {
+  if (parsed.values.help === true) {
     io.writeStdout(usage);
 
-    return parsed.values.help === true ? EXIT_DEFINITE : EXIT_REJECTED;
+    return EXIT_DEFINITE;
   }
+  if (parsed.positionals.length === 0) return reject(io, [usage]);
   const [command, treePath, ...extra] = parsed.positionals;
   if (command !== "evaluate" || treePath === undefined || extra.length > 0) {
     return reject(io, ["expected: trilean evaluate <tree.json>", "", usage]);
@@ -99,9 +104,14 @@ export function run(args: readonly string[], io: Readonly<CliIo>): number {
   if (as !== undefined && !isTreeKind(as)) {
     return reject(io, [`--as must be predicate or expression, not ${as}`]);
   }
+  const inputsPath = parsed.values.inputs;
+  if (treePath === STDIN && inputsPath === STDIN) {
+    return reject(io, [
+      "the tree and --inputs cannot both be read from standard input",
+    ]);
+  }
   const tree = readJson(io, treePath);
   if (!tree.ok) return reject(io, [tree.message]);
-  const inputsPath = parsed.values.inputs;
   const inputs =
     inputsPath === undefined ? undefined : readJson(io, inputsPath);
   if (inputs !== undefined && !inputs.ok) return reject(io, [inputs.message]);
