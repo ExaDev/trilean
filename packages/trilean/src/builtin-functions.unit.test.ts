@@ -311,3 +311,14 @@ describe("logarithm", () => {
     ).toMatch(/optional base/);
   });
 });
+
+describe("a result that is not a finite number", () => {
+  const infinite = num({ value: Number.POSITIVE_INFINITY });
+
+  it.each(["minimum", "maximum", "absoluteValue", "round"])(
+    "is a domain-error from %s even when the argument already was one",
+    (name) => {
+      expect(domainError(call(name, infinite))).toMatch(/not a finite number/);
+    },
+  );
+});
