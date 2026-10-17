@@ -12,6 +12,7 @@ import {
   firstIndeterminate,
   indeterminate,
 } from "./evaluation";
+import { divideComplexComponents } from "./complex-division";
 import type { FunctionRegistry } from "./functions";
 import { powerByRepeatedSquaring } from "./integer-power";
 import type {
@@ -558,33 +559,6 @@ function multiplyComplexValues(
     re: left.re * right.re - left.im * right.im,
     im: left.re * right.im + left.im * right.re,
     unit: combineUnitsForMultiply(left.unit, right.unit),
-  };
-}
-
-/**
- * The components of `dividend / divisor` for a non-zero divisor, by Smith's algorithm. The textbook route multiplies both sides by the divisor's conjugate and divides by `re^2 + im^2`, which overflows to infinity for a large divisor and underflows to zero (a false division by zero) for a tiny one even when the quotient is an ordinary number. Smith's scales by the divisor's larger-magnitude component instead, so every intermediate is at most the size of the operands: with `|re| >= |im|`, the ratio `im / re` is at most one, and the quotient is `(a + b*r) / (re + im*r)` for the real part and `(b - a*r) / (re + im*r)` for the imaginary part, the other branch swapping the roles of the two components.
- */
-function divideComplexComponents(
-  dividend: Readonly<Extract<ComputedValue, { kind: "complex" }>>,
-  divisor: Readonly<Extract<ComputedValue, { kind: "complex" }>>,
-): { re: number; im: number } {
-  const { re: a, im: b } = dividend;
-  const { re: c, im: d } = divisor;
-  if (Math.abs(c) >= Math.abs(d)) {
-    const ratio = d / c;
-    const denominator = c + d * ratio;
-
-    return {
-      re: (a + b * ratio) / denominator,
-      im: (b - a * ratio) / denominator,
-    };
-  }
-  const ratio = c / d;
-  const denominator = c * ratio + d;
-
-  return {
-    re: (a * ratio + b) / denominator,
-    im: (b * ratio - a) / denominator,
   };
 }
 

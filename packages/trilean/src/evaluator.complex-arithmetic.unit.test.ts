@@ -138,6 +138,7 @@ describe("arithmetic on complex values", () => {
     const quotientRe = 1.6;
     const quotientIm = -1.2;
     const precisionDigits = 12;
+    const quotientDigits = 14;
 
     async function divide(
       left: Readonly<{ re: number; im: number }>,
@@ -182,6 +183,33 @@ describe("arithmetic on complex values", () => {
         expect(value.re).toBeCloseTo(quotientRe, precisionDigits);
         expect(value.im).toBeCloseTo(quotientIm, precisionDigits);
       }
+    });
+
+    it("divides values near the top of the range by themselves to one", async () => {
+      expectDefinite(
+        await divide({ re: 1e308, im: 1e308 }, { re: 1e308, im: 1e308 }),
+        { kind: "complex", re: 1, im: 0, unit: {} },
+      );
+    });
+
+    it("gives a representable quotient there, not a zero that compares equal to zero", async () => {
+      const dividend = {
+        re: -6.562357840001232e306,
+        im: 1.1562475168118175e307,
+      };
+      const divisor = {
+        re: -4.145533667044553e307,
+        im: 1.7287855058139144e308,
+      };
+      const quotient = await divide(dividend, divisor);
+      const expected = { re: 0.07185287237270656, im: 0.02072942428658858 };
+
+      expect(quotient.status).toBe("definite");
+      const value = quotient.status === "definite" ? quotient.value : undefined;
+      if (value?.kind !== "complex")
+        throw new Error("expected a complex result");
+      expect(value.re).toBeCloseTo(expected.re, quotientDigits);
+      expect(value.im).toBeCloseTo(expected.im, quotientDigits);
     });
 
     it("still reports an exactly zero divisor as a division by zero", async () => {
@@ -533,6 +561,16 @@ describe("complex power by repeated squaring", () => {
       await power({ base: { re: 1e200, im: 0 }, exponent: 2 }),
       "domain-error",
     );
+  });
+
+  it("inverts a base near the top of the range without losing the result to zero", async () => {
+    const value = complexResult(
+      await power({ base: { re: 1e308, im: 1e308 }, exponent: -1 }),
+    );
+
+    expect(value.re).toBeGreaterThan(0);
+    expect(value.im).toBeLessThan(0);
+    expect(value.re / -value.im).toBeCloseTo(1, precisionDigits);
   });
 
   it("keeps a negative power of a large base finite where its positive power would overflow", async () => {
