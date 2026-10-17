@@ -13,6 +13,7 @@ import {
   indeterminate,
 } from "./evaluation";
 import type { FunctionRegistry } from "./functions";
+import { powerByRepeatedSquaring } from "./integer-power";
 import type {
   ArithmeticOperator,
   ComparisonOperator,
@@ -547,7 +548,7 @@ function toComplexValue(
   return { kind: "complex", re: value.value, im: 0, unit: value.unit };
 }
 
-/** The complex product, as its own component-level helper rather than only a branch of the operator switch below, because `power`'s repeated multiplication needs exactly this and must not re-derive it. */
+/** The complex product, as its own component-level helper rather than only a branch of the operator switch below, because `power`'s exponentiation by squaring needs exactly this and must not re-derive it. */
 function multiplyComplexValues(
   left: Readonly<Extract<ComputedValue, { kind: "complex" }>>,
   right: Readonly<Extract<ComputedValue, { kind: "complex" }>>,
@@ -649,7 +650,7 @@ function applyArithmeticOnComplex(
   }
 }
 
-/** `power` with a complex operand on either side, defined for exactly one case: a real integer exponent, evaluated as the repeated multiplication that integer exponentiation *is* (see the "Complex values" section of README.md for why an arbitrary complex exponent stays out of scope). */
+/** `power` with a complex operand on either side, defined for exactly one case: a real integer exponent, evaluated as the repeated multiplication that integer exponentiation *is*, grouped by squaring so the work grows with the logarithm of the exponent rather than the exponent itself (see the "Complex values" section of README.md for why an arbitrary complex exponent stays out of scope). */
 function applyComplexPower(
   base: Readonly<Extract<ComputedValue, { kind: "number" | "complex" }>>,
   exponent: Readonly<Extract<ComputedValue, { kind: "number" | "complex" }>>,
@@ -673,14 +674,34 @@ function applyComplexPower(
     unit: {},
   };
   const complexBase = toComplexValue(base);
-  let repeatedProduct = complexUnit;
-  for (let applied = 0; applied < Math.abs(exponent.value); applied += 1) {
-    repeatedProduct = multiplyComplexValues(repeatedProduct, complexBase);
+  if (exponent.value >= 0) {
+    return definite(
+      powerByRepeatedSquaring({
+        base: complexBase,
+        exponent: exponent.value,
+        identity: complexUnit,
+        multiply: multiplyComplexValues,
+      }),
+    );
   }
-  if (exponent.value >= 0) return definite(repeatedProduct);
+  // A negative exponent raises the reciprocal to the positive one. Inverting first, rather than inverting the positive power, keeps a result that is representable but whose positive power is not (`(1e160)^-2` is a subnormal, while `(1e160)^2` overflows); it also inherits the zero base's division-by-zero domain-error, since zero has no reciprocal.
+  if (complexBase.re === 0 && complexBase.im === 0) {
+    return indeterminate("domain-error", "division by zero");
+  }
+  const reciprocal: Extract<ComputedValue, { kind: "complex" }> = {
+    kind: "complex",
+    ...divideComplexComponents(complexUnit, complexBase),
+    unit: combineUnitsForDivide(complexUnit.unit, complexBase.unit),
+  };
 
-  // A negative exponent is the reciprocal of the positive one by definition, so it reuses the division above rather than re-deriving it -- which also means a zero base inherits that operator's own division-by-zero domain-error instead of needing its own check.
-  return applyArithmeticOnComplex("divide", complexUnit, repeatedProduct);
+  return definite(
+    powerByRepeatedSquaring({
+      base: reciprocal,
+      exponent: -exponent.value,
+      identity: complexUnit,
+      multiply: multiplyComplexValues,
+    }),
+  );
 }
 
 /**
