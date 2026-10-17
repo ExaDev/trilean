@@ -77,7 +77,7 @@ const millisecondsPerDurationUnit: Record<DurationUnit, number> = {
   d: 86_400_000,
 };
 
-/** Normalises a `duration`'s magnitude to milliseconds, the common base unit for combining or comparing two `duration`s (or an `instant` and a `duration`) of potentially different `DurationUnit`s -- used by the temporal arithmetic further down (comparison goes through `toSharedDurationUnit` instead, which cannot overflow). */
+/** Normalises a `duration`'s magnitude to milliseconds, the common base unit for combining or comparing two `duration`s (or an `instant` and a `duration`) of potentially different `DurationUnit`s. It is used by the temporal arithmetic further down (comparison goes through `toSharedDurationUnit` instead, which cannot overflow). */
 function toMilliseconds(value: number, unit: DurationUnit): number {
   return value * millisecondsPerDurationUnit[unit];
 }
