@@ -11,7 +11,6 @@ export const millisecondsPerDurationUnit: Record<DurationUnit, number> = {
 
 type Ordering = -1 | 0 | 1;
 
-const ZERO = 0n;
 const ONE = 1n;
 const FRACTION_BITS = 52n;
 const FRACTION_MASK = (ONE << FRACTION_BITS) - ONE;
@@ -29,7 +28,10 @@ function exactParts(magnitude: number): {
   exponent: number;
 } {
   scratchValue[0] = magnitude;
-  const bits = scratchBits[0] ?? ZERO;
+  const bits = scratchBits[0];
+  if (bits === undefined) {
+    throw new Error("a one-element array always has an element zero");
+  }
   const exponentField = Number((bits >> FRACTION_BITS) & EXPONENT_FIELD_MASK);
   const fraction = bits & FRACTION_MASK;
   if (exponentField === 0) {
@@ -42,7 +44,7 @@ function exactParts(magnitude: number): {
   };
 }
 
-function orderOf(left: bigint, right: bigint): Ordering {
+function orderOf(left: bigint | number, right: bigint | number): Ordering {
   if (left < right) return -1;
 
   return left > right ? 1 : 0;
@@ -72,16 +74,22 @@ function exactOrder(
 }
 
 /**
- * The exact order of two durations, for every pair of finite values in any units, with no overflow and no underflow.
+ * The order of two durations: -1, 0 or 1, or `undefined` when a NaN makes them unordered.
  *
- * Both are first divided into the coarser of the two units. A division by an exact integer is correctly rounded and rounding never reverses an order, so when the two rounded values differ their order is the true order, and that settles almost every comparison without leaving floating point. Dividing can lose the difference, though: two close values round to the same double, and a subnormal rounds to zero. Only when the rounded values are equal is the answer settled exactly, from the doubles' binary expansions, by comparing each value times its unit's size in milliseconds as integers.
+ * A value that is not finite is handled first, as numbers are: a NaN is unordered against everything (so every comparison with it is false, and `neq` true), and an infinity is equal to the same infinity and greater or less than anything finite whatever the units, since a unit only scales by a positive amount. The bit-pattern comparison below reads a finite double's exact value and has no meaning for these.
+ *
+ * Two finite durations are ordered exactly, with no overflow and no underflow. Both are divided into the coarser of the two units. A division by an exact integer is correctly rounded and rounding is monotone, so it can collapse a difference into equality but never reverse an order: when the two rounded values differ their order is the true order, and that settles almost every comparison without leaving floating point. Dividing can lose the difference, though: two close values round to the same double, and a subnormal rounds to zero. Only when the rounded values are equal is the answer settled exactly, from the doubles' binary expansions, by comparing each value times its unit's size in milliseconds as integers.
  *
  * Converting both to milliseconds by multiplying instead overflows for spans of days beyond roughly 1e300, which is why it is not done here.
  */
 export function compareDurations(
   left: Readonly<{ value: number; unit: DurationUnit }>,
   right: Readonly<{ value: number; unit: DurationUnit }>,
-): Ordering {
+): Ordering | undefined {
+  if (Number.isNaN(left.value) || Number.isNaN(right.value)) return undefined;
+  if (!Number.isFinite(left.value) || !Number.isFinite(right.value)) {
+    return orderOf(left.value, right.value);
+  }
   const leftSize = millisecondsPerDurationUnit[left.unit];
   const rightSize = millisecondsPerDurationUnit[right.unit];
   const sharedSize = Math.max(leftSize, rightSize);
