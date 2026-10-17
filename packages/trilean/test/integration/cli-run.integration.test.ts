@@ -152,7 +152,7 @@ describe("trilean evaluate", () => {
       /inputs\.width/,
     ],
     [
-      "a tree that needs a collection",
+      "a tree that needs a list the inputs do not hold",
       ["evaluate", "fold.json"],
       {
         "fold.json": JSON.stringify({
@@ -161,7 +161,20 @@ describe("trilean evaluate", () => {
           combiner: { mode: "max", item: { kind: "numberLiteral", value: 1 } },
         }),
       },
-      /evaluation could not run: .*scalar values only/,
+      /evaluation could not run: .*the inputs hold no list of items under that name/,
+    ],
+    [
+      "a list with an element that is not an object of values",
+      ["evaluate", "fold.json", "--inputs", "in.json"],
+      {
+        "fold.json": JSON.stringify({
+          kind: "fold",
+          collection: "loads",
+          combiner: { mode: "max", item: { kind: "numberLiteral", value: 1 } },
+        }),
+        "in.json": '{"loads":[1]}',
+      },
+      /inputs\.loads\[0\]: expected an object of named values/,
     ],
     [
       "an invalid --as",
@@ -369,11 +382,13 @@ describe("trilean evaluate", () => {
       });
     });
 
-    it("exits 2 for a quantifier over a collection", () => {
+    it("exits 2 for a quantifier over a list the inputs do not hold", () => {
       const captured = capture({ "t.json": JSON.stringify(quantified) });
 
       expect(run(["evaluate", "t.json"], captured.io)).toBe(EXIT_REJECTED);
-      expect(captured.stderr()).toMatch(/scalar values only/);
+      expect(captured.stderr()).toMatch(
+        /the inputs hold no list of items under that name/,
+      );
     });
 
     it("exits 2 even when a false operand would settle an `and`, because the evaluator asks for the collection", () => {
@@ -399,5 +414,83 @@ describe("trilean evaluate", () => {
 
     expect(run(["--version"], captured.io)).toBe(EXIT_DEFINITE);
     expect(captured.stdout()).toBe("9.9.9\n");
+  });
+});
+
+describe("trilean evaluate with lists of items and complex values", () => {
+  /** The loss of life of IEC 60076-7 clause 6.4: the sum over the intervals of the ageing rate 2^((theta_h - 98) / 6) times the interval's hours. */
+  const lossOfLife = JSON.stringify({
+    kind: "fold",
+    collection: "intervals",
+    combiner: {
+      mode: "reduce",
+      initial: { kind: "numberLiteral", value: 0 },
+      combine: {
+        kind: "arithmetic",
+        op: "add",
+        left: { kind: "accumulator" },
+        right: {
+          kind: "arithmetic",
+          op: "multiply",
+          left: {
+            kind: "arithmetic",
+            op: "power",
+            left: { kind: "numberLiteral", value: 2 },
+            right: {
+              kind: "arithmetic",
+              op: "divide",
+              left: {
+                kind: "arithmetic",
+                op: "subtract",
+                left: { kind: "reference", key: "theta_h" },
+                right: { kind: "numberLiteral", value: 98 },
+              },
+              right: { kind: "numberLiteral", value: 6 },
+            },
+          },
+          right: { kind: "reference", key: "hours" },
+        },
+      },
+    },
+  });
+
+  it("sums over a list of items in the inputs and exits 0", () => {
+    const captured = capture({
+      "life.json": lossOfLife,
+      "in.json": JSON.stringify({
+        intervals: [
+          { theta_h: 98, hours: 24 },
+          { theta_h: 110, hours: 2 },
+          { theta_h: 86, hours: 10 },
+        ],
+      }),
+    });
+
+    expect(
+      run(["evaluate", "life.json", "--inputs", "in.json"], captured.io),
+    ).toBe(EXIT_DEFINITE);
+    expect(JSON.parse(captured.stdout())).toMatchObject({
+      status: "definite",
+      value: { kind: "number", value: 34.5 },
+    });
+  });
+
+  it("takes the magnitude of a complex input and exits 0", () => {
+    const captured = capture({
+      "t.json": JSON.stringify({
+        kind: "call",
+        fn: "magnitude",
+        args: [{ kind: "reference", key: "z" }],
+      }),
+      "in.json": JSON.stringify({ z: { kind: "complex", re: 3, im: -4 } }),
+    });
+
+    expect(
+      run(["evaluate", "t.json", "--inputs", "in.json"], captured.io),
+    ).toBe(EXIT_DEFINITE);
+    expect(JSON.parse(captured.stdout())).toMatchObject({
+      status: "definite",
+      value: { kind: "number", value: 5 },
+    });
   });
 });

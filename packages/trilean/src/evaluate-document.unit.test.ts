@@ -168,7 +168,7 @@ describe("evaluateDocument", () => {
     );
   });
 
-  it("lets a collection error propagate for a tree that folds over one", () => {
+  it("lets a collection error propagate for a tree that folds over a list the inputs do not hold", () => {
     expect(() =>
       evaluateDocument({
         tree: {
@@ -177,7 +177,7 @@ describe("evaluateDocument", () => {
           combiner: { mode: "max", item: { kind: "numberLiteral", value: 1 } },
         },
       }),
-    ).toThrow(/scalar values only/);
+    ).toThrow(/the inputs hold no list of items under that name/);
   });
 });
 

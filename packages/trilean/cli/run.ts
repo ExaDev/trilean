@@ -32,14 +32,15 @@ Evaluates a trilean predicate or expression tree and prints the result as JSON.
   <tree.json>      the tree, or - to read it from standard input
   --inputs <file>  a JSON object of named values for \`reference\` nodes: a plain
                    number, string or boolean, or a complete computed value such
-                   as {"kind":"number","value":2,"unit":{"m":1}}
+                   as {"kind":"number","value":2,"unit":{"m":1}} or a complex
+                   one, {"kind":"complex","re":1,"im":2}. An array of objects of
+                   such values is a list of items for a fold, some or every
   --as <kind>      predicate or expression; needed only when the root is a
                    treeReference, otherwise read from the root's kind
 
 Exit status: 0 for a definite result, 1 for an indeterminate one, 2 when no
 result was printed: bad usage, an unreadable or invalid file, a tree that folds
-or quantifies over a collection (the command has none to supply), or a result
-JSON cannot carry. A lookup, delegate or treeReference it cannot resolve is an
+or quantifies over a list the inputs do not hold, or a result JSON cannot carry. A lookup, delegate or treeReference it cannot resolve is an
 indeterminate result (1).
 `;
 

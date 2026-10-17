@@ -1,12 +1,20 @@
 import { describe, expect, it } from "vitest";
 import type { ComputedValue } from "./computed-value";
+import type { InputItem } from "./input-resolvers";
 import { createInputResolvers, parseInputs } from "./input-resolvers";
 
-function parsed(raw: unknown): ReadonlyMap<string, ComputedValue> {
+function parsedAll(raw: unknown): {
+  inputs: ReadonlyMap<string, ComputedValue>;
+  collections: ReadonlyMap<string, readonly InputItem[]>;
+} {
   const result = parseInputs(raw);
   if (!result.ok) throw new Error(result.issues.join("; "));
 
-  return result.inputs;
+  return result;
+}
+
+function parsed(raw: unknown): ReadonlyMap<string, ComputedValue> {
+  return parsedAll(raw).inputs;
 }
 
 describe("parseInputs", () => {
@@ -29,14 +37,12 @@ describe("parseInputs", () => {
     const result = parseInputs({
       ok: 1,
       nothing: null,
-      list: [1],
       shape: { kind: "number" },
     });
     expect(result).toEqual({
       ok: false,
       issues: [
         "inputs.nothing: expected a finite number, text, boolean or a complete computed value",
-        "inputs.list: expected a finite number, text, boolean or a complete computed value",
         "inputs.shape: expected a finite number, text, boolean or a complete computed value",
       ],
     });
@@ -96,9 +102,97 @@ describe("createInputResolvers", () => {
     });
   });
 
-  it("throws rather than return an empty collection", () => {
+  it("throws rather than return an empty collection for a list the inputs do not hold", () => {
     expect(() => resolvers.resolveCollection("loads", undefined)).toThrow(
-      /scalar values only/,
+      /the inputs hold no list of items under that name/,
     );
+    expect(() => resolvers.resolveCollection(["loads"], undefined)).toThrow(
+      /the inputs hold no list of items under that name/,
+    );
+  });
+});
+
+describe("parseInputs lists of items", () => {
+  it("reads an array as a list of items and keeps scalar entries as named values", () => {
+    const { inputs, collections } = parsedAll({
+      scale: 2,
+      loads: [
+        { amount: 1, label: "a" },
+        { amount: { kind: "number", value: 3, unit: { A: 1 } } },
+      ],
+      empty: [],
+    });
+
+    expect([...inputs.keys()]).toEqual(["scale"]);
+    expect([...collections.keys()]).toEqual(["loads", "empty"]);
+    expect(collections.get("loads")).toEqual([
+      new Map<string, ComputedValue>([
+        ["amount", { kind: "number", value: 1 }],
+        ["label", { kind: "text", value: "a" }],
+      ]),
+      new Map<string, ComputedValue>([
+        ["amount", { kind: "number", value: 3, unit: { A: 1 } }],
+      ]),
+    ]);
+    expect(collections.get("empty")).toEqual([]);
+  });
+
+  it("names every element that is not an object and every value in an element that is not a value", () => {
+    expect(
+      parseInputs({
+        loads: [
+          "x",
+          { amount: 2 },
+          { amount: null },
+          { ok: true, bad: [true] },
+        ],
+      }),
+    ).toEqual({
+      ok: false,
+      issues: [
+        "inputs.loads[0]: expected an object of named values",
+        "inputs.loads[2].amount: expected a finite number, text, boolean or a complete computed value",
+        "inputs.loads[3].bad: expected a finite number, text, boolean or a complete computed value",
+      ],
+    });
+  });
+});
+
+describe("createInputResolvers over lists of items", () => {
+  const { inputs, collections } = parsedAll({
+    scale: 2,
+    loads: [{ amount: 1 }, { amount: 5 }],
+  });
+  const resolvers = createInputResolvers(inputs, collections);
+
+  it("returns the items of a list, each as the context its references resolve against", () => {
+    const items = resolvers.resolveCollection("loads", undefined);
+
+    expect(items).toHaveLength(2);
+    expect(resolvers.resolveValue("amount", items[0])).toEqual({
+      found: true,
+      value: { kind: "number", value: 1 },
+    });
+    expect(resolvers.resolveValue("amount", items[1])).toEqual({
+      found: true,
+      value: { kind: "number", value: 5 },
+    });
+  });
+
+  it("resolves a name inside an item against that item alone, never the top-level inputs", () => {
+    const [first] = resolvers.resolveCollection("loads", undefined);
+
+    expect(resolvers.resolveValue("scale", first)).toEqual({ found: false });
+    expect(resolvers.resolveValue("scale", undefined)).toEqual({
+      found: true,
+      value: { kind: "number", value: 2 },
+    });
+  });
+
+  it("hands back a copy, so a caller cannot change the list the inputs hold", () => {
+    const first = resolvers.resolveCollection("loads", undefined);
+    first.length = 0;
+
+    expect(resolvers.resolveCollection("loads", undefined)).toHaveLength(2);
   });
 });
