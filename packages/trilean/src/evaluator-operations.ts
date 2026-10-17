@@ -648,7 +648,7 @@ function applyComplexPower(
 /**
  * Dispatches `arithmetic` by operand kind. The three cross-kind temporal combinations this design defines (`instant - instant`, `instant + duration`, `duration + instant`) are checked explicitly first, in that order, against the exact operator each requires; any other combination touching an `instant` is `wrong-type` (see "Temporal values" in README.md -- e.g. adding two instants, or subtracting a `duration` from an `instant`, are deliberately *not* defined). Same-kind `duration`/`duration` combinations are delegated to `applyArithmeticOnDurations`; a `duration` paired with anything other than an `instant` or another `duration` is `wrong-type`. Everything remaining requires two `number` operands.
  */
-export function applyArithmetic(
+function applyArithmeticByKind(
   op: ArithmeticOperator,
   left: ComputedValue,
   right: ComputedValue,
@@ -724,6 +724,39 @@ export function applyArithmetic(
   }
 
   return applyArithmeticOnNumbers(op, left, right);
+}
+
+/** Whether a computed value's numeric components are all finite. Only the kinds an arithmetic operator can produce carry one; any other kind has nothing to overflow. */
+function hasFiniteMagnitude(value: ComputedValue): boolean {
+  switch (value.kind) {
+    case "number":
+    case "duration":
+      return Number.isFinite(value.value);
+    case "complex":
+      return Number.isFinite(value.re) && Number.isFinite(value.im);
+    case "text":
+    case "boolean":
+    case "instant":
+      return true;
+    default:
+      throw new Error("unreachable computed-value kind");
+  }
+}
+
+/**
+ * `arithmetic`'s entry point: the result of `applyArithmeticByKind`, except that a definite result whose magnitude overflowed to `Infinity` (or became `NaN`) is a `domain-error` instead. A value of that kind is outside what `ComputedValue` can serialise (JSON writes it as `null`), and an operation pushed outside its valid domain is exactly the category division by zero already uses. Checking once here, after every operator and operand kind has produced its result, is what keeps each of them honest without repeating the check per operator.
+ */
+export function applyArithmetic(
+  op: ArithmeticOperator,
+  left: ComputedValue,
+  right: ComputedValue,
+): Evaluation<ComputedValue> {
+  const result = applyArithmeticByKind(op, left, right);
+  if (result.status === "definite" && !hasFiniteMagnitude(result.value)) {
+    return indeterminate("domain-error", "result is not a finite number");
+  }
+
+  return result;
 }
 
 /** `reference`'s optional expected-unit check: when `expectedUnit` is declared (from `node.unit`), the resolved value must be numeric (`number` or `complex`) and its own unit must match. Returns the `wrong-type` `Evaluation` to return immediately if the check fails, or `undefined` if the reference may resolve as-is. */
