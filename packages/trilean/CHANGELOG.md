@@ -1,3 +1,28 @@
+## [1.9.0](https://github.com/ExaDev/trilean/compare/trilean%401.8.0...trilean%401.9.0) (2026-10-17)
+
+### Features
+
+* **trilean:** add magnitude and phase to the built-in functions ([4091e00](https://github.com/ExaDev/trilean/commit/4091e004e1f0467824b6a21daddf26bfabcd59a5))
+* **trilean:** let the command raise the node budget for a long list ([5ea3362](https://github.com/ExaDev/trilean/commit/5ea3362df6b005f478317b6b35925dea969451a7))
+* **trilean:** take lists of items from the command's inputs for fold, some and every ([7064d5f](https://github.com/ExaDev/trilean/commit/7064d5f156afe964f5d2bb742ae990f084888d61))
+
+### Bug Fixes
+
+* **trilean:** export InputItem from the package entry point ([735e6d7](https://github.com/ExaDev/trilean/commit/735e6d797008bee3fc81453806ffa495cafaf435))
+* **trilean:** give phase one range regardless of the sign of a zero ([e3f5987](https://github.com/ExaDev/trilean/commit/e3f5987a434fec61ea0bd6b10f4055257bbcabba))
+* **trilean:** scope a reference to the item the resolver handed out ([18f5083](https://github.com/ExaDev/trilean/commit/18f50834c8a1bf3e52d4050308d8fcf2bae042f6))
+
+### Documentation
+
+* **trilean:** say the node limit is also the guard against a hostile tree ([13ddcba](https://github.com/ExaDev/trilean/commit/13ddcbae8342d495e31694aaa714723d01abe74a))
+* **trilean:** state the phase range as closed and correct the atan2 claim ([dada9d5](https://github.com/ExaDev/trilean/commit/dada9d547e6383564186a76cbf2e06ae52aa1b78))
+* **trilean:** state what scoping a list of items guarantees ([414f7db](https://github.com/ExaDev/trilean/commit/414f7dbf022378b93f9a49f8e41afccb0fecadc3))
+* **trilean:** write a decimal fraction with a point in a test comment ([cd8fad9](https://github.com/ExaDev/trilean/commit/cd8fad965ce9887101cbdc2370c84a7f743e9adb))
+
+### Tests
+
+* **trilean:** derive the budget in the command's tests and make them able to fail ([ea39012](https://github.com/ExaDev/trilean/commit/ea39012d10a8b27692148e65d1a14e7e380539bb))
+
 ## [1.8.0](https://github.com/ExaDev/trilean/compare/trilean%401.7.12...trilean%401.8.0) (2026-10-17)
 
 ### Features
