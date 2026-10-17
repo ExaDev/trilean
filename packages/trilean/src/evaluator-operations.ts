@@ -548,6 +548,33 @@ function multiplyComplexValues(
   };
 }
 
+/**
+ * The components of `dividend / divisor` for a non-zero divisor, by Smith's algorithm. The textbook route multiplies both sides by the divisor's conjugate and divides by `re^2 + im^2`, which overflows to infinity for a large divisor and underflows to zero (a false division by zero) for a tiny one even when the quotient is an ordinary number. Smith's scales by the divisor's larger-magnitude component instead, so every intermediate is at most the size of the operands: with `|re| >= |im|`, the ratio `im / re` is at most one, and the quotient is `(a + b*r) / (re + im*r)` for the real part and `(b - a*r) / (re + im*r)` for the imaginary part, the other branch swapping the roles of the two components.
+ */
+function divideComplexComponents(
+  dividend: Readonly<Extract<ComputedValue, { kind: "complex" }>>,
+  divisor: Readonly<Extract<ComputedValue, { kind: "complex" }>>,
+): { re: number; im: number } {
+  const { re: a, im: b } = dividend;
+  const { re: c, im: d } = divisor;
+  if (Math.abs(c) >= Math.abs(d)) {
+    const ratio = d / c;
+    const denominator = c + d * ratio;
+
+    return {
+      re: (a + b * ratio) / denominator,
+      im: (b - a * ratio) / denominator,
+    };
+  }
+  const ratio = c / d;
+  const denominator = c * ratio + d;
+
+  return {
+    re: (a * ratio + b) / denominator,
+    im: (b * ratio - a) / denominator,
+  };
+}
+
 /** Complex arithmetic, over the one canonical rectangular representation the `complex` kind stores (see the "Complex values" section of README.md). `add`/`subtract` are component-wise and carry the same identical-units requirement real numbers already have. `power` is deliberately excluded from this operator set rather than handled and rejected here: its exponent must stay an un-promoted real number, so the dispatcher routes it to `applyComplexPower` first, and excluding it from the type is what makes the compiler enforce that routing instead of leaving a dead branch behind. */
 function applyArithmeticOnComplex(
   op: Exclude<ArithmeticOperator, "power">,
@@ -586,17 +613,16 @@ function applyArithmeticOnComplex(
     case "multiply":
       return definite(multiplyComplexValues(left, right));
     case "divide": {
-      // Multiplying both sides by the divisor's conjugate makes the denominator the real |divisor|^2, which is what turns a complex quotient into two ordinary real divisions.
-      const divisorSquaredMagnitude = right.re * right.re + right.im * right.im;
       // Zero is the one complex value with no reciprocal, and it is zero in *both* components -- a divisor with only a zero real part (a purely imaginary one) divides perfectly well.
-      if (divisorSquaredMagnitude === 0) {
+      if (right.re === 0 && right.im === 0) {
         return indeterminate("domain-error", "division by zero");
       }
+      const quotient = divideComplexComponents(left, right);
 
       return definite({
         kind: "complex",
-        re: (left.re * right.re + left.im * right.im) / divisorSquaredMagnitude,
-        im: (left.im * right.re - left.re * right.im) / divisorSquaredMagnitude,
+        re: quotient.re,
+        im: quotient.im,
         unit: combineUnitsForDivide(left.unit, right.unit),
       });
     }

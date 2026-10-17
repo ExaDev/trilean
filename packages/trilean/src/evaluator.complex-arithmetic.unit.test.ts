@@ -1,4 +1,4 @@
-import { describe, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import { evaluateValue } from "./evaluator-factory";
 import {
   expectDefinite,
@@ -130,6 +130,73 @@ describe("arithmetic on complex values", () => {
       resolvers,
     );
     expectDefinite(result, { kind: "complex", re: 0, im: -2, unit: {} });
+  });
+
+  describe("divide at extreme magnitudes", () => {
+    const huge = 1e200;
+    const tiny = 1e-200;
+    const quotientRe = 1.6;
+    const quotientIm = -1.2;
+    const precisionDigits = 12;
+
+    async function divide(
+      left: Readonly<{ re: number; im: number }>,
+      right: Readonly<{ re: number; im: number }>,
+    ) {
+      return evaluateValue(
+        {
+          kind: "arithmetic",
+          op: "divide",
+          left: { kind: "complexLiteral", ...left },
+          right: { kind: "complexLiteral", ...right },
+        },
+        undefined,
+        resolvers,
+      );
+    }
+
+    it("divides a large value by itself to exactly one, where |divisor|^2 would overflow", async () => {
+      expectDefinite(
+        await divide({ re: huge, im: huge }, { re: huge, im: huge }),
+        { kind: "complex", re: 1, im: 0, unit: {} },
+      );
+    });
+
+    it("divides by a tiny value without mistaking it for zero, where |divisor|^2 would underflow", async () => {
+      expectDefinite(await divide({ re: 1, im: 1 }, { re: tiny, im: tiny }), {
+        kind: "complex",
+        re: huge,
+        im: 0,
+        unit: {},
+      });
+    });
+
+    it("divides whichever component of the divisor is larger", async () => {
+      // (4 + 2i) / (1 + 2i) = ((4 + 4) + (2 - 8)i) / 5 = 1.6 - 1.2i; the imaginary part leads, so the other branch of the algorithm runs.
+      const result = await divide({ re: 4, im: 2 }, { re: 1, im: 2 });
+
+      expect(result).toMatchObject({ status: "definite" });
+      const value = result.status === "definite" ? result.value : undefined;
+      expect(value).toMatchObject({ kind: "complex" });
+      if (value?.kind === "complex") {
+        expect(value.re).toBeCloseTo(quotientRe, precisionDigits);
+        expect(value.im).toBeCloseTo(quotientIm, precisionDigits);
+      }
+    });
+
+    it("still reports an exactly zero divisor as a division by zero", async () => {
+      const result = await divide({ re: 1, im: 1 }, { re: 0, im: 0 });
+
+      expectIndeterminate(result, "domain-error");
+      expect(result).toMatchObject({ reason: { message: "division by zero" } });
+    });
+
+    it("still reports a quotient too large to represent as a domain-error", async () => {
+      expectIndeterminate(
+        await divide({ re: huge, im: huge }, { re: tiny, im: tiny }),
+        "domain-error",
+      );
+    });
   });
 
   it("modulo is domain-error -- there is no remainder on the complex plane", async () => {
