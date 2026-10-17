@@ -73,7 +73,7 @@ const lossOfLife = {
 
 describe("evaluateDocument with lists of items", () => {
   it("sums the loss of life over a load profile, each interval read from its own item", () => {
-    // V is 1 at 98 C, 4 at 110 C and 0,25 at 86 C, so 1 * 24 + 4 * 2 + 0,25 * 10.
+    // V is 1 at 98 C, 4 at 110 C and 0.25 at 86 C, so 1 * 24 + 4 * 2 + 0.25 * 10.
     const profile = {
       intervals: [
         { theta_h: 98, hours: 24 },
