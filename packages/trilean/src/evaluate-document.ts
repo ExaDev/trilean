@@ -94,7 +94,7 @@ function resolveTreeKind(
  *
  * - `evaluated`: an `Evaluation`, definite or indeterminate.
  * - `rejected`: nothing was evaluated, because a tree or an input failed validation (`invalid`) or a root `treeReference` was given without `as` (`ambiguous-tree-kind`). `issues` has one `path: message` line per problem.
- * - `unrepresentable`: the tree was evaluated and the result is a number JSON cannot carry (`Infinity` or `NaN`), which would otherwise be printed as `null`. No current path reaches it: the evaluator's arithmetic and the built-in functions both turn such a result into a `domain-error`, so this is a guard on the document boundary for a registry change that stops doing so.
+ * - `unrepresentable`: the tree was evaluated and the result is a number JSON cannot carry (`Infinity` or `NaN`), which would otherwise be printed as `null`. The built-in registry never produces one, and the evaluator's arithmetic turns an overflow into a `domain-error`, so this is a guard on the document boundary against a change that stops doing so.
  *
  * Resolution is limited to what `createInputResolvers` provides, and its collection error propagates for a tree that folds or quantifies over one.
  */
