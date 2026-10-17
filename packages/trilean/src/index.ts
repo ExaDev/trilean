@@ -31,7 +31,7 @@ export type { FunctionFailure, FunctionRegistry } from "./functions";
 export { emptyFunctionRegistry } from "./functions";
 export { builtinFunctions } from "./builtin-functions";
 
-export type { InputsParseResult } from "./input-resolvers";
+export type { InputItem, InputsParseResult } from "./input-resolvers";
 export { createInputResolvers, parseInputs } from "./input-resolvers";
 
 export type {
