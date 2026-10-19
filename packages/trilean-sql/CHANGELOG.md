@@ -1,3 +1,15 @@
+## [2.2.22](https://github.com/ExaDev/trilean/compare/trilean-sql%402.2.21...trilean-sql%402.2.22) (2026-10-19)
+
+### Build System
+
+* **deps-dev:** bump @vitest/coverage-v8 from 5.0.3 to 5.0.4 ([785f632](https://github.com/ExaDev/trilean/commit/785f63285b60267475e1dae59586a16fed5292b4))
+
+
+### Dependencies
+
+- Updated trilean-regex to 1.0.15
+- Updated trilean to 1.9.2
+
 ## [2.2.21](https://github.com/ExaDev/trilean/compare/trilean-sql%402.2.20...trilean-sql%402.2.21) (2026-10-19)
 
 ### Build System
