@@ -1,3 +1,15 @@
+## [2.2.20](https://github.com/ExaDev/trilean/compare/trilean-sql%402.2.19...trilean-sql%402.2.20) (2026-10-19)
+
+### Build System
+
+* **deps-dev:** bump prettier from 3.9.9 to 3.9.10 ([0ac3568](https://github.com/ExaDev/trilean/commit/0ac356872e50eb232c4e6fa05f8a173da7d75789))
+
+
+### Dependencies
+
+- Updated trilean-regex to 1.0.14
+- Updated trilean to 1.9.1
+
 ## [2.2.19](https://github.com/ExaDev/trilean/compare/trilean-sql%402.2.18...trilean-sql%402.2.19) (2026-10-17)
 
 

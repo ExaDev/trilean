@@ -245,7 +245,7 @@ importers:
   packages/trilean:
     dependencies:
       trilean-regex:
-        specifier: 1.0.13
+        specifier: 1.0.14
         version: link:../trilean-regex
       zod:
         specifier: ^4.6.5
@@ -357,10 +357,10 @@ importers:
   packages/trilean-sql:
     dependencies:
       trilean:
-        specifier: 1.9.0
+        specifier: 1.9.1
         version: link:../trilean
       trilean-regex:
-        specifier: 1.0.13
+        specifier: 1.0.14
         version: link:../trilean-regex
     devDependencies:
       '@arethetypeswrong/cli':

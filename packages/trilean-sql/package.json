@@ -1,13 +1,13 @@
 {
   "name": "trilean-sql",
   "description": "Compiles a trilean predicate tree into a parameterised SQL WHERE fragment, pushing three-valued logic down onto the database's own NULL propagation instead of evaluating it in process.",
-  "version": "2.2.19",
+  "version": "2.2.20",
   "bugs": {
     "url": "https://github.com/ExaDev/trilean/issues"
   },
   "dependencies": {
-    "trilean": "1.9.0",
-    "trilean-regex": "1.0.13"
+    "trilean": "1.9.1",
+    "trilean-regex": "1.0.14"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
