@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
-    "@cloudflare/vitest-plugin": "1.4.0",
+    "@cloudflare/vitest-plugin": "1.4.1",
     "@exadev/eslint-config": "3.0.0",
     "@types/node": "^26.6.5",
     "@vitest/coverage-v8": "^5.0.4",
