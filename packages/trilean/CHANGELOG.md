@@ -1,3 +1,9 @@
+## [1.10.0](https://github.com/ExaDev/trilean/compare/trilean%401.9.2...trilean%401.10.0) (2026-10-20)
+
+### Features
+
+* **builtins:** add complex squareRoot, exponential, logarithm and trigonometry ([143576d](https://github.com/ExaDev/trilean/commit/143576dd388d70c98a364dfaad19a820da4e5705))
+
 ## [1.9.2](https://github.com/ExaDev/trilean/compare/trilean%401.9.1...trilean%401.9.2) (2026-10-19)
 
 ### Build System
