@@ -26,7 +26,7 @@
     "pg": "^8.23.1",
     "prettier": "^3.9.10",
     "publint": "^0.3.25",
-    "tsdown": "^0.23.0",
+    "tsdown": "^0.23.1",
     "turbo": "^2.11.7",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.71.1",
