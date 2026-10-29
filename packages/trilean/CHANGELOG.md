@@ -1,3 +1,9 @@
+## [1.12.0](https://github.com/ExaDev/trilean/compare/trilean%401.11.1...trilean%401.12.0) (2026-10-29)
+
+### Features
+
+* **trilean:** export the evaluator's default budgets ([9ea87f0](https://github.com/ExaDev/trilean/commit/9ea87f0022e239b3ac09738f7f0a0a13986939e2))
+
 ## [1.11.1](https://github.com/ExaDev/trilean/compare/trilean%401.11.0...trilean%401.11.1) (2026-10-29)
 
 ### Tests

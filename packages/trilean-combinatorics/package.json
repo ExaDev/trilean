@@ -1,13 +1,13 @@
 {
   "name": "trilean-combinatorics",
   "description": "Constrains combinatrix models with trilean predicate trees, evaluated three-valued on partial assignments, and covers their valid combinations with pairwise and t-wise covering arrays.",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "bugs": {
     "url": "https://github.com/ExaDev/trilean/issues"
   },
   "dependencies": {
     "combinatrix": "1.0.0",
-    "trilean": "1.11.1"
+    "trilean": "1.12.0"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
