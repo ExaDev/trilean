@@ -1,3 +1,9 @@
+## [1.11.0](https://github.com/ExaDev/trilean/compare/trilean%401.10.1...trilean%401.11.0) (2026-10-29)
+
+### Features
+
+* let a resolver report a value as not yet known ([57334cd](https://github.com/ExaDev/trilean/commit/57334cd4ff57d44ee2f79330f371c0dd9d053523))
+
 ## [1.10.1](https://github.com/ExaDev/trilean/compare/trilean%401.10.0...trilean%401.10.1) (2026-10-20)
 
 ### Build System
