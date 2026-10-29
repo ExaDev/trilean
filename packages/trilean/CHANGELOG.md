@@ -1,3 +1,10 @@
+## [1.11.1](https://github.com/ExaDev/trilean/compare/trilean%401.11.0...trilean%401.11.1) (2026-10-29)
+
+### Tests
+
+* enumerate each tree over the references it mentions ([d28f740](https://github.com/ExaDev/trilean/commit/d28f740c7841613fd9b6d5da0812f5b35bac8979))
+* narrow the resolved key before matching it to a reference ([5e48d96](https://github.com/ExaDev/trilean/commit/5e48d966e10a26b4fff22d2bbd72f2522cb60655))
+
 ## [1.11.0](https://github.com/ExaDev/trilean/compare/trilean%401.10.1...trilean%401.11.0) (2026-10-29)
 
 ### Features
