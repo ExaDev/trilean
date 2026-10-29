@@ -49,7 +49,7 @@ describe("the README example", () => {
 
     expect(count(model, { limit })).toBe(VALID_COMBINATIONS);
     const rows = collect(model, {
-      strategy: coveringArray({ strength: 2, limit }),
+      strategy: coveringArray({ strength: 2 }),
       limit,
     }).map(({ values }) => values);
     expect(isCoveringArray(rows, model, { strength: 2, limit })).toBe(true);
