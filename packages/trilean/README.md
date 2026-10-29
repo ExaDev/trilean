@@ -858,12 +858,31 @@ When every resolver is a plain in-memory read, `createSyncEvaluator` builds the 
 function createSyncEvaluator(options: { functions?: FunctionRegistry; maxNodes?: number; maxNestingDepth?: number }): {
   evaluatePredicate: (node: PredicateNode, context: EvaluationContext, resolvers: SyncResolvers) => Evaluation<boolean>;
   evaluateValue: (node: ExpressionNode, context: EvaluationContext, resolvers: SyncResolvers) => Evaluation<ComputedValue>;
+  compilePredicate: (node: PredicateNode) => CompiledPredicate;
 };
 ```
 
 The node rules are written once and run by either driver, so the two evaluators agree on every node kind and every three-valued rule. A resolver that returns a promise (or any thenable) to a synchronous evaluator makes the evaluation throw a `TypeError`, since there is nothing to await it with. Because nothing is concurrent, independent operands (both sides of an `and`, the candidates of a `memberOf`, the items of a collection) are evaluated one after another; when a `maxNodes` or `maxNestingDepth` limit is exhausted partway through a tree, which operand meets it first can therefore differ from the asynchronous evaluator.
 
 Both evaluators default `maxNodes` to `DEFAULT_MAX_EVALUATION_NODES` and `maxNestingDepth` to `DEFAULT_MAX_NESTING_DEPTH`, and both constants are exported, so a caller that checks a tree against the budget before evaluating it (counting its nodes, with the root at nesting depth 0 and every child one deeper) reads the same limits the evaluator applies. One evaluation visits a node at most once unless the tree has a `treeReference`, a `fold` or a `some`/`every` quantifier, which revisit a subtree per resolved tree or item, so for any other tree its node count is exactly the most the evaluation can spend.
+
+### Evaluating one tree repeatedly
+
+A caller that evaluates one predicate tree many times against changing resolvers (a constraint solver asking about each partial assignment, a rule checked against every record) pays for walking the tree on every call. `compilePredicate` on a synchronous evaluator walks it once and returns a function of the context and resolvers:
+
+```ts
+type CompiledPredicate = (context: EvaluationContext, resolvers: SyncResolvers) => Evaluation<boolean>;
+
+const { compilePredicate } = createSyncEvaluator({ functions });
+const check = compilePredicate(tree);
+
+check(undefined, resolversForFirstAssignment);
+check(undefined, resolversForSecondAssignment);
+```
+
+The result is the `Evaluation` that `evaluatePredicate` gives for the same tree, context and resolvers: the same status, value and indeterminate reason (including which of several candidate reasons is reported), the same resolver calls in the same order, the same `maxNodes` and `maxNestingDepth` limits met at the same node, and the same `TypeError` for a resolver that returns a promise. The functions and limits are those the evaluator was built with. The tree must be well formed and must not be mutated after it is compiled.
+
+Every node kind is accepted. The compiled function evaluates `not`, `and`, `or`, `allOf`, `anyOf`, `compare`, `textCompare`, `memberOf` and `exists`, and the expression kinds `reference`, `accumulator`, the literals, `arithmetic`, `negate`, `call`, `lookup`, `conditional` and `delegate`, itself. A `some`, `every`, `fold` or `treeReference` node, which re-evaluates a subtree per item or per resolved tree, is handed to the interpreter inside the compiled function, sharing the call's budget, so a tree containing one still has a single entry point and one set of semantics. A tree that can never exhaust its budget (no such node, and no more nodes than `maxNodes`) skips the per-node budget charge; any other tree charges it at every node exactly as the interpreter does.
 
 ## Indeterminacy reference
 

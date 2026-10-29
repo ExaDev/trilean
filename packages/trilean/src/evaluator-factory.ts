@@ -6,6 +6,8 @@ import {
   createEvaluationBudget,
 } from "./evaluator-budget";
 import { evaluatePredicateInternal, evaluateValueInternal } from "./evaluator";
+import type { CompiledPredicate } from "./evaluator-compiled";
+import { compilePredicateTree } from "./evaluator-compiled";
 import type { FunctionRegistry } from "./functions";
 import { emptyFunctionRegistry } from "./functions";
 import { runAsync, runSync } from "./evaluator-effect";
@@ -93,6 +95,8 @@ export function createSyncEvaluator({
     context: EvaluationContext,
     resolvers: Readonly<SyncResolvers>,
   ) => Evaluation<ComputedValue>;
+  /** Prepares `node` for repeated evaluation under changing resolvers; see `CompiledPredicate` and `compilePredicateTree`. The function it returns gives the result `evaluatePredicate` gives for the same node, context and resolvers, without walking the tree afresh on each call, and is bound to this evaluator's functions and limits. */
+  compilePredicate: (node: PredicateNode) => CompiledPredicate;
 } {
   return {
     evaluatePredicate: (node, context, resolvers) =>
@@ -123,6 +127,8 @@ export function createSyncEvaluator({
           0,
         ),
       ),
+    compilePredicate: (node) =>
+      compilePredicateTree(node, functions, maxNodes, maxNestingDepth),
   };
 }
 

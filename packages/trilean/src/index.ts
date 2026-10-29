@@ -49,6 +49,7 @@ export {
   evaluateValue,
 } from "./evaluator-factory";
 export type { EvaluatorOptions } from "./evaluator-factory";
+export type { CompiledPredicate } from "./evaluator-compiled";
 export {
   DEFAULT_MAX_EVALUATION_NODES,
   DEFAULT_MAX_NESTING_DEPTH,
