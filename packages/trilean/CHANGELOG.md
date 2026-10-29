@@ -1,3 +1,13 @@
+## [1.13.0](https://github.com/ExaDev/trilean/compare/trilean%401.12.0...trilean%401.13.0) (2026-10-29)
+
+### Features
+
+* **trilean:** compile a predicate tree once for repeated synchronous evaluation ([6c34cb7](https://github.com/ExaDev/trilean/commit/6c34cb7927f6b4c4dbf5b275780c9dad4b716c7f))
+
+### Code Refactoring
+
+* **trilean:** share the promise rejection and literal values between evaluation paths ([9ab3bfa](https://github.com/ExaDev/trilean/commit/9ab3bfa70d9552417e68ee5e6d0ee10b8fcc7751))
+
 ## [1.12.0](https://github.com/ExaDev/trilean/compare/trilean%401.11.1...trilean%401.12.0) (2026-10-29)
 
 ### Features

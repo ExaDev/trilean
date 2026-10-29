@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/ExaDev/trilean/compare/trilean-combinatorics%401.0.0...trilean-combinatorics%401.0.1) (2026-10-29)
+
+
+### Dependencies
+
+- Updated trilean to 1.13.0
+
 ## 1.0.0 (2026-10-29)
 
 ### Features
