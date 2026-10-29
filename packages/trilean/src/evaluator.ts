@@ -1,4 +1,3 @@
-import { complexFromPolar } from "./complex";
 import type { ComputedValue } from "./computed-value";
 import {
   type Evaluation,
@@ -26,6 +25,7 @@ import {
   computeMembershipMatch,
   invokeRegisteredFunction,
 } from "./evaluator-operations";
+import { literalValue } from "./evaluator-literals";
 import type { FunctionRegistry } from "./functions";
 import { type Task, all, wait } from "./evaluator-effect";
 import type { EvaluationContext, EvaluatorResolvers } from "./resolvers";
@@ -460,31 +460,12 @@ export function* evaluateValueInternal(
       return invokeRegisteredFunction(functions, node.fn, args);
     }
     case "numberLiteral":
-      return definite({ kind: "number", value: node.value, unit: node.unit });
     case "textLiteral":
-      return definite({ kind: "text", value: node.value });
     case "booleanLiteral":
-      return definite({ kind: "boolean", value: node.value });
     case "instantLiteral":
-      return definite({ kind: "instant", value: node.value });
     case "durationLiteral":
-      return definite({
-        kind: "duration",
-        value: node.value,
-        unit: node.unit,
-      });
     case "complexLiteral":
-      // Whichever authoring form was used (see the "Complex values" section of README.md), normalise to the single rectangular `ComputedValue` immediately -- nothing downstream (arithmetic, compare, memberOf, negate) ever sees a polar-authored value.
-      if ("re" in node) {
-        return definite({
-          kind: "complex",
-          re: node.re,
-          im: node.im,
-          unit: node.unit,
-        });
-      }
-
-      return definite(complexFromPolar(node.magnitude, node.phase, node.unit));
+      return definite(literalValue(node));
     case "arithmetic": {
       const [left, right] = yield* all([
         evaluateValueInternal(
