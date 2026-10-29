@@ -92,7 +92,7 @@ function resolversFor(
 ): SyncResolvers {
   return {
     resolveValue: (key) => {
-      if (!isKey(key)) return { found: false };
+      if (typeof key !== "string" || !isKey(key)) return { found: false };
       const position = keys.indexOf(key);
       const state = states[position];
       if (state === undefined) {
