@@ -1,0 +1,89 @@
+{
+  "name": "trilean-combinatorics",
+  "description": "Constrains combinatrix models with trilean predicate trees, evaluated three-valued on partial assignments, and covers their valid combinations with pairwise and t-wise covering arrays.",
+  "version": "0.1.0",
+  "bugs": {
+    "url": "https://github.com/ExaDev/trilean/issues"
+  },
+  "dependencies": {
+    "combinatrix": "1.0.0",
+    "trilean": "1.11.0"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
+    "@exadev/eslint-config": "3.0.0",
+    "@types/node": "^26.6.5",
+    "@vitest/coverage-v8": "^5.0.4",
+    "eslint": "^10.12.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.6",
+    "globals": "^17.13.0",
+    "prettier": "^3.9.10",
+    "publint": "^0.3.25",
+    "tsdown": "^0.23.1",
+    "turbo": "^2.11.7",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.71.1",
+    "vitest": "^5.0.3"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "import": "./dist/*.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "homepage": "https://github.com/ExaDev/trilean/tree/main/packages/trilean-combinatorics",
+  "keywords": [
+    "combinatorial-testing",
+    "combinatrix",
+    "constraint-satisfaction",
+    "covering-array",
+    "pairwise",
+    "predicate",
+    "t-wise",
+    "three-valued-logic",
+    "trilean"
+  ],
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true,
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExaDev/trilean.git",
+    "directory": "packages/trilean-combinatorics"
+  },
+  "scripts": {
+    "_build": "tsdown",
+    "_lint": "eslint . --fix --cache --max-warnings 0",
+    "_prepush": "true",
+    "_test": "vitest run --project unit",
+    "_test:coverage": "vitest run --project unit --coverage",
+    "_typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.node.json",
+    "_typecheck:attw": "attw --pack --profile esm-only",
+    "build": "turbo run _build",
+    "lint": "turbo run _lint",
+    "prepublishOnly": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run build && publint && attw --pack --profile esm-only",
+    "prepush": "turbo run _prepush",
+    "test": "turbo run _test",
+    "test:coverage": "turbo run _test:coverage",
+    "typecheck": "turbo run _typecheck _typecheck:attw"
+  },
+  "sideEffects": false,
+  "type": "module",
+  "types": "./dist/index.d.ts"
+}
