@@ -49,6 +49,10 @@ export {
   evaluateValue,
 } from "./evaluator-factory";
 export type { EvaluatorOptions } from "./evaluator-factory";
+export {
+  DEFAULT_MAX_EVALUATION_NODES,
+  DEFAULT_MAX_NESTING_DEPTH,
+} from "./evaluator-budget";
 
 export {
   and,

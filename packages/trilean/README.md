@@ -863,6 +863,8 @@ function createSyncEvaluator(options: { functions?: FunctionRegistry; maxNodes?:
 
 The node rules are written once and run by either driver, so the two evaluators agree on every node kind and every three-valued rule. A resolver that returns a promise (or any thenable) to a synchronous evaluator makes the evaluation throw a `TypeError`, since there is nothing to await it with. Because nothing is concurrent, independent operands (both sides of an `and`, the candidates of a `memberOf`, the items of a collection) are evaluated one after another; when a `maxNodes` or `maxNestingDepth` limit is exhausted partway through a tree, which operand meets it first can therefore differ from the asynchronous evaluator.
 
+Both evaluators default `maxNodes` to `DEFAULT_MAX_EVALUATION_NODES` and `maxNestingDepth` to `DEFAULT_MAX_NESTING_DEPTH`, and both constants are exported, so a caller that checks a tree against the budget before evaluating it (counting its nodes, with the root at nesting depth 0 and every child one deeper) reads the same limits the evaluator applies. One evaluation visits a node at most once unless the tree has a `treeReference`, a `fold` or a `some`/`every` quantifier, which revisit a subtree per resolved tree or item, so for any other tree its node count is exactly the most the evaluation can spend.
+
 ## Indeterminacy reference
 
 How each reason category can arise, per node kind. "Propagates" means: an indeterminate operand/sub-result, with no other rule overriding it, makes the whole node indeterminate with that same reason (subject to the tie-break rule in [The evaluation model](#the-evaluation-model) when more than one candidate reason is present, and to the absorbing-value exceptions called out explicitly below).
