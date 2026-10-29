@@ -48,6 +48,19 @@ function isThenable(value: unknown): boolean {
   );
 }
 
+/**
+ * The synchronous driver's rule for a resolver result: it is returned as it is, or, when it is a promise, the evaluation throws a `TypeError`, since a synchronous evaluator has nothing to do with one. Shared by `runSync` and by every other synchronous evaluation path, so they cannot disagree about what a promise from a resolver means.
+ */
+export function settleSync<T>(value: T): T {
+  if (isThenable(value)) {
+    throw new TypeError(
+      "a resolver supplied to a synchronous evaluator returned a promise; use the asynchronous evaluator for asynchronous resolvers",
+    );
+  }
+
+  return value;
+}
+
 /** Runs a task to completion, awaiting each suspension and running an `all` group's tasks concurrently. */
 export async function runAsync<T>(task: Readonly<Runnable<T>>): Promise<T> {
   let step = task.next();
@@ -64,23 +77,16 @@ export async function runAsync<T>(task: Readonly<Runnable<T>>): Promise<T> {
 }
 
 /**
- * Runs a task to completion without awaiting anything: an `all` group's tasks run one after another, and a `wait` on a promise throws, since a synchronous evaluator has nothing to do with one.
+ * Runs a task to completion without awaiting anything: an `all` group's tasks run one after another, and a `wait` on a promise throws (see `settleSync`).
  */
 export function runSync<T>(task: Readonly<Runnable<T>>): T {
   let step = task.next();
   while (step.done !== true) {
     const suspension = step.value;
-    let result: unknown;
-    if (suspension.kind === "wait") {
-      if (isThenable(suspension.value)) {
-        throw new TypeError(
-          "a resolver supplied to a synchronous evaluator returned a promise; use the asynchronous evaluator for asynchronous resolvers",
-        );
-      }
-      result = suspension.value;
-    } else {
-      result = suspension.tasks.map(runSync);
-    }
+    const result: unknown =
+      suspension.kind === "wait"
+        ? settleSync(suspension.value)
+        : suspension.tasks.map(runSync);
     step = task.next(result);
   }
 

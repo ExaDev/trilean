@@ -218,7 +218,7 @@ export type DurationLiteralNode = z.infer<typeof DurationLiteralNodeSchema>;
 /**
  * The wire-format literal accepts either of the two authoring forms real-world complex data arrives in, discriminated structurally rather than by a `form` tag: rectangular (`re`/`im`), matching the `complex` computed-value kind's own single canonical representation exactly (see the "Complex values" section of README.md), or polar (`magnitude`/`phase`, in radians), for the domains that reason that way natively and would otherwise have to hand-compute the conversion before ever constructing the tree. `strictObject` on both members is what makes the two forms mutually exclusive on the wire -- a plain `object` would silently strip an unrecognised field rather than reject a payload that mixes both.
  *
- * The evaluator normalises whichever form was authored into the single rectangular `ComputedValue` immediately on evaluation (see the `complexLiteral` case in evaluator.ts), so nothing downstream of that -- arithmetic, `compare`, `memberOf`, `negate` -- ever sees a polar value; they keep consuming the one canonical `complex` shape unchanged.
+ * The evaluator normalises whichever form was authored into the single rectangular `ComputedValue` immediately on evaluation (see `literalValue` in evaluator-literals.ts), so nothing downstream of that -- arithmetic, `compare`, `memberOf`, `negate` -- ever sees a polar value; they keep consuming the one canonical `complex` shape unchanged.
  */
 export const ComplexRectangularLiteralNodeSchema = z.strictObject({
   kind: z.literal("complexLiteral"),
