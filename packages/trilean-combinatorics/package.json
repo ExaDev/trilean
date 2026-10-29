@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "combinatrix": "1.0.0",
-    "trilean": "1.11.0"
+    "trilean": "1.11.1"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
