@@ -225,20 +225,23 @@ type Evaluation<T> =
   | { status: "indeterminate"; reason: IndeterminateReason };
 
 interface IndeterminateReason {
-  /** Which of the three reason categories applies. */
-  code: "not-found" | "wrong-type" | "domain-error";
+  /** Which of the four reason categories applies. */
+  code: "not-found" | "not-yet-known" | "wrong-type" | "domain-error";
   /** A human-readable explanation, for logging and debugging. */
   message: string;
 }
 ```
 
-The three reason codes are:
+The four reason codes are:
 
 | Code | Meaning |
 |---|---|
 | `not-found` | A value a node needed did not exist in the underlying data at all. |
+| `not-yet-known` | A value a node needed has not been supplied yet, so it may exist later. Unlike the other three, this is a statement about the evaluation's input rather than about the data: evaluating a partial assignment, a resolver reports a value it has not been given with `{ found: false, notYetKnown: true }` (see [Resolvers](#resolvers)), and the result is indeterminate with this code until it is. |
 | `wrong-type` | A value existed but was not of a kind the operation could use (e.g. non-numeric where a number was required). |
 | `domain-error` | A mathematical operation was attempted outside its valid domain (division by zero, a function given an input outside its allowed range, an aggregation with nothing to aggregate). |
+
+`not-yet-known` propagates exactly as `not-found` does, except in [`exists`](#exists), which stays indeterminate on it instead of answering `false`. That is what makes a definite result on a partial assignment safe to act on: whatever the values still to come turn out to be, the result on the completed assignment is the same (the Kleene monotonicity property), including through [`coalesce`](#derived-values), which therefore waits for an earlier candidate instead of falling through to the next.
 
 `domain-error` is not a separate error type, exception, or crash — it uses exactly the same `Evaluation`/`IndeterminateReason` mechanism as the other two. This three-outcome model applies uniformly to every node kind in both trees: arithmetic, comparison, and boolean logic alike. It never collapses to a plain boolean or number at any intermediate point inside the tree; only the code that consumes the final top-level `Evaluation` decides what to do with an indeterminate outcome (reject, default, surface to a user, etc.) — that decision is deliberately outside this package's scope.
 
@@ -246,7 +249,7 @@ The three reason codes are:
 
 ### Where an indeterminate outcome can carry more than one candidate reason
 
-Some nodes combine several sub-evaluations that could each independently be indeterminate for a different reason (e.g. an `and` node whose both operands are indeterminate, one `not-found` and one `wrong-type`). This design resolves ties with a single, consistently-applied rule: **take the first indeterminate reason encountered in the node's own declared operand order** (left before right; list order for N-ary/collection operands). This is an implementation decision this document makes explicitly, once, so every node kind's evaluator can apply the same rule without re-deriving it.
+Some nodes combine several sub-evaluations that could each independently be indeterminate for a different reason (e.g. an `and` node whose both operands are indeterminate, one `not-found` and one `wrong-type`). This design resolves ties with a single, consistently-applied rule: **take the first indeterminate reason encountered in the node's own declared operand order** (left before right; list order for N-ary/collection operands), with one exception: `not-yet-known` outranks every other reason in the nodes where a later operand could still absorb an indeterminate one (`and`, `or`, `allOf`, `anyOf`, `some`, `every`, `memberOf` and a `unique` `conditional`). Reporting `not-found` there while another operand is not yet known would be wrong, because that operand might settle as an absorbing value and turn the node definite, after `exists` had already reported its absence. In every other node an earlier reason is final, since no later operand can change the outcome, so the first one is kept. This is an implementation decision this document makes explicitly, once, so every node kind's evaluator can apply the same rule without re-deriving it.
 
 ## Three-valued propagation rules
 
@@ -445,7 +448,7 @@ Evaluate `operand` first; if it is indeterminate, the whole leaf is indeterminat
 
 ### `exists`
 
-Evaluates `true` if the given `ExpressionNode` can be resolved to some value at all, `false` if it definitely cannot be resolved (the data point is genuinely absent), independent of whether that value would itself be usable in further computation. Concretely: evaluate the operand; if the result is definite, `exists` is `true`; if the result is indeterminate with reason `not-found`, `exists` is `false`; if the result is indeterminate with reason `wrong-type` or `domain-error`, `exists` is still `true` — the underlying data point *did* resolve to something, it merely wasn't usable for whatever computation was attempted around it, which is exactly why section [The evaluation model](#the-evaluation-model) distinguishes "did not exist" from "existed but unusable" in the first place. `exists` itself is never indeterminate — it always produces a definite boolean.
+Evaluates `true` if the given `ExpressionNode` can be resolved to some value at all, `false` if it definitely cannot be resolved (the data point is genuinely absent), independent of whether that value would itself be usable in further computation. Concretely: evaluate the operand; if the result is definite, `exists` is `true`; if the result is indeterminate with reason `not-found`, `exists` is `false`; if the result is indeterminate with reason `wrong-type` or `domain-error`, `exists` is still `true` — the underlying data point *did* resolve to something, it merely wasn't usable for whatever computation was attempted around it, which is exactly why section [The evaluation model](#the-evaluation-model) distinguishes "did not exist" from "existed but unusable" in the first place. If the result is indeterminate with reason `not-yet-known`, `exists` is indeterminate with that same reason: the value may still arrive, so neither `true` nor `false` is yet an answer a later evaluation could not contradict. `exists` is otherwise never indeterminate, and always produces a definite boolean for a value that is known to be present or known to be absent.
 
 ### `some`, `every`
 
@@ -590,7 +593,7 @@ A piecewise/conditional-value node: an ordered, possibly-empty list of `{ when, 
 **`hitPolicy: "unique"`** asserts that at most one case is expected to match, and treats two or more matches as a data error rather than silently taking the first. Every case's `when` is evaluated concurrently (there is no "earlier case" to short-circuit on), then resolved in this order:
 
 1. **Two or more cases are definitely `true`** — `domain-error` ("more than one case matched under the 'unique' hit policy"), regardless of any other case's own indeterminacy. This mirrors `memberOf`/`some`/`every`'s existing absorption: a confirmed outcome (here, "there is a genuine ambiguity") cannot be undone by an unrelated case's data problem.
-2. Otherwise, **any case's `when` is indeterminate** — the whole node is indeterminate with that reason (first such candidate, in declared case order, per [The evaluation model](#the-evaluation-model)'s tie-break rule). This is deliberately **not** absorbed by a single already-confirmed match, unlike step 1 above and unlike `memberOf`/`some`/`every`'s own absorption: an unresolved case might still turn out to be a second match, so "exactly one match so far" cannot be trusted as final until every other case is known to not also match.
+2. Otherwise, **any case's `when` is indeterminate** — the whole node is indeterminate with that reason (first such candidate, in declared case order, per [The evaluation model](#the-evaluation-model)'s tie-break rule, where a `not-yet-known` case outranks the others). This is deliberately **not** absorbed by a single already-confirmed match, unlike step 1 above and unlike `memberOf`/`some`/`every`'s own absorption: an unresolved case might still turn out to be a second match, so "exactly one match so far" cannot be trusted as final until every other case is known to not also match.
 3. Otherwise, **exactly one case is definitely `true`** — evaluate and return that case's `then`. No other case's `then` is ever evaluated.
 4. Otherwise (zero matches, and nothing indeterminate) — evaluate and return `fallback`, exactly as `"first"` already does.
 
@@ -692,10 +695,11 @@ Built right-to-left over the full candidate list via `reduceRight`, needing no s
 |---|---|---|---|
 | A definite value | definite `true` | matches | The candidate's value (re-evaluated as `then`, same result) |
 | Indeterminate, `not-found` | definite `false` | does not match | The next candidate (the enclosing `fallback`), evaluated fresh |
+| Indeterminate, `not-yet-known` | indeterminate `not-yet-known` | indeterminate, so the `conditional` is | Indeterminate `not-yet-known`: the later candidates are not reached while this one may still turn out to exist |
 | Indeterminate, `wrong-type` | definite `true` | matches | The candidate's own `wrong-type` result (re-evaluated as `then`) |
 | Indeterminate, `domain-error` | definite `true` | matches | The candidate's own `domain-error` result (re-evaluated as `then`) |
 
-Falling through to the next candidate therefore happens only on `exists`'s own `false` — a genuinely absent value (`not-found`) — never on a candidate that resolved to something merely unusable (`wrong-type`/`domain-error`): `exists` already draws exactly that line, and `coalesce` inherits it unmodified rather than re-deciding it. This is the one behaviour a naive reimplementation is likely to get backwards (treating *any* indeterminate candidate as "try the next one"), so it is worth stating explicitly rather than leaving it to be inferred from the composition alone.
+Falling through to the next candidate therefore happens only on `exists`'s own `false` — a genuinely absent value (`not-found`) — never on a candidate that resolved to something merely unusable (`wrong-type`/`domain-error`): `exists` already draws exactly that line, and `coalesce` inherits it unmodified rather than re-deciding it. This is the one behaviour a naive reimplementation is likely to get backwards (treating *any* indeterminate candidate as "try the next one"), so it is worth stating explicitly rather than leaving it to be inferred from the composition alone. A candidate that is `not-yet-known` is neither skipped nor propagated as its own value: the whole `coalesce` is indeterminate with that reason until the candidate is known, because falling through to the next candidate now would give an answer the candidate's arrival could change.
 
 A real implementation may memoise a candidate's single evaluation rather than running its resolver twice — once for the `exists` probe, once again for `then` — exactly the same performance caveat [Derived aggregates](#derived-aggregates)'s `presenceOf` already documents for its own `memberOf` probe; resolvers are pure functions of their inputs throughout this design, so this is a performance choice, not a correctness one.
 
@@ -765,13 +769,15 @@ An item whose `filter` is itself indeterminate is never silently included or exc
 Three core, required points of extension, plus two further independent optional ones, each supplied separately by the embedding consumer, each treated by the schema as pure data to hand over — never as resolver logic living inside the schema itself:
 
 ```ts
-type Resolution =
-  | { found: true; value: ComputedValue }
-  | { found: false };
+type Absence = {
+  found: false;
+  /** `true`: the value has not been supplied yet and may exist later. Absent or `false`: it is known to be absent. */
+  notYetKnown?: boolean;
+};
 
-type TreeResolution =
-  | { found: true; node: JsonValue }
-  | { found: false };
+type Resolution = { found: true; value: ComputedValue } | Absence;
+
+type TreeResolution = { found: true; node: JsonValue } | Absence;
 
 interface Resolvers {
   /** Resolver 1 — a single opaque key to a single value (IV.reference). */
@@ -794,6 +800,8 @@ interface Resolvers {
 `resolveCollection` takes no narrowing parameter of its own: it always returns the full candidate list for the given reference, and narrowing which of those candidates actually take part is handled uniformly, after resolution, by the `filter` mechanism described under [Pre-filtering which items participate](#pre-filtering-which-items-participate) — no resolver needs a bespoke narrowing argument for this. It also returns a plain array rather than a `Resolution` envelope: a collection's "nothing here" state is unambiguously an empty array, unlike a single value's absence, which needs an explicit flag to distinguish "there is genuinely nothing here" from any value the resolver might otherwise legitimately return. Each resolver may itself be asynchronous, independently of the others. None of the three core resolvers needs to know anything about the other two, or about either optional one; a consumer implementing all five is free to have them share underlying data-access logic, but the schema and evaluator never require or assume that they do.
 
 `resolveTree` returns a `TreeResolution`, deliberately shaped like `Resolution` but distinct from it: `node` carries opaque JSON — the referenced tree, re-validated by the evaluator rather than trusted (see [`treeReference`](#treereference)) — where `Resolution`'s `value` carries an already-typed `ComputedValue`. It is otherwise the same "found" envelope for the same reason: a `treeReference`'s absence needs to be distinguishable from any tree the resolver might otherwise legitimately return, exactly as a `reference`'s absence needs to be distinguishable from any value. `resolveDelegate` and `resolveTree` solve different problems and are never a substitute for one another: `resolveDelegate` hands a payload to an *external* system this package never evaluates; `resolveTree` hands back *more of this same schema*, for this same evaluator to keep evaluating.
+
+A resolver reports a value it has no answer for in one of two ways, and the difference is the one between a fact about the data and a fact about the evaluation. `{ found: false }` says the value is known to be absent: the result is indeterminate `not-found`, and [`exists`](#exists) answers `false`. `{ found: false, notYetKnown: true }` says the value has not been supplied yet: the result is indeterminate `not-yet-known` and `exists` stays indeterminate. A consumer evaluating a partial assignment (some inputs supplied, the rest still to come) reports every unsupplied input the second way, so a definite result it gets back holds for every way the remaining inputs could turn out. `resolveValue`, `resolveLookup`, `resolveDelegate` and `resolveTree` can each report it, in both the asynchronous and the synchronous flavour; `resolveCollection` cannot, since it has no absence to report (an empty list is its own answer) and a collection that is not yet known is better modelled by not evaluating the node that needs it.
 
 ## Evaluator entry points
 
@@ -858,6 +866,8 @@ The node rules are written once and run by either driver, so the two evaluators 
 ## Indeterminacy reference
 
 How each reason category can arise, per node kind. "Propagates" means: an indeterminate operand/sub-result, with no other rule overriding it, makes the whole node indeterminate with that same reason (subject to the tie-break rule in [The evaluation model](#the-evaluation-model) when more than one candidate reason is present, and to the absorbing-value exceptions called out explicitly below).
+
+`not-yet-known` has no column of its own because it arises at exactly the sites where `not-found` does (a `reference`, `lookup`, `delegate` or `treeReference` whose resolver reports `notYetKnown: true`) and then propagates through every row below exactly as `not-found` does, absorbed by the same definite values. The only rows where it differs are `exists`, which is indeterminate with that reason instead of answering `false`, and the nodes where the tie-break rule above ranks it first. `coalesce` is `exists` composed with `conditional`, so it follows `exists`.
 
 | Node kind | `not-found` | `wrong-type` | `domain-error` |
 |---|---|---|---|
