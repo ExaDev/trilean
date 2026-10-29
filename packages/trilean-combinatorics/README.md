@@ -56,7 +56,7 @@ const fastNeedsRatio = trileanConstraint(
 const model = defineModel({ dimensions, constraints: [fastNeedsRatio] });
 
 // 24 valid combinations; every pair of values among them appears in at least one of these rows.
-const rows = collect(model, { strategy: coveringArray({ strength: 2, limit: 10_000 }), limit: 10_000 }).map(({ values }) => values);
+const rows = collect(model, { strategy: coveringArray({ strength: 2 }), limit: 10_000 }).map(({ values }) => values);
 isCoveringArray(rows, model, { strength: 2, limit: 10_000 }); // true
 ```
 
@@ -89,9 +89,9 @@ When it is defined, the tree is validated with trilean's `PredicateNodeSchema` a
 
 A definite true is `valid` and a definite false `invalid`. An indeterminate result is `unknown` while any dependency is unassigned. Once every dependency is assigned, combinatrix's contract forbids `unknown`, so an indeterminate result there throws `UndecidedConstraintError` (a `ConstraintContractError`) carrying trilean's reason. The usual cause is reading a dimension that is unset in some combination without guarding it: `compare(reference, ...)` is indeterminate `not-found` when the dimension is unset, while `and(exists(reference), compare(reference, ...))` is definitely false there, because a definite false absorbs. Comparing values of different kinds (a text dimension with `compare`, say) is indeterminate `wrong-type` and throws the same way.
 
-### `coveringArray({ strength, limit })`
+### `coveringArray({ strength, limit? })`
 
-A combinatrix `Strategy` yielding a covering array of the solution set: valid combinations such that every t-way combination of dimension values that occurs in some valid combination occurs in at least one of them. `strength` is t, a positive integer: 1 covers each value, 2 is pairwise, 3 three-wise, and a strength at or above the dimension count yields the whole solution set. `limit` bounds the solution set it reads, throwing combinatrix's `LimitExceededError` past it, because the construction needs the whole solution set before it can choose a row. Either option out of range throws `RangeError` when the strategy is made.
+A combinatrix `Strategy` yielding a covering array of the solution set: valid combinations such that every t-way combination of dimension values that occurs in some valid combination occurs in at least one of them. `strength` is t, a positive integer: 1 covers each value, 2 is pairwise, 3 three-wise, and a strength at or above the dimension count yields the whole solution set. `limit`, optional, is the most rows the construction may hold: every row is held until the array is complete, so past it the strategy throws combinatrix's `LimitExceededError` instead of building a larger array. Without it the array has at most one row per coverable t-tuple. Either option out of range throws `RangeError` when the strategy is made.
 
 Every dimension is covered:
 
@@ -99,7 +99,11 @@ Every dimension is covered:
 - a derived dimension's values (first-valid and computed), since a derived value is part of every combination and can decide behaviour as much as a free one. Coverage is measured on the solution set, so a derived value is only ever required where it really occurs;
 - a dimension collapsed to unset by `activeWhen` is unset in those combinations, and unset counts as a value there. A combination does not record why a dimension is unset, so unset by choice and unset by inactivity are one value.
 
-The construction is greedy and deterministic: it reads the solution set in enumeration order, then repeatedly yields the combination covering the most t-tuples not yet covered, ties going to the earliest, until every coverable tuple is covered. The same model always gives the same rows in the same order. Each row is yielded as it is chosen, so stopping early, or the `limit` on combinatrix's own `combinations`, ends the work there. An empty solution set yields nothing.
+The construction is in-parameter-order ([IPOG](https://csrc.nist.gov/pubs/conference/2007/03/29/ipog-a-general-strategy-for-tway-software-testing/final), with constraints handled on partial rows as [IPOG-C](https://www.nist.gov/node/572651) does) and never reads the solution set. It starts one row per coverable t-tuple of the first t dimensions, then places each later dimension in turn: every row takes the value covering the most of that dimension's uncovered t-tuples, and each tuple still uncovered goes into the first row it fits, or into a new row whose other dimensions are left open. Each row is completed to a valid combination at the end, and a row whose every t-tuple another row also holds is dropped. Whether a t-tuple is coverable, and whether a row may take a value, are both asked of the engine as "is there a valid combination agreeing with this partial assignment" through the strategy context's `completions`, stopping at the first combination found, so the constraints' three-valued verdicts on partial assignments prune each question as they prune enumeration.
+
+So the construction holds at most one row per coverable t-tuple and one dimension's t-tuples at a time, which is polynomial in the dimension count for a fixed strength and independent of how large the solution set is, and its engine queries are polynomial in the t-tuple count. A computed dimension's possible values are found by one query per choice of the values of the dimensions it reads. The same model always gives the same rows in the same order. The whole array is built before the first row is yielded, since a later dimension can still change any row. An empty solution set yields nothing.
+
+The array is not always smaller than a greedy construction over the whole solution set (repeatedly taking the valid combination covering the most uncovered t-tuples), which is not size-optimal either: it is larger on some models and smaller on others, and the tests check it is no larger in total over the generated models.
 
 ### `isCoveringArray(rows, model, { strength, limit })`
 
@@ -113,7 +117,7 @@ Whether `rows` are a covering array of the model's solution set at that strength
 
 The unit suite holds the adapter and the strategy to definitions rather than to examples alone. Kleene soundness is checked exhaustively on a small model: for every partial assignment, a verdict that is not `unknown` equals the verdict on every completion of it, for trees covering every connective, `exists`, `coalesce` and `conditional`, and the adapter agrees with trilean's own `evaluatePredicate` on every complete assignment. The evaluator's budgets are checked at their boundaries, a tree exactly at each limit evaluating and one beyond it being refused, which pins the definition-time count to what the evaluator spends.
 
-The strategy is checked against `isCoveringArray` as an oracle over hundreds of seeded random models using every combinatrix feature (unset values, conditional activity, first-valid and computed dimensions, rules and guarded trilean constraints), at strengths 1, 2 and 3: every output is a covering array of valid, distinct combinations, deterministic, and no larger than the solution set. The oracle is itself shown to discriminate: it refuses the strategy's output with its last row removed, and a row outside the solution set.
+The strategy is checked against `isCoveringArray` as an oracle over hundreds of seeded random models using every combinatrix feature (unset values, conditional activity, first-valid and computed dimensions, rules and guarded trilean constraints), at strengths 1, 2 and 3: every output is a covering array of valid, distinct combinations, deterministic, no larger than the solution set and with no more rows than coverable t-tuples. The same models compare it with the greedy construction over the whole solution set, kept in the test support as a reference, and its total over the models must not exceed the reference's. A work-count test runs it on a model whose solution set is far larger than its pair count, counting every query it makes of the engine and every combination the engine hands back, and holds both to a bound derived from the pair count, while the reference cannot even start within that many combinations. The oracle is itself shown to discriminate: it refuses the strategy's output with any one row removed, and a row outside the solution set.
 
 ## Licence
 

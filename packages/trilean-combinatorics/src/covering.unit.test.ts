@@ -10,6 +10,8 @@ import {
 } from "combinatrix";
 import { describe, expect, it } from "vitest";
 import { coveringArray, isCoveringArray } from "./index";
+import { subsetsOf, tupleKey } from "./internal/tuples";
+import { greedyCoveringArray } from "./test-support/greedy-reference";
 import { randomModel } from "./test-support/random-model";
 
 /** How many generated models each property is checked against. */
@@ -130,31 +132,124 @@ describe("coveringArray", () => {
     );
   });
 
-  it("refuses a solution set larger than its limit", () => {
+  it("refuses to hold more rows than its limit, and needs no limit", () => {
+    // Every pair of two unconstrained dimensions is a whole combination, so the array is the product and needs that many rows.
     const model = defineModel({
       dimensions: [choice("a", SIZES), choice("b", SIZES)],
     });
+    const rows = SIZES.length ** 2;
     expect(() =>
-      rowsOf(
-        model,
-        coveringArray({ strength: 2, limit: SIZES.length ** 2 - 1 }),
-      ),
+      rowsOf(model, coveringArray({ strength: 2, limit: rows - 1 })),
     ).toThrow(LimitExceededError);
     expect(
-      rowsOf(model, coveringArray({ strength: 2, limit: SIZES.length ** 2 })),
-    ).toHaveLength(SIZES.length ** 2);
+      rowsOf(model, coveringArray({ strength: 2, limit: rows })),
+    ).toHaveLength(rows);
+    expect(rowsOf(model, coveringArray({ strength: 2 }))).toHaveLength(rows);
   });
 
   it("refuses a strength that is not a positive integer and a limit that is not a non-negative integer", () => {
-    expect(() => coveringArray({ strength: 0, limit: LIMIT })).toThrow(
-      RangeError,
-    );
-    expect(() => coveringArray({ strength: 1.5, limit: LIMIT })).toThrow(
-      RangeError,
-    );
+    expect(() => coveringArray({ strength: 0 })).toThrow(RangeError);
+    expect(() => coveringArray({ strength: 1.5 })).toThrow(RangeError);
     expect(() => coveringArray({ strength: 2, limit: -1 })).toThrow(RangeError);
+    expect(() => coveringArray({ strength: 2, limit: 1.5 })).toThrow(
+      RangeError,
+    );
+  });
+
+  it("never reads the solution set: the combinations it asks the engine for are bounded by the t-tuple count", () => {
+    // Unconstrained, so the solution set is the full product of the domains while the pairs grow only with the square of the dimension count.
+    const dimensionCount = 14;
+    const domain = [0, 1, 2];
+    const strength = 2;
+    const model = defineModel({
+      dimensions: Array.from({ length: dimensionCount }, (_, index) =>
+        choice(`d${String(index)}`, domain),
+      ),
+    });
+    const solutions = count(model, { limit: Number.MAX_SAFE_INTEGER });
+    const tupleCount =
+      subsetCount(dimensionCount, strength) * domain.length ** strength;
+    // The construction's engine queries, from its structure: one per candidate tuple when the tuples are listed (the first t dimensions' included), and per later dimension at most one per row and value plus one fallback in horizontal growth and one per row and uncovered tuple in vertical growth, plus one completion per row. Every row holds a tuple no earlier row did, so there are at most tupleCount rows.
+    const queryBound =
+      tupleCount +
+      dimensionCount * tupleCount * (domain.length + 1) +
+      tupleCount * tupleCount +
+      tupleCount;
+    expect(queryBound).toBeLessThan(solutions);
+
+    const work = { queries: 0, combinations: 0 };
+    const counted: Strategy = {
+      name: "counted",
+      select: (context) =>
+        coveringArray({ strength }).select({
+          ...context,
+          completions: function* (assignment) {
+            work.queries += 1;
+            for (const combination of context.completions(assignment)) {
+              work.combinations += 1;
+              yield combination;
+            }
+          },
+        }),
+    };
+    const rows = rowsOf(model, counted);
+    expect(rows.length).toBeLessThanOrEqual(tupleCount);
+    expect(work.queries).toBeLessThanOrEqual(queryBound);
+    // Each query stops at its first combination, so no more combinations pass through than queries are made.
+    expect(work.combinations).toBeLessThanOrEqual(work.queries);
+    // The greedy reference, by contrast, holds the whole solution set before its first row, so even as many combinations as there are tuples is too few for it.
+    expect(() =>
+      rowsOf(model, greedyCoveringArray({ strength, limit: tupleCount })),
+    ).toThrow(LimitExceededError);
   });
 });
+
+/** The number of ways to choose `size` of `total` items. */
+function subsetCount(total: number, size: number): number {
+  let result = 1;
+  for (let chosen = 0; chosen < size; chosen += 1) {
+    result = (result * (total - chosen)) / (chosen + 1);
+  }
+
+  return result;
+}
+
+describe("coveringArray against the greedy reference", () => {
+  it.each(STRENGTHS)(
+    "is no larger in total than the greedy reference over the generated models at strength %i, and never more rows than coverable tuples",
+    (strength) => {
+      let rowsTotal = 0;
+      let referenceTotal = 0;
+      for (const { model, seed } of generated()) {
+        const rows = rowsOf(model, coveringArray({ strength }));
+        const reference = rowsOf(
+          model,
+          greedyCoveringArray({ strength, limit: LIMIT }),
+        );
+        rowsTotal += rows.length;
+        referenceTotal += reference.length;
+        expect(rows.length, `seed ${String(seed)}`).toBeLessThanOrEqual(
+          coverableTupleCount(model, strength),
+        );
+      }
+      expect(rowsTotal).toBeLessThanOrEqual(referenceTotal);
+    },
+  );
+});
+
+/** The number of distinct t-tuples the model's solution set contains, read from the whole solution set. */
+function coverableTupleCount(model: Model<Row>, strength: number): number {
+  const names = model.dimensions.map((dimension) => dimension.name);
+  const subsets = subsetsOf(names, Math.min(strength, names.length));
+  const tuples = new Set<string>();
+  for (const { values } of collect(model, { limit: LIMIT })) {
+    for (const subset of subsets) {
+      tuples.add(tupleKey(subset.map((name) => [name, values[name]])));
+    }
+  }
+
+  return tuples.size;
+}
 
 describe("coveringArray against the isCoveringArray oracle", () => {
   it.each(STRENGTHS)(
@@ -190,21 +285,24 @@ describe("coveringArray against the isCoveringArray oracle", () => {
     }
   });
 
-  it("the oracle refuses the strategy's output with its last row dropped", () => {
+  it("the oracle refuses the strategy's output with any one row dropped", () => {
     let checked = 0;
-    for (const { model, seed } of generated()) {
+    for (const { model, seed } of generated().slice(
+      0,
+      MODELS / SAMPLE_DIVISOR,
+    )) {
       const rows = rowsOf(model, coveringArray({ strength: 2, limit: LIMIT }));
-      if (rows.length === 0) continue;
-
-      checked += 1;
-      // The last row chosen covered at least one tuple no earlier row did, so without it that tuple is uncovered.
-      expect(
-        isCoveringArray(rows.slice(0, -1), model, {
-          strength: 2,
-          limit: LIMIT,
-        }),
-        `seed ${String(seed)}`,
-      ).toBe(false);
+      // Redundant rows are removed, so every row holds a tuple no other row does, and without it that tuple is uncovered.
+      for (const [index] of rows.entries()) {
+        checked += 1;
+        expect(
+          isCoveringArray(rows.toSpliced(index, 1), model, {
+            strength: 2,
+            limit: LIMIT,
+          }),
+          `seed ${String(seed)}, row ${String(index)}`,
+        ).toBe(false);
+      }
     }
     expect(checked).toBeGreaterThan(0);
   });
