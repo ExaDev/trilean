@@ -15,6 +15,7 @@ import {
   resolveParticipatingItems,
 } from "./evaluator-collection";
 import {
+  absenceEvaluation,
   applyArithmetic,
   applyNegate,
   checkReferenceUnit,
@@ -292,12 +293,14 @@ export function* evaluatePredicateInternal(
         budget,
         nestingDepth + 1,
       );
-      // The data point resolved to *something* unless it was flatly not-found; a resolved-but-unusable value (wrong-type/domain-error) still counts as existing. `exists` is never itself indeterminate.
-      if (
-        operandResult.status === "indeterminate" &&
-        operandResult.reason.code === "not-found"
-      ) {
-        return definite(false);
+      // The data point resolved to *something* unless it was flatly not-found; a resolved-but-unusable value (wrong-type/domain-error) still counts as existing. A not-yet-known operand is neither: answering either way would turn a value that may still arrive into a definite answer that a later evaluation could contradict, so the question stays open and `exists` is indeterminate with that same reason. This is also what keeps `coalesce` from falling through to its next candidate before the earlier one is known.
+      if (operandResult.status === "indeterminate") {
+        if (operandResult.reason.code === "not-yet-known") {
+          return operandResult;
+        }
+        if (operandResult.reason.code === "not-found") {
+          return definite(false);
+        }
       }
 
       return definite(true);
@@ -363,9 +366,10 @@ export function* evaluatePredicateInternal(
       }
       const resolution = yield* wait(resolvers.resolveTree(node.key, context));
       if (!resolution.found) {
-        return indeterminate(
-          "not-found",
+        return absenceEvaluation(
+          resolution,
           "treeReference key did not resolve to a tree",
+          "the tree for the treeReference key is not yet known",
         );
       }
       const parsed = PredicateNodeSchema.safeParse(resolution.node);
@@ -410,9 +414,10 @@ export function* evaluateValueInternal(
     case "reference": {
       const resolution = yield* wait(resolvers.resolveValue(node.key, context));
       if (!resolution.found) {
-        return indeterminate(
-          "not-found",
+        return absenceEvaluation(
+          resolution,
           `no value found for reference key ${JSON.stringify(node.key)}`,
+          `the value for reference key ${JSON.stringify(node.key)} is not yet known`,
         );
       }
       const unitError = checkReferenceUnit(node.unit, resolution.value);
@@ -553,9 +558,10 @@ export function* evaluateValueInternal(
         resolvers.resolveLookup(node.table, keyValues, context),
       );
       if (!resolution.found) {
-        return indeterminate(
-          "not-found",
+        return absenceEvaluation(
+          resolution,
           `no match found in lookup table ${JSON.stringify(node.table)}`,
+          `the match in lookup table ${JSON.stringify(node.table)} is not yet known`,
         );
       }
 
@@ -777,9 +783,10 @@ export function* evaluateValueInternal(
         resolvers.resolveDelegate(node.system, node.payload, context),
       );
       if (!resolution.found) {
-        return indeterminate(
-          "not-found",
+        return absenceEvaluation(
+          resolution,
           `delegate handler for external system '${node.system}' reported no value`,
+          `the value from the delegate handler for external system '${node.system}' is not yet known`,
         );
       }
 
@@ -804,9 +811,10 @@ export function* evaluateValueInternal(
       }
       const resolution = yield* wait(resolvers.resolveTree(node.key, context));
       if (!resolution.found) {
-        return indeterminate(
-          "not-found",
+        return absenceEvaluation(
+          resolution,
           "treeReference key did not resolve to a tree",
+          "the tree for the treeReference key is not yet known",
         );
       }
       const parsed = ExpressionNodeSchema.safeParse(resolution.node);

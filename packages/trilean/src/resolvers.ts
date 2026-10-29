@@ -6,12 +6,18 @@ import type { JsonValue } from "./json-value";
  */
 export type EvaluationContext = unknown;
 
-export type Resolution =
-  { found: true; value: ComputedValue } | { found: false };
+/**
+ * A resolver's report that it has no value to give. `{ found: false }` says the value is known to be absent, and evaluates to an indeterminate `not-found`, which `exists` reads as a definite `false`. `{ found: false, notYetKnown: true }` says the value has not been supplied yet and may exist later, and evaluates to an indeterminate `not-yet-known`, which `exists` leaves indeterminate. Use it when evaluating a partial assignment, so that a definite result on the partial input is also the result on every completion of it. `notYetKnown: false` is the same as leaving it out.
+ */
+export interface Absence {
+  found: false;
+  notYetKnown?: boolean;
+}
 
-/** The `resolveTree` counterpart to `Resolution`: `found: true` carries the referenced tree as opaque JSON, re-validated by the evaluator (see the `treeReference` node kind) rather than trusted as already-shaped `PredicateNode`/`ExpressionNode`. */
-export type TreeResolution =
-  { found: true; node: JsonValue } | { found: false };
+export type Resolution = { found: true; value: ComputedValue } | Absence;
+
+/** The `resolveTree` counterpart to `Resolution`: `found: true` carries the referenced tree as opaque JSON, re-validated by the evaluator (see the `treeReference` node kind) rather than trusted as already-shaped `PredicateNode`/`ExpressionNode`. Absence, known or not yet known, is reported exactly as it is for `Resolution`. */
+export type TreeResolution = { found: true; node: JsonValue } | Absence;
 
 /**
  * Three core, required points of extension, plus two further independent optional ones (`resolveDelegate`, `resolveTree`), each supplied separately by the embedding consumer, each treated as pure data to hand over -- never as resolver logic living inside the schema itself. Plain TypeScript interfaces, not Zod schemas: resolvers are never serialised, only ever supplied in-process at evaluation time.

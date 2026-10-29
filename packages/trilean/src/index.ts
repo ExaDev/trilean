@@ -20,6 +20,7 @@ export {
 } from "./computed-value";
 
 export type {
+  Absence,
   EvaluationContext,
   Resolution,
   Resolvers,

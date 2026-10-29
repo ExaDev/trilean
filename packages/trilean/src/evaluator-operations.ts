@@ -18,12 +18,24 @@ import {
   millisecondsPerDurationUnit,
 } from "./duration-order";
 import type { FunctionRegistry } from "./functions";
+import type { Absence } from "./resolvers";
 import { powerByRepeatedSquaring } from "./integer-power";
 import type {
   ArithmeticOperator,
   ComparisonOperator,
   TextComparisonOperator,
 } from "./tree";
+
+/** The indeterminate result for a resolver's report of absence: `not-yet-known` when the resolver said the value has not been supplied yet, `not-found` otherwise. The two share every propagation rule except `exists` (and so `coalesce`), which is why every resolver call site goes through this one function. */
+export function absenceEvaluation(
+  absence: Readonly<Absence>,
+  notFoundMessage: string,
+  notYetKnownMessage: string,
+): Evaluation<never> {
+  return absence.notYetKnown === true
+    ? indeterminate("not-yet-known", notYetKnownMessage)
+    : indeterminate("not-found", notFoundMessage);
+}
 
 /** The three-valued AND table: `false` is absorbing regardless of the other operand's indeterminacy; otherwise both-definite folds to a boolean AND; otherwise indeterminate, with the tie-break rule (declared operand order, left before right) applied via `firstIndeterminate`. */
 export function combineAnd(
