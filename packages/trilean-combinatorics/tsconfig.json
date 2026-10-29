@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    // Same isomorphism gate packages/trilean uses: no "node" types and a WebWorker lib, so a Node-only global referenced from runtime src/ fails to compile here rather than at some consumer's runtime. The adapter and the covering-array construction are pure computations over in-memory values, so they have no reason to reach for a platform API at all.
+    "lib": ["ES2024", "WebWorker"],
+    "types": []
+  },
+  "exclude": ["src/**/*.test.ts", "src/test-support/**/*.ts"],
+  "extends": "../../tsconfig.base.json",
+  "include": ["src"]
+}
