@@ -11,7 +11,6 @@ The pnpm workspace holding the trilean packages. Each package is versioned, rele
 | [trilean](packages/trilean/README.md) | `packages/trilean` | [`trilean`](https://www.npmjs.com/package/trilean) on npm, [`@exadev/trilean`](https://github.com/ExaDev/trilean/pkgs/npm/trilean) on GitHub Packages |
 | [trilean-sql](packages/trilean-sql/README.md) | `packages/trilean-sql` | [`trilean-sql`](https://www.npmjs.com/package/trilean-sql) on npm, [`@exadev/trilean-sql`](https://github.com/ExaDev/trilean/pkgs/npm/trilean-sql) on GitHub Packages |
 | [trilean-regex](packages/trilean-regex/README.md) | `packages/trilean-regex` | [`trilean-regex`](https://www.npmjs.com/package/trilean-regex) on npm, [`@exadev/trilean-regex`](https://github.com/ExaDev/trilean/pkgs/npm/trilean-regex) on GitHub Packages |
-| [trilean-combinatorics](packages/trilean-combinatorics/README.md) | `packages/trilean-combinatorics` | [`trilean-combinatorics`](https://www.npmjs.com/package/trilean-combinatorics) on npm, [`@exadev/trilean-combinatorics`](https://github.com/ExaDev/trilean/pkgs/npm/trilean-combinatorics) on GitHub Packages |
 
 Each package is versioned, released, and published independently of every other, from its own commit history. There is no lockstep version shared across the workspace.
 
@@ -40,8 +39,7 @@ The `pnpm <task>` scripts are thin wrappers over `turbo run _<task>`; the unders
 ├── packages/
 │   ├── trilean/        the evaluation library, with its own README, CHANGELOG, and configs
 │   ├── trilean-sql/    the SQL compiler over trilean's predicate trees, likewise self-contained
-│   ├── trilean-regex/  the portable regex grammar trilean-sql pushes down where it can, likewise self-contained
-│   └── trilean-combinatorics/  trilean trees as combinatrix constraints, and covering arrays of a model's valid combinations, likewise self-contained
+│   └── trilean-regex/  the portable regex grammar trilean-sql pushes down where it can, likewise self-contained
 ├── pnpm-workspace.yaml package globs and pnpm's install-time settings
 ├── turbo.json          the task pipeline every package's tasks are ordered and cached by
 ├── tsconfig.base.json  the compiler options every package extends
