@@ -6,18 +6,24 @@ import type { Resolution, SyncResolvers } from "./resolvers";
 import type { ExpressionNode, PredicateNode } from "./tree";
 
 /**
- * The property a consumer evaluating a partial assignment relies on: whatever a definite answer on a partial assignment says, no completion of it can contradict. Every tree below is enumerated exhaustively over a small grammar, and each is evaluated under every partial assignment of three references and under every completion of that assignment. A reference is `unassigned` (the resolver reports it as not yet known) or assigned one of `number`, `text` (usable where a number is not) or `absent` (known to be absent).
+ * The property a consumer evaluating a partial assignment relies on: whatever a definite answer on a partial assignment says, no completion of it can contradict. Every tree below is enumerated exhaustively over a small grammar, and each is evaluated under every partial assignment of the references it mentions (out of `a`, `b` and `c`) and under every completion of that assignment. A reference is `unassigned` (the resolver reports it as not yet known) or assigned one of `number`, `text` (usable where a number is not) or `absent` (known to be absent).
  *
  * Two facts are checked per tree and partial assignment. First, Kleene monotonicity: a definite result equals the result under every completion. Second, the classification `exists` reads off a result (`absent` for `not-found`, `present` for a definite result, `wrong-type` or `domain-error`, and `open` for `not-yet-known`) is stable: a tree that `exists` would answer `true` or `false` on the partial assignment gets the same answer under every completion. The second is what makes `exists`, and so `coalesce`, sound over a partial assignment, and it is the property that fails if a node reports `not-found` while an unknown value could still absorb it.
+ *
+ * The work per tree is bounded by what it mentions: a reference a tree never mentions cannot change its result, so the enumeration ranges over the mentioned references only (the resolver throws if the evaluator asks for any other, which keeps that independence checked rather than assumed). Each assignment is evaluated and summarised once, and every partial assignment then compares summaries with its completions, so a tree costs one evaluation per assignment and no evaluation per partial and completion pair.
  */
 
-type State = "unassigned" | "number" | "text" | "absent";
-type Assignment = Readonly<Record<"a" | "b" | "c", State>>;
-type Completion = Exclude<State, "unassigned">;
+type Key = "a" | "b" | "c";
 
-const REFERENCES = ["a", "b", "c"] as const;
-const STATES: readonly State[] = ["unassigned", "number", "text", "absent"];
-const COMPLETIONS: readonly Completion[] = ["number", "text", "absent"];
+/** Ordered so that a state's position is its digit in an assignment's mixed-radix index; `unassigned` is digit 0. */
+const STATES = ["unassigned", "number", "text", "absent"] as const;
+type State = (typeof STATES)[number];
+const UNASSIGNED_DIGIT = 0;
+const COMPLETION_DIGITS: readonly number[] = STATES.map(
+  (_, digit) => digit,
+).filter((digit) => digit !== UNASSIGNED_DIGIT);
+
+const KEYS: readonly Key[] = ["a", "b", "c"];
 
 const RESOLUTIONS: Readonly<Record<State, Resolution>> = {
   unassigned: { found: false, notYetKnown: true },
@@ -26,41 +32,80 @@ const RESOLUTIONS: Readonly<Record<State, Resolution>> = {
   absent: { found: false },
 };
 
-function resolversFor(assignment: Assignment): SyncResolvers {
+const isKey = (key: string): key is Key => KEYS.some((known) => known === key);
+
+/** The state of each mentioned reference, indexed by position in the tree's mentioned references; the index of an assignment is its states read as digits, first reference least significant. */
+function statesAt(index: number, width: number): State[] {
+  return Array.from({ length: width }, (_, position) => {
+    const state =
+      STATES[Math.floor(index / STATES.length ** position) % STATES.length];
+    if (state === undefined) {
+      throw new Error("unreachable: a digit below the radix names a state");
+    }
+
+    return state;
+  });
+}
+
+/** The index of every assignment that agrees with `index` on its assigned references and gives each unassigned one a value. */
+function completionsOf(index: number, width: number): number[] {
+  let completions = [0];
+  for (let position = 0; position < width; position += 1) {
+    const weight = STATES.length ** position;
+    const digit = Math.floor(index / weight) % STATES.length;
+    const choices = digit === UNASSIGNED_DIGIT ? COMPLETION_DIGITS : [digit];
+    completions = completions.flatMap((base) =>
+      choices.map((choice) => base + choice * weight),
+    );
+  }
+
+  return completions;
+}
+
+/** Every key a tree mentions as a `reference` node, in `KEYS` order. */
+function mentionedKeys(node: unknown): Key[] {
+  const mentioned = new Set<string>();
+  const visit = (value: unknown): void => {
+    if (Array.isArray(value)) {
+      for (const item of value) visit(item);
+    } else if (typeof value === "object" && value !== null) {
+      if (
+        "kind" in value &&
+        value.kind === "reference" &&
+        "key" in value &&
+        typeof value.key === "string"
+      ) {
+        mentioned.add(value.key);
+      }
+      for (const child of Object.values(value)) visit(child);
+    }
+  };
+  visit(node);
+
+  return KEYS.filter((key) => mentioned.has(key));
+}
+
+/** Resolves each mentioned reference to its state and throws on any other, so a tree's independence of the references it does not mention is enforced by the evaluation itself. */
+function resolversFor(
+  keys: readonly Key[],
+  states: readonly State[],
+): SyncResolvers {
   return {
     resolveValue: (key) => {
-      if (key === "a" || key === "b" || key === "c") {
-        return RESOLUTIONS[assignment[key]];
+      if (!isKey(key)) return { found: false };
+      const position = keys.indexOf(key);
+      const state = states[position];
+      if (state === undefined) {
+        throw new Error(
+          `the evaluator resolved ${key}, which the tree does not mention`,
+        );
       }
 
-      return { found: false };
+      return RESOLUTIONS[state];
     },
     resolveLookup: () => ({ found: false }),
     resolveCollection: () => [],
   };
-}
-
-function allAssignments(): Assignment[] {
-  const assignments: Assignment[] = [];
-  for (const a of STATES) {
-    for (const b of STATES) {
-      for (const c of STATES) assignments.push({ a, b, c });
-    }
-  }
-
-  return assignments;
-}
-
-function completionsOf(assignment: Assignment): Assignment[] {
-  const choices = REFERENCES.map((key) =>
-    assignment[key] === "unassigned" ? COMPLETIONS : [assignment[key]],
-  );
-  const [as, bs, cs] = choices;
-  if (as === undefined || bs === undefined || cs === undefined) {
-    throw new Error("unreachable: three references yield three choice lists");
-  }
-
-  return as.flatMap((a) => bs.flatMap((b) => cs.map((c) => ({ a, b, c }))));
 }
 
 type Classification = "present" | "absent" | "open";
@@ -102,7 +147,7 @@ const sumsOfLeaves: ExpressionNode[] = leafValues.flatMap((left) =>
 
 const leafPredicates: PredicateNode[] = [
   ...leafValues.flatMap((left) => leafValues.map((right) => eq(left, right))),
-  ...REFERENCES.map((key): PredicateNode => ({
+  ...KEYS.map((key): PredicateNode => ({
     kind: "exists",
     operand: ref(key),
   })),
@@ -153,10 +198,16 @@ const guards: PredicateNode[] = [
     operand,
   })),
 ];
-const predicates: PredicateNode[] = [
+/** `connectivesOver(representative)` is a subset of `connectivesOver(leafPredicates)` wherever the representative operands are leaf predicates, so the union is reduced to its distinct members: a tree enumerated twice proves nothing the first did not. */
+const distinct = <Node extends ExpressionNode | PredicateNode>(
+  nodes: readonly Node[],
+): Node[] => [
+  ...new Map(nodes.map((node) => [JSON.stringify(node), node])).values(),
+];
+const predicates: PredicateNode[] = distinct([
   ...guards,
   ...connectivesOver(leafPredicates),
-];
+]);
 
 /** Conditionals guarded by every guard above, under both hit policies; the branches are one reference and one literal in either order, so a guard's outcome decides whether the result is present, absent or unusable. */
 const branchPairs: readonly (readonly [ExpressionNode, ExpressionNode])[] = [
@@ -189,51 +240,66 @@ interface Tally {
   readonly openWithUnassigned: number;
 }
 
-const keyOf = (assignment: Assignment): string =>
-  REFERENCES.map((key) => assignment[key]).join("/");
+/** What one assignment's evaluation is compared by: the serialised result (a definite one must match exactly) and what `exists` reads off it. */
+interface Summary {
+  readonly evaluation: Evaluation<unknown>;
+  readonly serialised: string;
+  readonly classification: Classification;
+}
 
-/** Evaluates the tree once under every assignment, then checks each partial assignment against the results of its completions. Fails with the offending tree, assignment and completion rather than a bare mismatch. */
+/** Evaluates the tree once under every assignment of the references it mentions, then checks each partial assignment against the summaries of its completions. Fails with the offending tree, assignment and completion rather than a bare mismatch. */
 function checkTree(
-  describeTree: string,
+  node: ExpressionNode | PredicateNode,
   evaluate: (resolvers: Readonly<SyncResolvers>) => Evaluation<unknown>,
 ): Tally {
-  const results = new Map<string, Evaluation<unknown>>();
-  for (const assignment of allAssignments()) {
-    results.set(keyOf(assignment), evaluate(resolversFor(assignment)));
-  }
-  const resultOf = (assignment: Assignment): Evaluation<unknown> => {
-    const result = results.get(keyOf(assignment));
-    if (result === undefined) {
-      throw new Error("unreachable: every assignment was evaluated");
-    }
+  const keys = mentionedKeys(node);
+  const width = keys.length;
+  const summaries = Array.from(
+    { length: STATES.length ** width },
+    (_, index): Summary => {
+      const evaluation = evaluate(resolversFor(keys, statesAt(index, width)));
 
-    return result;
-  };
+      return {
+        evaluation,
+        serialised: JSON.stringify(evaluation),
+        classification: classify(evaluation),
+      };
+    },
+  );
+  const describeAssignment = (index: number): string =>
+    statesAt(index, width)
+      .map((state, position) => `${String(keys[position])}=${state}`)
+      .join(" ");
   let definiteWithUnassigned = 0;
   let openWithUnassigned = 0;
-  for (const assignment of allAssignments()) {
-    if (REFERENCES.every((key) => assignment[key] !== "unassigned")) continue;
-    const partial = resultOf(assignment);
-    if (partial.status === "definite") definiteWithUnassigned += 1;
+  for (const [index, partial] of summaries.entries()) {
+    const completions = completionsOf(index, width);
+    if (completions.length === 1) continue;
+    if (partial.evaluation.status === "definite") definiteWithUnassigned += 1;
     if (
-      partial.status === "indeterminate" &&
-      partial.reason.code === "not-yet-known"
+      partial.evaluation.status === "indeterminate" &&
+      partial.evaluation.reason.code === "not-yet-known"
     ) {
       openWithUnassigned += 1;
     }
-    const partialClass = classify(partial);
-    for (const completion of completionsOf(assignment)) {
-      const completed = resultOf(completion);
-      const where = (): string =>
-        `${describeTree} under ${keyOf(assignment)} completed as ${keyOf(completion)}`;
-      if (
-        partial.status === "definite" &&
-        JSON.stringify(completed) !== JSON.stringify(partial)
-      ) {
-        expect(completed, where()).toEqual(partial);
+    for (const completion of completions) {
+      const completed = summaries[completion];
+      if (completed === undefined) {
+        throw new Error("unreachable: every assignment was summarised");
       }
-      if (partialClass !== "open" && classify(completed) !== partialClass) {
-        expect(classify(completed), where()).toBe(partialClass);
+      const where = (): string =>
+        `${JSON.stringify(node)} under ${describeAssignment(index)} completed as ${describeAssignment(completion)}`;
+      if (
+        partial.evaluation.status === "definite" &&
+        completed.serialised !== partial.serialised
+      ) {
+        expect(completed.evaluation, where()).toEqual(partial.evaluation);
+      }
+      if (
+        partial.classification !== "open" &&
+        completed.classification !== partial.classification
+      ) {
+        expect(completed.classification, where()).toBe(partial.classification);
       }
     }
   }
@@ -254,33 +320,62 @@ function sumTallies(tallies: readonly Tally[]): Tally {
   };
 }
 
-describe("a definite result on a partial assignment holds on every completion", () => {
-  it("for every enumerated predicate", () => {
-    const tally = sumTallies(
-      predicates.map((node) =>
-        checkTree(JSON.stringify(node), (resolvers) =>
-          evaluatePredicate(node, undefined, resolvers),
-        ),
-      ),
-    );
-    // The enumeration is not vacuous: it reaches both a definite answer and a not-yet-known one while a reference is still unassigned.
-    expect(tally.definiteWithUnassigned).toBeGreaterThan(0);
-    expect(tally.openWithUnassigned).toBeGreaterThan(0);
-  });
+/**
+ * Milliseconds allowed per evaluation. The budget a test gets scales with its enumeration instead of being the runner's flat default, because the evaluations are irreducible: each (tree, assignment) pair must be evaluated once for the property to be checked on it. One millisecond is a ceiling an evaluator call stays far under even on a host oversubscribed several-fold, so the budget trips on a hang, not on contention.
+ */
+const EVALUATION_ALLOWANCE_MS = 1;
 
-  it.each<[string, ExpressionNode[]]>([
+/** The evaluations `checkTree` performs over these trees: one per assignment of the references each mentions. */
+const evaluationsOver = (
+  nodes: readonly (ExpressionNode | PredicateNode)[],
+): number =>
+  nodes.reduce(
+    (total, node) => total + STATES.length ** mentionedKeys(node).length,
+    0,
+  );
+
+const budgetOver = (
+  nodes: readonly (ExpressionNode | PredicateNode)[],
+): number => evaluationsOver(nodes) * EVALUATION_ALLOWANCE_MS;
+
+describe("a definite result on a partial assignment holds on every completion", () => {
+  it(
+    "for every enumerated predicate",
+    { timeout: budgetOver(predicates) },
+    () => {
+      const tally = sumTallies(
+        predicates.map((node) =>
+          checkTree(node, (resolvers) =>
+            evaluatePredicate(node, undefined, resolvers),
+          ),
+        ),
+      );
+      // The enumeration is not vacuous: it reaches both a definite answer and a not-yet-known one while a reference is still unassigned.
+      expect(tally.definiteWithUnassigned).toBeGreaterThan(0);
+      expect(tally.openWithUnassigned).toBeGreaterThan(0);
+    },
+  );
+
+  const expressionEnumerations: readonly [string, ExpressionNode[]][] = [
     ["plain expressions and coalesce", plainValues],
     ["conditionals under the first hit policy", conditionalsWith("first")],
     ["conditionals under the unique hit policy", conditionalsWith("unique")],
-  ])("for every enumerated expression: %s", (_name, nodes) => {
-    const tally = sumTallies(
-      nodes.map((node) =>
-        checkTree(JSON.stringify(node), (resolvers) =>
-          evaluateValue(node, undefined, resolvers),
-        ),
-      ),
+  ];
+  for (const [name, nodes] of expressionEnumerations) {
+    it(
+      `for every enumerated expression: ${name}`,
+      { timeout: budgetOver(nodes) },
+      () => {
+        const tally = sumTallies(
+          nodes.map((node) =>
+            checkTree(node, (resolvers) =>
+              evaluateValue(node, undefined, resolvers),
+            ),
+          ),
+        );
+        expect(tally.definiteWithUnassigned).toBeGreaterThan(0);
+        expect(tally.openWithUnassigned).toBeGreaterThan(0);
+      },
     );
-    expect(tally.definiteWithUnassigned).toBeGreaterThan(0);
-    expect(tally.openWithUnassigned).toBeGreaterThan(0);
-  });
+  }
 });
