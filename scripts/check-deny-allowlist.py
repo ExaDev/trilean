@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Fails when rust/deny.toml allows a crate that cargo-deny does not find in the dependency graph.
 
-cargo-deny fails a crate that is missing from the allowlist, but reports an allowlisted crate that nothing uses only as a note: it has no option to make that an error, so the allowlist could grow wider than the graph without any review of the file. This closes the other direction, and takes the graph from the tool that enforces it: the crates cargo-deny itself reports as explicitly allowed (every platform and every feature, as `[graph]` in deny.toml says, and cfg edges evaluated the way cargo-deny evaluates them). A second definition of the graph, from `cargo tree` or `cargo metadata`, disagrees with the enforcing one for any platform-gated crate, and no deny.toml could satisfy both.
+cargo-deny fails a crate that is missing from the allowlist, but reports an allowlisted crate that nothing uses only as a note: it has no option to make that an error, so the allowlist could grow wider than the graph without any review of the file. This closes the other direction, and takes the graph from the tool that enforces it: the crates cargo-deny itself reports as explicitly allowed (every platform and every feature, as the [graph] table in deny.toml says, and cfg edges evaluated the way cargo-deny evaluates them). A second definition of the graph, from the tree or metadata commands of cargo, disagrees with the enforcing one for any platform-gated crate, and no deny.toml could satisfy both.
 
-Usage: check-deny-allowlist.py [--rust-dir DIR] [--config FILE]. It runs cargo-deny with the pinned toolchain against the committed Cargo.lock, and needs Python 3.11 for tomllib.
+Usage: check-deny-allowlist.py [--manifest FILE] [--config FILE]. It runs cargo-deny through scripts/rust.sh, which runs from rust/ so the pinned toolchain applies, against the committed Cargo.lock. It needs only the standard library (Python 3.9 or later).
 """
 from __future__ import annotations
 
@@ -12,24 +12,35 @@ import json
 import re
 import subprocess
 import sys
-import tomllib
 from pathlib import Path
 
-DEFAULT_RUST = Path(__file__).resolve().parent.parent / "rust"
+ROOT = Path(__file__).resolve().parent.parent
+DEFAULT_RUST = ROOT / "rust"
 CRATE = re.compile(r"crate '([^' ]+) = ")
 
 
 def allowed_names(config: Path) -> set[str]:
+    """The names under `[bans] allow`, each written `{ crate = "name", ... }` or as a bare string.
+
+    The file is read as text, since parsing TOML needs Python 3.11; the rule it relies on is the layout deny.toml states, one entry per line inside the `allow = [` array of the `[bans]` table.
+    """
+    text = config.read_text()
+    bans = re.search(r"^\[bans\]\s*$(.*?)(?=^\[|\Z)", text, re.MULTILINE | re.DOTALL)
+    block = re.search(r"^allow\s*=\s*\[(.*?)^\]", bans.group(1) if bans else "", re.MULTILINE | re.DOTALL)
+    if block is None:
+        raise SystemExit(f"{config}: no `allow = [` array under [bans]")
     names: set[str] = set()
-    for entry in tomllib.loads(config.read_text())["bans"]["allow"]:
-        names.add(entry if isinstance(entry, str) else entry["crate"])
+    for line in block.group(1).splitlines():
+        entry = re.match(r"\s*(?:\{\s*crate\s*=\s*)?\"([^\"]+)\"", line)
+        if entry:
+            names.add(entry.group(1))
     return names
 
 
-def diagnostics(rust: Path, config: Path) -> list[dict[str, object]]:
+def diagnostics(manifest: Path, config: Path) -> list[dict[str, object]]:
     """The bans diagnostics cargo-deny prints, as JSON lines on stderr, whatever its exit status."""
     result = subprocess.run(
-        ["cargo", "deny", "--locked", "--manifest-path", str(rust / "Cargo.toml"), "--config", str(config), "--format", "json", "-L", "info", "check", "bans"],
+        ["sh", str(ROOT / "scripts" / "rust.sh"), "deny-bans-json", str(manifest), str(config)],
         check=False,
         capture_output=True,
         text=True,
@@ -43,7 +54,7 @@ def diagnostics(rust: Path, config: Path) -> list[dict[str, object]]:
         if record.get("type") == "diagnostic":
             found.append(record["fields"])
     if not found:
-        raise SystemExit(f"cargo deny reported no diagnostics for {config}: {result.stderr[:500]}")
+        raise SystemExit(f"cargo-deny reported no diagnostics for {config}: {result.stderr[:500]}")
     return found
 
 
@@ -59,11 +70,11 @@ def crates_with_code(found: list[dict[str, object]], code: str) -> set[str]:
 
 def main(arguments: list[str]) -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--rust-dir", type=Path, default=DEFAULT_RUST)
-    parser.add_argument("--config", type=Path)
+    parser.add_argument("--manifest", type=Path, default=DEFAULT_RUST / "Cargo.toml")
+    parser.add_argument("--config", type=Path, default=DEFAULT_RUST / "deny.toml")
     args = parser.parse_args(arguments)
-    config = args.config or args.rust_dir / "deny.toml"
-    found = diagnostics(args.rust_dir, config)
+    config = args.config.resolve()
+    found = diagnostics(args.manifest.resolve(), config)
     in_graph = crates_with_code(found, "allowed") | crates_with_code(found, "not-allowed")
     status = 0
     for name in sorted(allowed_names(config) - in_graph):

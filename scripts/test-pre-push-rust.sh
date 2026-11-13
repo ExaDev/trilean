@@ -14,7 +14,8 @@ check() {
   case "$expected" in
     run) [ "$status" -eq 0 ] && [ "$out" = "checks ran" ] ;;
     skip) [ "$status" -eq 0 ] && [ -z "$out" ] ;;
-    fail) [ "$status" -ne 0 ] && printf '%s' "$out" | grep -q "Install rustup" ;;
+    fail) [ "$status" -ne 0 ] && printf '%s' "$out" | grep -q "Install" ;;
+    failpython) [ "$status" -ne 0 ] && printf '%s' "$out" | grep -q "Python 3.9" ;;
   esac && echo "ok   $name" || { echo "FAIL $name (status $status): $out"; failures=$((failures + 1)); }
 }
 
@@ -38,6 +39,11 @@ git checkout -q -b scripts-change "$base" && echo b > scripts/rust-checks.sh && 
 script=$(git rev-parse HEAD)
 zero=0000000000000000000000000000000000000000
 no_cargo=$(mktemp -d); for tool in git grep sh cat dirname mktemp env printf rm; do ln -s "$(command -v "$tool")" "$no_cargo/$tool"; done
+no_python=$(mktemp -d); for tool in git grep sh cat dirname mktemp env printf rm; do ln -s "$(command -v "$tool")" "$no_python/$tool"; done
+for tool in cargo rustup; do printf '#!/bin/sh\n' > "$no_python/$tool"; chmod +x "$no_python/$tool"; done
+old_python=$(mktemp -d); for tool in git grep sh cat dirname mktemp env printf rm; do ln -s "$(command -v "$tool")" "$old_python/$tool"; done
+for tool in cargo rustup; do printf '#!/bin/sh\n' > "$old_python/$tool"; chmod +x "$old_python/$tool"; done
+printf '#!/bin/sh\nexit 1\n' > "$old_python/python3"; chmod +x "$old_python/python3"
 
 check "docs-only push skips" skip "refs/heads/docs-only $docs refs/heads/docs-only $base"
 check "rust push runs" run "refs/heads/rust-change $rust refs/heads/rust-change $base"
@@ -49,7 +55,9 @@ check "deleting a branch skips" skip "(delete) $zero refs/heads/rust-change $rus
 check "forced push over unknown history runs" run "refs/heads/docs-only $docs refs/heads/docs-only 1111111111111111111111111111111111111111"
 check "one docs and one rust ref runs" run "refs/heads/docs-only $docs refs/heads/docs-only $base
 refs/heads/rust-change $rust refs/heads/rust-change $base"
-check "rust push without cargo fails with the instruction" fail "refs/heads/rust-change $rust refs/heads/rust-change $base" "$no_cargo"
-check "docs-only push without cargo skips" skip "refs/heads/docs-only $docs refs/heads/docs-only $base" "$no_cargo"
-rm -rf "$no_cargo"
+check "rust push without a Rust toolchain fails with the instruction" fail "refs/heads/rust-change $rust refs/heads/rust-change $base" "$no_cargo"
+check "rust push without python fails with the instruction" failpython "refs/heads/rust-change $rust refs/heads/rust-change $base" "$no_python"
+check "rust push with a python that is too old fails with the instruction" failpython "refs/heads/rust-change $rust refs/heads/rust-change $base" "$old_python"
+check "docs-only push without a Rust toolchain skips" skip "refs/heads/docs-only $docs refs/heads/docs-only $base" "$no_cargo"
+rm -rf "$no_cargo" "$no_python" "$old_python"
 exit "$failures"

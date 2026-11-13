@@ -1,6 +1,6 @@
 """Tests for check-deny-allowlist.py against a workspace whose one dependency exists only on another platform.
 
-The reviewer's scenario: a dependency under `[target.'cfg(windows)'...]`. cargo-deny checks every platform, so it must be allowed there, and the allowlist check must agree with cargo-deny on that and on a surplus entry. They need the pinned toolchain, cargo-deny and the network (the fixture's one crate is downloaded).
+The reviewer's scenario: a dependency under `[target.'cfg(windows)'...]`. cargo-deny checks every platform, so it must be allowed there, and the allowlist check must agree with cargo-deny on that and on a surplus entry. They need the pinned toolchain and cargo-deny, and cargo downloads the fixture's one crate.
 """
 from __future__ import annotations
 
@@ -16,7 +16,7 @@ FIXTURE = SCRIPTS / "fixtures" / "platform-gated"
 def cargo_deny(config: str) -> int:
     """The exit status of cargo-deny's own bans check, which is the enforcing definition."""
     return subprocess.run(
-        ["cargo", "deny", "--locked", "--manifest-path", str(FIXTURE / "Cargo.toml"), "--config", str(FIXTURE / config), "check", "bans"],
+        ["sh", str(SCRIPTS / "rust.sh"), "deny-bans", str(FIXTURE / "Cargo.toml"), str(FIXTURE / config)],
         check=False,
         capture_output=True,
     ).returncode
@@ -24,7 +24,7 @@ def cargo_deny(config: str) -> int:
 
 def allowlist_check(config: str) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
-        [sys.executable, "-I", str(SCRIPTS / "check-deny-allowlist.py"), "--rust-dir", str(FIXTURE), "--config", str(FIXTURE / config)],
+        [sys.executable, "-I", str(SCRIPTS / "check-deny-allowlist.py"), "--manifest", str(FIXTURE / "Cargo.toml"), "--config", str(FIXTURE / config)],
         check=False,
         capture_output=True,
         text=True,

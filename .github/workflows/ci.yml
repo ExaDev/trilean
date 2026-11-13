@@ -160,15 +160,10 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: rust
-      - name: Lock check, workspace check, format, clippy (warnings denied) and tests
+      - name: Guards, their tests, format, clippy (warnings denied) and tests
         run: sh scripts/rust-checks.sh
-      - name: Test the checks themselves
-        run: |
-          sh scripts/test-pre-push-rust.sh
-          python3 -I scripts/test_check_workspace_members.py
-          python3 -I scripts/test_check_cargo_locked.py
 
-  # `cargo deny check bans licenses sources` fails on any crate not allowlisted in rust/deny.toml, on a licence outside its list and on a source outside crates.io. Advisories are left out on purpose: the database changes without any change here, so a required check that read it would turn every open pull request red at once; .github/workflows/advisories.yml runs them on a schedule and when the lock file changes. The job name contains cargo-deny on purpose: it is how a check on main's head is recognised as the one enforcing the allowlist. The tool is pinned to an exact release and installed as a prebuilt binary, so a new cargo-deny cannot change what passes without a change here. It runs from rust/ so the pinned toolchain resolves the graph, against the committed Cargo.lock.
+  # The deny check (bans, licences and sources) fails on any crate not allowlisted in rust/deny.toml, on a licence outside its list and on a source outside crates.io. Advisories are left out on purpose: the database changes without any change here, so a required check that read it would turn every open pull request red at once; .github/workflows/advisories.yml runs them on a schedule and when the lock file changes. The job name contains cargo-deny on purpose: it is how a check on main's head is recognised as the one enforcing the allowlist. The tool is pinned to an exact release and installed as a prebuilt binary, so a new cargo-deny cannot change what passes without a change here. It runs from rust/ so the pinned toolchain resolves the graph, against the committed Cargo.lock.
   cargo-deny:
     name: cargo-deny
     runs-on: ubuntu-latest
@@ -183,7 +178,7 @@ jobs:
           tool: cargo-deny@0.20.2
       - name: Check the dependency allowlist
         working-directory: rust
-        run: cargo deny --locked check bans licenses sources
+        run: sh scripts/rust.sh deny
       # cargo-deny cannot fail on an allowed crate nothing uses, so the allowlist is compared with the graph cargo-deny itself reports, separately.
       - name: Check the allowlist lists exactly the dependency graph
         run: python3 -I scripts/check-deny-allowlist.py
