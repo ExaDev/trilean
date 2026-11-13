@@ -59,9 +59,9 @@ fn check_selection_fixture(failures: &mut Vec<String>) {
     }
 }
 
-/// Every file under `fixtures/invalid-cases` breaks one rule of the format and must be rejected.
-fn check_invalid_cases(failures: &mut Vec<String>) {
-    let directory = corpus_root().join("fixtures/invalid-cases");
+/// The files in a fixture directory, sorted; a directory with none is a failure, since a loop over nothing passes.
+fn fixture_files(relative: &str, failures: &mut Vec<String>) -> Vec<(String, PathBuf)> {
+    let directory = corpus_root().join("fixtures").join(relative);
     let mut names = match fs::read_dir(&directory) {
         Ok(entries) => entries
             .filter_map(Result::ok)
@@ -69,22 +69,74 @@ fn check_invalid_cases(failures: &mut Vec<String>) {
             .collect::<Vec<_>>(),
         Err(error) => {
             failures.push(format!("{}: {error}", directory.display()));
-            return;
+            return Vec::new();
         }
     };
     names.sort();
     if names.is_empty() {
-        failures.push("fixtures/invalid-cases holds no fixtures to reject".to_owned());
+        failures.push(format!("fixtures/{relative} holds no fixtures"));
     }
-    for name in names {
-        match read_json(&directory.join(&name)) {
-            Ok(value) => {
-                if validate::validate_file(&value).is_ok() {
-                    failures.push(format!("invalid-cases/{name} validated, and must not"));
-                }
-            }
-            Err(error) => failures.push(error),
+    names
+        .into_iter()
+        .map(|name| (format!("{relative}/{name}"), directory.join(name)))
+        .collect()
+}
+
+/// Every file in the directory breaks one rule of the format and must be rejected. A file that cannot be parsed is
+/// rejected too: it is how this loader meets an unpaired surrogate escape.
+fn check_rejected<T>(
+    relative: &str,
+    validate: impl Fn(&Value) -> Result<T, String>,
+    failures: &mut Vec<String>,
+) {
+    for (name, path) in fixture_files(relative, failures) {
+        if let Ok(value) = read_json(&path)
+            && validate(&value).is_ok()
+        {
+            failures.push(format!("{name} validated, and must not"));
         }
+    }
+}
+
+/// Every file in the directory is valid and must be accepted.
+fn check_accepted<T>(
+    relative: &str,
+    validate: impl Fn(&Value) -> Result<T, String>,
+    failures: &mut Vec<String>,
+) {
+    for (name, path) in fixture_files(relative, failures) {
+        match read_json(&path).and_then(|value| validate(&value)) {
+            Ok(_) => {}
+            Err(error) => failures.push(format!("{name} must validate: {error}")),
+        }
+    }
+}
+
+/// Both forms of a text denote the same UTF-16 code units.
+fn check_text_pairs(failures: &mut Vec<String>) {
+    let path = corpus_root().join("fixtures/text-forms/pairs.json");
+    let result = read_json(&path).and_then(|document| {
+        let pairs = document["pairs"]
+            .as_array()
+            .filter(|pairs| !pairs.is_empty());
+        let pairs = pairs.ok_or("pairs.json must hold a non-empty list of pairs")?;
+        for pair in pairs {
+            let from_text = validate::decode_text(&pair["text"], "text")?;
+            let from_units = validate::decode_text(
+                &serde_json::json!({ "codeUnits": pair["codeUnits"] }),
+                "codeUnits",
+            )?;
+            if from_text != from_units {
+                return Err(format!(
+                    "text {} is {from_text:?}, its code units are {from_units:?}",
+                    pair["text"]
+                ));
+            }
+        }
+        Ok(())
+    });
+    if let Err(error) = result {
+        failures.push(format!("fixtures/text-forms/pairs.json: {error}"));
     }
 }
 
@@ -162,7 +214,19 @@ fn check_manifest(files: &[LoadedFile], failures: &mut Vec<String>) {
 fn main() -> ExitCode {
     let mut failures = Vec::new();
     check_selection_fixture(&mut failures);
-    check_invalid_cases(&mut failures);
+    check_rejected("invalid-cases", validate::validate_file, &mut failures);
+    check_accepted("valid-cases", validate::validate_file, &mut failures);
+    check_rejected(
+        "manifests/invalid",
+        validate::validate_manifest,
+        &mut failures,
+    );
+    check_accepted(
+        "manifests/valid",
+        validate::validate_manifest,
+        &mut failures,
+    );
+    check_text_pairs(&mut failures);
     let files = load_corpus(&mut failures);
     check_manifest(&files, &mut failures);
     validate::self_check(&mut failures);

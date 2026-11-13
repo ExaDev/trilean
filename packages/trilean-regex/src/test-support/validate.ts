@@ -4,7 +4,7 @@ import Ajv2020 from "ajv/dist/2020.js";
 import type { CorpusFile, Manifest } from "./corpus-types";
 
 /**
- * Validates corpus files and the manifest against the schemas in `conformance/`, which is the whole definition of the format. The checks beside the schema are the rules JSON Schema cannot express and `conformance/README.md` lists: a range's `from` is not above its `to`, a repeat's `min` is not above its `max`, and a case id is not repeated within a file. Nothing else is validated by hand.
+ * Validates corpus files and the manifest against the schemas in `conformance/`, which is the whole definition of the format. The checks beside the schema are the rules JSON Schema cannot express and `conformance/README.md` lists: a range's `from` is not above its `to`, a repeat's `min` is not above its `max`, a case id is not repeated within a file, a manifest's `only` lists are in ascending order, and no JSON string holds an unpaired surrogate (content that needs one is written as `{ "codeUnits": [...] }`). Nothing else is validated by hand.
  */
 
 export type Validation<T> =
@@ -94,6 +94,26 @@ function nodeProblems(node: unknown, where: string): readonly string[] {
   return problems;
 }
 
+/** Where a JSON string, or an object key, holds an unpaired surrogate: such a document is read differently by different loaders. */
+function malformedStrings(value: unknown, where: string): readonly string[] {
+  if (typeof value === "string") {
+    return value.isWellFormed() ? [] : [`${where} holds an unpaired surrogate`];
+  }
+  if (Array.isArray(value)) {
+    return value.flatMap((item: unknown, index) =>
+      malformedStrings(item, `${where}/${String(index)}`),
+    );
+  }
+  if (isRecord(value)) {
+    return Object.entries(value).flatMap(([key, item]) => [
+      ...malformedStrings(key, `${where}/(key)`),
+      ...malformedStrings(item, `${where}/${key}`),
+    ]);
+  }
+
+  return [];
+}
+
 function ruleProblems(file: CorpusFile): readonly string[] {
   const problems: string[] = [];
   const ids = new Set<string>();
@@ -111,6 +131,10 @@ function ruleProblems(file: CorpusFile): readonly string[] {
 }
 
 export function validateCorpusFile(value: unknown): Validation<CorpusFile> {
+  const malformed = malformedStrings(value, "");
+  if (malformed.length > 0) {
+    return { ok: false, problems: malformed };
+  }
   if (!checkCorpusFile(value)) {
     return { ok: false, problems: describeErrors(checkCorpusFile.errors) };
   }
@@ -119,8 +143,24 @@ export function validateCorpusFile(value: unknown): Validation<CorpusFile> {
   return problems.length === 0 ? { ok: true, value } : { ok: false, problems };
 }
 
+/** Whether the ids are distinct and in ascending UTF-16 code unit order, which is the order every loader sorts in for the ASCII ids the schema allows. */
+function isAscending(ids: readonly string[]): boolean {
+  return ids.every((id, index) => {
+    const before = ids[index - 1];
+
+    return before === undefined || before < id;
+  });
+}
+
 export function validateManifest(value: unknown): Validation<Manifest> {
-  return checkManifest(value)
-    ? { ok: true, value }
-    : { ok: false, problems: describeErrors(checkManifest.errors) };
+  if (!checkManifest(value)) {
+    return { ok: false, problems: describeErrors(checkManifest.errors) };
+  }
+  const problems = Object.entries(value.files).flatMap(([name, entry]) =>
+    isAscending(entry.only)
+      ? []
+      : [`${name}: "only" must list distinct ids in ascending order`],
+  );
+
+  return problems.length === 0 ? { ok: true, value } : { ok: false, problems };
 }

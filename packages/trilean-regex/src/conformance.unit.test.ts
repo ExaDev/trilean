@@ -10,7 +10,9 @@ import type {
   CorpusFile,
   RegexMatchCase,
   RegexParseCase,
+  Text,
 } from "./test-support/corpus-types";
+import { textToCodeUnits, textToString } from "./test-support/text";
 import { validateCorpusFile, validateManifest } from "./test-support/validate";
 
 /**
@@ -33,6 +35,17 @@ function readJson(path: string): unknown {
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function isTextPair(
+  value: unknown,
+): value is { text: string; codeUnits: readonly number[] } {
+  return (
+    isRecord(value) &&
+    typeof value.text === "string" &&
+    Array.isArray(value.codeUnits) &&
+    value.codeUnits.every((unit: unknown) => typeof unit === "number")
+  );
 }
 
 function stringList(value: unknown, where: string): readonly string[] {
@@ -98,14 +111,15 @@ function reasonOf(error: RegexParseError): string {
 }
 
 /** Whether every fragment occurs in `text`, each after the end of the one before. */
-function containsInOrder(text: string, fragments: readonly string[]): boolean {
+function containsInOrder(text: string, fragments: readonly Text[]): boolean {
   let from = 0;
   for (const fragment of fragments) {
-    const at = text.indexOf(fragment, from);
+    const wanted = textToString(fragment);
+    const at = text.indexOf(wanted, from);
     if (at === -1) {
       return false;
     }
-    from = at + fragment.length;
+    from = at + wanted.length;
   }
 
   return true;
@@ -152,13 +166,16 @@ function subsetMatches(actual: unknown, expected: unknown): boolean {
 function runParseCase(testCase: RegexParseCase): void {
   const { expect: expectation } = testCase;
   if ("ast" in expectation) {
-    expect(parseRegex(testCase.pattern)).toEqual(expectation.ast);
+    expect(parseRegex(textToString(testCase.pattern))).toEqual(expectation.ast);
   } else if ("astSubset" in expectation) {
     expect(
-      subsetMatches(parseRegex(testCase.pattern), expectation.astSubset),
+      subsetMatches(
+        parseRegex(textToString(testCase.pattern)),
+        expectation.astSubset,
+      ),
     ).toBe(true);
   } else {
-    const error = parseFailure(testCase.pattern);
+    const error = parseFailure(textToString(testCase.pattern));
     const { index, message } = expectation.error;
     if (index !== undefined) {
       expect(error.index).toBe(index);
@@ -173,15 +190,17 @@ function runParseCase(testCase: RegexParseCase): void {
 }
 
 function runMatchCase(testCase: RegexMatchCase): void {
-  const compiled = compilePattern(testCase.pattern);
-  for (const { input, matches } of testCase.inputs) {
+  const pattern = textToString(testCase.pattern);
+  const compiled = compilePattern(pattern);
+  for (const { input: text, matches } of testCase.inputs) {
+    const input = textToString(text);
+    const label = JSON.stringify(textToCodeUnits(text));
+    expect(compiled.test(input), `compiled, input code units ${label}`).toBe(
+      matches,
+    );
     expect(
-      compiled.test(input),
-      `compiled, input ${JSON.stringify(input)}`,
-    ).toBe(matches);
-    expect(
-      testPattern(testCase.pattern, input),
-      `testPattern, input ${JSON.stringify(input)}`,
+      testPattern(pattern, input),
+      `testPattern, input code units ${label}`,
     ).toBe(matches);
   }
 }
@@ -210,19 +229,80 @@ describe("corpus loading", () => {
     expect(selectCorpusFiles(CORPUS_ROOT).problems).toEqual([]);
   });
 
-  const invalidDirectory = join(FIXTURES, "invalid-cases");
-  const invalidFiles = readdirSync(invalidDirectory).sort();
+  /** The fixture files in `directory`, which must hold at least one. */
+  function fixtureFiles(directory: string): readonly string[] {
+    const files = readdirSync(join(FIXTURES, directory)).sort();
+    expect(files.length, `${directory} holds no fixtures`).toBeGreaterThan(0);
 
-  it("has invalid-case fixtures to reject", () => {
-    expect(invalidFiles.length).toBeGreaterThan(0);
+    return files;
+  }
+
+  /** Whether a loader rejects the file: a file that cannot be parsed is rejected too. */
+  function rejects(
+    path: string,
+    validate: (value: unknown) => { readonly ok: boolean },
+  ): boolean {
+    try {
+      return !validate(readJson(path)).ok;
+    } catch {
+      return true;
+    }
+  }
+
+  it("rejects every invalid-case fixture, one rule each", () => {
+    const accepted = fixtureFiles("invalid-cases").filter(
+      (file) =>
+        !rejects(join(FIXTURES, "invalid-cases", file), validateCorpusFile),
+    );
+    expect(accepted).toEqual([]);
   });
 
-  for (const file of invalidFiles) {
-    it(`rejects the invalid-case fixture ${file}`, () => {
-      const result = validateCorpusFile(readJson(join(invalidDirectory, file)));
-      expect(result.ok, `${file} must not validate`).toBe(false);
-    });
-  }
+  it("accepts every valid-case fixture", () => {
+    for (const file of fixtureFiles("valid-cases")) {
+      const result = validateCorpusFile(
+        readJson(join(FIXTURES, "valid-cases", file)),
+      );
+      expect(result.ok ? [] : result.problems, file).toEqual([]);
+    }
+  });
+
+  it("accepts every valid manifest fixture", () => {
+    for (const file of fixtureFiles("manifests/valid")) {
+      const result = validateManifest(
+        readJson(join(FIXTURES, "manifests", "valid", file)),
+      );
+      expect(result.ok ? [] : result.problems, file).toEqual([]);
+    }
+  });
+
+  it("rejects every invalid manifest fixture", () => {
+    const accepted = fixtureFiles("manifests/invalid").filter(
+      (file) =>
+        !rejects(
+          join(FIXTURES, "manifests", "invalid", file),
+          validateManifest,
+        ),
+    );
+    expect(accepted).toEqual([]);
+  });
+
+  it("reads both forms of a text as the same UTF-16 code units", () => {
+    const document = readJson(join(FIXTURES, "text-forms", "pairs.json"));
+    const list: unknown = isRecord(document) ? document.pairs : undefined;
+    if (!Array.isArray(list) || list.length === 0) {
+      throw new Error("pairs.json must hold a non-empty list of pairs");
+    }
+    for (const pair of list) {
+      if (!isTextPair(pair)) {
+        throw new Error("a pair holds a text and its code units");
+      }
+      expect(textToCodeUnits(pair.text)).toEqual(pair.codeUnits);
+      expect(textToCodeUnits({ codeUnits: pair.codeUnits })).toEqual(
+        pair.codeUnits,
+      );
+      expect(textToString({ codeUnits: pair.codeUnits })).toBe(pair.text);
+    }
+  });
 
   it("validates the manifest against its schema", () => {
     const result = validateManifest(
@@ -233,29 +313,27 @@ describe("corpus loading", () => {
 });
 
 const corpus = loadCorpus();
-const counts = { executed: 0, skipped: 0 };
+
+// What this run registers, computed while the tests are collected, so the completeness check below holds whatever the run does with them afterwards: a name filter, a bail, a retry or a shuffled order changes which registered tests run, never which are registered.
+const registered: string[] = [];
+const skipped: string[] = [];
 
 for (const { name, file } of corpus) {
   describe(`conformance ${name}`, () => {
     for (const testCase of file.cases) {
-      if (testCase.only === "native") {
-        counts.skipped += 1;
-      }
-      it.skipIf(testCase.only === "native")(
-        `${testCase.id} (${testCase.from})`,
-        () => {
-          counts.executed += 1;
-          if (testCase.kind === "regex-parse") {
-            runParseCase(testCase);
-          } else if (testCase.kind === "regex-match") {
-            runMatchCase(testCase);
-          } else {
-            throw new Error(
-              `no executor for the ${testCase.kind} kind in this package`,
-            );
-          }
-        },
-      );
+      const skip = testCase.only === "ts";
+      (skip ? skipped : registered).push(testCase.id);
+      it.skipIf(skip)(`${testCase.id} (${testCase.from})`, () => {
+        if (testCase.kind === "regex-parse") {
+          runParseCase(testCase);
+        } else if (testCase.kind === "regex-match") {
+          runMatchCase(testCase);
+        } else {
+          throw new Error(
+            `no executor for the ${testCase.kind} kind in this package`,
+          );
+        }
+      });
     }
   });
 }
@@ -287,23 +365,31 @@ describe("corpus completeness", () => {
       .flatMap(({ file }) => file.cases)
       .filter(
         (testCase): testCase is RegexMatchCase =>
-          testCase.kind === "regex-match" && testCase.pattern === "^(?:a+)+b$",
+          testCase.kind === "regex-match" &&
+          textToString(testCase.pattern) === "^(?:a+)+b$",
       )
       .flatMap((testCase) => testCase.inputs);
     expect(answers.some(({ matches }) => matches)).toBe(true);
     expect(
       answers.some(
         ({ input, matches }) =>
-          !matches && input === `${"a".repeat(NESTED_QUANTIFIER_RUN)}c`,
+          !matches &&
+          textToString(input) === `${"a".repeat(NESTED_QUANTIFIER_RUN)}c`,
       ),
     ).toBe(true);
   });
 
-  it("executes every case the manifest counts, but those marked for the other side", () => {
+  it("registers every case the manifest counts, those marked for the other implementation as skipped", () => {
     const total = Object.values(manifest).reduce(
       (sum, entry) => sum + entry.cases,
       0,
     );
-    expect(counts.executed + counts.skipped).toBe(total);
+    const manifestSkipped = Object.values(manifest).reduce(
+      (sum, entry) => sum + entry.only.length,
+      0,
+    );
+    expect(registered.length + skipped.length).toBe(total);
+    expect(skipped.length).toBe(manifestSkipped);
+    expect(new Set([...registered, ...skipped]).size).toBe(total);
   });
 });

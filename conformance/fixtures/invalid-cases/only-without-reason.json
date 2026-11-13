@@ -10,7 +10,7 @@
       "from": "a fixture",
       "id": "fixture.1",
       "kind": "regex-parse",
-      "only": "js",
+      "only": "ts",
       "pattern": "a"
     }
   ]

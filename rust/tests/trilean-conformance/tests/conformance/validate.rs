@@ -1,6 +1,10 @@
 //! Validation of corpus files and the manifest, by hand until the validator is generated from the schema. It
 //! accepts exactly what `conformance/case.schema.json` accepts and rejects every case kind it does not validate
 //! in full, rather than passing it unchecked: a loader that cannot judge a case must not say it is fine.
+//!
+//! Strings in the corpus are sequences of UTF-16 code units. A JSON string is read by `serde_json`, which refuses
+//! an unpaired surrogate escape, so the file holding one does not load and is rejected; content that needs one is
+//! written as `{ "codeUnits": [...] }`, which `decode_text` reads into the same `u16` sequence a JSON string gives.
 
 use std::collections::{BTreeMap, BTreeSet};
 
@@ -11,8 +15,40 @@ type Check<T> = Result<T, String>;
 /// The largest value of a UTF-16 code unit, which bounds a literal's `codeUnit` and a range's ends.
 const MAX_CODE_UNIT: u64 = 65535;
 
-/// The largest integer a JSON number holds exactly in the JavaScript runners.
-const MAX_SAFE_INTEGER: f64 = 9_007_199_254_740_991.0;
+/// The largest integer a JSON number holds exactly in the JavaScript runners, and so the largest the format allows.
+const MAX_SAFE_INTEGER: u64 = 9_007_199_254_740_991;
+
+/// Whether a name (a case id, or a directory or file name of a corpus file) uses only lower-case ASCII letters,
+/// digits, dots, hyphens and underscores, and does not start with a punctuation character, so every loader orders
+/// names the same way.
+pub fn is_name(name: &str) -> bool {
+    let mut bytes = name.bytes();
+    bytes
+        .next()
+        .is_some_and(|first| first.is_ascii_lowercase() || first.is_ascii_digit())
+        && bytes.all(|byte| {
+            byte.is_ascii_lowercase() || byte.is_ascii_digit() || matches!(byte, b'.' | b'-' | b'_')
+        })
+}
+
+/// A string as the UTF-16 code units it denotes: a JSON string, or `{ "codeUnits": [...] }` for content a JSON
+/// string cannot carry. The second form is what lets a case hold an unpaired surrogate.
+pub fn decode_text(value: &Value, at: &str) -> Check<Vec<u16>> {
+    if let Some(text) = value.as_str() {
+        return Ok(text.encode_utf16().collect());
+    }
+    let map = exact_keys(value, at, &["codeUnits"], &[])?;
+    array(&map["codeUnits"], at, "\"codeUnits\"")?
+        .iter()
+        .map(|unit| {
+            as_integer(unit)
+                .and_then(|unit| u16::try_from(unit).ok())
+                .ok_or_else(|| {
+                    format!("{at}: a code unit must be an integer from 0 to {MAX_CODE_UNIT}")
+                })
+        })
+        .collect()
+}
 
 const COMMON_KEYS: [&str; 3] = ["id", "from", "kind"];
 const OPTIONAL_COMMON_KEYS: [&str; 3] = ["only", "reason", "tolerance"];
@@ -66,15 +102,17 @@ fn non_empty_string_field<'a>(map: &'a Map<String, Value>, key: &str, at: &str) 
 
 /// A non-negative JSON integer. Like JSON Schema's `integer`, `97.0` is one, and `97.5` is not.
 fn as_integer(value: &Value) -> Option<u64> {
-    if let Some(integer) = value.as_u64() {
-        return Some(integer);
-    }
-    let float = value.as_f64()?;
-    if float >= 0.0 && float.fract() == 0.0 && float <= MAX_SAFE_INTEGER {
+    let integer = if let Some(integer) = value.as_u64() {
+        integer
+    } else {
+        let float = value.as_f64()?;
+        if !(float >= 0.0 && float.fract() == 0.0 && float <= MAX_SAFE_INTEGER as f64) {
+            return None;
+        }
         // The checks above bound the value to a non-negative whole number below 2^53, which `u64` holds exactly.
-        return Some(float as u64);
-    }
-    None
+        float as u64
+    };
+    (integer <= MAX_SAFE_INTEGER).then_some(integer)
 }
 
 fn integer_field(map: &Map<String, Value>, key: &str, at: &str) -> Check<u64> {
@@ -173,8 +211,8 @@ fn check_regex_parse_expectation(value: &Value, at: &str) -> Check<()> {
                 return Err(format!("{at}: \"message\" must not be empty"));
             }
             for fragment in fragments {
-                if fragment.as_str().is_none_or(str::is_empty) {
-                    return Err(format!("{at}: \"message\" must hold non-empty strings"));
+                if decode_text(fragment, at)?.is_empty() {
+                    return Err(format!("{at}: \"message\" must hold non-empty texts"));
                 }
             }
         }
@@ -189,7 +227,7 @@ fn check_regex_match_inputs(value: &Value, at: &str) -> Check<()> {
     }
     for item in inputs {
         let map = exact_keys(item, at, &["input", "matches"], &[])?;
-        string_field(map, "input", at)?;
+        decode_text(&map["input"], at)?;
         boolean_field(map, "matches", at)?;
     }
     Ok(())
@@ -210,11 +248,16 @@ fn check_case(value: &Value, at: &str) -> Check<String> {
         }
     }
     let id = non_empty_string_field(map, "id", at)?;
+    if !is_name(id) {
+        return Err(format!(
+            "{at}: a case id uses lower-case ASCII letters, digits, dots, hyphens and underscores"
+        ));
+    }
     non_empty_string_field(map, "from", at)?;
-    if let Some(only) = map.get("only") {
-        if !matches!(only.as_str(), Some("js" | "native")) {
-            return Err(format!("{at}: \"only\" must be \"js\" or \"native\""));
-        }
+    if let Some(only) = map.get("only")
+        && !matches!(only.as_str(), Some("ts" | "rust"))
+    {
+        return Err(format!("{at}: \"only\" must be \"ts\" or \"rust\""));
     }
     if map.contains_key("only") != map.contains_key("reason") {
         return Err(format!("{at}: \"only\" and \"reason\" go together"));
@@ -228,19 +271,29 @@ fn check_case(value: &Value, at: &str) -> Check<String> {
     let kind = string_field(map, "kind", at)?;
     match kind {
         "regex-parse" => {
-            exact_keys(value, at, &[COMMON_KEYS.as_slice(), &["pattern", "expect"]].concat(), &OPTIONAL_COMMON_KEYS)?;
-            string_field(map, "pattern", at)?;
+            exact_keys(
+                value,
+                at,
+                &[COMMON_KEYS.as_slice(), &["pattern", "expect"]].concat(),
+                &OPTIONAL_COMMON_KEYS,
+            )?;
+            decode_text(&map["pattern"], at)?;
             check_regex_parse_expectation(&map["expect"], at)?;
         }
         "regex-match" => {
-            exact_keys(value, at, &[COMMON_KEYS.as_slice(), &["pattern", "inputs"]].concat(), &OPTIONAL_COMMON_KEYS)?;
-            string_field(map, "pattern", at)?;
+            exact_keys(
+                value,
+                at,
+                &[COMMON_KEYS.as_slice(), &["pattern", "inputs"]].concat(),
+                &OPTIONAL_COMMON_KEYS,
+            )?;
+            decode_text(&map["pattern"], at)?;
             check_regex_match_inputs(&map["inputs"], at)?;
         }
         other => {
             return Err(format!(
                 "{at}: the {other} kind is not validated by this loader, and an unchecked case is not accepted"
-            ))
+            ));
         }
     }
     Ok(id.to_owned())
@@ -289,8 +342,7 @@ pub fn validate_manifest(value: &Value) -> Check<BTreeMap<String, (usize, Vec<St
     for (name, entry) in files {
         let at = format!("manifest {name}");
         let parts: Vec<&str> = name.split('/').collect();
-        if parts.len() != 3 || parts.iter().any(|part| part.is_empty()) || !name.ends_with(".json")
-        {
+        if parts.len() != 3 || !parts.iter().all(|part| is_name(part)) || !name.ends_with(".json") {
             return Err(format!(
                 "{at}: a corpus file is named <package>/<area>/<name>.json"
             ));
@@ -304,16 +356,16 @@ pub fn validate_manifest(value: &Value) -> Check<BTreeMap<String, (usize, Vec<St
         for id in array(&map["only"], &at, "\"only\"")? {
             only.push(
                 id.as_str()
-                    .filter(|text| !text.is_empty())
-                    .ok_or_else(|| format!("{at}: \"only\" must hold non-empty strings"))?
+                    .filter(|text| is_name(text))
+                    .ok_or_else(|| format!("{at}: \"only\" must hold case ids"))?
                     .to_owned(),
             );
         }
-        let distinct: BTreeSet<&String> = only.iter().collect();
-        if distinct.len() != only.len() {
-            return Err(format!("{at}: \"only\" names an id twice"));
+        if !only.windows(2).all(|pair| pair[0] < pair[1]) {
+            return Err(format!(
+                "{at}: \"only\" must list distinct ids in ascending order"
+            ));
         }
-        only.sort();
         let count = usize::try_from(count).map_err(|error| format!("{at}: {error}"))?;
         manifest.insert(name.clone(), (count, only));
     }

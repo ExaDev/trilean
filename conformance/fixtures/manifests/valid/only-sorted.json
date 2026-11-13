@@ -1,0 +1,16 @@
+{
+  "files": {
+    "pkg/area/a.json": {
+      "cases": 3,
+      "only": [
+        "a.2",
+        "a.3",
+        "b.1"
+      ]
+    },
+    "pkg/area/b.json": {
+      "cases": 9007199254740991,
+      "only": []
+    }
+  }
+}

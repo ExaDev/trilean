@@ -197,6 +197,7 @@
           "additionalProperties": false,
           "properties": {
             "exit": {
+              "maximum": 9007199254740991,
               "type": "integer"
             },
             "stderr": {
@@ -550,8 +551,8 @@
       "type": "string"
     },
     "id": {
-      "description": "Unique across the whole corpus.",
-      "minLength": 1,
+      "description": "Unique across the whole corpus. Lower-case ASCII letters, digits, dots, hyphens and underscores, so every loader orders ids the same way.",
+      "pattern": "^[a-z0-9][a-z0-9._-]*$",
       "type": "string"
     },
     "inputs": {
@@ -642,11 +643,38 @@
     "json": {
       "description": "Any JSON value."
     },
+    "nonEmptyText": {
+      "description": "A text that holds at least one code unit.",
+      "oneOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "codeUnits": {
+              "items": {
+                "maximum": 65535,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "minItems": 1,
+              "type": "array"
+            }
+          },
+          "required": [
+            "codeUnits"
+          ],
+          "type": "object"
+        }
+      ]
+    },
     "only": {
-      "description": "Present only for a case one side cannot express: js for a case the native crates skip, native for a case the JavaScript runners skip. Always with a reason.",
+      "description": "Present only for a case one implementation cannot run: ts for a case the TypeScript implementation skips, rust for a case every build of the Rust implementation skips, wherever it runs (native, or wasm under Node, a browser or Workers). Always with a reason.",
       "enum": [
-        "js",
-        "native"
+        "ts",
+        "rust"
       ]
     },
     "reason": {
@@ -676,7 +704,7 @@
             "additionalProperties": false,
             "properties": {
               "input": {
-                "type": "string"
+                "$ref": "#/$defs/text"
               },
               "matches": {
                 "type": "boolean"
@@ -698,7 +726,7 @@
           "$ref": "#/$defs/only"
         },
         "pattern": {
-          "type": "string"
+          "$ref": "#/$defs/text"
         },
         "reason": {
           "$ref": "#/$defs/reason"
@@ -861,10 +889,12 @@
               "const": "repeat"
             },
             "max": {
+              "maximum": 9007199254740991,
               "minimum": 0,
               "type": "integer"
             },
             "min": {
+              "maximum": 9007199254740991,
               "minimum": 0,
               "type": "integer"
             },
@@ -931,14 +961,14 @@
                   "properties": {
                     "index": {
                       "description": "Offset in UTF-16 code units into pattern. Given only where the case pins it.",
+                      "maximum": 9007199254740991,
                       "minimum": 0,
                       "type": "integer"
                     },
                     "message": {
-                      "description": "Fragments the reason text of the refusal contains, each after the end of the one before. The reason is the part of the error that says why the pattern was refused: not the index, the echoed pattern or the position marker. Given only where the original test asserted a message.",
+                      "description": "Fragments the reason text of the refusal contains, each after the end of the one before. The reason is the part of the error that says why the pattern was refused: not the index, the echoed pattern or the position marker. Given only where the original test asserted a message, or where the case is recorded.",
                       "items": {
-                        "minLength": 1,
-                        "type": "string"
+                        "$ref": "#/$defs/nonEmptyText"
                       },
                       "minItems": 1,
                       "type": "array"
@@ -967,7 +997,7 @@
           "$ref": "#/$defs/only"
         },
         "pattern": {
-          "type": "string"
+          "$ref": "#/$defs/text"
         },
         "reason": {
           "$ref": "#/$defs/reason"
@@ -995,6 +1025,7 @@
               "const": true
             },
             "settlesAfter": {
+              "maximum": 9007199254740991,
               "minimum": 0,
               "type": "integer"
             },
@@ -1018,6 +1049,7 @@
               "type": "boolean"
             },
             "settlesAfter": {
+              "maximum": 9007199254740991,
               "minimum": 0,
               "type": "integer"
             }
@@ -1031,6 +1063,7 @@
           "additionalProperties": false,
           "properties": {
             "settlesAfter": {
+              "maximum": 9007199254740991,
               "minimum": 0,
               "type": "integer"
             },
@@ -1050,6 +1083,7 @@
               "$ref": "#/$defs/json"
             },
             "settlesAfter": {
+              "maximum": 9007199254740991,
               "minimum": 0,
               "type": "integer"
             }
@@ -1543,7 +1577,7 @@
           "$ref": "#/$defs/only"
         },
         "pattern": {
-          "type": "string"
+          "$ref": "#/$defs/text"
         },
         "reason": {
           "$ref": "#/$defs/reason"
@@ -1562,11 +1596,37 @@
       ],
       "type": "object"
     },
+    "text": {
+      "description": "A string as a sequence of UTF-16 code units, which is what the TypeScript implementation and the patterns' index counts are in. A JSON string, which must be well-formed Unicode so every loader can read it, or an object holding the code units themselves for content a JSON string cannot carry, an unpaired surrogate.",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "codeUnits": {
+              "items": {
+                "maximum": 65535,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "codeUnits"
+          ],
+          "type": "object"
+        }
+      ]
+    },
     "tolerance": {
       "additionalProperties": false,
       "description": "Numbers compare exactly unless a case gives a tolerance in units in the last place.",
       "properties": {
         "ulps": {
+          "maximum": 9007199254740991,
           "minimum": 0,
           "type": "integer"
         }
@@ -1616,6 +1676,7 @@
                       },
                       "path": {
                         "items": {
+                          "maximum": 9007199254740991,
                           "type": [
                             "string",
                             "integer"

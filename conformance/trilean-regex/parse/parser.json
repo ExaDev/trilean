@@ -1202,6 +1202,195 @@
       "id": "parse.error-positions.names-the-exact-offending-index.1",
       "kind": "regex-parse",
       "pattern": "ab\\q"
+    },
+    {
+      "expect": {
+        "ast": {
+          "kind": "concat",
+          "operands": [
+            {
+              "codeUnit": 55357,
+              "kind": "literal"
+            },
+            {
+              "codeUnit": 56832,
+              "kind": "literal"
+            }
+          ]
+        }
+      },
+      "from": "recorded: trilean-regex src/parser.ts (no original test; astral literal)",
+      "id": "parse.utf-16-code-units.astral-literal.1",
+      "kind": "regex-parse",
+      "pattern": "😀"
+    },
+    {
+      "expect": {
+        "ast": {
+          "kind": "concat",
+          "operands": [
+            {
+              "codeUnit": 55357,
+              "kind": "literal"
+            },
+            {
+              "kind": "plus",
+              "operand": {
+                "codeUnit": 56832,
+                "kind": "literal"
+              }
+            }
+          ]
+        }
+      },
+      "from": "recorded: trilean-regex src/parser.ts (no original test; astral quantified)",
+      "id": "parse.utf-16-code-units.astral-quantified.1",
+      "kind": "regex-parse",
+      "pattern": "😀+"
+    },
+    {
+      "expect": {
+        "ast": {
+          "kind": "charClass",
+          "negated": false,
+          "ranges": [
+            {
+              "from": 55357,
+              "to": 55357
+            },
+            {
+              "from": 56832,
+              "to": 56832
+            }
+          ]
+        }
+      },
+      "from": "recorded: trilean-regex src/parser.ts (no original test; astral in class)",
+      "id": "parse.utf-16-code-units.astral-in-class.1",
+      "kind": "regex-parse",
+      "pattern": "[😀]"
+    },
+    {
+      "expect": {
+        "error": {
+          "index": 3,
+          "message": [
+            "reversed"
+          ]
+        }
+      },
+      "from": "recorded: trilean-regex src/parser.ts (no original test; astral range)",
+      "id": "parse.utf-16-code-units.astral-range.1",
+      "kind": "regex-parse",
+      "pattern": "[😀-😁]"
+    },
+    {
+      "expect": {
+        "ast": {
+          "codeUnit": 55357,
+          "kind": "literal"
+        }
+      },
+      "from": "recorded: trilean-regex src/parser.ts (no original test; lone surrogate)",
+      "id": "parse.utf-16-code-units.lone-surrogate.1",
+      "kind": "regex-parse",
+      "pattern": {
+        "codeUnits": [
+          55357
+        ]
+      }
+    },
+    {
+      "expect": {
+        "ast": {
+          "kind": "charClass",
+          "negated": false,
+          "ranges": [
+            {
+              "from": 55357,
+              "to": 55357
+            }
+          ]
+        }
+      },
+      "from": "recorded: trilean-regex src/parser.ts (no original test; lone surrogate in class)",
+      "id": "parse.utf-16-code-units.lone-surrogate-in-class.1",
+      "kind": "regex-parse",
+      "pattern": {
+        "codeUnits": [
+          91,
+          55357,
+          93
+        ]
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "index": 2,
+          "message": [
+            "unknown escape"
+          ]
+        }
+      },
+      "from": "recorded: trilean-regex src/parser.ts (no original test; error after astral)",
+      "id": "parse.utf-16-code-units.error-after-astral.1",
+      "kind": "regex-parse",
+      "pattern": "😀\\q"
+    },
+    {
+      "expect": {
+        "ast": {
+          "kind": "plus",
+          "operand": {
+            "codeUnit": 233,
+            "kind": "literal"
+          }
+        }
+      },
+      "from": "recorded: trilean-regex src/parser.ts (no original test; bmp literal)",
+      "id": "parse.utf-16-code-units.bmp-literal.1",
+      "kind": "regex-parse",
+      "pattern": "é+"
+    },
+    {
+      "expect": {
+        "ast": {
+          "kind": "charClass",
+          "negated": false,
+          "ranges": [
+            {
+              "from": 1072,
+              "to": 1103
+            }
+          ]
+        }
+      },
+      "from": "recorded: trilean-regex src/parser.ts (no original test; bmp class)",
+      "id": "parse.utf-16-code-units.bmp-class.1",
+      "kind": "regex-parse",
+      "pattern": "[а-я]"
+    },
+    {
+      "expect": {
+        "ast": {
+          "kind": "concat",
+          "operands": [
+            {
+              "codeUnit": 26085,
+              "kind": "literal"
+            },
+            {
+              "codeUnit": 26412,
+              "kind": "literal"
+            }
+          ]
+        }
+      },
+      "from": "recorded: trilean-regex src/parser.ts (no original test; cjk)",
+      "id": "parse.utf-16-code-units.cjk.1",
+      "kind": "regex-parse",
+      "pattern": "日本"
     }
   ]
 }

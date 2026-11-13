@@ -1,11 +1,11 @@
 {
   "files": {
     "trilean-regex/match/matcher.json": {
-      "cases": 38,
+      "cases": 48,
       "only": []
     },
     "trilean-regex/parse/parser.json": {
-      "cases": 77,
+      "cases": 87,
       "only": []
     }
   }

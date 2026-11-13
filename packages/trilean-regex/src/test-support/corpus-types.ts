@@ -16,10 +16,13 @@ export type UnexecutedKind =
   | "sql-pattern"
   | "sql-execute";
 
+/** A string as UTF-16 code units: a JSON string, or the code units themselves for content a JSON string cannot carry. */
+export type Text = string | { readonly codeUnits: readonly number[] };
+
 interface CaseBase {
   readonly id: string;
   readonly from: string;
-  readonly only?: "js" | "native";
+  readonly only?: "ts" | "rust";
   readonly reason?: string;
   readonly tolerance?: { readonly ulps: number };
 }
@@ -30,21 +33,21 @@ export type RegexParseExpectation =
   | {
       readonly error: {
         readonly index?: number;
-        readonly message?: readonly string[];
+        readonly message?: readonly Text[];
       };
     };
 
 export interface RegexParseCase extends CaseBase {
   readonly kind: "regex-parse";
-  readonly pattern: string;
+  readonly pattern: Text;
   readonly expect: RegexParseExpectation;
 }
 
 export interface RegexMatchCase extends CaseBase {
   readonly kind: "regex-match";
-  readonly pattern: string;
+  readonly pattern: Text;
   readonly inputs: readonly {
-    readonly input: string;
+    readonly input: Text;
     readonly matches: boolean;
   }[];
 }
