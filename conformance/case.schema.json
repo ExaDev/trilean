@@ -546,8 +546,8 @@
       "type": "object"
     },
     "from": {
-      "description": "The original test title this case came from, or what the case pins for a case written for the corpus.",
-      "minLength": 1,
+      "description": "The original test title this case came from, as `<test file>: <title>`, or `recorded: <package> <source file> (<what>)` for a behaviour recorded from the implementation because no test covered it. The prefix tells a pinned original from a recorded behaviour.",
+      "pattern": "^(recorded: .+|[a-z0-9._-]+\\.test\\.ts: .+)$",
       "type": "string"
     },
     "id": {

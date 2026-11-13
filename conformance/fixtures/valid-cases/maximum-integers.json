@@ -12,7 +12,7 @@
           }
         }
       },
-      "from": "a fixture",
+      "from": "x.unit.test.ts: a fixture",
       "id": "fixture.max-integers",
       "kind": "regex-parse",
       "pattern": "a"
@@ -23,7 +23,7 @@
           "index": 9007199254740991
         }
       },
-      "from": "a fixture",
+      "from": "x.unit.test.ts: a fixture",
       "id": "fixture.max-index",
       "kind": "regex-parse",
       "pattern": "a"
@@ -35,7 +35,7 @@
           "kind": "literal"
         }
       },
-      "from": "a fixture",
+      "from": "x.unit.test.ts: a fixture",
       "id": "fixture.zero-ulps",
       "kind": "regex-parse",
       "pattern": "a",
@@ -50,7 +50,7 @@
           "kind": "literal"
         }
       },
-      "from": "a fixture",
+      "from": "x.unit.test.ts: a fixture",
       "id": "fixture.ulps",
       "kind": "regex-parse",
       "pattern": "a",

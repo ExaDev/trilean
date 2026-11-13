@@ -1,11 +1,15 @@
-import { readdirSync, readFileSync } from "node:fs";
+import { readdirSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { RegexParseError } from "./errors";
 import { compilePattern, testPattern } from "./matcher";
 import { parseRegex } from "./parser";
-import { checkCorpus } from "./test-support/corpus";
+import {
+  checkCorpus,
+  collect,
+  completenessProblems,
+} from "./test-support/corpus";
 import { selectCorpusFiles } from "./test-support/corpus-files";
 import type {
   RegexMatchCase,
@@ -17,6 +21,7 @@ import {
   ONLY_VALUES,
   UNEXECUTED_KINDS,
 } from "./test-support/corpus-types";
+import { readJson } from "./test-support/read-json";
 import { textToCodeUnits, textToString } from "./test-support/text";
 import { validateCorpusFile, validateManifest } from "./test-support/validate";
 
@@ -33,10 +38,6 @@ const FIXTURES = join(CORPUS_ROOT, "fixtures");
 
 // The length of the run of "a" in the nested-quantifier case the corpus pins and matcher.unit.test.ts bounds in time.
 const NESTED_QUANTIFIER_RUN = 30;
-
-function readJson(path: string): unknown {
-  return JSON.parse(readFileSync(path, "utf8"));
-}
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -349,25 +350,26 @@ if (checked.problems.length > 0) {
 const corpus = checked.files;
 
 // What this run registers, computed while the tests are collected, so the completeness check below holds whatever the run does with them afterwards: a name filter, a bail, a retry or a shuffled order changes which registered tests run, never which are registered.
-const registered: string[] = [];
-const skipped: string[] = [];
+const { registered, skipped } = collect(corpus);
+const registeredIds = new Set(registered);
 
 for (const { name, file } of corpus) {
   describe(`conformance ${name}`, () => {
     for (const testCase of file.cases) {
-      const skip = testCase.only === "ts";
-      (skip ? skipped : registered).push(testCase.id);
-      it.skipIf(skip)(`${testCase.id} (${testCase.from})`, () => {
-        if (testCase.kind === "regex-parse") {
-          runParseCase(testCase);
-        } else if (testCase.kind === "regex-match") {
-          runMatchCase(testCase);
-        } else {
-          throw new Error(
-            `no executor for the ${testCase.kind} kind in this package`,
-          );
-        }
-      });
+      it.skipIf(!registeredIds.has(testCase.id))(
+        `${testCase.id} (${testCase.from})`,
+        () => {
+          if (testCase.kind === "regex-parse") {
+            runParseCase(testCase);
+          } else if (testCase.kind === "regex-match") {
+            runMatchCase(testCase);
+          } else {
+            throw new Error(
+              `no executor for the ${testCase.kind} kind in this package`,
+            );
+          }
+        },
+      );
     }
   });
 }
@@ -377,16 +379,19 @@ describe("corpus completeness", () => {
     readJson(join(CORPUS_ROOT, "manifest.json")),
   );
 
-  it("registers every case the manifest counts, those marked for the other implementation as skipped", () => {
+  it("registers and skips cases so that they add up to the manifest, per implementation", () => {
     if (!manifest.ok) {
       throw new Error(manifest.problems.join("\n"));
     }
     const entries = Object.values(manifest.value.files);
-    const total = entries.reduce((sum, entry) => sum + entry.cases, 0);
-    const marked = entries.reduce((sum, entry) => sum + entry.only.length, 0);
-    expect(registered.length + skipped.length).toBe(total);
-    expect(skipped.length).toBe(marked);
-    expect(new Set([...registered, ...skipped]).size).toBe(total);
+    expect(
+      completenessProblems(
+        entries.reduce((sum, entry) => sum + entry.cases, 0),
+        new Set(entries.flatMap((entry) => entry.only)),
+        registered,
+        skipped,
+      ),
+    ).toEqual([]);
   });
 
   it("pins the answer for the nested-quantifier pattern the time-bound test uses", () => {

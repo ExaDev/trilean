@@ -31,6 +31,23 @@ pub fn is_name(name: &str) -> bool {
         })
 }
 
+/// Whether a case's `from` is an original test title (`<test file>.test.ts: <title>`) or a recorded behaviour
+/// (`recorded: <package> <source file> (<what>)`), so a reader can tell a pinned original from a recorded one.
+fn is_valid_from(from: &str) -> bool {
+    if let Some(rest) = from.strip_prefix("recorded: ") {
+        return !rest.is_empty();
+    }
+    from.split_once(".test.ts: ").is_some_and(|(stem, title)| {
+        !stem.is_empty()
+            && !title.is_empty()
+            && stem.bytes().all(|byte| {
+                byte.is_ascii_lowercase()
+                    || byte.is_ascii_digit()
+                    || matches!(byte, b'.' | b'_' | b'-')
+            })
+    })
+}
+
 /// A string as the UTF-16 code units it denotes: a JSON string, or `{ "codeUnits": [...] }` for content a JSON
 /// string cannot carry. The second form is what lets a case hold an unpaired surrogate.
 pub fn decode_text(value: &Value, at: &str) -> Check<Vec<u16>> {
@@ -256,7 +273,11 @@ fn check_case(value: &Value, at: &str) -> Check<String> {
             "{at}: a case id uses lower-case ASCII letters, digits, dots, hyphens and underscores"
         ));
     }
-    non_empty_string_field(map, "from", at)?;
+    if !is_valid_from(non_empty_string_field(map, "from", at)?) {
+        return Err(format!(
+            "{at}: \"from\" must be \"<test file>.test.ts: <title>\" or \"recorded: <what>\""
+        ));
+    }
     if let Some(only) = map.get("only")
         && !matches!(only.as_str(), Some("ts" | "rust"))
     {

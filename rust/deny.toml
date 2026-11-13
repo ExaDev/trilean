@@ -1,4 +1,4 @@
-# The allowlist `cargo deny check` enforces in CI. A crate that is not listed under [bans] allow fails the check,
+# The allowlist the cargo-deny check enforces in CI. A crate that is not listed under [bans] allow fails the check,
 # so adding a dependency is a reviewed change to this file, with the reason it is needed. The workspace's own
 # crates are listed too, since cargo-deny applies the allowlist to every crate in the graph.
 #

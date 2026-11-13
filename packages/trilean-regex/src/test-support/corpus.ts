@@ -1,7 +1,7 @@
-import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { selectCorpusFiles } from "./corpus-files";
 import type { CorpusFile } from "./corpus-types";
+import { readJson } from "./read-json";
 import { validateCorpusFile, validateManifest } from "./validate";
 
 /**
@@ -19,10 +19,6 @@ export interface CheckedCorpus {
   readonly problems: readonly string[];
 }
 
-function readJson(path: string): unknown {
-  return JSON.parse(readFileSync(path, "utf8"));
-}
-
 /** What the files of a corpus say about themselves, in the manifest's own shape. */
 function describeFiles(files: readonly LoadedFile[]): Record<string, string> {
   return Object.fromEntries(
@@ -37,6 +33,49 @@ function describeFiles(files: readonly LoadedFile[]): Record<string, string> {
       }),
     ]),
   );
+}
+
+/** The case ids this implementation registers to run and the ones it skips because they are marked for it alone. A case marked for the other implementation is registered and run here. */
+export function collect(files: readonly LoadedFile[]): {
+  readonly registered: readonly string[];
+  readonly skipped: readonly string[];
+} {
+  const cases = files.flatMap(({ file }) => file.cases);
+
+  return {
+    registered: cases.filter(({ only }) => only !== "ts").map(({ id }) => id),
+    skipped: cases.filter(({ only }) => only === "ts").map(({ id }) => id),
+  };
+}
+
+/**
+ * The completeness check, per implementation: what this implementation registered and skipped must add up to the manifest's total, and what it skips must be marked in the manifest. Cases marked for the other implementation count as registered here, so they cannot fail it.
+ */
+export function completenessProblems(
+  total: number,
+  markedIds: ReadonlySet<string>,
+  registered: readonly string[],
+  skipped: readonly string[],
+): readonly string[] {
+  const problems: string[] = [];
+  if (registered.length + skipped.length !== total) {
+    problems.push(
+      `registered ${String(registered.length)} plus skipped ${String(skipped.length)} is not the manifest's ${String(total)}`,
+    );
+  }
+  for (const id of skipped) {
+    if (!markedIds.has(id)) {
+      problems.push(`${id} is skipped here and not marked in the manifest`);
+    }
+  }
+  if (
+    new Set([...registered, ...skipped]).size !==
+    registered.length + skipped.length
+  ) {
+    problems.push("a case is both registered and skipped, or registered twice");
+  }
+
+  return problems;
 }
 
 export function checkCorpus(root: string): CheckedCorpus {
@@ -81,6 +120,20 @@ export function checkCorpus(root: string): CheckedCorpus {
       ]),
     );
     const actual = describeFiles(files);
+    const counts = collect(files);
+    problems.push(
+      ...completenessProblems(
+        Object.values(manifest.value.files).reduce(
+          (sum, entry) => sum + entry.cases,
+          0,
+        ),
+        new Set(
+          Object.values(manifest.value.files).flatMap((entry) => entry.only),
+        ),
+        counts.registered,
+        counts.skipped,
+      ),
+    );
     for (const name of new Set([
       ...Object.keys(recorded),
       ...Object.keys(actual),

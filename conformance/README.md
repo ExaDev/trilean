@@ -14,7 +14,7 @@ conformance/
   fixtures/                  data the runners test themselves with
 ```
 
-The files are canonical JSON, which the repository's lint requires: keys sorted, two-space indent, one element per line. Running `pnpm lint` rewrites a file into that form, so the examples below show the fields in reading order and the files do not.
+The files are UTF-8 (a loader refuses a file that is not, rather than reading replacement characters) and canonical JSON, which the repository's lint requires: keys sorted, two-space indent, one element per line. Running `pnpm lint` rewrites a file into that form, so the examples below show the fields in reading order and the files do not.
 
 ### Which files are corpus files
 
@@ -30,19 +30,19 @@ Every loader applies this one rule, and each runs it over `fixtures/loader-selec
 
 ### The manifest
 
-`manifest.json` records, for every corpus file, its case count and the ids of the cases marked for one implementation only, in ascending order. Every runner checks the corpus against it and fails on any difference. A runner also counts the cases it executes and the cases it skips, and asserts that the sum is the manifest's total. The TypeScript runner counts the cases it registers when it collects them, so the check holds whatever the run does with the registered tests (a name filter, a bail, a retry, a shuffled order). The Rust loader executes no case yet and counts every case as skipped, for that stated reason; execution moves cases from skipped to executed and cannot lose one. Changing the corpus means changing the manifest in the same commit, so a case cannot be dropped, or hidden from one side, without a visible change.
+`manifest.json` records, for every corpus file, its case count and the ids of the cases marked for one implementation only, in ascending order. Every runner checks the corpus against it and fails on any difference. A runner also counts, for its own implementation, the cases it executes and the cases it skips (those marked for it alone), and asserts that the sum is the manifest's total and that every case it skips is marked in the manifest; a case marked for the other implementation is one it executes. The TypeScript runner counts the cases it registers when it collects them, so the check holds whatever the run does with the registered tests (a name filter, a bail, a retry, a shuffled order). The Rust loader executes no case yet and counts every case as skipped, for that stated reason; execution moves cases from skipped to executed and cannot lose one. Changing the corpus means changing the manifest in the same commit, so a case cannot be dropped, or hidden from one side, without a visible change.
 
 ## Cases
 
 Every case has:
 
 - `id`: unique across the whole corpus, in lower-case ASCII letters, digits, dots, hyphens and underscores.
-- `from`: the original test title the case came from, as `<test file>: <describe> > <test>`, so a failure points back to the behaviour it pinned. A case written for the corpus says what it pins instead. Where the original asserted less than the case records, `from` says so.
+- `from`: either `<test file>.test.ts: <describe> > <test>`, the original test title the case came from, so a failure points back to the behaviour it pinned, or `recorded: <package> <source file> (<what>)` for a recorded case. The schema and every loader refuse a `from` in neither form. Where the original asserted less than the case records, `from` says so.
 - `kind`: selects the shape below.
 - `only`, optional, with a `reason` that says why: `ts` for a case the TypeScript implementation skips, `rust` for a case the Rust implementation skips. The axis is the implementation, never the host: a wasm build of the Rust engine is `rust` wherever it runs (native, Node, a browser or Workers). A case one implementation cannot run carries it; nothing else does. A `reason` without `only` is refused.
 - `tolerance`, optional: `{ "ulps": n }`. Numbers compare exactly (`-0` included) unless a case gives one.
 
-A case comes from an existing test, with the same inputs and the same expectation, and an expectation is never weaker than the original's. The exception is a recorded case: one written for the corpus because no test covered the behaviour, whose expectation is what the TypeScript implementation does today. Its `from` starts `recorded:` and names the source file the behaviour comes from (`recorded: trilean-regex src/parser.ts (...)`), so a reader can tell a pinned original from a recorded behaviour. A recorded behaviour that is a defect is fixed and its case changed together, never left pinned.
+A case comes from an existing test, with the same inputs and the same expectation, and an expectation is never weaker than the original's. The exception is a recorded case: one written for the corpus because no test covered the behaviour, whose expectation is what the TypeScript implementation does today. Its `from` starts `recorded:` and names the source file the behaviour comes from (`recorded: trilean-regex src/parser.ts (...)`), so a reader can tell a pinned original from a recorded behaviour, and a loader checks the form. A recorded behaviour that is a defect is fixed and its case changed together, never left pinned.
 
 ### Text
 
@@ -53,7 +53,7 @@ Every pattern, input and message fragment is a sequence of UTF-16 code units, an
 
 A loader reads both into the same code unit sequence; `fixtures/text-forms/pairs.json` lists texts with their code units, and every loader checks they agree. A loader that cannot decode a string into code units, or that reads one in scalar values or bytes, is wrong: `😀` is two literals, and `index` after it counts two.
 
-`case.schema.json` is the format, including the kinds later packages use. A loader accepts no document the schema rejects, and accepts every document the schema accepts for the kinds it validates in full; it refuses any other kind rather than passing it unchecked. A corpus file holds at least one case.
+`case.schema.json` is the format, including the kinds later packages use. A loader accepts no document the schema rejects, and accepts every document the schema accepts for the kinds it validates in full, except one that breaks a rule the Text and Rules sections add beside the schema (an unpaired surrogate in a JSON string, invalid UTF-8); it refuses any other kind rather than passing it unchecked. A corpus file holds at least one case.
 
 ### Rules the schema cannot express
 
