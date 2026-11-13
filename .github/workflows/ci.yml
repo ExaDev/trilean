@@ -179,6 +179,9 @@ jobs:
       - name: Check the dependency allowlist
         working-directory: rust
         run: cargo deny --locked check
+      # cargo-deny cannot fail on an allowed crate nothing uses, so the allowlist is compared with the graph separately.
+      - name: Check the allowlist lists exactly the dependency graph
+        run: python3 -I scripts/check-deny-allowlist.py
 
   # Single stable branch-protection target aggregating every job that runs on every PR, so the required status check doesn't need updating whenever a job is added, renamed, or split.
   required-checks:
