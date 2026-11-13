@@ -5,6 +5,7 @@ set -eu
 cd "$(dirname "$0")/.."
 
 sh scripts/check-cargo-locked.sh
+python3 -I scripts/check-workspace-members.py
 cd rust
 cargo fmt --check
 cargo clippy --locked --all-targets --all-features -- -D warnings

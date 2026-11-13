@@ -160,11 +160,12 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: rust
-      - name: Lock check, format, clippy (warnings denied) and tests
+      - name: Lock check, workspace check, format, clippy (warnings denied) and tests
         run: sh scripts/rust-checks.sh
       - name: Test the checks themselves
         run: |
           sh scripts/test-pre-push-rust.sh
+          python3 -I scripts/test_check_workspace_members.py
 
   # `cargo deny check` fails on any crate not allowlisted in rust/deny.toml, on a licence outside its list and on a published advisory. The job name contains cargo-deny on purpose: it is how a check on main's head is recognised as the one enforcing the allowlist. The tool is pinned to an exact release and installed as a prebuilt binary, so a new cargo-deny cannot change what passes without a change here. It runs from rust/ so the pinned toolchain resolves the graph, against the committed Cargo.lock.
   cargo-deny:
