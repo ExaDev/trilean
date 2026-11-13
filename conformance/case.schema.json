@@ -1,0 +1,1551 @@
+{
+  "$defs": {
+    "build": {
+      "additionalProperties": false,
+      "properties": {
+        "args": {
+          "type": "array"
+        },
+        "builder": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "expect": {
+          "$ref": "#/$defs/json"
+        },
+        "from": {
+          "$ref": "#/$defs/from"
+        },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "const": "build"
+        },
+        "only": {
+          "$ref": "#/$defs/only"
+        },
+        "tolerance": {
+          "$ref": "#/$defs/tolerance"
+        }
+      },
+      "required": [
+        "id",
+        "from",
+        "kind",
+        "builder",
+        "args",
+        "expect"
+      ],
+      "type": "object"
+    },
+    "call": {
+      "additionalProperties": false,
+      "properties": {
+        "args": {
+          "items": {
+            "$ref": "#/$defs/computedValue"
+          },
+          "type": "array"
+        },
+        "expect": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/computedValue"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "domainError": {
+                  "const": true,
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "domainError"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "wrongType": {
+                  "const": true,
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "wrongType"
+              ],
+              "type": "object"
+            }
+          ]
+        },
+        "from": {
+          "$ref": "#/$defs/from"
+        },
+        "function": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "const": "call"
+        },
+        "only": {
+          "$ref": "#/$defs/only"
+        },
+        "tolerance": {
+          "$ref": "#/$defs/tolerance"
+        }
+      },
+      "required": [
+        "id",
+        "from",
+        "kind",
+        "function",
+        "args",
+        "expect"
+      ],
+      "type": "object"
+    },
+    "case": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/regexParse"
+        },
+        {
+          "$ref": "#/$defs/regexMatch"
+        },
+        {
+          "$ref": "#/$defs/validate"
+        },
+        {
+          "$ref": "#/$defs/build"
+        },
+        {
+          "$ref": "#/$defs/call"
+        },
+        {
+          "$ref": "#/$defs/evaluate"
+        },
+        {
+          "$ref": "#/$defs/inputs"
+        },
+        {
+          "$ref": "#/$defs/document"
+        },
+        {
+          "$ref": "#/$defs/cli"
+        },
+        {
+          "$ref": "#/$defs/sqlCompile"
+        },
+        {
+          "$ref": "#/$defs/sqlGuard"
+        },
+        {
+          "$ref": "#/$defs/sqlPattern"
+        },
+        {
+          "$ref": "#/$defs/sqlExecute"
+        }
+      ]
+    },
+    "cli": {
+      "additionalProperties": false,
+      "properties": {
+        "args": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "expect": {
+          "additionalProperties": false,
+          "properties": {
+            "exit": {
+              "type": "integer"
+            },
+            "stderr": {
+              "type": "string"
+            },
+            "stderrIncludes": {
+              "type": "string"
+            },
+            "stdout": {
+              "type": "string"
+            },
+            "stdoutJson": {
+              "$ref": "#/$defs/json"
+            }
+          },
+          "required": [
+            "exit"
+          ],
+          "type": "object"
+        },
+        "files": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "File name to file text. Contents are text, so a number such as 1e999 reaches the parser as written.",
+          "type": "object"
+        },
+        "from": {
+          "$ref": "#/$defs/from"
+        },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "const": "cli"
+        },
+        "only": {
+          "$ref": "#/$defs/only"
+        },
+        "stdin": {
+          "type": "string"
+        },
+        "tolerance": {
+          "$ref": "#/$defs/tolerance"
+        }
+      },
+      "required": [
+        "id",
+        "from",
+        "kind",
+        "args",
+        "files",
+        "expect"
+      ],
+      "type": "object"
+    },
+    "computedValue": {
+      "description": "A ComputedValue as the trilean package represents it; validated by the runner of the package that owns it.",
+      "properties": {
+        "kind": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "type": "object"
+    },
+    "context": {
+      "$ref": "#/$defs/json",
+      "description": "A context to match, or * for any context."
+    },
+    "document": {
+      "additionalProperties": false,
+      "properties": {
+        "as": {
+          "enum": [
+            "predicate",
+            "expression"
+          ]
+        },
+        "expect": {
+          "$ref": "#/$defs/json"
+        },
+        "from": {
+          "$ref": "#/$defs/from"
+        },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "inputs": {
+          "$ref": "#/$defs/json"
+        },
+        "kind": {
+          "const": "document"
+        },
+        "maxNodes": {
+          "$ref": "#/$defs/json"
+        },
+        "only": {
+          "$ref": "#/$defs/only"
+        },
+        "tolerance": {
+          "$ref": "#/$defs/tolerance"
+        },
+        "tree": {
+          "$ref": "#/$defs/json"
+        }
+      },
+      "required": [
+        "id",
+        "from",
+        "kind",
+        "tree",
+        "expect"
+      ],
+      "type": "object"
+    },
+    "evaluate": {
+      "additionalProperties": false,
+      "properties": {
+        "as": {
+          "enum": [
+            "predicate",
+            "expression"
+          ]
+        },
+        "context": {
+          "$ref": "#/$defs/json"
+        },
+        "evaluator": {
+          "additionalProperties": false,
+          "properties": {
+            "functions": {
+              "additionalProperties": false,
+              "properties": {
+                "builtin": {
+                  "type": "boolean"
+                },
+                "table": {
+                  "additionalProperties": {
+                    "items": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "args": {
+                          "items": {
+                            "$ref": "#/$defs/computedValue"
+                          },
+                          "type": "array"
+                        },
+                        "result": {
+                          "$ref": "#/$defs/json"
+                        }
+                      },
+                      "required": [
+                        "args",
+                        "result"
+                      ],
+                      "type": "object"
+                    },
+                    "type": "array"
+                  },
+                  "type": "object"
+                }
+              },
+              "type": "object"
+            },
+            "maxNestingDepth": {
+              "$ref": "#/$defs/json"
+            },
+            "maxNodes": {
+              "$ref": "#/$defs/json"
+            }
+          },
+          "type": "object"
+        },
+        "expect": {
+          "oneOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "status": {
+                  "const": "definite"
+                },
+                "value": {
+                  "$ref": "#/$defs/json"
+                }
+              },
+              "required": [
+                "status",
+                "value"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "code": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "status": {
+                  "const": "indeterminate"
+                }
+              },
+              "required": [
+                "status",
+                "code"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "throws": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "from": {
+                      "enum": [
+                        "resolver",
+                        "function",
+                        "type-error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "from"
+                  ],
+                  "type": "object"
+                }
+              },
+              "required": [
+                "throws"
+              ],
+              "type": "object"
+            }
+          ]
+        },
+        "expectCalls": {
+          "description": "The resolver calls in the order they were made.",
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "collection": {
+                "$ref": "#/$defs/json"
+              },
+              "key": {
+                "$ref": "#/$defs/json"
+              },
+              "resolver": {
+                "enum": [
+                  "value",
+                  "lookup",
+                  "collection",
+                  "delegate",
+                  "tree"
+                ]
+              },
+              "system": {
+                "type": "string"
+              },
+              "table": {
+                "$ref": "#/$defs/json"
+              }
+            },
+            "required": [
+              "resolver"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "from": {
+          "$ref": "#/$defs/from"
+        },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "const": "evaluate"
+        },
+        "modes": {
+          "items": {
+            "enum": [
+              "async",
+              "sync",
+              "compiled"
+            ]
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "only": {
+          "$ref": "#/$defs/only"
+        },
+        "resolvers": {
+          "$ref": "#/$defs/resolvers"
+        },
+        "tolerance": {
+          "$ref": "#/$defs/tolerance"
+        },
+        "tree": {
+          "$ref": "#/$defs/json"
+        }
+      },
+      "required": [
+        "id",
+        "from",
+        "kind",
+        "as",
+        "tree",
+        "resolvers",
+        "expect"
+      ],
+      "type": "object"
+    },
+    "from": {
+      "description": "The original test title this case came from, or what the case pins for a case written for the corpus.",
+      "minLength": 1,
+      "type": "string"
+    },
+    "id": {
+      "description": "Unique across the whole corpus.",
+      "minLength": 1,
+      "type": "string"
+    },
+    "inputs": {
+      "additionalProperties": false,
+      "properties": {
+        "expect": {
+          "oneOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "collections": {
+                  "$ref": "#/$defs/json"
+                },
+                "inputs": {
+                  "$ref": "#/$defs/json"
+                },
+                "ok": {
+                  "const": true
+                }
+              },
+              "required": [
+                "ok",
+                "inputs",
+                "collections"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "issues": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "ok": {
+                  "const": false
+                }
+              },
+              "required": [
+                "ok",
+                "issues"
+              ],
+              "type": "object"
+            }
+          ]
+        },
+        "from": {
+          "$ref": "#/$defs/from"
+        },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "const": "inputs"
+        },
+        "only": {
+          "$ref": "#/$defs/only"
+        },
+        "raw": {
+          "$ref": "#/$defs/json"
+        },
+        "tolerance": {
+          "$ref": "#/$defs/tolerance"
+        }
+      },
+      "required": [
+        "id",
+        "from",
+        "kind",
+        "raw",
+        "expect"
+      ],
+      "type": "object"
+    },
+    "json": {
+      "description": "Any JSON value."
+    },
+    "only": {
+      "description": "Present only for a case one side cannot express: js for a case the native crates skip, native for a case the JavaScript runners skip.",
+      "enum": [
+        "js",
+        "native"
+      ]
+    },
+    "regexMatch": {
+      "additionalProperties": false,
+      "properties": {
+        "from": {
+          "$ref": "#/$defs/from"
+        },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "inputs": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "input": {
+                "type": "string"
+              },
+              "matches": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "input",
+              "matches"
+            ],
+            "type": "object"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "kind": {
+          "const": "regex-match"
+        },
+        "only": {
+          "$ref": "#/$defs/only"
+        },
+        "pattern": {
+          "type": "string"
+        },
+        "tolerance": {
+          "$ref": "#/$defs/tolerance"
+        }
+      },
+      "required": [
+        "id",
+        "from",
+        "kind",
+        "pattern",
+        "inputs"
+      ],
+      "type": "object"
+    },
+    "regexNode": {
+      "description": "A trilean-regex abstract syntax node, with the field names of the package's ast module. An unbounded repeat omits max.",
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "codeUnit": {
+              "maximum": 65535,
+              "minimum": 0,
+              "type": "integer"
+            },
+            "kind": {
+              "const": "literal"
+            }
+          },
+          "required": [
+            "kind",
+            "codeUnit"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "enum": [
+                "anyChar",
+                "anchorStart",
+                "anchorEnd"
+              ]
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "charClass"
+            },
+            "negated": {
+              "type": "boolean"
+            },
+            "ranges": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "from": {
+                    "maximum": 65535,
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "to": {
+                    "maximum": 65535,
+                    "minimum": 0,
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "from",
+                  "to"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "kind",
+            "negated",
+            "ranges"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "concat"
+            },
+            "operands": {
+              "items": {
+                "$ref": "#/$defs/regexNode"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "kind",
+            "operands"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "branches": {
+              "items": {
+                "$ref": "#/$defs/regexNode"
+              },
+              "type": "array"
+            },
+            "kind": {
+              "const": "alternation"
+            }
+          },
+          "required": [
+            "kind",
+            "branches"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "enum": [
+                "star",
+                "plus",
+                "optional"
+              ]
+            },
+            "operand": {
+              "$ref": "#/$defs/regexNode"
+            }
+          },
+          "required": [
+            "kind",
+            "operand"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "repeat"
+            },
+            "max": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "min": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "operand": {
+              "$ref": "#/$defs/regexNode"
+            }
+          },
+          "required": [
+            "kind",
+            "operand",
+            "min"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "regexNodeSubset": {
+      "description": "A partial regexNode for astSubset: an object matches when every key it gives matches, an array matches element by element at the same length, any other value matches when equal.",
+      "type": [
+        "object",
+        "array",
+        "string",
+        "number",
+        "boolean",
+        "null"
+      ]
+    },
+    "regexParse": {
+      "additionalProperties": false,
+      "properties": {
+        "expect": {
+          "oneOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "ast": {
+                  "$ref": "#/$defs/regexNode"
+                }
+              },
+              "required": [
+                "ast"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "astSubset": {
+                  "$ref": "#/$defs/regexNodeSubset"
+                }
+              },
+              "required": [
+                "astSubset"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "error": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "index": {
+                      "description": "Offset in UTF-16 code units into pattern. Given only where the case pins it.",
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "message": {
+                      "description": "A substring the error message contains. Given only where the case pins it.",
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              },
+              "required": [
+                "error"
+              ],
+              "type": "object"
+            }
+          ]
+        },
+        "from": {
+          "$ref": "#/$defs/from"
+        },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "const": "regex-parse"
+        },
+        "only": {
+          "$ref": "#/$defs/only"
+        },
+        "pattern": {
+          "type": "string"
+        },
+        "tolerance": {
+          "$ref": "#/$defs/tolerance"
+        }
+      },
+      "required": [
+        "id",
+        "from",
+        "kind",
+        "pattern",
+        "expect"
+      ],
+      "type": "object"
+    },
+    "resolution": {
+      "description": "What one resolver call returns. settlesAfter, async only, settles it after that many microtask turns.",
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "found": {
+              "const": true
+            },
+            "settlesAfter": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "value": {
+              "$ref": "#/$defs/computedValue"
+            }
+          },
+          "required": [
+            "found",
+            "value"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "found": {
+              "const": false
+            },
+            "notYetKnown": {
+              "type": "boolean"
+            },
+            "settlesAfter": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "found"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "settlesAfter": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "throws": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "throws"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "raw": {
+              "$ref": "#/$defs/json"
+            },
+            "settlesAfter": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "raw"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "resolvers": {
+      "additionalProperties": false,
+      "properties": {
+        "collections": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "collection": {
+                "$ref": "#/$defs/json"
+              },
+              "context": {
+                "$ref": "#/$defs/context"
+              },
+              "items": {
+                "type": "array"
+              }
+            },
+            "required": [
+              "collection",
+              "items"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "default": {
+          "$ref": "#/$defs/resolution"
+        },
+        "delegates": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "payload": {
+                "$ref": "#/$defs/json"
+              },
+              "result": {
+                "$ref": "#/$defs/resolution"
+              },
+              "system": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "system",
+              "payload",
+              "result"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "fromContext": {
+          "type": "boolean"
+        },
+        "lookups": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "context": {
+                "$ref": "#/$defs/context"
+              },
+              "keys": {
+                "items": {
+                  "$ref": "#/$defs/computedValue"
+                },
+                "type": "array"
+              },
+              "result": {
+                "$ref": "#/$defs/resolution"
+              },
+              "table": {
+                "$ref": "#/$defs/json"
+              }
+            },
+            "required": [
+              "table",
+              "keys",
+              "result"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "trees": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "key": {
+                "$ref": "#/$defs/json"
+              },
+              "result": {
+                "oneOf": [
+                  {
+                    "additionalProperties": false,
+                    "properties": {
+                      "found": {
+                        "const": true
+                      },
+                      "node": {
+                        "$ref": "#/$defs/json"
+                      }
+                    },
+                    "required": [
+                      "found",
+                      "node"
+                    ],
+                    "type": "object"
+                  },
+                  {
+                    "additionalProperties": false,
+                    "properties": {
+                      "found": {
+                        "const": false
+                      },
+                      "notYetKnown": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "found"
+                    ],
+                    "type": "object"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "key",
+              "result"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "values": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "context": {
+                "$ref": "#/$defs/context"
+              },
+              "key": {
+                "$ref": "#/$defs/json"
+              },
+              "result": {
+                "$ref": "#/$defs/resolution"
+              }
+            },
+            "required": [
+              "key",
+              "result"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "sqlCompile": {
+      "additionalProperties": false,
+      "properties": {
+        "expect": {
+          "oneOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "params": {
+                  "type": "array"
+                },
+                "sql": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "sql",
+                "params"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "error": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "column": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "nodeKind": {
+                      "type": "string"
+                    },
+                    "path": {
+                      "type": "string"
+                    },
+                    "reason": {
+                      "type": "string"
+                    },
+                    "referenceKey": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name"
+                  ],
+                  "type": "object"
+                }
+              },
+              "required": [
+                "error"
+              ],
+              "type": "object"
+            }
+          ]
+        },
+        "from": {
+          "$ref": "#/$defs/from"
+        },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "const": "sql-compile"
+        },
+        "only": {
+          "$ref": "#/$defs/only"
+        },
+        "options": {
+          "$ref": "#/$defs/sqlOptions"
+        },
+        "tolerance": {
+          "$ref": "#/$defs/tolerance"
+        },
+        "tree": {
+          "$ref": "#/$defs/json"
+        }
+      },
+      "required": [
+        "id",
+        "from",
+        "kind",
+        "tree",
+        "options",
+        "expect"
+      ],
+      "type": "object"
+    },
+    "sqlExecute": {
+      "additionalProperties": false,
+      "properties": {
+        "agreesWithEvaluator": {
+          "type": "boolean"
+        },
+        "dialects": {
+          "items": {
+            "enum": [
+              "sqlite",
+              "postgres"
+            ]
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "expectRows": {
+          "type": "array"
+        },
+        "fixture": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "from": {
+          "$ref": "#/$defs/from"
+        },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "const": "sql-execute"
+        },
+        "only": {
+          "$ref": "#/$defs/only"
+        },
+        "options": {
+          "$ref": "#/$defs/sqlOptions"
+        },
+        "tolerance": {
+          "$ref": "#/$defs/tolerance"
+        },
+        "tree": {
+          "$ref": "#/$defs/json"
+        }
+      },
+      "required": [
+        "id",
+        "from",
+        "kind",
+        "fixture",
+        "dialects",
+        "tree",
+        "options",
+        "expectRows",
+        "agreesWithEvaluator"
+      ],
+      "type": "object"
+    },
+    "sqlGuard": {
+      "additionalProperties": false,
+      "properties": {
+        "expect": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "nodeKind": {
+                  "type": "string"
+                },
+                "path": {
+                  "type": "string"
+                },
+                "reason": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "nodeKind",
+                "path"
+              ],
+              "type": "object"
+            }
+          ]
+        },
+        "from": {
+          "$ref": "#/$defs/from"
+        },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "const": "sql-guard"
+        },
+        "only": {
+          "$ref": "#/$defs/only"
+        },
+        "options": {
+          "$ref": "#/$defs/sqlOptions"
+        },
+        "tolerance": {
+          "$ref": "#/$defs/tolerance"
+        },
+        "tree": {
+          "$ref": "#/$defs/json"
+        }
+      },
+      "required": [
+        "id",
+        "from",
+        "kind",
+        "tree",
+        "options",
+        "expect"
+      ],
+      "type": "object"
+    },
+    "sqlOptions": {
+      "additionalProperties": false,
+      "properties": {
+        "collections": {
+          "type": "object"
+        },
+        "columns": {
+          "type": "object"
+        },
+        "dialect": {
+          "type": "string"
+        },
+        "postgresRegexpPushdown": {
+          "type": "boolean"
+        },
+        "sqliteRegexpAvailable": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "dialect"
+      ],
+      "type": "object"
+    },
+    "sqlPattern": {
+      "additionalProperties": false,
+      "properties": {
+        "dialect": {
+          "type": "string"
+        },
+        "expect": {
+          "oneOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "text": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "text"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "error": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "error"
+              ],
+              "type": "object"
+            }
+          ]
+        },
+        "from": {
+          "$ref": "#/$defs/from"
+        },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "const": "sql-pattern"
+        },
+        "only": {
+          "$ref": "#/$defs/only"
+        },
+        "pattern": {
+          "type": "string"
+        },
+        "tolerance": {
+          "$ref": "#/$defs/tolerance"
+        }
+      },
+      "required": [
+        "id",
+        "from",
+        "kind",
+        "pattern",
+        "dialect",
+        "expect"
+      ],
+      "type": "object"
+    },
+    "tolerance": {
+      "additionalProperties": false,
+      "description": "Numbers compare exactly unless a case gives a tolerance in units in the last place.",
+      "properties": {
+        "ulps": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "ulps"
+      ],
+      "type": "object"
+    },
+    "validate": {
+      "additionalProperties": false,
+      "properties": {
+        "expect": {
+          "oneOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "ok": {
+                  "const": true
+                },
+                "value": {
+                  "$ref": "#/$defs/json"
+                }
+              },
+              "required": [
+                "ok"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "issues": {
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "message": {
+                        "type": "string"
+                      },
+                      "path": {
+                        "items": {
+                          "type": [
+                            "string",
+                            "integer"
+                          ]
+                        },
+                        "type": "array"
+                      }
+                    },
+                    "required": [
+                      "path"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "ok": {
+                  "const": false
+                }
+              },
+              "required": [
+                "ok",
+                "issues"
+              ],
+              "type": "object"
+            }
+          ]
+        },
+        "from": {
+          "$ref": "#/$defs/from"
+        },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "input": {
+          "$ref": "#/$defs/json"
+        },
+        "kind": {
+          "const": "validate"
+        },
+        "only": {
+          "$ref": "#/$defs/only"
+        },
+        "schema": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "tolerance": {
+          "$ref": "#/$defs/tolerance"
+        }
+      },
+      "required": [
+        "id",
+        "from",
+        "kind",
+        "schema",
+        "input",
+        "expect"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://github.com/ExaDev/trilean/tree/main/conformance/case.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "One corpus file: an object holding a list of cases. Every case names the behaviour it pins with a unique id and a from, and takes a kind-specific shape. See README.md for the matching rules.",
+  "properties": {
+    "cases": {
+      "items": {
+        "$ref": "#/$defs/case"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "cases"
+  ],
+  "title": "trilean conformance corpus file",
+  "type": "object"
+}
