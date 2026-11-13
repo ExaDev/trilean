@@ -1,0 +1,660 @@
+{
+  "cases": [
+    {
+      "from": "matcher.unit.test.ts: literals and concatenation > matches a literal substring anywhere in the input",
+      "id": "match.literals-and-concatenation.matches-a-literal-substring-anywhere-in-the-input.1",
+      "inputs": [
+        {
+          "input": "concatenate",
+          "matches": true
+        },
+        {
+          "input": "dog",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "cat"
+    },
+    {
+      "from": "matcher.unit.test.ts: literals and concatenation > matches the empty pattern against anything, including the empty string",
+      "id": "match.literals-and-concatenation.matches-the-empty-pattern-against-anything-including-the-empty-string.1",
+      "inputs": [
+        {
+          "input": "",
+          "matches": true
+        },
+        {
+          "input": "anything",
+          "matches": true
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": ""
+    },
+    {
+      "from": "matcher.unit.test.ts: anchors > ^ pins the match to the start of the string",
+      "id": "match.anchors.pins-the-match-to-the-start-of-the-string.1",
+      "inputs": [
+        {
+          "input": "catalogue",
+          "matches": true
+        },
+        {
+          "input": "concatenate",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^cat"
+    },
+    {
+      "from": "matcher.unit.test.ts: anchors > $ pins the match to the end of the string",
+      "id": "match.anchors.pins-the-match-to-the-end-of-the-string.1",
+      "inputs": [
+        {
+          "input": "bobcat",
+          "matches": true
+        },
+        {
+          "input": "catalogue",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "cat$"
+    },
+    {
+      "from": "matcher.unit.test.ts: anchors > ^...$ together require a full match",
+      "id": "match.anchors.together-require-a-full-match.1",
+      "inputs": [
+        {
+          "input": "cat",
+          "matches": true
+        },
+        {
+          "input": "cats",
+          "matches": false
+        },
+        {
+          "input": "bobcat",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^cat$"
+    },
+    {
+      "from": "matcher.unit.test.ts: anchors > ^ and $ inside an alternation branch apply only to that branch",
+      "id": "match.anchors.and-inside-an-alternation-branch-apply-only-to-that-branch.1",
+      "inputs": [
+        {
+          "input": "abc",
+          "matches": true
+        },
+        {
+          "input": "xyz",
+          "matches": true
+        },
+        {
+          "input": "bcx",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^a|z$"
+    },
+    {
+      "from": "matcher.unit.test.ts: anchors > $ matches the position before a would-be next character, not a literal end marker",
+      "id": "match.anchors.matches-the-position-before-a-would-be-next-character-not-a-literal-end-marker.1",
+      "inputs": [
+        {
+          "input": "",
+          "matches": true
+        },
+        {
+          "input": "x",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^$"
+    },
+    {
+      "from": "matcher.unit.test.ts: . > matches any single character",
+      "id": "match..matches-any-single-character.1",
+      "inputs": [
+        {
+          "input": "abc",
+          "matches": true
+        },
+        {
+          "input": "a c",
+          "matches": true
+        },
+        {
+          "input": "ac",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "a.c"
+    },
+    {
+      "from": "matcher.unit.test.ts: alternation > matches if any branch matches",
+      "id": "match.alternation.matches-if-any-branch-matches.1",
+      "inputs": [
+        {
+          "input": "I have a dog",
+          "matches": true
+        },
+        {
+          "input": "I have a cat",
+          "matches": true
+        },
+        {
+          "input": "I have a bird",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "cat|dog"
+    },
+    {
+      "from": "matcher.unit.test.ts: alternation > supports more than two branches",
+      "id": "match.alternation.supports-more-than-two-branches.1",
+      "inputs": [
+        {
+          "input": "green",
+          "matches": true
+        },
+        {
+          "input": "yellow",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "red|green|blue"
+    },
+    {
+      "from": "matcher.unit.test.ts: groups > groups for repetition",
+      "id": "match.groups.groups-for-repetition.1",
+      "inputs": [
+        {
+          "input": "ababab",
+          "matches": true
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "(?:ab)+"
+    },
+    {
+      "from": "matcher.unit.test.ts: groups > groups for repetition",
+      "id": "match.groups.groups-for-repetition.2",
+      "inputs": [
+        {
+          "input": "aba",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^(?:ab)+$"
+    },
+    {
+      "from": "matcher.unit.test.ts: groups > groups for alternation precedence",
+      "id": "match.groups.groups-for-alternation-precedence.1",
+      "inputs": [
+        {
+          "input": "abd",
+          "matches": true
+        },
+        {
+          "input": "acd",
+          "matches": true
+        },
+        {
+          "input": "aed",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^a(?:b|c)d$"
+    },
+    {
+      "from": "matcher.unit.test.ts: quantifiers > * matches zero or more",
+      "id": "match.quantifiers.matches-zero-or-more.1",
+      "inputs": [
+        {
+          "input": "ac",
+          "matches": true
+        },
+        {
+          "input": "abc",
+          "matches": true
+        },
+        {
+          "input": "abbbbc",
+          "matches": true
+        },
+        {
+          "input": "abbbbx",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^ab*c$"
+    },
+    {
+      "from": "matcher.unit.test.ts: quantifiers > + matches one or more, never zero",
+      "id": "match.quantifiers.matches-one-or-more-never-zero.1",
+      "inputs": [
+        {
+          "input": "ac",
+          "matches": false
+        },
+        {
+          "input": "abc",
+          "matches": true
+        },
+        {
+          "input": "abbbbc",
+          "matches": true
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^ab+c$"
+    },
+    {
+      "from": "matcher.unit.test.ts: quantifiers > ? matches zero or one",
+      "id": "match.quantifiers.matches-zero-or-one.1",
+      "inputs": [
+        {
+          "input": "ac",
+          "matches": true
+        },
+        {
+          "input": "abc",
+          "matches": true
+        },
+        {
+          "input": "abbc",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^ab?c$"
+    },
+    {
+      "from": "matcher.unit.test.ts: quantifiers > {n} matches exactly n",
+      "id": "match.quantifiers.n-matches-exactly-n.1",
+      "inputs": [
+        {
+          "input": "aaa",
+          "matches": true
+        },
+        {
+          "input": "aa",
+          "matches": false
+        },
+        {
+          "input": "aaaa",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^a{3}$"
+    },
+    {
+      "from": "matcher.unit.test.ts: quantifiers > {n,} matches at least n",
+      "id": "match.quantifiers.n-matches-at-least-n.1",
+      "inputs": [
+        {
+          "input": "a",
+          "matches": false
+        },
+        {
+          "input": "aa",
+          "matches": true
+        },
+        {
+          "input": "aaaaaa",
+          "matches": true
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^a{2,}$"
+    },
+    {
+      "from": "matcher.unit.test.ts: quantifiers > {n,m} matches between n and m inclusive",
+      "id": "match.quantifiers.n-m-matches-between-n-and-m-inclusive.1",
+      "inputs": [
+        {
+          "input": "a",
+          "matches": false
+        },
+        {
+          "input": "aa",
+          "matches": true
+        },
+        {
+          "input": "aaa",
+          "matches": true
+        },
+        {
+          "input": "aaaa",
+          "matches": true
+        },
+        {
+          "input": "aaaaa",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^a{2,4}$"
+    },
+    {
+      "from": "matcher.unit.test.ts: quantifiers > {0} and {0,0} match only the empty repetition",
+      "id": "match.quantifiers.0-and-0-0-match-only-the-empty-repetition.1",
+      "inputs": [
+        {
+          "input": "",
+          "matches": true
+        },
+        {
+          "input": "a",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^a{0}$"
+    },
+    {
+      "from": "matcher.unit.test.ts: quantifiers > {0} and {0,0} match only the empty repetition",
+      "id": "match.quantifiers.0-and-0-0-match-only-the-empty-repetition.2",
+      "inputs": [
+        {
+          "input": "b",
+          "matches": true
+        },
+        {
+          "input": "ab",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^a{0,0}b$"
+    },
+    {
+      "from": "matcher.unit.test.ts: quantifiers > bounded repetition composes with a group",
+      "id": "match.quantifiers.bounded-repetition-composes-with-a-group.1",
+      "inputs": [
+        {
+          "input": "ababab",
+          "matches": true
+        },
+        {
+          "input": "ab",
+          "matches": false
+        },
+        {
+          "input": "abababab",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^(?:ab){2,3}$"
+    },
+    {
+      "from": "matcher.unit.test.ts: character classes > matches membership and its negation",
+      "id": "match.character-classes.matches-membership-and-its-negation.1",
+      "inputs": [
+        {
+          "input": "a",
+          "matches": true
+        },
+        {
+          "input": "d",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^[abc]$"
+    },
+    {
+      "from": "matcher.unit.test.ts: character classes > matches membership and its negation",
+      "id": "match.character-classes.matches-membership-and-its-negation.2",
+      "inputs": [
+        {
+          "input": "d",
+          "matches": true
+        },
+        {
+          "input": "a",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^[^abc]$"
+    },
+    {
+      "from": "matcher.unit.test.ts: character classes > matches a range",
+      "id": "match.character-classes.matches-a-range.1",
+      "inputs": [
+        {
+          "input": "hello",
+          "matches": true
+        },
+        {
+          "input": "Hello",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^[a-z]+$"
+    },
+    {
+      "from": "matcher.unit.test.ts: character classes > matches a union of ranges and singles",
+      "id": "match.character-classes.matches-a-union-of-ranges-and-singles.1",
+      "inputs": [
+        {
+          "input": "abcxyz0",
+          "matches": true
+        },
+        {
+          "input": "abcd",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^[a-cx-z0]+$"
+    },
+    {
+      "from": "matcher.unit.test.ts: shorthand classes > \\d matches ASCII digits only",
+      "id": "match.shorthand-classes.d-matches-ascii-digits-only.1",
+      "inputs": [
+        {
+          "input": "12345",
+          "matches": true
+        },
+        {
+          "input": "123a",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^\\d+$"
+    },
+    {
+      "from": "matcher.unit.test.ts: shorthand classes > \\D is the negation of \\d",
+      "id": "match.shorthand-classes.d-is-the-negation-of-d.1",
+      "inputs": [
+        {
+          "input": "abc",
+          "matches": true
+        },
+        {
+          "input": "abc1",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^\\D+$"
+    },
+    {
+      "from": "matcher.unit.test.ts: shorthand classes > \\w matches word characters",
+      "id": "match.shorthand-classes.w-matches-word-characters.1",
+      "inputs": [
+        {
+          "input": "hello_123",
+          "matches": true
+        },
+        {
+          "input": "hello world",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^\\w+$"
+    },
+    {
+      "from": "matcher.unit.test.ts: shorthand classes > \\W is the negation of \\w",
+      "id": "match.shorthand-classes.w-is-the-negation-of-w.1",
+      "inputs": [
+        {
+          "input": " -!",
+          "matches": true
+        },
+        {
+          "input": "a",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^\\W+$"
+    },
+    {
+      "from": "matcher.unit.test.ts: shorthand classes > \\s matches whitespace",
+      "id": "match.shorthand-classes.s-matches-whitespace.1",
+      "inputs": [
+        {
+          "input": "a b",
+          "matches": true
+        },
+        {
+          "input": "a\tb",
+          "matches": true
+        },
+        {
+          "input": "ab",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^a\\sb$"
+    },
+    {
+      "from": "matcher.unit.test.ts: shorthand classes > \\S is the negation of \\s",
+      "id": "match.shorthand-classes.s-is-the-negation-of-s.1",
+      "inputs": [
+        {
+          "input": "hello",
+          "matches": true
+        },
+        {
+          "input": "he llo",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^\\S+$"
+    },
+    {
+      "from": "matcher.unit.test.ts: shorthand classes > embeds a positive shorthand class inside brackets",
+      "id": "match.shorthand-classes.embeds-a-positive-shorthand-class-inside-brackets.1",
+      "inputs": [
+        {
+          "input": "1a2a3",
+          "matches": true
+        },
+        {
+          "input": "1ab",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^[\\da]+$"
+    },
+    {
+      "from": "matcher.unit.test.ts: realistic composite patterns > matches a simple email-shaped string",
+      "id": "match.realistic-composite-patterns.matches-a-simple-email-shaped-string.1",
+      "inputs": [
+        {
+          "input": "person@example.com",
+          "matches": true
+        },
+        {
+          "input": "not-an-email",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^[\\w.]+@[\\w]+\\.[a-z]{2,}$"
+    },
+    {
+      "from": "matcher.unit.test.ts: realistic composite patterns > matches a hex colour code",
+      "id": "match.realistic-composite-patterns.matches-a-hex-colour-code.1",
+      "inputs": [
+        {
+          "input": "#1a2b3c",
+          "matches": true
+        },
+        {
+          "input": "#1a2b3g",
+          "matches": false
+        },
+        {
+          "input": "1a2b3c",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^#[0-9a-fA-F]{6}$"
+    },
+    {
+      "from": "matcher.unit.test.ts: realistic composite patterns > matches a UK-style National Grid reference number shape",
+      "id": "match.realistic-composite-patterns.matches-a-uk-style-national-grid-reference-number-shape.1",
+      "inputs": [
+        {
+          "input": "ENA-12345",
+          "matches": true
+        },
+        {
+          "input": "ENA-123",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^ENA-\\d{4,6}$"
+    },
+    {
+      "from": "matcher.unit.test.ts: reusing a compiled pattern > gives the same answers as testPattern across many inputs",
+      "id": "match.reusing-a-compiled-pattern.gives-the-same-answers-as-testpattern-across-many-inputs.1",
+      "inputs": [
+        {
+          "input": "abc123",
+          "matches": true
+        },
+        {
+          "input": "abc",
+          "matches": true
+        },
+        {
+          "input": "123abc",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^[a-z]+\\d*$"
+    }
+  ]
+}
