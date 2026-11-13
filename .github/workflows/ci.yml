@@ -167,7 +167,7 @@ jobs:
           sh scripts/test-pre-push-rust.sh
           python3 -I scripts/test_check_workspace_members.py
 
-  # `cargo deny check` fails on any crate not allowlisted in rust/deny.toml, on a licence outside its list and on a published advisory. The job name contains cargo-deny on purpose: it is how a check on main's head is recognised as the one enforcing the allowlist. The tool is pinned to an exact release and installed as a prebuilt binary, so a new cargo-deny cannot change what passes without a change here. It runs from rust/ so the pinned toolchain resolves the graph, against the committed Cargo.lock.
+  # `cargo deny check bans licenses sources` fails on any crate not allowlisted in rust/deny.toml, on a licence outside its list and on a source outside crates.io. Advisories are left out on purpose: the database changes without any change here, so a required check that read it would turn every open pull request red at once; .github/workflows/advisories.yml runs them on a schedule and when the lock file changes. The job name contains cargo-deny on purpose: it is how a check on main's head is recognised as the one enforcing the allowlist. The tool is pinned to an exact release and installed as a prebuilt binary, so a new cargo-deny cannot change what passes without a change here. It runs from rust/ so the pinned toolchain resolves the graph, against the committed Cargo.lock.
   cargo-deny:
     name: cargo-deny
     runs-on: ubuntu-latest
@@ -182,7 +182,7 @@ jobs:
           tool: cargo-deny@0.20.2
       - name: Check the dependency allowlist
         working-directory: rust
-        run: cargo deny --locked check
+        run: cargo deny --locked check bans licenses sources
       # cargo-deny cannot fail on an allowed crate nothing uses, so the allowlist is compared with the graph separately.
       - name: Check the allowlist lists exactly the dependency graph
         run: python3 -I scripts/check-deny-allowlist.py
