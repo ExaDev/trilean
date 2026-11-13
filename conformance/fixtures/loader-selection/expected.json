@@ -1,7 +1,10 @@
 {
   "problems": [
+    "alpha/area/Upper.json",
     "alpha/area/notes.txt",
     "alpha/area/sub",
+    "alpha/area/😀.txt",
+    "alpha/area/�.txt",
     "alpha/stray.json",
     "other.json"
   ],

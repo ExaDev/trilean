@@ -1,0 +1,121 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "ast": {
+          "codeUnit": 97,
+          "kind": "literal"
+        }
+      },
+      "from": "a fixture",
+      "id": "fixture.astral-text",
+      "kind": "regex-parse",
+      "pattern": "😀"
+    },
+    {
+      "expect": {
+        "ast": {
+          "codeUnit": 97,
+          "kind": "literal"
+        }
+      },
+      "from": "a fixture",
+      "id": "fixture.code-units-form",
+      "kind": "regex-parse",
+      "pattern": {
+        "codeUnits": [
+          55357,
+          56832
+        ]
+      }
+    },
+    {
+      "expect": {
+        "ast": {
+          "codeUnit": 97,
+          "kind": "literal"
+        }
+      },
+      "from": "a fixture",
+      "id": "fixture.lone-surrogate",
+      "kind": "regex-parse",
+      "pattern": {
+        "codeUnits": [
+          55357
+        ]
+      }
+    },
+    {
+      "from": "a fixture",
+      "id": "fixture.match-text",
+      "inputs": [
+        {
+          "input": {
+            "codeUnits": [
+              55357
+            ]
+          },
+          "matches": true
+        },
+        {
+          "input": "😀",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": {
+        "codeUnits": [
+          94,
+          46,
+          36
+        ]
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": [
+            "é",
+            {
+              "codeUnits": [
+                55357
+              ]
+            }
+          ]
+        }
+      },
+      "from": "a fixture",
+      "id": "fixture.message-forms",
+      "kind": "regex-parse",
+      "pattern": "a"
+    },
+    {
+      "expect": {
+        "ast": {
+          "codeUnit": 97,
+          "kind": "literal"
+        }
+      },
+      "from": "a fixture",
+      "id": "fixture.only-ts",
+      "kind": "regex-parse",
+      "only": "ts",
+      "pattern": "a",
+      "reason": "a fixture"
+    },
+    {
+      "expect": {
+        "ast": {
+          "codeUnit": 97,
+          "kind": "literal"
+        }
+      },
+      "from": "a fixture",
+      "id": "fixture.only-rust",
+      "kind": "regex-parse",
+      "only": "rust",
+      "pattern": "a",
+      "reason": "a fixture"
+    }
+  ]
+}

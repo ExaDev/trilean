@@ -9,12 +9,15 @@
         "additionalProperties": false,
         "properties": {
           "cases": {
+            "maximum": 9007199254740991,
             "minimum": 1,
             "type": "integer"
           },
           "only": {
+            "description": "Ids in ascending order, which the schema cannot express and every loader checks.",
             "items": {
               "minLength": 1,
+              "pattern": "^[a-z0-9][a-z0-9._-]*$",
               "type": "string"
             },
             "type": "array",
@@ -29,7 +32,7 @@
       },
       "minProperties": 1,
       "propertyNames": {
-        "pattern": "^[^/]+/[^/]+/[^/]+\\.json$"
+        "pattern": "^[a-z0-9][a-z0-9._-]*/[a-z0-9][a-z0-9._-]*/[a-z0-9][a-z0-9._-]*\\.json$"
       },
       "type": "object"
     }

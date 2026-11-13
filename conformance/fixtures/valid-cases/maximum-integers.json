@@ -1,0 +1,62 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "ast": {
+          "kind": "repeat",
+          "max": 9007199254740991,
+          "min": 9007199254740991,
+          "operand": {
+            "codeUnit": 65535,
+            "kind": "literal"
+          }
+        }
+      },
+      "from": "a fixture",
+      "id": "fixture.max-integers",
+      "kind": "regex-parse",
+      "pattern": "a"
+    },
+    {
+      "expect": {
+        "error": {
+          "index": 9007199254740991
+        }
+      },
+      "from": "a fixture",
+      "id": "fixture.max-index",
+      "kind": "regex-parse",
+      "pattern": "a"
+    },
+    {
+      "expect": {
+        "ast": {
+          "codeUnit": 97,
+          "kind": "literal"
+        }
+      },
+      "from": "a fixture",
+      "id": "fixture.zero-ulps",
+      "kind": "regex-parse",
+      "pattern": "a",
+      "tolerance": {
+        "ulps": 0
+      }
+    },
+    {
+      "expect": {
+        "ast": {
+          "codeUnit": 97,
+          "kind": "literal"
+        }
+      },
+      "from": "a fixture",
+      "id": "fixture.ulps",
+      "kind": "regex-parse",
+      "pattern": "a",
+      "tolerance": {
+        "ulps": 9007199254740991
+      }
+    }
+  ]
+}

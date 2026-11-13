@@ -21,11 +21,14 @@ const ROOT_FILES: ReadonlySet<string> = new Set([
 ]);
 
 export interface CorpusSelection {
-  /** Corpus files as `/`-separated paths relative to the root, sorted. */
+  /** Corpus files as `/`-separated paths relative to the root, in the order a walk in UTF-16 code unit order finds them. */
   readonly selected: readonly string[];
-  /** Entries that are neither a corpus file, a known root file nor a skipped directory, sorted. */
+  /** Entries that are neither a corpus file, a known root file nor a skipped directory, in the same order. */
   readonly problems: readonly string[];
 }
+
+/** The characters a directory or file name outside the root's own files may use, so every loader orders names the same way. */
+const NAME_PATTERN = /^[a-z0-9][a-z0-9._-]*$/;
 
 /** The depth at which a directory holds corpus files: `<package>/<area>/<name>.json`. */
 const AREA_DEPTH = 2;
@@ -53,25 +56,28 @@ function scan(
       if (NON_CASE_DIRECTORIES.has(entry.name)) {
         continue;
       }
-      if (depth < AREA_DEPTH) {
+      if (depth < AREA_DEPTH && NAME_PATTERN.test(entry.name)) {
         scan(root, path, depth + 1, selection);
       } else {
         selection.problems.push(path);
       }
+    } else if (entry.isFile() && depth === 0 && ROOT_FILES.has(entry.name)) {
+      continue;
     } else if (
       entry.isFile() &&
       depth === AREA_DEPTH &&
-      entry.name.endsWith(".json")
+      entry.name.endsWith(".json") &&
+      NAME_PATTERN.test(entry.name)
     ) {
       selection.selected.push(path);
-    } else if (!(entry.isFile() && depth === 0 && ROOT_FILES.has(entry.name))) {
+    } else {
       selection.problems.push(path);
     }
   }
 }
 
 /**
- * Applies the selection rule to the tree at `root`. A name starting with a dot is ignored at any depth, a directory named `fixtures`, `schema` or `runner` is skipped at any depth, and everything else must be a `.json` file at `<package>/<area>/<name>.json` or one of the root's own files; anything else is returned in `problems`, for the caller to fail on.
+ * Applies the selection rule to the tree at `root`. A name starting with a dot is ignored at any depth, a directory named `fixtures`, `schema` or `runner` is skipped at any depth, and everything else must be a `.json` file at `<package>/<area>/<name>.json`, with names of lower-case ASCII letters, digits, dots, hyphens and underscores, or one of the root's own files; anything else is returned in `problems`, for the caller to fail on.
  */
 export function selectCorpusFiles(root: string): CorpusSelection {
   const selection: { selected: string[]; problems: string[] } = {
