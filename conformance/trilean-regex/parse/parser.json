@@ -1,0 +1,1169 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "ast": {
+          "codeUnit": 97,
+          "kind": "literal"
+        }
+      },
+      "from": "parser.unit.test.ts: literals and concatenation > parses a bare literal",
+      "id": "parse.literals-and-concatenation.parses-a-bare-literal.1",
+      "kind": "regex-parse",
+      "pattern": "a"
+    },
+    {
+      "expect": {
+        "ast": {
+          "kind": "concat",
+          "operands": [
+            {
+              "codeUnit": 97,
+              "kind": "literal"
+            },
+            {
+              "codeUnit": 98,
+              "kind": "literal"
+            },
+            {
+              "codeUnit": 99,
+              "kind": "literal"
+            }
+          ]
+        }
+      },
+      "from": "parser.unit.test.ts: literals and concatenation > parses a run of literals as a concat",
+      "id": "parse.literals-and-concatenation.parses-a-run-of-literals-as-a-concat.1",
+      "kind": "regex-parse",
+      "pattern": "abc"
+    },
+    {
+      "expect": {
+        "ast": {
+          "kind": "concat",
+          "operands": []
+        }
+      },
+      "from": "parser.unit.test.ts: literals and concatenation > parses the empty pattern as an empty concat",
+      "id": "parse.literals-and-concatenation.parses-the-empty-pattern-as-an-empty-concat.1",
+      "kind": "regex-parse",
+      "pattern": ""
+    },
+    {
+      "expect": {
+        "ast": {
+          "codeUnit": 46,
+          "kind": "literal"
+        }
+      },
+      "from": "parser.unit.test.ts: literals and concatenation > unescapes every documented metacharacter escape",
+      "id": "parse.literals-and-concatenation.unescapes-every-documented-metacharacter-escape.1",
+      "kind": "regex-parse",
+      "pattern": "\\."
+    },
+    {
+      "expect": {
+        "ast": {
+          "codeUnit": 42,
+          "kind": "literal"
+        }
+      },
+      "from": "parser.unit.test.ts: literals and concatenation > unescapes every documented metacharacter escape",
+      "id": "parse.literals-and-concatenation.unescapes-every-documented-metacharacter-escape.2",
+      "kind": "regex-parse",
+      "pattern": "\\*"
+    },
+    {
+      "expect": {
+        "ast": {
+          "codeUnit": 43,
+          "kind": "literal"
+        }
+      },
+      "from": "parser.unit.test.ts: literals and concatenation > unescapes every documented metacharacter escape",
+      "id": "parse.literals-and-concatenation.unescapes-every-documented-metacharacter-escape.3",
+      "kind": "regex-parse",
+      "pattern": "\\+"
+    },
+    {
+      "expect": {
+        "ast": {
+          "codeUnit": 63,
+          "kind": "literal"
+        }
+      },
+      "from": "parser.unit.test.ts: literals and concatenation > unescapes every documented metacharacter escape",
+      "id": "parse.literals-and-concatenation.unescapes-every-documented-metacharacter-escape.4",
+      "kind": "regex-parse",
+      "pattern": "\\?"
+    },
+    {
+      "expect": {
+        "ast": {
+          "codeUnit": 40,
+          "kind": "literal"
+        }
+      },
+      "from": "parser.unit.test.ts: literals and concatenation > unescapes every documented metacharacter escape",
+      "id": "parse.literals-and-concatenation.unescapes-every-documented-metacharacter-escape.5",
+      "kind": "regex-parse",
+      "pattern": "\\("
+    },
+    {
+      "expect": {
+        "ast": {
+          "codeUnit": 41,
+          "kind": "literal"
+        }
+      },
+      "from": "parser.unit.test.ts: literals and concatenation > unescapes every documented metacharacter escape",
+      "id": "parse.literals-and-concatenation.unescapes-every-documented-metacharacter-escape.6",
+      "kind": "regex-parse",
+      "pattern": "\\)"
+    },
+    {
+      "expect": {
+        "ast": {
+          "codeUnit": 91,
+          "kind": "literal"
+        }
+      },
+      "from": "parser.unit.test.ts: literals and concatenation > unescapes every documented metacharacter escape",
+      "id": "parse.literals-and-concatenation.unescapes-every-documented-metacharacter-escape.7",
+      "kind": "regex-parse",
+      "pattern": "\\["
+    },
+    {
+      "expect": {
+        "ast": {
+          "codeUnit": 93,
+          "kind": "literal"
+        }
+      },
+      "from": "parser.unit.test.ts: literals and concatenation > unescapes every documented metacharacter escape",
+      "id": "parse.literals-and-concatenation.unescapes-every-documented-metacharacter-escape.8",
+      "kind": "regex-parse",
+      "pattern": "\\]"
+    },
+    {
+      "expect": {
+        "ast": {
+          "codeUnit": 123,
+          "kind": "literal"
+        }
+      },
+      "from": "parser.unit.test.ts: literals and concatenation > unescapes every documented metacharacter escape",
+      "id": "parse.literals-and-concatenation.unescapes-every-documented-metacharacter-escape.9",
+      "kind": "regex-parse",
+      "pattern": "\\{"
+    },
+    {
+      "expect": {
+        "ast": {
+          "codeUnit": 125,
+          "kind": "literal"
+        }
+      },
+      "from": "parser.unit.test.ts: literals and concatenation > unescapes every documented metacharacter escape",
+      "id": "parse.literals-and-concatenation.unescapes-every-documented-metacharacter-escape.10",
+      "kind": "regex-parse",
+      "pattern": "\\}"
+    },
+    {
+      "expect": {
+        "ast": {
+          "codeUnit": 124,
+          "kind": "literal"
+        }
+      },
+      "from": "parser.unit.test.ts: literals and concatenation > unescapes every documented metacharacter escape",
+      "id": "parse.literals-and-concatenation.unescapes-every-documented-metacharacter-escape.11",
+      "kind": "regex-parse",
+      "pattern": "\\|"
+    },
+    {
+      "expect": {
+        "ast": {
+          "codeUnit": 94,
+          "kind": "literal"
+        }
+      },
+      "from": "parser.unit.test.ts: literals and concatenation > unescapes every documented metacharacter escape",
+      "id": "parse.literals-and-concatenation.unescapes-every-documented-metacharacter-escape.12",
+      "kind": "regex-parse",
+      "pattern": "\\^"
+    },
+    {
+      "expect": {
+        "ast": {
+          "codeUnit": 36,
+          "kind": "literal"
+        }
+      },
+      "from": "parser.unit.test.ts: literals and concatenation > unescapes every documented metacharacter escape",
+      "id": "parse.literals-and-concatenation.unescapes-every-documented-metacharacter-escape.13",
+      "kind": "regex-parse",
+      "pattern": "\\$"
+    },
+    {
+      "expect": {
+        "ast": {
+          "codeUnit": 92,
+          "kind": "literal"
+        }
+      },
+      "from": "parser.unit.test.ts: literals and concatenation > unescapes every documented metacharacter escape",
+      "id": "parse.literals-and-concatenation.unescapes-every-documented-metacharacter-escape.14",
+      "kind": "regex-parse",
+      "pattern": "\\\\"
+    },
+    {
+      "expect": {
+        "ast": {
+          "codeUnit": 47,
+          "kind": "literal"
+        }
+      },
+      "from": "parser.unit.test.ts: literals and concatenation > unescapes every documented metacharacter escape",
+      "id": "parse.literals-and-concatenation.unescapes-every-documented-metacharacter-escape.15",
+      "kind": "regex-parse",
+      "pattern": "\\/"
+    },
+    {
+      "expect": {
+        "ast": {
+          "codeUnit": 10,
+          "kind": "literal"
+        }
+      },
+      "from": "parser.unit.test.ts: literals and concatenation > unescapes control-character shorthands",
+      "id": "parse.literals-and-concatenation.unescapes-control-character-shorthands.1",
+      "kind": "regex-parse",
+      "pattern": "\\n"
+    },
+    {
+      "expect": {
+        "ast": {
+          "codeUnit": 9,
+          "kind": "literal"
+        }
+      },
+      "from": "parser.unit.test.ts: literals and concatenation > unescapes control-character shorthands",
+      "id": "parse.literals-and-concatenation.unescapes-control-character-shorthands.2",
+      "kind": "regex-parse",
+      "pattern": "\\t"
+    },
+    {
+      "expect": {
+        "ast": {
+          "codeUnit": 13,
+          "kind": "literal"
+        }
+      },
+      "from": "parser.unit.test.ts: literals and concatenation > unescapes control-character shorthands",
+      "id": "parse.literals-and-concatenation.unescapes-control-character-shorthands.3",
+      "kind": "regex-parse",
+      "pattern": "\\r"
+    },
+    {
+      "expect": {
+        "ast": {
+          "codeUnit": 12,
+          "kind": "literal"
+        }
+      },
+      "from": "parser.unit.test.ts: literals and concatenation > unescapes control-character shorthands",
+      "id": "parse.literals-and-concatenation.unescapes-control-character-shorthands.4",
+      "kind": "regex-parse",
+      "pattern": "\\f"
+    },
+    {
+      "expect": {
+        "ast": {
+          "codeUnit": 11,
+          "kind": "literal"
+        }
+      },
+      "from": "parser.unit.test.ts: literals and concatenation > unescapes control-character shorthands",
+      "id": "parse.literals-and-concatenation.unescapes-control-character-shorthands.5",
+      "kind": "regex-parse",
+      "pattern": "\\v"
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "unknown escape"
+        }
+      },
+      "from": "parser.unit.test.ts: literals and concatenation > rejects an unknown escape",
+      "id": "parse.literals-and-concatenation.rejects-an-unknown-escape.1",
+      "kind": "regex-parse",
+      "pattern": "\\q"
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "trailing backslash"
+        }
+      },
+      "from": "parser.unit.test.ts: literals and concatenation > rejects a trailing backslash",
+      "id": "parse.literals-and-concatenation.rejects-a-trailing-backslash.1",
+      "kind": "regex-parse",
+      "pattern": "a\\"
+    },
+    {
+      "expect": {
+        "ast": {
+          "kind": "concat",
+          "operands": [
+            {
+              "codeUnit": 97,
+              "kind": "literal"
+            },
+            {
+              "codeUnit": 123,
+              "kind": "literal"
+            },
+            {
+              "codeUnit": 98,
+              "kind": "literal"
+            }
+          ]
+        }
+      },
+      "from": "parser.unit.test.ts: literals and concatenation > treats an unescaped brace as literal when it is not a valid bound",
+      "id": "parse.literals-and-concatenation.treats-an-unescaped-brace-as-literal-when-it-is-not-a-valid-bound.1",
+      "kind": "regex-parse",
+      "pattern": "a{b"
+    },
+    {
+      "expect": {
+        "ast": {
+          "kind": "concat",
+          "operands": [
+            {
+              "codeUnit": 123,
+              "kind": "literal"
+            },
+            {
+              "codeUnit": 125,
+              "kind": "literal"
+            }
+          ]
+        }
+      },
+      "from": "parser.unit.test.ts: literals and concatenation > treats an unescaped brace as literal when it is not a valid bound",
+      "id": "parse.literals-and-concatenation.treats-an-unescaped-brace-as-literal-when-it-is-not-a-valid-bound.2",
+      "kind": "regex-parse",
+      "pattern": "{}"
+    },
+    {
+      "expect": {
+        "ast": {
+          "kind": "concat",
+          "operands": [
+            {
+              "codeUnit": 97,
+              "kind": "literal"
+            },
+            {
+              "codeUnit": 123,
+              "kind": "literal"
+            },
+            {
+              "codeUnit": 44,
+              "kind": "literal"
+            },
+            {
+              "codeUnit": 53,
+              "kind": "literal"
+            },
+            {
+              "codeUnit": 125,
+              "kind": "literal"
+            }
+          ]
+        }
+      },
+      "from": "parser.unit.test.ts: literals and concatenation > treats an unescaped brace as literal when it is not a valid bound",
+      "id": "parse.literals-and-concatenation.treats-an-unescaped-brace-as-literal-when-it-is-not-a-valid-bound.3",
+      "kind": "regex-parse",
+      "pattern": "a{,5}"
+    },
+    {
+      "expect": {
+        "error": {}
+      },
+      "from": "parser.unit.test.ts: literals and concatenation > treats an unescaped closing paren or bracket at the top level as an error",
+      "id": "parse.literals-and-concatenation.treats-an-unescaped-closing-paren-or-bracket-at-the-top-level-as-an-error.1",
+      "kind": "regex-parse",
+      "pattern": "a)"
+    },
+    {
+      "expect": {
+        "ast": {
+          "kind": "anyChar"
+        }
+      },
+      "from": "parser.unit.test.ts: . > parses to anyChar",
+      "id": "parse..parses-to-anychar.1",
+      "kind": "regex-parse",
+      "pattern": "."
+    },
+    {
+      "expect": {
+        "ast": {
+          "kind": "concat",
+          "operands": [
+            {
+              "kind": "anchorStart"
+            },
+            {
+              "codeUnit": 97,
+              "kind": "literal"
+            }
+          ]
+        }
+      },
+      "from": "parser.unit.test.ts: anchors > parses ^ and $ anywhere in the pattern",
+      "id": "parse.anchors.parses-and-anywhere-in-the-pattern.1",
+      "kind": "regex-parse",
+      "pattern": "^a"
+    },
+    {
+      "expect": {
+        "ast": {
+          "kind": "concat",
+          "operands": [
+            {
+              "codeUnit": 97,
+              "kind": "literal"
+            },
+            {
+              "kind": "anchorEnd"
+            }
+          ]
+        }
+      },
+      "from": "parser.unit.test.ts: anchors > parses ^ and $ anywhere in the pattern",
+      "id": "parse.anchors.parses-and-anywhere-in-the-pattern.2",
+      "kind": "regex-parse",
+      "pattern": "a$"
+    },
+    {
+      "expect": {
+        "ast": {
+          "kind": "concat",
+          "operands": [
+            {
+              "kind": "anchorStart"
+            },
+            {
+              "codeUnit": 97,
+              "kind": "literal"
+            },
+            {
+              "kind": "anchorEnd"
+            }
+          ]
+        }
+      },
+      "from": "parser.unit.test.ts: anchors > parses ^ and $ anywhere in the pattern",
+      "id": "parse.anchors.parses-and-anywhere-in-the-pattern.3",
+      "kind": "regex-parse",
+      "pattern": "^a$"
+    },
+    {
+      "expect": {
+        "ast": {
+          "branches": [
+            {
+              "kind": "concat",
+              "operands": [
+                {
+                  "kind": "anchorStart"
+                },
+                {
+                  "codeUnit": 97,
+                  "kind": "literal"
+                }
+              ]
+            },
+            {
+              "kind": "concat",
+              "operands": [
+                {
+                  "codeUnit": 98,
+                  "kind": "literal"
+                },
+                {
+                  "kind": "anchorEnd"
+                }
+              ]
+            }
+          ],
+          "kind": "alternation"
+        }
+      },
+      "from": "parser.unit.test.ts: anchors > allows an anchor inside an alternation branch",
+      "id": "parse.anchors.allows-an-anchor-inside-an-alternation-branch.1",
+      "kind": "regex-parse",
+      "pattern": "^a|b$"
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot be quantified"
+        }
+      },
+      "from": "parser.unit.test.ts: anchors > rejects quantifying an anchor",
+      "id": "parse.anchors.rejects-quantifying-an-anchor.1",
+      "kind": "regex-parse",
+      "pattern": "^*"
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot be quantified"
+        }
+      },
+      "from": "parser.unit.test.ts: anchors > rejects quantifying an anchor",
+      "id": "parse.anchors.rejects-quantifying-an-anchor.2",
+      "kind": "regex-parse",
+      "pattern": "$+"
+    },
+    {
+      "expect": {
+        "ast": {
+          "branches": [
+            {
+              "codeUnit": 97,
+              "kind": "literal"
+            },
+            {
+              "codeUnit": 98,
+              "kind": "literal"
+            }
+          ],
+          "kind": "alternation"
+        }
+      },
+      "from": "parser.unit.test.ts: alternation > parses two branches",
+      "id": "parse.alternation.parses-two-branches.1",
+      "kind": "regex-parse",
+      "pattern": "a|b"
+    },
+    {
+      "expect": {
+        "ast": {
+          "branches": [
+            {
+              "codeUnit": 97,
+              "kind": "literal"
+            },
+            {
+              "codeUnit": 98,
+              "kind": "literal"
+            },
+            {
+              "codeUnit": 99,
+              "kind": "literal"
+            }
+          ],
+          "kind": "alternation"
+        }
+      },
+      "from": "parser.unit.test.ts: alternation > parses more than two branches into one flat alternation",
+      "id": "parse.alternation.parses-more-than-two-branches-into-one-flat-alternation.1",
+      "kind": "regex-parse",
+      "pattern": "a|b|c"
+    },
+    {
+      "expect": {
+        "ast": {
+          "branches": [
+            {
+              "codeUnit": 97,
+              "kind": "literal"
+            },
+            {
+              "kind": "concat",
+              "operands": []
+            }
+          ],
+          "kind": "alternation"
+        }
+      },
+      "from": "parser.unit.test.ts: alternation > allows an empty branch",
+      "id": "parse.alternation.allows-an-empty-branch.1",
+      "kind": "regex-parse",
+      "pattern": "a|"
+    },
+    {
+      "expect": {
+        "ast": {
+          "branches": [
+            {
+              "kind": "concat",
+              "operands": []
+            },
+            {
+              "codeUnit": 97,
+              "kind": "literal"
+            }
+          ],
+          "kind": "alternation"
+        }
+      },
+      "from": "parser.unit.test.ts: alternation > allows an empty branch",
+      "id": "parse.alternation.allows-an-empty-branch.2",
+      "kind": "regex-parse",
+      "pattern": "|a"
+    },
+    {
+      "expect": {
+        "ast": {
+          "kind": "concat",
+          "operands": [
+            {
+              "codeUnit": 97,
+              "kind": "literal"
+            },
+            {
+              "codeUnit": 98,
+              "kind": "literal"
+            }
+          ]
+        }
+      },
+      "from": "parser.unit.test.ts: groups > parses a non-capturing group as its inner expression",
+      "id": "parse.groups.parses-a-non-capturing-group-as-its-inner-expression.1",
+      "kind": "regex-parse",
+      "pattern": "(?:ab)"
+    },
+    {
+      "expect": {
+        "ast": {
+          "kind": "concat",
+          "operands": [
+            {
+              "codeUnit": 97,
+              "kind": "literal"
+            },
+            {
+              "branches": [
+                {
+                  "codeUnit": 98,
+                  "kind": "literal"
+                },
+                {
+                  "codeUnit": 99,
+                  "kind": "literal"
+                }
+              ],
+              "kind": "alternation"
+            },
+            {
+              "codeUnit": 100,
+              "kind": "literal"
+            }
+          ]
+        }
+      },
+      "from": "parser.unit.test.ts: groups > groups for precedence against alternation",
+      "id": "parse.groups.groups-for-precedence-against-alternation.1",
+      "kind": "regex-parse",
+      "pattern": "a(?:b|c)d"
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "capturing groups are not supported"
+        }
+      },
+      "from": "parser.unit.test.ts: groups > rejects a capturing group",
+      "id": "parse.groups.rejects-a-capturing-group.1",
+      "kind": "regex-parse",
+      "pattern": "(a)"
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "expected ')'"
+        }
+      },
+      "from": "parser.unit.test.ts: groups > rejects an unterminated group",
+      "id": "parse.groups.rejects-an-unterminated-group.1",
+      "kind": "regex-parse",
+      "pattern": "(?:ab"
+    },
+    {
+      "expect": {
+        "ast": {
+          "kind": "star",
+          "operand": {
+            "codeUnit": 97,
+            "kind": "literal"
+          }
+        }
+      },
+      "from": "parser.unit.test.ts: quantifiers > parses *, +, ?",
+      "id": "parse.quantifiers.parses.1",
+      "kind": "regex-parse",
+      "pattern": "a*"
+    },
+    {
+      "expect": {
+        "ast": {
+          "kind": "plus",
+          "operand": {
+            "codeUnit": 97,
+            "kind": "literal"
+          }
+        }
+      },
+      "from": "parser.unit.test.ts: quantifiers > parses *, +, ?",
+      "id": "parse.quantifiers.parses.2",
+      "kind": "regex-parse",
+      "pattern": "a+"
+    },
+    {
+      "expect": {
+        "ast": {
+          "kind": "optional",
+          "operand": {
+            "codeUnit": 97,
+            "kind": "literal"
+          }
+        }
+      },
+      "from": "parser.unit.test.ts: quantifiers > parses *, +, ?",
+      "id": "parse.quantifiers.parses.3",
+      "kind": "regex-parse",
+      "pattern": "a?"
+    },
+    {
+      "expect": {
+        "ast": {
+          "kind": "star",
+          "operand": {
+            "kind": "concat",
+            "operands": [
+              {
+                "codeUnit": 97,
+                "kind": "literal"
+              },
+              {
+                "codeUnit": 98,
+                "kind": "literal"
+              }
+            ]
+          }
+        }
+      },
+      "from": "parser.unit.test.ts: quantifiers > applies a quantifier to a preceding group",
+      "id": "parse.quantifiers.applies-a-quantifier-to-a-preceding-group.1",
+      "kind": "regex-parse",
+      "pattern": "(?:ab)*"
+    },
+    {
+      "expect": {
+        "ast": {
+          "kind": "repeat",
+          "max": 3,
+          "min": 3,
+          "operand": {
+            "codeUnit": 97,
+            "kind": "literal"
+          }
+        }
+      },
+      "from": "parser.unit.test.ts: quantifiers > parses bounded repetition",
+      "id": "parse.quantifiers.parses-bounded-repetition.1",
+      "kind": "regex-parse",
+      "pattern": "a{3}"
+    },
+    {
+      "expect": {
+        "ast": {
+          "kind": "repeat",
+          "min": 2,
+          "operand": {
+            "codeUnit": 97,
+            "kind": "literal"
+          }
+        }
+      },
+      "from": "parser.unit.test.ts: quantifiers > parses bounded repetition",
+      "id": "parse.quantifiers.parses-bounded-repetition.2",
+      "kind": "regex-parse",
+      "pattern": "a{2,}"
+    },
+    {
+      "expect": {
+        "ast": {
+          "kind": "repeat",
+          "max": 5,
+          "min": 2,
+          "operand": {
+            "codeUnit": 97,
+            "kind": "literal"
+          }
+        }
+      },
+      "from": "parser.unit.test.ts: quantifiers > parses bounded repetition",
+      "id": "parse.quantifiers.parses-bounded-repetition.3",
+      "kind": "regex-parse",
+      "pattern": "a{2,5}"
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "backwards"
+        }
+      },
+      "from": "parser.unit.test.ts: quantifiers > rejects a backwards bound",
+      "id": "parse.quantifiers.rejects-a-backwards-bound.1",
+      "kind": "regex-parse",
+      "pattern": "a{5,2}"
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "nothing to repeat"
+        }
+      },
+      "from": "parser.unit.test.ts: quantifiers > rejects a dangling quantifier",
+      "id": "parse.quantifiers.rejects-a-dangling-quantifier.1",
+      "kind": "regex-parse",
+      "pattern": "*a"
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "nothing to repeat"
+        }
+      },
+      "from": "parser.unit.test.ts: quantifiers > rejects a dangling quantifier",
+      "id": "parse.quantifiers.rejects-a-dangling-quantifier.2",
+      "kind": "regex-parse",
+      "pattern": "+"
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot itself be quantified"
+        }
+      },
+      "from": "parser.unit.test.ts: quantifiers > rejects stacking two quantifiers",
+      "id": "parse.quantifiers.rejects-stacking-two-quantifiers.1",
+      "kind": "regex-parse",
+      "pattern": "a**"
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot itself be quantified"
+        }
+      },
+      "from": "parser.unit.test.ts: quantifiers > rejects stacking two quantifiers",
+      "id": "parse.quantifiers.rejects-stacking-two-quantifiers.2",
+      "kind": "regex-parse",
+      "pattern": "a*+"
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot itself be quantified"
+        }
+      },
+      "from": "parser.unit.test.ts: quantifiers > rejects stacking two quantifiers",
+      "id": "parse.quantifiers.rejects-stacking-two-quantifiers.3",
+      "kind": "regex-parse",
+      "pattern": "a*{2}"
+    },
+    {
+      "expect": {
+        "ast": {
+          "kind": "charClass",
+          "negated": false,
+          "ranges": [
+            {
+              "from": 97,
+              "to": 97
+            },
+            {
+              "from": 98,
+              "to": 98
+            },
+            {
+              "from": 99,
+              "to": 99
+            }
+          ]
+        }
+      },
+      "from": "parser.unit.test.ts: character classes > parses a simple class",
+      "id": "parse.character-classes.parses-a-simple-class.1",
+      "kind": "regex-parse",
+      "pattern": "[abc]"
+    },
+    {
+      "expect": {
+        "astSubset": {
+          "kind": "charClass",
+          "negated": true
+        }
+      },
+      "from": "parser.unit.test.ts: character classes > parses a negated class",
+      "id": "parse.character-classes.parses-a-negated-class.1",
+      "kind": "regex-parse",
+      "pattern": "[^abc]"
+    },
+    {
+      "expect": {
+        "ast": {
+          "kind": "charClass",
+          "negated": false,
+          "ranges": [
+            {
+              "from": 97,
+              "to": 122
+            }
+          ]
+        }
+      },
+      "from": "parser.unit.test.ts: character classes > parses a range",
+      "id": "parse.character-classes.parses-a-range.1",
+      "kind": "regex-parse",
+      "pattern": "[a-z]"
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "reversed"
+        }
+      },
+      "from": "parser.unit.test.ts: character classes > rejects a reversed range",
+      "id": "parse.character-classes.rejects-a-reversed-range.1",
+      "kind": "regex-parse",
+      "pattern": "[z-a]"
+    },
+    {
+      "expect": {
+        "ast": {
+          "kind": "charClass",
+          "negated": false,
+          "ranges": [
+            {
+              "from": 45,
+              "to": 45
+            },
+            {
+              "from": 97,
+              "to": 97
+            }
+          ]
+        }
+      },
+      "from": "parser.unit.test.ts: character classes > treats a leading or trailing hyphen as literal",
+      "id": "parse.character-classes.treats-a-leading-or-trailing-hyphen-as-literal.1",
+      "kind": "regex-parse",
+      "pattern": "[-a]"
+    },
+    {
+      "expect": {
+        "ast": {
+          "kind": "charClass",
+          "negated": false,
+          "ranges": [
+            {
+              "from": 97,
+              "to": 97
+            },
+            {
+              "from": 45,
+              "to": 45
+            }
+          ]
+        }
+      },
+      "from": "parser.unit.test.ts: character classes > treats a leading or trailing hyphen as literal",
+      "id": "parse.character-classes.treats-a-leading-or-trailing-hyphen-as-literal.2",
+      "kind": "regex-parse",
+      "pattern": "[a-]"
+    },
+    {
+      "expect": {
+        "ast": {
+          "kind": "charClass",
+          "negated": false,
+          "ranges": [
+            {
+              "from": 93,
+              "to": 93
+            }
+          ]
+        }
+      },
+      "from": "parser.unit.test.ts: character classes > requires ']' to be escaped to appear literally inside a class",
+      "id": "parse.character-classes.requires-to-be-escaped-to-appear-literally-inside-a-class.1",
+      "kind": "regex-parse",
+      "pattern": "[\\]]"
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "at least one item"
+        }
+      },
+      "from": "parser.unit.test.ts: character classes > rejects an empty class",
+      "id": "parse.character-classes.rejects-an-empty-class.1",
+      "kind": "regex-parse",
+      "pattern": "[]"
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "at least one item"
+        }
+      },
+      "from": "parser.unit.test.ts: character classes > rejects an empty class",
+      "id": "parse.character-classes.rejects-an-empty-class.2",
+      "kind": "regex-parse",
+      "pattern": "[^]"
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "unterminated character class"
+        }
+      },
+      "from": "parser.unit.test.ts: character classes > rejects an unterminated class",
+      "id": "parse.character-classes.rejects-an-unterminated-class.1",
+      "kind": "regex-parse",
+      "pattern": "[abc"
+    },
+    {
+      "expect": {
+        "ast": {
+          "kind": "charClass",
+          "negated": false,
+          "ranges": [
+            {
+              "from": 48,
+              "to": 57
+            },
+            {
+              "from": 97,
+              "to": 97
+            }
+          ]
+        }
+      },
+      "from": "parser.unit.test.ts: character classes > embeds a positive shorthand class inside brackets",
+      "id": "parse.character-classes.embeds-a-positive-shorthand-class-inside-brackets.1",
+      "kind": "regex-parse",
+      "pattern": "[\\da]"
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot be embedded"
+        }
+      },
+      "from": "parser.unit.test.ts: character classes > rejects embedding a negated shorthand class inside brackets",
+      "id": "parse.character-classes.rejects-embedding-a-negated-shorthand-class-inside-brackets.1",
+      "kind": "regex-parse",
+      "pattern": "[\\Da]"
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot be a range endpoint"
+        }
+      },
+      "from": "parser.unit.test.ts: character classes > rejects a shorthand class as a range endpoint",
+      "id": "parse.character-classes.rejects-a-shorthand-class-as-a-range-endpoint.1",
+      "kind": "regex-parse",
+      "pattern": "[a-\\d]"
+    },
+    {
+      "expect": {
+        "astSubset": {
+          "kind": "charClass"
+        }
+      },
+      "from": "parser.unit.test.ts: shorthand classes as standalone atoms > parses \\d, \\w, \\s and their negations",
+      "id": "parse.shorthand-classes-as-standalone-atoms.parses-d-w-s-and-their-negations.1",
+      "kind": "regex-parse",
+      "pattern": "\\d"
+    },
+    {
+      "expect": {
+        "astSubset": {
+          "kind": "charClass"
+        }
+      },
+      "from": "parser.unit.test.ts: shorthand classes as standalone atoms > parses \\d, \\w, \\s and their negations",
+      "id": "parse.shorthand-classes-as-standalone-atoms.parses-d-w-s-and-their-negations.2",
+      "kind": "regex-parse",
+      "pattern": "\\D"
+    },
+    {
+      "expect": {
+        "astSubset": {
+          "kind": "charClass"
+        }
+      },
+      "from": "parser.unit.test.ts: shorthand classes as standalone atoms > parses \\d, \\w, \\s and their negations",
+      "id": "parse.shorthand-classes-as-standalone-atoms.parses-d-w-s-and-their-negations.3",
+      "kind": "regex-parse",
+      "pattern": "\\w"
+    },
+    {
+      "expect": {
+        "astSubset": {
+          "kind": "charClass"
+        }
+      },
+      "from": "parser.unit.test.ts: shorthand classes as standalone atoms > parses \\d, \\w, \\s and their negations",
+      "id": "parse.shorthand-classes-as-standalone-atoms.parses-d-w-s-and-their-negations.4",
+      "kind": "regex-parse",
+      "pattern": "\\W"
+    },
+    {
+      "expect": {
+        "astSubset": {
+          "kind": "charClass"
+        }
+      },
+      "from": "parser.unit.test.ts: shorthand classes as standalone atoms > parses \\d, \\w, \\s and their negations",
+      "id": "parse.shorthand-classes-as-standalone-atoms.parses-d-w-s-and-their-negations.5",
+      "kind": "regex-parse",
+      "pattern": "\\s"
+    },
+    {
+      "expect": {
+        "astSubset": {
+          "kind": "charClass"
+        }
+      },
+      "from": "parser.unit.test.ts: shorthand classes as standalone atoms > parses \\d, \\w, \\s and their negations",
+      "id": "parse.shorthand-classes-as-standalone-atoms.parses-d-w-s-and-their-negations.6",
+      "kind": "regex-parse",
+      "pattern": "\\S"
+    },
+    {
+      "expect": {
+        "error": {
+          "index": 2
+        }
+      },
+      "from": "parser.unit.test.ts: error positions > names the exact offending index",
+      "id": "parse.error-positions.names-the-exact-offending-index.1",
+      "kind": "regex-parse",
+      "pattern": "ab\\q"
+    }
+  ]
+}
