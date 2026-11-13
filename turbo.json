@@ -1,9 +1,7 @@
 {
   "$schema": "https://turborepo.com/schema.json",
   "agentGuidance": false,
-  // conformance/** is the language-neutral corpus that every package's conformance runner reads from outside its own directory. A change confined to it belongs to no package, so --affected would select none and no runner would rerun; listing it here makes a corpus change affect every package and invalidates every cached result.
   "globalDependencies": [
-    "conformance/**",
     "pnpm-lock.yaml",
     ".tool-versions",
     "prettier.config.ts",
