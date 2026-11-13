@@ -59,8 +59,8 @@ fn check_selection_fixture(failures: &mut Vec<String>) {
     }
 }
 
-/// The files in a fixture directory, sorted; a directory with none is a failure, since a loop over nothing passes.
-fn fixture_files(relative: &str, failures: &mut Vec<String>) -> Vec<(String, PathBuf)> {
+/// The names in a fixture directory, sorted; a directory with none is a failure, since a loop over nothing passes.
+fn fixture_names(relative: &str, failures: &mut Vec<String>) -> Vec<String> {
     let directory = corpus_root().join("fixtures").join(relative);
     let mut names = match fs::read_dir(&directory) {
         Ok(entries) => entries
@@ -77,23 +77,38 @@ fn fixture_files(relative: &str, failures: &mut Vec<String>) -> Vec<(String, Pat
         failures.push(format!("fixtures/{relative} holds no fixtures"));
     }
     names
-        .into_iter()
-        .map(|name| (format!("{relative}/{name}"), directory.join(name)))
-        .collect()
 }
 
-/// Every file in the directory breaks one rule of the format and must be rejected. A file that cannot be parsed is
-/// rejected too: it is how this loader meets an unpaired surrogate escape.
-fn check_rejected<T>(
-    relative: &str,
+/// Whether a loader rejects the file. A file that cannot be parsed is rejected too: it is how this loader meets an
+/// unpaired surrogate escape.
+fn rejects<T>(path: &Path, validate: &impl Fn(&Value) -> Result<T, String>) -> bool {
+    read_json(path).map_or(true, |value| validate(&value).is_err())
+}
+
+/// A negative fixture must fail for the rule it exists for. Each file in `invalid` has a file of the same name in
+/// `repaired` that differs by that one defect and is valid, so the invalid one cannot stay rejected for another
+/// reason.
+fn check_pairs<T>(
+    invalid: &str,
+    repaired: &str,
     validate: impl Fn(&Value) -> Result<T, String>,
     failures: &mut Vec<String>,
 ) {
-    for (name, path) in fixture_files(relative, failures) {
-        if let Ok(value) = read_json(&path)
-            && validate(&value).is_ok()
+    let names = fixture_names(invalid, failures);
+    if fixture_names(repaired, failures) != names {
+        failures.push(format!(
+            "fixtures/{repaired} and fixtures/{invalid} do not hold the same names"
+        ));
+    }
+    let root = corpus_root().join("fixtures");
+    for name in names {
+        if !rejects(&root.join(invalid).join(&name), &validate) {
+            failures.push(format!("{invalid}/{name} validated, and must not"));
+        }
+        if let Err(error) =
+            read_json(&root.join(repaired).join(&name)).and_then(|value| validate(&value))
         {
-            failures.push(format!("{name} validated, and must not"));
+            failures.push(format!("{repaired}/{name} must validate: {error}"));
         }
     }
 }
@@ -104,10 +119,30 @@ fn check_accepted<T>(
     validate: impl Fn(&Value) -> Result<T, String>,
     failures: &mut Vec<String>,
 ) {
-    for (name, path) in fixture_files(relative, failures) {
-        match read_json(&path).and_then(|value| validate(&value)) {
-            Ok(_) => {}
-            Err(error) => failures.push(format!("{name} must validate: {error}")),
+    let root = corpus_root().join("fixtures").join(relative);
+    for name in fixture_names(relative, failures) {
+        if let Err(error) = read_json(&root.join(&name)).and_then(|value| validate(&value)) {
+            failures.push(format!("{relative}/{name} must validate: {error}"));
+        }
+    }
+}
+
+/// Each whole-corpus fixture has a problem, and its repaired twin has none.
+fn check_corpus_pairs(failures: &mut Vec<String>) {
+    let names = fixture_names("corpora/invalid", failures);
+    if fixture_names("corpora/repaired", failures) != names {
+        failures.push(
+            "fixtures/corpora/repaired and fixtures/corpora/invalid do not hold the same names"
+                .to_owned(),
+        );
+    }
+    let root = corpus_root().join("fixtures/corpora");
+    for name in names {
+        if check_corpus(&root.join("invalid").join(&name)).1.is_empty() {
+            failures.push(format!("corpora/invalid/{name} has no problem, and must"));
+        }
+        for problem in check_corpus(&root.join("repaired").join(&name)).1 {
+            failures.push(format!("corpora/repaired/{name}: {problem}"));
         }
     }
 }
@@ -146,17 +181,17 @@ struct LoadedFile {
     only_ids: Vec<String>,
 }
 
-fn load_corpus(failures: &mut Vec<String>) -> Vec<LoadedFile> {
-    let root = corpus_root();
-    let found = match selection::select_corpus_files(&root) {
+/// Loads and checks a whole corpus root by every rule `conformance/README.md` states: the files selected, each file
+/// valid, ids unique across files, and the corpus equal to its manifest. The real corpus and every fixture corpus go
+/// through this one function.
+fn check_corpus(root: &Path) -> (Vec<LoadedFile>, Vec<String>) {
+    let mut problems = Vec::new();
+    let found = match selection::select_corpus_files(root) {
         Ok(found) => found,
-        Err(error) => {
-            failures.push(error);
-            return Vec::new();
-        }
+        Err(error) => return (Vec::new(), vec![error]),
     };
     for problem in &found.problems {
-        failures.push(format!(
+        problems.push(format!(
             "{problem}: not a corpus file and not a recognised root file"
         ));
     }
@@ -170,7 +205,7 @@ fn load_corpus(failures: &mut Vec<String>) -> Vec<LoadedFile> {
             Ok(facts) => {
                 for id in &facts.ids {
                     if !ids.insert(id.clone()) {
-                        failures.push(format!("{name}: case id {id} is used by another file"));
+                        problems.push(format!("{name}: case id {id} is used by another file"));
                     }
                 }
                 files.push(LoadedFile {
@@ -179,45 +214,72 @@ fn load_corpus(failures: &mut Vec<String>) -> Vec<LoadedFile> {
                     only_ids: facts.only_ids,
                 });
             }
-            Err(error) => failures.push(error),
+            Err(error) => problems.push(error),
         }
     }
-    files
+    match read_json(&root.join("manifest.json"))
+        .and_then(|value| validate::validate_manifest(&value))
+    {
+        Ok(manifest) => {
+            let actual: BTreeMap<&str, (usize, &Vec<String>)> = files
+                .iter()
+                .map(|file| (file.name.as_str(), (file.case_count, &file.only_ids)))
+                .collect();
+            let recorded: BTreeMap<&str, (usize, &Vec<String>)> = manifest
+                .iter()
+                .map(|(name, (count, only))| (name.as_str(), (*count, only)))
+                .collect();
+            for name in actual
+                .keys()
+                .chain(recorded.keys())
+                .collect::<BTreeSet<_>>()
+            {
+                if actual.get(*name) != recorded.get(*name) {
+                    problems.push(format!(
+                        "manifest.json does not match {name}: the file holds {:?}, the manifest records {:?}",
+                        actual.get(*name),
+                        recorded.get(*name)
+                    ));
+                }
+            }
+        }
+        Err(error) => problems.push(format!("manifest.json: {error}")),
+    }
+    (files, problems)
 }
 
-/// The corpus must be exactly what the committed manifest records.
-fn check_manifest(files: &[LoadedFile], failures: &mut Vec<String>) {
-    let manifest = read_json(&corpus_root().join("manifest.json"))
-        .and_then(|value| validate::validate_manifest(&value));
-    let manifest = match manifest {
-        Ok(manifest) => manifest,
-        Err(error) => {
-            failures.push(format!("manifest.json: {error}"));
-            return;
-        }
-    };
-    let actual: BTreeMap<&str, (usize, &Vec<String>)> = files
-        .iter()
-        .map(|file| (file.name.as_str(), (file.case_count, &file.only_ids)))
-        .collect();
-    let recorded: BTreeMap<&str, (usize, &Vec<String>)> = manifest
-        .iter()
-        .map(|(name, (count, only))| (name.as_str(), (*count, only)))
-        .collect();
-    if actual != recorded {
-        failures.push(format!(
-            "manifest.json does not match the corpus: files hold {actual:?}, manifest records {recorded:?}"
-        ));
+/// Counts the cases this runner executed and skipped and asserts the sum against the manifest's total. No native
+/// executor exists yet, so every case is skipped for that one stated reason; the assertion is in place for the change
+/// that adds execution, which moves cases from skipped to executed and cannot lose one.
+fn check_counts(files: &[LoadedFile], failures: &mut Vec<String>) -> (usize, usize) {
+    let executed = 0;
+    let skipped_without_executor: usize = files.iter().map(|file| file.case_count).sum();
+    let total = read_json(&corpus_root().join("manifest.json"))
+        .and_then(|value| validate::validate_manifest(&value))
+        .map(|manifest| manifest.values().map(|(count, _)| count).sum::<usize>());
+    match total {
+        Ok(total) if executed + skipped_without_executor == total => {}
+        Ok(total) => failures.push(format!(
+            "executed {executed} plus skipped {skipped_without_executor} is not the manifest's {total}"
+        )),
+        Err(error) => failures.push(format!("manifest.json: {error}")),
     }
+    (executed, skipped_without_executor)
 }
 
 fn main() -> ExitCode {
     let mut failures = Vec::new();
     check_selection_fixture(&mut failures);
-    check_rejected("invalid-cases", validate::validate_file, &mut failures);
+    check_pairs(
+        "invalid-cases",
+        "repaired-cases",
+        validate::validate_file,
+        &mut failures,
+    );
     check_accepted("valid-cases", validate::validate_file, &mut failures);
-    check_rejected(
+    check_pairs(
         "manifests/invalid",
+        "manifests/repaired",
         validate::validate_manifest,
         &mut failures,
     );
@@ -226,13 +288,15 @@ fn main() -> ExitCode {
         validate::validate_manifest,
         &mut failures,
     );
+    check_corpus_pairs(&mut failures);
     check_text_pairs(&mut failures);
-    let files = load_corpus(&mut failures);
-    check_manifest(&files, &mut failures);
     validate::self_check(&mut failures);
+    let (files, problems) = check_corpus(&corpus_root());
+    failures.extend(problems);
+    let (executed, skipped) = check_counts(&files, &mut failures);
     for file in &files {
         println!(
-            "{}: {} cases ({} for one side only)",
+            "{}: {} cases ({} for one implementation only)",
             file.name,
             file.case_count,
             file.only_ids.len()
@@ -243,7 +307,7 @@ fn main() -> ExitCode {
     }
     if failures.is_empty() {
         println!(
-            "checked {} files; no case executes natively yet",
+            "checked {} files: {executed} executed, {skipped} skipped because no native executor exists yet",
             files.len()
         );
         ExitCode::SUCCESS

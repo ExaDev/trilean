@@ -5,12 +5,17 @@ import { describe, expect, it } from "vitest";
 import { RegexParseError } from "./errors";
 import { compilePattern, testPattern } from "./matcher";
 import { parseRegex } from "./parser";
+import { checkCorpus } from "./test-support/corpus";
 import { selectCorpusFiles } from "./test-support/corpus-files";
 import type {
-  CorpusFile,
   RegexMatchCase,
   RegexParseCase,
   Text,
+} from "./test-support/corpus-types";
+import {
+  EXECUTED_KINDS,
+  ONLY_VALUES,
+  UNEXECUTED_KINDS,
 } from "./test-support/corpus-types";
 import { textToCodeUnits, textToString } from "./test-support/text";
 import { validateCorpusFile, validateManifest } from "./test-support/validate";
@@ -60,40 +65,6 @@ function stringList(value: unknown, where: string): readonly string[] {
 
     return item;
   });
-}
-
-interface LoadedFile {
-  readonly name: string;
-  readonly file: CorpusFile;
-}
-
-/** Every corpus file under the root, validated; throws listing everything wrong with the tree. */
-function loadCorpus(): readonly LoadedFile[] {
-  const selection = selectCorpusFiles(CORPUS_ROOT);
-  const failures = selection.problems.map(
-    (path) => `${path}: not a corpus file and not a recognised root file`,
-  );
-  const loaded: LoadedFile[] = [];
-  const ids = new Set<string>();
-  for (const name of selection.selected) {
-    const result = validateCorpusFile(readJson(join(CORPUS_ROOT, name)));
-    if (!result.ok) {
-      failures.push(...result.problems.map((problem) => `${name}: ${problem}`));
-      continue;
-    }
-    for (const { id } of result.value.cases) {
-      if (ids.has(id)) {
-        failures.push(`${name}: case id ${id} is used by another file`);
-      }
-      ids.add(id);
-    }
-    loaded.push({ name, file: result.value });
-  }
-  if (failures.length > 0) {
-    throw new Error(`the corpus is malformed:\n${failures.join("\n")}`);
-  }
-
-  return loaded;
 }
 
 /** The reason text of a parse error: the part of the message after the index and before the echoed pattern. */
@@ -165,17 +136,15 @@ function subsetMatches(actual: unknown, expected: unknown): boolean {
 
 function runParseCase(testCase: RegexParseCase): void {
   const { expect: expectation } = testCase;
+  const pattern = textToString(testCase.pattern);
   if ("ast" in expectation) {
-    expect(parseRegex(textToString(testCase.pattern))).toEqual(expectation.ast);
+    expect(parseRegex(pattern)).toEqual(expectation.ast);
   } else if ("astSubset" in expectation) {
-    expect(
-      subsetMatches(
-        parseRegex(textToString(testCase.pattern)),
-        expectation.astSubset,
-      ),
-    ).toBe(true);
+    expect(subsetMatches(parseRegex(pattern), expectation.astSubset)).toBe(
+      true,
+    );
   } else {
-    const error = parseFailure(textToString(testCase.pattern));
+    const error = parseFailure(pattern);
     const { index, message } = expectation.error;
     if (index !== undefined) {
       expect(error.index).toBe(index);
@@ -205,6 +174,64 @@ function runMatchCase(testCase: RegexMatchCase): void {
   }
 }
 
+/** The names of the entries in a fixture directory, which must hold at least one. */
+function fixtureNames(directory: string): readonly string[] {
+  const names = readdirSync(join(FIXTURES, directory)).sort();
+  expect(names.length, `${directory} holds no fixtures`).toBeGreaterThan(0);
+
+  return names;
+}
+
+/** Whether a loader rejects the file: a file that cannot be parsed is rejected too. */
+function rejects(
+  path: string,
+  validate: (value: unknown) => { readonly ok: boolean },
+): boolean {
+  try {
+    return !validate(readJson(path)).ok;
+  } catch {
+    return true;
+  }
+}
+
+/**
+ * A negative fixture must fail for the rule it exists for. Each file in `invalid` has a file of the same name in `repaired` that differs by that one defect and is valid, so the invalid one cannot stay rejected for another reason.
+ */
+function expectPairs(
+  invalid: string,
+  repaired: string,
+  validate: (value: unknown) => {
+    readonly ok: boolean;
+    readonly problems?: readonly string[];
+  },
+): void {
+  const names = fixtureNames(invalid);
+  expect(fixtureNames(repaired), "every fixture has a repaired twin").toEqual(
+    names,
+  );
+  const accepted = names.filter(
+    (name) => !rejects(join(FIXTURES, invalid, name), validate),
+  );
+  expect(accepted, `${invalid} fixtures that validate`).toEqual([]);
+  for (const name of names) {
+    const result = validate(readJson(join(FIXTURES, repaired, name)));
+    expect(result.ok ? [] : result.problems, `${repaired}/${name}`).toEqual([]);
+  }
+}
+
+/** The value at a path of keys, or undefined. */
+function dig(value: unknown, ...keys: readonly string[]): unknown {
+  let current = value;
+  for (const key of keys) {
+    if (!isRecord(current)) {
+      return undefined;
+    }
+    current = current[key];
+  }
+
+  return current;
+}
+
 describe("corpus loading", () => {
   it("selects the files the README's rule selects, over the shared fixture tree", () => {
     const expected = readJson(
@@ -225,65 +252,46 @@ describe("corpus loading", () => {
     });
   });
 
-  it("finds nothing unexpected in the real corpus", () => {
-    expect(selectCorpusFiles(CORPUS_ROOT).problems).toEqual([]);
+  it("finds nothing wrong with the real corpus", () => {
+    expect(checkCorpus(CORPUS_ROOT).problems).toEqual([]);
   });
 
-  /** The fixture files in `directory`, which must hold at least one. */
-  function fixtureFiles(directory: string): readonly string[] {
-    const files = readdirSync(join(FIXTURES, directory)).sort();
-    expect(files.length, `${directory} holds no fixtures`).toBeGreaterThan(0);
+  it("rejects every invalid-case fixture, each for its one defect", () => {
+    expectPairs("invalid-cases", "repaired-cases", validateCorpusFile);
+  });
 
-    return files;
-  }
+  it("rejects every invalid manifest fixture, each for its one defect", () => {
+    expectPairs("manifests/invalid", "manifests/repaired", validateManifest);
+  });
 
-  /** Whether a loader rejects the file: a file that cannot be parsed is rejected too. */
-  function rejects(
-    path: string,
-    validate: (value: unknown) => { readonly ok: boolean },
-  ): boolean {
-    try {
-      return !validate(readJson(path)).ok;
-    } catch {
-      return true;
+  it("rejects every invalid corpus fixture, each for its one defect", () => {
+    const names = fixtureNames("corpora/invalid");
+    expect(fixtureNames("corpora/repaired")).toEqual(names);
+    for (const name of names) {
+      expect(
+        checkCorpus(join(FIXTURES, "corpora", "invalid", name)).problems.length,
+        `corpora/invalid/${name} must have a problem`,
+      ).toBeGreaterThan(0);
+      expect(
+        checkCorpus(join(FIXTURES, "corpora", "repaired", name)).problems,
+        `corpora/repaired/${name}`,
+      ).toEqual([]);
     }
-  }
-
-  it("rejects every invalid-case fixture, one rule each", () => {
-    const accepted = fixtureFiles("invalid-cases").filter(
-      (file) =>
-        !rejects(join(FIXTURES, "invalid-cases", file), validateCorpusFile),
-    );
-    expect(accepted).toEqual([]);
   });
 
-  it("accepts every valid-case fixture", () => {
-    for (const file of fixtureFiles("valid-cases")) {
+  it("accepts every valid fixture", () => {
+    for (const name of fixtureNames("valid-cases")) {
       const result = validateCorpusFile(
-        readJson(join(FIXTURES, "valid-cases", file)),
+        readJson(join(FIXTURES, "valid-cases", name)),
       );
-      expect(result.ok ? [] : result.problems, file).toEqual([]);
+      expect(result.ok ? [] : result.problems, name).toEqual([]);
     }
-  });
-
-  it("accepts every valid manifest fixture", () => {
-    for (const file of fixtureFiles("manifests/valid")) {
+    for (const name of fixtureNames("manifests/valid")) {
       const result = validateManifest(
-        readJson(join(FIXTURES, "manifests", "valid", file)),
+        readJson(join(FIXTURES, "manifests", "valid", name)),
       );
-      expect(result.ok ? [] : result.problems, file).toEqual([]);
+      expect(result.ok ? [] : result.problems, name).toEqual([]);
     }
-  });
-
-  it("rejects every invalid manifest fixture", () => {
-    const accepted = fixtureFiles("manifests/invalid").filter(
-      (file) =>
-        !rejects(
-          join(FIXTURES, "manifests", "invalid", file),
-          validateManifest,
-        ),
-    );
-    expect(accepted).toEqual([]);
   });
 
   it("reads both forms of a text as the same UTF-16 code units", () => {
@@ -304,15 +312,41 @@ describe("corpus loading", () => {
     }
   });
 
-  it("validates the manifest against its schema", () => {
-    const result = validateManifest(
-      readJson(join(CORPUS_ROOT, "manifest.json")),
+  it("types the case kinds and the only values the schema defines, and no others", () => {
+    const schema = readJson(join(CORPUS_ROOT, "case.schema.json"));
+    const refs = dig(schema, "$defs", "case", "oneOf");
+    if (!Array.isArray(refs)) {
+      throw new Error("the schema's $defs.case.oneOf must be a list");
+    }
+    const kinds = refs.map((reference: unknown) => {
+      const target = dig(reference, "$ref");
+      const name = typeof target === "string" ? target.split("/").pop() : "";
+      const kind = dig(
+        schema,
+        "$defs",
+        name ?? "",
+        "properties",
+        "kind",
+        "const",
+      );
+      if (typeof kind !== "string") {
+        throw new Error(`no kind constant behind ${JSON.stringify(target)}`);
+      }
+
+      return kind;
+    });
+    expect([...kinds].sort()).toEqual(
+      [...EXECUTED_KINDS, ...UNEXECUTED_KINDS].sort(),
     );
-    expect(result.ok ? [] : result.problems).toEqual([]);
+    expect(dig(schema, "$defs", "only", "enum")).toEqual([...ONLY_VALUES]);
   });
 });
 
-const corpus = loadCorpus();
+const checked = checkCorpus(CORPUS_ROOT);
+if (checked.problems.length > 0) {
+  throw new Error(`the corpus is malformed:\n${checked.problems.join("\n")}`);
+}
+const corpus = checked.files;
 
 // What this run registers, computed while the tests are collected, so the completeness check below holds whatever the run does with them afterwards: a name filter, a bail, a retry or a shuffled order changes which registered tests run, never which are registered.
 const registered: string[] = [];
@@ -339,25 +373,20 @@ for (const { name, file } of corpus) {
 }
 
 describe("corpus completeness", () => {
-  const manifestResult = validateManifest(
+  const manifest = validateManifest(
     readJson(join(CORPUS_ROOT, "manifest.json")),
   );
-  const manifest = manifestResult.ok ? manifestResult.value.files : {};
-  const actual = Object.fromEntries(
-    corpus.map(({ name, file }) => [
-      name,
-      {
-        cases: file.cases.length,
-        only: file.cases
-          .filter((testCase) => testCase.only !== undefined)
-          .map((testCase) => testCase.id)
-          .sort(),
-      },
-    ]),
-  );
 
-  it("matches the manifest, so no case is dropped or hidden unnoticed", () => {
-    expect(actual).toEqual(manifest);
+  it("registers every case the manifest counts, those marked for the other implementation as skipped", () => {
+    if (!manifest.ok) {
+      throw new Error(manifest.problems.join("\n"));
+    }
+    const entries = Object.values(manifest.value.files);
+    const total = entries.reduce((sum, entry) => sum + entry.cases, 0);
+    const marked = entries.reduce((sum, entry) => sum + entry.only.length, 0);
+    expect(registered.length + skipped.length).toBe(total);
+    expect(skipped.length).toBe(marked);
+    expect(new Set([...registered, ...skipped]).size).toBe(total);
   });
 
   it("pins the answer for the nested-quantifier pattern the time-bound test uses", () => {
@@ -377,19 +406,5 @@ describe("corpus completeness", () => {
           textToString(input) === `${"a".repeat(NESTED_QUANTIFIER_RUN)}c`,
       ),
     ).toBe(true);
-  });
-
-  it("registers every case the manifest counts, those marked for the other implementation as skipped", () => {
-    const total = Object.values(manifest).reduce(
-      (sum, entry) => sum + entry.cases,
-      0,
-    );
-    const manifestSkipped = Object.values(manifest).reduce(
-      (sum, entry) => sum + entry.only.length,
-      0,
-    );
-    expect(registered.length + skipped.length).toBe(total);
-    expect(skipped.length).toBe(manifestSkipped);
-    expect(new Set([...registered, ...skipped]).size).toBe(total);
   });
 });

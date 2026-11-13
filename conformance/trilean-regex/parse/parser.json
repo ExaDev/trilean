@@ -396,9 +396,11 @@
     },
     {
       "expect": {
-        "error": {}
+        "error": {
+          "index": 1
+        }
       },
-      "from": "parser.unit.test.ts: literals and concatenation > treats an unescaped closing paren or bracket at the top level as an error (the original asserted only the error type)",
+      "from": "parser.unit.test.ts: literals and concatenation > treats an unescaped closing paren or bracket at the top level as an error (the original asserted only the error type; recorded: trilean-regex src/parser.ts, the index)",
       "id": "parse.literals-and-concatenation.treats-an-unescaped-closing-paren-or-bracket-at-the-top-level-as-an-error.1",
       "kind": "regex-parse",
       "pattern": "a)"

@@ -4,6 +4,7 @@
       "expect": {
         "ast": {
           "kind": "repeat",
+          "max": 9007199254740992,
           "min": 9007199254740992,
           "operand": {
             "codeUnit": 97,

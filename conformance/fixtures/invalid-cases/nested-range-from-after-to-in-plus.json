@@ -1,0 +1,25 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "ast": {
+          "kind": "plus",
+          "operand": {
+            "kind": "charClass",
+            "negated": false,
+            "ranges": [
+              {
+                "from": 98,
+                "to": 97
+              }
+            ]
+          }
+        }
+      },
+      "from": "a fixture",
+      "id": "fixture.1",
+      "kind": "regex-parse",
+      "pattern": "a"
+    }
+  ]
+}

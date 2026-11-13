@@ -3,18 +3,27 @@
  */
 
 /** The case kinds that belong to other packages: validated by the schema, never executed here. */
-export type UnexecutedKind =
-  | "validate"
-  | "build"
-  | "call"
-  | "evaluate"
-  | "inputs"
-  | "document"
-  | "cli"
-  | "sql-compile"
-  | "sql-guard"
-  | "sql-pattern"
-  | "sql-execute";
+export const UNEXECUTED_KINDS = [
+  "validate",
+  "build",
+  "call",
+  "evaluate",
+  "inputs",
+  "document",
+  "cli",
+  "sql-compile",
+  "sql-guard",
+  "sql-pattern",
+  "sql-execute",
+] as const;
+
+export type UnexecutedKind = (typeof UNEXECUTED_KINDS)[number];
+
+/** The kinds this package executes. */
+export const EXECUTED_KINDS = ["regex-parse", "regex-match"] as const;
+
+/** The values of `only`: the implementation that skips a case, never the host it runs on. */
+export const ONLY_VALUES = ["ts", "rust"] as const;
 
 /** A string as UTF-16 code units: a JSON string, or the code units themselves for content a JSON string cannot carry. */
 export type Text = string | { readonly codeUnits: readonly number[] };
@@ -22,7 +31,7 @@ export type Text = string | { readonly codeUnits: readonly number[] };
 interface CaseBase {
   readonly id: string;
   readonly from: string;
-  readonly only?: "ts" | "rust";
+  readonly only?: (typeof ONLY_VALUES)[number];
   readonly reason?: string;
   readonly tolerance?: { readonly ulps: number };
 }
