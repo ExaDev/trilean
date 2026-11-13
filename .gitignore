@@ -10,4 +10,4 @@ coverage/
 dist-cli/
 
 # Rust workspace build output
-target/
+/rust/target/

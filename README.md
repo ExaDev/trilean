@@ -30,6 +30,8 @@ pnpm test:smoke        # rebuilds, then exercises the built dist/ through the ex
 pnpm test:workers      # the workers project, inside the real workerd runtime
 ```
 
+The Rust workspace is outside Turborepo. `sh scripts/rust-checks.sh` runs what CI's `rust` job runs (rustfmt, clippy with warnings denied and the tests, against the committed `Cargo.lock`), and `cargo deny --locked check` in `rust/` runs the `cargo-deny` job's check of the crate allowlist.
+
 The `pnpm <task>` scripts are thin wrappers over `turbo run _<task>`; the underscore-prefixed name is the one that carries the real command in each package's own manifest. Running a task inside a single package works the same way (`pnpm --dir packages/trilean test`), reaching the same cached pipeline.
 
 ## Layout
@@ -40,6 +42,9 @@ The `pnpm <task>` scripts are thin wrappers over `turbo run _<task>`; the unders
 │   ├── trilean/        the evaluation library, with its own README, CHANGELOG, and configs
 │   ├── trilean-sql/    the SQL compiler over trilean's predicate trees, likewise self-contained
 │   └── trilean-regex/  the portable regex grammar trilean-sql pushes down where it can, likewise self-contained
+├── conformance/        language-neutral cases every implementation of a package runs, and their format (its own README)
+├── rust/               the Rust workspace the packages are being ported into, with its toolchain pin and crate allowlist
+├── scripts/            the checks CI and the pre-push hook share, outside turbo
 ├── pnpm-workspace.yaml package globs and pnpm's install-time settings
 ├── turbo.json          the task pipeline every package's tasks are ordered and cached by
 ├── tsconfig.base.json  the compiler options every package extends
