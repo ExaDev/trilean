@@ -1,11 +1,10 @@
-# The allowlist `cargo deny check` enforces in CI. A crate that is not listed under [bans] allow fails the build,
+# The allowlist `cargo deny check` enforces in CI. A crate that is not listed under [bans] allow fails the check,
 # so adding a dependency is a reviewed change to this file, with the reason it is needed. The workspace's own
 # crates are listed too, since cargo-deny applies the allowlist to every crate in the graph.
 #
-# The deliberate limit is to std, serde and serde_json for the library crates. The binding crates, which compile
-# to wasm, are the only ones allowed to depend on wasm-bindgen and its companions: cargo-deny cannot express that
-# in this file, since a crate it allows cannot also be denied with `wrappers`, so deny-boundaries.toml states it and
-# CI runs both files.
+# The list is exactly the crates in the dependency graph: cargo-deny has no option to fail on an allowed crate that
+# nothing uses, so scripts/check-deny-allowlist.py compares the two in CI. A crate is added in the change that
+# first depends on it, and removed in the change that drops it.
 
 [graph]
 all-features = true
@@ -16,15 +15,10 @@ all-features = true
 ignore = []
 
 [licenses]
-# Only permissive licences, so nothing in the graph restricts how the crates are redistributed.
-allow = [
-    # The licence of the workspace's own crates and of most of the crates below.
-    "MIT",
-    # The other half of the dual licence most Rust crates carry.
-    "Apache-2.0",
-    # unicode-ident, which proc-macro2 and syn depend on, ships its Unicode data under this licence.
-    "Unicode-3.0",
-]
+# Only permissive licences, so nothing in the graph restricts how the crates are redistributed. A licence that no
+# crate in the graph uses fails the check, so this list is the set in use.
+unused-allowed-license = "deny"
+allow = ["MIT"]
 
 [bans]
 multiple-versions = "deny"
@@ -32,24 +26,13 @@ multiple-versions = "deny"
 wildcards = "deny"
 allow-wildcard-paths = true
 
-# Every crate in the graph, with the reason it is there. Anything absent fails.
 allow = [
-    # The workspace's own crates are subject to the allowlist too.
-    { crate = "trilean-conformance", reason = "Loads and checks the conformance corpus." },
-    { crate = "serde", reason = "Serialisation traits for the data types the crates exchange." },
-    { crate = "serde_core", reason = "The trait definitions serde re-exports, split out of serde itself." },
-    { crate = "serde_derive", reason = "Derives Serialize and Deserialize for the tree and value types." },
-    { crate = "serde_json", reason = "Reads and writes JSON, the format of trees, values, schemas and the conformance corpus." },
+    { crate = "trilean-conformance", reason = "Loads the conformance corpus and checks it against its format." },
+    { crate = "serde_json", reason = "Reads the JSON the corpus and its manifest are written in." },
+    { crate = "serde_core", reason = "The serialisation traits serde_json is written against." },
     { crate = "itoa", reason = "serde_json formats integers with it." },
     { crate = "memchr", reason = "serde_json scans strings with it." },
     { crate = "zmij", reason = "serde_json formats floating point numbers with it." },
-    { crate = "proc-macro2", reason = "The token types serde_derive and the Shape derive are written against." },
-    { crate = "quote", reason = "Builds the code serde_derive and the Shape derive generate." },
-    { crate = "syn", reason = "Parses the item serde_derive and the Shape derive are applied to." },
-    { crate = "unicode-ident", reason = "proc-macro2 checks identifiers against it." },
-    { crate = "wasm-bindgen", reason = "The JavaScript boundary of the wasm builds; only binding crates may depend on it, see deny-boundaries.toml." },
-    { crate = "js-sys", reason = "Calls JavaScript built-ins (RegExp, Reflect) from the binding crates." },
-    { crate = "wasm-bindgen-futures", reason = "Awaits JavaScript promises from the async resolvers in the binding crates." },
 ]
 
 [sources]
