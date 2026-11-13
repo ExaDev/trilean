@@ -202,6 +202,9 @@ fn check_regex_parse_expectation(value: &Value, at: &str) -> Check<()> {
     } else {
         let outer = exact_keys(value, at, &["error"], &[])?;
         let error = exact_keys(&outer["error"], at, &[], &["index", "message"])?;
+        if error.is_empty() {
+            return Err(format!("{at}: \"error\" must name an index or a message"));
+        }
         if error.contains_key("index") {
             integer_field(error, "index", at)?;
         }

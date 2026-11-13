@@ -10,7 +10,7 @@
       "from": "a fixture",
       "id": "fixture.1",
       "kind": "regex-parse",
-      "pattern": "\ud800"
+      "pattern": "\ud83d"
     }
   ]
 }

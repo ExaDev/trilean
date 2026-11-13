@@ -1,0 +1,30 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "ast": {
+          "kind": "concat",
+          "operands": [
+            {
+              "codeUnit": 97,
+              "kind": "literal"
+            },
+            {
+              "kind": "repeat",
+              "max": 5,
+              "min": 2,
+              "operand": {
+                "codeUnit": 97,
+                "kind": "literal"
+              }
+            }
+          ]
+        }
+      },
+      "from": "a fixture",
+      "id": "fixture.1",
+      "kind": "regex-parse",
+      "pattern": "a"
+    }
+  ]
+}

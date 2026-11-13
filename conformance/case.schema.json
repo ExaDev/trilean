@@ -958,6 +958,8 @@
               "properties": {
                 "error": {
                   "additionalProperties": false,
+                  "description": "What the refusal is pinned to: its index, fragments of its reason, or both. At least one, since an empty error is satisfied by any refusal for any reason.",
+                  "minProperties": 1,
                   "properties": {
                     "index": {
                       "description": "Offset in UTF-16 code units into pattern. Given only where the case pins it.",

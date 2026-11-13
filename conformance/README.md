@@ -30,7 +30,7 @@ Every loader applies this one rule, and each runs it over `fixtures/loader-selec
 
 ### The manifest
 
-`manifest.json` records, for every corpus file, its case count and the ids of the cases marked for one implementation only, in ascending order. Every runner checks the corpus against it and fails on any difference, and checks that the cases it registered plus the cases it skips equal the manifest's total, counted when it collects them, so the check holds whatever the run does with the registered tests (a name filter, a bail, a retry, a shuffled order). Changing the corpus means changing the manifest in the same commit, so a case cannot be dropped, or hidden from one side, without a visible change.
+`manifest.json` records, for every corpus file, its case count and the ids of the cases marked for one implementation only, in ascending order. Every runner checks the corpus against it and fails on any difference. A runner also counts the cases it executes and the cases it skips, and asserts that the sum is the manifest's total. The TypeScript runner counts the cases it registers when it collects them, so the check holds whatever the run does with the registered tests (a name filter, a bail, a retry, a shuffled order). The Rust loader executes no case yet and counts every case as skipped, for that stated reason; execution moves cases from skipped to executed and cannot lose one. Changing the corpus means changing the manifest in the same commit, so a case cannot be dropped, or hidden from one side, without a visible change.
 
 ## Cases
 
@@ -53,7 +53,7 @@ Every pattern, input and message fragment is a sequence of UTF-16 code units, an
 
 A loader reads both into the same code unit sequence; `fixtures/text-forms/pairs.json` lists texts with their code units, and every loader checks they agree. A loader that cannot decode a string into code units, or that reads one in scalar values or bytes, is wrong: `😀` is two literals, and `index` after it counts two.
 
-`case.schema.json` is the format, including the kinds later packages use. Every loader accepts exactly the documents the schema accepts, and refuses a kind it cannot validate in full rather than passing it unchecked. A corpus file holds at least one case.
+`case.schema.json` is the format, including the kinds later packages use. A loader accepts no document the schema rejects, and accepts every document the schema accepts for the kinds it validates in full; it refuses any other kind rather than passing it unchecked. A corpus file holds at least one case.
 
 ### Rules the schema cannot express
 
@@ -67,7 +67,7 @@ Each loader enforces these beside the schema:
 
 Integers are at most 2^53-1, the largest the JavaScript runners hold exactly, and an integer written `97.0` is the integer 97, as in JSON Schema.
 
-`fixtures/invalid-cases` holds one file per rule, each of which every loader must reject; `fixtures/valid-cases` holds files every loader must accept, the bounds of every number among them; `fixtures/manifests/invalid` and `fixtures/manifests/valid` do the same for the manifest. A file a loader cannot parse counts as rejected, which is how a loader meets an unpaired surrogate escape. Every real corpus file must be accepted by all of them. A rule added to the format gets a fixture in the same commit.
+Every rule above has a negative fixture, and every negative fixture has a repaired twin of the same name that differs by that one defect and is valid, so a fixture cannot stay rejected for another reason: each loader asserts both. A rule about one file has a file in `fixtures/invalid-cases` (twin in `fixtures/repaired-cases`); a rule about the manifest has a file in `fixtures/manifests/invalid` (twin in `fixtures/manifests/repaired`); a rule across files, or between the corpus and its manifest, has a whole corpus root in `fixtures/corpora/invalid` (twin in `fixtures/corpora/repaired`), loaded the way the real corpus is. `fixtures/valid-cases` and `fixtures/manifests/valid` hold files every loader must accept, the bounds of every number among them. A file a loader cannot parse counts as rejected, which is how a loader meets an unpaired surrogate escape. Every real corpus file must be accepted by all of them. A rule added to the format gets a fixture and its twin in the same commit.
 
 ### trilean-regex
 
@@ -81,7 +81,7 @@ Integers are at most 2^53-1, the largest the JavaScript runners hold exactly, an
 
 - `{ "ast": <node> }`: the parsed tree equals the node. Field names are those of the package's AST. An unbounded `repeat` omits `max`, since JSON has no `undefined`.
 - `{ "astSubset": <partial node> }`: for a test that asserted only some fields of the tree. It names at least one key. An object matches when every key it gives matches; an array matches element by element and has the same length; any other value must be equal.
-- `{ "error": { "index"?, "message"? } }`: the pattern is refused with a parse error. `index` is an offset in UTF-16 code units into the pattern. `message` is a list of texts (fragments) that must all occur in the reason text, in order, each after the end of the one before. The reason text is the part of the error that says why the pattern was refused, in the error's own wording: not the index, not the echoed pattern and not the position marker, so an implementation exposes its reason separately from the rest of its message. Each field is given only where the original test asserted it, and an original assertion written as a regular expression is recorded as the literal fragments it requires, in order (`/anchor.*cannot be quantified/` is `["anchor", "cannot be quantified"]`). `{}` records a test that asserted only that the pattern is refused.
+- `{ "error": { "index"?, "message"? } }` (at least one of the two): the pattern is refused with a parse error. `index` is an offset in UTF-16 code units into the pattern. `message` is a list of texts (fragments) that must all occur in the reason text, in order, each after the end of the one before. The reason text is the part of the error that says why the pattern was refused, in the error's own wording: not the index, not the echoed pattern and not the position marker, so an implementation exposes its reason separately from the rest of its message. Each field is given only where the original test asserted it, and an original assertion written as a regular expression is recorded as the literal fragments it requires, in order (`/anchor.*cannot be quantified/` is `["anchor", "cannot be quantified"]`). A test that asserted only that the pattern is refused is recorded with the index the current implementation reports, and its `from` says so.
 
 `regex-match`:
 

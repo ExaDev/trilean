@@ -1,0 +1,17 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "error": {
+          "message": [
+            "x"
+          ]
+        }
+      },
+      "from": "a fixture",
+      "id": "fixture.1",
+      "kind": "regex-parse",
+      "pattern": "a"
+    }
+  ]
+}
