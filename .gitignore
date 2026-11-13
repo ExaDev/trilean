@@ -12,3 +12,4 @@ dist-cli/
 # Rust workspace build output
 /rust/target/
 __pycache__/
+/scripts/fixtures/*/target/
