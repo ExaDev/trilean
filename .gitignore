@@ -8,3 +8,6 @@ coverage/
 .turbo/
 .husky/_/
 dist-cli/
+
+# Rust workspace build output
+target/
