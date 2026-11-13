@@ -15,6 +15,7 @@
   // `_typecheck`, `_lint` and `_test:smoke` additionally depend on the package's OWN `_build`, which is not the same thing and is not optional here: test/smoke.e2e.test.ts and scripts/generate-json-schema.ts both import from ../dist/ by relative path, so tsc, eslint's typed rules, and the smoke suite itself all need this package's dist/ present before they run.
   "tasks": {
     // The workspace root's own tooling files (eslint.config.ts, commitlint.config.ts, lint-staged.config.ts, release-workspace.config.ts) are held to the same lint and typecheck gates as package code. Registered as root tasks so `turbo run _lint` and `turbo run _typecheck` cover them without a separate command.
+    // conformance/** is linted by this root task (the corpus is canonical JSON), and no package owns it, so it is an input here: a change confined to the corpus must not replay a cached lint.
     "//#_lint": {
       "inputs": [
         "eslint.config.ts",
@@ -22,7 +23,8 @@
         "commitlint.config.ts",
         "lint-staged.config.ts",
         "release-workspace.config.ts",
-        "tsconfig.json"
+        "tsconfig.json",
+        "conformance/**"
       ],
       "outputs": [".eslintcache"]
     },
@@ -63,7 +65,9 @@
         "_test",
         "_test:integration",
         "_test:smoke",
-        "_test:workers"
+        "_test:workers",
+        "//#_lint",
+        "//#_typecheck"
       ],
       "outputs": []
     },
