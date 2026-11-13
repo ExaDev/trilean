@@ -22,7 +22,7 @@
           "kind": "alternation"
         }
       },
-      "from": "a fixture",
+      "from": "x.unit.test.ts: a fixture",
       "id": "fixture.1",
       "kind": "regex-parse",
       "pattern": "a"

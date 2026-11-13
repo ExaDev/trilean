@@ -7,7 +7,7 @@
           "kind": "literal"
         }
       },
-      "from": "a fixture",
+      "from": "x.unit.test.ts: a fixture",
       "id": "fixture.astral-text",
       "kind": "regex-parse",
       "pattern": "😀"
@@ -19,7 +19,7 @@
           "kind": "literal"
         }
       },
-      "from": "a fixture",
+      "from": "x.unit.test.ts: a fixture",
       "id": "fixture.code-units-form",
       "kind": "regex-parse",
       "pattern": {
@@ -36,7 +36,7 @@
           "kind": "literal"
         }
       },
-      "from": "a fixture",
+      "from": "x.unit.test.ts: a fixture",
       "id": "fixture.lone-surrogate",
       "kind": "regex-parse",
       "pattern": {
@@ -46,7 +46,7 @@
       }
     },
     {
-      "from": "a fixture",
+      "from": "x.unit.test.ts: a fixture",
       "id": "fixture.match-text",
       "inputs": [
         {
@@ -84,7 +84,7 @@
           ]
         }
       },
-      "from": "a fixture",
+      "from": "x.unit.test.ts: a fixture",
       "id": "fixture.message-forms",
       "kind": "regex-parse",
       "pattern": "a"
@@ -96,7 +96,7 @@
           "kind": "literal"
         }
       },
-      "from": "a fixture",
+      "from": "x.unit.test.ts: a fixture",
       "id": "fixture.only-ts",
       "kind": "regex-parse",
       "only": "ts",
@@ -110,7 +110,7 @@
           "kind": "literal"
         }
       },
-      "from": "a fixture",
+      "from": "x.unit.test.ts: a fixture",
       "id": "fixture.only-rust",
       "kind": "regex-parse",
       "only": "rust",
