@@ -2,6 +2,14 @@
   "$defs": {
     "build": {
       "additionalProperties": false,
+      "dependentRequired": {
+        "only": [
+          "reason"
+        ],
+        "reason": [
+          "only"
+        ]
+      },
       "properties": {
         "args": {
           "type": "array"
@@ -25,6 +33,9 @@
         "only": {
           "$ref": "#/$defs/only"
         },
+        "reason": {
+          "$ref": "#/$defs/reason"
+        },
         "tolerance": {
           "$ref": "#/$defs/tolerance"
         }
@@ -41,6 +52,14 @@
     },
     "call": {
       "additionalProperties": false,
+      "dependentRequired": {
+        "only": [
+          "reason"
+        ],
+        "reason": [
+          "only"
+        ]
+      },
       "properties": {
         "args": {
           "items": {
@@ -96,6 +115,9 @@
         },
         "only": {
           "$ref": "#/$defs/only"
+        },
+        "reason": {
+          "$ref": "#/$defs/reason"
         },
         "tolerance": {
           "$ref": "#/$defs/tolerance"
@@ -156,6 +178,14 @@
     },
     "cli": {
       "additionalProperties": false,
+      "dependentRequired": {
+        "only": [
+          "reason"
+        ],
+        "reason": [
+          "only"
+        ]
+      },
       "properties": {
         "args": {
           "items": {
@@ -206,6 +236,9 @@
         "only": {
           "$ref": "#/$defs/only"
         },
+        "reason": {
+          "$ref": "#/$defs/reason"
+        },
         "stdin": {
           "type": "string"
         },
@@ -241,6 +274,14 @@
     },
     "document": {
       "additionalProperties": false,
+      "dependentRequired": {
+        "only": [
+          "reason"
+        ],
+        "reason": [
+          "only"
+        ]
+      },
       "properties": {
         "as": {
           "enum": [
@@ -269,6 +310,9 @@
         "only": {
           "$ref": "#/$defs/only"
         },
+        "reason": {
+          "$ref": "#/$defs/reason"
+        },
         "tolerance": {
           "$ref": "#/$defs/tolerance"
         },
@@ -287,6 +331,14 @@
     },
     "evaluate": {
       "additionalProperties": false,
+      "dependentRequired": {
+        "only": [
+          "reason"
+        ],
+        "reason": [
+          "only"
+        ]
+      },
       "properties": {
         "as": {
           "enum": [
@@ -468,6 +520,9 @@
         "only": {
           "$ref": "#/$defs/only"
         },
+        "reason": {
+          "$ref": "#/$defs/reason"
+        },
         "resolvers": {
           "$ref": "#/$defs/resolvers"
         },
@@ -501,6 +556,14 @@
     },
     "inputs": {
       "additionalProperties": false,
+      "dependentRequired": {
+        "only": [
+          "reason"
+        ],
+        "reason": [
+          "only"
+        ]
+      },
       "properties": {
         "expect": {
           "oneOf": [
@@ -560,6 +623,9 @@
         "raw": {
           "$ref": "#/$defs/json"
         },
+        "reason": {
+          "$ref": "#/$defs/reason"
+        },
         "tolerance": {
           "$ref": "#/$defs/tolerance"
         }
@@ -577,14 +643,27 @@
       "description": "Any JSON value."
     },
     "only": {
-      "description": "Present only for a case one side cannot express: js for a case the native crates skip, native for a case the JavaScript runners skip.",
+      "description": "Present only for a case one side cannot express: js for a case the native crates skip, native for a case the JavaScript runners skip. Always with a reason.",
       "enum": [
         "js",
         "native"
       ]
     },
+    "reason": {
+      "description": "Why one side cannot run the case. Required with only, and only with only.",
+      "minLength": 1,
+      "type": "string"
+    },
     "regexMatch": {
       "additionalProperties": false,
+      "dependentRequired": {
+        "only": [
+          "reason"
+        ],
+        "reason": [
+          "only"
+        ]
+      },
       "properties": {
         "from": {
           "$ref": "#/$defs/from"
@@ -620,6 +699,9 @@
         },
         "pattern": {
           "type": "string"
+        },
+        "reason": {
+          "$ref": "#/$defs/reason"
         },
         "tolerance": {
           "$ref": "#/$defs/tolerance"
@@ -681,6 +763,7 @@
               "type": "boolean"
             },
             "ranges": {
+              "description": "The positive set; never empty, since a class holds at least one item. Each range's from is not above its to, which the schema cannot express and every loader checks.",
               "items": {
                 "additionalProperties": false,
                 "properties": {
@@ -701,6 +784,7 @@
                 ],
                 "type": "object"
               },
+              "minItems": 1,
               "type": "array"
             }
           },
@@ -771,6 +855,7 @@
         },
         {
           "additionalProperties": false,
+          "description": "max is omitted for an unbounded repeat. min is not above max, which the schema cannot express and every loader checks.",
           "properties": {
             "kind": {
               "const": "repeat"
@@ -797,18 +882,20 @@
       ]
     },
     "regexNodeSubset": {
-      "description": "A partial regexNode for astSubset: an object matches when every key it gives matches, an array matches element by element at the same length, any other value matches when equal.",
-      "type": [
-        "object",
-        "array",
-        "string",
-        "number",
-        "boolean",
-        "null"
-      ]
+      "description": "A partial regexNode for astSubset: an object that matches when every key it gives matches (an array matches element by element at the same length, any other value when equal). It names at least one key, since an empty subset matches every tree.",
+      "minProperties": 1,
+      "type": "object"
     },
     "regexParse": {
       "additionalProperties": false,
+      "dependentRequired": {
+        "only": [
+          "reason"
+        ],
+        "reason": [
+          "only"
+        ]
+      },
       "properties": {
         "expect": {
           "oneOf": [
@@ -848,9 +935,13 @@
                       "type": "integer"
                     },
                     "message": {
-                      "description": "A substring the error message contains. Given only where the case pins it.",
-                      "minLength": 1,
-                      "type": "string"
+                      "description": "Fragments the reason text of the refusal contains, each after the end of the one before. The reason is the part of the error that says why the pattern was refused: not the index, the echoed pattern or the position marker. Given only where the original test asserted a message.",
+                      "items": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "minItems": 1,
+                      "type": "array"
                     }
                   },
                   "type": "object"
@@ -877,6 +968,9 @@
         },
         "pattern": {
           "type": "string"
+        },
+        "reason": {
+          "$ref": "#/$defs/reason"
         },
         "tolerance": {
           "$ref": "#/$defs/tolerance"
@@ -1128,6 +1222,14 @@
     },
     "sqlCompile": {
       "additionalProperties": false,
+      "dependentRequired": {
+        "only": [
+          "reason"
+        ],
+        "reason": [
+          "only"
+        ]
+      },
       "properties": {
         "expect": {
           "oneOf": [
@@ -1200,6 +1302,9 @@
         "options": {
           "$ref": "#/$defs/sqlOptions"
         },
+        "reason": {
+          "$ref": "#/$defs/reason"
+        },
         "tolerance": {
           "$ref": "#/$defs/tolerance"
         },
@@ -1219,6 +1324,14 @@
     },
     "sqlExecute": {
       "additionalProperties": false,
+      "dependentRequired": {
+        "only": [
+          "reason"
+        ],
+        "reason": [
+          "only"
+        ]
+      },
       "properties": {
         "agreesWithEvaluator": {
           "type": "boolean"
@@ -1256,6 +1369,9 @@
         "options": {
           "$ref": "#/$defs/sqlOptions"
         },
+        "reason": {
+          "$ref": "#/$defs/reason"
+        },
         "tolerance": {
           "$ref": "#/$defs/tolerance"
         },
@@ -1278,6 +1394,14 @@
     },
     "sqlGuard": {
       "additionalProperties": false,
+      "dependentRequired": {
+        "only": [
+          "reason"
+        ],
+        "reason": [
+          "only"
+        ]
+      },
       "properties": {
         "expect": {
           "oneOf": [
@@ -1319,6 +1443,9 @@
         },
         "options": {
           "$ref": "#/$defs/sqlOptions"
+        },
+        "reason": {
+          "$ref": "#/$defs/reason"
         },
         "tolerance": {
           "$ref": "#/$defs/tolerance"
@@ -1363,6 +1490,14 @@
     },
     "sqlPattern": {
       "additionalProperties": false,
+      "dependentRequired": {
+        "only": [
+          "reason"
+        ],
+        "reason": [
+          "only"
+        ]
+      },
       "properties": {
         "dialect": {
           "type": "string"
@@ -1410,6 +1545,9 @@
         "pattern": {
           "type": "string"
         },
+        "reason": {
+          "$ref": "#/$defs/reason"
+        },
         "tolerance": {
           "$ref": "#/$defs/tolerance"
         }
@@ -1440,6 +1578,14 @@
     },
     "validate": {
       "additionalProperties": false,
+      "dependentRequired": {
+        "only": [
+          "reason"
+        ],
+        "reason": [
+          "only"
+        ]
+      },
       "properties": {
         "expect": {
           "oneOf": [
@@ -1512,6 +1658,9 @@
         "only": {
           "$ref": "#/$defs/only"
         },
+        "reason": {
+          "$ref": "#/$defs/reason"
+        },
         "schema": {
           "minLength": 1,
           "type": "string"
@@ -1534,12 +1683,13 @@
   "$id": "https://github.com/ExaDev/trilean/tree/main/conformance/case.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "One corpus file: an object holding a list of cases. Every case names the behaviour it pins with a unique id and a from, and takes a kind-specific shape. See README.md for the matching rules.",
+  "description": "One corpus file: an object holding a non-empty list of cases. Every case names the behaviour it pins with a unique id and a from, and takes a kind-specific shape. See README.md for the rules a schema cannot express.",
   "properties": {
     "cases": {
       "items": {
         "$ref": "#/$defs/case"
       },
+      "minItems": 1,
       "type": "array"
     }
   },
