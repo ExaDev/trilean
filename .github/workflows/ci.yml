@@ -184,7 +184,6 @@ jobs:
         with:
           tool: cargo-deny@0.20.2
       - name: Check the dependency allowlist
-        working-directory: rust
         run: sh scripts/rust.sh deny
       # cargo-deny cannot fail on an allowed crate nothing uses, so the allowlist is compared with the graph cargo-deny itself reports, separately.
       - name: Check the allowlist lists exactly the dependency graph
