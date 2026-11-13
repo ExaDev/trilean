@@ -30,7 +30,7 @@ pnpm test:smoke        # rebuilds, then exercises the built dist/ through the ex
 pnpm test:workers      # the workers project, inside the real workerd runtime
 ```
 
-The Rust workspace is outside Turborepo. `sh scripts/rust-checks.sh` runs the `rust` job's checks (the cargo `--locked` guard, the workspace-settings guard, rustfmt, clippy with warnings denied and the tests, against the committed `Cargo.lock`). The `cargo-deny` job runs `cargo deny --locked check bans licenses sources` in `rust/` and `python3 -I scripts/check-deny-allowlist.py`, which fails on an allowed crate that cargo-deny does not find in the graph; advisories run separately, in `.github/workflows/advisories.yml`.
+The Rust workspace is outside Turborepo, and cargo runs from exactly one place: `scripts/rust.sh`, whose checks (`fmt`, `clippy`, `test`, `deny`, `advisories`, `metadata`) each run against the committed `Cargo.lock` and the toolchain `rust/rust-toolchain.toml` pins. Workflows, hooks and other scripts call it and never cargo, which `scripts/check-cargo-entry.sh` enforces. `sh scripts/rust-checks.sh` runs everything CI's `rust` job runs: the guards, the tests of every script that has one, rustfmt, clippy with warnings denied and the tests. The `cargo-deny` job runs `sh scripts/rust.sh deny` (bans, licences and sources) and `python3 -I scripts/check-deny-allowlist.py`, which fails on an allowed crate that cargo-deny does not find in the graph; advisories run separately, in `.github/workflows/advisories.yml`, because the advisory database changes without any change here.
 
 The `pnpm <task>` scripts are thin wrappers over `turbo run _<task>`; the underscore-prefixed name is the one that carries the real command in each package's own manifest. Running a task inside a single package works the same way (`pnpm --dir packages/trilean test`), reaching the same cached pipeline.
 
@@ -44,7 +44,7 @@ The `pnpm <task>` scripts are thin wrappers over `turbo run _<task>`; the unders
 │   └── trilean-regex/  the portable regex grammar trilean-sql pushes down where it can, likewise self-contained
 ├── conformance/        language-neutral cases every implementation of a package runs, and their format (its own README)
 ├── rust/               the Rust workspace: its crates, toolchain pin and crate allowlist
-├── scripts/            the repository's checks that run outside turbo, and their tests; CI runs them, and the pre-push hook runs the Rust ones
+├── scripts/            the checks that run outside turbo, and their tests; every one has a test that CI runs on pull requests, and the pre-push hook runs the Rust ones when a push touches Rust (`check-tool-pins.py` also checks against crates.io on a schedule)
 ├── pnpm-workspace.yaml package globs and pnpm's install-time settings
 ├── turbo.json          the task pipeline every package's tasks are ordered and cached by
 ├── tsconfig.base.json  the compiler options every package extends
