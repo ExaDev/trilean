@@ -13,7 +13,7 @@ serde_json.workspace = true
 
 [[test]]
 name = "conformance"
-path = "tests/conformance.rs"
+path = "tests/conformance/main.rs"
 # A plain main that prints the failing case ids, rather than libtest, so a corpus failure names the case.
 harness = false
 

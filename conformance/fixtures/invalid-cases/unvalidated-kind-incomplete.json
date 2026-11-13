@@ -1,0 +1,9 @@
+{
+  "cases": [
+    {
+      "from": "a fixture",
+      "id": "fixture.1",
+      "kind": "sql-guard"
+    }
+  ]
+}

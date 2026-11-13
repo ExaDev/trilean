@@ -292,7 +292,9 @@
     {
       "expect": {
         "error": {
-          "message": "unknown escape"
+          "message": [
+            "unknown escape"
+          ]
         }
       },
       "from": "parser.unit.test.ts: literals and concatenation > rejects an unknown escape",
@@ -303,7 +305,9 @@
     {
       "expect": {
         "error": {
-          "message": "trailing backslash"
+          "message": [
+            "trailing backslash"
+          ]
         }
       },
       "from": "parser.unit.test.ts: literals and concatenation > rejects a trailing backslash",
@@ -394,7 +398,7 @@
       "expect": {
         "error": {}
       },
-      "from": "parser.unit.test.ts: literals and concatenation > treats an unescaped closing paren or bracket at the top level as an error",
+      "from": "parser.unit.test.ts: literals and concatenation > treats an unescaped closing paren or bracket at the top level as an error (the original asserted only the error type)",
       "id": "parse.literals-and-concatenation.treats-an-unescaped-closing-paren-or-bracket-at-the-top-level-as-an-error.1",
       "kind": "regex-parse",
       "pattern": "a)"
@@ -513,7 +517,10 @@
     {
       "expect": {
         "error": {
-          "message": "cannot be quantified"
+          "message": [
+            "anchor",
+            "cannot be quantified"
+          ]
         }
       },
       "from": "parser.unit.test.ts: anchors > rejects quantifying an anchor",
@@ -524,7 +531,10 @@
     {
       "expect": {
         "error": {
-          "message": "cannot be quantified"
+          "message": [
+            "anchor",
+            "cannot be quantified"
+          ]
         }
       },
       "from": "parser.unit.test.ts: anchors > rejects quantifying an anchor",
@@ -678,7 +688,9 @@
     {
       "expect": {
         "error": {
-          "message": "capturing groups are not supported"
+          "message": [
+            "capturing groups are not supported"
+          ]
         }
       },
       "from": "parser.unit.test.ts: groups > rejects a capturing group",
@@ -689,7 +701,9 @@
     {
       "expect": {
         "error": {
-          "message": "expected ')'"
+          "message": [
+            "expected ')'"
+          ]
         }
       },
       "from": "parser.unit.test.ts: groups > rejects an unterminated group",
@@ -819,7 +833,9 @@
     {
       "expect": {
         "error": {
-          "message": "backwards"
+          "message": [
+            "backwards"
+          ]
         }
       },
       "from": "parser.unit.test.ts: quantifiers > rejects a backwards bound",
@@ -830,7 +846,9 @@
     {
       "expect": {
         "error": {
-          "message": "nothing to repeat"
+          "message": [
+            "nothing to repeat"
+          ]
         }
       },
       "from": "parser.unit.test.ts: quantifiers > rejects a dangling quantifier",
@@ -841,7 +859,9 @@
     {
       "expect": {
         "error": {
-          "message": "nothing to repeat"
+          "message": [
+            "nothing to repeat"
+          ]
         }
       },
       "from": "parser.unit.test.ts: quantifiers > rejects a dangling quantifier",
@@ -852,7 +872,9 @@
     {
       "expect": {
         "error": {
-          "message": "cannot itself be quantified"
+          "message": [
+            "cannot itself be quantified"
+          ]
         }
       },
       "from": "parser.unit.test.ts: quantifiers > rejects stacking two quantifiers",
@@ -863,7 +885,9 @@
     {
       "expect": {
         "error": {
-          "message": "cannot itself be quantified"
+          "message": [
+            "cannot itself be quantified"
+          ]
         }
       },
       "from": "parser.unit.test.ts: quantifiers > rejects stacking two quantifiers",
@@ -874,7 +898,9 @@
     {
       "expect": {
         "error": {
-          "message": "cannot itself be quantified"
+          "message": [
+            "cannot itself be quantified"
+          ]
         }
       },
       "from": "parser.unit.test.ts: quantifiers > rejects stacking two quantifiers",
@@ -941,7 +967,9 @@
     {
       "expect": {
         "error": {
-          "message": "reversed"
+          "message": [
+            "reversed"
+          ]
         }
       },
       "from": "parser.unit.test.ts: character classes > rejects a reversed range",
@@ -1014,7 +1042,9 @@
     {
       "expect": {
         "error": {
-          "message": "at least one item"
+          "message": [
+            "at least one item"
+          ]
         }
       },
       "from": "parser.unit.test.ts: character classes > rejects an empty class",
@@ -1025,7 +1055,9 @@
     {
       "expect": {
         "error": {
-          "message": "at least one item"
+          "message": [
+            "at least one item"
+          ]
         }
       },
       "from": "parser.unit.test.ts: character classes > rejects an empty class",
@@ -1036,7 +1068,9 @@
     {
       "expect": {
         "error": {
-          "message": "unterminated character class"
+          "message": [
+            "unterminated character class"
+          ]
         }
       },
       "from": "parser.unit.test.ts: character classes > rejects an unterminated class",
@@ -1069,7 +1103,9 @@
     {
       "expect": {
         "error": {
-          "message": "cannot be embedded"
+          "message": [
+            "cannot be embedded"
+          ]
         }
       },
       "from": "parser.unit.test.ts: character classes > rejects embedding a negated shorthand class inside brackets",
@@ -1080,7 +1116,9 @@
     {
       "expect": {
         "error": {
-          "message": "cannot be a range endpoint"
+          "message": [
+            "cannot be a range endpoint"
+          ]
         }
       },
       "from": "parser.unit.test.ts: character classes > rejects a shorthand class as a range endpoint",

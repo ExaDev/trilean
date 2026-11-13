@@ -1,0 +1,11 @@
+{
+  "cases": [
+    {
+      "from": "a fixture",
+      "id": "fixture.1",
+      "inputs": [],
+      "kind": "regex-match",
+      "pattern": "a"
+    }
+  ]
+}

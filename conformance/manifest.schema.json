@@ -1,0 +1,42 @@
+{
+  "$id": "https://github.com/ExaDev/trilean/tree/main/conformance/manifest.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "What the corpus holds: per corpus file, how many cases it has and which of them are marked for one side only. Every runner checks the corpus against it, so a case cannot be dropped or hidden without a change to this file in the same commit.",
+  "properties": {
+    "files": {
+      "additionalProperties": {
+        "additionalProperties": false,
+        "properties": {
+          "cases": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "only": {
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "cases",
+          "only"
+        ],
+        "type": "object"
+      },
+      "minProperties": 1,
+      "propertyNames": {
+        "pattern": "^[^/]+/[^/]+/[^/]+\\.json$"
+      },
+      "type": "object"
+    }
+  },
+  "required": [
+    "files"
+  ],
+  "title": "trilean conformance manifest",
+  "type": "object"
+}

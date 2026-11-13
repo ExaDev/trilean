@@ -1,0 +1,17 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "ast": {
+          "codeUnit": 97,
+          "kind": "literal"
+        }
+      },
+      "extra": 1,
+      "from": "a fixture",
+      "id": "fixture.1",
+      "kind": "regex-parse",
+      "pattern": "a"
+    }
+  ]
+}

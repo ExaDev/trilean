@@ -1,0 +1,13 @@
+{
+  "problems": [
+    "alpha/area/notes.txt",
+    "alpha/area/sub",
+    "alpha/stray.json",
+    "other.json"
+  ],
+  "selected": [
+    "alpha/area/a.json",
+    "alpha/area/b.json",
+    "beta/area/z.json"
+  ]
+}

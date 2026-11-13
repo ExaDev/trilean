@@ -655,6 +655,22 @@
       ],
       "kind": "regex-match",
       "pattern": "^[a-z]+\\d*$"
+    },
+    {
+      "from": "matcher.unit.test.ts: no catastrophic backtracking on adversarial input > resolves a classically pathological nested-quantifier pattern instantly (the answer only; the time bound stays in matcher.unit.test.ts)",
+      "id": "match.no-catastrophic-backtracking-on-adversarial-input.resolves-a-classically-pathological-nested-quantifier-pattern-instantly.1",
+      "inputs": [
+        {
+          "input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaac",
+          "matches": false
+        },
+        {
+          "input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaab",
+          "matches": true
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^(?:a+)+b$"
     }
   ]
 }

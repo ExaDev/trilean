@@ -5,334 +5,110 @@ import { describe, expect, it } from "vitest";
 import { RegexParseError } from "./errors";
 import { compilePattern, testPattern } from "./matcher";
 import { parseRegex } from "./parser";
+import { selectCorpusFiles } from "./test-support/corpus-files";
+import type {
+  CorpusFile,
+  RegexMatchCase,
+  RegexParseCase,
+} from "./test-support/corpus-types";
+import { validateCorpusFile, validateManifest } from "./test-support/validate";
 
 /**
- * Runs this package's share of the language-neutral conformance corpus (`conformance/trilean-regex/` at the repository root) against the TypeScript implementation. The format, and the rules a case is matched by, are in `conformance/README.md`; `conformance/case.schema.json` is its schema.
+ * Runs this package's share of the language-neutral conformance corpus (`conformance/` at the repository root) against the TypeScript implementation. The format, the file selection rule and the matching rules are in `conformance/README.md`; `conformance/case.schema.json` is the schema every file is validated against before anything runs.
  *
- * Every file is validated before anything runs, and a file that does not match the format fails the run rather than being skipped: a typo in a case would otherwise read as a case that passes.
+ * Nothing about the corpus is trusted: a file that does not match the format, an unexpected entry in the tree, a corpus that differs from `conformance/manifest.json` and a case this package cannot execute all fail the run rather than being skipped, since a skipped case reads as a case that passes.
  */
 
-const CORPUS_DIRECTORY = fileURLToPath(
-  new URL("../../../conformance/trilean-regex/", import.meta.url),
+const CORPUS_ROOT = fileURLToPath(
+  new URL("../../../conformance/", import.meta.url),
 );
+const FIXTURES = join(CORPUS_ROOT, "fixtures");
 
-type RegexParseExpectation =
-  | { readonly ast: unknown }
-  | { readonly astSubset: unknown }
-  | {
-      readonly error: {
-        readonly index: number | undefined;
-        readonly message: string | undefined;
-      };
-    };
+// The length of the run of "a" in the nested-quantifier case the corpus pins and matcher.unit.test.ts bounds in time.
+const NESTED_QUANTIFIER_RUN = 30;
 
-interface CaseBase {
-  readonly id: string;
-  readonly from: string;
-  readonly only: "js" | "native" | undefined;
-}
-
-interface RegexParseCase extends CaseBase {
-  readonly kind: "regex-parse";
-  readonly pattern: string;
-  readonly expect: RegexParseExpectation;
-}
-
-interface RegexMatchCase extends CaseBase {
-  readonly kind: "regex-match";
-  readonly pattern: string;
-  readonly inputs: readonly {
-    readonly input: string;
-    readonly matches: boolean;
-  }[];
-}
-
-interface CorpusFile {
-  readonly name: string;
-  readonly cases: readonly (RegexParseCase | RegexMatchCase)[];
+function readJson(path: string): unknown {
+  return JSON.parse(readFileSync(path, "utf8"));
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
-function fail(where: string, problem: string): never {
-  throw new Error(`${where}: ${problem}`);
-}
-
-/** The record at `where`, holding exactly the keys in `required` and `optional` and no others. */
-function exactRecord(
-  value: unknown,
-  where: string,
-  required: readonly string[],
-  optional: readonly string[],
-): Record<string, unknown> {
-  if (!isRecord(value)) {
-    return fail(where, "expected an object");
-  }
-  for (const key of required) {
-    if (!(key in value)) {
-      fail(where, `missing "${key}"`);
-    }
-  }
-  for (const key of Object.keys(value)) {
-    if (!required.includes(key) && !optional.includes(key)) {
-      fail(where, `unexpected "${key}"`);
-    }
-  }
-
-  return value;
-}
-
-function stringField(
-  record: Record<string, unknown>,
-  key: string,
-  where: string,
-): string {
-  const value = record[key];
-  if (typeof value !== "string") {
-    return fail(where, `"${key}" must be a string`);
-  }
-
-  return value;
-}
-
-function nonEmptyStringField(
-  record: Record<string, unknown>,
-  key: string,
-  where: string,
-): string {
-  const value = stringField(record, key, where);
-  if (value === "") {
-    return fail(where, `"${key}" must not be empty`);
-  }
-
-  return value;
-}
-
-function integerField(
-  record: Record<string, unknown>,
-  key: string,
-  where: string,
-): number {
-  const value = record[key];
-  if (typeof value !== "number" || !Number.isInteger(value) || value < 0) {
-    return fail(where, `"${key}" must be a non-negative integer`);
-  }
-
-  return value;
-}
-
-function arrayOf(value: unknown, where: string, what: string): unknown[] {
+function stringList(value: unknown, where: string): readonly string[] {
   if (!Array.isArray(value)) {
-    return fail(where, `${what} must be an array`);
+    throw new Error(`${where}: expected a list`);
   }
 
-  return value;
+  return value.map((item: unknown) => {
+    if (typeof item !== "string") {
+      throw new Error(`${where}: expected a list of strings`);
+    }
+
+    return item;
+  });
 }
 
-function checkRegexNode(value: unknown, where: string): void {
-  if (!isRecord(value)) {
-    return fail(where, "a regex node must be an object");
-  }
-  const kind = value.kind;
-  switch (kind) {
-    case "literal":
-      exactRecord(value, where, ["kind", "codeUnit"], []);
-      integerField(value, "codeUnit", where);
-
-      return;
-    case "anyChar":
-    case "anchorStart":
-    case "anchorEnd":
-      exactRecord(value, where, ["kind"], []);
-
-      return;
-    case "charClass": {
-      exactRecord(value, where, ["kind", "negated", "ranges"], []);
-      if (typeof value.negated !== "boolean") {
-        fail(where, '"negated" must be a boolean');
-      }
-      for (const range of arrayOf(value.ranges, where, '"ranges"')) {
-        const record = exactRecord(
-          range,
-          `${where}.ranges`,
-          ["from", "to"],
-          [],
-        );
-        integerField(record, "from", `${where}.ranges`);
-        integerField(record, "to", `${where}.ranges`);
-      }
-
-      return;
-    }
-    case "concat":
-    case "alternation": {
-      const key = kind === "concat" ? "operands" : "branches";
-      exactRecord(value, where, ["kind", key], []);
-      for (const child of arrayOf(value[key], where, `"${key}"`)) {
-        checkRegexNode(child, `${where}.${key}`);
-      }
-
-      return;
-    }
-    case "star":
-    case "plus":
-    case "optional":
-      exactRecord(value, where, ["kind", "operand"], []);
-      checkRegexNode(value.operand, `${where}.operand`);
-
-      return;
-    case "repeat":
-      exactRecord(value, where, ["kind", "operand", "min"], ["max"]);
-      checkRegexNode(value.operand, `${where}.operand`);
-      integerField(value, "min", where);
-      if ("max" in value) {
-        integerField(value, "max", where);
-      }
-
-      return;
-    default:
-      return fail(where, `unknown regex node kind ${JSON.stringify(kind)}`);
-  }
+interface LoadedFile {
+  readonly name: string;
+  readonly file: CorpusFile;
 }
 
-function parseExpectation(
-  value: unknown,
-  where: string,
-): RegexParseExpectation {
-  if (!isRecord(value)) {
-    return fail(where, '"expect" must be an object');
-  }
-  if ("ast" in value) {
-    exactRecord(value, where, ["ast"], []);
-    checkRegexNode(value.ast, `${where}.ast`);
-
-    return { ast: value.ast };
-  }
-  if ("astSubset" in value) {
-    exactRecord(value, where, ["astSubset"], []);
-
-    return { astSubset: value.astSubset };
-  }
-  const outer = exactRecord(value, where, ["error"], []);
-  const error = exactRecord(
-    outer.error,
-    `${where}.error`,
-    [],
-    ["index", "message"],
+/** Every corpus file under the root, validated; throws listing everything wrong with the tree. */
+function loadCorpus(): readonly LoadedFile[] {
+  const selection = selectCorpusFiles(CORPUS_ROOT);
+  const failures = selection.problems.map(
+    (path) => `${path}: not a corpus file and not a recognised root file`,
   );
-
-  return {
-    error: {
-      index: "index" in error ? integerField(error, "index", where) : undefined,
-      message:
-        "message" in error
-          ? nonEmptyStringField(error, "message", where)
-          : undefined,
-    },
-  };
-}
-
-function parseCase(
-  value: unknown,
-  where: string,
-): RegexParseCase | RegexMatchCase {
-  if (!isRecord(value)) {
-    return fail(where, "a case must be an object");
-  }
-  const kind = value.kind;
-  const common = ["id", "from", "kind"];
-  const optional = ["only", "tolerance"];
-  const only = value.only;
-  if (only !== undefined && only !== "js" && only !== "native") {
-    fail(where, '"only" must be "js" or "native"');
-  }
-  if (kind === "regex-parse") {
-    const record = exactRecord(
-      value,
-      where,
-      [...common, "pattern", "expect"],
-      optional,
-    );
-
-    return {
-      kind,
-      id: nonEmptyStringField(record, "id", where),
-      from: nonEmptyStringField(record, "from", where),
-      only,
-      pattern: stringField(record, "pattern", where),
-      expect: parseExpectation(record.expect, where),
-    };
-  }
-  if (kind === "regex-match") {
-    const record = exactRecord(
-      value,
-      where,
-      [...common, "pattern", "inputs"],
-      optional,
-    );
-    const inputs = arrayOf(record.inputs, where, '"inputs"');
-    if (inputs.length === 0) {
-      return fail(where, '"inputs" must not be empty');
-    }
-
-    return {
-      kind,
-      id: nonEmptyStringField(record, "id", where),
-      from: nonEmptyStringField(record, "from", where),
-      only,
-      pattern: stringField(record, "pattern", where),
-      inputs: inputs.map((entry) => {
-        const item = exactRecord(
-          entry,
-          `${where}.inputs`,
-          ["input", "matches"],
-          [],
-        );
-        const matches = item.matches;
-        if (typeof matches !== "boolean") {
-          return fail(where, '"matches" must be a boolean');
-        }
-
-        return { input: stringField(item, "input", where), matches };
-      }),
-    };
-  }
-
-  return fail(where, `unknown case kind ${JSON.stringify(kind)}`);
-}
-
-function loadCorpus(): readonly CorpusFile[] {
-  const files: CorpusFile[] = [];
+  const loaded: LoadedFile[] = [];
   const ids = new Set<string>();
-  for (const area of readdirSync(CORPUS_DIRECTORY).sort()) {
-    const areaDirectory = join(CORPUS_DIRECTORY, area);
-    for (const file of readdirSync(areaDirectory).sort()) {
-      const name = `${area}/${file}`;
-      const parsed: unknown = JSON.parse(
-        readFileSync(join(areaDirectory, file), "utf8"),
-      );
-      const record = exactRecord(parsed, name, ["cases"], []);
-      const cases = arrayOf(record.cases, name, '"cases"').map(
-        (entry, position) => {
-          const parsedCase = parseCase(
-            entry,
-            `${name} case ${String(position)}`,
-          );
-          if (ids.has(parsedCase.id)) {
-            fail(name, `duplicate case id ${parsedCase.id}`);
-          }
-          ids.add(parsedCase.id);
-
-          return parsedCase;
-        },
-      );
-      files.push({ name, cases });
+  for (const name of selection.selected) {
+    const result = validateCorpusFile(readJson(join(CORPUS_ROOT, name)));
+    if (!result.ok) {
+      failures.push(...result.problems.map((problem) => `${name}: ${problem}`));
+      continue;
     }
+    for (const { id } of result.value.cases) {
+      if (ids.has(id)) {
+        failures.push(`${name}: case id ${id} is used by another file`);
+      }
+      ids.add(id);
+    }
+    loaded.push({ name, file: result.value });
+  }
+  if (failures.length > 0) {
+    throw new Error(`the corpus is malformed:\n${failures.join("\n")}`);
   }
 
-  return files;
+  return loaded;
+}
+
+/** The reason text of a parse error: the part of the message after the index and before the echoed pattern. */
+function reasonOf(error: RegexParseError): string {
+  const prefix = `invalid pattern at index ${String(error.index)}: `;
+  if (!error.message.startsWith(prefix)) {
+    throw new Error(`unexpected error message layout: ${error.message}`);
+  }
+  const lineEnd = error.message.indexOf("\n");
+
+  return error.message.slice(
+    prefix.length,
+    lineEnd === -1 ? undefined : lineEnd,
+  );
+}
+
+/** Whether every fragment occurs in `text`, each after the end of the one before. */
+function containsInOrder(text: string, fragments: readonly string[]): boolean {
+  let from = 0;
+  for (const fragment of fragments) {
+    const at = text.indexOf(fragment, from);
+    if (at === -1) {
+      return false;
+    }
+    from = at + fragment.length;
+  }
+
+  return true;
 }
 
 /** The error `parseRegex` throws for `pattern`; fails the case if it parses. */
@@ -388,7 +164,10 @@ function runParseCase(testCase: RegexParseCase): void {
       expect(error.index).toBe(index);
     }
     if (message !== undefined) {
-      expect(error.message).toContain(message);
+      expect(
+        containsInOrder(reasonOf(error), message),
+        `reason ${JSON.stringify(reasonOf(error))} lacks, in order, ${JSON.stringify(message)}`,
+      ).toBe(true);
     }
   }
 }
@@ -407,19 +186,124 @@ function runMatchCase(testCase: RegexMatchCase): void {
   }
 }
 
-for (const file of loadCorpus()) {
-  describe(`conformance ${file.name}`, () => {
+describe("corpus loading", () => {
+  it("selects the files the README's rule selects, over the shared fixture tree", () => {
+    const expected = readJson(
+      join(FIXTURES, "loader-selection", "expected.json"),
+    );
+    if (!isRecord(expected)) {
+      throw new Error("expected.json must be an object");
+    }
+    const selection = selectCorpusFiles(
+      join(FIXTURES, "loader-selection", "tree"),
+    );
+    expect({
+      problems: selection.problems,
+      selected: selection.selected,
+    }).toEqual({
+      problems: stringList(expected.problems, "problems"),
+      selected: stringList(expected.selected, "selected"),
+    });
+  });
+
+  it("finds nothing unexpected in the real corpus", () => {
+    expect(selectCorpusFiles(CORPUS_ROOT).problems).toEqual([]);
+  });
+
+  const invalidDirectory = join(FIXTURES, "invalid-cases");
+  const invalidFiles = readdirSync(invalidDirectory).sort();
+
+  it("has invalid-case fixtures to reject", () => {
+    expect(invalidFiles.length).toBeGreaterThan(0);
+  });
+
+  for (const file of invalidFiles) {
+    it(`rejects the invalid-case fixture ${file}`, () => {
+      const result = validateCorpusFile(readJson(join(invalidDirectory, file)));
+      expect(result.ok, `${file} must not validate`).toBe(false);
+    });
+  }
+
+  it("validates the manifest against its schema", () => {
+    const result = validateManifest(
+      readJson(join(CORPUS_ROOT, "manifest.json")),
+    );
+    expect(result.ok ? [] : result.problems).toEqual([]);
+  });
+});
+
+const corpus = loadCorpus();
+const counts = { executed: 0, skipped: 0 };
+
+for (const { name, file } of corpus) {
+  describe(`conformance ${name}`, () => {
     for (const testCase of file.cases) {
+      if (testCase.only === "native") {
+        counts.skipped += 1;
+      }
       it.skipIf(testCase.only === "native")(
         `${testCase.id} (${testCase.from})`,
         () => {
+          counts.executed += 1;
           if (testCase.kind === "regex-parse") {
             runParseCase(testCase);
-          } else {
+          } else if (testCase.kind === "regex-match") {
             runMatchCase(testCase);
+          } else {
+            throw new Error(
+              `no executor for the ${testCase.kind} kind in this package`,
+            );
           }
         },
       );
     }
   });
 }
+
+describe("corpus completeness", () => {
+  const manifestResult = validateManifest(
+    readJson(join(CORPUS_ROOT, "manifest.json")),
+  );
+  const manifest = manifestResult.ok ? manifestResult.value.files : {};
+  const actual = Object.fromEntries(
+    corpus.map(({ name, file }) => [
+      name,
+      {
+        cases: file.cases.length,
+        only: file.cases
+          .filter((testCase) => testCase.only !== undefined)
+          .map((testCase) => testCase.id)
+          .sort(),
+      },
+    ]),
+  );
+
+  it("matches the manifest, so no case is dropped or hidden unnoticed", () => {
+    expect(actual).toEqual(manifest);
+  });
+
+  it("pins the answer for the nested-quantifier pattern the time-bound test uses", () => {
+    const answers = corpus
+      .flatMap(({ file }) => file.cases)
+      .filter(
+        (testCase): testCase is RegexMatchCase =>
+          testCase.kind === "regex-match" && testCase.pattern === "^(?:a+)+b$",
+      )
+      .flatMap((testCase) => testCase.inputs);
+    expect(answers.some(({ matches }) => matches)).toBe(true);
+    expect(
+      answers.some(
+        ({ input, matches }) =>
+          !matches && input === `${"a".repeat(NESTED_QUANTIFIER_RUN)}c`,
+      ),
+    ).toBe(true);
+  });
+
+  it("executes every case the manifest counts, but those marked for the other side", () => {
+    const total = Object.values(manifest).reduce(
+      (sum, entry) => sum + entry.cases,
+      0,
+    );
+    expect(counts.executed + counts.skipped).toBe(total);
+  });
+});
