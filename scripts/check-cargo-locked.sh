@@ -7,7 +7,7 @@ set -eu
 cd "$(dirname "$0")/.."
 
 if [ "$#" -eq 0 ]; then
-  set -- .github/workflows/*.yml .husky/pre-push scripts/rust-checks.sh package.json packages/*/package.json
+  set -- .github/workflows/*.yml .husky/pre-push scripts/*.sh package.json packages/*/package.json
 fi
 
 # Subcommands that resolve the dependency graph. fmt and install do not, and are left alone.
