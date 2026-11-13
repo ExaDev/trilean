@@ -79,8 +79,6 @@
     },
     "_test:integration": {
       "dependsOn": ["^_build"],
-      // Turborepo's strict environment mode removes every variable not listed here, so the container runtime variables a developer sets for testcontainers never reached vitest, and a Colima user (whose socket is not /var/run/docker.sock) could not run trilean-sql's PostgreSQL project through turbo at all. DOCKER_HOST points testcontainers at the runtime; the override names the socket's path inside the runtime's VM, which a container that mounts it needs. Pass-through variables are not part of the task hash, so a cache hit is unaffected.
-      "passThroughEnv": ["DOCKER_HOST", "TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE"],
       "inputs": [
         "src/**",
         "cli/**",
@@ -88,7 +86,9 @@
         "vitest.config.ts",
         "test/integration/**"
       ],
-      "outputs": []
+      "outputs": [],
+      // Turborepo's strict environment mode removes every variable not listed here, so the container runtime variables a developer sets for testcontainers never reached vitest, and a Colima user (whose socket is not /var/run/docker.sock) could not run trilean-sql's PostgreSQL project through turbo at all. DOCKER_HOST points testcontainers at the runtime; the override names the socket's path inside the runtime's VM, which a container that mounts it needs. Pass-through variables are not part of the task hash, so a cache hit is unaffected.
+      "passThroughEnv": ["DOCKER_HOST", "TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE"]
     },
     "_test:smoke": {
       "dependsOn": ["^_build", "_build"],
