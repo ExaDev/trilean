@@ -30,7 +30,7 @@ pnpm test:smoke        # rebuilds, then exercises the built dist/ through the ex
 pnpm test:workers      # the workers project, inside the real workerd runtime
 ```
 
-The Rust workspace is outside Turborepo. `sh scripts/rust-checks.sh` runs what CI's `rust` job runs (rustfmt, clippy with warnings denied and the tests, against the committed `Cargo.lock`), and `cargo deny --locked check` in `rust/` runs the `cargo-deny` job's check of the crate allowlist.
+The Rust workspace is outside Turborepo. `sh scripts/rust-checks.sh` runs the `rust` job's checks (the cargo `--locked` guard, the workspace-settings guard, rustfmt, clippy with warnings denied and the tests, against the committed `Cargo.lock`). The `cargo-deny` job runs `cargo deny --locked check bans licenses sources` in `rust/` and `python3 -I scripts/check-deny-allowlist.py`, which fails on an allowed crate that cargo-deny does not find in the graph; advisories run separately, in `.github/workflows/advisories.yml`.
 
 The `pnpm <task>` scripts are thin wrappers over `turbo run _<task>`; the underscore-prefixed name is the one that carries the real command in each package's own manifest. Running a task inside a single package works the same way (`pnpm --dir packages/trilean test`), reaching the same cached pipeline.
 
@@ -43,8 +43,8 @@ The `pnpm <task>` scripts are thin wrappers over `turbo run _<task>`; the unders
 │   ├── trilean-sql/    the SQL compiler over trilean's predicate trees, likewise self-contained
 │   └── trilean-regex/  the portable regex grammar trilean-sql pushes down where it can, likewise self-contained
 ├── conformance/        language-neutral cases every implementation of a package runs, and their format (its own README)
-├── rust/               the Rust workspace the packages are being ported into, with its toolchain pin and crate allowlist
-├── scripts/            the checks CI and the pre-push hook share, outside turbo
+├── rust/               the Rust workspace: its crates, toolchain pin and crate allowlist
+├── scripts/            the repository's checks that run outside turbo, and their tests; CI runs them, and the pre-push hook runs the Rust ones
 ├── pnpm-workspace.yaml package globs and pnpm's install-time settings
 ├── turbo.json          the task pipeline every package's tasks are ordered and cached by
 ├── tsconfig.base.json  the compiler options every package extends

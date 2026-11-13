@@ -1,8 +1,8 @@
-# Run the same lint/typecheck/test matrix CI runs, via turbo's _prepush task -- a no-op that exists purely to
-# depend on the real tasks (see turbo.json), so a push with nothing relevant changed since the last run is a
-# cache hit and effectively free, while a genuine change actually gets caught before it reaches CI.
 # git hands the pushed refs to this hook on stdin, and a command below may read it, so it is taken first.
 refs=$(cat)
+# Run the same lint/typecheck/test matrix CI runs for the TypeScript packages, via turbo's _prepush task -- a no-op
+# that exists purely to depend on the real tasks (see turbo.json), so a push with nothing relevant changed since the
+# last run is a cache hit and effectively free, while a genuine change actually gets caught before it reaches CI.
 pnpm run prepush
 # The Rust workspace is outside turbo, so its checks (the same script CI's rust job runs) follow the TypeScript matrix, and only when the pushed commits touch something they cover.
 printf '%s\n' "$refs" | sh scripts/pre-push-rust.sh
