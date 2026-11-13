@@ -2,3 +2,5 @@
 # depend on the real tasks (see turbo.json), so a push with nothing relevant changed since the last run is a
 # cache hit and effectively free, while a genuine change actually gets caught before it reaches CI.
 pnpm run prepush
+# The Rust workspace is outside turbo, so its checks (the same script CI's rust job runs) follow the TypeScript matrix.
+sh scripts/rust-checks.sh

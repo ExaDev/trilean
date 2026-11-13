@@ -4,7 +4,7 @@
 
 - **Pre-commit** lints and auto-fixes staged files (`lint-staged`).
 - **commit-msg** validates the message against [Conventional Commits](https://www.conventionalcommits.org/), enforced by commitlint. The allowed types, the release level each one triggers, and its changelog heading are defined once, in `release-workspace.config.ts`'s `commitTypes` (commitlint imports the same list, so a type can never pass one check and fail the other). As a rule: `feat` releases minor, a breaking-change footer/`!` releases major, everything else (`fix`, `refactor`, `docs`, `test`, `chore`, …) releases patch.
-- **Pre-push** runs the `unit` project (fast) to catch obvious breakage before it reaches CI, which runs the full matrix — `integration`, `smoke`, and `workers` included.
+- **Pre-push** runs the `unit` project (fast) and the Rust checks (`scripts/rust-checks.sh`: rustfmt, clippy and the tests) to catch obvious breakage before it reaches CI, which runs the full matrix — `integration`, `smoke`, and `workers` included — and the `cargo-deny` allowlist check.
 
 ## Before opening a PR
 
