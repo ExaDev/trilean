@@ -40,7 +40,7 @@ jobs:
           tool: cargo-deny@0.20.2
       - name: Check the lock file against the advisory database
         working-directory: rust
-        run: cargo deny --locked check advisories
+        run: sh scripts/rust.sh advisories
 
   # Dependabot reads Cargo.lock and the toolchain file, and no tool installed by name in a workflow, so this fails when the cargo-deny pin is behind a release older than the cooldown the Dependabot entries use.
   tool-pins:
