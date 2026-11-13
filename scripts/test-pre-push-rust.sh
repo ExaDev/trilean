@@ -2,6 +2,11 @@
 # Tests the range logic of scripts/pre-push-rust.sh in a throwaway repository: a docs-only push, a Rust push, a corpus push, a new branch, a deletion, a forced push over history that is not here, and cargo missing.
 set -eu
 
+# git exports GIT_DIR, GIT_INDEX_FILE and the like to a hook, and they would point the throwaway repository's commands at the repository being pushed, so the test starts from a clean git environment.
+for variable in $(git rev-parse --local-env-vars); do
+  unset "$variable"
+done
+
 here=$(cd "$(dirname "$0")/.." && pwd)
 work=$(mktemp -d)
 trap 'rm -rf "$work"' EXIT
