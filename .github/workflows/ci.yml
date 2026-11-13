@@ -147,43 +147,38 @@ jobs:
           task: test-workers
           command: pnpm test:workers $TURBO_FLAGS
 
-  # The Rust workspace under rust/ is built and tested by cargo, not turbo, so these jobs sit beside the turbo-driven ones and need no pnpm install. The toolchain is whatever rust/rust-toolchain.toml pins, so the file stays the one place that names a version.
+  # The Rust workspace under rust/ is built and tested by cargo, not turbo, so these jobs sit beside the turbo-driven ones and need no pnpm install. The toolchain is whatever rust/rust-toolchain.toml pins, so the file stays the one place that names a version, and every cargo command runs against the committed Cargo.lock. The commands live in scripts/rust-checks.sh so the pre-push hook runs the same ones.
   rust:
     name: Rust
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    defaults:
-      run:
-        working-directory: rust
     steps:
       - uses: actions/checkout@v7
       - name: Install the pinned toolchain
+        working-directory: rust
         run: rustup toolchain install
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: rust
-      - name: Format
-        run: cargo fmt --check
-      - name: Clippy (warnings denied)
-        run: cargo clippy --locked --all-targets --all-features -- -D warnings
-      - name: Test
-        run: cargo test --locked --all-targets --all-features
+      - name: Lock check, format, clippy (warnings denied) and tests
+        run: sh scripts/rust-checks.sh
 
-  # `cargo deny check` fails on any crate not allowlisted in rust/deny.toml, on a licence outside its list and on a published advisory. The job name contains cargo-deny on purpose: it is how a check on main's head is recognised as the one enforcing the allowlist. The tool is pinned to an exact release and installed as a prebuilt binary, so a new cargo-deny cannot change what passes without a change here.
+  # `cargo deny check` fails on any crate not allowlisted in rust/deny.toml, on a licence outside its list and on a published advisory. The job name contains cargo-deny on purpose: it is how a check on main's head is recognised as the one enforcing the allowlist. The tool is pinned to an exact release and installed as a prebuilt binary, so a new cargo-deny cannot change what passes without a change here. It runs from rust/ so the pinned toolchain resolves the graph, against the committed Cargo.lock.
   cargo-deny:
     name: cargo-deny
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
+      - name: Install the pinned toolchain
+        working-directory: rust
+        run: rustup toolchain install
       - uses: taiki-e/install-action@v2
         with:
           tool: cargo-deny@0.20.2
       - name: Check the dependency allowlist
-        run: cargo deny --manifest-path rust/Cargo.toml check
-      # The wrapper rules that keep wasm-bindgen out of every crate but the bindings need their own file, because cargo-deny rejects a crate that is both on the allowlist and denied.
-      - name: Check which crates may depend on wasm-bindgen
-        run: cargo deny --manifest-path rust/Cargo.toml --config rust/deny-boundaries.toml check bans
+        working-directory: rust
+        run: cargo deny --locked check
 
   # Single stable branch-protection target aggregating every job that runs on every PR, so the required status check doesn't need updating whenever a job is added, renamed, or split.
   required-checks:
