@@ -2,7 +2,7 @@ import { defineConfig } from "tsdown";
 
 export default defineConfig([
   {
-    entry: ["src/*.ts", "!src/**/*.test.ts"],
+    entry: ["src/*.ts", "!src/**/*.test.ts", "!src/**/*-test-helpers.ts"],
     format: ["esm"],
     dts: true,
     platform: "neutral",
