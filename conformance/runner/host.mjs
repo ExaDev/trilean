@@ -1,6 +1,11 @@
-// Helpers of the entry points: the corpus as a tree, the tarball unpacked, a bundle for runtimes without module resolution.
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, readFileSync, readdirSync, rmSync } from "node:fs";
+import {
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  readdirSync,
+  rmSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -9,16 +14,10 @@ import { build } from "esbuild";
 const here = fileURLToPath(new URL(".", import.meta.url));
 const utf8 = new TextDecoder("utf-8", { fatal: true, ignoreBOM: true });
 
-/**
- * Every file under the corpus root but the runner itself: its text, null when it is not UTF-8, false when it is not a file.
- */
 export function readTree(root = join(here, "..")) {
   const tree = {};
   for (const e of readdirSync(root, { recursive: true, withFileTypes: true })) {
-    const path = join(e.parentPath, e.name)
-      .slice(root.length + 1)
-      .split("\\")
-      .join("/");
+    const path = join(e.parentPath, e.name).slice(root.length + 1);
     if (e.isDirectory() || path.startsWith("runner/")) continue;
     try {
       tree[path] = e.isFile()
@@ -32,26 +31,16 @@ export function readTree(root = join(here, "..")) {
   return tree;
 }
 
-/**
- * The package as a consumer installs it: the contents of its tarball under node_modules.
- */
 export function install(tarball) {
   const dir = mkdtempSync(join(tmpdir(), "wasm-conformance-"));
   process.once("exit", () => rmSync(dir, { recursive: true, force: true }));
-  execFileSync("sh", [
-    "-c",
-    `mkdir -p "$1/node_modules/trilean-regex" && tar -xzf "$2" -C "$1/node_modules/trilean-regex" --strip-components=1`,
-    "sh",
-    dir,
-    tarball,
-  ]);
+  const into = `${dir}/node_modules/trilean-regex`;
+  mkdirSync(into, { recursive: true });
+  execFileSync("tar", ["-xzf", tarball, "-C", into, "--strip-components=1"]);
 
   return dir;
 }
 
-/**
- * The runner and the installed package as one module for a runtime that resolves conditions through a bundler.
- */
 export async function bundle(dir, platform, conditions, entry) {
   const source = `import * as pkg from "trilean-regex"; import { prepare } from ${JSON.stringify(join(here, "run.mjs"))}; ${entry}`;
   const { outputFiles } = await build({
@@ -75,3 +64,6 @@ export function report(runtime, { executed, skipped, failures }) {
   );
   process.exitCode = failures.length ? 1 : 0;
 }
+
+export const wasm = (dir) =>
+  readFileSync(`${dir}/node_modules/trilean-regex/dist/trilean_regex_bg.wasm`);
