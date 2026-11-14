@@ -44,7 +44,10 @@ runs:
       shell: bash
       env:
         BASE_SHA: ${{ github.event.pull_request.base.sha }}
-      run: echo "TURBO_FLAGS=$(sh scripts/turbo-scope.sh "$BASE_SHA")" >> "$GITHUB_ENV"
+      # The script runs as its own command, so a failure fails the step (bash -e); inside the echo's substitution it would write an empty value and the step would pass.
+      run: |
+        flags=$(sh scripts/turbo-scope.sh "$BASE_SHA")
+        echo "TURBO_FLAGS=$flags" >> "$GITHUB_ENV"
 
     - name: Run ${{ inputs.task }}
       run: ${{ inputs.command }}
