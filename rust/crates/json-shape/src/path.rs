@@ -1,5 +1,6 @@
 //! Where in a document a problem is, and the problems a validation collects.
 
+use std::collections::HashMap;
 use std::error::Error;
 use std::fmt;
 
@@ -10,9 +11,14 @@ pub enum PathSegment {
     Index(usize),
 }
 
-/// The steps from the root of a document to a value inside it.
+/// The steps from the root of a document to a value inside it. It also carries what a conversion of one document
+/// remembers between its nodes (which alternative of a union accepted which value), so that choosing among
+/// alternatives costs each value once.
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
-pub struct Path(Vec<PathSegment>);
+pub struct Path {
+    segments: Vec<PathSegment>,
+    pub(crate) memo: HashMap<(usize, usize), bool>,
+}
 
 impl Path {
     pub fn new() -> Self {
@@ -20,19 +26,19 @@ impl Path {
     }
 
     pub fn push_key(&mut self, key: &str) {
-        self.0.push(PathSegment::Key(key.to_owned()));
+        self.segments.push(PathSegment::Key(key.to_owned()));
     }
 
     pub fn push_index(&mut self, index: usize) {
-        self.0.push(PathSegment::Index(index));
+        self.segments.push(PathSegment::Index(index));
     }
 
     pub fn pop(&mut self) {
-        self.0.pop();
+        self.segments.pop();
     }
 
     pub fn segments(&self) -> &[PathSegment] {
-        &self.0
+        &self.segments
     }
 }
 

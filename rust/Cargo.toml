@@ -15,7 +15,8 @@ proc-macro2 = "1"
 quote = "1"
 serde = "1"
 serde_json = "1"
-syn = { version = "2", default-features = false, features = ["clone-impls", "derive", "parsing", "printing", "proc-macro"] }
+# The lock holds the newest release old enough for the install policy's release-age rule, and moves up by the same rule.
+syn = { version = "3", default-features = false, features = ["clone-impls", "derive", "parsing", "printing", "proc-macro"] }
 
 [workspace.lints.rust]
 # Binding crates that need wasm-bindgen's generated FFI relax this in their own manifest, not here.

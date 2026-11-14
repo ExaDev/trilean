@@ -1,5 +1,5 @@
 //! An ordered JSON value. Object keys keep the order of the input, which `serde_json::Value` does not without its
-//! `preserve_order` feature (and that feature adds `indexmap` to the graph), so opaque payloads round-trip as written.
+//! `preserve_order` feature (and that feature adds `indexmap` to the graph), so opaque payloads keep their key order.
 
 use std::collections::HashMap;
 use std::fmt;
@@ -10,9 +10,20 @@ use serde::ser::{Serialize, SerializeMap, SerializeSeq, Serializer};
 /// The largest integer that a JavaScript number, and so a JSON document read by JavaScript, holds exactly.
 pub const MAX_SAFE_INTEGER: f64 = 9_007_199_254_740_991.0;
 
-/// A JSON value. Numbers are finite `f64`s, as `JSON.parse` produces them, so an integer above 2^53 is rounded when
-/// it is read, which is why no integer type accepts one. An object is a list of pairs in input order, and a
-/// duplicate key keeps its first position and its last value, as `JSON.parse` does.
+/// A JSON value.
+///
+/// Numbers are finite `f64`s, as `JSON.parse` produces them: an integer above 2^53 is rounded when it is read (which
+/// is why no integer type accepts one), `-0` and `0` are one value, and a number is not distinguishable from the
+/// same number written another way (`1e2` and `100`), so a document does not round-trip digit for digit.
+///
+/// An object is a list of pairs in input order, and a duplicate key keeps its first position and its last value, as
+/// `JSON.parse` does. `==` (from `PartialEq`) compares objects in that order and numbers as `f64`s; use
+/// [`Value::json_equal`] for JSON Schema's equality, which ignores key order.
+///
+/// Reading goes through serde, so the parser's own limits apply: `serde_json` refuses nesting deeper than 128 levels
+/// and an unpaired surrogate escape, which `JSON.parse` and so a JSON Schema validator in JavaScript accept. A value
+/// built another way has no depth limit, and `Display`, `json_equal`, `Drop` and validation recurse.
+/// [`Value::get`] is linear in the size of the object.
 #[derive(Clone, Debug, PartialEq)]
 pub enum Value {
     Null,
@@ -80,41 +91,60 @@ impl Value {
     }
 
     /// Whether two values are equal as JSON Schema defines it: objects regardless of key order, numbers by value.
+    /// Linear in the size of the values, times a logarithm for sorting object keys.
     pub fn json_equal(&self, other: &Value) -> bool {
-        match (self, other) {
-            (Value::Array(left), Value::Array(right)) => {
-                left.len() == right.len()
-                    && left
-                        .iter()
-                        .zip(right)
-                        .all(|(left, right)| left.json_equal(right))
+        self.canonical() == other.canonical()
+    }
+
+    /// The text of the value with object keys in sorted order, so two values are equal as JSON Schema defines it
+    /// exactly when their canonical texts are equal.
+    pub fn canonical(&self) -> String {
+        match self {
+            Value::Array(items) => {
+                let parts: Vec<String> = items.iter().map(Value::canonical).collect();
+                format!("[{}]", parts.join(","))
             }
-            (Value::Object(left), Value::Object(right)) => {
-                left.len() == right.len()
-                    && left.iter().all(|(key, value)| {
-                        other
-                            .get(key)
-                            .is_some_and(|counterpart| value.json_equal(counterpart))
+            Value::Object(pairs) => {
+                let mut sorted: Vec<&(String, Value)> = pairs.iter().collect();
+                sorted.sort_by(|left, right| left.0.cmp(&right.0));
+                let parts: Vec<String> = sorted
+                    .iter()
+                    .map(|(key, value)| {
+                        format!("{}:{}", Value::String(key.clone()), value.canonical())
                     })
+                    .collect();
+                format!("{{{}}}", parts.join(","))
             }
-            _ => self == other,
+            other => other.to_string(),
         }
     }
 }
 
+/// A number as `JSON.stringify` writes it: digits for magnitudes from 1e-6 up to 1e21, an exponent outside that, and
+/// `0` for `-0`.
+fn number_text(number: f64) -> String {
+    if number == 0.0 {
+        return "0".to_owned();
+    }
+    if (1e-6..1e21).contains(&number.abs()) {
+        return format!("{number}");
+    }
+    let text = format!("{number:e}");
+    match text.split_once('e') {
+        Some((mantissa, exponent)) if !exponent.starts_with('-') => {
+            format!("{mantissa}e+{exponent}")
+        }
+        _ => text,
+    }
+}
+
 impl fmt::Display for Value {
-    /// Compact JSON text. A whole number is written without a fraction, as `JSON.stringify` writes it.
+    /// Compact JSON text, with numbers written as `JSON.stringify` writes them.
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Value::Null => formatter.write_str("null"),
             Value::Bool(flag) => write!(formatter, "{flag}"),
-            Value::Number(number) => {
-                if number.fract() == 0.0 && number.abs() <= MAX_SAFE_INTEGER {
-                    write!(formatter, "{}", *number as i64)
-                } else {
-                    write!(formatter, "{number}")
-                }
-            }
+            Value::Number(number) => formatter.write_str(&number_text(*number)),
             Value::String(text) => {
                 formatter.write_str(&serde_json::to_string(text).map_err(|_| fmt::Error)?)
             }

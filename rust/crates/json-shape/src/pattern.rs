@@ -50,10 +50,28 @@ struct Item {
     max: Option<usize>,
 }
 
-/// A compiled pattern.
+/// One state of the automaton a pattern compiles to. A state that consumes a character names the state to go to next.
+#[derive(Clone, Debug)]
+enum State {
+    Char(char, usize),
+    Any(usize),
+    Class {
+        negated: bool,
+        ranges: Vec<(char, char)>,
+        next: usize,
+    },
+    Split(usize, usize),
+    Start(usize),
+    End(usize),
+    Match,
+}
+
+/// A compiled pattern, matched by simulating a Thompson automaton: no backtracking and no recursion over the text,
+/// so matching costs time linear in the text times the size of the pattern, and constant stack, whatever the text.
 #[derive(Clone, Debug)]
 pub struct Pattern {
-    alternatives: Vec<Vec<Item>>,
+    states: Vec<State>,
+    entry: usize,
 }
 
 struct Parser<'a> {
@@ -209,6 +227,94 @@ impl Parser<'_> {
     }
 }
 
+fn push(states: &mut Vec<State>, state: State) -> usize {
+    states.push(state);
+    states.len() - 1
+}
+
+fn compile_alternatives(alternatives: &[Vec<Item>], next: usize, states: &mut Vec<State>) -> usize {
+    let mut entries: Vec<usize> = alternatives
+        .iter()
+        .map(|sequence| compile_sequence(sequence, next, states))
+        .collect();
+    let mut entry = entries.pop().unwrap_or(next);
+    while let Some(earlier) = entries.pop() {
+        entry = push(states, State::Split(earlier, entry));
+    }
+    entry
+}
+
+fn compile_sequence(items: &[Item], next: usize, states: &mut Vec<State>) -> usize {
+    items.iter().rev().fold(next, |following, item| {
+        compile_item(item, following, states)
+    })
+}
+
+fn compile_item(item: &Item, next: usize, states: &mut Vec<State>) -> usize {
+    match (item.min, item.max) {
+        (0, Some(1)) => {
+            let atom = compile_atom(&item.atom, next, states);
+            push(states, State::Split(atom, next))
+        }
+        (0, None) => {
+            let split = push(states, State::Split(next, next));
+            let atom = compile_atom(&item.atom, split, states);
+            states[split] = State::Split(atom, next);
+            split
+        }
+        (1, None) => {
+            let split = push(states, State::Split(next, next));
+            let atom = compile_atom(&item.atom, split, states);
+            states[split] = State::Split(atom, next);
+            atom
+        }
+        _ => compile_atom(&item.atom, next, states),
+    }
+}
+
+fn compile_atom(atom: &Atom, next: usize, states: &mut Vec<State>) -> usize {
+    match atom {
+        Atom::Char(expected) => push(states, State::Char(*expected, next)),
+        Atom::AnyChar => push(states, State::Any(next)),
+        Atom::Class { negated, ranges } => push(
+            states,
+            State::Class {
+                negated: *negated,
+                ranges: ranges.clone(),
+                next,
+            },
+        ),
+        Atom::Group(alternatives) => compile_alternatives(alternatives, next, states),
+        Atom::Start => push(states, State::Start(next)),
+        Atom::End => push(states, State::End(next)),
+    }
+}
+
+/// The states reached so far at one position in the text.
+struct Frontier {
+    stamp: Vec<usize>,
+    generation: usize,
+    consuming: Vec<usize>,
+    matched: bool,
+}
+
+impl Frontier {
+    fn new(size: usize) -> Self {
+        Frontier {
+            stamp: vec![0; size],
+            generation: 1,
+            consuming: Vec::new(),
+            matched: false,
+        }
+    }
+
+    fn clear(&mut self) {
+        self.generation += 1;
+        self.consuming.clear();
+        self.matched = false;
+    }
+}
+
 impl Pattern {
     /// Compiles `pattern`, or says which part of it is outside the supported subset.
     pub fn new(pattern: &str) -> Result<Pattern, PatternError> {
@@ -221,72 +327,107 @@ impl Pattern {
         if parser.position != parser.chars.len() {
             return parser.fail("an unmatched closing parenthesis");
         }
-        Ok(Pattern { alternatives })
+        let mut states = vec![State::Match];
+        let entry = compile_alternatives(&alternatives, 0, &mut states);
+        Ok(Pattern { states, entry })
     }
 
     /// Whether the pattern matches anywhere in `text`, as `new RegExp(pattern, "u").test(text)` does.
     pub fn is_match(&self, text: &str) -> bool {
+        self.is_match_with_work(text).0
+    }
+
+    /// [`Pattern::is_match`] and the number of automaton states it visited, which is at most a constant times the
+    /// text's length plus one, times the number of states of the pattern.
+    pub fn is_match_with_work(&self, text: &str) -> (bool, u64) {
         let input: Vec<char> = text.chars().collect();
-        let matcher = Matcher { input: &input };
-        (0..=input.len()).any(|start| matcher.alternatives(&self.alternatives, start, &|_| true))
-    }
-}
-
-struct Matcher<'a> {
-    input: &'a [char],
-}
-
-impl Matcher<'_> {
-    fn alternatives(
-        &self,
-        alternatives: &[Vec<Item>],
-        at: usize,
-        then: &dyn Fn(usize) -> bool,
-    ) -> bool {
-        alternatives
-            .iter()
-            .any(|sequence| self.sequence(sequence, at, then))
-    }
-
-    fn sequence(&self, items: &[Item], at: usize, then: &dyn Fn(usize) -> bool) -> bool {
-        match items.split_first() {
-            None => then(at),
-            Some((item, rest)) => self.repeat(item, 0, at, &|next| self.sequence(rest, next, then)),
-        }
-    }
-
-    fn repeat(&self, item: &Item, count: usize, at: usize, then: &dyn Fn(usize) -> bool) -> bool {
-        if item.max.is_none_or(|max| count < max) {
-            let advanced = self.atom(&item.atom, at, &|next| {
-                // An iteration that consumed nothing cannot lead anywhere new once the minimum is met.
-                (next != at || count < item.min) && self.repeat(item, count + 1, next, then)
-            });
-            if advanced {
-                return true;
+        let mut work = 0;
+        let mut stack = Vec::new();
+        let mut current = Frontier::new(self.states.len());
+        let mut following = Frontier::new(self.states.len());
+        for position in 0..=input.len() {
+            // A match may start at any position, so the start of the pattern joins the states already reached.
+            self.close(
+                self.entry,
+                position,
+                input.len(),
+                &mut current,
+                &mut stack,
+                &mut work,
+            );
+            if current.matched {
+                return (true, work);
             }
-        }
-        count >= item.min && then(at)
-    }
-
-    fn atom(&self, atom: &Atom, at: usize, then: &dyn Fn(usize) -> bool) -> bool {
-        let current = self.input.get(at).copied();
-        match atom {
-            Atom::Char(expected) => current == Some(*expected) && then(at + 1),
-            Atom::AnyChar => {
-                current.is_some_and(|found| !matches!(found, '\n' | '\r' | '\u{2028}' | '\u{2029}'))
-                    && then(at + 1)
-            }
-            Atom::Class { negated, ranges } => {
-                current.is_some_and(|found| {
-                    ranges
+            let Some(&found) = input.get(position) else {
+                break;
+            };
+            following.clear();
+            for &state in &current.consuming {
+                work += 1;
+                let next = match &self.states[state] {
+                    State::Char(expected, next) if *expected == found => Some(*next),
+                    State::Any(next) if !matches!(found, '\n' | '\r' | '\u{2028}' | '\u{2029}') => {
+                        Some(*next)
+                    }
+                    State::Class {
+                        negated,
+                        ranges,
+                        next,
+                    } if ranges
                         .iter()
                         .any(|(from, to)| (*from..=*to).contains(&found))
-                        != *negated
-                }) && then(at + 1)
+                        != *negated =>
+                    {
+                        Some(*next)
+                    }
+                    _ => None,
+                };
+                if let Some(next) = next {
+                    self.close(
+                        next,
+                        position + 1,
+                        input.len(),
+                        &mut following,
+                        &mut stack,
+                        &mut work,
+                    );
+                }
             }
-            Atom::Group(alternatives) => self.alternatives(alternatives, at, then),
-            Atom::Start => at == 0 && then(at),
-            Atom::End => at == self.input.len() && then(at),
+            std::mem::swap(&mut current, &mut following);
+        }
+        (false, work)
+    }
+
+    /// Adds `entry` and every state reachable from it without consuming a character to `frontier`.
+    fn close(
+        &self,
+        entry: usize,
+        position: usize,
+        length: usize,
+        frontier: &mut Frontier,
+        stack: &mut Vec<usize>,
+        work: &mut u64,
+    ) {
+        stack.push(entry);
+        while let Some(state) = stack.pop() {
+            if frontier.stamp[state] == frontier.generation {
+                continue;
+            }
+            frontier.stamp[state] = frontier.generation;
+            *work += 1;
+            match &self.states[state] {
+                State::Split(first, second) => {
+                    stack.push(*second);
+                    stack.push(*first);
+                }
+                State::Start(next) if position == 0 => stack.push(*next),
+                State::End(next) if position == length => stack.push(*next),
+                State::Start(_) | State::End(_) => {}
+                State::Match => frontier.matched = true,
+                State::Char(..) | State::Any(_) | State::Class { .. } => {
+                    frontier.consuming.push(state)
+                }
+            }
         }
     }
 }
@@ -339,6 +480,33 @@ mod tests {
             assert!(Pattern::new(source).is_err(), "{source} must be refused");
         }
         assert!(Pattern::new(r"[a\-z]").is_ok());
+    }
+
+    #[test]
+    fn matching_is_linear_in_the_text_and_uses_no_stack_per_character() {
+        let long = "a".repeat(200_000);
+        assert!(matches("^[a-z]*$", &long));
+        assert!(!matches("^[a-z]*$", &format!("{long}!")));
+        let pattern = Pattern::new("^(?:a|a)*$").expect("a supported pattern");
+        let (_, short) = pattern.is_match_with_work(&format!("{}b", "a".repeat(1_000)));
+        let (_, double) = pattern.is_match_with_work(&format!("{}b", "a".repeat(2_000)));
+        assert!(
+            short <= 12 * 1_001,
+            "{short} state visits for 1001 characters"
+        );
+        assert!(
+            double <= 12 * 2_001,
+            "{double} state visits for 2001 characters"
+        );
+        assert!(double < 3 * short, "{double} is not about twice {short}");
+    }
+
+    #[test]
+    fn an_unanchored_search_is_linear_too() {
+        let pattern = Pattern::new("[0-9]+x").expect("a supported pattern");
+        let (_, short) = pattern.is_match_with_work(&"1".repeat(1_000));
+        let (_, double) = pattern.is_match_with_work(&"1".repeat(2_000));
+        assert!(double < 3 * short, "{double} is not about twice {short}");
     }
 
     #[test]

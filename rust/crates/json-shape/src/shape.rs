@@ -3,7 +3,7 @@
 
 use std::borrow::Cow;
 
-use crate::def::{Definitions, Kind, Registry, ShapeDef};
+use crate::def::{Class, Definitions, Kind, Registry, ShapeDef};
 use crate::path::{Issues, Path};
 use crate::validate::check;
 use crate::value::{MAX_SAFE_INTEGER, Value};
@@ -12,6 +12,15 @@ use crate::value::{MAX_SAFE_INTEGER, Value};
 pub trait Shape: Sized {
     /// Whether a field of this type may be absent from its object.
     const OPTIONAL: bool = false;
+
+    /// The class of the shape, which decides at compile time which constraints a field of this type may carry.
+    const CLASS: Class;
+
+    /// Whether the type is a struct, which is what a flattened field and a newtype variant of a tagged enum must be.
+    const IS_OBJECT: bool = false;
+
+    /// The keys of the object this type is, own and flattened, which a derive checks for duplicates at compile time.
+    const KEYS: &'static [&'static str] = &[];
 
     /// How a field of this type is described: a named type gives a reference to its definition, a built-in gives
     /// its shape inline.
@@ -69,6 +78,7 @@ fn mismatch<T>(path: &Path, expected: &str) -> Result<T, Issues> {
 }
 
 impl Shape for String {
+    const CLASS: Class = Class::String;
     fn reference() -> ShapeDef {
         ShapeDef::new(Kind::String {
             min_length: None,
@@ -85,6 +95,7 @@ impl Shape for String {
 }
 
 impl Shape for bool {
+    const CLASS: Class = Class::Bool;
     fn reference() -> ShapeDef {
         ShapeDef::new(Kind::Bool)
     }
@@ -98,6 +109,7 @@ impl Shape for bool {
 }
 
 impl Shape for f64 {
+    const CLASS: Class = Class::Number;
     fn reference() -> ShapeDef {
         ShapeDef::new(Kind::Number {
             min: None,
@@ -115,6 +127,7 @@ impl Shape for f64 {
 
 /// Any JSON value, kept in order.
 impl Shape for Value {
+    const CLASS: Class = Class::Any;
     fn reference() -> ShapeDef {
         ShapeDef::new(Kind::Any)
     }
@@ -127,6 +140,7 @@ impl Shape for Value {
 macro_rules! integer_shape {
     ($type:ty, $min:expr, $max:expr, $convert:expr) => {
         impl Shape for $type {
+            const CLASS: Class = Class::Integer;
             fn reference() -> ShapeDef {
                 ShapeDef::new(Kind::Integer {
                     min: Some($min),
@@ -161,6 +175,7 @@ integer_shape!(usize, 0.0, MAX_SAFE_INTEGER, |n| usize::try_from(n).ok());
 integer_shape!(i64, -MAX_SAFE_INTEGER, MAX_SAFE_INTEGER, Some);
 
 impl<T: Shape> Shape for Vec<T> {
+    const CLASS: Class = Class::Array;
     fn reference() -> ShapeDef {
         ShapeDef::new(Kind::Array {
             items: Box::new(T::reference()),
@@ -187,10 +202,12 @@ impl<T: Shape> Shape for Vec<T> {
     }
 }
 
-/// An absent field, and so an optional one. A field that is present is described by `T` alone, so `null` is not an
+/// An absent field, and so an optional one. It is not an object type for a flattened field, whose fields would then be
+/// optional as a group, which a shape cannot say. A field that is present is described by `T` alone, so `null` is not an
 /// accepted spelling of absence.
 impl<T: Shape> Shape for Option<T> {
     const OPTIONAL: bool = true;
+    const CLASS: Class = T::CLASS;
     fn reference() -> ShapeDef {
         T::reference()
     }
@@ -206,6 +223,9 @@ impl<T: Shape> Shape for Option<T> {
 }
 
 impl<T: Shape> Shape for Box<T> {
+    const CLASS: Class = T::CLASS;
+    const IS_OBJECT: bool = T::IS_OBJECT;
+    const KEYS: &'static [&'static str] = T::KEYS;
     fn reference() -> ShapeDef {
         T::reference()
     }
@@ -228,6 +248,7 @@ impl<T: Shape> Shape for Box<T> {
 pub struct Map<T>(pub Vec<(String, T)>);
 
 impl<T: Shape> Shape for Map<T> {
+    const CLASS: Class = Class::Map;
     fn reference() -> ShapeDef {
         ShapeDef::new(Kind::Map {
             values: Box::new(T::reference()),
@@ -258,6 +279,7 @@ impl<T: Shape> Shape for Map<T> {
 pub struct OpenObject(pub Vec<(String, Value)>);
 
 impl Shape for OpenObject {
+    const CLASS: Class = Class::OpenObject;
     fn reference() -> ShapeDef {
         ShapeDef::new(Kind::Object(crate::def::ObjectDef::default()))
     }

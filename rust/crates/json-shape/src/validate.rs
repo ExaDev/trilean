@@ -1,5 +1,11 @@
 //! Checking a value against a shape. The rules here and the keywords the schema emitter writes are the two readings
-//! of one descriptor, and the agreement table in `tests/agreement.rs` keeps them equal.
+//! of one descriptor, and the agreement tables in `tests/agreement.rs` keep them equal.
+//!
+//! The work of a check is linear in the size of the document, whatever the shape: a union decides among its
+//! alternatives by first discarding those that cannot match the value's kind or lack a required key, and remembers
+//! which alternative accepted which value, so two alternatives that descend into the same child check it once.
+
+use std::collections::{HashMap, HashSet};
 
 use crate::def::{Definitions, Kind, ObjectDef, ShapeDef};
 use crate::path::{Issue, Path};
@@ -8,13 +14,19 @@ use crate::value::Value;
 
 /// Every way `value` does not match `shape`, with the path of the value each is about. Empty when it matches.
 pub fn check(definitions: &Definitions, shape: &ShapeDef, value: &Value) -> Vec<Issue> {
-    let mut checker = Checker {
-        definitions,
-        path: Path::new(),
-        issues: Vec::new(),
-    };
+    check_with_work(definitions, shape, value).0
+}
+
+/// [`check`] and the number of shapes it visited, which is at most a constant times the size of the document times
+/// the size of the shape.
+pub fn check_with_work(
+    definitions: &Definitions,
+    shape: &ShapeDef,
+    value: &Value,
+) -> (Vec<Issue>, u64) {
+    let mut checker = Checker::new(definitions, HashMap::new());
     checker.shape(shape, value);
-    checker.issues
+    (checker.issues, checker.work)
 }
 
 /// Whether `value` matches `shape`.
@@ -22,13 +34,57 @@ pub fn accepts(definitions: &Definitions, shape: &ShapeDef, value: &Value) -> bo
     check(definitions, shape, value).is_empty()
 }
 
+/// Whether `alternative` accepts `value`, remembering the answer in the memory `path` carries, so a conversion that
+/// asks the same question at every node of a document asks each once.
+pub(crate) fn decide(
+    path: &mut Path,
+    definitions: &Definitions,
+    alternative: &ShapeDef,
+    value: &Value,
+) -> bool {
+    let mut checker = Checker::new(definitions, std::mem::take(&mut path.memo));
+    let accepted = checker.accepts_memo(alternative, value);
+    path.memo = checker.memo;
+    accepted
+}
+
+/// A JSON string literal, which is how every message writes a string, so no message depends on Rust's own escaping.
+fn json_text(text: &str) -> String {
+    Value::String(text.to_owned()).to_string()
+}
+
+fn json_list(items: &[String]) -> String {
+    Value::Array(
+        items
+            .iter()
+            .map(|item| Value::String(item.clone()))
+            .collect(),
+    )
+    .to_string()
+}
+
+/// How deep a union may nest before its kind pre-filter stops looking, so a recursive definition cannot loop.
+const FILTER_DEPTH: usize = 16;
+
 struct Checker<'a> {
     definitions: &'a Definitions,
     path: Path,
     issues: Vec<Issue>,
+    memo: HashMap<(usize, usize), bool>,
+    work: u64,
 }
 
-impl Checker<'_> {
+impl<'a> Checker<'a> {
+    fn new(definitions: &'a Definitions, memo: HashMap<(usize, usize), bool>) -> Self {
+        Checker {
+            definitions,
+            path: Path::new(),
+            issues: Vec::new(),
+            memo,
+            work: 0,
+        }
+    }
+
     fn report(&mut self, message: impl Into<String>) {
         self.issues.push(Issue {
             path: self.path.segments().to_vec(),
@@ -40,7 +96,58 @@ impl Checker<'_> {
         self.report(format!("expected {expected}, found {}", value.type_name()));
     }
 
+    /// Whether `shape` accepts `value`, asked once per pair: the addresses name the pair, and both outlive the check.
+    fn accepts_memo(&mut self, shape: &ShapeDef, value: &Value) -> bool {
+        let key = (
+            std::ptr::from_ref(shape) as usize,
+            std::ptr::from_ref(value) as usize,
+        );
+        if let Some(known) = self.memo.get(&key) {
+            return *known;
+        }
+        let before = self.issues.len();
+        self.shape(shape, value);
+        let accepted = self.issues.len() == before;
+        self.issues.truncate(before);
+        self.memo.insert(key, accepted);
+        accepted
+    }
+
+    /// Whether `value` could match `shape`: false only when it certainly does not, from its kind and the keys a
+    /// closed or required field demands. Cheap and never descends into children.
+    fn may_match(&self, shape: &ShapeDef, value: &Value, depth: usize) -> bool {
+        match &shape.kind {
+            Kind::Any => true,
+            Kind::Null => *value == Value::Null,
+            Kind::Bool | Kind::ConstBool(_) => matches!(value, Value::Bool(_)),
+            Kind::ConstString(_) | Kind::Enum(_) | Kind::String { .. } => {
+                matches!(value, Value::String(_))
+            }
+            Kind::Integer { .. } | Kind::Number { .. } => matches!(value, Value::Number(_)),
+            Kind::Array { .. } => matches!(value, Value::Array(_)),
+            Kind::Map { .. } | Kind::Tagged { .. } => matches!(value, Value::Object(_)),
+            Kind::Object(object) => {
+                matches!(value, Value::Object(_))
+                    && object
+                        .fields
+                        .iter()
+                        .all(|field| !field.required || value.get(&field.name).is_some())
+            }
+            Kind::OneOf(alternatives) => {
+                depth >= FILTER_DEPTH
+                    || alternatives
+                        .iter()
+                        .any(|alternative| self.may_match(alternative, value, depth + 1))
+            }
+            Kind::Ref(name) => match self.definitions.get(name) {
+                Some(target) if depth < FILTER_DEPTH => self.may_match(target, value, depth + 1),
+                _ => true,
+            },
+        }
+    }
+
     fn shape(&mut self, shape: &ShapeDef, value: &Value) {
+        self.work += 1;
         match &shape.kind {
             Kind::Any => {}
             Kind::Null => {
@@ -60,7 +167,7 @@ impl Checker<'_> {
             }
             Kind::ConstString(expected) => {
                 if value.as_str() != Some(expected) {
-                    self.report(format!("expected {expected:?}"));
+                    self.report(format!("expected {}", json_text(expected)));
                 }
             }
             Kind::Enum(options) => {
@@ -68,7 +175,7 @@ impl Checker<'_> {
                     .as_str()
                     .is_some_and(|text| options.iter().any(|option| option == text))
                 {
-                    self.report(format!("expected one of {options:?}"));
+                    self.report(format!("expected one of {}", json_list(options)));
                 }
             }
             Kind::String {
@@ -93,7 +200,7 @@ impl Checker<'_> {
             Kind::Tagged { tag, variants } => self.tagged(tag, variants, value),
             Kind::Ref(name) => match self.definitions.get(name) {
                 Some(target) => self.shape(target, value),
-                None => self.report(format!("the definition {name} does not exist")),
+                None => self.report(format!("the definition {} does not exist", json_text(name))),
             },
         }
     }
@@ -158,14 +265,14 @@ impl Checker<'_> {
         {
             self.report(format!("expected at most {most} items"));
         }
-        if unique
-            && elements.iter().enumerate().any(|(position, element)| {
-                elements[..position]
-                    .iter()
-                    .any(|earlier| earlier.json_equal(element))
-            })
-        {
-            self.report("expected every item to be different");
+        if unique {
+            let mut seen = HashSet::new();
+            if elements
+                .iter()
+                .any(|element| !seen.insert(element.canonical()))
+            {
+                self.report("expected every item to be different");
+            }
         }
         for (position, element) in elements.iter().enumerate() {
             self.path.push_index(position);
@@ -221,7 +328,10 @@ impl Checker<'_> {
                     self.path.pop();
                 }
                 None if field.required => {
-                    self.report(format!("missing the required property {}", field.name))
+                    self.report(format!(
+                        "missing the required property {}",
+                        json_text(&field.name)
+                    ));
                 }
                 None => {}
             }
@@ -241,32 +351,28 @@ impl Checker<'_> {
             }
             for other in required {
                 if value.get(other).is_none() {
-                    self.report(format!("{key} requires {other}"));
+                    self.report(format!("{} requires {}", json_text(key), json_text(other)));
                 }
             }
         }
     }
 
     fn one_of(&mut self, alternatives: &[ShapeDef], value: &Value) {
+        let candidates: Vec<&ShapeDef> = alternatives
+            .iter()
+            .filter(|alternative| self.may_match(alternative, value, 0))
+            .collect();
         let mut matching = 0;
-        let mut closest: Option<Vec<Issue>> = None;
-        for alternative in alternatives {
-            let found = check(self.definitions, alternative, value);
-            if found.is_empty() {
+        for candidate in &candidates {
+            if self.accepts_memo(candidate, value) {
                 matching += 1;
-            } else if closest.as_ref().is_none_or(|best| found.len() < best.len()) {
-                closest = Some(found);
             }
         }
-        match (matching, closest) {
+        match (matching, candidates.as_slice()) {
             (1, _) => {}
-            (0, closest) => {
-                let detail = closest
-                    .and_then(|issues| issues.into_iter().next())
-                    .map(|issue| format!(" (the closest: {issue})"))
-                    .unwrap_or_default();
-                self.report(format!("matches none of the alternatives{detail}"));
-            }
+            // The one alternative the value could be is the one it fails, so its issues, at their own paths, say why.
+            (0, [only]) => self.shape(only, value),
+            (0, _) => self.report("matches none of the alternatives"),
             _ => self.report("matches more than one alternative"),
         }
     }
@@ -285,8 +391,8 @@ impl Checker<'_> {
             Some((_, variant)) => self.shape(variant, value),
             None => {
                 self.path.push_key(tag);
-                let names: Vec<&str> = variants.iter().map(|(name, _)| name.as_str()).collect();
-                self.report(format!("expected one of {names:?}"));
+                let names: Vec<String> = variants.iter().map(|(name, _)| name.clone()).collect();
+                self.report(format!("expected one of {}", json_list(&names)));
                 self.path.pop();
             }
         }

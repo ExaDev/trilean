@@ -1214,5 +1214,265 @@
     },
     "type": "Patterned",
     "valid": true
+  },
+  {
+    "case": "the renamed required key",
+    "document": {
+      "firstName": "x"
+    },
+    "type": "Renamed",
+    "valid": true
+  },
+  {
+    "case": "the struct-level rename_all does not accept the original name",
+    "document": {
+      "first_name": "x"
+    },
+    "type": "Renamed",
+    "valid": false
+  },
+  {
+    "case": "a field renamed by itself",
+    "document": {
+      "firstName": "x",
+      "other-key": 1
+    },
+    "type": "Renamed",
+    "valid": true
+  },
+  {
+    "case": "the original name of a renamed field",
+    "document": {
+      "firstName": "x",
+      "other": 1
+    },
+    "type": "Renamed",
+    "valid": false
+  },
+  {
+    "case": "a defaulted field present",
+    "document": {
+      "firstName": "x",
+      "flag": true
+    },
+    "type": "Renamed",
+    "valid": true
+  },
+  {
+    "case": "a defaulted field of the wrong type",
+    "document": {
+      "firstName": "x",
+      "flag": "no"
+    },
+    "type": "Renamed",
+    "valid": false
+  },
+  {
+    "case": "a renamed field of the wrong type",
+    "document": {
+      "firstName": "x",
+      "other-key": "1"
+    },
+    "type": "Renamed",
+    "valid": false
+  },
+  {
+    "case": "a required key missing",
+    "document": {
+      "flag": true
+    },
+    "type": "Renamed",
+    "valid": false
+  },
+  {
+    "case": "a newtype variant over a closed struct",
+    "document": {
+      "kind": "Plain",
+      "name": "a"
+    },
+    "type": "Wrapper",
+    "valid": true
+  },
+  {
+    "case": "a newtype variant over a closed struct with an extra key",
+    "document": {
+      "kind": "Plain",
+      "name": "a",
+      "z": 1
+    },
+    "type": "Wrapper",
+    "valid": false
+  },
+  {
+    "case": "a newtype variant over an open struct with an extra key",
+    "document": {
+      "kind": "Other",
+      "name": "a",
+      "z": 1
+    },
+    "type": "Wrapper",
+    "valid": true
+  },
+  {
+    "case": "a newtype variant missing the struct's field",
+    "document": {
+      "kind": "Plain"
+    },
+    "type": "Wrapper",
+    "valid": false
+  },
+  {
+    "case": "an unknown kind",
+    "document": {
+      "kind": "Third",
+      "name": "a"
+    },
+    "type": "Wrapper",
+    "valid": false
+  },
+  {
+    "case": "no kind",
+    "document": {
+      "name": "a"
+    },
+    "type": "Wrapper",
+    "valid": false
+  },
+  {
+    "case": "a number, which only the first alternative accepts",
+    "document": 3,
+    "type": "Overlap",
+    "valid": true
+  },
+  {
+    "case": "a string both string alternatives accept",
+    "document": "a",
+    "type": "Overlap",
+    "valid": false
+  },
+  {
+    "case": "a string only one string alternative accepts",
+    "document": "b",
+    "type": "Overlap",
+    "valid": true
+  },
+  {
+    "case": "a boolean no alternative accepts",
+    "document": true,
+    "type": "Overlap",
+    "valid": false
+  },
+  {
+    "case": "null no alternative accepts",
+    "document": null,
+    "type": "Overlap",
+    "valid": false
+  },
+  {
+    "case": "no properties",
+    "document": {},
+    "type": "Sparse",
+    "valid": false
+  },
+  {
+    "case": "one property",
+    "document": {
+      "a": 1
+    },
+    "type": "Sparse",
+    "valid": false
+  },
+  {
+    "case": "two properties",
+    "document": {
+      "a": 1,
+      "b": 2
+    },
+    "type": "Sparse",
+    "valid": true
+  },
+  {
+    "case": "two unknown properties count",
+    "document": {
+      "y": 1,
+      "z": 2
+    },
+    "type": "Sparse",
+    "valid": true
+  },
+  {
+    "case": "a property of the wrong type",
+    "document": {
+      "a": "x",
+      "b": 2
+    },
+    "type": "Sparse",
+    "valid": false
+  },
+  {
+    "case": "a word at its minimum length",
+    "document": "ab",
+    "type": "Shaped",
+    "valid": true
+  },
+  {
+    "case": "a word below its minimum length",
+    "document": "a",
+    "type": "Shaped",
+    "valid": false
+  },
+  {
+    "case": "a count in range",
+    "document": 2,
+    "type": "Shaped",
+    "valid": true
+  },
+  {
+    "case": "a count above its range",
+    "document": 4,
+    "type": "Shaped",
+    "valid": false
+  },
+  {
+    "case": "a count below its range",
+    "document": 0,
+    "type": "Shaped",
+    "valid": false
+  },
+  {
+    "case": "null",
+    "document": null,
+    "type": "Shaped",
+    "valid": true
+  },
+  {
+    "case": "an object",
+    "document": {},
+    "type": "Shaped",
+    "valid": false
+  },
+  {
+    "case": "a duplicate key keeps its last value, which is invalid",
+    "text": "{\"name\":\"a\",\"name\":1}",
+    "type": "Closed",
+    "valid": false
+  },
+  {
+    "case": "a duplicate key keeps its last value, which is valid",
+    "text": "{\"name\":1,\"name\":\"a\"}",
+    "type": "Closed",
+    "valid": true
+  },
+  {
+    "case": "a tag written twice keeps its last value",
+    "text": "{\"kind\":\"dot\",\"kind\":\"circle\",\"radius\":1}",
+    "type": "Figure",
+    "valid": true
+  },
+  {
+    "case": "a tag written twice, the last of which is unknown",
+    "text": "{\"kind\":\"circle\",\"radius\":1,\"kind\":\"nope\"}",
+    "type": "Figure",
+    "valid": false
   }
 ]
