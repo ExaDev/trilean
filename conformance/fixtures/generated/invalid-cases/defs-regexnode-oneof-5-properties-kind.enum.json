@@ -1,0 +1,19 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "ast": {
+          "kind": "not-an-allowed-value",
+          "operand": {
+            "codeUnit": 97,
+            "kind": "literal"
+          }
+        }
+      },
+      "from": "parser.unit.test.ts: quantifiers > parses *, +, ?",
+      "id": "parse.quantifiers.parses.1",
+      "kind": "regex-parse",
+      "pattern": "a*"
+    }
+  ]
+}

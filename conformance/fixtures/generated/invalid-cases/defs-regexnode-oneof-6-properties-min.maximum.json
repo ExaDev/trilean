@@ -1,0 +1,21 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "ast": {
+          "kind": "repeat",
+          "max": 9007199254740991,
+          "min": 9007199254740992,
+          "operand": {
+            "codeUnit": 65535,
+            "kind": "literal"
+          }
+        }
+      },
+      "from": "x.unit.test.ts: a fixture",
+      "id": "fixture.max-integers",
+      "kind": "regex-parse",
+      "pattern": "a"
+    }
+  ]
+}

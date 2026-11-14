@@ -1,0 +1,15 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "error": {
+          "index": 9007199254740992
+        }
+      },
+      "from": "x.unit.test.ts: a fixture",
+      "id": "fixture.max-index",
+      "kind": "regex-parse",
+      "pattern": "a"
+    }
+  ]
+}

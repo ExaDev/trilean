@@ -1,0 +1,26 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "ast": {
+          "branches": [
+            {
+              "codeUnit": 97,
+              "kind": "literal"
+            },
+            {
+              "codeUnit": 98,
+              "kind": "literal"
+            }
+          ],
+          "kind": "alternation",
+          "unexpectedMember": 1
+        }
+      },
+      "from": "parser.unit.test.ts: alternation > parses two branches",
+      "id": "parse.alternation.parses-two-branches.1",
+      "kind": "regex-parse",
+      "pattern": "a|b"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "ast": {
+          "kind": "anyChar",
+          "unexpectedMember": 1
+        }
+      },
+      "from": "parser.unit.test.ts: . > parses to anyChar",
+      "id": "parse..parses-to-anychar.1",
+      "kind": "regex-parse",
+      "pattern": "."
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "ast": {
+          "copied": 1
+        },
+        "error": {
+          "index": 9007199254740991
+        }
+      },
+      "from": "x.unit.test.ts: a fixture",
+      "id": "fixture.max-index",
+      "kind": "regex-parse",
+      "pattern": "a"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "ast": {
+          "kind": "charClass",
+          "negated": false,
+          "ranges": [
+            {
+              "from": 97,
+              "to": 122,
+              "unexpectedMember": 1
+            }
+          ]
+        }
+      },
+      "from": "parser.unit.test.ts: character classes > parses a range",
+      "id": "parse.character-classes.parses-a-range.1",
+      "kind": "regex-parse",
+      "pattern": "[a-z]"
+    }
+  ]
+}

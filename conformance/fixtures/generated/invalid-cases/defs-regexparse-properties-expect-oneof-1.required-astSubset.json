@@ -1,0 +1,11 @@
+{
+  "cases": [
+    {
+      "expect": {},
+      "from": "parser.unit.test.ts: character classes > parses a negated class",
+      "id": "parse.character-classes.parses-a-negated-class.1",
+      "kind": "regex-parse",
+      "pattern": "[^abc]"
+    }
+  ]
+}

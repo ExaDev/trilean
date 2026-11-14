@@ -1,0 +1,18 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "error": {
+          "message": [
+            "é",
+            {}
+          ]
+        }
+      },
+      "from": "x.unit.test.ts: a fixture",
+      "id": "fixture.message-forms",
+      "kind": "regex-parse",
+      "pattern": "a"
+    }
+  ]
+}

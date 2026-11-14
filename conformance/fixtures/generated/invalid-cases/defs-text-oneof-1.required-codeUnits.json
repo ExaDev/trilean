@@ -1,26 +1,16 @@
 {
   "cases": [
     {
-      "from": "x.unit.test.ts: a fixture",
-      "id": "fixture.match-text",
-      "inputs": [
-        {
-          "input": {},
-          "matches": true
-        },
-        {
-          "input": "😀",
-          "matches": false
+      "expect": {
+        "ast": {
+          "codeUnit": 97,
+          "kind": "literal"
         }
-      ],
-      "kind": "regex-match",
-      "pattern": {
-        "codeUnits": [
-          94,
-          46,
-          36
-        ]
-      }
+      },
+      "from": "x.unit.test.ts: a fixture",
+      "id": "fixture.lone-surrogate",
+      "kind": "regex-parse",
+      "pattern": {}
     }
   ]
 }

@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "ast": "not-the-type"
+      },
+      "from": "recorded: trilean-regex src/parser.ts (no original test; cjk)",
+      "id": "parse.utf-16-code-units.cjk.1",
+      "kind": "regex-parse",
+      "pattern": "日本"
+    }
+  ]
+}

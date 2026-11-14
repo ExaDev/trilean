@@ -26,6 +26,7 @@ export const COVERED_KINDS: readonly string[] = [
   "serialise",
   "number-format",
   "regex-match",
+  "regex-parse",
 ];
 
 /** The definitions of the case kinds in the schema, by kind name. */

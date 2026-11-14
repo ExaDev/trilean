@@ -1,13 +1,15 @@
 {
   "cases": [
     {
-      "expect": "1",
+      "expect": {
+        "error": {
+          "index": 9007199254740991
+        }
+      },
       "from": "x.unit.test.ts: a fixture",
       "id": 1,
-      "kind": "number-format",
-      "reason": "the implementation cannot run this case",
-      "skip": "ts",
-      "value": 1
+      "kind": "regex-parse",
+      "pattern": "a"
     }
   ]
 }

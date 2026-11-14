@@ -1,0 +1,15 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "ast": {
+          "kind": "not-an-allowed-value"
+        }
+      },
+      "from": "parser.unit.test.ts: . > parses to anyChar",
+      "id": "parse..parses-to-anychar.1",
+      "kind": "regex-parse",
+      "pattern": "."
+    }
+  ]
+}
