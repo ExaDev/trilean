@@ -162,3 +162,34 @@ describe("a pattern or a subject with a NUL, which GLOB reads only up to", () =>
     expect(run(withOp("notMatches"))).toEqual(["re-plain"]);
   });
 });
+
+describe("a timestamp column whose name holds a quote", () => {
+  it("is quoted once and the instant comparison runs and selects the later row", () => {
+    const column = 'a"b';
+    db.exec(`CREATE TABLE stamped (id TEXT PRIMARY KEY, "a""b" TEXT);`);
+    const insert = db.prepare(`INSERT INTO stamped (id, "a""b") VALUES (?, ?)`);
+    insert.run("early", "2019-12-31T23:59:59Z");
+    insert.run("late", "2020-01-01T02:00:00+02:00");
+    insert.run("later", "2020-01-02T00:00:00Z");
+    insert.run("bad", "now");
+    const compiled = compilePredicateNode(
+      {
+        kind: "compare",
+        op: "gt",
+        left: { kind: "reference", key: "k" },
+        right: { kind: "instantLiteral", value: "2020-01-01T00:00:00Z" },
+      },
+      {
+        dialect: "sqlite",
+        columnFor: () => ({ column, paramType: "timestamp" }),
+      },
+    );
+    const rows = db
+      .prepare<unknown[], { id: string }>(
+        `SELECT id FROM stamped WHERE ${compiled.sql} ORDER BY id`,
+      )
+      .all(...compiled.params)
+      .map((row) => row.id);
+    expect(rows).toEqual(["later"]);
+  });
+});

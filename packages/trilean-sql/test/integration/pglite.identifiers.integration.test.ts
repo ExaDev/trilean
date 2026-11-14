@@ -80,3 +80,37 @@ describe("a text value holding a NUL", () => {
     );
   });
 });
+
+describe("a timestamp column whose name holds a quote", () => {
+  it("is quoted once and the instant comparison runs and selects the later row", async () => {
+    await db.exec(
+      `CREATE TABLE stamped (id text PRIMARY KEY, "a""b" timestamptz);`,
+    );
+    await Promise.all(
+      [
+        ["early", "2019-12-31T23:59:59Z"],
+        ["late", "2020-01-01T02:00:00+02:00"],
+        ["later", "2020-01-02T00:00:00Z"],
+      ].map(async ([id, at]) =>
+        db.query(`INSERT INTO stamped (id, "a""b") VALUES ($1, $2)`, [id, at]),
+      ),
+    );
+    const compiled = compilePredicateNode(
+      {
+        kind: "compare",
+        op: "gt",
+        left: { kind: "reference", key: "k" },
+        right: { kind: "instantLiteral", value: "2020-01-01T00:00:00Z" },
+      },
+      {
+        dialect: "postgres",
+        columnFor: () => ({ column: 'a"b', paramType: "timestamp" }),
+      },
+    );
+    const result = await db.query<{ id: string }>(
+      `SELECT id FROM stamped WHERE ${compiled.sql} ORDER BY id`,
+      compiled.params,
+    );
+    expect(result.rows.map((row) => row.id)).toEqual(["later"]);
+  });
+});

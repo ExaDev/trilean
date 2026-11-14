@@ -8,7 +8,8 @@ import {
   UnsupportedNodeError,
 } from "./errors";
 import { findUnpushableNodeKind } from "./guard";
-import type { SqlCompileOptions, SqlDialect } from "./options";
+import { sqliteInstantColumn } from "./internal/sqlite-instant";
+import type { SqlCompileOptions, SqlDialect, SqlParamType } from "./options";
 
 /**
  * The refusal table of identifiers and values a dialect cannot carry. Every row is run through the guard and through the compiler, and they must agree: the guard reports the tree unpushable exactly when the compiler throws, and an error says what is wrong without repeating the input.
@@ -21,13 +22,24 @@ const MARK = "MarkerThatMustNotAppear";
 
 const DIALECTS: readonly SqlDialect[] = ["postgres", "sqlite"];
 
+/** How many times the SQLite expression for an instant column names the column. */
+const INSTANT_MENTIONS = 43;
+
 function optionsFor(
   dialect: SqlDialect,
-  names: Readonly<{ column: string; table?: string; itemColumn?: string }>,
+  names: Readonly<{
+    column: string;
+    table?: string;
+    itemColumn?: string;
+    paramType?: SqlParamType;
+  }>,
 ): SqlCompileOptions {
   return {
     dialect,
-    columnFor: () => ({ column: names.column }),
+    columnFor: () => ({
+      column: names.column,
+      ...(names.paramType === undefined ? {} : { paramType: names.paramType }),
+    }),
     collectionFor: () => ({
       table: names.table ?? "tbl",
       join: "TRUE",
@@ -175,6 +187,14 @@ const rows: readonly Row[] = [
       error: InvalidColumnError,
     },
   ]),
+  ...COLUMN_PROBLEMS.map(([what, name]): Row => ({
+    label: `a timestamp column with ${what}, compared with an instant`,
+    tree: instant("2020-01-01T00:00:00Z"),
+    options: (dialect) =>
+      optionsFor(dialect, { column: name, paramType: "timestamp" }),
+    refusedBy: DIALECTS,
+    error: InvalidColumnError,
+  })),
   ...(
     [
       ["a NUL", `${MARK}${NUL}`],
@@ -359,6 +379,31 @@ describe.each(DIALECTS)(
     it.each(accepted)("accepts %s", (_label, tree, options) => {
       expect(findUnpushableNodeKind(tree, options(dialect))).toBeUndefined();
       expect(() => compilePredicateNode(tree, options(dialect))).not.toThrow();
+    });
+  },
+);
+
+describe.each(DIALECTS)(
+  "the %s dialect: a timestamp column whose name holds a quote",
+  (dialect) => {
+    const quoted = `"a""b${MARK}"`;
+    const compiled = compilePredicateNode(
+      instant("2020-01-01T00:00:00Z"),
+      optionsFor(dialect, { column: `a"b${MARK}`, paramType: "timestamp" }),
+    );
+
+    it("quotes the name once and repeats the quoted text, never the raw name", () => {
+      const occurrences = compiled.sql.split(quoted).length - 1;
+      expect(occurrences).toBe(dialect === "sqlite" ? INSTANT_MENTIONS : 1);
+      expect(compiled.sql.replaceAll(quoted, "")).not.toContain(`a"b`);
+    });
+
+    it("is the SQL the dialect compiles an instant comparison to", () => {
+      expect(compiled.sql).toBe(
+        dialect === "sqlite"
+          ? `(${sqliteInstantColumn(quoted)} > ?)`
+          : `(${quoted} > $1::timestamptz)`,
+      );
     });
   },
 );
