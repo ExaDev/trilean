@@ -68,7 +68,7 @@ pub fn decode_text(value: &Value, at: &str) -> Check<Vec<u16>> {
 }
 
 const COMMON_KEYS: [&str; 3] = ["id", "from", "kind"];
-const OPTIONAL_COMMON_KEYS: [&str; 3] = ["only", "reason", "tolerance"];
+const OPTIONAL_COMMON_KEYS: [&str; 3] = ["skip", "reason", "tolerance"];
 
 fn object<'a>(value: &'a Value, at: &str) -> Check<&'a Map<String, Value>> {
     value
@@ -278,13 +278,13 @@ fn check_case(value: &Value, at: &str) -> Check<String> {
             "{at}: \"from\" must be \"<test file>.test.ts: <title>\" or \"recorded: <what>\""
         ));
     }
-    if let Some(only) = map.get("only")
-        && !matches!(only.as_str(), Some("ts" | "rust"))
+    if let Some(skip) = map.get("skip")
+        && !matches!(skip.as_str(), Some("ts" | "rust"))
     {
-        return Err(format!("{at}: \"only\" must be \"ts\" or \"rust\""));
+        return Err(format!("{at}: \"skip\" must be \"ts\" or \"rust\""));
     }
-    if map.contains_key("only") != map.contains_key("reason") {
-        return Err(format!("{at}: \"only\" and \"reason\" go together"));
+    if map.contains_key("skip") != map.contains_key("reason") {
+        return Err(format!("{at}: \"skip\" and \"reason\" go together"));
     }
     if map.contains_key("reason") {
         non_empty_string_field(map, "reason", at)?;
@@ -326,10 +326,10 @@ fn check_case(value: &Value, at: &str) -> Check<String> {
 /// What a valid corpus file holds, for the checks that compare files with each other and with the manifest.
 pub struct FileFacts {
     pub ids: Vec<String>,
-    /// The ids of the cases marked for one implementation only, sorted.
-    pub only_ids: Vec<String>,
+    /// The ids of the cases marked to be skipped by one implementation, sorted.
+    pub skip_ids: Vec<String>,
     /// The ids of the cases marked `rust`, the ones this implementation skips because they are marked, sorted.
-    pub rust_only_ids: Vec<String>,
+    pub rust_skip_ids: Vec<String>,
 }
 
 pub fn validate_file(value: &Value) -> Check<FileFacts> {
@@ -340,8 +340,8 @@ pub fn validate_file(value: &Value) -> Check<FileFacts> {
     }
     let mut facts = FileFacts {
         ids: Vec::new(),
-        only_ids: Vec::new(),
-        rust_only_ids: Vec::new(),
+        skip_ids: Vec::new(),
+        rust_skip_ids: Vec::new(),
     };
     let mut seen = BTreeSet::new();
     for (position, case) in cases.iter().enumerate() {
@@ -349,20 +349,20 @@ pub fn validate_file(value: &Value) -> Check<FileFacts> {
         if !seen.insert(id.clone()) {
             return Err(format!("case id {id} is used twice in the file"));
         }
-        if case.get("only").is_some() {
-            facts.only_ids.push(id.clone());
+        if case.get("skip").is_some() {
+            facts.skip_ids.push(id.clone());
         }
-        if case.get("only").and_then(Value::as_str) == Some("rust") {
-            facts.rust_only_ids.push(id.clone());
+        if case.get("skip").and_then(Value::as_str) == Some("rust") {
+            facts.rust_skip_ids.push(id.clone());
         }
         facts.ids.push(id);
     }
-    facts.only_ids.sort();
-    facts.rust_only_ids.sort();
+    facts.skip_ids.sort();
+    facts.rust_skip_ids.sort();
     Ok(facts)
 }
 
-/// The manifest as a map from corpus file to its case count and the ids marked for one side only.
+/// The manifest as a map from corpus file to its case count and the ids marked to be skipped by one side.
 pub fn validate_manifest(value: &Value) -> Check<BTreeMap<String, (usize, Vec<String>)>> {
     let top = exact_keys(value, "manifest", &["files"], &[])?;
     let files = object(&top["files"], "manifest")?;
@@ -378,27 +378,27 @@ pub fn validate_manifest(value: &Value) -> Check<BTreeMap<String, (usize, Vec<St
                 "{at}: a corpus file is named <package>/<area>/<name>.json"
             ));
         }
-        let map = exact_keys(entry, &at, &["cases", "only"], &[])?;
+        let map = exact_keys(entry, &at, &["cases", "skip"], &[])?;
         let count = integer_field(map, "cases", &at)?;
         if count == 0 {
             return Err(format!("{at}: \"cases\" must be at least 1"));
         }
-        let mut only = Vec::new();
-        for id in array(&map["only"], &at, "\"only\"")? {
-            only.push(
+        let mut skip = Vec::new();
+        for id in array(&map["skip"], &at, "\"skip\"")? {
+            skip.push(
                 id.as_str()
                     .filter(|text| is_name(text))
-                    .ok_or_else(|| format!("{at}: \"only\" must hold case ids"))?
+                    .ok_or_else(|| format!("{at}: \"skip\" must hold case ids"))?
                     .to_owned(),
             );
         }
-        if !only.windows(2).all(|pair| pair[0] < pair[1]) {
+        if !skip.windows(2).all(|pair| pair[0] < pair[1]) {
             return Err(format!(
-                "{at}: \"only\" must list distinct ids in ascending order"
+                "{at}: \"skip\" must list distinct ids in ascending order"
             ));
         }
         let count = usize::try_from(count).map_err(|error| format!("{at}: {error}"))?;
-        manifest.insert(name.clone(), (count, only));
+        manifest.insert(name.clone(), (count, skip));
     }
     Ok(manifest)
 }

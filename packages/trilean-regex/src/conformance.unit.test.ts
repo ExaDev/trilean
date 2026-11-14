@@ -18,7 +18,7 @@ import type {
 } from "./test-support/corpus-types";
 import {
   EXECUTED_KINDS,
-  ONLY_VALUES,
+  SKIP_VALUES,
   UNEXECUTED_KINDS,
 } from "./test-support/corpus-types";
 import { readJson } from "./test-support/read-json";
@@ -313,7 +313,7 @@ describe("corpus loading", () => {
     }
   });
 
-  it("types the case kinds and the only values the schema defines, and no others", () => {
+  it("types the case kinds and the skip values the schema defines, and no others", () => {
     const schema = readJson(join(CORPUS_ROOT, "case.schema.json"));
     const refs = dig(schema, "$defs", "case", "oneOf");
     if (!Array.isArray(refs)) {
@@ -339,7 +339,7 @@ describe("corpus loading", () => {
     expect([...kinds].sort()).toEqual(
       [...EXECUTED_KINDS, ...UNEXECUTED_KINDS].sort(),
     );
-    expect(dig(schema, "$defs", "only", "enum")).toEqual([...ONLY_VALUES]);
+    expect(dig(schema, "$defs", "skip", "enum")).toEqual([...SKIP_VALUES]);
   });
 });
 
@@ -387,7 +387,7 @@ describe("corpus completeness", () => {
     expect(
       completenessProblems(
         entries.reduce((sum, entry) => sum + entry.cases, 0),
-        new Set(entries.flatMap((entry) => entry.only)),
+        new Set(entries.flatMap((entry) => entry.skip)),
         registered,
         skipped,
       ),

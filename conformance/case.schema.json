@@ -3,11 +3,11 @@
     "build": {
       "additionalProperties": false,
       "dependentRequired": {
-        "only": [
-          "reason"
-        ],
         "reason": [
-          "only"
+          "skip"
+        ],
+        "skip": [
+          "reason"
         ]
       },
       "properties": {
@@ -30,11 +30,11 @@
         "kind": {
           "const": "build"
         },
-        "only": {
-          "$ref": "#/$defs/only"
-        },
         "reason": {
           "$ref": "#/$defs/reason"
+        },
+        "skip": {
+          "$ref": "#/$defs/skip"
         },
         "tolerance": {
           "$ref": "#/$defs/tolerance"
@@ -53,11 +53,11 @@
     "call": {
       "additionalProperties": false,
       "dependentRequired": {
-        "only": [
-          "reason"
-        ],
         "reason": [
-          "only"
+          "skip"
+        ],
+        "skip": [
+          "reason"
         ]
       },
       "properties": {
@@ -113,11 +113,11 @@
         "kind": {
           "const": "call"
         },
-        "only": {
-          "$ref": "#/$defs/only"
-        },
         "reason": {
           "$ref": "#/$defs/reason"
+        },
+        "skip": {
+          "$ref": "#/$defs/skip"
         },
         "tolerance": {
           "$ref": "#/$defs/tolerance"
@@ -179,11 +179,11 @@
     "cli": {
       "additionalProperties": false,
       "dependentRequired": {
-        "only": [
-          "reason"
-        ],
         "reason": [
-          "only"
+          "skip"
+        ],
+        "skip": [
+          "reason"
         ]
       },
       "properties": {
@@ -234,11 +234,11 @@
         "kind": {
           "const": "cli"
         },
-        "only": {
-          "$ref": "#/$defs/only"
-        },
         "reason": {
           "$ref": "#/$defs/reason"
+        },
+        "skip": {
+          "$ref": "#/$defs/skip"
         },
         "stdin": {
           "type": "string"
@@ -276,11 +276,11 @@
     "document": {
       "additionalProperties": false,
       "dependentRequired": {
-        "only": [
-          "reason"
-        ],
         "reason": [
-          "only"
+          "skip"
+        ],
+        "skip": [
+          "reason"
         ]
       },
       "properties": {
@@ -308,11 +308,11 @@
         "maxNodes": {
           "$ref": "#/$defs/json"
         },
-        "only": {
-          "$ref": "#/$defs/only"
-        },
         "reason": {
           "$ref": "#/$defs/reason"
+        },
+        "skip": {
+          "$ref": "#/$defs/skip"
         },
         "tolerance": {
           "$ref": "#/$defs/tolerance"
@@ -333,11 +333,11 @@
     "evaluate": {
       "additionalProperties": false,
       "dependentRequired": {
-        "only": [
-          "reason"
-        ],
         "reason": [
-          "only"
+          "skip"
+        ],
+        "skip": [
+          "reason"
         ]
       },
       "properties": {
@@ -518,14 +518,14 @@
           "type": "array",
           "uniqueItems": true
         },
-        "only": {
-          "$ref": "#/$defs/only"
-        },
         "reason": {
           "$ref": "#/$defs/reason"
         },
         "resolvers": {
           "$ref": "#/$defs/resolvers"
+        },
+        "skip": {
+          "$ref": "#/$defs/skip"
         },
         "tolerance": {
           "$ref": "#/$defs/tolerance"
@@ -558,11 +558,11 @@
     "inputs": {
       "additionalProperties": false,
       "dependentRequired": {
-        "only": [
-          "reason"
-        ],
         "reason": [
-          "only"
+          "skip"
+        ],
+        "skip": [
+          "reason"
         ]
       },
       "properties": {
@@ -618,14 +618,14 @@
         "kind": {
           "const": "inputs"
         },
-        "only": {
-          "$ref": "#/$defs/only"
-        },
         "raw": {
           "$ref": "#/$defs/json"
         },
         "reason": {
           "$ref": "#/$defs/reason"
+        },
+        "skip": {
+          "$ref": "#/$defs/skip"
         },
         "tolerance": {
           "$ref": "#/$defs/tolerance"
@@ -670,26 +670,19 @@
         }
       ]
     },
-    "only": {
-      "description": "Present only for a case one implementation cannot run: ts for a case the TypeScript implementation skips, rust for a case every build of the Rust implementation skips, wherever it runs (native, or wasm under Node, a browser or Workers). Always with a reason.",
-      "enum": [
-        "ts",
-        "rust"
-      ]
-    },
     "reason": {
-      "description": "Why one side cannot run the case. Required with only, and only with only.",
+      "description": "Why one side cannot run the case. Required with skip, and only with skip.",
       "minLength": 1,
       "type": "string"
     },
     "regexMatch": {
       "additionalProperties": false,
       "dependentRequired": {
-        "only": [
-          "reason"
-        ],
         "reason": [
-          "only"
+          "skip"
+        ],
+        "skip": [
+          "reason"
         ]
       },
       "properties": {
@@ -722,14 +715,14 @@
         "kind": {
           "const": "regex-match"
         },
-        "only": {
-          "$ref": "#/$defs/only"
-        },
         "pattern": {
           "$ref": "#/$defs/text"
         },
         "reason": {
           "$ref": "#/$defs/reason"
+        },
+        "skip": {
+          "$ref": "#/$defs/skip"
         },
         "tolerance": {
           "$ref": "#/$defs/tolerance"
@@ -919,11 +912,11 @@
     "regexParse": {
       "additionalProperties": false,
       "dependentRequired": {
-        "only": [
-          "reason"
-        ],
         "reason": [
-          "only"
+          "skip"
+        ],
+        "skip": [
+          "reason"
         ]
       },
       "properties": {
@@ -995,14 +988,14 @@
         "kind": {
           "const": "regex-parse"
         },
-        "only": {
-          "$ref": "#/$defs/only"
-        },
         "pattern": {
           "$ref": "#/$defs/text"
         },
         "reason": {
           "$ref": "#/$defs/reason"
+        },
+        "skip": {
+          "$ref": "#/$defs/skip"
         },
         "tolerance": {
           "$ref": "#/$defs/tolerance"
@@ -1256,14 +1249,21 @@
       },
       "type": "object"
     },
+    "skip": {
+      "description": "Names the implementation that skips the case, for a case one implementation cannot run: ts for a case the TypeScript implementation skips, rust for a case every build of the Rust implementation skips, wherever it runs (native, or wasm under Node, a browser or Workers). Always with a reason.",
+      "enum": [
+        "ts",
+        "rust"
+      ]
+    },
     "sqlCompile": {
       "additionalProperties": false,
       "dependentRequired": {
-        "only": [
-          "reason"
-        ],
         "reason": [
-          "only"
+          "skip"
+        ],
+        "skip": [
+          "reason"
         ]
       },
       "properties": {
@@ -1332,14 +1332,14 @@
         "kind": {
           "const": "sql-compile"
         },
-        "only": {
-          "$ref": "#/$defs/only"
-        },
         "options": {
           "$ref": "#/$defs/sqlOptions"
         },
         "reason": {
           "$ref": "#/$defs/reason"
+        },
+        "skip": {
+          "$ref": "#/$defs/skip"
         },
         "tolerance": {
           "$ref": "#/$defs/tolerance"
@@ -1361,11 +1361,11 @@
     "sqlExecute": {
       "additionalProperties": false,
       "dependentRequired": {
-        "only": [
-          "reason"
-        ],
         "reason": [
-          "only"
+          "skip"
+        ],
+        "skip": [
+          "reason"
         ]
       },
       "properties": {
@@ -1399,14 +1399,14 @@
         "kind": {
           "const": "sql-execute"
         },
-        "only": {
-          "$ref": "#/$defs/only"
-        },
         "options": {
           "$ref": "#/$defs/sqlOptions"
         },
         "reason": {
           "$ref": "#/$defs/reason"
+        },
+        "skip": {
+          "$ref": "#/$defs/skip"
         },
         "tolerance": {
           "$ref": "#/$defs/tolerance"
@@ -1431,11 +1431,11 @@
     "sqlGuard": {
       "additionalProperties": false,
       "dependentRequired": {
-        "only": [
-          "reason"
-        ],
         "reason": [
-          "only"
+          "skip"
+        ],
+        "skip": [
+          "reason"
         ]
       },
       "properties": {
@@ -1474,14 +1474,14 @@
         "kind": {
           "const": "sql-guard"
         },
-        "only": {
-          "$ref": "#/$defs/only"
-        },
         "options": {
           "$ref": "#/$defs/sqlOptions"
         },
         "reason": {
           "$ref": "#/$defs/reason"
+        },
+        "skip": {
+          "$ref": "#/$defs/skip"
         },
         "tolerance": {
           "$ref": "#/$defs/tolerance"
@@ -1527,11 +1527,11 @@
     "sqlPattern": {
       "additionalProperties": false,
       "dependentRequired": {
-        "only": [
-          "reason"
-        ],
         "reason": [
-          "only"
+          "skip"
+        ],
+        "skip": [
+          "reason"
         ]
       },
       "properties": {
@@ -1575,14 +1575,14 @@
         "kind": {
           "const": "sql-pattern"
         },
-        "only": {
-          "$ref": "#/$defs/only"
-        },
         "pattern": {
           "$ref": "#/$defs/text"
         },
         "reason": {
           "$ref": "#/$defs/reason"
+        },
+        "skip": {
+          "$ref": "#/$defs/skip"
         },
         "tolerance": {
           "$ref": "#/$defs/tolerance"
@@ -1641,11 +1641,11 @@
     "validate": {
       "additionalProperties": false,
       "dependentRequired": {
-        "only": [
-          "reason"
-        ],
         "reason": [
-          "only"
+          "skip"
+        ],
+        "skip": [
+          "reason"
         ]
       },
       "properties": {
@@ -1718,15 +1718,15 @@
         "kind": {
           "const": "validate"
         },
-        "only": {
-          "$ref": "#/$defs/only"
-        },
         "reason": {
           "$ref": "#/$defs/reason"
         },
         "schema": {
           "minLength": 1,
           "type": "string"
+        },
+        "skip": {
+          "$ref": "#/$defs/skip"
         },
         "tolerance": {
           "$ref": "#/$defs/tolerance"

@@ -99,9 +99,9 @@
       "from": "x.unit.test.ts: a fixture",
       "id": "fixture.only-ts",
       "kind": "regex-parse",
-      "only": "ts",
       "pattern": "a",
-      "reason": "a fixture"
+      "reason": "a fixture",
+      "skip": "ts"
     },
     {
       "expect": {
@@ -113,9 +113,9 @@
       "from": "x.unit.test.ts: a fixture",
       "id": "fixture.only-rust",
       "kind": "regex-parse",
-      "only": "rust",
       "pattern": "a",
-      "reason": "a fixture"
+      "reason": "a fixture",
+      "skip": "rust"
     }
   ]
 }
