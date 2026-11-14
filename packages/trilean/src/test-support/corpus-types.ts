@@ -159,6 +159,13 @@ export const EXECUTED_KINDS = [
   "cli",
 ] as const;
 
+export interface BuildCase extends CaseBase {
+  readonly kind: "build";
+  readonly builder: string;
+  readonly args: readonly Json[];
+  readonly expect: Json;
+}
+
 /** What a built-in function reports instead of a value: the failure and the fragments its message contains. */
 export interface CallFailure {
   readonly domainError?: true;
@@ -186,14 +193,18 @@ export interface RegexParseCase extends CaseBase {
 export interface OtherCase extends CaseBase {
   readonly kind:
     | Exclude<(typeof FOREIGN_KINDS)[number], "regex-parse">
-    | "build"
     | "inputs"
     | "document"
     | "cli";
 }
 
 export type CorpusCase =
-  ValidateCase | EvaluateCase | CallCase | RegexParseCase | OtherCase;
+  | ValidateCase
+  | EvaluateCase
+  | CallCase
+  | BuildCase
+  | RegexParseCase
+  | OtherCase;
 
 export interface CorpusFile {
   readonly cases: readonly CorpusCase[];

@@ -13,6 +13,7 @@ import {
   FOREIGN_KINDS,
   SKIP_VALUES,
 } from "./test-support/corpus-types";
+import { runBuildCase } from "./test-support/run-build";
 import { runCallCase } from "./test-support/run-call";
 import { runEvaluateCase } from "./test-support/run-evaluate";
 import { runValidateCase } from "./test-support/run-validate";
@@ -252,6 +253,8 @@ for (const { name, file } of corpus) {
             runValidateCase(testCase);
           } else if (testCase.kind === "evaluate") {
             await runEvaluateCase(testCase);
+          } else if (testCase.kind === "build") {
+            runBuildCase(testCase);
           } else if (testCase.kind === "call") {
             runCallCase(testCase);
           } else {

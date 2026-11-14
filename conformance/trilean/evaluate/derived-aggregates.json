@@ -1,0 +1,822 @@
+{
+  "cases": [
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 6
+        }
+      },
+      "from": "derived-aggregates.unit.test.ts: sum > aggregates every participating item's projected value",
+      "id": "aggregates.sum-aggregates-every-participating-item-s-projected-value.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "items",
+            "items": [
+              {
+                "amount": 1
+              },
+              {
+                "amount": 2
+              },
+              {
+                "amount": 3
+              }
+            ]
+          },
+          {
+            "collection": "mixedCode",
+            "items": [
+              {
+                "amount": 1,
+                "code": "x"
+              },
+              {
+                "amount": 2
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "collection": "items",
+        "combiner": {
+          "combine": {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "accumulator"
+            },
+            "op": "add",
+            "right": {
+              "key": "amount",
+              "kind": "reference"
+            }
+          },
+          "initial": {
+            "kind": "numberLiteral",
+            "value": 0
+          },
+          "mode": "reduce"
+        },
+        "kind": "fold"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 5
+        }
+      },
+      "from": "derived-aggregates.unit.test.ts: sum > a filter excludes an item from the total, exactly as if it had never been in the collection",
+      "id": "aggregates.sum-a-filter-excludes-an-item-from-the-total-exactly-as-if-it-had-never-been-in-the-collection.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "items",
+            "items": [
+              {
+                "amount": 1
+              },
+              {
+                "amount": 2
+              },
+              {
+                "amount": 3
+              }
+            ]
+          },
+          {
+            "collection": "mixedCode",
+            "items": [
+              {
+                "amount": 1,
+                "code": "x"
+              },
+              {
+                "amount": 2
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "collection": "items",
+        "combiner": {
+          "combine": {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "accumulator"
+            },
+            "op": "add",
+            "right": {
+              "key": "amount",
+              "kind": "reference"
+            }
+          },
+          "initial": {
+            "kind": "numberLiteral",
+            "value": 0
+          },
+          "mode": "reduce"
+        },
+        "filter": {
+          "kind": "compare",
+          "left": {
+            "key": "amount",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        },
+        "kind": "fold"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 0
+        }
+      },
+      "from": "derived-aggregates.unit.test.ts: sum > over an empty collection, the reduce seed (0) is the identity -- no combine step is ever reached",
+      "id": "aggregates.sum-over-an-empty-collection-the-reduce-seed-0-is-the-identity-no-combine-step-is-ever-reached.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "items",
+            "items": [
+              {
+                "amount": 1
+              },
+              {
+                "amount": 2
+              },
+              {
+                "amount": 3
+              }
+            ]
+          },
+          {
+            "collection": "mixedCode",
+            "items": [
+              {
+                "amount": 1,
+                "code": "x"
+              },
+              {
+                "amount": 2
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "collection": "empty",
+        "combiner": {
+          "combine": {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "accumulator"
+            },
+            "op": "add",
+            "right": {
+              "key": "amount",
+              "kind": "reference"
+            }
+          },
+          "initial": {
+            "kind": "numberLiteral",
+            "value": 0
+          },
+          "mode": "reduce"
+        },
+        "kind": "fold"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 3
+        }
+      },
+      "from": "derived-aggregates.unit.test.ts: count > counts every participating item when no probe is supplied",
+      "id": "aggregates.count-counts-every-participating-item-when-no-probe-is-supplied.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "items",
+            "items": [
+              {
+                "amount": 1
+              },
+              {
+                "amount": 2
+              },
+              {
+                "amount": 3
+              }
+            ]
+          },
+          {
+            "collection": "mixedCode",
+            "items": [
+              {
+                "amount": 1,
+                "code": "x"
+              },
+              {
+                "amount": 2
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "collection": "items",
+        "combiner": {
+          "combine": {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "accumulator"
+            },
+            "op": "add",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          },
+          "initial": {
+            "kind": "numberLiteral",
+            "value": 0
+          },
+          "mode": "reduce"
+        },
+        "kind": "fold"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 2
+        }
+      },
+      "from": "derived-aggregates.unit.test.ts: count > a filter excludes an item silently -- the count reflects only what remains, with no indeterminacy",
+      "id": "aggregates.count-a-filter-excludes-an-item-silently-the-count-reflects-only-what-remains-with-no-indeterminacy.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "items",
+            "items": [
+              {
+                "amount": 1
+              },
+              {
+                "amount": 2
+              },
+              {
+                "amount": 3
+              }
+            ]
+          },
+          {
+            "collection": "mixedCode",
+            "items": [
+              {
+                "amount": 1,
+                "code": "x"
+              },
+              {
+                "amount": 2
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "collection": "items",
+        "combiner": {
+          "combine": {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "accumulator"
+            },
+            "op": "add",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          },
+          "initial": {
+            "kind": "numberLiteral",
+            "value": 0
+          },
+          "mode": "reduce"
+        },
+        "filter": {
+          "kind": "compare",
+          "left": {
+            "key": "amount",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        },
+        "kind": "fold"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 0
+        }
+      },
+      "from": "derived-aggregates.unit.test.ts: count > over an empty collection, count is 0",
+      "id": "aggregates.count-over-an-empty-collection-count-is-0.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "items",
+            "items": [
+              {
+                "amount": 1
+              },
+              {
+                "amount": 2
+              },
+              {
+                "amount": 3
+              }
+            ]
+          },
+          {
+            "collection": "mixedCode",
+            "items": [
+              {
+                "amount": 1,
+                "code": "x"
+              },
+              {
+                "amount": 2
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "collection": "empty",
+        "combiner": {
+          "combine": {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "accumulator"
+            },
+            "op": "add",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          },
+          "initial": {
+            "kind": "numberLiteral",
+            "value": 0
+          },
+          "mode": "reduce"
+        },
+        "kind": "fold"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "derived-aggregates.unit.test.ts: count > a probe that fails to resolve for a participating item makes the whole count indeterminate, unlike a filter's silent exclusion",
+      "id": "aggregates.count-a-probe-that-fails-to-resolve-for-a-participating-item-makes-the-whole-count-indeterminate-unlike-a-filter-s-silent-exclusion.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "items",
+            "items": [
+              {
+                "amount": 1
+              },
+              {
+                "amount": 2
+              },
+              {
+                "amount": 3
+              }
+            ]
+          },
+          {
+            "collection": "mixedCode",
+            "items": [
+              {
+                "amount": 1,
+                "code": "x"
+              },
+              {
+                "amount": 2
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "collection": "mixedCode",
+        "combiner": {
+          "combine": {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "accumulator"
+            },
+            "op": "add",
+            "right": {
+              "cases": [
+                {
+                  "then": {
+                    "kind": "numberLiteral",
+                    "value": 1
+                  },
+                  "when": {
+                    "candidates": [
+                      {
+                        "key": "code",
+                        "kind": "reference"
+                      }
+                    ],
+                    "kind": "memberOf",
+                    "op": "in",
+                    "operand": {
+                      "key": "code",
+                      "kind": "reference"
+                    }
+                  }
+                }
+              ],
+              "fallback": {
+                "kind": "numberLiteral",
+                "value": 0
+              },
+              "kind": "conditional"
+            }
+          },
+          "initial": {
+            "kind": "numberLiteral",
+            "value": 0
+          },
+          "mode": "reduce"
+        },
+        "kind": "fold"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 1
+        }
+      },
+      "from": "derived-aggregates.unit.test.ts: count > the same item excluded by a filter never reaches the probe at all, so the count stays definite",
+      "id": "aggregates.count-the-same-item-excluded-by-a-filter-never-reaches-the-probe-at-all-so-the-count-stays-definite.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "items",
+            "items": [
+              {
+                "amount": 1
+              },
+              {
+                "amount": 2
+              },
+              {
+                "amount": 3
+              }
+            ]
+          },
+          {
+            "collection": "mixedCode",
+            "items": [
+              {
+                "amount": 1,
+                "code": "x"
+              },
+              {
+                "amount": 2
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "collection": "mixedCode",
+        "combiner": {
+          "combine": {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "accumulator"
+            },
+            "op": "add",
+            "right": {
+              "cases": [
+                {
+                  "then": {
+                    "kind": "numberLiteral",
+                    "value": 1
+                  },
+                  "when": {
+                    "candidates": [
+                      {
+                        "key": "code",
+                        "kind": "reference"
+                      }
+                    ],
+                    "kind": "memberOf",
+                    "op": "in",
+                    "operand": {
+                      "key": "code",
+                      "kind": "reference"
+                    }
+                  }
+                }
+              ],
+              "fallback": {
+                "kind": "numberLiteral",
+                "value": 0
+              },
+              "kind": "conditional"
+            }
+          },
+          "initial": {
+            "kind": "numberLiteral",
+            "value": 0
+          },
+          "mode": "reduce"
+        },
+        "filter": {
+          "kind": "exists",
+          "operand": {
+            "key": "code",
+            "kind": "reference"
+          }
+        },
+        "kind": "fold"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "unit": {},
+          "value": 2
+        }
+      },
+      "from": "derived-aggregates.unit.test.ts: average > is sum divided by count over the same collection",
+      "id": "aggregates.average-is-sum-divided-by-count-over-the-same-collection.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "items",
+            "items": [
+              {
+                "amount": 1
+              },
+              {
+                "amount": 2
+              },
+              {
+                "amount": 3
+              }
+            ]
+          },
+          {
+            "collection": "mixedCode",
+            "items": [
+              {
+                "amount": 1,
+                "code": "x"
+              },
+              {
+                "amount": 2
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "collection": "items",
+          "combiner": {
+            "combine": {
+              "kind": "arithmetic",
+              "left": {
+                "kind": "accumulator"
+              },
+              "op": "add",
+              "right": {
+                "key": "amount",
+                "kind": "reference"
+              }
+            },
+            "initial": {
+              "kind": "numberLiteral",
+              "value": 0
+            },
+            "mode": "reduce"
+          },
+          "kind": "fold"
+        },
+        "op": "divide",
+        "right": {
+          "collection": "items",
+          "combiner": {
+            "combine": {
+              "kind": "arithmetic",
+              "left": {
+                "kind": "accumulator"
+              },
+              "op": "add",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 1
+              }
+            },
+            "initial": {
+              "kind": "numberLiteral",
+              "value": 0
+            },
+            "mode": "reduce"
+          },
+          "kind": "fold"
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "domain-error",
+        "status": "indeterminate"
+      },
+      "from": "derived-aggregates.unit.test.ts: average > over an empty collection, division by count's own 0 is domain-error",
+      "id": "aggregates.average-over-an-empty-collection-division-by-count-s-own-0-is-domain-error.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "items",
+            "items": [
+              {
+                "amount": 1
+              },
+              {
+                "amount": 2
+              },
+              {
+                "amount": 3
+              }
+            ]
+          },
+          {
+            "collection": "mixedCode",
+            "items": [
+              {
+                "amount": 1,
+                "code": "x"
+              },
+              {
+                "amount": 2
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "collection": "empty",
+          "combiner": {
+            "combine": {
+              "kind": "arithmetic",
+              "left": {
+                "kind": "accumulator"
+              },
+              "op": "add",
+              "right": {
+                "key": "amount",
+                "kind": "reference"
+              }
+            },
+            "initial": {
+              "kind": "numberLiteral",
+              "value": 0
+            },
+            "mode": "reduce"
+          },
+          "kind": "fold"
+        },
+        "op": "divide",
+        "right": {
+          "collection": "empty",
+          "combiner": {
+            "combine": {
+              "kind": "arithmetic",
+              "left": {
+                "kind": "accumulator"
+              },
+              "op": "add",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 1
+              }
+            },
+            "initial": {
+              "kind": "numberLiteral",
+              "value": 0
+            },
+            "mode": "reduce"
+          },
+          "kind": "fold"
+        }
+      }
+    }
+  ]
+}

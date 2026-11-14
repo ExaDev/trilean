@@ -1,0 +1,507 @@
+{
+  "cases": [
+    {
+      "args": [
+        "items",
+        {
+          "key": "amount",
+          "kind": "reference"
+        }
+      ],
+      "builder": "sum",
+      "expect": {
+        "collection": "items",
+        "combiner": {
+          "combine": {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "accumulator"
+            },
+            "op": "add",
+            "right": {
+              "key": "amount",
+              "kind": "reference"
+            }
+          },
+          "initial": {
+            "kind": "numberLiteral",
+            "value": 0
+          },
+          "mode": "reduce"
+        },
+        "kind": "fold"
+      },
+      "from": "recorded: trilean src/derived-aggregates.ts (the tree sum builds)",
+      "id": "aggregates-build.sum-items-kind-reference-key-amount.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        "items",
+        {
+          "key": "amount",
+          "kind": "reference"
+        },
+        {
+          "kind": "compare",
+          "left": {
+            "key": "amount",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      ],
+      "builder": "sum",
+      "expect": {
+        "collection": "items",
+        "combiner": {
+          "combine": {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "accumulator"
+            },
+            "op": "add",
+            "right": {
+              "key": "amount",
+              "kind": "reference"
+            }
+          },
+          "initial": {
+            "kind": "numberLiteral",
+            "value": 0
+          },
+          "mode": "reduce"
+        },
+        "filter": {
+          "kind": "compare",
+          "left": {
+            "key": "amount",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        },
+        "kind": "fold"
+      },
+      "from": "recorded: trilean src/derived-aggregates.ts (the tree sum builds)",
+      "id": "aggregates-build.sum-items-kind-reference-key-amount-kind-compare-op-gt-left-kind-reference-key-amount-right-kind-numberliteral-value-1.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        "empty",
+        {
+          "key": "amount",
+          "kind": "reference"
+        }
+      ],
+      "builder": "sum",
+      "expect": {
+        "collection": "empty",
+        "combiner": {
+          "combine": {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "accumulator"
+            },
+            "op": "add",
+            "right": {
+              "key": "amount",
+              "kind": "reference"
+            }
+          },
+          "initial": {
+            "kind": "numberLiteral",
+            "value": 0
+          },
+          "mode": "reduce"
+        },
+        "kind": "fold"
+      },
+      "from": "recorded: trilean src/derived-aggregates.ts (the tree sum builds)",
+      "id": "aggregates-build.sum-empty-kind-reference-key-amount.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        "items"
+      ],
+      "builder": "count",
+      "expect": {
+        "collection": "items",
+        "combiner": {
+          "combine": {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "accumulator"
+            },
+            "op": "add",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          },
+          "initial": {
+            "kind": "numberLiteral",
+            "value": 0
+          },
+          "mode": "reduce"
+        },
+        "kind": "fold"
+      },
+      "from": "recorded: trilean src/derived-aggregates.ts (the tree count builds)",
+      "id": "aggregates-build.count-items.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        "items",
+        {
+          "kind": "compare",
+          "left": {
+            "key": "amount",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      ],
+      "builder": "count",
+      "expect": {
+        "collection": "items",
+        "combiner": {
+          "combine": {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "accumulator"
+            },
+            "op": "add",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          },
+          "initial": {
+            "kind": "numberLiteral",
+            "value": 0
+          },
+          "mode": "reduce"
+        },
+        "filter": {
+          "kind": "compare",
+          "left": {
+            "key": "amount",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        },
+        "kind": "fold"
+      },
+      "from": "recorded: trilean src/derived-aggregates.ts (the tree count builds)",
+      "id": "aggregates-build.count-items-kind-compare-op-gt-left-kind-reference-key-amount-right-kind-numberliteral-value-1.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        "empty"
+      ],
+      "builder": "count",
+      "expect": {
+        "collection": "empty",
+        "combiner": {
+          "combine": {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "accumulator"
+            },
+            "op": "add",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          },
+          "initial": {
+            "kind": "numberLiteral",
+            "value": 0
+          },
+          "mode": "reduce"
+        },
+        "kind": "fold"
+      },
+      "from": "recorded: trilean src/derived-aggregates.ts (the tree count builds)",
+      "id": "aggregates-build.count-empty.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        "mixedCode",
+        null,
+        {
+          "key": "code",
+          "kind": "reference"
+        }
+      ],
+      "builder": "count",
+      "expect": {
+        "collection": "mixedCode",
+        "combiner": {
+          "combine": {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "accumulator"
+            },
+            "op": "add",
+            "right": {
+              "cases": [
+                {
+                  "then": {
+                    "kind": "numberLiteral",
+                    "value": 1
+                  },
+                  "when": {
+                    "candidates": [
+                      {
+                        "key": "code",
+                        "kind": "reference"
+                      }
+                    ],
+                    "kind": "memberOf",
+                    "op": "in",
+                    "operand": {
+                      "key": "code",
+                      "kind": "reference"
+                    }
+                  }
+                }
+              ],
+              "fallback": {
+                "kind": "numberLiteral",
+                "value": 0
+              },
+              "kind": "conditional"
+            }
+          },
+          "initial": {
+            "kind": "numberLiteral",
+            "value": 0
+          },
+          "mode": "reduce"
+        },
+        "kind": "fold"
+      },
+      "from": "recorded: trilean src/derived-aggregates.ts (the tree count builds)",
+      "id": "aggregates-build.count-mixedcode-null-kind-reference-key-code.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        "mixedCode",
+        {
+          "kind": "exists",
+          "operand": {
+            "key": "code",
+            "kind": "reference"
+          }
+        },
+        {
+          "key": "code",
+          "kind": "reference"
+        }
+      ],
+      "builder": "count",
+      "expect": {
+        "collection": "mixedCode",
+        "combiner": {
+          "combine": {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "accumulator"
+            },
+            "op": "add",
+            "right": {
+              "cases": [
+                {
+                  "then": {
+                    "kind": "numberLiteral",
+                    "value": 1
+                  },
+                  "when": {
+                    "candidates": [
+                      {
+                        "key": "code",
+                        "kind": "reference"
+                      }
+                    ],
+                    "kind": "memberOf",
+                    "op": "in",
+                    "operand": {
+                      "key": "code",
+                      "kind": "reference"
+                    }
+                  }
+                }
+              ],
+              "fallback": {
+                "kind": "numberLiteral",
+                "value": 0
+              },
+              "kind": "conditional"
+            }
+          },
+          "initial": {
+            "kind": "numberLiteral",
+            "value": 0
+          },
+          "mode": "reduce"
+        },
+        "filter": {
+          "kind": "exists",
+          "operand": {
+            "key": "code",
+            "kind": "reference"
+          }
+        },
+        "kind": "fold"
+      },
+      "from": "recorded: trilean src/derived-aggregates.ts (the tree count builds)",
+      "id": "aggregates-build.count-mixedcode-kind-exists-operand-kind-reference-key-code-kind-reference-key-code.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        "items",
+        {
+          "key": "amount",
+          "kind": "reference"
+        }
+      ],
+      "builder": "average",
+      "expect": {
+        "kind": "arithmetic",
+        "left": {
+          "collection": "items",
+          "combiner": {
+            "combine": {
+              "kind": "arithmetic",
+              "left": {
+                "kind": "accumulator"
+              },
+              "op": "add",
+              "right": {
+                "key": "amount",
+                "kind": "reference"
+              }
+            },
+            "initial": {
+              "kind": "numberLiteral",
+              "value": 0
+            },
+            "mode": "reduce"
+          },
+          "kind": "fold"
+        },
+        "op": "divide",
+        "right": {
+          "collection": "items",
+          "combiner": {
+            "combine": {
+              "kind": "arithmetic",
+              "left": {
+                "kind": "accumulator"
+              },
+              "op": "add",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 1
+              }
+            },
+            "initial": {
+              "kind": "numberLiteral",
+              "value": 0
+            },
+            "mode": "reduce"
+          },
+          "kind": "fold"
+        }
+      },
+      "from": "recorded: trilean src/derived-aggregates.ts (the tree average builds)",
+      "id": "aggregates-build.average-items-kind-reference-key-amount.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        "empty",
+        {
+          "key": "amount",
+          "kind": "reference"
+        }
+      ],
+      "builder": "average",
+      "expect": {
+        "kind": "arithmetic",
+        "left": {
+          "collection": "empty",
+          "combiner": {
+            "combine": {
+              "kind": "arithmetic",
+              "left": {
+                "kind": "accumulator"
+              },
+              "op": "add",
+              "right": {
+                "key": "amount",
+                "kind": "reference"
+              }
+            },
+            "initial": {
+              "kind": "numberLiteral",
+              "value": 0
+            },
+            "mode": "reduce"
+          },
+          "kind": "fold"
+        },
+        "op": "divide",
+        "right": {
+          "collection": "empty",
+          "combiner": {
+            "combine": {
+              "kind": "arithmetic",
+              "left": {
+                "kind": "accumulator"
+              },
+              "op": "add",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 1
+              }
+            },
+            "initial": {
+              "kind": "numberLiteral",
+              "value": 0
+            },
+            "mode": "reduce"
+          },
+          "kind": "fold"
+        }
+      },
+      "from": "recorded: trilean src/derived-aggregates.ts (the tree average builds)",
+      "id": "aggregates-build.average-empty-kind-reference-key-amount.1",
+      "kind": "build"
+    }
+  ]
+}

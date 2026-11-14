@@ -1,0 +1,964 @@
+{
+  "cases": [
+    {
+      "args": [
+        {
+          "kind": "allOf",
+          "operands": []
+        },
+        {
+          "kind": "allOf",
+          "operands": []
+        }
+      ],
+      "builder": "xor",
+      "expect": {
+        "kind": "or",
+        "left": {
+          "kind": "and",
+          "left": {
+            "kind": "allOf",
+            "operands": []
+          },
+          "right": {
+            "kind": "not",
+            "operand": {
+              "kind": "allOf",
+              "operands": []
+            }
+          }
+        },
+        "right": {
+          "kind": "and",
+          "left": {
+            "kind": "not",
+            "operand": {
+              "kind": "allOf",
+              "operands": []
+            }
+          },
+          "right": {
+            "kind": "allOf",
+            "operands": []
+          }
+        }
+      },
+      "from": "recorded: trilean src/derived-connectives.ts (the tree xor builds)",
+      "id": "connectives-build.xor-kind-allof-operands-kind-allof-operands.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "kind": "allOf",
+          "operands": []
+        },
+        {
+          "kind": "anyOf",
+          "operands": []
+        }
+      ],
+      "builder": "xor",
+      "expect": {
+        "kind": "or",
+        "left": {
+          "kind": "and",
+          "left": {
+            "kind": "allOf",
+            "operands": []
+          },
+          "right": {
+            "kind": "not",
+            "operand": {
+              "kind": "anyOf",
+              "operands": []
+            }
+          }
+        },
+        "right": {
+          "kind": "and",
+          "left": {
+            "kind": "not",
+            "operand": {
+              "kind": "allOf",
+              "operands": []
+            }
+          },
+          "right": {
+            "kind": "anyOf",
+            "operands": []
+          }
+        }
+      },
+      "from": "recorded: trilean src/derived-connectives.ts (the tree xor builds)",
+      "id": "connectives-build.xor-kind-allof-operands-kind-anyof-operands.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "kind": "allOf",
+          "operands": []
+        },
+        {
+          "kind": "compare",
+          "left": {
+            "key": "missing",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "key": "present",
+            "kind": "reference"
+          }
+        }
+      ],
+      "builder": "xor",
+      "expect": {
+        "kind": "or",
+        "left": {
+          "kind": "and",
+          "left": {
+            "kind": "allOf",
+            "operands": []
+          },
+          "right": {
+            "kind": "not",
+            "operand": {
+              "kind": "compare",
+              "left": {
+                "key": "missing",
+                "kind": "reference"
+              },
+              "op": "eq",
+              "right": {
+                "key": "present",
+                "kind": "reference"
+              }
+            }
+          }
+        },
+        "right": {
+          "kind": "and",
+          "left": {
+            "kind": "not",
+            "operand": {
+              "kind": "allOf",
+              "operands": []
+            }
+          },
+          "right": {
+            "kind": "compare",
+            "left": {
+              "key": "missing",
+              "kind": "reference"
+            },
+            "op": "eq",
+            "right": {
+              "key": "present",
+              "kind": "reference"
+            }
+          }
+        }
+      },
+      "from": "recorded: trilean src/derived-connectives.ts (the tree xor builds)",
+      "id": "connectives-build.xor-kind-allof-operands-kind-compare-op-eq-left-kind-reference-key-missing-right-kind-reference-key-present.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "kind": "anyOf",
+          "operands": []
+        },
+        {
+          "kind": "allOf",
+          "operands": []
+        }
+      ],
+      "builder": "xor",
+      "expect": {
+        "kind": "or",
+        "left": {
+          "kind": "and",
+          "left": {
+            "kind": "anyOf",
+            "operands": []
+          },
+          "right": {
+            "kind": "not",
+            "operand": {
+              "kind": "allOf",
+              "operands": []
+            }
+          }
+        },
+        "right": {
+          "kind": "and",
+          "left": {
+            "kind": "not",
+            "operand": {
+              "kind": "anyOf",
+              "operands": []
+            }
+          },
+          "right": {
+            "kind": "allOf",
+            "operands": []
+          }
+        }
+      },
+      "from": "recorded: trilean src/derived-connectives.ts (the tree xor builds)",
+      "id": "connectives-build.xor-kind-anyof-operands-kind-allof-operands.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "kind": "anyOf",
+          "operands": []
+        },
+        {
+          "kind": "anyOf",
+          "operands": []
+        }
+      ],
+      "builder": "xor",
+      "expect": {
+        "kind": "or",
+        "left": {
+          "kind": "and",
+          "left": {
+            "kind": "anyOf",
+            "operands": []
+          },
+          "right": {
+            "kind": "not",
+            "operand": {
+              "kind": "anyOf",
+              "operands": []
+            }
+          }
+        },
+        "right": {
+          "kind": "and",
+          "left": {
+            "kind": "not",
+            "operand": {
+              "kind": "anyOf",
+              "operands": []
+            }
+          },
+          "right": {
+            "kind": "anyOf",
+            "operands": []
+          }
+        }
+      },
+      "from": "recorded: trilean src/derived-connectives.ts (the tree xor builds)",
+      "id": "connectives-build.xor-kind-anyof-operands-kind-anyof-operands.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "kind": "anyOf",
+          "operands": []
+        },
+        {
+          "kind": "compare",
+          "left": {
+            "key": "missing",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "key": "present",
+            "kind": "reference"
+          }
+        }
+      ],
+      "builder": "xor",
+      "expect": {
+        "kind": "or",
+        "left": {
+          "kind": "and",
+          "left": {
+            "kind": "anyOf",
+            "operands": []
+          },
+          "right": {
+            "kind": "not",
+            "operand": {
+              "kind": "compare",
+              "left": {
+                "key": "missing",
+                "kind": "reference"
+              },
+              "op": "eq",
+              "right": {
+                "key": "present",
+                "kind": "reference"
+              }
+            }
+          }
+        },
+        "right": {
+          "kind": "and",
+          "left": {
+            "kind": "not",
+            "operand": {
+              "kind": "anyOf",
+              "operands": []
+            }
+          },
+          "right": {
+            "kind": "compare",
+            "left": {
+              "key": "missing",
+              "kind": "reference"
+            },
+            "op": "eq",
+            "right": {
+              "key": "present",
+              "kind": "reference"
+            }
+          }
+        }
+      },
+      "from": "recorded: trilean src/derived-connectives.ts (the tree xor builds)",
+      "id": "connectives-build.xor-kind-anyof-operands-kind-compare-op-eq-left-kind-reference-key-missing-right-kind-reference-key-present.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "kind": "compare",
+          "left": {
+            "key": "missing",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "key": "present",
+            "kind": "reference"
+          }
+        },
+        {
+          "kind": "allOf",
+          "operands": []
+        }
+      ],
+      "builder": "xor",
+      "expect": {
+        "kind": "or",
+        "left": {
+          "kind": "and",
+          "left": {
+            "kind": "compare",
+            "left": {
+              "key": "missing",
+              "kind": "reference"
+            },
+            "op": "eq",
+            "right": {
+              "key": "present",
+              "kind": "reference"
+            }
+          },
+          "right": {
+            "kind": "not",
+            "operand": {
+              "kind": "allOf",
+              "operands": []
+            }
+          }
+        },
+        "right": {
+          "kind": "and",
+          "left": {
+            "kind": "not",
+            "operand": {
+              "kind": "compare",
+              "left": {
+                "key": "missing",
+                "kind": "reference"
+              },
+              "op": "eq",
+              "right": {
+                "key": "present",
+                "kind": "reference"
+              }
+            }
+          },
+          "right": {
+            "kind": "allOf",
+            "operands": []
+          }
+        }
+      },
+      "from": "recorded: trilean src/derived-connectives.ts (the tree xor builds)",
+      "id": "connectives-build.xor-kind-compare-op-eq-left-kind-reference-key-missing-right-kind-reference-key-present-kind-allof-operands.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "kind": "compare",
+          "left": {
+            "key": "missing",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "key": "present",
+            "kind": "reference"
+          }
+        },
+        {
+          "kind": "anyOf",
+          "operands": []
+        }
+      ],
+      "builder": "xor",
+      "expect": {
+        "kind": "or",
+        "left": {
+          "kind": "and",
+          "left": {
+            "kind": "compare",
+            "left": {
+              "key": "missing",
+              "kind": "reference"
+            },
+            "op": "eq",
+            "right": {
+              "key": "present",
+              "kind": "reference"
+            }
+          },
+          "right": {
+            "kind": "not",
+            "operand": {
+              "kind": "anyOf",
+              "operands": []
+            }
+          }
+        },
+        "right": {
+          "kind": "and",
+          "left": {
+            "kind": "not",
+            "operand": {
+              "kind": "compare",
+              "left": {
+                "key": "missing",
+                "kind": "reference"
+              },
+              "op": "eq",
+              "right": {
+                "key": "present",
+                "kind": "reference"
+              }
+            }
+          },
+          "right": {
+            "kind": "anyOf",
+            "operands": []
+          }
+        }
+      },
+      "from": "recorded: trilean src/derived-connectives.ts (the tree xor builds)",
+      "id": "connectives-build.xor-kind-compare-op-eq-left-kind-reference-key-missing-right-kind-reference-key-present-kind-anyof-operands.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "kind": "compare",
+          "left": {
+            "key": "missing",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "key": "present",
+            "kind": "reference"
+          }
+        },
+        {
+          "kind": "compare",
+          "left": {
+            "key": "missing",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "key": "present",
+            "kind": "reference"
+          }
+        }
+      ],
+      "builder": "xor",
+      "expect": {
+        "kind": "or",
+        "left": {
+          "kind": "and",
+          "left": {
+            "kind": "compare",
+            "left": {
+              "key": "missing",
+              "kind": "reference"
+            },
+            "op": "eq",
+            "right": {
+              "key": "present",
+              "kind": "reference"
+            }
+          },
+          "right": {
+            "kind": "not",
+            "operand": {
+              "kind": "compare",
+              "left": {
+                "key": "missing",
+                "kind": "reference"
+              },
+              "op": "eq",
+              "right": {
+                "key": "present",
+                "kind": "reference"
+              }
+            }
+          }
+        },
+        "right": {
+          "kind": "and",
+          "left": {
+            "kind": "not",
+            "operand": {
+              "kind": "compare",
+              "left": {
+                "key": "missing",
+                "kind": "reference"
+              },
+              "op": "eq",
+              "right": {
+                "key": "present",
+                "kind": "reference"
+              }
+            }
+          },
+          "right": {
+            "kind": "compare",
+            "left": {
+              "key": "missing",
+              "kind": "reference"
+            },
+            "op": "eq",
+            "right": {
+              "key": "present",
+              "kind": "reference"
+            }
+          }
+        }
+      },
+      "from": "recorded: trilean src/derived-connectives.ts (the tree xor builds)",
+      "id": "connectives-build.xor-kind-compare-op-eq-left-kind-reference-key-missing-right-kind-reference-key-present-kind-compare-op-eq-left-kind-reference-key-m.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "kind": "anyOf",
+          "operands": []
+        },
+        {
+          "kind": "compare",
+          "left": {
+            "key": "missing",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "key": "present",
+            "kind": "reference"
+          }
+        }
+      ],
+      "builder": "implies",
+      "expect": {
+        "kind": "or",
+        "left": {
+          "kind": "not",
+          "operand": {
+            "kind": "anyOf",
+            "operands": []
+          }
+        },
+        "right": {
+          "kind": "compare",
+          "left": {
+            "key": "missing",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "key": "present",
+            "kind": "reference"
+          }
+        }
+      },
+      "from": "recorded: trilean src/derived-connectives.ts (the tree implies builds)",
+      "id": "connectives-build.implies-kind-anyof-operands-kind-compare-op-eq-left-kind-reference-key-missing-right-kind-reference-key-present.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "kind": "allOf",
+          "operands": []
+        },
+        {
+          "kind": "anyOf",
+          "operands": []
+        }
+      ],
+      "builder": "nand",
+      "expect": {
+        "kind": "not",
+        "operand": {
+          "kind": "and",
+          "left": {
+            "kind": "allOf",
+            "operands": []
+          },
+          "right": {
+            "kind": "anyOf",
+            "operands": []
+          }
+        }
+      },
+      "from": "recorded: trilean src/derived-connectives.ts (the tree nand builds)",
+      "id": "connectives-build.nand-kind-allof-operands-kind-anyof-operands.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "kind": "allOf",
+          "operands": []
+        },
+        {
+          "kind": "allOf",
+          "operands": []
+        }
+      ],
+      "builder": "nand",
+      "expect": {
+        "kind": "not",
+        "operand": {
+          "kind": "and",
+          "left": {
+            "kind": "allOf",
+            "operands": []
+          },
+          "right": {
+            "kind": "allOf",
+            "operands": []
+          }
+        }
+      },
+      "from": "recorded: trilean src/derived-connectives.ts (the tree nand builds)",
+      "id": "connectives-build.nand-kind-allof-operands-kind-allof-operands.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "kind": "anyOf",
+          "operands": []
+        },
+        {
+          "kind": "anyOf",
+          "operands": []
+        }
+      ],
+      "builder": "nor",
+      "expect": {
+        "kind": "not",
+        "operand": {
+          "kind": "or",
+          "left": {
+            "kind": "anyOf",
+            "operands": []
+          },
+          "right": {
+            "kind": "anyOf",
+            "operands": []
+          }
+        }
+      },
+      "from": "recorded: trilean src/derived-connectives.ts (the tree nor builds)",
+      "id": "connectives-build.nor-kind-anyof-operands-kind-anyof-operands.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "kind": "allOf",
+          "operands": []
+        },
+        {
+          "kind": "anyOf",
+          "operands": []
+        }
+      ],
+      "builder": "nor",
+      "expect": {
+        "kind": "not",
+        "operand": {
+          "kind": "or",
+          "left": {
+            "kind": "allOf",
+            "operands": []
+          },
+          "right": {
+            "kind": "anyOf",
+            "operands": []
+          }
+        }
+      },
+      "from": "recorded: trilean src/derived-connectives.ts (the tree nor builds)",
+      "id": "connectives-build.nor-kind-allof-operands-kind-anyof-operands.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "kind": "allOf",
+          "operands": []
+        },
+        {
+          "kind": "allOf",
+          "operands": []
+        }
+      ],
+      "builder": "iff",
+      "expect": {
+        "kind": "not",
+        "operand": {
+          "kind": "or",
+          "left": {
+            "kind": "and",
+            "left": {
+              "kind": "allOf",
+              "operands": []
+            },
+            "right": {
+              "kind": "not",
+              "operand": {
+                "kind": "allOf",
+                "operands": []
+              }
+            }
+          },
+          "right": {
+            "kind": "and",
+            "left": {
+              "kind": "not",
+              "operand": {
+                "kind": "allOf",
+                "operands": []
+              }
+            },
+            "right": {
+              "kind": "allOf",
+              "operands": []
+            }
+          }
+        }
+      },
+      "from": "recorded: trilean src/derived-connectives.ts (the tree iff builds)",
+      "id": "connectives-build.iff-kind-allof-operands-kind-allof-operands.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "kind": "allOf",
+          "operands": []
+        },
+        {
+          "kind": "anyOf",
+          "operands": []
+        }
+      ],
+      "builder": "iff",
+      "expect": {
+        "kind": "not",
+        "operand": {
+          "kind": "or",
+          "left": {
+            "kind": "and",
+            "left": {
+              "kind": "allOf",
+              "operands": []
+            },
+            "right": {
+              "kind": "not",
+              "operand": {
+                "kind": "anyOf",
+                "operands": []
+              }
+            }
+          },
+          "right": {
+            "kind": "and",
+            "left": {
+              "kind": "not",
+              "operand": {
+                "kind": "allOf",
+                "operands": []
+              }
+            },
+            "right": {
+              "kind": "anyOf",
+              "operands": []
+            }
+          }
+        }
+      },
+      "from": "recorded: trilean src/derived-connectives.ts (the tree iff builds)",
+      "id": "connectives-build.iff-kind-allof-operands-kind-anyof-operands.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        "numbers",
+        {
+          "kind": "compare",
+          "left": {
+            "key": "self",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 10
+          }
+        }
+      ],
+      "builder": "none",
+      "expect": {
+        "kind": "not",
+        "operand": {
+          "collection": "numbers",
+          "item": {
+            "kind": "compare",
+            "left": {
+              "key": "self",
+              "kind": "reference"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 10
+            }
+          },
+          "kind": "some"
+        }
+      },
+      "from": "recorded: trilean src/derived-connectives.ts (the tree none builds)",
+      "id": "connectives-build.none-numbers-kind-compare-op-gt-left-kind-reference-key-self-right-kind-numberliteral-value-10.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        "numbers",
+        {
+          "kind": "compare",
+          "left": {
+            "key": "self",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      ],
+      "builder": "none",
+      "expect": {
+        "kind": "not",
+        "operand": {
+          "collection": "numbers",
+          "item": {
+            "kind": "compare",
+            "left": {
+              "key": "self",
+              "kind": "reference"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          },
+          "kind": "some"
+        }
+      },
+      "from": "recorded: trilean src/derived-connectives.ts (the tree none builds)",
+      "id": "connectives-build.none-numbers-kind-compare-op-gt-left-kind-reference-key-self-right-kind-numberliteral-value-1.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "kind": "allOf",
+          "operands": []
+        },
+        {
+          "kind": "anyOf",
+          "operands": []
+        }
+      ],
+      "builder": "xor",
+      "expect": {
+        "kind": "or",
+        "left": {
+          "kind": "and",
+          "left": {
+            "kind": "allOf",
+            "operands": []
+          },
+          "right": {
+            "kind": "not",
+            "operand": {
+              "kind": "anyOf",
+              "operands": []
+            }
+          }
+        },
+        "right": {
+          "kind": "and",
+          "left": {
+            "kind": "not",
+            "operand": {
+              "kind": "allOf",
+              "operands": []
+            }
+          },
+          "right": {
+            "kind": "anyOf",
+            "operands": []
+          }
+        }
+      },
+      "from": "derived-connectives.unit.test.ts: derived = composition, not separate logic > xor(a, b) is structurally exactly or(and(a, not(b)), and(not(a), b))",
+      "id": "connectives-build.derived-composition-not-separate-logic-xor-a-b-is-structurally-exactly-or-and-a-not-b-and-not-a-b.1",
+      "kind": "build"
+    }
+  ]
+}

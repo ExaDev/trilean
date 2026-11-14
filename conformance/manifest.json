@@ -8,6 +8,22 @@
       "cases": 87,
       "skip": []
     },
+    "trilean/build/derived-aggregates.json": {
+      "cases": 10,
+      "skip": []
+    },
+    "trilean/build/derived-connectives.json": {
+      "cases": 19,
+      "skip": []
+    },
+    "trilean/build/derived-patterns.json": {
+      "cases": 43,
+      "skip": []
+    },
+    "trilean/build/derived-values.json": {
+      "cases": 9,
+      "skip": []
+    },
     "trilean/call/builtin-functions.json": {
       "cases": 180,
       "skip": [
@@ -30,6 +46,22 @@
         "builtin.sine-cosine-and-tangent-sine-is-a-domain-error-for-an-angle-that-is-not-finite.1",
         "builtin.sine-cosine-and-tangent-tangent-is-a-domain-error-for-an-angle-that-is-not-finite.1"
       ]
+    },
+    "trilean/evaluate/derived-aggregates.json": {
+      "cases": 10,
+      "skip": []
+    },
+    "trilean/evaluate/derived-connectives.json": {
+      "cases": 22,
+      "skip": []
+    },
+    "trilean/evaluate/derived-patterns.json": {
+      "cases": 78,
+      "skip": []
+    },
+    "trilean/evaluate/derived-values.json": {
+      "cases": 7,
+      "skip": []
     },
     "trilean/evaluate/evaluator.arithmetic.json": {
       "cases": 22,
