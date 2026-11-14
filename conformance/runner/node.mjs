@@ -1,4 +1,3 @@
-// node conformance/runner/node.mjs <package tarball>: the corpus against the package as installed, in Node.
 import { createRequire } from "node:module";
 import { pathToFileURL } from "node:url";
 import { install, readTree, report } from "./host.mjs";

@@ -3,14 +3,15 @@
 //! which files are corpus files, what a valid file is, and that the corpus is what `conformance/manifest.json`
 //! says it is. A file that does not match is a failure, never a skip.
 //!
-//! The loader executes no case: it reads the same files, selected the same way, as the TypeScript runner does, and
-//! validates every case of every kind in full through the types of `trilean_conformance`. A case is registered when
-//! its id is read from the raw document and checked when it passes that validation, two observations by different
-//! code that must agree per file. It counts every case in one
-//! of two categories: a case marked `skip: rust` is skipped because it is marked, and any other is skipped for want
-//! of a native executor.
+//! The loader reads the same files, selected the same way, as the TypeScript runner does, and validates every case of
+//! every kind in full through the types of `trilean_conformance`. A case is registered when its id is read from the
+//! raw document and checked when it passes that validation, two observations by different code that must agree per
+//! file. It counts every case in one of three categories: a case marked `skip: rust` is skipped because it is marked,
+//! a case of a regex kind is executed against the native crate (see `execute`), a stated work bound included, and any
+//! other is skipped for want of a native executor.
 
 mod canonical;
+mod execute;
 mod schema;
 mod selection;
 mod validate;
@@ -256,6 +257,8 @@ struct LoadedFile {
     checked_ids: Vec<String>,
     ts_skip_ids: Vec<String>,
     rust_skip_ids: Vec<String>,
+    /// The cases of the file this loader executed.
+    executed: usize,
 }
 
 /// Loads and checks a whole corpus root by every rule `conformance/README.md` states: the files selected, each file
@@ -276,14 +279,21 @@ fn check_corpus(root: &Path) -> (Vec<LoadedFile>, Vec<String>) {
     let mut ids = BTreeSet::new();
     for name in found.selected {
         let mut registered_ids = Vec::new();
+        let mut run = execute::Outcome {
+            executed: 0,
+            failures: Vec::new(),
+        };
         let facts = read_json(&root.join(&name))
             .and_then(|value| {
                 registered_ids = registered(&value);
-                validate::validate_file(&value)
+                let facts = validate::validate_file(&value)?;
+                run = execute::run_file(&name, &value);
+                Ok(facts)
             })
             .map_err(|error| format!("{name}: {error}"));
         match facts {
             Ok(facts) => {
+                problems.extend(run.failures);
                 for id in &facts.ids {
                     if !ids.insert(id.clone()) {
                         problems.push(format!("{name}: case id {id} is used by another file"));
@@ -296,6 +306,7 @@ fn check_corpus(root: &Path) -> (Vec<LoadedFile>, Vec<String>) {
                     checked_ids: facts.ids,
                     ts_skip_ids: facts.ts_skip_ids,
                     rust_skip_ids: facts.rust_skip_ids,
+                    executed: run.executed,
                 });
             }
             Err(error) => problems.push(error),
@@ -410,6 +421,7 @@ fn self_check_completeness(failures: &mut Vec<String>) {
         checked_ids: checked.iter().map(|id| (*id).to_owned()).collect(),
         ts_skip_ids: Vec::new(),
         rust_skip_ids: rust.iter().map(|id| (*id).to_owned()).collect(),
+        executed: 0,
     };
     let manifest = |cases: usize, rust: &[&str]| {
         BTreeMap::from([(
@@ -464,12 +476,14 @@ fn self_check_completeness(failures: &mut Vec<String>) {
     }
 }
 
-/// The cases this runner executed, skipped because they are marked `rust`, and skipped for want of an executor.
+/// The cases this runner executed, skipped because they are marked `rust`, and skipped for want of an executor. The
+/// executed ones are the cases of the regex kinds that are not marked.
 fn counts(files: &[LoadedFile]) -> (usize, usize, usize) {
     let total: usize = files.iter().map(|file| file.case_count).sum();
     let skipped_marked: usize = files.iter().map(|file| file.rust_skip_ids.len()).sum();
+    let executed: usize = files.iter().map(|file| file.executed).sum();
 
-    (0, skipped_marked, total - skipped_marked)
+    (executed, skipped_marked, total - skipped_marked - executed)
 }
 
 fn main() -> ExitCode {

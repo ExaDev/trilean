@@ -1377,6 +1377,10 @@
         },
         "matches": {
           "type": "boolean"
+        },
+        "workBound": {
+          "$ref": "#/$defs/WorkBound",
+          "description": "A bound on the work the matcher does for this input. Only a runner that counts NFA state visits checks it."
         }
       },
       "required": [
@@ -2144,6 +2148,21 @@
       "required": [
         "key",
         "result"
+      ],
+      "type": "object"
+    },
+    "WorkBound": {
+      "additionalProperties": false,
+      "description": "A bound on the work of a match, in NFA state visits: at most `factor` times (the pattern's length + 1) times (the input's length + 1), both lengths in UTF-16 code units.",
+      "properties": {
+        "factor": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "factor"
       ],
       "type": "object"
     }

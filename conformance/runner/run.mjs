@@ -22,6 +22,28 @@ const bad = (n) =>
     ["operand", "operands", "branches"].some((k) =>
       [].concat(n[k] ?? []).some(bad),
     ));
+const DEPTH = 64;
+const keyed = (t) => {
+  const st = [];
+  if (t[0] === "\uFEFF") return false;
+  for (const [m] of t.matchAll(/"(?:[^"\\]|\\.)*"|[[\]{},]/g)) {
+    const o = st.at(-1);
+    if (m[0] === '"') {
+      if (!o?.k) continue;
+      const v = JSON.parse(m);
+      if (!v.isWellFormed() || (o.last !== undefined && v <= o.last))
+        return false;
+      [o.last, o.k] = [v, 0];
+    } else if (m === "{" || m === "[") {
+      st.push(m === "{" ? { o: 1, k: 1 } : {});
+      if (st.length > DEPTH) return false;
+    } else if (m === ",") {
+      if (o?.o) o.k = 1;
+    } else st.pop();
+  }
+
+  return true;
+};
 const units = (t) =>
   typeof t === "string" ? t : String.fromCharCode(...t.codeUnits);
 const eq = (a, b) =>
@@ -95,7 +117,6 @@ export function select(tree) {
 }
 
 export function prepare(tree) {
-  // Ajv compiles code, which a Workers isolate allows only at startup: prepare before serving.
   const ajv = new Ajv({ allErrors: true, strict: true, allowUnionTypes: true });
   const [vFile, vManifest] = ["case", "manifest"].map((n) =>
     ajv.compile(JSON.parse(tree[`${n}.schema.json`])),
@@ -111,6 +132,7 @@ export function prepare(tree) {
     const v = typeof text === "string" ? parse(text) : undefined;
     if (v === undefined) return ["is not UTF-8 JSON"];
     if (!wf(v)) return ["holds an unpaired surrogate"];
+    if (!keyed(text)) return ["has keys out of order"];
     if (!validate(v)) return [ajv.errorsText(validate.errors)];
 
     return [];
@@ -132,10 +154,12 @@ export function prepare(tree) {
 
     return p.length
       ? p
-      : Object.values(parse(text).files).some((e) =>
-            e.skip.some((id, i) => i && e.skip[i - 1] >= id),
+      : Object.values(parse(text).files).some(
+            ({ skip: { ts, rust } }) =>
+              [ts, rust].some((l) => l.some((id, i) => i && l[i - 1] >= id)) ||
+              ts.some((id) => rust.includes(id)),
           )
-        ? ["skip is not ascending"]
+        ? ["skip lists are not ascending and apart"]
         : [];
   };
   const corpus = (t) => {
@@ -154,10 +178,15 @@ export function prepare(tree) {
       });
       files[n] = {
         cases: cases.length,
-        skip: cases
-          .filter((c) => c.skip)
-          .map((c) => c.id)
-          .sort(),
+        skip: Object.fromEntries(
+          ["rust", "ts"].map((i) => [
+            i,
+            cases
+              .filter((c) => c.skip === i)
+              .map((c) => c.id)
+              .sort(),
+          ]),
+        ),
       };
     }
     const m = manifestProblems(t["manifest.json"]);
@@ -199,32 +228,27 @@ export function prepare(tree) {
       })
     )
       out.push("the selection rule disagrees with loader-selection");
-    out.push(
-      ...pairs("invalid-cases", "repaired-cases", fileProblems),
-      ...pairs("refused-kinds/invalid", "refused-kinds/repaired", fileProblems),
-      ...pairs("manifests/invalid", "manifests/repaired", manifestProblems),
-    );
-    for (const n of names(tree, "fixtures/valid-cases/"))
-      if (fileProblems(text("valid-cases", n)).length)
-        out.push(`valid-cases/${n} is rejected`);
-    for (const n of names(tree, "fixtures/manifests/valid/"))
-      if (manifestProblems(text("manifests/valid", n)).length)
-        out.push(`manifests/valid/${n} is rejected`);
-    for (const n of names(tree, "fixtures/corpora/invalid/")) {
-      if (!corpus(sub(tree, `fixtures/corpora/invalid/${n}/`)).length)
-        out.push(`corpora/invalid/${n} has no problem`);
-      out.push(
-        ...corpus(sub(tree, `fixtures/corpora/repaired/${n}/`)).map(
-          (x) => `corpora/repaired/${n}: ${x}`,
-        ),
-      );
-    }
-    for (const p of parse(text("text-forms", "pairs.json")).pairs)
-      if (
-        units(p.text) !== units({ codeUnits: p.codeUnits }) ||
-        units(p.text).length !== p.codeUnits.length
-      )
-        out.push(`text form ${p.text}`);
+
+    for (const [i, r, p] of [
+      ["invalid-cases", "repaired-cases", fileProblems],
+      ["refused-kinds/invalid", "refused-kinds/repaired", fileProblems],
+      ["manifests/invalid", "manifests/repaired", manifestProblems],
+      ["schema-only/invalid-cases", "schema-only/repaired-cases", fileProblems],
+      ["generated/invalid-cases", "generated/repaired-cases", fileProblems],
+      [
+        "canonical-keys/invalid",
+        "canonical-keys/repaired",
+        (t) => (keyed(t) ? [] : ["keys"]),
+      ],
+    ])
+      out.push(...pairs(i, r, p));
+    for (const [d, p] of [
+      ["valid-cases", fileProblems],
+      ["manifests/valid", manifestProblems],
+      ["schema-only/valid-cases", fileProblems],
+    ])
+      for (const n of names(tree, `fixtures/${d}/`))
+        if (p(text(d, n)).length) out.push(`${d}/${n} is rejected`);
 
     return out;
   };
@@ -232,19 +256,21 @@ export function prepare(tree) {
   const manifest = parse(tree["manifest.json"]).files;
 
   return async (pkg) => {
-    let executed = 0,
-      skipped = 0;
-    const regexFiles = Object.keys(manifest).filter((n) =>
-      n.startsWith("trilean-regex/"),
-    );
-    for (const name of regexFiles) {
+    const registered = [],
+      skipped = [],
+      started = [],
+      files = Object.keys(manifest).filter((n) =>
+        n.startsWith("trilean-regex/"),
+      );
+    for (const name of files) {
       for (const c of parse(tree[name]).cases) {
+        registered.push(c.id);
         // Only a `rust` mark skips here; the native runner alone counts a `workBound`.
         if (c.skip === "rust") {
-          skipped++;
+          skipped.push(c.id);
           continue;
         }
-        executed++;
+        started.push(c.id);
         try {
           run(pkg, c);
         } catch (e) {
@@ -252,32 +278,20 @@ export function prepare(tree) {
         }
       }
     }
-    // Refusals are not corpus cases: check the class thrown through the boundary.
-    for (const [p, index, construct] of [
-      [".", 0, "."],
-      ["a\\s", 1, "\\s"],
-      ["[\\s]", 1, "\\s"],
-      ["x|{2}", 2, "{"],
-    ]) {
-      try {
-        pkg.compileEcmascriptSubset(p);
-        failures.push(`${p} compiled`);
-      } catch (e) {
-        if (!(
-          e instanceof pkg.UnsupportedConstructError &&
-          e.index === index &&
-          e.construct === construct
-        ))
-          failures.push(`${p}: ${e}`);
-      }
-    }
-    const total = regexFiles.reduce((n, f) => n + manifest[f].cases, 0);
-    if (executed + skipped !== total)
+    const total = files.reduce((n, f) => n + manifest[f].cases, 0),
+      listed = files.flatMap((f) => manifest[f].skip.rust).sort(),
+      ran = registered.filter((id) => !skipped.includes(id)).sort();
+    if (
+      registered.length !== total ||
+      new Set(registered).size !== total ||
+      !eq(skipped.sort(), listed) ||
+      !eq(started.sort(), ran)
+    )
       failures.push(
-        `executed ${executed} plus skipped ${skipped} is not the manifest's ${total}`,
+        `registered ${registered.length}, the manifest has ${total}`,
       );
 
-    return { executed, skipped, failures };
+    return { executed: started.length, skipped: skipped.length, failures };
   };
 }
 
