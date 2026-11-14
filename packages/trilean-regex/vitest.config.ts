@@ -2,6 +2,9 @@ import { defineConfig } from "vitest/config";
 
 const BUNDLER_TIMEOUT_MS = 180000;
 
+/** The differential against `RegExp` is 30,000 patterns by some seventy subjects, which takes a few seconds on an idle host and longer on a shared one. */
+const DIFFERENTIAL_TIMEOUT_MS = 60000;
+
 export default defineConfig({
   test: {
     projects: [
@@ -9,6 +12,7 @@ export default defineConfig({
         test: {
           name: "unit",
           include: ["test/**/*.unit.test.ts"],
+          testTimeout: DIFFERENTIAL_TIMEOUT_MS,
         },
       },
       {
