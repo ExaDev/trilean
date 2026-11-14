@@ -4,8 +4,10 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import {
   checkCorpus,
-  collect,
   completenessProblems,
+  createRunRecord,
+  registerCases,
+  type RunRecord,
 } from "./test-support/corpus";
 import { selectCorpusFiles } from "./test-support/corpus-files";
 import {
@@ -23,6 +25,7 @@ import {
 } from "./test-support/run-serialise";
 import { runEvaluateCase } from "./test-support/run-evaluate";
 import { runValidateCase } from "./test-support/run-validate";
+import { keyProblems } from "./test-support/canonical-keys";
 import { readJson } from "./test-support/read-json";
 import { textToCodeUnits, textToString } from "./test-support/text";
 import { validateCorpusFile, validateManifest } from "./test-support/validate";
@@ -170,6 +173,63 @@ describe("corpus loading", () => {
     );
   });
 
+  it("rejects every file whose keys are not canonical, each for its one defect", () => {
+    expectPairs("canonical-keys/invalid", "canonical-keys/repaired", () => ({
+      ok: true,
+    }));
+    for (const name of fixtureNames("canonical-keys/invalid")) {
+      expect(
+        () => readJson(join(FIXTURES, "canonical-keys", "invalid", name)),
+        `readJson refuses invalid/${name}`,
+      ).toThrow();
+      expect(
+        readJson(join(FIXTURES, "canonical-keys", "repaired", name)),
+        `readJson reads repaired/${name}`,
+      ).toBeDefined();
+      for (const side of ["invalid", "repaired"]) {
+        const text = readFileSync(
+          join(FIXTURES, "canonical-keys", side, name),
+          "utf8",
+        );
+        expect(keyProblems(text).length > 0, `${side}/${name}`).toBe(
+          side === "invalid",
+        );
+      }
+    }
+  });
+
+  it("finds in every generated document the number of problems the file records", () => {
+    const document = readJson(
+      join(FIXTURES, "canonical-keys", "differential.json"),
+    );
+    const documents: unknown = isRecord(document)
+      ? document.documents
+      : undefined;
+    if (!Array.isArray(documents) || documents.length === 0) {
+      throw new Error("differential.json must hold a non-empty list");
+    }
+    const differing = documents.flatMap((entry: unknown, position: number) =>
+      isRecord(entry) &&
+      typeof entry.text === "string" &&
+      keyProblems(entry.text).length === entry.problems
+        ? []
+        : [position],
+    );
+    expect(differing).toEqual([]);
+    expect(
+      documents.some(
+        (entry: unknown) => isRecord(entry) && entry.problems !== 0,
+      ),
+      "the documents include some that break the rule",
+    ).toBe(true);
+    expect(
+      documents.some(
+        (entry: unknown) => isRecord(entry) && entry.problems === 0,
+      ),
+      "the documents include some that keep the rule",
+    ).toBe(true);
+  });
+
   it("rejects every invalid manifest fixture, each for its one defect", () => {
     expectPairs("manifests/invalid", "manifests/repaired", validateManifest);
   });
@@ -265,51 +325,168 @@ const corpus = checked.files.filter(({ name }) =>
   name.startsWith(PACKAGE_DIRECTORY),
 );
 
-// What this run registers, computed while the tests are collected, so the completeness check below holds whatever the run does with them afterwards: a name filter, a bail, a retry or a shuffled order changes which registered tests run, never which are registered.
-const { registered, skipped } = collect(corpus);
-const registeredIds = new Set(registered);
+// What this run does, written by the registration loop and the test bodies below and never computed from the parsed corpus: the completeness check at the end compares it with the manifest, so a loop that drops or filters cases, skips more than the manifest allows, or registers a body that never runs fails it.
+const record = createRunRecord();
+
+/** Runs one case of this package's share of the corpus. */
+async function runCase(
+  testCase: (typeof corpus)[number]["file"]["cases"][number],
+): Promise<void> {
+  if (testCase.kind === "validate") {
+    runValidateCase(testCase);
+  } else if (testCase.kind === "evaluate") {
+    await runEvaluateCase(testCase);
+  } else if (testCase.kind === "cli") {
+    runCliCase(testCase);
+  } else if (testCase.kind === "serialise") {
+    runSerialiseCase(testCase);
+  } else if (testCase.kind === "number-format") {
+    runNumberFormatCase(testCase);
+  } else if (testCase.kind === "inputs") {
+    runInputsCase(testCase);
+  } else if (testCase.kind === "document") {
+    runDocumentCase(testCase);
+  } else if (testCase.kind === "build") {
+    runBuildCase(testCase);
+  } else if (testCase.kind === "call") {
+    runCallCase(testCase);
+  } else {
+    throw new Error(
+      `no executor for the ${testCase.kind} kind in this package`,
+    );
+  }
+}
 
 for (const { name, file } of corpus) {
   describe(`conformance ${name}`, () => {
-    for (const testCase of file.cases) {
-      it.skipIf(!registeredIds.has(testCase.id))(
-        `${testCase.id} (${testCase.from})`,
-        async () => {
-          if (testCase.kind === "validate") {
-            runValidateCase(testCase);
-          } else if (testCase.kind === "evaluate") {
-            await runEvaluateCase(testCase);
-          } else if (testCase.kind === "cli") {
-            runCliCase(testCase);
-          } else if (testCase.kind === "serialise") {
-            runSerialiseCase(testCase);
-          } else if (testCase.kind === "number-format") {
-            runNumberFormatCase(testCase);
-          } else if (testCase.kind === "inputs") {
-            runInputsCase(testCase);
-          } else if (testCase.kind === "document") {
-            runDocumentCase(testCase);
-          } else if (testCase.kind === "build") {
-            runBuildCase(testCase);
-          } else if (testCase.kind === "call") {
-            runCallCase(testCase);
-          } else {
-            throw new Error(
-              `no executor for the ${testCase.kind} kind in this package`,
-            );
-          }
-        },
-      );
-    }
+    registerCases(
+      file.cases,
+      record,
+      (title, skipped, body) => {
+        (skipped ? it.skip : it)(title, body);
+      },
+      runCase,
+    );
   });
 }
+
+describe("the completeness check", () => {
+  const manifest = { total: 3, skip: ["c"] };
+  const run = (changes: Partial<RunRecord> = {}): RunRecord => ({
+    registered: ["a", "b", "c"],
+    skipped: ["c"],
+    started: ["a", "b"],
+    ...changes,
+  });
+
+  it("accepts a run that registered, skipped and started what the manifest says", () => {
+    expect(completenessProblems(manifest, run())).toEqual([]);
+  });
+
+  it("registers every case, skips those marked for this implementation and starts the rest", async () => {
+    const cases = [
+      { id: "a", from: "x.test.ts: a" },
+      { id: "b", from: "x.test.ts: b", skip: "ts" },
+      { id: "c", from: "x.test.ts: c", skip: "rust" },
+    ];
+    const recorded = createRunRecord();
+    const defined: {
+      title: string;
+      skipped: boolean;
+      body: () => Promise<void>;
+    }[] = [];
+    registerCases(
+      cases,
+      recorded,
+      (title, skipped, body) => {
+        defined.push({ title, skipped, body });
+      },
+      () => undefined,
+    );
+    await Promise.all(
+      defined.filter(({ skipped }) => !skipped).map(async ({ body }) => body()),
+    );
+    expect(defined.map(({ skipped }) => skipped)).toEqual([false, true, false]);
+    expect(completenessProblems({ total: 3, skip: ["b"] }, recorded)).toEqual(
+      [],
+    );
+  });
+
+  it("leaves a body that is registered and never run to fail the check", () => {
+    const recorded = createRunRecord();
+    registerCases(
+      [{ id: "a", from: "x.test.ts: a" }],
+      recorded,
+      () => undefined,
+      () => undefined,
+    );
+    expect(completenessProblems({ total: 1, skip: [] }, recorded)).not.toEqual(
+      [],
+    );
+  });
+
+  it("refuses a run that skips every case", () => {
+    expect(
+      completenessProblems(
+        manifest,
+        run({ skipped: ["a", "b", "c"], started: [] }),
+      ),
+    ).not.toEqual([]);
+  });
+
+  it("refuses a registration loop that leaves cases out", () => {
+    expect(
+      completenessProblems(
+        manifest,
+        run({ registered: ["a", "c"], started: ["a"] }),
+      ),
+    ).not.toEqual([]);
+  });
+
+  it("refuses a registered case whose body never starts", () => {
+    expect(completenessProblems(manifest, run({ started: ["a"] }))).not.toEqual(
+      [],
+    );
+  });
+
+  it("refuses a case registered twice, started twice or started after being skipped", () => {
+    expect(
+      completenessProblems(
+        { total: 3, skip: ["c"] },
+        run({ registered: ["a", "a", "c"], started: ["a"] }),
+      ),
+    ).not.toEqual([]);
+    expect(
+      completenessProblems(manifest, run({ started: ["a", "b", "b"] })),
+    ).not.toEqual([]);
+    expect(
+      completenessProblems(manifest, run({ started: ["a", "b", "c"] })),
+    ).not.toEqual([]);
+  });
+
+  it("refuses a skip the manifest does not list, and a listed skip that is not made", () => {
+    expect(
+      completenessProblems(
+        manifest,
+        run({ skipped: ["b", "c"], started: ["a"] }),
+      ),
+    ).not.toEqual([]);
+    expect(
+      completenessProblems(
+        manifest,
+        run({ skipped: [], started: ["a", "b", "c"] }),
+      ),
+    ).not.toEqual([]);
+  });
+});
 
 describe("corpus completeness", () => {
   const manifest = validateManifest(
     readJson(join(CORPUS_ROOT, "manifest.json")),
   );
 
-  it("registers and skips cases so that they add up to the manifest's share for this package", () => {
+  // Runs after every test above it, which holds for the file order vitest uses unless it is told to shuffle; a run that filters tests by name leaves this test out or, run by itself, finds no body started.
+  it("registers, skips and runs cases as the manifest says for this implementation", () => {
     if (!manifest.ok) {
       throw new Error(manifest.problems.join("\n"));
     }
@@ -322,10 +499,11 @@ describe("corpus completeness", () => {
     ).toBeGreaterThan(0);
     expect(
       completenessProblems(
-        entries.reduce((sum, entry) => sum + entry.cases, 0),
-        new Set(entries.flatMap((entry) => entry.skip)),
-        registered,
-        skipped,
+        {
+          total: entries.reduce((sum, entry) => sum + entry.cases, 0),
+          skip: entries.flatMap((entry) => entry.skip.ts),
+        },
+        record,
       ),
     ).toEqual([]);
   });
@@ -422,7 +600,14 @@ describe("the tests that stay outside the corpus", () => {
 
 /** The loader files two packages' runners copy from each other. Both copies are removed with the TypeScript they test, and a change to one is made in the other. */
 describe("the loader files copied between the two runners", () => {
-  const copied = ["corpus-files", "corpus", "text", "read-json", "validate"];
+  const copied = [
+    "canonical-keys",
+    "corpus-files",
+    "corpus",
+    "text",
+    "read-json",
+    "validate",
+  ];
   const packages = fileURLToPath(new URL("../../", import.meta.url));
   /** A file without the line that names the other copy, the one place the two differ. */
   const withoutHeaderLine = (text: string): string =>

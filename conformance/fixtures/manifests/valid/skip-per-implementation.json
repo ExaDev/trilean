@@ -1,0 +1,16 @@
+{
+  "files": {
+    "pkg/area/a.json": {
+      "cases": 3,
+      "skip": {
+        "rust": [
+          "a.2",
+          "a.3"
+        ],
+        "ts": [
+          "a.1"
+        ]
+      }
+    }
+  }
+}

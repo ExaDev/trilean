@@ -84,7 +84,11 @@ export interface Manifest {
       string,
       {
         readonly cases: number;
-        readonly skip: readonly string[];
+        /** Per implementation, the ids of the cases it skips because they are marked for it, each list in ascending order. */
+        readonly skip: {
+          readonly ts: readonly string[];
+          readonly rust: readonly string[];
+        };
         readonly generated?: true;
       }
     >
