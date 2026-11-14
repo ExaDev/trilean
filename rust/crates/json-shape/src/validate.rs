@@ -50,7 +50,7 @@ pub(crate) fn decide(
 
 /// A JSON string literal, which is how every message writes a string, so no message depends on Rust's own escaping.
 fn json_text(text: &str) -> String {
-    Value::String(text.to_owned()).to_string()
+    crate::pattern::json_quote(text)
 }
 
 fn json_list(items: &[String]) -> String {
@@ -237,9 +237,9 @@ impl<'a> Checker<'a> {
             self.report(format!("expected at least {least} characters"));
         }
         if let Some(source) = pattern {
-            match Pattern::new(source) {
+            match Pattern::shared(source) {
                 Ok(compiled) if !compiled.is_match(text) => {
-                    self.report(format!("expected a string matching {source}"));
+                    self.report(format!("expected a string matching {}", json_text(source)));
                 }
                 Ok(_) => {}
                 Err(error) => self.report(error.to_string()),
@@ -323,12 +323,12 @@ impl<'a> Checker<'a> {
         {
             self.report(format!("expected at least {least} properties"));
         }
-        let key_check = key_pattern.map(|source| (source, Pattern::new(source)));
+        let key_check = key_pattern.map(|source| (source, Pattern::shared(source)));
         for (key, entry) in pairs {
             self.path.push_key(key);
             match &key_check {
                 Some((source, Ok(compiled))) if !compiled.is_match(key) => {
-                    self.report(format!("the key must match {source}"));
+                    self.report(format!("the key must match {}", json_text(source)));
                 }
                 Some((_, Err(error))) => self.report(error.to_string()),
                 _ => {}
