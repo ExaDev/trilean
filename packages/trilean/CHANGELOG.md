@@ -1,3 +1,9 @@
+## [1.13.3](https://github.com/ExaDev/trilean/compare/trilean%401.13.2...trilean%401.13.3) (2026-11-14)
+
+### Build System
+
+* **deps:** bump zod from 4.6.6 to 4.6.7 ([36fb320](https://github.com/ExaDev/trilean/commit/36fb320a5e33b7d29feb25d3441c7d01699ef146))
+
 ## [1.13.2](https://github.com/ExaDev/trilean/compare/trilean%401.13.1...trilean%401.13.2) (2026-11-14)
 
 ### Build System
