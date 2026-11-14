@@ -61,3 +61,27 @@ describe("an identifier SQLite cannot carry", () => {
     prepare.mockRestore();
   });
 });
+
+describe("a text value holding a NUL", () => {
+  it("is bound and compared as text by SQLite, which carries it", () => {
+    const compiled = compilePredicateNode(
+      {
+        kind: "textCompare",
+        op: "equals",
+        left: { kind: "reference", key: "note" },
+        right: { kind: "textLiteral", value: "x\u0000y" },
+      },
+      { dialect: "sqlite", columnFor: () => ({ column: "note" }) },
+    );
+    db.prepare("INSERT INTO subjects (id, note) VALUES (?, ?)").run(
+      "nul",
+      "x\u0000y",
+    );
+    const rows = db
+      .prepare<unknown[], { id: string }>(
+        `SELECT id FROM subjects WHERE ${compiled.sql}`,
+      )
+      .all(...compiled.params);
+    expect(rows.map((row) => row.id)).toEqual(["nul"]);
+  });
+});

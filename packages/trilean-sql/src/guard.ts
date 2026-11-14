@@ -68,6 +68,8 @@ interface DialectDivergence {
   textOrdering: (operandPath: string) => string;
   /** How the engine orders booleans, as the trailing clause of a `whereas ...`. */
   booleanOrdering: string;
+  /** Why a text value holding the NUL character cannot be bound, or `undefined` for an engine that carries one. */
+  nulInText: string | undefined;
 }
 
 const DIALECT_DIVERGENCE: Readonly<Record<SqlDialect, DialectDivergence>> = {
@@ -79,6 +81,8 @@ const DIALECT_DIVERGENCE: Readonly<Record<SqlDialect, DialectDivergence>> = {
     textOrdering: (operandPath) =>
       `PostgreSQL would order the text operand at ${operandPath} collation-wise and answer definitely`,
     booleanOrdering: "PostgreSQL orders false before true",
+    nulInText:
+      "PostgreSQL cannot carry the NUL character (code zero) in a text value, and rejects the statement with an invalid byte sequence error",
   },
   sqlite: {
     complexNumbers: "SQLite has no complex number type",
@@ -90,6 +94,7 @@ const DIALECT_DIVERGENCE: Readonly<Record<SqlDialect, DialectDivergence>> = {
       `SQLite would answer definitely for the text operand at ${operandPath}, comparing it under the text affinity it applies to the other side ('9' > 5 is true there, while '10' > 5 is not)`,
     booleanOrdering:
       "SQLite stores booleans as the integers 0 and 1 and orders them as integers",
+    nulInText: undefined,
   },
 };
 
@@ -191,8 +196,13 @@ function findUnpushableExpression(
 
       return undefined;
     case "textLiteral":
-    case "booleanLiteral":
     case "instantLiteral":
+      if (divergence.nulInText !== undefined && node.value.includes("\u0000")) {
+        return { kind: node.kind, path, reason: divergence.nulInText };
+      }
+
+      return undefined;
+    case "booleanLiteral":
       return undefined;
     case "durationLiteral":
       return {
