@@ -1,3 +1,9 @@
+## [1.0.18](https://github.com/ExaDev/trilean/compare/trilean-regex%401.0.17...trilean-regex%401.0.18) (2026-11-14)
+
+### Build System
+
+* **deps-dev:** bump vitest from 5.0.3 to 5.1.0 ([db070e6](https://github.com/ExaDev/trilean/commit/db070e6ec2e305440ff08c71925d84119458513b))
+
 ## [1.0.17](https://github.com/ExaDev/trilean/compare/trilean-regex%401.0.16...trilean-regex%401.0.17) (2026-11-14)
 
 ### Tests

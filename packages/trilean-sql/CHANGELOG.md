@@ -1,3 +1,15 @@
+## [2.2.33](https://github.com/ExaDev/trilean/compare/trilean-sql%402.2.32...trilean-sql%402.2.33) (2026-11-14)
+
+### Build System
+
+* **deps-dev:** bump vitest from 5.0.3 to 5.1.0 ([db070e6](https://github.com/ExaDev/trilean/commit/db070e6ec2e305440ff08c71925d84119458513b))
+
+
+### Dependencies
+
+- Updated trilean-regex to 1.0.18
+- Updated trilean to 1.13.5
+
 ## [2.2.32](https://github.com/ExaDev/trilean/compare/trilean-sql%402.2.31...trilean-sql%402.2.32) (2026-11-14)
 
 
