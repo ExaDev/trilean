@@ -679,6 +679,14 @@
             "expect": {
               "$ref": "#/$defs/SqlCompileExpect"
             },
+            "expectColumnCalls": {
+              "description": "The keys the compilation passes to the top-level `columnFor`, in order.",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
             "from": {
               "description": "The original test title this case came from, as `<test file>: <title>`, or `recorded: <package> <source file> (<what>)` for a behaviour recorded from the implementation because no test covered it. The prefix tells a pinned original from a recorded behaviour.",
               "pattern": "^(recorded: .+|[a-z0-9._-]+\\.test\\.ts: .+)$",
@@ -702,9 +710,6 @@
             },
             "skip": {
               "$ref": "#/$defs/Skip"
-            },
-            "tolerance": {
-              "$ref": "#/$defs/Tolerance"
             },
             "tree": {
               "$ref": "#/$defs/Json"
@@ -758,9 +763,6 @@
             "skip": {
               "$ref": "#/$defs/Skip"
             },
-            "tolerance": {
-              "$ref": "#/$defs/Tolerance"
-            },
             "tree": {
               "$ref": "#/$defs/Json"
             }
@@ -770,7 +772,6 @@
             "id",
             "from",
             "expect",
-            "options",
             "tree"
           ],
           "type": "object"
@@ -787,7 +788,7 @@
           },
           "properties": {
             "dialect": {
-              "type": "string"
+              "$ref": "#/$defs/SqlDialect"
             },
             "expect": {
               "$ref": "#/$defs/SqlPatternExpect"
@@ -815,9 +816,6 @@
             },
             "skip": {
               "$ref": "#/$defs/Skip"
-            },
-            "tolerance": {
-              "$ref": "#/$defs/Tolerance"
             }
           },
           "required": [
@@ -841,19 +839,27 @@
             ]
           },
           "properties": {
-            "agreesWithEvaluator": {
-              "type": "boolean"
+            "connection": {
+              "$ref": "#/$defs/SqlConnection"
             },
-            "dialects": {
-              "items": {
-                "$ref": "#/$defs/SqlDialect"
+            "dialect": {
+              "$ref": "#/$defs/SqlDialect"
+            },
+            "expect": {
+              "$ref": "#/$defs/SqlExecuteExpect"
+            },
+            "expectSql": {
+              "description": "The exact text the compilation produced.",
+              "type": "string"
+            },
+            "expectTableCounts": {
+              "additionalProperties": {
+                "maximum": 9007199254740991,
+                "minimum": 0,
+                "type": "integer"
               },
-              "minItems": 1,
-              "type": "array",
-              "uniqueItems": true
-            },
-            "expectRows": {
-              "type": "array"
+              "description": "The number of rows each named table holds once the query has run.",
+              "type": "object"
             },
             "fixture": {
               "minLength": 1,
@@ -872,34 +878,26 @@
             "kind": {
               "const": "sql-execute"
             },
-            "options": {
-              "$ref": "#/$defs/SqlOptions"
-            },
             "reason": {
               "description": "Why one side cannot run the case. Required with skip, and only with skip.",
               "minLength": 1,
               "type": "string"
             },
+            "run": {
+              "$ref": "#/$defs/SqlRun"
+            },
             "skip": {
               "$ref": "#/$defs/Skip"
-            },
-            "tolerance": {
-              "$ref": "#/$defs/Tolerance"
-            },
-            "tree": {
-              "$ref": "#/$defs/Json"
             }
           },
           "required": [
             "kind",
             "id",
             "from",
-            "agreesWithEvaluator",
-            "dialects",
-            "expectRows",
+            "dialect",
+            "expect",
             "fixture",
-            "options",
-            "tree"
+            "run"
           ],
           "type": "object"
         },
@@ -1643,6 +1641,39 @@
         }
       ]
     },
+    "RelayedText": {
+      "description": "The text exactly, character for character; or, where it holds a message another package wrote (the parse error of a pattern, which the corpus of that package pins), what comes before that message, its fragments in order, and what comes after.",
+      "oneOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "after": {
+              "type": "string"
+            },
+            "before": {
+              "type": "string"
+            },
+            "relayed": {
+              "items": {
+                "$ref": "#/$defs/NonEmptyText"
+              },
+              "minItems": 1,
+              "type": "array"
+            }
+          },
+          "required": [
+            "after",
+            "before",
+            "relayed"
+          ],
+          "type": "object"
+        }
+      ]
+    },
     "Resolution": {
       "description": "What one resolver call returns.",
       "oneOf": [
@@ -1825,12 +1856,55 @@
       ],
       "type": "object"
     },
+    "SqlCollectionBinding": {
+      "additionalProperties": false,
+      "description": "The correlated table a collection key maps onto, the caller's SQL relating it to the outer row, and the columns a reference key inside its `item` and `filter` maps onto.",
+      "properties": {
+        "columns": {
+          "additionalProperties": {
+            "$ref": "#/$defs/SqlColumnBinding"
+          },
+          "type": "object"
+        },
+        "join": {
+          "type": "string"
+        },
+        "table": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "columns",
+        "join",
+        "table"
+      ],
+      "type": "object"
+    },
+    "SqlColumnBinding": {
+      "additionalProperties": false,
+      "description": "What a reference key maps onto: a column, dot-qualified, and optionally its declared kind.",
+      "properties": {
+        "column": {
+          "type": "string"
+        },
+        "paramType": {
+          "$ref": "#/$defs/SqlParamType"
+        }
+      },
+      "required": [
+        "column"
+      ],
+      "type": "object"
+    },
     "SqlCompileExpect": {
       "oneOf": [
         {
           "additionalProperties": false,
           "properties": {
             "params": {
+              "items": {
+                "$ref": "#/$defs/SqlParam"
+              },
               "type": "array"
             },
             "sql": {
@@ -1857,6 +1931,19 @@
         }
       ]
     },
+    "SqlConnection": {
+      "additionalProperties": false,
+      "description": "How the SQLite connection is prepared. `regexpFunction: false` leaves the `regexp` function unregistered.",
+      "properties": {
+        "regexpFunction": {
+          "const": false
+        }
+      },
+      "required": [
+        "regexpFunction"
+      ],
+      "type": "object"
+    },
     "SqlDialect": {
       "enum": [
         "sqlite",
@@ -1864,30 +1951,211 @@
       ]
     },
     "SqlError": {
+      "description": "The failure an operation ends in. `name` is the package's error class; `CallerError` is the exception the options' callback threw, which must reach the caller unchanged.",
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "message": {
+              "$ref": "#/$defs/RelayedText"
+            },
+            "name": {
+              "const": "UnsupportedNodeError"
+            },
+            "nodeKind": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            },
+            "reason": {
+              "$ref": "#/$defs/RelayedText"
+            }
+          },
+          "required": [
+            "name",
+            "message",
+            "nodeKind",
+            "path",
+            "reason"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "column": {
+              "type": "string"
+            },
+            "message": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "name": {
+              "const": "InvalidColumnError"
+            },
+            "referenceKey": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name",
+            "message",
+            "referenceKey",
+            "column"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "collectionKey": {
+              "type": "string"
+            },
+            "message": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "name": {
+              "const": "InvalidCollectionTableError"
+            },
+            "table": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name",
+            "message",
+            "collectionKey",
+            "table"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "dialect": {
+              "type": "string"
+            },
+            "implemented": {
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            "message": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "name": {
+              "const": "UnknownDialectError"
+            }
+          },
+          "required": [
+            "name",
+            "message",
+            "dialect",
+            "implemented"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "message": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "name": {
+              "const": "CallerError"
+            }
+          },
+          "required": [
+            "name",
+            "message"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "SqlExecuteExpect": {
+      "description": "What an execute case expects: the ids a tree selects, the rows a statement returns, or the failure of the query, as fragments of the engine's own message.",
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "rows": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "rows"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "result": {
+              "items": {
+                "items": {
+                  "$ref": "#/$defs/Json"
+                },
+                "type": "array"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "result"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "queryError": {
+              "items": {
+                "$ref": "#/$defs/NonEmptyText"
+              },
+              "minItems": 1,
+              "type": "array"
+            }
+          },
+          "required": [
+            "queryError"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "SqlExecuteOptions": {
       "additionalProperties": false,
+      "description": "The options of a compilation an engine runs: the dialect is the case's own, so the options never name one.",
       "properties": {
-        "column": {
-          "type": "string"
+        "collections": {
+          "additionalProperties": {
+            "$ref": "#/$defs/SqlCollectionBinding"
+          },
+          "type": "object"
         },
-        "name": {
-          "type": "string"
+        "columns": {
+          "additionalProperties": {
+            "$ref": "#/$defs/SqlColumnBinding"
+          },
+          "type": "object"
         },
-        "nodeKind": {
-          "type": "string"
+        "postgresRegexpPushdown": {
+          "type": "boolean"
         },
-        "path": {
-          "type": "string"
-        },
-        "reason": {
-          "type": "string"
-        },
-        "referenceKey": {
-          "type": "string"
+        "sqliteRegexpAvailable": {
+          "type": "boolean"
         }
       },
-      "required": [
-        "name"
-      ],
       "type": "object"
     },
     "SqlGuardExpect": {
@@ -1905,12 +2173,25 @@
               "type": "string"
             },
             "reason": {
-              "type": "string"
+              "$ref": "#/$defs/RelayedText"
             }
           },
           "required": [
             "nodeKind",
-            "path"
+            "path",
+            "reason"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "error": {
+              "$ref": "#/$defs/SqlError"
+            }
+          },
+          "required": [
+            "error"
           ],
           "type": "object"
         }
@@ -1918,14 +2199,22 @@
     },
     "SqlOptions": {
       "additionalProperties": false,
+      "description": "The options of a compilation as data: the maps stand in for the `columnFor` and `collectionFor` callbacks, and a key a map lacks makes the callback throw.",
       "properties": {
         "collections": {
+          "additionalProperties": {
+            "$ref": "#/$defs/SqlCollectionBinding"
+          },
           "type": "object"
         },
         "columns": {
+          "additionalProperties": {
+            "$ref": "#/$defs/SqlColumnBinding"
+          },
           "type": "object"
         },
         "dialect": {
+          "minLength": 1,
           "type": "string"
         },
         "postgresRegexpPushdown": {
@@ -1937,6 +2226,98 @@
       },
       "required": [
         "dialect"
+      ],
+      "type": "object"
+    },
+    "SqlParam": {
+      "description": "A positional parameter with the kind the dialect binds it as.",
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "text"
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "timestamp"
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "boolean"
+            },
+            "value": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "number"
+            },
+            "value": {
+              "$ref": "#/$defs/NumberValue"
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "SqlParamType": {
+      "description": "The declared value kind of a mapped column, which a comparison against the column is checked against.",
+      "enum": [
+        "text",
+        "number",
+        "boolean",
+        "timestamp"
+      ]
+    },
+    "SqlPatternError": {
+      "additionalProperties": false,
+      "description": "What a pattern a dialect cannot express is refused with: the exact text of the refusal.",
+      "properties": {
+        "message": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "message"
       ],
       "type": "object"
     },
@@ -1958,11 +2339,64 @@
           "additionalProperties": false,
           "properties": {
             "error": {
-              "type": "object"
+              "$ref": "#/$defs/SqlPatternError"
             }
           },
           "required": [
             "error"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "SqlRun": {
+      "description": "What to run: a tree compiled for the case's dialect and run, a tree only the evaluator reads, or a statement.",
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "options": {
+              "$ref": "#/$defs/SqlExecuteOptions"
+            },
+            "tree": {
+              "$ref": "#/$defs/Json"
+            }
+          },
+          "required": [
+            "options",
+            "tree"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "tree": {
+              "$ref": "#/$defs/Json"
+            }
+          },
+          "required": [
+            "tree"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "params": {
+              "items": {
+                "$ref": "#/$defs/Json"
+              },
+              "type": "array"
+            },
+            "sql": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "params",
+            "sql"
           ],
           "type": "object"
         }

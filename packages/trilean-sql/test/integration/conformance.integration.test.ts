@@ -8,8 +8,9 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { compilePredicateNode } from "../../src/compile";
 import {
   checkCorpus,
-  collect,
   completenessProblems,
+  createRunRecord,
+  registerCases,
 } from "../../src/test-support/corpus";
 import type { SqlExecuteCase, Text } from "../../src/test-support/corpus-types";
 import { decodeNumbers } from "../../src/test-support/numbers";
@@ -43,9 +44,8 @@ if (checked.problems.length > 0) {
 }
 const corpus = checked.files.filter(({ name }) => name.startsWith(SHARE));
 
-// What this run registers, computed while the tests are collected, so the completeness check below holds whatever the run does with them afterwards.
-const { registered, skipped } = collect(corpus);
-const registeredIds = new Set(registered);
+// What this run does, written by the registration loop and the test bodies below and never computed from the parsed corpus.
+const record = createRunRecord();
 
 let container: StartedPostgreSqlContainer;
 const postgresEngines = new Map<string, Engine>();
@@ -213,19 +213,21 @@ async function runCase(testCase: SqlExecuteCase): Promise<void> {
 
 for (const { name, file } of corpus) {
   describe(`conformance ${name}`, () => {
-    for (const testCase of file.cases) {
-      it.skipIf(!registeredIds.has(testCase.id))(
-        `${testCase.id} (${testCase.from})`,
-        async () => {
-          if (testCase.kind !== "sql-execute") {
-            throw new Error(
-              `no executor for the ${testCase.kind} kind in this runner`,
-            );
-          }
-          await runCase(testCase);
-        },
-      );
-    }
+    registerCases(
+      file.cases,
+      record,
+      (title, skipped, body) => {
+        (skipped ? it.skip : it)(title, body);
+      },
+      async (testCase) => {
+        if (testCase.kind !== "sql-execute") {
+          throw new Error(
+            `no executor for the ${testCase.kind} kind in this runner`,
+          );
+        }
+        await runCase(testCase);
+      },
+    );
   });
 }
 
@@ -264,10 +266,11 @@ describe("corpus completeness", () => {
     ).toBeGreaterThan(0);
     expect(
       completenessProblems(
-        entries.reduce((sum, entry) => sum + entry.cases, 0),
-        new Set(entries.flatMap((entry) => entry.skip)),
-        registered,
-        skipped,
+        {
+          total: entries.reduce((sum, entry) => sum + entry.cases, 0),
+          skip: entries.flatMap((entry) => entry.skip.ts),
+        },
+        record,
       ),
     ).toEqual([]);
   });

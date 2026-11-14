@@ -1935,11 +1935,11 @@
         },
         "expectTableCounts": {
           "additionalProperties": {
+            "maximum": 9007199254740991,
             "minimum": 0,
             "type": "integer"
           },
           "description": "The number of rows each named table holds once the query has run.",
-          "minProperties": 1,
           "type": "object"
         },
         "fixture": {
@@ -2043,7 +2043,6 @@
           "type": "boolean"
         }
       },
-      "required": [],
       "type": "object"
     },
     "sqlGuard": {

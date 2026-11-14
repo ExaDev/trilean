@@ -24,127 +24,220 @@
     },
     "trilean-sql/compile/compile.dialects.json": {
       "cases": 26,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean-sql/compile/compile.mechanics.json": {
       "cases": 13,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean-sql/compile/compile.predicates.json": {
       "cases": 32,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean-sql/compile/compile.quantifiers.json": {
       "cases": 7,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean-sql/compile/identifiers.json": {
       "cases": 172,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean-sql/compile/matrix.json": {
       "cases": 230,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean-sql/compile/numbers.json": {
       "cases": 76,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean-sql/compile/parameters.json": {
       "cases": 98,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean-sql/compile/pattern-operators.json": {
       "cases": 400,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean-sql/compile/postgres.edge-cases.json": {
       "cases": 1,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean-sql/compile/postgres.predicates.json": {
       "cases": 1,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean-sql/compile/sqlite.edge-cases.json": {
       "cases": 4,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean-sql/compile/sqlite.predicates.json": {
       "cases": 2,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean-sql/execute/identifiers.json": {
       "cases": 58,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean-sql/execute/matrix.json": {
       "cases": 52,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean-sql/execute/numbers.json": {
       "cases": 150,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean-sql/execute/postgres.edge-cases.json": {
       "cases": 7,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean-sql/execute/postgres.predicates.json": {
       "cases": 21,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean-sql/execute/postgres.quantifiers.json": {
       "cases": 16,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean-sql/execute/sqlite.edge-cases.json": {
       "cases": 13,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean-sql/execute/sqlite.predicates.json": {
       "cases": 22,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean-sql/execute/sqlite.quantifiers.json": {
       "cases": 16,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean-sql/execute/strings.json": {
       "cases": 160,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean-sql/guard/compile.dialects.json": {
       "cases": 2,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean-sql/guard/guard.dialect.json": {
       "cases": 31,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean-sql/guard/guard.quantification.json": {
       "cases": 18,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean-sql/guard/guard.references.json": {
       "cases": 19,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean-sql/guard/guard.supported.json": {
       "cases": 15,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean-sql/guard/matrix.json": {
       "cases": 141,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean-sql/pattern/escaping.json": {
       "cases": 160,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean-sql/pattern/portable-pattern.json": {
       "cases": 50,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/build/derived-aggregates.json": {
       "cases": 10,

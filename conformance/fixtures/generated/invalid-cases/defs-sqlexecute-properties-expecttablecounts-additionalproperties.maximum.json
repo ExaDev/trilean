@@ -5,7 +5,9 @@
       "expect": {
         "rows": []
       },
-      "expectTableCounts": {},
+      "expectTableCounts": {
+        "subjects": 9007199254740992
+      },
       "fixture": "subjects",
       "from": "sqlite.edge-cases.integration.test.ts: degenerate and adversarial fragments > treats an injection attempt as data and leaves the table standing",
       "id": "sql.execute.sqlite-edge-cases.degenerate-and-adversarial-fragments-treats-an-i",

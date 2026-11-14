@@ -4,8 +4,9 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import {
   checkCorpus,
-  collect,
   completenessProblems,
+  createRunRecord,
+  registerCases,
 } from "./test-support/corpus";
 import { selectCorpusFiles } from "./test-support/corpus-files";
 import {
@@ -257,30 +258,31 @@ if (checked.problems.length > 0) {
 }
 const corpus = checked.files.filter(({ name }) => inShare(name));
 
-// What this run registers, computed while the tests are collected, so the completeness check below holds whatever the run does with them afterwards: a name filter, a bail, a retry or a shuffled order changes which registered tests run, never which are registered.
-const { registered, skipped } = collect(corpus);
-const registeredIds = new Set(registered);
+// What this run does, written by the registration loop and the test bodies below and never computed from the parsed corpus: the completeness check at the end compares it with the manifest, so a loop that drops or filters cases, skips more than the manifest allows, or registers a body that never runs fails it.
+const record = createRunRecord();
 
 for (const { name, file } of corpus) {
   describe(`conformance ${name}`, () => {
-    for (const testCase of file.cases) {
-      it.skipIf(!registeredIds.has(testCase.id))(
-        `${testCase.id} (${testCase.from})`,
-        () => {
-          if (testCase.kind === "sql-compile") {
-            runCompileCase(testCase);
-          } else if (testCase.kind === "sql-guard") {
-            runGuardCase(testCase);
-          } else if (testCase.kind === "sql-pattern") {
-            runPatternCase(testCase);
-          } else {
-            throw new Error(
-              `no executor for the ${testCase.kind} kind in this runner`,
-            );
-          }
-        },
-      );
-    }
+    registerCases(
+      file.cases,
+      record,
+      (title, skipped, body) => {
+        (skipped ? it.skip : it)(title, body);
+      },
+      (testCase) => {
+        if (testCase.kind === "sql-compile") {
+          runCompileCase(testCase);
+        } else if (testCase.kind === "sql-guard") {
+          runGuardCase(testCase);
+        } else if (testCase.kind === "sql-pattern") {
+          runPatternCase(testCase);
+        } else {
+          throw new Error(
+            `no executor for the ${testCase.kind} kind in this runner`,
+          );
+        }
+      },
+    );
   });
 }
 
@@ -289,7 +291,7 @@ describe("corpus completeness", () => {
     readJson(join(CORPUS_ROOT, "manifest.json")),
   );
 
-  it("registers and skips cases so that they add up to the manifest's share for this runner", () => {
+  it("registers, skips and runs cases as the manifest says for this implementation", () => {
     if (!manifest.ok) {
       throw new Error(manifest.problems.join("\n"));
     }
@@ -302,10 +304,11 @@ describe("corpus completeness", () => {
     ).toBeGreaterThan(0);
     expect(
       completenessProblems(
-        entries.reduce((sum, entry) => sum + entry.cases, 0),
-        new Set(entries.flatMap((entry) => entry.skip)),
-        registered,
-        skipped,
+        {
+          total: entries.reduce((sum, entry) => sum + entry.cases, 0),
+          skip: entries.flatMap((entry) => entry.skip.ts),
+        },
+        record,
       ),
     ).toEqual([]);
   });

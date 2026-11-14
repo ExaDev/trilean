@@ -845,40 +845,165 @@ pub struct Serialise {
     pub schema: SerialiseSchema,
 }
 
+/// The declared value kind of a mapped column, which a comparison against the column is checked against.
+#[derive(Shape, Clone, Copy, Debug, PartialEq, Eq)]
+#[serde(rename_all = "lowercase")]
+pub enum SqlParamType {
+    Text,
+    Number,
+    Boolean,
+    Timestamp,
+}
+
+/// What a reference key maps onto: a column, dot-qualified, and optionally its declared kind.
+#[derive(Shape, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct SqlColumnBinding {
+    pub column: String,
+    #[serde(rename = "paramType")]
+    pub param_type: Option<SqlParamType>,
+}
+
+/// The correlated table a collection key maps onto, the caller's SQL relating it to the outer row, and the columns a
+/// reference key inside its `item` and `filter` maps onto.
+#[derive(Shape, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct SqlCollectionBinding {
+    pub columns: Map<SqlColumnBinding>,
+    pub join: String,
+    pub table: String,
+}
+
+/// The options of a compilation as data: the maps stand in for the `columnFor` and `collectionFor` callbacks, and a
+/// key a map lacks makes the callback throw.
 #[derive(Shape, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct SqlOptions {
-    pub collections: Option<OpenObject>,
-    pub columns: Option<OpenObject>,
+    pub collections: Option<Map<SqlCollectionBinding>>,
+    pub columns: Option<Map<SqlColumnBinding>>,
+    #[shape(min_length = 1)]
     pub dialect: String,
     pub postgres_regexp_pushdown: Option<bool>,
     pub sqlite_regexp_available: Option<bool>,
 }
 
+/// The options of a compilation an engine runs: the dialect is the case's own, so the options never name one.
 #[derive(Shape, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
-pub struct SqlError {
-    pub column: Option<String>,
-    pub name: String,
-    pub node_kind: Option<String>,
-    pub path: Option<String>,
-    pub reason: Option<String>,
-    pub reference_key: Option<String>,
+pub struct SqlExecuteOptions {
+    pub collections: Option<Map<SqlCollectionBinding>>,
+    pub columns: Option<Map<SqlColumnBinding>>,
+    pub postgres_regexp_pushdown: Option<bool>,
+    pub sqlite_regexp_available: Option<bool>,
+}
+
+/// A positional parameter with the kind the dialect binds it as.
+#[derive(Shape, Clone, Debug, PartialEq)]
+#[serde(untagged, deny_unknown_fields)]
+pub enum SqlParam {
+    Text {
+        #[shape(constant = "text")]
+        r#type: String,
+        value: String,
+    },
+    Timestamp {
+        #[shape(constant = "timestamp")]
+        r#type: String,
+        value: String,
+    },
+    Boolean {
+        #[shape(constant = "boolean")]
+        r#type: String,
+        value: bool,
+    },
+    Number {
+        #[shape(constant = "number")]
+        r#type: String,
+        value: NumberValue,
+    },
+}
+
+/// The text exactly, character for character; or, where it holds a message another package wrote (the parse error of a
+/// pattern, which the corpus of that package pins), what comes before that message, its fragments in order, and what
+/// comes after.
+#[derive(Shape, Clone, Debug, PartialEq)]
+#[serde(untagged, deny_unknown_fields)]
+pub enum RelayedText {
+    #[shape(min_length = 1)]
+    Exact(String),
+    Relayed {
+        after: String,
+        before: String,
+        #[shape(min_items = 1)]
+        relayed: Vec<NonEmptyText>,
+    },
+}
+
+/// The failure an operation ends in. `name` is the package's error class; `CallerError` is the exception the options'
+/// callback threw, which must reach the caller unchanged.
+#[derive(Shape, Clone, Debug, PartialEq)]
+#[serde(untagged, deny_unknown_fields)]
+pub enum SqlError {
+    Unsupported {
+        #[shape(constant = "UnsupportedNodeError")]
+        name: String,
+        message: RelayedText,
+        #[serde(rename = "nodeKind")]
+        node_kind: String,
+        path: String,
+        reason: RelayedText,
+    },
+    InvalidColumn {
+        #[shape(constant = "InvalidColumnError")]
+        name: String,
+        #[shape(min_length = 1)]
+        message: String,
+        #[serde(rename = "referenceKey")]
+        reference_key: String,
+        column: String,
+    },
+    InvalidCollectionTable {
+        #[shape(constant = "InvalidCollectionTableError")]
+        name: String,
+        #[shape(min_length = 1)]
+        message: String,
+        #[serde(rename = "collectionKey")]
+        collection_key: String,
+        table: String,
+    },
+    UnknownDialect {
+        #[shape(constant = "UnknownDialectError")]
+        name: String,
+        #[shape(min_length = 1)]
+        message: String,
+        dialect: String,
+        #[shape(min_items = 1)]
+        implemented: Vec<String>,
+    },
+    Caller {
+        #[shape(constant = "CallerError")]
+        name: String,
+        #[shape(min_length = 1)]
+        message: String,
+    },
 }
 
 #[derive(Shape, Clone, Debug, PartialEq)]
 #[serde(untagged, deny_unknown_fields)]
 pub enum SqlCompileExpect {
-    Compiled { params: Vec<Value>, sql: String },
+    Compiled { params: Vec<SqlParam>, sql: String },
     Failed { error: SqlError },
 }
 
 #[derive(Shape, Clone, Debug, PartialEq)]
-#[serde(deny_unknown_fields)]
+#[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct SqlCompile {
     #[serde(flatten)]
-    pub common: Common,
+    pub header: Header,
     pub expect: SqlCompileExpect,
+    /// The keys the compilation passes to the top-level `columnFor`, in order.
+    #[shape(min_items = 1)]
+    pub expect_column_calls: Option<Vec<String>>,
     pub options: SqlOptions,
     pub tree: Json,
 }
@@ -891,7 +1016,10 @@ pub enum SqlGuardExpect {
         #[serde(rename = "nodeKind")]
         node_kind: String,
         path: String,
-        reason: Option<String>,
+        reason: RelayedText,
+    },
+    Failed {
+        error: SqlError,
     },
 }
 
@@ -899,27 +1027,25 @@ pub enum SqlGuardExpect {
 #[serde(deny_unknown_fields)]
 pub struct SqlGuard {
     #[serde(flatten)]
-    pub common: Common,
+    pub header: Header,
     pub expect: SqlGuardExpect,
-    pub options: SqlOptions,
+    pub options: Option<SqlOptions>,
     pub tree: Json,
+}
+
+/// What a pattern a dialect cannot express is refused with: the exact text of the refusal.
+#[derive(Shape, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct SqlPatternError {
+    #[shape(min_length = 1)]
+    pub message: String,
 }
 
 #[derive(Shape, Clone, Debug, PartialEq)]
 #[serde(untagged, deny_unknown_fields)]
 pub enum SqlPatternExpect {
     Rendered { text: String },
-    Refused { error: OpenObject },
-}
-
-#[derive(Shape, Clone, Debug, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct SqlPattern {
-    #[serde(flatten)]
-    pub common: Common,
-    pub dialect: String,
-    pub expect: SqlPatternExpect,
-    pub pattern: Text,
+    Refused { error: SqlPatternError },
 }
 
 #[derive(Shape, Clone, Copy, Debug, PartialEq, Eq)]
@@ -930,18 +1056,75 @@ pub enum SqlDialect {
 }
 
 #[derive(Shape, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct SqlPattern {
+    #[serde(flatten)]
+    pub header: Header,
+    pub dialect: SqlDialect,
+    pub expect: SqlPatternExpect,
+    pub pattern: Text,
+}
+
+/// How the SQLite connection is prepared. `regexpFunction: false` leaves the `regexp` function unregistered.
+#[derive(Shape, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct SqlConnection {
+    #[serde(rename = "regexpFunction")]
+    #[shape(constant = false)]
+    pub regexp_function: bool,
+}
+
+/// What an execute case expects: the ids a tree selects, the rows a statement returns, or the failure of the query,
+/// as fragments of the engine's own message.
+#[derive(Shape, Clone, Debug, PartialEq)]
+#[serde(untagged, deny_unknown_fields)]
+pub enum SqlExecuteExpect {
+    Ids {
+        rows: Vec<String>,
+    },
+    Statement {
+        result: Vec<Vec<Json>>,
+    },
+    Failed {
+        #[serde(rename = "queryError")]
+        #[shape(min_items = 1)]
+        query_error: Vec<NonEmptyText>,
+    },
+}
+
+/// What to run: a tree compiled for the case's dialect and run, a tree only the evaluator reads, or a statement.
+#[derive(Shape, Clone, Debug, PartialEq)]
+#[serde(untagged, deny_unknown_fields)]
+pub enum SqlRun {
+    Compiled {
+        options: SqlExecuteOptions,
+        tree: Json,
+    },
+    Evaluated {
+        tree: Json,
+    },
+    Statement {
+        params: Vec<Json>,
+        #[shape(min_length = 1)]
+        sql: String,
+    },
+}
+
+#[derive(Shape, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct SqlExecute {
     #[serde(flatten)]
-    pub common: Common,
-    pub agrees_with_evaluator: bool,
-    #[shape(min_items = 1, unique_items)]
-    pub dialects: Vec<SqlDialect>,
-    pub expect_rows: Vec<Value>,
+    pub header: Header,
+    pub connection: Option<SqlConnection>,
+    pub dialect: SqlDialect,
+    pub expect: SqlExecuteExpect,
+    /// The exact text the compilation produced.
+    pub expect_sql: Option<String>,
+    /// The number of rows each named table holds once the query has run.
+    pub expect_table_counts: Option<Map<u64>>,
     #[shape(min_length = 1)]
     pub fixture: String,
-    pub options: SqlOptions,
-    pub tree: Json,
+    pub run: SqlRun,
 }
 
 /// One corpus case, chosen by its kind.
@@ -978,10 +1161,10 @@ impl Case {
             Case::Inputs(case) => &case.common.header,
             Case::Document(case) => &case.common.header,
             Case::Cli(case) => &case.common.header,
-            Case::SqlCompile(case) => &case.common.header,
-            Case::SqlGuard(case) => &case.common.header,
-            Case::SqlPattern(case) => &case.common.header,
-            Case::SqlExecute(case) => &case.common.header,
+            Case::SqlCompile(case) => &case.header,
+            Case::SqlGuard(case) => &case.header,
+            Case::SqlPattern(case) => &case.header,
+            Case::SqlExecute(case) => &case.header,
             Case::Serialise(case) => &case.header,
             Case::NumberFormat(case) => &case.header,
         }
