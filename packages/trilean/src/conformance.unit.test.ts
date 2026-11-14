@@ -553,9 +553,9 @@ describe("the tests that stay outside the corpus", () => {
     )
     .split("\n");
   const packages = fileURLToPath(new URL("../../", import.meta.url));
-  const files = [
-    ...testFiles(join(packages, "trilean")),
-  ].filter((file) => !file.includes("node_modules"));
+  const files = [...testFiles(join(packages, "trilean"))].filter(
+    (file) => !file.includes("node_modules"),
+  );
   const rowLines = section.filter((line) => /^\| \S+\.test\.ts \|/u.test(line));
   const rows = rowLines.flatMap((line) => {
     const found = ROW.exec(line);
@@ -594,5 +594,73 @@ describe("the tests that stay outside the corpus", () => {
     const listed = rows.map(({ name, title }) => `${name} | ${title}`);
     expect(listed.filter((key) => !present.includes(key))).toEqual([]);
     expect([...listed].sort()).toEqual([...present].sort());
+  });
+});
+
+/** The fixture table of `conformance/README.md`: one row per fixture set, with the loaders that assert it and whether the three-runtime runner does. */
+describe("the fixture table", () => {
+  const readme = readFileSync(join(CORPUS_ROOT, "README.md"), "utf8");
+  const rows = readme
+    .split("\n")
+    .filter((line) => line.startsWith("| `"))
+    .map((line) => line.split(" | "))
+    .filter((cells) => /^(asserts|does not)/u.test(cells.at(-1) ?? ""));
+  const named = rows.flatMap((cells) =>
+    [...(cells[0] ?? "").matchAll(/`([^`]+)`/gu)].map(
+      (match) => match[1] ?? "",
+    ),
+  );
+  const source = readFileSync(fileURLToPath(import.meta.url), "utf8");
+  const files = (directory: string): readonly string[] =>
+    readdirSync(directory, { withFileTypes: true }).flatMap((entry) =>
+      entry.isDirectory()
+        ? files(join(directory, entry.name))
+        : [join(directory, entry.name)],
+    );
+
+  it("has a row for every fixture file, and a fixture for every name in a row", () => {
+    expect(rows.length).toBeGreaterThan(0);
+    const present = files(FIXTURES).map((file) =>
+      file.slice(FIXTURES.length + 1),
+    );
+    expect(
+      present.filter(
+        (file) => !named.some((name) => `${file}/`.startsWith(`${name}/`)),
+      ),
+    ).toEqual([]);
+    expect(
+      named.filter(
+        (name) =>
+          !present.some(
+            (file) => `${file}/`.startsWith(`${name}/`) || file === name,
+          ),
+      ),
+    ).toEqual([]);
+  });
+
+  it("gives every set a reason where the three-runtime runner does not assert it", () => {
+    const unreasoned = rows.filter((cells) => {
+      const last = cells.at(-1) ?? "";
+
+      return last.startsWith("does not") && !/^does not \(.+\)/u.test(last);
+    });
+    expect(unreasoned).toEqual([]);
+  });
+
+  it("names, for every set that every loader asserts, a directory this suite reads", () => {
+    const claimed = rows
+      .filter((cells) => (cells[2] ?? "").includes("every loader"))
+      .flatMap((cells) =>
+        [...(cells[0] ?? "").matchAll(/`([^`]+)`/gu)].map(
+          (match) => match[1] ?? "",
+        ),
+      );
+    const unread = claimed.filter((name) => {
+      const first = name.split("/").pop() ?? name;
+
+      return !source.includes(`"${name}"`) && !source.includes(`"${first}"`);
+    });
+    expect(claimed.length).toBeGreaterThan(0);
+    expect(unread).toEqual([]);
   });
 });
