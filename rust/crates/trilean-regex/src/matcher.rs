@@ -131,8 +131,16 @@ impl Compiler {
     }
 }
 
-/// The most states a pattern may compile to, the final match state included. It bounds the memory a pattern can take before anything is allocated for it: `a{99999}` is within the limit and `a{100000}` is not, and so is `(?:a{1000}){1000}`, whose nested counts multiply. A pattern over it is a `RegexParseError` at the repetition that went over, or at index 0 when only the sum of several did.
+/// The most states a pattern may compile to, the final match state included. A state and its mark take at most `BYTES_PER_STATE` bytes (a test holds the type to it), so a compiled pattern takes at most about eight megabytes: the limit is that figure divided by the size of a state, chosen so that a service holding a few hundred patterns at once stays within a few gigabytes. It bounds the memory a pattern can take before anything is allocated for it: `a{99999}` is within the limit and `a{100000}` is not, and so is `(?:a{1000}){1000}`, whose nested counts multiply. A pattern over it is a `RegexParseError` at the repetition that went over, or at index 0 when only the sum of several did.
 pub const MAX_STATES: usize = 100_000;
+
+/// The most bytes a state and its mark take together, which `MAX_STATES` is derived from.
+#[cfg(test)]
+const BYTES_PER_STATE: usize = 80;
+
+/// The limit times a state's size is at most eight megabytes, which the documentation of `MAX_STATES` states. It is checked when the tests compile.
+#[cfg(test)]
+const _: () = assert!(MAX_STATES * BYTES_PER_STATE <= 8_000_000);
 
 /// The number of states `node` compiles to, not counting the final match state, as `Compiler` builds them. It is computed from the tree without building the automaton, with saturating arithmetic, so a pattern is refused before the memory it would need is asked for. A test keeps it equal to the compiler's own count.
 pub(crate) fn states_of(node: &RegexNode) -> u64 {
@@ -312,6 +320,11 @@ pub fn test_pattern(pattern: &str, input: &str) -> Result<bool, RegexParseError>
 mod tests {
     use super::*;
     use crate::parser::parse_regex;
+
+    #[test]
+    fn a_state_and_its_mark_fit_the_bytes_the_limit_assumes() {
+        assert!(std::mem::size_of::<State>() + std::mem::size_of::<u64>() <= BYTES_PER_STATE);
+    }
 
     #[test]
     fn the_count_computed_from_the_tree_is_the_count_the_compiler_builds() {

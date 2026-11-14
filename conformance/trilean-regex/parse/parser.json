@@ -405,7 +405,7 @@
           ]
         }
       },
-      "from": "parser.unit.test.ts: literals and concatenation > treats an unescaped closing paren or bracket at the top level as an error (the original asserted only the error type; recorded: trilean-regex rust/crates/trilean-regex/src/parser.ts, the index)",
+      "from": "parser.unit.test.ts: literals and concatenation > treats an unescaped closing paren or bracket at the top level as an error (the original asserted only the error type; recorded: trilean-regex src/parser.ts, the index)",
       "id": "parse.literals-and-concatenation.treats-an-unescaped-closing-paren-or-bracket-at-the-top-level-as-an-error.1",
       "kind": "regex-parse",
       "pattern": "a)"
@@ -1502,7 +1502,7 @@
           ]
         }
       },
-      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.ts (no original test; astral literal)",
+      "from": "recorded: trilean-regex src/parser.ts (no original test; astral literal)",
       "id": "parse.utf-16-code-units.astral-literal.1",
       "kind": "regex-parse",
       "pattern": "😀"
@@ -1526,7 +1526,7 @@
           ]
         }
       },
-      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.ts (no original test; astral quantified)",
+      "from": "recorded: trilean-regex src/parser.ts (no original test; astral quantified)",
       "id": "parse.utf-16-code-units.astral-quantified.1",
       "kind": "regex-parse",
       "pattern": "😀+"
@@ -1548,7 +1548,7 @@
           ]
         }
       },
-      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.ts (no original test; astral in class)",
+      "from": "recorded: trilean-regex src/parser.ts (no original test; astral in class)",
       "id": "parse.utf-16-code-units.astral-in-class.1",
       "kind": "regex-parse",
       "pattern": "[😀]"
@@ -1562,7 +1562,7 @@
           ]
         }
       },
-      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.ts (no original test; astral range)",
+      "from": "recorded: trilean-regex src/parser.ts (no original test; astral range)",
       "id": "parse.utf-16-code-units.astral-range.1",
       "kind": "regex-parse",
       "pattern": "[😀-😁]"
@@ -1574,7 +1574,7 @@
           "kind": "literal"
         }
       },
-      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.ts (no original test; lone surrogate)",
+      "from": "recorded: trilean-regex src/parser.ts (no original test; lone surrogate)",
       "id": "parse.utf-16-code-units.lone-surrogate.1",
       "kind": "regex-parse",
       "pattern": {
@@ -1596,7 +1596,7 @@
           ]
         }
       },
-      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.ts (no original test; lone surrogate in class)",
+      "from": "recorded: trilean-regex src/parser.ts (no original test; lone surrogate in class)",
       "id": "parse.utf-16-code-units.lone-surrogate-in-class.1",
       "kind": "regex-parse",
       "pattern": {
@@ -1616,7 +1616,7 @@
           ]
         }
       },
-      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.ts (no original test; error after astral)",
+      "from": "recorded: trilean-regex src/parser.ts (no original test; error after astral)",
       "id": "parse.utf-16-code-units.error-after-astral.1",
       "kind": "regex-parse",
       "pattern": "😀\\q"
@@ -1631,7 +1631,7 @@
           }
         }
       },
-      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.ts (no original test; bmp literal)",
+      "from": "recorded: trilean-regex src/parser.ts (no original test; bmp literal)",
       "id": "parse.utf-16-code-units.bmp-literal.1",
       "kind": "regex-parse",
       "pattern": "é+"
@@ -1649,7 +1649,7 @@
           ]
         }
       },
-      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.ts (no original test; bmp class)",
+      "from": "recorded: trilean-regex src/parser.ts (no original test; bmp class)",
       "id": "parse.utf-16-code-units.bmp-class.1",
       "kind": "regex-parse",
       "pattern": "[а-я]"
@@ -1670,7 +1670,7 @@
           ]
         }
       },
-      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.ts (no original test; cjk)",
+      "from": "recorded: trilean-regex src/parser.ts (no original test; cjk)",
       "id": "parse.utf-16-code-units.cjk.1",
       "kind": "regex-parse",
       "pattern": "日本"
