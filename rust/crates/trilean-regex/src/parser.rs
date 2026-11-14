@@ -301,7 +301,7 @@ impl<'a> Parser<'a> {
         if self.peek_is_quantifier_start()? {
             return self.fail(
                 self.pos,
-                "a quantifier cannot itself be quantified -- this grammar has no lazy or possessive modifiers, since a pattern that only ever answers a yes/no match question has no notion for either to change",
+                "a quantifier cannot itself be quantified: this grammar has no lazy or possessive modifiers, since a pattern that only ever answers a yes/no match question has no notion for either to change",
             );
         }
         let operand = Box::new(atom);
@@ -494,7 +494,7 @@ impl<'a> Parser<'a> {
         } else {
             return self.fail(
                 start,
-                "capturing groups are not supported in this grammar -- there is nothing to capture, since a pattern only ever answers whether it matches. Use '(?:...)' for grouping.",
+                "capturing groups are not supported in this grammar: there is nothing to capture, since a pattern only ever answers whether it matches. Use '(?:...)' for grouping.",
             );
         }
         if self.depth >= MAX_NESTING_DEPTH {
@@ -561,13 +561,13 @@ impl<'a> Parser<'a> {
         let mut atoms: Vec<ClassAtom> = Vec::new();
         loop {
             if self.at_end() {
-                return self.fail(start, "unterminated character class -- missing closing ']'");
+                return self.fail(start, "unterminated character class: missing closing ']'");
             }
             if self.peek() == Some(CLOSE_BRACKET) {
                 if ranges.is_empty() {
                     return self.fail(
                         self.pos,
-                        "a character class must contain at least one item -- ']' immediately, or immediately after '[^', is not the empty class here (escape it as '\\]' to match a literal ']')",
+                        "a character class must contain at least one item: ']' immediately, or immediately after '[^', is not the empty class here (escape it as '\\]' to match a literal ']')",
                     );
                 }
                 self.pos += 1;
@@ -675,7 +675,7 @@ pub(crate) fn parse_with_hazards(
     if !parser.at_end() {
         return parser.fail(
             parser.pos,
-            "unexpected character -- if this was meant literally, escape it with a backslash",
+            "unexpected character: if this was meant literally, escape it with a backslash",
         );
     }
     if states_of(&node) >= MAX_STATES as u64 {

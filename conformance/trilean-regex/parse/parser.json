@@ -401,7 +401,7 @@
         "error": {
           "index": 1,
           "message": [
-            "unexpected character -- if this was meant literally, escape it with a backslash"
+            "unexpected character: if this was meant literally, escape it with a backslash"
           ]
         }
       },

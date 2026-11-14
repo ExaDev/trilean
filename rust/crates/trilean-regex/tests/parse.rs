@@ -122,7 +122,7 @@ fn a_reason_quoting_an_unpaired_surrogate_keeps_it() {
 fn the_message_echoes_the_pattern_and_puts_a_caret_under_the_index() {
     assert_eq!(
         refusal("ab)").to_string(),
-        "invalid pattern at index 2: unexpected character -- if this was meant literally, escape it with a backslash\n  ab)\n    ^"
+        "invalid pattern at index 2: unexpected character: if this was meant literally, escape it with a backslash\n  ab)\n    ^"
     );
 }
 
