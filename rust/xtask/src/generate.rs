@@ -64,12 +64,16 @@ fn exported(text: &str, keywords: &[&str]) -> Vec<String> {
 /// The function of the binding that is handed the error classes, which the entry point calls and does not offer.
 const REGISTER_ERRORS: &str = "registerErrorClasses";
 
+/// What the binding exports for the entry point's own use and for the tests of the binding, and so is not part of the package's API.
+const HIDDEN: [&str; 2] = [REGISTER_ERRORS, "panicForTesting"];
+
 /// What `wasm-bindgen` exports only to start the module, which the `#init` modules call and the package does not offer.
 fn is_loader_name(name: &str) -> bool {
-    matches!(
-        name,
-        "initSync" | "InitInput" | "InitOutput" | "SyncInitInput" | REGISTER_ERRORS
-    )
+    HIDDEN.contains(&name)
+        || matches!(
+            name,
+            "initSync" | "InitInput" | "InitOutput" | "SyncInitInput"
+        )
 }
 
 fn public_names(text: &str, keywords: &[&str]) -> Vec<String> {
@@ -82,11 +86,40 @@ fn public_names(text: &str, keywords: &[&str]) -> Vec<String> {
 /// The package's entry point, which starts the module through `#init` and re-exports the generated API and the error classes.
 fn index_js(package: &Package, glue_js: &str, errors: &[String]) -> String {
     let values = public_names(glue_js, &["function", "class"]).join(", ");
+    let classes = public_names(glue_js, &["class"]);
+    let imported = if classes.is_empty() {
+        String::new()
+    } else {
+        format!(", {}", classes.join(", "))
+    };
+    // A class that owns memory in the module is freed by its finaliser once the loop yields, or at once by `free()`. wasm-bindgen's `free()` throws on a second call and `Symbol.dispose` calls it, so `using` followed by `free()` would throw; `free` here does nothing for an object already freed.
+    let idempotent: String = classes
+        .iter()
+        .map(|class| format!(
+            "{class}.prototype.free = ((free) => function () {{\n  if (this.__wbg_ptr !== 0) {{\n    free.call(this);\n  }}\n}})({class}.prototype.free);\nif (Symbol.dispose) {{\n  {class}.prototype[Symbol.dispose] = {class}.prototype.free;\n}}\n"
+        ))
+        .collect();
     format!(
-        "import \"#init\";\nimport {{ {REGISTER_ERRORS} }} from \"./{glue}.js\";\nimport {{ {errors} }} from \"./errors.js\";\n\n{REGISTER_ERRORS}({errors});\n\nexport {{ {values} }} from \"./{glue}.js\";\nexport {{ {errors} }} from \"./errors.js\";\n",
+        "import \"#init\";\nimport {{ {REGISTER_ERRORS}{imported} }} from \"./{glue}.js\";\nimport {{ {errors} }} from \"./errors.js\";\n\n{REGISTER_ERRORS}({errors});\n{idempotent}\nexport {{ {values} }} from \"./{glue}.js\";\nexport {{ {errors} }} from \"./errors.js\";\n",
         glue = package.glue,
         errors = errors.join(", ")
     )
+}
+
+/// The declarations of the generated module without what needs more of a consumer's project than the package's own types do. The loader's declarations name `RequestInfo`, `URL`, `Response`, `BufferSource` and `WebAssembly`, which only the DOM library has, and `[Symbol.dispose]` needs `esnext.disposable`; the loader is not part of the package's API and `Symbol.dispose` is still on the objects at run time, so neither is declared.
+fn consumer_declarations(glue_declarations: &str) -> String {
+    let api = glue_declarations
+        .split("\nexport type InitInput")
+        .next()
+        .unwrap_or(glue_declarations);
+    let mut kept: Vec<&str> = api
+        .lines()
+        .filter(|line| !line.contains("[Symbol.dispose]"))
+        .collect();
+    while kept.last().is_some_and(|line| line.is_empty()) {
+        kept.pop();
+    }
+    kept.join("\n") + "\n"
 }
 
 fn index_declarations(package: &Package, glue_declarations: &str, errors: &[String]) -> String {
@@ -106,13 +139,16 @@ pub fn write_support_files(package: &Package, dist: &Path) -> Result<Written, St
     };
     let glue_js = read(format!("{}.js", package.glue))?;
     let glue_declarations = read(format!("{}.d.ts", package.glue))?;
+    let consumer = consumer_declarations(&glue_declarations);
     let errors = exported(package.errors_js, &["class"]);
+    let glue_declarations_name = format!("{}.d.ts", package.glue);
     let files = [
         ("errors.js", package.errors_js.to_owned()),
         ("errors.d.ts", package.errors_declarations.to_owned()),
         ("init.node.js", init_node(package)),
         ("init.workerd.js", init_workerd(package)),
         ("init.browser.js", init_browser(package)),
+        (glue_declarations_name.as_str(), consumer),
         ("index.js", index_js(package, &glue_js, &errors)),
         (
             "index.d.ts",
@@ -146,7 +182,14 @@ mod tests {
     fn the_entry_point_re_exports_the_api_and_leaves_the_loader_out() {
         let package = Package::named("trilean-regex").expect("package");
         let errors = exported(package.errors_js, &["class"]);
-        assert_eq!(errors, ["RegexParseError", "UnsupportedConstructError"]);
+        assert_eq!(
+            errors,
+            [
+                "RegexParseError",
+                "UnsupportedConstructError",
+                "InternalError"
+            ]
+        );
         let index = index_js(package, GLUE, &errors);
         assert!(index.starts_with("import \"#init\";"));
         assert!(
@@ -154,9 +197,9 @@ mod tests {
         );
         assert!(!index.contains("initSync"));
         assert!(!index.contains("default"));
-        assert!(
-            index.contains("registerErrorClasses(RegexParseError, UnsupportedConstructError);")
-        );
+        assert!(index.contains(
+            "registerErrorClasses(RegexParseError, UnsupportedConstructError, InternalError);"
+        ));
         assert_eq!(index.matches("registerErrorClasses").count(), 2);
     }
 
@@ -167,6 +210,52 @@ mod tests {
         assert!(declarations.contains("export { parseRegex, CompiledPattern } from"));
         assert!(declarations.contains("export type { LiteralNode, RegexNode } from"));
         assert!(!declarations.contains("Init"));
+    }
+
+    #[test]
+    fn a_class_is_freed_once_however_many_times_free_is_called() {
+        let package = Package::named("trilean-regex").expect("package");
+        let index = index_js(package, GLUE, &[]);
+        assert!(index.contains("import { registerErrorClasses, CompiledPattern } from"));
+        assert!(index.contains("CompiledPattern.prototype.free = ((free) => function () {"));
+        assert!(index.contains("if (this.__wbg_ptr !== 0) {"));
+        assert!(index.contains(
+            "CompiledPattern.prototype[Symbol.dispose] = CompiledPattern.prototype.free;"
+        ));
+        assert_eq!(
+            index_js(package, "export function f() {}\n", &[])
+                .matches("prototype")
+                .count(),
+            0
+        );
+    }
+
+    #[test]
+    fn the_declarations_a_consumer_gets_need_neither_the_dom_library_nor_disposable() {
+        let source = "export class CompiledPattern {\n  free(): void;\n  [Symbol.dispose](): void;\n  test(input: string): boolean;\n}\n\nexport type InitInput = RequestInfo | URL;\nexport function initSync(module: SyncInitInput): InitOutput;\n";
+        let consumer = consumer_declarations(source);
+        assert_eq!(
+            consumer,
+            "export class CompiledPattern {\n  free(): void;\n  test(input: string): boolean;\n}\n"
+        );
+        for needs in [
+            "RequestInfo",
+            "URL",
+            "WebAssembly",
+            "Symbol.dispose",
+            "BufferSource",
+        ] {
+            assert!(!consumer.contains(needs), "{needs}");
+        }
+    }
+
+    #[test]
+    fn the_binding_and_test_only_exports_are_not_part_of_the_api() {
+        let package = Package::named("trilean-regex").expect("package");
+        let glue = "export function parseRegex() {}\nexport function panicForTesting() {}\nexport function registerErrorClasses() {}\n";
+        let index = index_js(package, glue, &[]);
+        assert!(index.contains("export { parseRegex } from"));
+        assert!(!index.contains("panicForTesting"));
     }
 
     #[test]

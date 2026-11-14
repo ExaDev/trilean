@@ -5,11 +5,24 @@ import { bundle, install, readTree, report } from "./host.mjs";
 
 const dir = install(process.argv[2]);
 writeFileSync(`${dir}/tree.json`, JSON.stringify(readTree()));
-// The corpus is bundled in, and the schemas compile at startup, which is when a Worker may compile code.
-const worker = await bundle(dir, "neutral", ["workerd", "worker", "browser"], 'import tree from "./tree.json"; const go = prepare(tree); export default { fetch: async () => Response.json(await go(pkg)) };');
+const worker = await bundle(
+  dir,
+  "neutral",
+  ["workerd", "worker", "browser"],
+  'import tree from "./tree.json"; const go = prepare(tree); export default { fetch: async () => Response.json(await go(pkg)) };',
+);
 const mf = new Miniflare({
   modulesRoot: dir,
-  modules: [{ type: "ESModule", path: `${dir}/bundle.js`, contents: worker }, { type: "CompiledWasm", path: `${dir}/trilean_regex_bg.wasm`, contents: readFileSync(`${dir}/node_modules/trilean-regex/dist/trilean_regex_bg.wasm`) }],
+  modules: [
+    { type: "ESModule", path: `${dir}/bundle.js`, contents: worker },
+    {
+      type: "CompiledWasm",
+      path: `${dir}/trilean_regex_bg.wasm`,
+      contents: readFileSync(
+        `${dir}/node_modules/trilean-regex/dist/trilean_regex_bg.wasm`,
+      ),
+    },
+  ],
   compatibilityDate: "2026-01-01",
 });
 report("workerd", await (await mf.dispatchFetch("http://runner.test/")).json());

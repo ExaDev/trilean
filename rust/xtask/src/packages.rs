@@ -37,6 +37,14 @@ export class UnsupportedConstructError extends Error {
     this.construct = construct;
   }
 }
+
+/** A bug in the package: Rust panicked. `message` carries the panic's message and location. The instance that panicked is spent and the panic is to be reported. */
+export class InternalError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "InternalError";
+  }
+}
 "#,
     errors_declarations: r#"/** A pattern the parser refuses. `message` names the index, the reason, the pattern and a caret under the position; `index` is the offset in UTF-16 code units into `pattern`. */
 export declare class RegexParseError extends Error {
@@ -50,6 +58,11 @@ export declare class UnsupportedConstructError extends Error {
   readonly index: number;
   readonly construct: string;
   constructor(message: string, index: number, construct: string);
+}
+
+/** A bug in the package: Rust panicked. `message` carries the panic's message and location. The instance that panicked is spent and the panic is to be reported. */
+export declare class InternalError extends Error {
+  constructor(message: string);
 }
 "#,
 }];

@@ -4,5 +4,10 @@ import { pathToFileURL } from "node:url";
 import { install, readTree, report } from "./host.mjs";
 import { prepare } from "./run.mjs";
 
-const entry = createRequire(`${install(process.argv[2])}/x.js`).resolve("trilean-regex");
-report("node", await prepare(readTree())(await import(pathToFileURL(entry).href)));
+const entry = createRequire(`${install(process.argv[2])}/x.js`).resolve(
+  "trilean-regex",
+);
+report(
+  "node",
+  await prepare(readTree())(await import(pathToFileURL(entry).href)),
+);
