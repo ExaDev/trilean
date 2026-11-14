@@ -993,7 +993,7 @@ pub enum SqlError {
 #[serde(untagged, deny_unknown_fields)]
 pub enum SqlCompileExpect {
     Compiled { params: Vec<SqlParam>, sql: String },
-    Failed { error: SqlError },
+    Failed { error: Box<SqlError> },
 }
 
 #[derive(Shape, Clone, Debug, PartialEq)]
