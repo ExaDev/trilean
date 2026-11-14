@@ -2,7 +2,7 @@
   "$id": "https://github.com/ExaDev/trilean/tree/main/conformance/manifest.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "What the corpus holds: per corpus file, how many cases it has and which of them are marked to be skipped by one side. Every runner checks the corpus against it, so a case cannot be dropped or hidden without a change to this file in the same commit.",
+  "description": "What the corpus holds: per corpus file, how many cases it has and which of them are marked to be skipped by each implementation. Every runner checks the corpus against it, so a case cannot be dropped or hidden without a change to this file in the same commit.",
   "properties": {
     "files": {
       "additionalProperties": {
@@ -19,14 +19,35 @@
             "type": "boolean"
           },
           "skip": {
-            "description": "Ids in ascending order, which the schema cannot express and every loader checks.",
-            "items": {
-              "minLength": 1,
-              "pattern": "^[a-z0-9][a-z0-9._-]*$",
-              "type": "string"
+            "additionalProperties": false,
+            "description": "Per implementation, the ids of the cases it skips because they are marked for it. Each runner checks its own list against what it skips, so a case marked for one implementation cannot be skipped by the other and still pass.",
+            "properties": {
+              "rust": {
+                "description": "The ids of the cases marked `skip: \"rust\"`, in ascending order, which the schema cannot express and every loader checks.",
+                "items": {
+                  "minLength": 1,
+                  "pattern": "^[a-z0-9][a-z0-9._-]*$",
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              },
+              "ts": {
+                "description": "The ids of the cases marked `skip: \"ts\"`, in ascending order, which the schema cannot express and every loader checks.",
+                "items": {
+                  "minLength": 1,
+                  "pattern": "^[a-z0-9][a-z0-9._-]*$",
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              }
             },
-            "type": "array",
-            "uniqueItems": true
+            "required": [
+              "rust",
+              "ts"
+            ],
+            "type": "object"
           }
         },
         "required": [

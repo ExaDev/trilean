@@ -2,7 +2,10 @@
   "files": {
     "pkg/area/a.json": {
       "cases": 1.5,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     }
   }
 }

@@ -158,11 +158,20 @@ export function validateManifest(value: unknown): Validation<Manifest> {
   if (!checkManifest(value)) {
     return { ok: false, problems: describeErrors(checkManifest.errors) };
   }
-  const problems = Object.entries(value.files).flatMap(([name, entry]) =>
-    isAscending(entry.skip)
-      ? []
-      : [`${name}: "skip" must list distinct ids in ascending order`],
-  );
+  const problems = Object.entries(value.files).flatMap(([name, entry]) => [
+    ...(["ts", "rust"] as const).flatMap((implementation) =>
+      isAscending(entry.skip[implementation])
+        ? []
+        : [
+            `${name}: "skip.${implementation}" must list distinct ids in ascending order`,
+          ],
+    ),
+    ...entry.skip.ts
+      .filter((id) => entry.skip.rust.includes(id))
+      .map(
+        (id) => `${name}: ${id} is listed in both "skip.ts" and "skip.rust"`,
+      ),
+  ]);
 
   return problems.length === 0 ? { ok: true, value } : { ok: false, problems };
 }

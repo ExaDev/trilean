@@ -3,213 +3,369 @@
     "trilean-regex/ecmascript/derived-patterns.json": {
       "cases": 72,
       "generated": true,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean-regex/match/matcher.json": {
       "cases": 48,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean-regex/parse/parser.json": {
       "cases": 87,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/build/derived-aggregates.json": {
       "cases": 10,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/build/derived-connectives.json": {
       "cases": 19,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/build/derived-patterns.json": {
       "cases": 43,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/build/derived-values.json": {
       "cases": 9,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/build/pattern-matching.json": {
       "cases": 7,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/call/builtin-functions.json": {
       "cases": 181,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/cli/cli-run.json": {
       "cases": 52,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/cli/max-nodes-grammar.json": {
       "cases": 43,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/document/evaluate-document.collections.json": {
       "cases": 10,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/document/evaluate-document.json": {
       "cases": 26,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/evaluate/complex-arithmetic.json": {
       "cases": 6,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/evaluate/composed-rules.json": {
       "cases": 12,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/evaluate/delegate-handler.json": {
       "cases": 7,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/evaluate/derived-aggregates.json": {
       "cases": 10,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/evaluate/derived-connectives.json": {
       "cases": 22,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/evaluate/derived-patterns.json": {
       "cases": 78,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/evaluate/derived-values.json": {
       "cases": 7,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/evaluate/evaluator.arithmetic.json": {
       "cases": 22,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/evaluate/evaluator.collections.json": {
       "cases": 11,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/evaluate/evaluator.comparison.json": {
       "cases": 57,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/evaluate/evaluator.complex-arithmetic.json": {
       "cases": 80,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/evaluate/evaluator.control-flow.json": {
       "cases": 37,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/evaluate/evaluator.duration-comparison.json": {
       "cases": 51,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/evaluate/evaluator.functions.json": {
       "cases": 3,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/evaluate/evaluator.indeterminacy-cases.json": {
       "cases": 16,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/evaluate/evaluator.indeterminacy-table.json": {
       "cases": 65,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/evaluate/evaluator.integration.json": {
       "cases": 27,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/evaluate/evaluator.membership.json": {
       "cases": 28,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/evaluate/evaluator.non-finite.json": {
       "cases": 8,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/evaluate/evaluator.not-yet-known.json": {
       "cases": 65,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/evaluate/evaluator.temporal.json": {
       "cases": 14,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/evaluate/evaluator.values.json": {
       "cases": 16,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/evaluate/exists-budget.json": {
       "cases": 67,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/evaluate/function-registry.json": {
       "cases": 3,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/evaluate/golden-examples.json": {
       "cases": 3,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/evaluate/instants.json": {
       "cases": 16,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/evaluate/pattern-matching.json": {
       "cases": 10,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/evaluate/resolver-data.json": {
       "cases": 37,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/evaluate/schema-pipeline.json": {
       "cases": 6,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/evaluate/tree-reference.json": {
       "cases": 6,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/evaluate/truth-tables.json": {
       "cases": 23,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/inputs/input-resolvers.json": {
       "cases": 13,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/number-format/number-format.json": {
       "cases": 40,
       "generated": true,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/serialise/serialise.json": {
       "cases": 38,
       "generated": true,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/validate/computed-value.json": {
       "cases": 4,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/validate/evaluation.json": {
       "cases": 5,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/validate/pattern-matching.json": {
       "cases": 1,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/validate/schema-pipeline.json": {
       "cases": 10,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     },
     "trilean/validate/tree.json": {
       "cases": 107,
-      "skip": []
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
     }
   }
 }

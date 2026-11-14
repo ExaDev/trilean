@@ -4,10 +4,13 @@
 //! says it is. A file that does not match is a failure, never a skip.
 //!
 //! The loader executes no case: it reads the same files, selected the same way, as the TypeScript runner does, and
-//! validates every case of every kind in full through the types of `trilean_conformance`. It counts every case in one
+//! validates every case of every kind in full through the types of `trilean_conformance`. A case is registered when
+//! its id is read from the raw document and checked when it passes that validation, two observations by different
+//! code that must agree per file. It counts every case in one
 //! of two categories: a case marked `skip: rust` is skipped because it is marked, and any other is skipped for want
 //! of a native executor.
 
+mod canonical;
 mod schema;
 mod selection;
 mod validate;
@@ -19,12 +22,21 @@ use std::process::ExitCode;
 
 use serde_json::Value;
 
+use validate::ManifestEntry;
+
 fn corpus_root() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../conformance")
 }
 
+/// Reads a corpus JSON file: strict UTF-8 (`read_to_string` refuses anything else), valid JSON and canonical keys
+/// (see `canonical.rs`). A file with any other key order, or a repeated key or an unpaired surrogate in a key, is an
+/// error, as in the TypeScript loaders, so every file a loader reads is in the one form.
 fn read_json(path: &Path) -> Result<Value, String> {
     let text = fs::read_to_string(path).map_err(|error| format!("{}: {error}", path.display()))?;
+    let problems = canonical::key_problems(&text);
+    if !problems.is_empty() {
+        return Err(format!("{}: {}", path.display(), problems.join("; ")));
+    }
     serde_json::from_str(&text).map_err(|error| format!("{}: {error}", path.display()))
 }
 
@@ -130,6 +142,63 @@ fn check_accepted<T>(
     }
 }
 
+/// Each file in `canonical-keys/invalid` breaks the key rule, and its twin in `canonical-keys/repaired` does not.
+fn check_key_refusals(failures: &mut Vec<String>) {
+    let root = corpus_root().join("fixtures/canonical-keys");
+    for name in fixture_names("canonical-keys/invalid", failures) {
+        for (side, must_break) in [("invalid", true), ("repaired", false)] {
+            match fs::read_to_string(root.join(side).join(&name)) {
+                Ok(text) if canonical::key_problems(&text).is_empty() == must_break => {
+                    failures.push(format!(
+                        "canonical-keys/{side}/{name}: the key rule must {}find a problem",
+                        if must_break { "" } else { "not " }
+                    ));
+                }
+                Ok(_) => {}
+                Err(error) => failures.push(format!("canonical-keys/{side}/{name}: {error}")),
+            }
+            // The loader's own read, which every file of the corpus goes through, gives the same verdict.
+            if read_json(&root.join(side).join(&name)).is_ok() == must_break {
+                failures.push(format!(
+                    "canonical-keys/{side}/{name}: read_json must {}refuse it",
+                    if must_break { "" } else { "not " }
+                ));
+            }
+        }
+    }
+}
+
+/// The generated documents of `canonical-keys/differential.json` give the number of problems the key rule finds in
+/// each, as the TypeScript scanners find them; this scanner must find the same number in every one, so the three
+/// implementations of the rule agree on a wide set of inputs and not only on the hand-written fixtures.
+fn check_key_agreement(failures: &mut Vec<String>) {
+    let path = corpus_root().join("fixtures/canonical-keys/differential.json");
+    let result = read_json(&path).and_then(|document| {
+        let documents = document["documents"]
+            .as_array()
+            .filter(|documents| !documents.is_empty())
+            .ok_or("differential.json must hold a non-empty list of documents")?;
+        let mut differing = Vec::new();
+        for (position, entry) in documents.iter().enumerate() {
+            let text = entry["text"].as_str().ok_or("a document is a text")?;
+            let expected = entry["problems"].as_u64().ok_or("problems is a count")?;
+            if canonical::key_problems(text).len() as u64 != expected {
+                differing.push(position);
+            }
+        }
+        if differing.is_empty() {
+            Ok(())
+        } else {
+            Err(format!("the key rule disagrees on documents {differing:?}"))
+        }
+    });
+    if let Err(error) = result {
+        failures.push(format!(
+            "fixtures/canonical-keys/differential.json: {error}"
+        ));
+    }
+}
+
 /// Each whole-corpus fixture has a problem, and its repaired twin has none.
 fn check_corpus_pairs(failures: &mut Vec<String>) {
     let names = fixture_names("corpora/invalid", failures);
@@ -179,7 +248,13 @@ fn check_text_pairs(failures: &mut Vec<String>) {
 struct LoadedFile {
     name: String,
     case_count: usize,
-    skip_ids: Vec<String>,
+    /// The ids of the file's cases as read from the raw document, before any case is validated.
+    registered_ids: Vec<String>,
+    /// The ids of the cases that passed validation, as the typed reading of the file reports them. They are a second
+    /// observation of the file made by other code than `registered_ids`, so a validator that skips a case, or checks
+    /// one twice, makes the two differ.
+    checked_ids: Vec<String>,
+    ts_skip_ids: Vec<String>,
     rust_skip_ids: Vec<String>,
 }
 
@@ -200,8 +275,12 @@ fn check_corpus(root: &Path) -> (Vec<LoadedFile>, Vec<String>) {
     let mut files = Vec::new();
     let mut ids = BTreeSet::new();
     for name in found.selected {
+        let mut registered_ids = Vec::new();
         let facts = read_json(&root.join(&name))
-            .and_then(|value| validate::validate_file(&value))
+            .and_then(|value| {
+                registered_ids = registered(&value);
+                validate::validate_file(&value)
+            })
             .map_err(|error| format!("{name}: {error}"));
         match facts {
             Ok(facts) => {
@@ -213,7 +292,9 @@ fn check_corpus(root: &Path) -> (Vec<LoadedFile>, Vec<String>) {
                 files.push(LoadedFile {
                     name,
                     case_count: facts.ids.len(),
-                    skip_ids: facts.skip_ids,
+                    registered_ids,
+                    checked_ids: facts.ids,
+                    ts_skip_ids: facts.ts_skip_ids,
                     rust_skip_ids: facts.rust_skip_ids,
                 });
             }
@@ -225,20 +306,29 @@ fn check_corpus(root: &Path) -> (Vec<LoadedFile>, Vec<String>) {
     {
         Ok(manifest) => {
             problems.extend(count_problems(&files, &manifest));
-            let actual: BTreeMap<&str, (usize, &Vec<String>)> = files
+            let actual: BTreeMap<&str, ManifestEntry> = files
                 .iter()
-                .map(|file| (file.name.as_str(), (file.case_count, &file.skip_ids)))
+                .map(|file| {
+                    (
+                        file.name.as_str(),
+                        ManifestEntry {
+                            cases: file.case_count,
+                            ts: file.ts_skip_ids.clone(),
+                            rust: file.rust_skip_ids.clone(),
+                        },
+                    )
+                })
                 .collect();
-            let recorded: BTreeMap<&str, (usize, &Vec<String>)> = manifest
+            let recorded: BTreeMap<&str, &ManifestEntry> = manifest
                 .iter()
-                .map(|(name, (count, skip))| (name.as_str(), (*count, skip)))
+                .map(|(name, entry)| (name.as_str(), entry))
                 .collect();
             for name in actual
                 .keys()
                 .chain(recorded.keys())
                 .collect::<BTreeSet<_>>()
             {
-                if actual.get(*name) != recorded.get(*name) {
+                if actual.get(*name) != recorded.get(*name).copied() {
                     problems.push(format!(
                         "manifest.json does not match {name}: the file holds {:?}, the manifest records {:?}",
                         actual.get(*name),
@@ -252,17 +342,28 @@ fn check_corpus(root: &Path) -> (Vec<LoadedFile>, Vec<String>) {
     (files, problems)
 }
 
-/// The completeness check for this implementation, the same rule as the TypeScript runner's `completenessProblems`:
-/// what is executed plus what is skipped is the manifest's total, and every case skipped because it is marked for this
-/// implementation (`skip: rust`) is marked in the manifest. A case that is not marked is skipped for want of a native
-/// executor; the two categories and the executed cases add up to the manifest's total.
-fn count_problems(
-    files: &[LoadedFile],
-    manifest: &BTreeMap<String, (usize, Vec<String>)>,
-) -> Vec<String> {
+/// The ids of the cases of a file as the loader registers them, read from the file before any case is checked. A
+/// case without a string `id` registers nothing, and the check of that file fails for it.
+fn registered(file: &Value) -> Vec<String> {
+    file["cases"]
+        .as_array()
+        .map(|cases| {
+            cases
+                .iter()
+                .filter_map(|case| case["id"].as_str().map(str::to_owned))
+                .collect()
+        })
+        .unwrap_or_default()
+}
+
+/// The completeness check for this implementation, from what the loader registered and what it checked, and the
+/// manifest's own skip list for `rust`: per file, the cases registered are the manifest's count, the cases checked
+/// are exactly the cases registered and in the same order, and the cases skipped because they are marked `rust` are
+/// exactly the ones the manifest lists for `rust`. Over the whole corpus, what is executed plus what is skipped is
+/// the manifest's total. A case not marked `rust` is skipped for want of a native executor.
+fn count_problems(files: &[LoadedFile], manifest: &BTreeMap<String, ManifestEntry>) -> Vec<String> {
     let (executed, skipped_marked, skipped_without_executor) = counts(files);
-    let total: usize = manifest.values().map(|(count, _)| count).sum();
-    let marked: BTreeSet<&String> = manifest.values().flat_map(|(_, skip)| skip).collect();
+    let total: usize = manifest.values().map(|entry| entry.cases).sum();
     let mut problems = Vec::new();
     if executed + skipped_marked + skipped_without_executor != total {
         problems.push(format!(
@@ -270,14 +371,97 @@ fn count_problems(
             skipped_marked + skipped_without_executor
         ));
     }
-    for id in files.iter().flat_map(|file| &file.rust_skip_ids) {
-        if !marked.contains(id) {
+    for file in files {
+        let Some(entry) = manifest.get(&file.name) else {
+            continue;
+        };
+        if file.registered_ids.len() != entry.cases {
             problems.push(format!(
-                "{id} is skipped here because it is marked, and the manifest does not mark it"
+                "{}: {} cases registered, and the manifest has {}",
+                file.name,
+                file.registered_ids.len(),
+                entry.cases
+            ));
+        }
+        if file.checked_ids != file.registered_ids {
+            problems.push(format!(
+                "{}: the cases checked are not the cases registered",
+                file.name
+            ));
+        }
+        if file.rust_skip_ids != entry.rust {
+            problems.push(format!(
+                "{}: skipped here as marked {:?}, and the manifest lists {:?} for rust",
+                file.name, file.rust_skip_ids, entry.rust
             ));
         }
     }
     problems
+}
+
+/// Checks `count_problems` against corpora written here: a complete one passes, and each way a loader can lose a case
+/// or miscount a skip fails it, so a change that removes one of its rules is seen.
+fn self_check_completeness(failures: &mut Vec<String>) {
+    let file = |registered: &[&str], checked: &[&str], rust: &[&str]| LoadedFile {
+        name: "pkg/area/a.json".to_owned(),
+        // The count the loader reports for the file, which a loop that loses cases does not change.
+        case_count: 2,
+        registered_ids: registered.iter().map(|id| (*id).to_owned()).collect(),
+        checked_ids: checked.iter().map(|id| (*id).to_owned()).collect(),
+        ts_skip_ids: Vec::new(),
+        rust_skip_ids: rust.iter().map(|id| (*id).to_owned()).collect(),
+    };
+    let manifest = |cases: usize, rust: &[&str]| {
+        BTreeMap::from([(
+            "pkg/area/a.json".to_owned(),
+            ManifestEntry {
+                cases,
+                ts: Vec::new(),
+                rust: rust.iter().map(|id| (*id).to_owned()).collect(),
+            },
+        )])
+    };
+    let complete = file(&["a", "b"], &["a", "b"], &["b"]);
+    let broken = [
+        (
+            "a registration that dropped a case",
+            file(&["a"], &["a"], &[]),
+            manifest(2, &[]),
+        ),
+        (
+            "a check that dropped a registered case",
+            file(&["a", "b"], &["a"], &[]),
+            manifest(2, &[]),
+        ),
+        (
+            "a case validated twice",
+            file(&["a", "b"], &["a", "a", "b"], &[]),
+            manifest(2, &[]),
+        ),
+        (
+            "a case validated in another order than it was registered",
+            file(&["a", "b"], &["b", "a"], &[]),
+            manifest(2, &[]),
+        ),
+        (
+            "a skip the manifest does not list for rust",
+            file(&["a", "b"], &["a", "b"], &["b"]),
+            manifest(2, &[]),
+        ),
+        (
+            "a skip listed for rust and not made",
+            file(&["a", "b"], &["a", "b"], &[]),
+            manifest(2, &["b"]),
+        ),
+    ];
+    if !count_problems(std::slice::from_ref(&complete), &manifest(2, &["b"])).is_empty() {
+        failures.push("self-check: a complete corpus must have no completeness problem".to_owned());
+    }
+    for (what, loaded, listed) in broken {
+        if count_problems(&[loaded], &listed).is_empty() {
+            failures.push(format!("self-check: {what} must be a completeness problem"));
+        }
+    }
 }
 
 /// The cases this runner executed, skipped because they are marked `rust`, and skipped for want of an executor.
@@ -321,9 +505,12 @@ fn main() -> ExitCode {
         validate::validate_manifest,
         &mut failures,
     );
+    check_key_refusals(&mut failures);
+    check_key_agreement(&mut failures);
     check_corpus_pairs(&mut failures);
     check_text_pairs(&mut failures);
     validate::self_check(&mut failures);
+    self_check_completeness(&mut failures);
     schema::check(&mut failures);
     let (files, problems) = check_corpus(&corpus_root());
     failures.extend(problems);
@@ -333,7 +520,7 @@ fn main() -> ExitCode {
             "{}: {} cases ({} skipped by one implementation)",
             file.name,
             file.case_count,
-            file.skip_ids.len()
+            file.ts_skip_ids.len() + file.rust_skip_ids.len()
         );
     }
     for failure in &failures {

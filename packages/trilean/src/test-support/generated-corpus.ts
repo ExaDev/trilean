@@ -2,6 +2,7 @@ import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { format, isRecord } from "./generated-format";
 import { generatedFixtures } from "./generated-fixtures";
+import { keyDocumentsFile } from "./generated-key-documents";
 import { readmeWithIndex } from "./generated-index";
 import { ComputedValueSchema } from "../computed-value";
 import {
@@ -416,6 +417,7 @@ export function generatedCorpus(): ReadonlyMap<string, string> {
 export function generatedDerived(root: string): ReadonlyMap<string, string> {
   return new Map([
     ...generatedFixtures(root),
+    ["fixtures/canonical-keys/differential.json", keyDocumentsFile()],
     ["README.md", readmeWithIndex(root)],
   ]);
 }

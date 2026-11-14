@@ -79,8 +79,8 @@ fn node_problems(node: &RegexNode, problems: &mut Vec<String>) {
 /// What a valid corpus file holds, for the checks that compare files with each other and with the manifest.
 pub struct FileFacts {
     pub ids: Vec<String>,
-    /// The ids of the cases marked to be skipped by one implementation, sorted.
-    pub skip_ids: Vec<String>,
+    /// The ids of the cases marked `ts`, the ones the TypeScript runners skip, sorted.
+    pub ts_skip_ids: Vec<String>,
     /// The ids of the cases marked `rust`, the ones this implementation skips because they are marked, sorted.
     pub rust_skip_ids: Vec<String>,
 }
@@ -90,7 +90,7 @@ pub fn validate_file(value: &Value) -> Check<FileFacts> {
     let file = CorpusFile::from_json(&shaped(value)?).map_err(|issues| issues.to_string())?;
     let mut facts = FileFacts {
         ids: Vec::new(),
-        skip_ids: Vec::new(),
+        ts_skip_ids: Vec::new(),
         rust_skip_ids: Vec::new(),
     };
     let mut seen = BTreeSet::new();
@@ -109,16 +109,13 @@ pub fn validate_file(value: &Value) -> Check<FileFacts> {
             return Err(format!("case id {} is used twice in the file", common.id));
         }
         match common.skip {
-            Some(Skip::Rust) => {
-                facts.skip_ids.push(common.id.clone());
-                facts.rust_skip_ids.push(common.id.clone());
-            }
-            Some(Skip::Ts) => facts.skip_ids.push(common.id.clone()),
+            Some(Skip::Rust) => facts.rust_skip_ids.push(common.id.clone()),
+            Some(Skip::Ts) => facts.ts_skip_ids.push(common.id.clone()),
             None => {}
         }
         facts.ids.push(common.id.clone());
     }
-    facts.skip_ids.sort();
+    facts.ts_skip_ids.sort();
     facts.rust_skip_ids.sort();
     Ok(facts)
 }
@@ -127,6 +124,12 @@ fn object<'a>(value: &'a Value, at: &str) -> Check<&'a Map<String, Value>> {
     value
         .as_object()
         .ok_or_else(|| format!("{at}: expected an object"))
+}
+
+fn array<'a>(value: &'a Value, at: &str, what: &str) -> Check<&'a Vec<Value>> {
+    value
+        .as_array()
+        .ok_or_else(|| format!("{at}: {what} must be an array"))
 }
 
 /// The object at `at`, holding every key in `required`, and no key outside `required` and `optional`.
@@ -165,8 +168,36 @@ fn as_integer(value: &Value) -> Option<u64> {
     (integer <= MAX_SAFE_INTEGER).then_some(integer)
 }
 
-/// The manifest as a map from corpus file to its case count and the ids marked to be skipped by one side.
-pub fn validate_manifest(value: &Value) -> Check<BTreeMap<String, (usize, Vec<String>)>> {
+/// What the manifest records for one corpus file: its number of cases and, per implementation, the ids of the cases
+/// marked to be skipped by it.
+#[derive(Debug, PartialEq, Eq)]
+pub struct ManifestEntry {
+    pub cases: usize,
+    pub ts: Vec<String>,
+    pub rust: Vec<String>,
+}
+
+/// A manifest's list of ids: case ids, in ascending order, without repeats.
+fn skip_list(value: &Value, at: &str, which: &str) -> Check<Vec<String>> {
+    let mut ids = Vec::new();
+    for id in array(value, at, which)? {
+        ids.push(
+            id.as_str()
+                .filter(|text| is_name(text))
+                .ok_or_else(|| format!("{at}: {which} must hold case ids"))?
+                .to_owned(),
+        );
+    }
+    if !ids.windows(2).all(|pair| pair[0] < pair[1]) {
+        return Err(format!(
+            "{at}: {which} must list distinct ids in ascending order"
+        ));
+    }
+    Ok(ids)
+}
+
+/// The manifest as a map from corpus file to what it records for the file.
+pub fn validate_manifest(value: &Value) -> Check<BTreeMap<String, ManifestEntry>> {
     let top = exact_keys(value, "manifest", &["files"], &[])?;
     let files = object(&top["files"], "manifest")?;
     if files.is_empty() {
@@ -195,25 +226,16 @@ pub fn validate_manifest(value: &Value) -> Check<BTreeMap<String, (usize, Vec<St
         if count == 0 {
             return Err(format!("{at}: \"cases\" must be at least 1"));
         }
-        let mut skip = Vec::new();
-        let listed = map["skip"]
-            .as_array()
-            .ok_or_else(|| format!("{at}: \"skip\" must be an array"))?;
-        for id in listed {
-            skip.push(
-                id.as_str()
-                    .filter(|text| is_name(text))
-                    .ok_or_else(|| format!("{at}: \"skip\" must hold case ids"))?
-                    .to_owned(),
-            );
-        }
-        if !skip.windows(2).all(|pair| pair[0] < pair[1]) {
+        let skip = exact_keys(&map["skip"], &at, &["rust", "ts"], &[])?;
+        let ts = skip_list(&skip["ts"], &at, "\"skip.ts\"")?;
+        let rust = skip_list(&skip["rust"], &at, "\"skip.rust\"")?;
+        if let Some(id) = ts.iter().find(|id| rust.contains(id)) {
             return Err(format!(
-                "{at}: \"skip\" must list distinct ids in ascending order"
+                "{at}: {id} is listed in both \"skip.ts\" and \"skip.rust\""
             ));
         }
-        let count = usize::try_from(count).map_err(|error| format!("{at}: {error}"))?;
-        manifest.insert(name.clone(), (count, skip));
+        let cases = usize::try_from(count).map_err(|error| format!("{at}: {error}"))?;
+        manifest.insert(name.clone(), ManifestEntry { cases, ts, rust });
     }
     Ok(manifest)
 }
