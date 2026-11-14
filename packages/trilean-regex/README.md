@@ -58,9 +58,25 @@ A character is a UTF-16 code unit, exactly matching `RegExp`'s own behaviour wit
 
 ## Reference implementation
 
-`parseRegex` is a hand-written recursive-descent parser producing a `RegexNode` AST -- the same AST `trilean-sql`'s dialect compilers pattern-match over to translate a pattern into `LIKE`/`GLOB`/`~` fragments, rather than each compiler re-parsing pattern text itself.
+`parseRegex` is a hand-written recursive-descent parser producing a `RegexNode` AST, the same AST `trilean-sql`'s dialect compilers pattern-match over to translate a pattern into `LIKE`/`GLOB`/`~` fragments, rather than each compiler re-parsing pattern text itself.
 
-`compilePattern`/`compileToNfa` compile that AST to a non-deterministic finite automaton via Thompson's construction, and `matchesNfa` simulates it against an input with the standard "new thread at every position" search algorithm (Cox, ["Regular Expression Matching Can Be Simple And Fast"](https://swtch.com/~rsc/regexp/regexp1.html)). This is what makes the "no catastrophic backtracking" guarantee true by construction rather than merely by convention: simulating an NFA takes time linear in `pattern states x input length` regardless of the pattern's shape, so there is no input this package's own reference matcher can be made to hang on.
+`compilePattern` compiles that AST to a non-deterministic finite automaton by Thompson's construction and simulates it against an input with the standard "new thread at every position" search algorithm (Cox, ["Regular Expression Matching Can Be Simple And Fast"](https://swtch.com/~rsc/regexp/regexp1.html)). This is what makes the "no catastrophic backtracking" guarantee true by construction rather than by convention: simulating an NFA takes at most one visit to each state per position of the input, whatever the pattern's shape, so there is no input this matcher can be made to hang on. The automaton itself is internal: its states hold closures, which have no data form.
+
+Negated shorthand classes (`\D`, `\W`, `\S`) are accepted inside a bracketed class. Over UTF-16 code units the complement of a set is a set of ranges, so `[\S]` and `[\D\da]` parse, and `[\s\S]` is every code unit, which is how a pattern says "any character, a line terminator included".
+
+## ECMAScript compatibility
+
+`compileEcmascriptSubset` compiles a pattern only when every construct in it means the same here as in an unflagged ECMAScript `RegExp`, so a pattern it accepts can be handed to either engine and gives the same answer. It throws `RegexParseError` for a pattern outside the grammar and `UnsupportedConstructError` (with the `index` and `construct` of the first offender) for one of these:
+
+- `.`, which matches a line terminator here and does not in ECMAScript.
+- `\s` and `\S` outside a class that holds every code unit. ECMAScript's `\s` includes U+00A0, U+FEFF, U+2028 and the `Zs` space separators, with or without the `u` flag, where this grammar's is the six ASCII white-space characters.
+- A braced quantifier with nothing to repeat (`{2}` at the start of a pattern, a group or a branch), which is a syntax error in ECMAScript and a literal here.
+
+## Installing and runtime support
+
+The package is one WebAssembly build of the Rust crate, with the same API in Node, Bun, Deno, browsers and Cloudflare Workers. It is ECMAScript modules only (`require()` works through `require(esm)` from Node 20.19 and 22.12). The package's `imports` field selects, by condition, the one module that differs between runtimes, which loads the `.wasm` file: Node, Bun and Deno read it from disk, Workers import it as a module, and browsers and bundlers fetch it, so no extra configuration is needed.
+
+A string crosses into the module as the UTF-16 code units it is, so an unpaired surrogate behaves exactly as it does in a JavaScript `RegExp` without the `u` flag. Groups nest to a fixed depth, and a repetition bound is a count that fits in 32 bits; a pattern beyond either is a `RegexParseError`.
 
 ```ts
 import { compilePattern, testPattern, parseRegex, RegexParseError } from "trilean-regex";
@@ -85,4 +101,4 @@ try {
 - **A true regular language, not a documented subset of one.** Every construct this grammar accepts corresponds to something a finite automaton can express; nothing is included on the promise that "most engines happen to agree about it."
 - **A real parser, not pattern validation.** `parseRegex` builds an AST via recursive descent, the same way a general-purpose parser would -- it does not check the input string against a meta-pattern and hope the input itself is then safe to hand to another regex engine.
 - **No indeterminate outcome for a bad pattern here.** A pattern is grammatical or it is not; `parseRegex` throws `RegexParseError` for the latter, naming the exact index. (What a caller does with that error -- `trilean` core's `evaluator.ts` turns an invalid `portableMatches` pattern into `wrong-type`, matching how it already treats an invalid ECMAScript pattern under plain `matches` -- is that caller's decision, not this package's.)
-- **Isomorphic.** No `node:*` import, no `Buffer`, in any runtime module -- enforced by this package's own `eslint.config.ts` isomorphism guard, the same convention `trilean` and `trilean-sql` both follow.
+- **Isomorphic.** One build runs unchanged in every runtime above; only the module that loads the `.wasm` file differs between them, and the package's `imports` field chooses it.

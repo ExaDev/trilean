@@ -87,9 +87,19 @@ Every rule above has a negative fixture, and every negative fixture has a repair
 | `canonical-keys/invalid`, `canonical-keys/repaired` | a document whose keys break the key rule, which is any JSON document and not a corpus file, and its twin with the keys in order; the file under `invalid-cases` of the same name as one under `repaired-cases` shows the rule applied to a corpus file | every loader |
 | `loader-selection`, `text-forms` | the file selection rule and the two forms of a text | every loader |
 
-A file a loader cannot parse counts as rejected, which is how a loader meets an unpaired surrogate escape. Every real corpus file must be accepted by all of them. A rule added to the format gets a fixture and its twin in the same commit; a constraint added to the schema gets its generated pair when the generator is run, and the generator's test fails until it is.
+Each loader of the corpus is one of these: the Rust loader, the TypeScript runner of `trilean` and the wasm runner of `trilean-regex`, which reads the files with the schema through Ajv in every runtime it runs in. A file a loader cannot parse counts as rejected, which is how a loader meets an unpaired surrogate escape. Every real corpus file must be accepted by all of them. A rule added to the format gets a fixture and its twin in the same commit; a constraint added to the schema gets its generated pair when the generator is run, and the generator's test fails until it is.
 
 The schema accepts nothing that no case exercises: a test of the TypeScript runner walks `case.schema.json` along every case of the corpus and every valid fixture and fails for a property, a `oneOf` branch or an `enum` value of the kinds that package runs that none of them uses. A form is added to the schema together with a case that uses it.
+
+### The wasm runner
+
+`conformance/runner/` holds the runner of the `trilean-regex` package, the one JavaScript this repository allows outside configuration and the Node glue of a package, in `.mjs` files that total at most 16,384 bytes. It runs the corpus against the package as a consumer installs it, from the tarball `pnpm pack` makes, in three runtimes:
+
+- `node.mjs <tarball>` installs the tarball under a temporary `node_modules` and imports the package from there.
+- `chromium.mjs <tarball>` bundles the runner and the package the way a page would, with the `browser` condition, and runs them in headless Chromium through Playwright.
+- `workerd.mjs <tarball>` bundles them for Cloudflare Workers, with the `workerd` condition and the corpus built in, and runs them in workerd through Miniflare.
+
+Each runtime applies the contract of this README to the corpus it reads: the one file selection rule, over the fixture tree as well, every file and the manifest checked with Ajv against the schemas, every negative fixture rejected beside its repaired twin, and the corpus equal to its manifest. It then executes the cases of `trilean-regex/`. The runner is written for a runtime with no file system, so `run.mjs` takes the corpus as a tree of files and the package as a module, and the other files only supply them. The wasm build is the Rust implementation, so the runner skips a case marked `skip: rust` and executes one marked `skip: ts`, and ignores a `workBound`, which only the native runner counts.
 
 ### Generated files
 
@@ -117,9 +127,9 @@ Some files are written by a generator, `packages/trilean/scripts/generate-corpus
 
 Each input is tested against the pattern, through every entry point the implementation offers for testing a pattern (compiled once and reused, and compiled per call), and all of them must give `matches`.
 
-`regex-match` takes an optional `dialect`: `trilean`, the default, is the language of the package's own matcher. `ecmascript` is the language of an unflagged ECMAScript `RegExp`: the pattern is read as that engine reads it, over UTF-16 code units, with no `^` or `$` at a line break (no `m` flag), no `.` that excludes line terminators (the patterns the derived builders write use `[\s\S]` and `[^\/]`, which take every code unit, a line terminator and an unpaired surrogate among them), and `test` finding a match anywhere. Each `matches` was recorded from `new RegExp(pattern).test(input)`. The TypeScript runner replays these cases against the host's `RegExp`, which checks that the recorded answers still hold and tests no implementation of this repository; an implementation with an engine of its own for that language must run each case through it and give the recorded answer.
+`regex-match` takes an optional `dialect`: `trilean`, the default, is the language of the package's own matcher. `ecmascript` is the language of an unflagged ECMAScript `RegExp`: the pattern is read as that engine reads it, over UTF-16 code units, with no `^` or `$` at a line break (no `m` flag), no `.` that excludes line terminators (the patterns the derived builders write use `[\s\S]` and `[^\/]`, which take every code unit, a line terminator and an unpaired surrogate among them), and `test` finding a match anywhere. Each `matches` was recorded from `new RegExp(pattern).test(input)`. The generator that writes these cases (see Generated files) recomputes every answer from the host's `RegExp`, which checks that the recorded answers still hold and tests no implementation of this repository. An implementation compiles each pattern through the entry point it offers for that language, which refuses a construct that means something else there (`compile_ecmascript_subset` in the Rust crate, `compileEcmascriptSubset` in the package), and gives the recorded answer.
 
-The corpus pins answers, never time. A test that bounds how long a pattern takes stays in the implementation's own tests, next to the case that pins its answer, and a port keeps its own time-bound test.
+The corpus pins answers, never time. An input may also state a bound on the work the matcher does for it, `workBound: { "factor": k }`: at most k times (the pattern's length + 1) times (the input's length + 1) NFA state visits, both lengths in UTF-16 code units, where a visit is the epsilon closure expanding a state (`CompiledPattern::test_counted` in the Rust crate reports it). Only a runner that counts visits checks the field: the native runner does, and the runners of the wasm build run the same compiled Rust without the counter and ignore it. The cases that state one are patterns a backtracking engine takes exponential time on, so a matcher that backtracks fails them without a clock. A test that bounds how long something takes stays in the implementation's own tests.
 
 ### trilean
 
@@ -138,8 +148,8 @@ The cases are the specification of the package's behaviour: the reason codes, th
 | `evaluate` | 813 |
 | `inputs` | 13 |
 | `number-format` | 40 |
-| `regex-match` | 120 |
-| `regex-parse` | 87 |
+| `regex-match` | 129 |
+| `regex-parse` | 98 |
 | `serialise` | 38 |
 | `validate` | 127 |
 
@@ -257,7 +267,7 @@ An instant is a text in the ECMAScript date-time string format (`YYYY-MM-DD`, op
 
 ## Tests that stay outside the corpus
 
-A test stays in an implementation's own suite when a case cannot state it. Each is listed here with the reason, since these tests disappear with the TypeScript they test and a port has to cover each behaviour itself. The table covers the tests of `trilean` and `trilean-regex` other than the runners' own (`conformance.unit.test.ts`, `conformance.generated.unit.test.ts`, `conformance.compare.unit.test.ts`, `conformance.schema.unit.test.ts` and the regex package's `conformance.unit.test.ts`), which test the corpus machinery and not a behaviour; another package lists its own tests where its corpus is described. `trilean/src/conformance.unit.test.ts` fails when a test has no row, when a row has no test, when a row's title is not exactly the test's title (a template title is listed as written, placeholders included), when a row is malformed, and when a row's code is not defined above.
+A test stays in an implementation's own suite when a case cannot state it. Each is listed here with the reason, since these tests disappear with the TypeScript they test and a port has to cover each behaviour itself. The table covers the tests of `trilean` other than the runners' own (`conformance.unit.test.ts`, `conformance.generated.unit.test.ts`, `conformance.compare.unit.test.ts` and `conformance.schema.unit.test.ts`), which test the corpus machinery and not a behaviour; another package lists its own tests where its corpus is described. `trilean/src/conformance.unit.test.ts` fails when a test has no row, when a row has no test, when a row's title is not exactly the test's title (a template title is listed as written, placeholders included), when a row is malformed, and when a row's code is not defined above.
 
 | Code | Why a case cannot state it | A port must |
 | --- | --- | --- |
@@ -265,7 +275,7 @@ A test stays in an implementation's own suite when a case cannot state it. Each 
 | T2 | it relates two evaluations of one tree to each other, or enumerates trees, so it has no single expectation to write down | run the same comparison between its own evaluation paths (asynchronous, synchronous, compiled, native and wasm) over the same trees |
 | T3 | it tests a module that is not part of the package's public API (an internal numeric routine or helper), whose results the corpus pins only through the public operations built on it | test the routine it has in its place at the inputs the titles describe, since the corpus reaches these inputs only through `divide`, `power` and the duration comparisons |
 | T4 | it checks the built package (its entry points, declarations, command file and JSON Schema file), which is a build artefact and not a behaviour of the language-neutral contract | check its own build output: the entry points it publishes, its declared types, its command and the schema it emits |
-| T5 | it runs the package inside a Cloudflare Workers isolate, which is a host, not a behaviour; the behaviours it runs are the ones the corpus holds | run the corpus under workerd, as the wasm runner will |
+| T5 | it runs the package inside a Cloudflare Workers isolate, which is a host, not a behaviour; the behaviours it runs are the ones the corpus holds | run the corpus under workerd, as the wasm runner does |
 | T6 | it replaces an internal module with a stub to reach a path the real implementation cannot (a result the evaluator would already have refused) | test that path through its own seam: a result that is not a finite number must be refused by the output check |
 | T7 | it tests the shape of the TypeScript API an embedder composes (resolver objects and the item type), which is host code, not data | test its own embedding API: that an item is scoped to itself however the list was built, that nothing in the inputs reads as an inherited member, and that a returned list is a copy |
 | T8 | it checks that something runs in bounded time or work, which a case, giving an answer, cannot | keep its own time or work bound test next to the cases that pin the answer; the matcher also bounds its work by counting state visits |
@@ -397,16 +407,6 @@ A test stays in an implementation's own suite when a case cannot state it. Each 
 | trilean.e2e.test.ts | portableMatches matches via trilean-regex's own compiled NFA | T5 |
 | trilean.e2e.test.ts | portableNotMatches is the negation, still inside the isolate | T5 |
 | trilean.e2e.test.ts | an invalid trilean-regex pattern resolves wrong-type rather than throwing out of the isolate | T5 |
-| ast.unit.test.ts | includes both endpoints and everything between them | T3 |
-| ast.unit.test.ts | excludes values outside the range | T3 |
-| ast.unit.test.ts | matches membership in the positive form | T3 |
-| ast.unit.test.ts | inverts membership when negated | T3 |
-| ast.unit.test.ts | unions multiple ranges | T3 |
-| shorthand-classes.unit.test.ts | \d expands to the ASCII digit range | T3 |
-| shorthand-classes.unit.test.ts | \D negates \d rather than owning its own range table | T3 |
-| shorthand-classes.unit.test.ts | \w matches letters, digits, and underscore only | T3 |
-| shorthand-classes.unit.test.ts | \s matches the ASCII whitespace set | T3 |
-| matcher.unit.test.ts | resolves a classically pathological nested-quantifier pattern instantly | T8 |
 
 ## Adding a case
 
