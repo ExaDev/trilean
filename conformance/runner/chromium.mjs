@@ -32,5 +32,7 @@ await page.route("http://runner.test/**", (route) => {
   return route.fulfill({ contentType, body });
 });
 await page.goto("http://runner.test/");
+// The module finishes after the page loads, since it waits for the wasm file.
+await page.waitForFunction(() => window.done);
 report("chromium", await page.evaluate(() => window.done));
 await browser.close();
