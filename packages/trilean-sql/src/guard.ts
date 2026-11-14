@@ -83,7 +83,7 @@ const DIALECT_DIVERGENCE: Readonly<Record<SqlDialect, DialectDivergence>> = {
   sqlite: {
     complexNumbers: "SQLite has no complex number type",
     // A different mechanism from PostgreSQL's, and a divergence in the opposite direction: SQLite has no NaN of its own, and a driver binding a JS NaN substitutes SQL NULL for it -- confirmed directly against better-sqlite3, where `typeof(?)` bound with NaN answers 'null'. So `NaN = NaN` is indeterminate there and the tree matches nothing, while its negation matches everything; trilean's `===` makes the same comparison definitely false and its negation definitely true. Refused for the same reason, worded for the mechanism that actually applies.
-    nan: "NaN is equal to nothing in trilean, not even itself, whereas SQLite has no NaN at all and a driver binding one substitutes SQL NULL -- so 'NaN = NaN' is indeterminate there rather than definitely false, and its negation matches every row instead of none",
+    nan: "NaN is equal to nothing in trilean, not even itself, whereas SQLite has no NaN at all and a driver binding one substitutes SQL NULL, so 'NaN = NaN' is indeterminate there rather than definitely false, and its negation matches every row instead of none",
     crossKindCoercion:
       "SQLite's type affinity may coerce one to the other and answer definitely",
     textOrdering: (operandPath) =>
@@ -271,14 +271,14 @@ function findUnpushableExpression(
         return {
           kind: node.kind,
           path: itemPath,
-          reason: `a '${node.combiner.mode}' fold orders participating items by comparing them, and trilean never orders text values ('compare' returns wrong-type for text; use 'textCompare') -- but ${divergence.textOrdering(itemPath)}`,
+          reason: `a '${node.combiner.mode}' fold orders participating items by comparing them, and trilean never orders text values ('compare' returns wrong-type for text; use 'textCompare'); but ${divergence.textOrdering(itemPath)}`,
         };
       }
       if (itemKind === "boolean") {
         return {
           kind: node.kind,
           path: itemPath,
-          reason: `a '${node.combiner.mode}' fold orders participating items by comparing them, and booleans have no ordering in trilean -- whereas ${divergence.booleanOrdering}`,
+          reason: `a '${node.combiner.mode}' fold orders participating items by comparing them, and booleans have no ordering in trilean; whereas ${divergence.booleanOrdering}`,
         };
       }
 
@@ -421,7 +421,7 @@ function findUnpushablePredicate(
           return {
             kind: node.kind,
             path,
-            reason: `'compare' never compares text in trilean -- it returns wrong-type and directs the caller to 'textCompare' -- but ${divergence.textOrdering(operand.path)}`,
+            reason: `'compare' never compares text in trilean: it returns wrong-type and directs the caller to 'textCompare'; but ${divergence.textOrdering(operand.path)}`,
           };
         }
         if (staticKind === "boolean" && ORDERING_OPERATORS.has(node.op)) {
@@ -478,7 +478,7 @@ function findUnpushablePredicate(
         return {
           kind: node.kind,
           path,
-          reason: `'${node.op}' matches trilean's own ECMAScript 'RegExp' against the pattern, whereas PostgreSQL's '~'/'!~' would match it under PostgreSQL's own regular-expression dialect (POSIX ARE) -- a different language that can silently answer a different set of rows for the same pattern and data (for example, PostgreSQL's '.' matches a newline by default where ECMAScript's does not, and PostgreSQL's '\\w' follows the database's locale where ECMAScript's is ASCII-only) -- so this is refused unless 'postgresRegexpPushdown' is explicitly set 'true'`,
+          reason: `'${node.op}' matches trilean's own ECMAScript 'RegExp' against the pattern, whereas PostgreSQL's '~'/'!~' would match it under PostgreSQL's own regular-expression dialect (POSIX ARE), a different language that can silently answer a different set of rows for the same pattern and data (for example, PostgreSQL's '.' matches a newline by default where ECMAScript's does not, and PostgreSQL's '\\w' follows the database's locale where ECMAScript's is ASCII-only), so this is refused unless 'postgresRegexpPushdown' is explicitly set 'true'`,
         };
       }
       if (node.op === "portableMatches" || node.op === "portableNotMatches") {
@@ -488,7 +488,7 @@ function findUnpushablePredicate(
             kind: node.kind,
             path,
             reason:
-              "a 'portableMatches'/'portableNotMatches' pattern must be a literal, known at compile time -- translating it into this dialect's own pattern syntax happens once, at compile time, not per row",
+              "a 'portableMatches'/'portableNotMatches' pattern must be a literal, known at compile time: translating it into this dialect's own pattern syntax happens once, at compile time, not per row",
           };
         }
         try {
