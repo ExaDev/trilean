@@ -1,0 +1,12 @@
+[package]
+name = "trilean-regex"
+description = "A portable regular-expression grammar over UTF-16 code units, with a Thompson-construction matcher that never backtracks."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[lints]
+workspace = true
