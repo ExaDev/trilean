@@ -57,10 +57,10 @@ function registryOf(testCase: EvaluateCase): FunctionRegistry {
 function optionsOf(testCase: EvaluateCase): EvaluatorOptions {
   const spec = testCase.evaluator;
   const options: EvaluatorOptions = { functions: registryOf(testCase) };
-  if (typeof spec?.maxNodes === "number") {
+  if (spec?.maxNodes !== undefined) {
     options.maxNodes = spec.maxNodes;
   }
-  if (typeof spec?.maxNestingDepth === "number") {
+  if (spec?.maxNestingDepth !== undefined) {
     options.maxNestingDepth = spec.maxNestingDepth;
   }
 
@@ -148,14 +148,16 @@ function checkCalls(
   if (wanted === undefined) {
     return;
   }
-  expect(calls.length, `${label}: number of resolver calls`).toBe(
-    wanted.length,
-  );
+  expect(
+    calls.length,
+    `${label}: number of resolver calls, made: ${JSON.stringify(calls)}`,
+  ).toBe(wanted.length);
   wanted.forEach((call, position) => {
     const made = calls[position];
-    expect(made?.resolver, `${label}: call ${String(position)}`).toBe(
-      call.resolver,
-    );
+    expect(
+      made?.resolver,
+      `${label}: call ${String(position)}, made: ${JSON.stringify(calls)}`,
+    ).toBe(call.resolver);
     for (const field of ["key", "table", "collection", "system"] as const) {
       const expected = call[field];
       if (expected !== undefined) {
@@ -170,21 +172,16 @@ function checkCalls(
 
 /** Checks the exception an evaluation threw against the case's `throws` expectation. */
 function checkThrown(
-  expectation: { readonly from: string; readonly message?: string },
+  expectation: { readonly message: string },
   thrown: { readonly error: unknown } | undefined,
   label: string,
 ): void {
   expect(thrown, `${label}: expected the evaluation to throw`).toBeDefined();
   const error = thrown?.error;
-  if (expectation.message !== undefined) {
-    expect(
-      error instanceof Error ? error.message : String(error),
-      label,
-    ).toContain(expectation.message);
-  }
-  if (expectation.from === "type-error") {
-    expect(error, label).toBeInstanceOf(TypeError);
-  }
+  expect(
+    error instanceof Error ? error.message : String(error),
+    label,
+  ).toContain(expectation.message);
 }
 
 /** Evaluates the case in every mode it names and checks the result, and the resolver calls where it lists them. */

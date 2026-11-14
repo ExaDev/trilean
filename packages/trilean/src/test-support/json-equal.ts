@@ -1,7 +1,7 @@
 import { decodeNumbers } from "./values";
 
 /**
- * How a corpus expectation compares with what an implementation returned. Numbers are equal when `Object.is` says so (`-0` is not `0`), or within the tolerance a case gives (`ulps` units in the last place, or an `absolute` distance); an object key whose value is `undefined` counts as absent, since JSON has no `undefined`; every other value must match structurally.
+ * How a corpus expectation compares with what an implementation returned. Without a tolerance numbers are equal when `Object.is` says so (`-0` is not `0`); with one, every number in the compared value is held to it (see `withinTolerance`); an object key whose value is `undefined` counts as absent, since JSON has no `undefined`; every other value must match structurally.
  */
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -12,7 +12,7 @@ const FLOAT64_BYTES = 8;
 const ONE = 1n;
 const SIGN_SHIFT = 63n;
 
-/** The position of a finite double in the total order of all doubles, as an integer. */
+/** The position of a finite double in the order of all finite doubles, as an integer; both zeros are the one point 0. */
 function orderedBits(value: number): bigint {
   const view = new DataView(new ArrayBuffer(FLOAT64_BYTES));
   view.setFloat64(0, value);
@@ -22,12 +22,12 @@ function orderedBits(value: number): bigint {
   return bits & sign ? -(bits & ~sign) : bits;
 }
 
-/** The number of doubles between two numbers, or infinity when either is not a number. */
+/** The number of representable doubles between two finite numbers, both zeros being one point; infinity when either is not finite and they are not the same value. */
 export function ulpDistance(a: number, b: number): number {
   if (Object.is(a, b)) {
     return 0;
   }
-  if (Number.isNaN(a) || Number.isNaN(b)) {
+  if (!Number.isFinite(a) || !Number.isFinite(b)) {
     return Number.POSITIVE_INFINITY;
   }
   const first = orderedBits(a);
@@ -42,19 +42,32 @@ function definedKeys(value: Readonly<Record<string, unknown>>): string[] {
     .sort();
 }
 
-/** How far a number may be from the one a case gives: within `ulps` units in the last place, or at most `absolute` apart. With neither it must be the same double. */
+/** How far a number may be from the one a case gives: `ulps` representable doubles between them, or an `absolute` distance that must not be reached. With neither it must be the same double. */
 export interface Tolerance {
   readonly ulps?: number;
   readonly absolute?: number;
 }
 
+/** A tolerance applies to finite numbers only: an expectation that is not finite (an infinity or NaN) is compared exactly whatever the tolerance, and a tolerance forgives the sign of a zero. */
 function withinTolerance(
   actual: number,
   expected: number,
   tolerance: Tolerance,
 ): boolean {
+  if (Object.is(actual, expected)) {
+    return true;
+  }
+  if (tolerance.ulps === undefined && tolerance.absolute === undefined) {
+    return false;
+  }
+  if (!Number.isFinite(expected) || !Number.isFinite(actual)) {
+    return false;
+  }
+  if (actual === expected) {
+    return true;
+  }
   if (tolerance.absolute !== undefined) {
-    return Math.abs(actual - expected) <= tolerance.absolute;
+    return Math.abs(actual - expected) < tolerance.absolute;
   }
 
   return ulpDistance(actual, expected) <= (tolerance.ulps ?? 0);

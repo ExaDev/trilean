@@ -40,10 +40,15 @@ export function runDocumentCase(testCase: DocumentCase): void {
       ? {}
       : { inputs: decodeNumbers(testCase.inputs) }),
     ...(testCase.as === undefined ? {} : { as: testCase.as }),
-    ...(typeof testCase.maxNodes === "number"
-      ? { maxNodes: testCase.maxNodes }
-      : {}),
+    ...(testCase.maxNodes === undefined ? {} : { maxNodes: testCase.maxNodes }),
   });
+  const issues =
+    "issues" in result
+      ? result.issues.map((issue) => issue.split(": ")[0])
+      : [];
+  for (const path of testCase.expectIssuePaths ?? []) {
+    expect(issues, `the issues of ${JSON.stringify(result)}`).toContain(path);
+  }
   const matches =
     testCase.expectSubset === undefined
       ? jsonEquals(result, testCase.expect, testCase.tolerance)

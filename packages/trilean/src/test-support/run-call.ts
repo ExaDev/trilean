@@ -7,7 +7,9 @@ import { toComputedValue } from "./values";
 
 /** Calls the named built-in function with the arguments and compares what it returns with the case's expectation. */
 export function runCallCase(testCase: CallCase): void {
-  const fn = builtinFunctions[testCase.function];
+  const fn = Object.hasOwn(builtinFunctions, testCase.function)
+    ? builtinFunctions[testCase.function]
+    : undefined;
   if (fn === undefined) {
     throw new Error(`no built-in function ${testCase.function}`);
   }

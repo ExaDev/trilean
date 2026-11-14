@@ -80,6 +80,13 @@ export interface CorpusFile {
 
 export interface Manifest {
   readonly files: Readonly<
-    Record<string, { readonly cases: number; readonly skip: readonly string[] }>
+    Record<
+      string,
+      {
+        readonly cases: number;
+        readonly skip: readonly string[];
+        readonly generated?: true;
+      }
+    >
   >;
 }

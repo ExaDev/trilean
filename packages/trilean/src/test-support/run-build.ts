@@ -112,7 +112,9 @@ const BUILDERS: Readonly<Record<string, (args: Arguments) => unknown>> = {
 
 /** Builds with the named builder and compares the tree it returns with the case's expectation. */
 export function runBuildCase(testCase: BuildCase): void {
-  const builder = BUILDERS[testCase.builder];
+  const builder = Object.hasOwn(BUILDERS, testCase.builder)
+    ? BUILDERS[testCase.builder]
+    : undefined;
   if (builder === undefined) {
     throw new Error(`no builder is known by the name ${testCase.builder}`);
   }
