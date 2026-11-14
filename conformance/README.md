@@ -377,8 +377,8 @@ A test stays in an implementation's own suite when a case cannot state it. Each 
 | schema-pipeline.integration.test.ts | survives JSON.parse as a real own key: the control confirming the fixture is genuinely hazardous before validation | T1 |
 | schema-pipeline.integration.test.ts | cannot hijack a downstream copy's prototype once validated, where the unvalidated parse still can | T1 |
 | schema-pipeline.integration.test.ts | never leaks onto the shared Object.prototype, the global half of the attack | T1 |
-| smoke.e2e.test.ts | dist/index.cjs loads as CommonJS and exposes every expected export | T4 |
-| smoke.e2e.test.ts | dist/tree.cjs loads as CommonJS and exposes both node-tree schemas | T4 |
+| smoke.e2e.test.ts | dist/index.js exposes every expected export | T4 |
+| smoke.e2e.test.ts | dist/tree.js exposes both node-tree schemas | T4 |
 | smoke.e2e.test.ts | a pre-approved, discount-authorised winning bid is definitely eligible | T4 |
 | smoke.e2e.test.ts | an empty bid list: fold's max has no first item to seed from: is indeterminate domain-error, not a crash or a silent default | T4 |
 | smoke.e2e.test.ts | is valid, parseable JSON with both node trees defined | T4 |
