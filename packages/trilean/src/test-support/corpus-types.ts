@@ -109,6 +109,7 @@ export type EvaluateExpectation =
       readonly code?: string;
       readonly message?: string;
       readonly messageIncludes?: readonly string[];
+      readonly ignoreCase?: boolean;
     }
   | {
       readonly throws: {
@@ -199,6 +200,7 @@ export interface CliCase extends CaseBase {
     readonly stdoutExcludes?: readonly string[];
     readonly stderrIncludes?: readonly string[];
     readonly stderrStartsWith?: string;
+    readonly stdoutStartsWith?: string;
   };
 }
 

@@ -143,7 +143,7 @@ The document is evaluated with the package's built-in functions. `expect` is the
 { "id": "...", "from": "...", "kind": "cli", "args": ["evaluate", "tree.json"], "files": { "tree.json": "{...}" }, "stdin": "...", "expect": { "exit": 0, "stdoutJson": { ... } } }
 ```
 
-The command is run with `args` against an in-memory set of files, `files` (name to text, which a parser reads as written, so `1e999` is an infinite number) and `stdin`, which the path `-` reads; a path that is in neither cannot be read. `expect` gives the exit status and, where the original asserted it, `stdout` or `stderr` as exact text, `stdoutJson`, the JSON the command printed, compared by the rules above, `stdoutJsonSubset`, the same for an original that asserted only some fields (it names at least one key; an object matches when every key it gives matches, an array matches element by element at the same length, any other value must be equal), `stdoutExcludes`, fragments standard output does not contain, `stderrIncludes`, fragments standard error contains in order, and `stderrStartsWith`.
+The command is run with `args` against an in-memory set of files, `files` (name to text, which a parser reads as written, so `1e999` is an infinite number) and `stdin`, which the path `-` reads; a path that is in neither cannot be read. `expect` gives the exit status and, where the original asserted it, `stdout` or `stderr` as exact text, `stdoutJson`, the JSON the command printed, compared by the rules above, `stdoutJsonSubset`, the same for an original that asserted only some fields (it names at least one key; an object matches when every key it gives matches, an array matches element by element at the same length, any other value must be equal), `stdoutExcludes`, fragments standard output does not contain, `stderrIncludes`, fragments standard error contains in order, `stderrStartsWith` and `stdoutStartsWith`.
 
 `evaluate`:
 
@@ -151,11 +151,15 @@ The command is run with `args` against an in-memory set of files, `files` (name 
 { "id": "...", "from": "...", "kind": "evaluate", "as": "predicate", "tree": { ... }, "context": { ... }, "resolvers": { ... }, "expect": { "status": "definite", "value": true } }
 ```
 
-`tree` is a predicate or an expression (`as` says which) and is evaluated against `context` (a JSON value, absent when the test passed none). `expect` is `{ "status": "definite", "value": ... }` (a boolean for a predicate, a computed value for an expression; `value` is left out where the original asserted only that the result is definite), `{ "status": "indeterminate", "code": ... }` (`code` is left out where the original asserted only that it is indeterminate), optionally with `message`, which must equal the reason's message, or `messageIncludes`, a list of fragments that must occur in the reason's message in order, or `{ "throws": { "from": ..., "message"? } }` for an evaluation that throws, where `from` names what threw (`resolver`, `function`, or `type-error` for a `TypeError`) and `message` must occur in the exception's message. Each assertion is given only where the original test made it, and a case that asserts only the resolver calls its original counted (`expectCalls`) gives no `expect`.
+`tree` is a predicate or an expression (`as` says which) and is evaluated against `context` (a JSON value). A case without `context` gives the evaluator no context at all, which is not the same as a context of `null`: a resolver entry whose `context` is `null` matches only a call made under a `null` context, and an entry without `context` matches any, a missing one included. `expect` is `{ "status": "definite", "value": ... }` (a boolean for a predicate, a computed value for an expression; `value` is left out where the original asserted only that the result is definite), `{ "status": "indeterminate", "code": ... }` (`code` is left out where the original asserted only that it is indeterminate), optionally with `message`, which must equal the reason's message, or `messageIncludes`, a list of fragments that must occur in the reason's message in order (with `ignoreCase: true`, in any letter case, for an original that matched case-insensitively), or `{ "throws": { "from": ..., "message"? } }` for an evaluation that throws, where `from` names what threw (`resolver`, `function`, or `type-error` for a `TypeError`) and `message` must occur in the exception's message. Each assertion is given only where the original test made it, and a case that asserts only the resolver calls its original counted (`expectCalls`) gives no `expect`.
 
 The resolvers are data. In `resolvers`, `values`, `lookups`, `collections`, `delegates` and `trees` list the answers; the first entry whose key (`key`, `table` with `keys`, `collection`, `system` with `payload`) equals the call (a delegate entry too may give a `context`, which defaults to any), and whose `context` equals the context of the call (an omitted `context`, or `"*"`, matches any), gives the answer. A call that no entry matches gets `default`, `{ "found": false }` when absent, and an unmatched collection is empty. `delegates` or `trees` absent means that resolver is not supplied. `fromContext: true` reads a string key from the context object instead of `values`, taking a boolean, a number or a string as a value without a unit. A resolution is `{ "found": true, "value": <computed value> }`, `{ "found": false }`, `{ "found": false, "notYetKnown": true }` or `{ "throws": "message" }`, and in the asynchronous evaluator any of them takes `settlesAfter` microtask turns to settle. `expectCalls` lists the resolver calls the evaluation makes, in order, each with the key, table, collection or system it names where it gives one.
 
 `evaluator` sets what the evaluator is built with: `functions` (`builtin` for the package's built-in functions, and `table`, per function name the argument lists it answers and the result, a computed value or a failure `{ "domainError": ... }` or `{ "wrongType": ... }`), `maxNodes` and `maxNestingDepth`. `modes` lists the evaluators the case runs under: `async`, `sync` and, for a predicate, `compiled`; omitted, it is every one that applies, so a result that differs between them is a defect of the implementation. A case whose resolvers settle later (`settlesAfter`) lists `async` only.
+
+#### The evaluation budget
+
+A call may visit at most 10000 nodes and may nest at most 500 levels deep unless `evaluator.maxNodes` or `evaluator.maxNestingDepth` says otherwise. The count is of visits, not of the size of the tree: every node costs one visit each time it is evaluated, so a reduce fold costs one visit for itself, one for its initial expression and, for each item of its collection, one for each node of its combine expression. A tree that visits exactly the limit evaluates; one visit more is indeterminate with the code `domain-error` and the message `evaluation exceeded the maximum of N nodes visited in a single call (resource exhausted)`. The depth of a node is the number of nodes on the path from the root to it, a referenced tree continuing the path of the `treeReference` that named it, and a path of exactly the limit evaluates while one node longer is indeterminate with `evaluation nesting depth exceeds the maximum of N (resource exhausted)`. A chain of `treeReference` nodes is limited separately, to 100 trees. The cases under `trilean/evaluate/evaluator.integration.json` pin each of these at the boundary, with the defaults and with explicit limits, and `trilean/cli/cli-run.json` pins the same for the command, where `--max-nodes` is given as `--max-nodes N` and as `--max-nodes=N`.
 
 `serialise`:
 
@@ -174,6 +178,158 @@ The resolvers are data. In `resolvers`, `values`, `lookups`, `collections`, `del
 `expect` is the text `Number.prototype.toString` gives `value`, the formatter the native crate makes public, at the boundaries between its notations. A negative zero is `{ "$number": "-0" }` and formats as `0`.
 
 `regex-match` takes an optional `dialect`: `trilean`, the default, or `ecmascript`, for a pattern in the file `trilean-regex/ecmascript/derived-patterns.json`, which the derived pattern builders of the trilean package produce and an unflagged ECMAScript `RegExp` reads. Each `matches` there is recorded from `new RegExp(pattern).test(input)`, and a generator the trilean package commits writes the file and its tests regenerate it and compare.
+
+## Tests that stay outside the corpus
+
+A test stays in an implementation's own suite when a case cannot state it. Each is listed here with the reason, since these tests disappear with the TypeScript they test and a port has to cover each behaviour itself. `trilean/src/conformance.unit.test.ts` fails when a test is added to, or removed from, these files without a row here, by comparing the titles of the tests with this section (a title that is a template matches up to its first placeholder). The `trilean-sql` tests are listed when its cases are extracted.
+
+| Code | Why a case cannot state it | A port must |
+| --- | --- | --- |
+| T1 | a mechanism of the TypeScript language or runtime with no counterpart elsewhere (a frozen object, a thenable, a copy of an array, the prototype chain, an exception as a value) | write its own test of whatever the port has in place of it, if anything |
+| T2 | it relates two evaluations of one tree to each other, or enumerates trees, so it has no single expectation to write down | run the same comparison between its own evaluation paths (asynchronous, synchronous, compiled, native and wasm) over the same trees |
+| T3 | it tests a module that is not part of the package's public API (an internal numeric routine or helper), whose results the corpus pins only through the public operations built on it | test the routine it has in its place at the inputs the titles describe, since the corpus reaches these inputs only through `divide`, `power` and the duration comparisons |
+| T4 | it checks the built package (its entry points, declarations, command file and JSON Schema file), which is a build artefact and not a behaviour of the language-neutral contract | check its own build output: the entry points it publishes, its declared types, its command and the schema it emits |
+| T5 | it runs the package inside a Cloudflare Workers isolate, which is a host, not a behaviour; the behaviours it runs are the ones the corpus holds | run the corpus under workerd, as the wasm runner will |
+| T6 | it replaces an internal module with a stub to reach a path the real implementation cannot (a result the evaluator would already have refused) | test that path through its own seam: a result that is not a finite number must be refused by the output check |
+| T7 | it tests the shape of the TypeScript API an embedder composes (resolver objects and the item type), which is host code, not data | test its own embedding API: that an item is scoped to itself however the list was built, that nothing in the inputs reads as an inherited member, and that a returned list is a copy |
+| T9 | it checks a value the command is given by its host and not by its arguments or files (the version), which a case has nowhere to state | test its own command's version output |
+| T8 | it checks that something runs in bounded time or work, which a case, giving an answer, cannot | keep its own time or work bound test next to the cases that pin the answer; the matcher also bounds its work by counting state visits |
+
+| Test file | Test | Code |
+| --- | --- | --- |
+| builtin-functions.unit.test.ts | is frozen, so changing the export cannot change what evaluation resolves | T1 |
+| complex-division.unit.test.ts | does not collapse a representable quotient to zero when |divisor| is near the top of the range | T3 |
+| complex-division.unit.test.ts | divides a value by itself to exactly one | T3 |
+| complex-division.unit.test.ts | returns a quotient as large as the dividend when the divisor is about one | T3 |
+| complex-division.unit.test.ts | returns the reciprocal of a divisor near the top of the range | T3 |
+| complex-division.unit.test.ts | keeps the bits of subnormal operands | T3 |
+| complex-division.unit.test.ts | divides a subnormal by itself to exactly one | T3 |
+| complex-division.unit.test.ts | divides by a subnormal divisor to a large quotient | T3 |
+| complex-division.unit.test.ts | does not round a quotient of several spacings to zero when the dividend is far smaller than the divisor | T3 |
+| complex-division.unit.test.ts | rounds a quotient of three quarters of a spacing up to one spacing, not to zero | T3 |
+| complex-division.unit.test.ts | returns zero for a zero dividend however large the divisor | T3 |
+| complex-division.unit.test.ts | gives zero for a dividend of negative zeros without preserving their signs | T3 |
+| complex-division.unit.test.ts | returns zero when the quotient is below the smallest subnormal | T3 |
+| complex-division.unit.test.ts | overflows to infinity when the quotient is too large for a double | T3 |
+| complex-division.unit.test.ts | keeps the dividend's own scale when the divisor is much larger | T3 |
+| complex-division.unit.test.ts | matches the textbook quotient | T3 |
+| complex-division.unit.test.ts | divides by a purely imaginary value | T3 |
+| complex.unit.test.ts | places a zero-phase value entirely on the real axis | T3 |
+| complex.unit.test.ts | carries the unit through unchanged | T3 |
+| complex.unit.test.ts | reads the magnitude back as a real number carrying the value's own unit | T3 |
+| complex.unit.test.ts | reads the phase back as a dimensionless angle in radians, whatever unit the value carries | T3 |
+| complex.unit.test.ts | reads a negative real number as +pi whatever the sign of its zero imaginary part, and zero as 0 | T3 |
+| complex.unit.test.ts | round-trips a magnitude and phase through the rectangular form | T3 |
+| complex.unit.test.ts | builds a complexLiteral the expression tree accepts, evaluating to the value complexFromPolar would have produced directly | T3 |
+| duration-order.unit.test.ts | is exact for every pair of near-equal durations in different units, subnormals included | T3 |
+| duration-order.unit.test.ts | leaves a NaN unordered against anything, $leftUnit against $rightUnit | T3 |
+| duration-order.unit.test.ts | finds equal infinities equal and orders them against finite values, $leftUnit against $rightUnit | T3 |
+| duration-order.unit.test.ts | orders %j and %j as %i | T3 |
+| integer-power.unit.test.ts | returns the identity for exponent zero without multiplying | T3 |
+| integer-power.unit.test.ts | handles an exponent past the safe integers, whose low bits are all zero | T3 |
+| integer-power.unit.test.ts | matches repeated multiplication for exponent $exponent | T3 |
+| integer-power.unit.test.ts | multiplies a number of times logarithmic in the exponent $exponent | T3 |
+| evaluate-document.non-finite.unit.test.ts | passes a representable result through | T6 |
+| evaluate-document.non-finite.unit.test.ts | rejects a definite result from %s that JSON would print as null | T6 |
+| evaluate-document.unit.test.ts | lets a collection error propagate for a tree that folds over a list the inputs do not hold | T1 |
+| evaluation.unit.test.ts | takes the first indeterminate reason in operand order | T3 |
+| evaluation.unit.test.ts | lets not-yet-known outrank every other reason wherever it appears | T3 |
+| evaluation.unit.test.ts | is undefined when no entry is indeterminate | T3 |
+| evaluator-compiled.unit.test.ts | returns the interpreter's Evaluation and asks the resolvers the same questions, for random trees | T2 |
+| evaluator-compiled.unit.test.ts | exercises definite results, every indeterminate reason and the resource limits | T2 |
+| evaluator-compiled.unit.test.ts | reports not-yet-known ahead of an earlier not-found, and the first of equal reasons | T2 |
+| evaluator-compiled.unit.test.ts | takes the left operand's reason of two indeterminate operands | T2 |
+| evaluator-compiled.unit.test.ts | gives each call its own answers when the same compiled predicate is called with different resolvers | T2 |
+| evaluator-compiled.unit.test.ts | builds a literal handed to a registered function afresh on every call | T2 |
+| evaluator-compiled.unit.test.ts | meets a node limit at the same node as the interpreter, with the resolvers asked the same questions | T2 |
+| evaluator-compiled.unit.test.ts | hands a tree deeper than the nesting limit to the interpreter without compiling past the limit | T2 |
+| evaluator-compiled.unit.test.ts | throws, as the interpreter does, when a resolver returns a promise | T2 |
+| evaluator-compiled.unit.test.ts | reports a delegate node as wrong-type when the resolvers register no handler | T2 |
+| evaluator-compiled.unit.test.ts | passes the context to the resolvers untouched | T2 |
+| evaluator.complex-arithmetic.unit.test.ts | a negative exponent is exactly the reciprocal of the positive power when that is representable, for $base to the power -$exponent | T2 |
+| evaluator.monotonicity.unit.test.ts | for every enumerated predicate | T2 |
+| evaluator.monotonicity.unit.test.ts | for every enumerated expression: ${name} | T2 |
+| evaluator.sync.unit.test.ts | gives definite and indeterminate results across the cases above, so the comparison is not vacuous | T2 |
+| evaluator.sync.unit.test.ts | evaluates a value expression to the same result as the asynchronous evaluator | T2 |
+| evaluator.sync.unit.test.ts | throws, rather than returning a pending result, when a resolver hands back a thenable | T2 |
+| evaluator.sync.unit.test.ts | applies the node budget | T2 |
+| evaluator.sync.unit.test.ts | propagates an exception thrown by a resolver | T2 |
+| evaluator.sync.unit.test.ts | evaluates %s exactly as the asynchronous evaluator does | T2 |
+| input-resolvers.unit.test.ts | resolves a string key naming an input | T7 |
+| input-resolvers.unit.test.ts | finds nothing for an unknown name, an inherited member or a non-string key | T7 |
+| input-resolvers.unit.test.ts | finds nothing for a lookup | T7 |
+| input-resolvers.unit.test.ts | throws rather than return an empty collection for a list the inputs do not hold | T7 |
+| input-resolvers.unit.test.ts | keeps the lists in the order they were written, apart from the named values | T7 |
+| input-resolvers.unit.test.ts | returns the items of a list, each as the context its references resolve against | T7 |
+| input-resolvers.unit.test.ts | resolves a name inside an item against that item alone, never the top-level inputs | T7 |
+| input-resolvers.unit.test.ts | hands back a copy, so a caller cannot change the list the inputs hold | T7 |
+| input-resolvers.unit.test.ts | resolves a reference inside an item against that item, whatever built the list | T7 |
+| input-resolvers.unit.test.ts | never reads the top-level inputs for a reference inside an item | T7 |
+| input-resolvers.unit.test.ts | gives the items the same scope as a parsed list | T7 |
+| input-resolvers.unit.test.ts | does not treat a map handed in as a context as an item | T7 |
+| input-resolvers.unit.test.ts | exports the item type that createInputResolvers and parseInputs take and return | T7 |
+| cli.e2e.test.ts | is the file package.json's bin names, with a node shebang | T4 |
+| cli.e2e.test.ts | evaluates a tree read from standard input and exits 0 | T4 |
+| cli.e2e.test.ts | exits 1 for an indeterminate result | T4 |
+| cli.e2e.test.ts | exits 2 with the problem on standard error for an invalid tree | T4 |
+| cli.e2e.test.ts | reports the package version | T4 |
+| cli.e2e.test.ts | keeps quiet and keeps its exit status when the reader of standard output has gone | T4 |
+| declaration-shape.e2e.test.ts | exports both node-tree schemas in place | T4 |
+| declaration-shape.e2e.test.ts | declares nothing bare and re-exports nothing through a trailing list | T4 |
+| declaration-shape.e2e.test.ts | declaration shape of %s | T4 |
+| cli-run.integration.test.ts | prints the version for --version | T9 |
+| cli-unrepresentable.integration.test.ts | prints nothing on standard output, names the problem on standard error and exits 2 | T6 |
+| json-schema-consistency.integration.test.ts | the predicate tree's generated 'kind' consts are exactly PredicateNodeSchema's own discriminated-union options | T4 |
+| json-schema-consistency.integration.test.ts | the expression tree's generated 'kind' consts are exactly ExpressionNodeSchema's own discriminated-union options | T4 |
+| json-schema-consistency.integration.test.ts | treeReference is present in both the predicate and expression discriminant sets | T4 |
+| json-schema-consistency.integration.test.ts | hoists the repeated sub-schemas into $defs rather than inlining them | T4 |
+| json-schema-consistency.integration.test.ts | emits at least one reference, so the assertion below cannot pass vacuously | T4 |
+| json-schema-consistency.integration.test.ts | emits every reference in a form that resolves inside the converted document | T4 |
+| json-schema-consistency.integration.test.ts | %s's mutual recursion converts to resolvable references | T4 |
+| schema-pipeline.integration.test.ts | survives JSON.parse as a real own key -- the control confirming the fixture is genuinely hazardous before validation | T1 |
+| schema-pipeline.integration.test.ts | cannot hijack a downstream copy's prototype once validated, where the unvalidated parse still can | T1 |
+| schema-pipeline.integration.test.ts | never leaks onto the shared Object.prototype, the global half of the attack | T1 |
+| smoke.e2e.test.ts | dist/index.cjs loads as CommonJS and exposes every expected export | T4 |
+| smoke.e2e.test.ts | dist/tree.cjs loads as CommonJS and exposes both node-tree schemas | T4 |
+| smoke.e2e.test.ts | a pre-approved, discount-authorised winning bid is definitely eligible | T4 |
+| smoke.e2e.test.ts | an empty bid list -- fold's max has no first item to seed from -- is indeterminate domain-error, not a crash or a silent default | T4 |
+| smoke.e2e.test.ts | is valid, parseable JSON with both node trees defined | T4 |
+| smoke.e2e.test.ts | is self-contained: every $ref resolves to a definition inside the document | T4 |
+| smoke.e2e.test.ts | carries a version-pinned $id identifying this exact published version on jsDelivr | T4 |
+| smoke.e2e.test.ts | is RFC 8785 (JCS) canonical: re-canonicalizing its parsed content reproduces the file on disk byte for byte | T4 |
+| smoke.e2e.test.ts | satisfies RFC 8785's structural rules read straight off the raw bytes, independently of the canonicalize package | T4 |
+| smoke.e2e.test.ts | built package entry point -- %s | T4 |
+| smoke.e2e.test.ts | exports %s as a %s | T4 |
+| smoke.e2e.test.ts | built deep-import subpath -- %s | T4 |
+| smoke.e2e.test.ts | exports %s as an object | T4 |
+| smoke.e2e.test.ts | composed rule (fold max + memberOf + implies) against the built package -- %s | T4 |
+| smoke.e2e.test.ts | %s's generated 'kind' consts are exactly the built package's own %s options | T4 |
+| trilean.e2e.test.ts | base case: isActive eq true AND sum(items.amount) via reduce fold > x + y -> definite true | T5 |
+| trilean.e2e.test.ts | items: [] variation -> definite false (the fold-over-empty identity feeds through to and's own absorbing false) | T5 |
+| trilean.e2e.test.ts | x missing from data variation -> indeterminate not-found (and does NOT absorb here) | T5 |
+| trilean.e2e.test.ts | a gold-tier member meeting every condition is definitely eligible | T5 |
+| trilean.e2e.test.ts | a member with every other condition satisfied but a missing score is indeterminate, not silently eligible or ineligible | T5 |
+| trilean.e2e.test.ts | mass (kg) divided by volume (m^3) combines to kg/m^3, comparable against a matching compound-unit literal | T5 |
+| trilean.e2e.test.ts | a gold-tier customer's rate resolves through the referenced 'unique'-hit-policy rule | T5 |
+| trilean.e2e.test.ts | two matching cases under 'unique' absorb to a domain-error, even reached via treeReference | T5 |
+| trilean.e2e.test.ts | coalesce falls through a not-found preferred discount code to a guaranteed fallback value | T5 |
+| trilean.e2e.test.ts | prefixPattern enforces a word boundary rather than a bare startsWith | T5 |
+| trilean.e2e.test.ts | wildcardPattern keeps an escaped asterisk literal while an unescaped one still wildcards | T5 |
+| trilean.e2e.test.ts | hierarchicalGlobPattern distinguishes one segment from every segment | T5 |
+| trilean.e2e.test.ts | portableMatches matches via trilean-regex's own compiled NFA | T5 |
+| trilean.e2e.test.ts | portableNotMatches is the negation, still inside the isolate | T5 |
+| trilean.e2e.test.ts | an invalid trilean-regex pattern resolves wrong-type rather than throwing out of the isolate | T5 |
+| ast.unit.test.ts | includes both endpoints and everything between them | T3 |
+| ast.unit.test.ts | excludes values outside the range | T3 |
+| ast.unit.test.ts | matches membership in the positive form | T3 |
+| ast.unit.test.ts | inverts membership when negated | T3 |
+| ast.unit.test.ts | unions multiple ranges | T3 |
+| shorthand-classes.unit.test.ts | \d expands to the ASCII digit range | T3 |
+| shorthand-classes.unit.test.ts | \D negates \d rather than owning its own range table | T3 |
+| shorthand-classes.unit.test.ts | \w matches letters, digits, and underscore only | T3 |
+| shorthand-classes.unit.test.ts | \s matches the ASCII whitespace set | T3 |
+| matcher.unit.test.ts | resolves a classically pathological nested-quantifier pattern instantly | T9 | it checks a value the command is given by its host and not by its arguments or files (the version), which a case has nowhere to state | test its own command's version output |
+| T8 |
 
 ## Adding a case
 

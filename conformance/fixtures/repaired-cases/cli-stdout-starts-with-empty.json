@@ -1,0 +1,17 @@
+{
+  "cases": [
+    {
+      "args": [
+        "--help"
+      ],
+      "expect": {
+        "exit": 0,
+        "stdoutStartsWith": "Usage"
+      },
+      "files": {},
+      "from": "x.unit.test.ts: a fixture",
+      "id": "fixture.1",
+      "kind": "cli"
+    }
+  ]
+}

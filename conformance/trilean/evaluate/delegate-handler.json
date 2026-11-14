@@ -333,6 +333,224 @@
     {
       "as": "expression",
       "context": {
+        "region": "international",
+        "subtotal": 1000
+      },
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "unit": {},
+          "value": 1200
+        }
+      },
+      "from": "delegate-handler.integration.test.ts: delegate result flows through arithmetic and a conditional's fallback branch, into a comparison > the resolved rate is what the total is computed from",
+      "id": "delegate-handler.delegate-result-flows-through-arithmetic-and-a-conditional-s-fallback-branch-into-a-comparison-the-resolved-rate-is-what-the-total-is.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "delegates": [
+          {
+            "context": {
+              "region": "international",
+              "subtotal": 1000
+            },
+            "payload": {
+              "ruleset": "standard"
+            },
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 0.2
+              }
+            },
+            "system": "taxEngine"
+          },
+          {
+            "context": {
+              "region": "remote",
+              "subtotal": 1000
+            },
+            "payload": {
+              "ruleset": "standard"
+            },
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 0.15
+              }
+            },
+            "system": "taxEngine"
+          }
+        ],
+        "fromContext": true
+      },
+      "tolerance": {
+        "absolute": 1e-9
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "key": "subtotal",
+          "kind": "reference"
+        },
+        "op": "multiply",
+        "right": {
+          "kind": "arithmetic",
+          "left": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "op": "add",
+          "right": {
+            "cases": [
+              {
+                "then": {
+                  "kind": "numberLiteral",
+                  "value": 0.1
+                },
+                "when": {
+                  "kind": "textCompare",
+                  "left": {
+                    "key": "region",
+                    "kind": "reference"
+                  },
+                  "op": "equals",
+                  "right": {
+                    "kind": "textLiteral",
+                    "value": "domestic"
+                  }
+                }
+              }
+            ],
+            "fallback": {
+              "kind": "delegate",
+              "payload": {
+                "ruleset": "standard"
+              },
+              "system": "taxEngine"
+            },
+            "kind": "conditional"
+          }
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "context": {
+        "region": "remote",
+        "subtotal": 1000
+      },
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "unit": {},
+          "value": 1150
+        }
+      },
+      "from": "delegate-handler.integration.test.ts: delegate result flows through arithmetic and a conditional's fallback branch, into a comparison > the resolved rate is what the total is computed from",
+      "id": "delegate-handler.delegate-result-flows-through-arithmetic-and-a-conditional-s-fallback-branch-into-a-comparison-the-resolved-rate-is-what-the-total-is.2",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "delegates": [
+          {
+            "context": {
+              "region": "international",
+              "subtotal": 1000
+            },
+            "payload": {
+              "ruleset": "standard"
+            },
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 0.2
+              }
+            },
+            "system": "taxEngine"
+          },
+          {
+            "context": {
+              "region": "remote",
+              "subtotal": 1000
+            },
+            "payload": {
+              "ruleset": "standard"
+            },
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 0.15
+              }
+            },
+            "system": "taxEngine"
+          }
+        ],
+        "fromContext": true
+      },
+      "tolerance": {
+        "absolute": 1e-9
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "key": "subtotal",
+          "kind": "reference"
+        },
+        "op": "multiply",
+        "right": {
+          "kind": "arithmetic",
+          "left": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "op": "add",
+          "right": {
+            "cases": [
+              {
+                "then": {
+                  "kind": "numberLiteral",
+                  "value": 0.1
+                },
+                "when": {
+                  "kind": "textCompare",
+                  "left": {
+                    "key": "region",
+                    "kind": "reference"
+                  },
+                  "op": "equals",
+                  "right": {
+                    "kind": "textLiteral",
+                    "value": "domestic"
+                  }
+                }
+              }
+            ],
+            "fallback": {
+              "kind": "delegate",
+              "payload": {
+                "ruleset": "standard"
+              },
+              "system": "taxEngine"
+            },
+            "kind": "conditional"
+          }
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "context": {
         "lineItems": [
           {
             "amount": 100,

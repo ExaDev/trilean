@@ -1,4 +1,4 @@
-import { readdirSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
@@ -308,5 +308,84 @@ describe("corpus completeness", () => {
         skipped,
       ),
     ).toEqual([]);
+  });
+});
+
+/** The titles of the tests in a source file: the first string of each `it(` and of each `it.each(...)(`, with escapes read as the text they stand for. */
+function testTitles(source: string): readonly string[] {
+  const direct = /\b(?:it|test)\(\s*(["'`])((?:\\.|(?!\1)[\s\S])*)\1/gu;
+  const each =
+    /\)\(\s*(["'`])((?:\\.|(?!\1)[\s\S])*)\1\s*,\s*(?:async\s*)?\(/gu;
+  const titles = [...source.matchAll(direct), ...source.matchAll(each)].map(
+    (found) => (found[2] ?? "").replace(/\\(.)/gu, "$1"),
+  );
+
+  return titles;
+}
+
+/** The test files under a directory, other than the corpus runners. */
+function testFiles(directory: string): readonly string[] {
+  return readdirSync(directory, { recursive: true, withFileTypes: true })
+    .filter(
+      (entry) =>
+        entry.isFile() &&
+        entry.name.endsWith(".test.ts") &&
+        !entry.name.startsWith("conformance"),
+    )
+    .map((entry) => join(entry.parentPath, entry.name));
+}
+
+describe("the tests that stay outside the corpus", () => {
+  const readme = readFileSync(join(CORPUS_ROOT, "README.md"), "utf8");
+  const section = readme.slice(
+    readme.indexOf("## Tests that stay outside the corpus"),
+    readme.indexOf("## Adding a case"),
+  );
+  const packages = fileURLToPath(new URL("../../", import.meta.url));
+  const files = [
+    ...testFiles(join(packages, "trilean")),
+    ...testFiles(join(packages, "trilean-regex")),
+  ].filter((file) => !file.includes("node_modules"));
+
+  it("are each listed in the README, under the file they are in", () => {
+    expect(files.length).toBeGreaterThan(0);
+    const missing: string[] = [];
+    for (const file of files) {
+      const name = file.slice(file.lastIndexOf("/") + 1);
+      for (const title of testTitles(readFileSync(file, "utf8"))) {
+        // A title that is a template stands for its rows: it matches up to its first placeholder.
+        const stem = title.split(/[%$]/u)[0] ?? title;
+        const wanted = `| ${name} | ${stem}`;
+        if (!section.includes(wanted)) {
+          missing.push(`${name}: ${title}`);
+        }
+      }
+    }
+    expect(missing).toEqual([]);
+  });
+
+  it("list no test that is no longer there", () => {
+    const present = new Set(
+      files.flatMap((file) => {
+        const name = file.slice(file.lastIndexOf("/") + 1);
+
+        return testTitles(readFileSync(file, "utf8")).map(
+          (title) => `${name}|${title.split(/[%$]/u)[0] ?? title}`,
+        );
+      }),
+    );
+    const listed = [
+      ...section.matchAll(/^\| (\S+\.test\.ts) \| (.*) \| T\d \|$/gmu),
+    ].map((row) => ({ name: row[1] ?? "", title: row[2] ?? "" }));
+    expect(listed.length).toBeGreaterThan(0);
+    const stale = listed.filter(
+      ({ name, title }) =>
+        ![...present].some(
+          (key) =>
+            key.startsWith(`${name}|`) &&
+            title.startsWith(key.slice(name.length + 1)),
+        ),
+    );
+    expect(stale).toEqual([]);
   });
 });

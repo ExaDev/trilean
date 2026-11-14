@@ -665,6 +665,58 @@
     {
       "as": "expression",
       "expect": {
+        "status": "definite",
+        "value": {
+          "im": 0,
+          "kind": "complex",
+          "re": -3e-323,
+          "unit": {}
+        }
+      },
+      "from": "evaluator.complex-arithmetic.unit.test.ts: arithmetic on complex values > divide at extreme magnitudes > does not report a subnormal quotient as equal to zero",
+      "id": "complex-arithmetic.arithmetic-on-complex-values-divide-at-extreme-magnitudes-does-not-report-a-subnormal-quotient-as-equal-to-zero.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tolerance": {
+        "absolute": 1e-323
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "im": -8.343164103148207e-219,
+          "kind": "complexLiteral",
+          "re": -7.124494562846174e-209
+        },
+        "op": "divide",
+        "right": {
+          "im": -1.8086225038951245e+105,
+          "kind": "complexLiteral",
+          "re": 2.50063496577604e+114
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
         "code": "domain-error",
         "message": "division by zero",
         "status": "indeterminate"
