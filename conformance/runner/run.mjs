@@ -1,4 +1,3 @@
-// The core of the wasm runner, the same in every runtime: the corpus as a tree of files, the loader contract of ../README.md, the trilean-regex cases.
 import Ajv from "ajv/dist/2020.js";
 
 const NAME = /^[a-z0-9][a-z0-9._-]*$/;
@@ -71,9 +70,6 @@ const sub = (tree, prefix) =>
 const names = (tree, dir) =>
   [...new Set(Object.keys(sub(tree, dir)).map((p) => p.split("/")[0]))].sort();
 
-/**
- * The one file selection rule: a corpus file is <package>/<area>/<name>.json, and anything unexpected is a problem.
- */
 export function select(tree) {
   const kids = new Map();
   for (const [p, t] of Object.entries(tree)) {
@@ -229,26 +225,60 @@ export function prepare(tree) {
     )
       out.push("the selection rule disagrees with loader-selection");
 
-    for (const [i, r, p] of [
-      ["invalid-cases", "repaired-cases", fileProblems],
-      ["refused-kinds/invalid", "refused-kinds/repaired", fileProblems],
-      ["manifests/invalid", "manifests/repaired", manifestProblems],
-      ["schema-only/invalid-cases", "schema-only/repaired-cases", fileProblems],
-      ["generated/invalid-cases", "generated/repaired-cases", fileProblems],
-      [
-        "canonical-keys/invalid",
-        "canonical-keys/repaired",
-        (t) => (keyed(t) ? [] : ["keys"]),
+    const pairing = [
+        ["invalid-cases", "repaired-cases", fileProblems],
+        ["refused-kinds/invalid", "refused-kinds/repaired", fileProblems],
+        ["manifests/invalid", "manifests/repaired", manifestProblems],
+        [
+          "schema-only/invalid-cases",
+          "schema-only/repaired-cases",
+          fileProblems,
+        ],
+        ["generated/invalid-cases", "generated/repaired-cases", fileProblems],
+        [
+          "canonical-keys/invalid",
+          "canonical-keys/repaired",
+          (t) => (keyed(t) ? [] : ["keys"]),
+        ],
       ],
-    ])
-      out.push(...pairs(i, r, p));
-    for (const [d, p] of [
-      ["valid-cases", fileProblems],
-      ["manifests/valid", manifestProblems],
-      ["schema-only/valid-cases", fileProblems],
-    ])
+      valid = [
+        ["valid-cases", fileProblems],
+        ["manifests/valid", manifestProblems],
+        ["schema-only/valid-cases", fileProblems],
+      ],
+      rows = tree["README.md"]
+        .split("\n")
+        .map((l) => l.split(" | "))
+        .filter((c) => /^(asserts|does not)/.test(c.at(-1))),
+      named = (c) => [...c[0].matchAll(/`([^`]+)`/g)].map((m) => m[1]);
+    for (const [i, r, p] of pairing) out.push(...pairs(i, r, p));
+    for (const [d, p] of valid)
       for (const n of names(tree, `fixtures/${d}/`))
         if (p(text(d, n)).length) out.push(`${d}/${n} is rejected`);
+    // The README table says which fixture sets this runner asserts: every fixture is in a row, and the rows that say asserts are the sets checked above.
+    const mine = [
+      ...pairing.flatMap(([i, r]) => [i, r]),
+      ...valid.map(([d]) => d),
+      "loader-selection",
+    ];
+    if (
+      !eq(
+        mine.sort(),
+        rows
+          .filter((c) => c.at(-1).startsWith("asserts"))
+          .flatMap(named)
+          .sort(),
+      )
+    )
+      out.push(
+        "the fixture table and the runner disagree on what the runner asserts",
+      );
+    for (const p of Object.keys(tree))
+      if (
+        p.startsWith("fixtures/") &&
+        !rows.flatMap(named).some((n) => `${p}/`.startsWith(`fixtures/${n}/`))
+      )
+        out.push(`${p} is in no row of the fixture table`);
 
     return out;
   };
