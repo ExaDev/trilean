@@ -4,7 +4,7 @@
 //
 // A member of tsconfig.node.json's program like every other test/**/*.ts file, importing straight from the built dist/*.js paths -- turbo's "_typecheck" and "_lint" tasks both depend on "_build" (see turbo.json), so dist/ genuinely exists by the time either tsc or eslint's typed rules resolve these imports.
 
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { createRequire } from "node:module";
 import canonicalize from "canonicalize";
 import { describe, expect, it } from "vitest";
@@ -95,6 +95,14 @@ describe.each([["ESM (dist/tree.js)", esmTree]])(
     });
   },
 );
+
+describe("the published files", () => {
+  it("ship no test helper", () => {
+    const shipped = readdirSync(new URL("../dist/", import.meta.url));
+    expect(shipped.filter((name) => name.includes("test-helpers"))).toEqual([]);
+    expect(shipped.length).toBeGreaterThan(0);
+  });
+});
 
 // A consumer that loads the package with require() gets the same exports, through Node's own loader (require of an ES module, which Node 20.19, 22.12 and later support without a flag) and not through Vite's module runner.
 describe("the entries loaded through Node's own require()", () => {
