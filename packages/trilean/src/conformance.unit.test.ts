@@ -555,7 +555,6 @@ describe("the tests that stay outside the corpus", () => {
   const packages = fileURLToPath(new URL("../../", import.meta.url));
   const files = [
     ...testFiles(join(packages, "trilean")),
-    ...testFiles(join(packages, "trilean-regex")),
   ].filter((file) => !file.includes("node_modules"));
   const rowLines = section.filter((line) => /^\| \S+\.test\.ts \|/u.test(line));
   const rows = rowLines.flatMap((line) => {
