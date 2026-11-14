@@ -326,8 +326,10 @@ fn check_case(value: &Value, at: &str) -> Check<String> {
 /// What a valid corpus file holds, for the checks that compare files with each other and with the manifest.
 pub struct FileFacts {
     pub ids: Vec<String>,
-    /// The ids of the cases marked for one side only, sorted.
+    /// The ids of the cases marked for one implementation only, sorted.
     pub only_ids: Vec<String>,
+    /// The ids of the cases marked `rust`, the ones this implementation skips because they are marked, sorted.
+    pub rust_only_ids: Vec<String>,
 }
 
 pub fn validate_file(value: &Value) -> Check<FileFacts> {
@@ -339,6 +341,7 @@ pub fn validate_file(value: &Value) -> Check<FileFacts> {
     let mut facts = FileFacts {
         ids: Vec::new(),
         only_ids: Vec::new(),
+        rust_only_ids: Vec::new(),
     };
     let mut seen = BTreeSet::new();
     for (position, case) in cases.iter().enumerate() {
@@ -349,9 +352,13 @@ pub fn validate_file(value: &Value) -> Check<FileFacts> {
         if case.get("only").is_some() {
             facts.only_ids.push(id.clone());
         }
+        if case.get("only").and_then(Value::as_str) == Some("rust") {
+            facts.rust_only_ids.push(id.clone());
+        }
         facts.ids.push(id);
     }
     facts.only_ids.sort();
+    facts.rust_only_ids.sort();
     Ok(facts)
 }
 
