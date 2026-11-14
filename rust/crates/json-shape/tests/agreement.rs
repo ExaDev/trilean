@@ -199,6 +199,35 @@ enum Shaped {
     Nothing,
 }
 
+#[derive(Shape)]
+struct CatchAll {
+    kind: String,
+    #[serde(flatten)]
+    rest: Map<u8>,
+}
+
+#[derive(Shape)]
+#[shape(any_of(first, second))]
+struct AnyOfKeys {
+    first: Option<u8>,
+    second: Option<String>,
+}
+
+#[derive(Shape)]
+#[shape(one_of(first, second))]
+struct OneOfKeys {
+    first: Option<u8>,
+    second: Option<String>,
+}
+
+#[derive(Shape)]
+struct Exclusive {
+    #[shape(exclusive_min = 0)]
+    above: f64,
+    #[shape(exclusive_min = 1, max = 3)]
+    count: Option<u8>,
+}
+
 macro_rules! roots {
     ($($root:ident),* $(,)?) => {
         /// The types the tables name, each with a document of every verdict.
@@ -220,7 +249,8 @@ macro_rules! roots {
 
 roots!(
     Closed, Open, Colour, Figure, Either, Bounds, Lengths, Patterned, Files, Together, Constants,
-    Chain, Flat, Raw, Renamed, Wrapper, Overlap, Sparse, Shaped,
+    Chain, Flat, Raw, Renamed, Wrapper, Overlap, Sparse, Shaped, CatchAll, AnyOfKeys, OneOfKeys,
+    Exclusive,
 );
 
 fn fixtures() -> PathBuf {
@@ -359,8 +389,19 @@ impl Generator<'_> {
                     .next()
                     .expect("the pool holds a matching string"),
             ),
-            Kind::Integer { min, max } | Kind::Number { min, max } => {
-                let low = min.unwrap_or(0.0);
+            Kind::Integer {
+                min,
+                exclusive_min,
+                max,
+            }
+            | Kind::Number {
+                min,
+                exclusive_min,
+                max,
+            } => {
+                let low = exclusive_min.map_or(min.unwrap_or(0.0), |above| {
+                    min.unwrap_or(0.0).max(above + 1.0)
+                });
                 Value::Number(max.map_or(low, |most| low.min(most)))
             }
             Kind::Array {
@@ -398,6 +439,18 @@ impl Generator<'_> {
                     .clone()
             }
             Kind::Tagged { variants, .. } => self.sample(&variants[0].1, depth),
+            Kind::Not(_) => Value::Null,
+            Kind::AllOf(parts) => parts
+                .iter()
+                .map(|part| self.sample(part, depth))
+                .reduce(|merged, next| match (merged, next) {
+                    (Value::Object(mut left), Value::Object(right)) => {
+                        left.extend(right);
+                        Value::Object(left)
+                    }
+                    (merged, _) => merged,
+                })
+                .unwrap_or(Value::Null),
             Kind::Ref(name) => self.sample(
                 self.definitions.get(name).expect("a defined name"),
                 depth + 1,
@@ -426,6 +479,16 @@ impl Generator<'_> {
             }
             document = set(&document, &field.name, self.sample(&field.shape, depth));
         }
+        for keys in [&definition.any_of_keys, &definition.one_of_keys] {
+            if !keys.is_empty() && keys.iter().all(|key| document.get(key).is_none()) {
+                let field = definition
+                    .fields
+                    .iter()
+                    .find(|field| field.name == keys[0])
+                    .expect("a field");
+                document = set(&document, &keys[0], self.sample(&field.shape, depth));
+            }
+        }
         document
     }
 
@@ -439,6 +502,11 @@ impl Generator<'_> {
         depth: usize,
     ) -> Value {
         let mut document = set(base, name, value);
+        if definition.one_of_keys.iter().any(|key| key == name) {
+            for other in definition.one_of_keys.iter().filter(|key| *key != name) {
+                document = without(&document, other);
+            }
+        }
         let mut pending = vec![name.to_owned()];
         while let Some(key) = pending.pop() {
             for (_, others) in definition
@@ -515,12 +583,42 @@ impl Generator<'_> {
                     ));
                 }
             }
-            Kind::Integer { min, max } | Kind::Number { min, max } => {
+            Kind::Integer {
+                min,
+                exclusive_min,
+                max,
+            }
+            | Kind::Number {
+                min,
+                exclusive_min,
+                max,
+            } => {
+                // A candidate is a variant only if every bound the shape holds allows it, worked out here from the bounds
+                // and not asked of the validator.
+                let whole = matches!(shape.kind, Kind::Integer { .. });
+                let allowed = |candidate: f64| {
+                    min.is_none_or(|low| candidate >= low)
+                        && exclusive_min.is_none_or(|above| candidate > above)
+                        && max.is_none_or(|high| candidate <= high)
+                        && (!whole || candidate.fract() == 0.0)
+                };
+                let mut candidates: Vec<(&str, f64)> = Vec::new();
                 if let Some(low) = min {
-                    rows.push(("at the minimum".to_owned(), Value::Number(*low)));
+                    candidates.push(("at the minimum", *low));
+                }
+                if let Some(above) = exclusive_min {
+                    candidates.push((
+                        "just above the exclusive minimum",
+                        above + if whole { 1.0 } else { 0.5 },
+                    ));
                 }
                 if let Some(high) = max {
-                    rows.push(("at the maximum".to_owned(), Value::Number(*high)));
+                    candidates.push(("at the maximum", *high));
+                }
+                for (label, candidate) in candidates {
+                    if allowed(candidate) {
+                        rows.push((label.to_owned(), Value::Number(candidate)));
+                    }
                 }
             }
             Kind::String {
@@ -586,6 +684,12 @@ impl Generator<'_> {
                         document = set(&document, name, self.sample(&field.shape, depth));
                     }
                     rows.push((format!("{key} with what it requires"), document));
+                }
+                if let Some(additional) = &definition.additional {
+                    rows.push((
+                        "an extra member".to_owned(),
+                        set(&base, "zz_extra", self.sample(additional, depth)),
+                    ));
                 }
             }
             Kind::OneOf(alternatives) => {
@@ -661,13 +765,26 @@ impl Generator<'_> {
                     add!("outside the pattern", Value::String(bad));
                 }
             }
-            Kind::Integer { min, max } | Kind::Number { min, max } => {
+            Kind::Integer {
+                min,
+                exclusive_min,
+                max,
+            }
+            | Kind::Number {
+                min,
+                exclusive_min,
+                max,
+            } => {
                 add!("not a number", wrong_type("x"));
                 if matches!(shape.kind, Kind::Integer { .. }) {
                     add!("a fraction", Value::Number(0.5));
                 }
                 if let Some(low) = min {
                     add!("below the minimum", Value::Number(low - 1.0));
+                }
+                if let Some(above) = exclusive_min {
+                    add!("at the exclusive minimum", Value::Number(*above));
+                    add!("below the exclusive minimum", Value::Number(above - 1.0));
                 }
                 if let Some(high) = max {
                     add!("above the maximum", Value::Number(high + 1.0));
@@ -767,6 +884,35 @@ impl Generator<'_> {
                         set(&base, "zz_unknown", Value::Number(0.0))
                     );
                 }
+                if let Some(additional) = &definition.additional {
+                    for (label, mutated) in self.mutations(additional, depth) {
+                        rows.push((
+                            format!("an extra member, {label}"),
+                            set(&base, "zz_extra", mutated),
+                        ));
+                    }
+                }
+                for keys in [&definition.any_of_keys, &definition.one_of_keys] {
+                    if !keys.is_empty() {
+                        let mut bare = base.clone();
+                        for key in keys {
+                            bare = without(&bare, key);
+                        }
+                        add!("none of the grouped keys", bare);
+                    }
+                }
+                if definition.one_of_keys.len() > 1 {
+                    let mut both = base.clone();
+                    for key in &definition.one_of_keys {
+                        let field = definition
+                            .fields
+                            .iter()
+                            .find(|field| field.name == *key)
+                            .expect("a field");
+                        both = set(&both, key, self.sample(&field.shape, depth));
+                    }
+                    add!("more than one of the exclusive keys", both);
+                }
                 for (key, others) in &definition.dependent_required {
                     let field = definition
                         .fields
@@ -822,7 +968,7 @@ impl Generator<'_> {
                     depth + 1,
                 );
             }
-            Kind::Ref(_) => {}
+            Kind::Not(_) | Kind::AllOf(_) | Kind::Ref(_) => {}
         }
         rows
     }

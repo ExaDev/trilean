@@ -115,6 +115,7 @@ dependencies = [
 name = "trilean-conformance"
 version = "0.0.0"
 dependencies = [
+ "json-shape",
  "serde_json",
 ]
 

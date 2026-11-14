@@ -139,6 +139,10 @@ impl<'a> Checker<'a> {
                         .iter()
                         .any(|alternative| self.may_match(alternative, value, depth + 1))
             }
+            Kind::Not(_) => true,
+            Kind::AllOf(parts) => parts
+                .iter()
+                .all(|part| self.may_match(part, value, depth + 1)),
             Kind::Ref(name) => match self.definitions.get(name) {
                 Some(target) if depth < FILTER_DEPTH => self.may_match(target, value, depth + 1),
                 _ => true,
@@ -182,8 +186,16 @@ impl<'a> Checker<'a> {
                 min_length,
                 pattern,
             } => self.string(*min_length, pattern.as_deref(), value),
-            Kind::Integer { min, max } => self.number(true, *min, *max, value),
-            Kind::Number { min, max } => self.number(false, *min, *max, value),
+            Kind::Integer {
+                min,
+                exclusive_min,
+                max,
+            } => self.number(true, [*min, *exclusive_min, *max], value),
+            Kind::Number {
+                min,
+                exclusive_min,
+                max,
+            } => self.number(false, [*min, *exclusive_min, *max], value),
             Kind::Array {
                 items,
                 min_items,
@@ -197,6 +209,16 @@ impl<'a> Checker<'a> {
             } => self.map(values, *min_properties, key_pattern.as_deref(), value),
             Kind::Object(object) => self.object(object, value),
             Kind::OneOf(alternatives) => self.one_of(alternatives, value),
+            Kind::Not(inner) => {
+                if self.accepts_memo(inner, value) {
+                    self.report("matches a shape it must not match");
+                }
+            }
+            Kind::AllOf(parts) => {
+                for part in parts {
+                    self.shape(part, value);
+                }
+            }
             Kind::Tagged { tag, variants } => self.tagged(tag, variants, value),
             Kind::Ref(name) => match self.definitions.get(name) {
                 Some(target) => self.shape(target, value),
@@ -225,7 +247,7 @@ impl<'a> Checker<'a> {
         }
     }
 
-    fn number(&mut self, whole: bool, min: Option<f64>, max: Option<f64>, value: &Value) {
+    fn number(&mut self, whole: bool, [min, exclusive_min, max]: [Option<f64>; 3], value: &Value) {
         let Some(number) = value.as_f64() else {
             return self.expect_type(if whole { "an integer" } else { "a number" }, value);
         };
@@ -236,6 +258,11 @@ impl<'a> Checker<'a> {
             && number < least
         {
             self.report(format!("expected at least {least}"));
+        }
+        if let Some(above) = exclusive_min
+            && number <= above
+        {
+            self.report(format!("expected more than {above}"));
         }
         if let Some(most) = max
             && number > most
@@ -336,13 +363,33 @@ impl<'a> Checker<'a> {
                 None => {}
             }
         }
-        if object.closed {
-            for (key, _) in pairs {
-                if !object.fields.iter().any(|field| field.name == *key) {
-                    self.path.push_key(key);
-                    self.report("unexpected property");
-                    self.path.pop();
+        if object.closed || object.additional.is_some() {
+            for (key, entry) in pairs {
+                if object.fields.iter().any(|field| field.name == *key) {
+                    continue;
                 }
+                self.path.push_key(key);
+                match &object.additional {
+                    Some(shape) => self.shape(shape, entry),
+                    None => self.report("unexpected property"),
+                }
+                self.path.pop();
+            }
+        }
+        if !object.any_of_keys.is_empty() || !object.one_of_keys.is_empty() {
+            let present =
+                |keys: &[String]| keys.iter().filter(|key| value.get(key).is_some()).count();
+            if !object.any_of_keys.is_empty() && present(&object.any_of_keys) == 0 {
+                self.report(format!(
+                    "expected at least one of {}",
+                    json_list(&object.any_of_keys)
+                ));
+            }
+            if !object.one_of_keys.is_empty() && present(&object.one_of_keys) != 1 {
+                self.report(format!(
+                    "expected exactly one of {}",
+                    json_list(&object.one_of_keys)
+                ));
             }
         }
         for (key, required) in &object.dependent_required {
