@@ -12,7 +12,9 @@ const PARSERS: Readonly<Record<string, (input: unknown) => unknown>> = {
 
 /** Parses the text with the named schema and serialises the result again: the text must be exactly the case's. */
 export function runSerialiseCase(testCase: SerialiseCase): void {
-  const parse = PARSERS[testCase.schema];
+  const parse = Object.hasOwn(PARSERS, testCase.schema)
+    ? PARSERS[testCase.schema]
+    : undefined;
   if (parse === undefined) {
     throw new Error(`no schema is known by the name ${testCase.schema}`);
   }

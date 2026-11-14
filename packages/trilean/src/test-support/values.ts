@@ -24,7 +24,9 @@ export function decodeNumbers(value: unknown): unknown {
   }
   const named = value.$number;
   if (typeof named === "string" && Object.keys(value).length === 1) {
-    const decoded = NAMED_NUMBERS[named];
+    const decoded = Object.hasOwn(NAMED_NUMBERS, named)
+      ? NAMED_NUMBERS[named]
+      : undefined;
     if (decoded === undefined) {
       throw new Error(
         `$number names ${named}, which is not a number a corpus file names`,

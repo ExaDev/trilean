@@ -40,7 +40,11 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 /** The text an evaluator is given to read: a resolver's answer for a key read straight from a context object, as `fromContext` defines it. */
 function fromContextValue(key: Json, context: unknown): EvaluatorResolution {
-  if (typeof key !== "string" || !isRecord(context) || !(key in context)) {
+  if (
+    typeof key !== "string" ||
+    !isRecord(context) ||
+    !Object.hasOwn(context, key)
+  ) {
     return { found: false };
   }
   const value = context[key];
@@ -71,24 +75,8 @@ function settle(resolution: Resolution): EvaluatorResolution {
     : { found: false, notYetKnown: resolution.notYetKnown };
 }
 
-async function delay(turns: number | undefined): Promise<void> {
-  let waited = Promise.resolve();
-  for (let turn = 0; turn < (turns ?? 0); turn += 1) {
-    waited = waited.then(() => undefined);
-  }
-
-  return waited;
-}
-
-interface Answer<T> {
-  /** The microtask turns an asynchronous resolver waits before answering. */
-  readonly turns: number | undefined;
-  /** The answer itself, or the exception the data says the resolver throws. */
-  readonly give: () => T;
-}
-
-function answer(resolution: Resolution): Answer<EvaluatorResolution> {
-  return { turns: resolution.settlesAfter, give: () => settle(resolution) };
+function answer(resolution: Resolution): () => EvaluatorResolution {
+  return () => settle(resolution);
 }
 
 /**
@@ -98,7 +86,7 @@ export function buildResolvers(data: ResolverData): ResolverSet {
   const calls: RecordedCall[] = [];
   const fallback = data.default ?? { found: false };
 
-  const value = (key: Json, context: unknown): Answer<EvaluatorResolution> => {
+  const value = (key: Json, context: unknown): (() => EvaluatorResolution) => {
     calls.push({ resolver: "value", key });
     const entry = (data.values ?? []).find(
       (item) =>
@@ -107,7 +95,7 @@ export function buildResolvers(data: ResolverData): ResolverSet {
     if (entry === undefined && data.fromContext === true) {
       const read = fromContextValue(key, context);
       if (read.found) {
-        return { turns: undefined, give: () => read };
+        return () => read;
       }
     }
 
@@ -117,7 +105,7 @@ export function buildResolvers(data: ResolverData): ResolverSet {
     table: Json,
     keys: readonly ComputedValue[],
     context: unknown,
-  ): Answer<EvaluatorResolution> => {
+  ): (() => EvaluatorResolution) => {
     calls.push({ resolver: "lookup", table });
     const entry = (data.lookups ?? []).find(
       (item) =>
@@ -142,7 +130,7 @@ export function buildResolvers(data: ResolverData): ResolverSet {
     system: string,
     payload: Json,
     context: unknown,
-  ): Answer<EvaluatorResolution> => {
+  ): (() => EvaluatorResolution) => {
     calls.push({ resolver: "delegate", system });
     const entry = (data.delegates ?? []).find(
       (item) =>
@@ -170,33 +158,28 @@ export function buildResolvers(data: ResolverData): ResolverSet {
   const hasDelegates = data.delegates !== undefined;
   const hasTrees = data.trees !== undefined;
   const sync: SyncResolvers = {
-    resolveValue: (key, context) => value(key, context).give(),
-    resolveLookup: (table, keys, context) =>
-      lookup(table, keys, context).give(),
+    resolveValue: (key, context) => value(key, context)(),
+    resolveLookup: (table, keys, context) => lookup(table, keys, context)(),
     resolveCollection: (name, context) => collection(name, context),
     ...(hasDelegates
       ? {
           resolveDelegate: (system, payload, context) =>
-            delegate(system, payload, context).give(),
+            delegate(system, payload, context)(),
         }
       : {}),
     ...(hasTrees ? { resolveTree: (key) => tree(key) } : {}),
   };
-  const later = async <T>(given: Answer<T>): Promise<T> => {
-    await delay(given.turns);
-
-    return given.give();
-  };
   const asynchronous: Resolvers = {
-    resolveValue: async (key, context) => later(value(key, context)),
+    resolveValue: async (key, context) =>
+      Promise.resolve(value(key, context)()),
     resolveLookup: async (table, keys, context) =>
-      later(lookup(table, keys, context)),
+      Promise.resolve(lookup(table, keys, context)()),
     resolveCollection: async (name, context) =>
       Promise.resolve(collection(name, context)),
     ...(hasDelegates
       ? {
           resolveDelegate: async (system, payload, context) =>
-            later(delegate(system, payload, context)),
+            Promise.resolve(delegate(system, payload, context)()),
         }
       : {}),
     ...(hasTrees

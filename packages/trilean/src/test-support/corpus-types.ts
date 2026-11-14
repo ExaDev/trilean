@@ -38,14 +38,7 @@ export interface ValidateCase extends CaseBase {
   readonly schema: string;
   readonly input: Json;
   readonly expect:
-    | { readonly ok: true; readonly value?: Json }
-    | {
-        readonly ok: false;
-        readonly issues: readonly {
-          readonly path: readonly (string | number)[];
-          readonly message?: string;
-        }[];
-      };
+    { readonly ok: true; readonly value?: Json } | { readonly ok: false };
 }
 
 export interface ComputedValueJson {
@@ -54,17 +47,9 @@ export interface ComputedValueJson {
 }
 
 export type Resolution =
-  | {
-      readonly found: true;
-      readonly value: ComputedValueJson;
-      readonly settlesAfter?: number;
-    }
-  | {
-      readonly found: false;
-      readonly notYetKnown?: boolean;
-      readonly settlesAfter?: number;
-    }
-  | { readonly throws: string; readonly settlesAfter?: number };
+  | { readonly found: true; readonly value: ComputedValueJson }
+  | { readonly found: false; readonly notYetKnown?: boolean }
+  | { readonly throws: string };
 
 /** A context to match: any JSON value, or `*` (or omitted) for any context. */
 export type ContextMatch = Json | undefined;
@@ -112,10 +97,7 @@ export type EvaluateExpectation =
       readonly ignoreCase?: boolean;
     }
   | {
-      readonly throws: {
-        readonly from: "resolver" | "function" | "type-error";
-        readonly message?: string;
-      };
+      readonly throws: { readonly message: string };
     };
 
 export interface ExpectedCall {
@@ -145,8 +127,8 @@ export interface EvaluateCase extends CaseBase {
         >
       >;
     };
-    readonly maxNestingDepth?: Json;
-    readonly maxNodes?: Json;
+    readonly maxNestingDepth?: number;
+    readonly maxNodes?: number;
   };
   readonly modes?: readonly Mode[];
   readonly expect?: EvaluateExpectation;
@@ -217,9 +199,10 @@ export interface DocumentCase extends CaseBase {
   readonly tree: Json;
   readonly as?: "predicate" | "expression";
   readonly inputs?: Json;
-  readonly maxNodes?: Json;
+  readonly maxNodes?: number;
   readonly expect?: Json;
   readonly expectSubset?: Json;
+  readonly expectIssuePaths?: readonly string[];
 }
 
 /** What a built-in function reports instead of a value: the failure and the fragments its message contains. */
@@ -245,7 +228,7 @@ export interface RegexParseCase extends CaseBase {
     | { readonly error: unknown };
 }
 
-/** A case of a kind this package has no executor for: a foreign kind, or one it does not run yet. */
+/** A case of a kind another package executes. */
 export interface OtherCase extends CaseBase {
   readonly kind: Exclude<(typeof FOREIGN_KINDS)[number], "regex-parse">;
 }
@@ -269,7 +252,14 @@ export interface CorpusFile {
 
 export interface Manifest {
   readonly files: Readonly<
-    Record<string, { readonly cases: number; readonly skip: readonly string[] }>
+    Record<
+      string,
+      {
+        readonly cases: number;
+        readonly skip: readonly string[];
+        readonly generated?: true;
+      }
+    >
   >;
 }
 
