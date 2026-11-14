@@ -17,6 +17,14 @@ let db: Database.Database;
 beforeAll(() => {
   db = new Database(":memory:");
   db.exec(`CREATE TABLE subjects (id TEXT PRIMARY KEY, note TEXT);`);
+  // The function the dialect requires of a caller for \`matches\`; it receives its arguments whole, a NUL included.
+  db.function("regexp", (pattern: unknown, subject: unknown) =>
+    typeof pattern !== "string" || typeof subject !== "string"
+      ? null
+      : new RegExp(pattern, "u").test(subject)
+        ? 1
+        : 0,
+  );
   db.prepare("INSERT INTO subjects (id, note) VALUES (?, ?)").run("a", "x");
 });
 
@@ -127,5 +135,30 @@ describe("a pattern or a subject with a NUL, which GLOB reads only up to", () =>
       "glob-nul",
     );
     expect(rows(portable("^a.*c$"))).not.toContain("glob-nul-tail");
+  });
+
+  it("carries a NUL in the pattern of matches and notMatches whole, since REGEXP is a function the caller registered", () => {
+    const insert = db.prepare("INSERT INTO subjects (id, note) VALUES (?, ?)");
+    insert.run("re-nul", "xa\u0000by");
+    insert.run("re-plain", "xaby");
+    const withOp = (op: "matches" | "notMatches"): PredicateNode => ({
+      kind: "textCompare",
+      op,
+      left: { kind: "reference", key: "note" },
+      right: { kind: "textLiteral", value: "a\u0000b" },
+    });
+    const regexp = { ...options, sqliteRegexpAvailable: true };
+    const run = (tree: PredicateNode): string[] => {
+      const compiled = compilePredicateNode(tree, regexp);
+
+      return db
+        .prepare<unknown[], { id: string }>(
+          `SELECT id FROM subjects WHERE id LIKE 're-%' AND ${compiled.sql} ORDER BY id`,
+        )
+        .all(...compiled.params)
+        .map((row) => row.id);
+    };
+    expect(run(withOp("matches"))).toEqual(["re-nul"]);
+    expect(run(withOp("notMatches"))).toEqual(["re-plain"]);
   });
 });
