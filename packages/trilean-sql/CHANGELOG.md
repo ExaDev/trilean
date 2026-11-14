@@ -1,3 +1,11 @@
+## [2.2.42](https://github.com/ExaDev/trilean/compare/trilean-sql%402.2.41...trilean-sql%402.2.42) (2026-11-14)
+
+### Bug Fixes
+
+* **trilean-sql:** compare instants as points in time under SQLite ([f903159](https://github.com/ExaDev/trilean/commit/f9031596087779fe0fbd3658a921063afb55b08f)), references [#159](https://github.com/ExaDev/trilean/issues/159)
+* **trilean-sql:** read a stored instant only in one strict grammar ([b849906](https://github.com/ExaDev/trilean/commit/b849906ffd73027b749a94f9f32e207b08cad657)), references [#159](https://github.com/ExaDev/trilean/issues/159)
+* **trilean-sql:** state and test the precision and the cost of an instant comparison ([a8ee406](https://github.com/ExaDev/trilean/commit/a8ee406c94c087d4bb4761bb9f0995b39aac29d3)), references [#159](https://github.com/ExaDev/trilean/issues/159)
+
 ## [2.2.41](https://github.com/ExaDev/trilean/compare/trilean-sql%402.2.40...trilean-sql%402.2.41) (2026-11-14)
 
 
