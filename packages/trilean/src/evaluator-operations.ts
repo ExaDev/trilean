@@ -274,7 +274,13 @@ export function compareText(
           `'${right.value}' is not a valid trilean-regex pattern: ${reason}`,
         );
       }
-      const isMatch = compiled.test(left.value);
+      // The compiled pattern owns memory inside the wasm module until it is freed, and the finaliser frees it only after the event loop has turned, so a synchronous pass over many rows would hold every pattern. It is freed as soon as it has answered.
+      let isMatch: boolean;
+      try {
+        isMatch = compiled.test(left.value);
+      } finally {
+        compiled.free();
+      }
 
       return definite(op === "portableMatches" ? isMatch : !isMatch);
     }

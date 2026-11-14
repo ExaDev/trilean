@@ -335,6 +335,9 @@ A test stays in an implementation's own suite when a case cannot state it. Each 
 | evaluator-compiled.unit.test.ts | throws, as the interpreter does, when a resolver returns a promise | T2 |
 | evaluator-compiled.unit.test.ts | reports a delegate node as wrong-type when the resolvers register no handler | T2 |
 | evaluator-compiled.unit.test.ts | passes the context to the resolvers untouched | T2 |
+| evaluator-operations.free.unit.test.ts | frees the pattern it compiled, so %s over many rows in one synchronous pass holds none | T1 |
+| evaluator-operations.free.unit.test.ts | holds no pattern for an answer of false either | T1 |
+| evaluator-operations.free.unit.test.ts | compiles nothing for a pattern that is not in the grammar, and holds nothing | T1 |
 | evaluator.complex-arithmetic.unit.test.ts | keeps a negative power of a large base finite where its positive power would overflow | T10 |
 | evaluator.complex-arithmetic.unit.test.ts | a negative exponent is exactly the reciprocal of the positive power when that is representable, for $base to the power -$exponent | T2 |
 | evaluator.monotonicity.unit.test.ts | for every enumerated predicate | T2 |
