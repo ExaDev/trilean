@@ -1,0 +1,438 @@
+{
+  "cases": [
+    {
+      "args": [
+        {
+          "key": "present",
+          "kind": "reference"
+        },
+        {
+          "key": "missing",
+          "kind": "reference"
+        }
+      ],
+      "builder": "coalesce",
+      "expect": {
+        "cases": [
+          {
+            "then": {
+              "key": "present",
+              "kind": "reference"
+            },
+            "when": {
+              "kind": "exists",
+              "operand": {
+                "key": "present",
+                "kind": "reference"
+              }
+            }
+          }
+        ],
+        "fallback": {
+          "key": "missing",
+          "kind": "reference"
+        },
+        "kind": "conditional"
+      },
+      "from": "derived-values.unit.test.ts: derived = composition, not separate logic > coalesce(a, b) expands to a conditional whose single case probes a with exists, falling back to b",
+      "id": "values-build.derived-composition-not-separate-logic-coalesce-a-b-expands-to-a-conditional-whose-single-case-probes-a-with-exists-falling-back-to-b.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "present",
+          "kind": "reference"
+        },
+        {
+          "key": "b",
+          "kind": "reference"
+        },
+        {
+          "key": "c",
+          "kind": "reference"
+        }
+      ],
+      "builder": "coalesce",
+      "expect": {
+        "cases": [
+          {
+            "then": {
+              "key": "present",
+              "kind": "reference"
+            },
+            "when": {
+              "kind": "exists",
+              "operand": {
+                "key": "present",
+                "kind": "reference"
+              }
+            }
+          }
+        ],
+        "fallback": {
+          "cases": [
+            {
+              "then": {
+                "key": "b",
+                "kind": "reference"
+              },
+              "when": {
+                "kind": "exists",
+                "operand": {
+                  "key": "b",
+                  "kind": "reference"
+                }
+              }
+            }
+          ],
+          "fallback": {
+            "key": "c",
+            "kind": "reference"
+          },
+          "kind": "conditional"
+        },
+        "kind": "conditional"
+      },
+      "from": "derived-values.unit.test.ts: derived = composition, not separate logic > coalesce(a, b, c) nests right-to-left: a's conditional falls back to b's conditional, which falls back to c",
+      "id": "values-build.derived-composition-not-separate-logic-coalesce-a-b-c-nests-right-to-left-a-s-conditional-falls-back-to-b-s-conditional-which-falls-back.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "present",
+          "kind": "reference"
+        },
+        {
+          "key": "missing",
+          "kind": "reference"
+        }
+      ],
+      "builder": "coalesce",
+      "expect": {
+        "cases": [
+          {
+            "then": {
+              "key": "present",
+              "kind": "reference"
+            },
+            "when": {
+              "kind": "exists",
+              "operand": {
+                "key": "present",
+                "kind": "reference"
+              }
+            }
+          }
+        ],
+        "fallback": {
+          "key": "missing",
+          "kind": "reference"
+        },
+        "kind": "conditional"
+      },
+      "from": "recorded: trilean src/derived-values.ts (the tree coalesce builds)",
+      "id": "values-build.coalesce-kind-reference-key-present-kind-reference-key-missing.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "present",
+          "kind": "reference"
+        },
+        {
+          "key": "later-candidate-marker",
+          "kind": "reference"
+        }
+      ],
+      "builder": "coalesce",
+      "expect": {
+        "cases": [
+          {
+            "then": {
+              "key": "present",
+              "kind": "reference"
+            },
+            "when": {
+              "kind": "exists",
+              "operand": {
+                "key": "present",
+                "kind": "reference"
+              }
+            }
+          }
+        ],
+        "fallback": {
+          "key": "later-candidate-marker",
+          "kind": "reference"
+        },
+        "kind": "conditional"
+      },
+      "from": "recorded: trilean src/derived-values.ts (the tree coalesce builds)",
+      "id": "values-build.coalesce-kind-reference-key-present-kind-reference-key-later-candidate-marker.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "missing",
+          "kind": "reference"
+        },
+        {
+          "key": "present",
+          "kind": "reference"
+        }
+      ],
+      "builder": "coalesce",
+      "expect": {
+        "cases": [
+          {
+            "then": {
+              "key": "missing",
+              "kind": "reference"
+            },
+            "when": {
+              "kind": "exists",
+              "operand": {
+                "key": "missing",
+                "kind": "reference"
+              }
+            }
+          }
+        ],
+        "fallback": {
+          "key": "present",
+          "kind": "reference"
+        },
+        "kind": "conditional"
+      },
+      "from": "recorded: trilean src/derived-values.ts (the tree coalesce builds)",
+      "id": "values-build.coalesce-kind-reference-key-missing-kind-reference-key-present.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "kind": "arithmetic",
+          "left": {
+            "kind": "textLiteral",
+            "value": "x"
+          },
+          "op": "add",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        },
+        {
+          "key": "present",
+          "kind": "reference"
+        }
+      ],
+      "builder": "coalesce",
+      "expect": {
+        "cases": [
+          {
+            "then": {
+              "kind": "arithmetic",
+              "left": {
+                "kind": "textLiteral",
+                "value": "x"
+              },
+              "op": "add",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 1
+              }
+            },
+            "when": {
+              "kind": "exists",
+              "operand": {
+                "kind": "arithmetic",
+                "left": {
+                  "kind": "textLiteral",
+                  "value": "x"
+                },
+                "op": "add",
+                "right": {
+                  "kind": "numberLiteral",
+                  "value": 1
+                }
+              }
+            }
+          }
+        ],
+        "fallback": {
+          "key": "present",
+          "kind": "reference"
+        },
+        "kind": "conditional"
+      },
+      "from": "recorded: trilean src/derived-values.ts (the tree coalesce builds)",
+      "id": "values-build.coalesce-kind-arithmetic-op-add-left-kind-textliteral-value-x-right-kind-numberliteral-value-1-kind-reference-key-present.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "kind": "arithmetic",
+          "left": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "op": "divide",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        },
+        {
+          "key": "present",
+          "kind": "reference"
+        }
+      ],
+      "builder": "coalesce",
+      "expect": {
+        "cases": [
+          {
+            "then": {
+              "kind": "arithmetic",
+              "left": {
+                "kind": "numberLiteral",
+                "value": 1
+              },
+              "op": "divide",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 0
+              }
+            },
+            "when": {
+              "kind": "exists",
+              "operand": {
+                "kind": "arithmetic",
+                "left": {
+                  "kind": "numberLiteral",
+                  "value": 1
+                },
+                "op": "divide",
+                "right": {
+                  "kind": "numberLiteral",
+                  "value": 0
+                }
+              }
+            }
+          }
+        ],
+        "fallback": {
+          "key": "present",
+          "kind": "reference"
+        },
+        "kind": "conditional"
+      },
+      "from": "recorded: trilean src/derived-values.ts (the tree coalesce builds)",
+      "id": "values-build.coalesce-kind-arithmetic-op-divide-left-kind-numberliteral-value-1-right-kind-numberliteral-value-0-kind-reference-key-present.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "missing",
+          "kind": "reference"
+        },
+        {
+          "key": "missing",
+          "kind": "reference"
+        }
+      ],
+      "builder": "coalesce",
+      "expect": {
+        "cases": [
+          {
+            "then": {
+              "key": "missing",
+              "kind": "reference"
+            },
+            "when": {
+              "kind": "exists",
+              "operand": {
+                "key": "missing",
+                "kind": "reference"
+              }
+            }
+          }
+        ],
+        "fallback": {
+          "key": "missing",
+          "kind": "reference"
+        },
+        "kind": "conditional"
+      },
+      "from": "recorded: trilean src/derived-values.ts (the tree coalesce builds)",
+      "id": "values-build.coalesce-kind-reference-key-missing-kind-reference-key-missing.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "missing",
+          "kind": "reference"
+        },
+        {
+          "key": "missing",
+          "kind": "reference"
+        },
+        {
+          "key": "present",
+          "kind": "reference"
+        }
+      ],
+      "builder": "coalesce",
+      "expect": {
+        "cases": [
+          {
+            "then": {
+              "key": "missing",
+              "kind": "reference"
+            },
+            "when": {
+              "kind": "exists",
+              "operand": {
+                "key": "missing",
+                "kind": "reference"
+              }
+            }
+          }
+        ],
+        "fallback": {
+          "cases": [
+            {
+              "then": {
+                "key": "missing",
+                "kind": "reference"
+              },
+              "when": {
+                "kind": "exists",
+                "operand": {
+                  "key": "missing",
+                  "kind": "reference"
+                }
+              }
+            }
+          ],
+          "fallback": {
+            "key": "present",
+            "kind": "reference"
+          },
+          "kind": "conditional"
+        },
+        "kind": "conditional"
+      },
+      "from": "recorded: trilean src/derived-values.ts (the tree coalesce builds)",
+      "id": "values-build.coalesce-kind-reference-key-missing-kind-reference-key-missing-kind-reference-key-present.1",
+      "kind": "build"
+    }
+  ]
+}

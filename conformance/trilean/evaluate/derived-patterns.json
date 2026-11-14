@@ -1,0 +1,3100 @@
+{
+  "cases": [
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: prefixPattern > prefix 'ls' against 'ls' => true",
+      "id": "patterns.prefixpattern-prefix-ls-against-ls-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "ls"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^ls(?: [\\s\\S]*)?$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: prefixPattern > prefix 'ls' against 'ls -la' => true",
+      "id": "patterns.prefixpattern-prefix-ls-against-ls-la-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "ls -la"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^ls(?: [\\s\\S]*)?$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: prefixPattern > prefix 'ls' against 'ls two spaces' => true",
+      "id": "patterns.prefixpattern-prefix-ls-against-ls-two-spaces-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "ls two spaces"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^ls(?: [\\s\\S]*)?$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: prefixPattern > prefix 'ls' against 'ls ' => true",
+      "id": "patterns.prefixpattern-prefix-ls-against-ls-true.2",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "ls "
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^ls(?: [\\s\\S]*)?$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "derived-patterns.unit.test.ts: prefixPattern > prefix 'ls' against 'lsof' => false",
+      "id": "patterns.prefixpattern-prefix-ls-against-lsof-false.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "lsof"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^ls(?: [\\s\\S]*)?$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "derived-patterns.unit.test.ts: prefixPattern > prefix 'ls' against 'xls' => false",
+      "id": "patterns.prefixpattern-prefix-ls-against-xls-false.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "xls"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^ls(?: [\\s\\S]*)?$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "derived-patterns.unit.test.ts: prefixPattern > prefix 'ls' against '' => false",
+      "id": "patterns.prefixpattern-prefix-ls-against-false.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": ""
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^ls(?: [\\s\\S]*)?$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: prefixPattern > prefix 'git commit' against 'git commit -m message' => true",
+      "id": "patterns.prefixpattern-prefix-git-commit-against-git-commit-m-message-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "git commit -m message"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^git commit(?: [\\s\\S]*)?$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "derived-patterns.unit.test.ts: prefixPattern > prefix 'git commit' against 'git committed' => false",
+      "id": "patterns.prefixpattern-prefix-git-commit-against-git-committed-false.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "git committed"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^git commit(?: [\\s\\S]*)?$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: prefixPattern > treats the prefix as a plain literal, so a regex metacharacter in it matches only itself",
+      "id": "patterns.prefixpattern-treats-the-prefix-as-a-plain-literal-so-a-regex-metacharacter-in-it-matches-only-itself.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "a.b"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a\\.b(?: [\\s\\S]*)?$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "derived-patterns.unit.test.ts: prefixPattern > treats the prefix as a plain literal, so a regex metacharacter in it matches only itself",
+      "id": "patterns.prefixpattern-treats-the-prefix-as-a-plain-literal-so-a-regex-metacharacter-in-it-matches-only-itself.2",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "axb"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a\\.b(?: [\\s\\S]*)?$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: prefixPattern > treats an asterisk in the prefix as a literal asterisk, since the prefix dialect has no wildcard syntax",
+      "id": "patterns.prefixpattern-treats-an-asterisk-in-the-prefix-as-a-literal-asterisk-since-the-prefix-dialect-has-no-wildcard-syntax.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "run*"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^run\\*(?: [\\s\\S]*)?$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: prefixPattern > treats an asterisk in the prefix as a literal asterisk, since the prefix dialect has no wildcard syntax",
+      "id": "patterns.prefixpattern-treats-an-asterisk-in-the-prefix-as-a-literal-asterisk-since-the-prefix-dialect-has-no-wildcard-syntax.2",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "run* now"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^run\\*(?: [\\s\\S]*)?$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "derived-patterns.unit.test.ts: prefixPattern > treats an asterisk in the prefix as a literal asterisk, since the prefix dialect has no wildcard syntax",
+      "id": "patterns.prefixpattern-treats-an-asterisk-in-the-prefix-as-a-literal-asterisk-since-the-prefix-dialect-has-no-wildcard-syntax.3",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "running"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^run\\*(?: [\\s\\S]*)?$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: wildcardPattern > pattern 'git status' against 'git status' => true",
+      "id": "patterns.wildcardpattern-pattern-git-status-against-git-status-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "git status"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^git status$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "derived-patterns.unit.test.ts: wildcardPattern > pattern 'git status' against 'git status --short' => false",
+      "id": "patterns.wildcardpattern-pattern-git-status-against-git-status-short-false.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "git status --short"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^git status$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: wildcardPattern > pattern 'git *' against 'git add file' => true",
+      "id": "patterns.wildcardpattern-pattern-git-against-git-add-file-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "git add file"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^git(?: [\\s\\S]*)?$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: wildcardPattern > pattern 'git *' against 'git' => true",
+      "id": "patterns.wildcardpattern-pattern-git-against-git-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "git"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^git(?: [\\s\\S]*)?$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "derived-patterns.unit.test.ts: wildcardPattern > pattern 'git *' against 'gitx' => false",
+      "id": "patterns.wildcardpattern-pattern-git-against-gitx-false.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "gitx"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^git(?: [\\s\\S]*)?$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: wildcardPattern > pattern '*.ts' against 'index.ts' => true",
+      "id": "patterns.wildcardpattern-pattern-ts-against-index-ts-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "index.ts"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^[\\s\\S]*\\.ts$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: wildcardPattern > pattern '*.ts' against 'src/index.ts' => true",
+      "id": "patterns.wildcardpattern-pattern-ts-against-src-index-ts-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "src/index.ts"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^[\\s\\S]*\\.ts$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "derived-patterns.unit.test.ts: wildcardPattern > pattern '*.ts' against 'index.tsx' => false",
+      "id": "patterns.wildcardpattern-pattern-ts-against-index-tsx-false.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "index.tsx"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^[\\s\\S]*\\.ts$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: wildcardPattern > pattern 'npm run *' against 'npm run build' => true",
+      "id": "patterns.wildcardpattern-pattern-npm-run-against-npm-run-build-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "npm run build"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^npm run(?: [\\s\\S]*)?$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: wildcardPattern > pattern 'npm run *' against 'npm run' => true",
+      "id": "patterns.wildcardpattern-pattern-npm-run-against-npm-run-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "npm run"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^npm run(?: [\\s\\S]*)?$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: wildcardPattern > pattern 'a*c' against 'abc' => true",
+      "id": "patterns.wildcardpattern-pattern-a-c-against-abc-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "abc"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a[\\s\\S]*c$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: wildcardPattern > pattern 'a*c' against 'ac' => true",
+      "id": "patterns.wildcardpattern-pattern-a-c-against-ac-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "ac"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a[\\s\\S]*c$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "derived-patterns.unit.test.ts: wildcardPattern > pattern 'a*c' against 'abd' => false",
+      "id": "patterns.wildcardpattern-pattern-a-c-against-abd-false.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "abd"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a[\\s\\S]*c$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: wildcardPattern > matches a literal asterisk via \\*, never treating it as a wildcard",
+      "id": "patterns.wildcardpattern-matches-a-literal-asterisk-via-never-treating-it-as-a-wildcard.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "a*b"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a\\*b$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "derived-patterns.unit.test.ts: wildcardPattern > matches a literal asterisk via \\*, never treating it as a wildcard",
+      "id": "patterns.wildcardpattern-matches-a-literal-asterisk-via-never-treating-it-as-a-wildcard.2",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "axb"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a\\*b$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "derived-patterns.unit.test.ts: wildcardPattern > matches a literal asterisk via \\*, never treating it as a wildcard",
+      "id": "patterns.wildcardpattern-matches-a-literal-asterisk-via-never-treating-it-as-a-wildcard.3",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "ab"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a\\*b$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: wildcardPattern > matches a literal backslash via \\\\",
+      "id": "patterns.wildcardpattern-matches-a-literal-backslash-via.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "a\\b"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a\\\\b$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "derived-patterns.unit.test.ts: wildcardPattern > matches a literal backslash via \\\\",
+      "id": "patterns.wildcardpattern-matches-a-literal-backslash-via.2",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "ab"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a\\\\b$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: wildcardPattern > keeps an escaped asterisk literal while a neighbouring unescaped one still wildcards",
+      "id": "patterns.wildcardpattern-keeps-an-escaped-asterisk-literal-while-a-neighbouring-unescaped-one-still-wildcards.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "*"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^\\*[\\s\\S]*$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: wildcardPattern > keeps an escaped asterisk literal while a neighbouring unescaped one still wildcards",
+      "id": "patterns.wildcardpattern-keeps-an-escaped-asterisk-literal-while-a-neighbouring-unescaped-one-still-wildcards.2",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "*anything"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^\\*[\\s\\S]*$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "derived-patterns.unit.test.ts: wildcardPattern > keeps an escaped asterisk literal while a neighbouring unescaped one still wildcards",
+      "id": "patterns.wildcardpattern-keeps-an-escaped-asterisk-literal-while-a-neighbouring-unescaped-one-still-wildcards.3",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "anything"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^\\*[\\s\\S]*$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: wildcardPattern > applies the trailing-single-wildcard convenience only when that wildcard is the pattern's sole unescaped one",
+      "id": "patterns.wildcardpattern-applies-the-trailing-single-wildcard-convenience-only-when-that-wildcard-is-the-pattern-s-sole-unescaped-one.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "git"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^git(?: [\\s\\S]*)?$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "derived-patterns.unit.test.ts: wildcardPattern > applies the trailing-single-wildcard convenience only when that wildcard is the pattern's sole unescaped one",
+      "id": "patterns.wildcardpattern-applies-the-trailing-single-wildcard-convenience-only-when-that-wildcard-is-the-pattern-s-sole-unescaped-one.2",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "git"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^git [\\s\\S]* [\\s\\S]*$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: wildcardPattern > applies the trailing-single-wildcard convenience only when that wildcard is the pattern's sole unescaped one",
+      "id": "patterns.wildcardpattern-applies-the-trailing-single-wildcard-convenience-only-when-that-wildcard-is-the-pattern-s-sole-unescaped-one.3",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "git a b"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^git [\\s\\S]* [\\s\\S]*$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: wildcardPattern > does not apply the convenience when the trailing wildcard is not preceded by a space",
+      "id": "patterns.wildcardpattern-does-not-apply-the-convenience-when-the-trailing-wildcard-is-not-preceded-by-a-space.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "git"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^git[\\s\\S]*$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: wildcardPattern > does not apply the convenience when the trailing wildcard is not preceded by a space",
+      "id": "patterns.wildcardpattern-does-not-apply-the-convenience-when-the-trailing-wildcard-is-not-preceded-by-a-space.2",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "gitx"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^git[\\s\\S]*$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: wildcardPattern > trims surrounding whitespace from the pattern before compiling it",
+      "id": "patterns.wildcardpattern-trims-surrounding-whitespace-from-the-pattern-before-compiling-it.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "git"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^git(?: [\\s\\S]*)?$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: wildcardPattern > matches across line terminators, since the compiled pattern carries no flags to enable that behaviour later",
+      "id": "patterns.wildcardpattern-matches-across-line-terminators-since-the-compiled-pattern-carries-no-flags-to-enable-that-behaviour-later.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "a\nb"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a[\\s\\S]*b$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: wildcardPattern > escapes regex metacharacters in the literal parts of the pattern",
+      "id": "patterns.wildcardpattern-escapes-regex-metacharacters-in-the-literal-parts-of-the-pattern.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "v1.0 (beta)"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^v1\\.0 \\([\\s\\S]*\\)$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "derived-patterns.unit.test.ts: wildcardPattern > escapes regex metacharacters in the literal parts of the pattern",
+      "id": "patterns.wildcardpattern-escapes-regex-metacharacters-in-the-literal-parts-of-the-pattern.2",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "v1x0 (beta)"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^v1\\.0 \\([\\s\\S]*\\)$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: hierarchicalGlobPattern > glob 'src/*' against 'src/index.ts' => true",
+      "id": "patterns.hierarchicalglobpattern-glob-src-against-src-index-ts-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "src/index.ts"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^src\\/[^\\/]*$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "derived-patterns.unit.test.ts: hierarchicalGlobPattern > glob 'src/*' against 'src/nested/index.ts' => false",
+      "id": "patterns.hierarchicalglobpattern-glob-src-against-src-nested-index-ts-false.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "src/nested/index.ts"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^src\\/[^\\/]*$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: hierarchicalGlobPattern > glob 'src/*' against 'src/' => true",
+      "id": "patterns.hierarchicalglobpattern-glob-src-against-src-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "src/"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^src\\/[^\\/]*$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: hierarchicalGlobPattern > glob 'src/**' against 'src/index.ts' => true",
+      "id": "patterns.hierarchicalglobpattern-glob-src-against-src-index-ts-true.2",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "src/index.ts"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^src\\/[\\s\\S]*$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: hierarchicalGlobPattern > glob 'src/**' against 'src/nested/deep/index.ts' => true",
+      "id": "patterns.hierarchicalglobpattern-glob-src-against-src-nested-deep-index-ts-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "src/nested/deep/index.ts"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^src\\/[\\s\\S]*$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: hierarchicalGlobPattern > glob '**/*.ts' against 'src/index.ts' => true",
+      "id": "patterns.hierarchicalglobpattern-glob-ts-against-src-index-ts-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "src/index.ts"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^[\\s\\S]*\\/[^\\/]*\\.ts$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: hierarchicalGlobPattern > glob '**/*.ts' against 'src/nested/index.ts' => true",
+      "id": "patterns.hierarchicalglobpattern-glob-ts-against-src-nested-index-ts-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "src/nested/index.ts"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^[\\s\\S]*\\/[^\\/]*\\.ts$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: hierarchicalGlobPattern > glob '*' against 'one' => true",
+      "id": "patterns.hierarchicalglobpattern-glob-against-one-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "one"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^[^\\/]*$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "derived-patterns.unit.test.ts: hierarchicalGlobPattern > glob '*' against 'one/two' => false",
+      "id": "patterns.hierarchicalglobpattern-glob-against-one-two-false.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "one/two"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^[^\\/]*$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: hierarchicalGlobPattern > glob '**' against 'one/two/three' => true",
+      "id": "patterns.hierarchicalglobpattern-glob-against-one-two-three-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "one/two/three"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^[\\s\\S]*$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: hierarchicalGlobPattern > glob 'docs/readme.md' against 'docs/readme.md' => true",
+      "id": "patterns.hierarchicalglobpattern-glob-docs-readme-md-against-docs-readme-md-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "docs/readme.md"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^docs\\/readme\\.md$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "derived-patterns.unit.test.ts: hierarchicalGlobPattern > glob 'docs/readme.md' against 'docs/readme_md' => false",
+      "id": "patterns.hierarchicalglobpattern-glob-docs-readme-md-against-docs-readme-md-false.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "docs/readme_md"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^docs\\/readme\\.md$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "derived-patterns.unit.test.ts: hierarchicalGlobPattern > glob 'docs/readme.md' against 'docs/readme.md.bak' => false",
+      "id": "patterns.hierarchicalglobpattern-glob-docs-readme-md-against-docs-readme-md-bak-false.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "docs/readme.md.bak"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^docs\\/readme\\.md$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: hierarchicalGlobPattern > distinguishes * from ** at the same position: one segment versus every segment",
+      "id": "patterns.hierarchicalglobpattern-distinguishes-from-at-the-same-position-one-segment-versus-every-segment.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "electrical/lv/cables"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^electrical\\/[^\\/]*\\/cables$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "derived-patterns.unit.test.ts: hierarchicalGlobPattern > distinguishes * from ** at the same position: one segment versus every segment",
+      "id": "patterns.hierarchicalglobpattern-distinguishes-from-at-the-same-position-one-segment-versus-every-segment.2",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "electrical/lv/underground/cables"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^electrical\\/[^\\/]*\\/cables$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: hierarchicalGlobPattern > distinguishes * from ** at the same position: one segment versus every segment",
+      "id": "patterns.hierarchicalglobpattern-distinguishes-from-at-the-same-position-one-segment-versus-every-segment.3",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "electrical/lv/cables"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^electrical\\/[\\s\\S]*\\/cables$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: hierarchicalGlobPattern > distinguishes * from ** at the same position: one segment versus every segment",
+      "id": "patterns.hierarchicalglobpattern-distinguishes-from-at-the-same-position-one-segment-versus-every-segment.4",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "electrical/lv/underground/cables"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^electrical\\/[\\s\\S]*\\/cables$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: hierarchicalGlobPattern > requires ** to still be followed by its literal separator, so 'src/**/x' does not match 'src/x'",
+      "id": "patterns.hierarchicalglobpattern-requires-to-still-be-followed-by-its-literal-separator-so-src-x-does-not-match-src-x.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "src/a/x"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^src\\/[\\s\\S]*\\/x$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "derived-patterns.unit.test.ts: hierarchicalGlobPattern > requires ** to still be followed by its literal separator, so 'src/**/x' does not match 'src/x'",
+      "id": "patterns.hierarchicalglobpattern-requires-to-still-be-followed-by-its-literal-separator-so-src-x-does-not-match-src-x.2",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "src/x"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^src\\/[\\s\\S]*\\/x$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: hierarchicalGlobPattern > matches exactly one within-segment character with ?",
+      "id": "patterns.hierarchicalglobpattern-matches-exactly-one-within-segment-character-with.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "v1"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^v[^\\/]$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "derived-patterns.unit.test.ts: hierarchicalGlobPattern > matches exactly one within-segment character with ?",
+      "id": "patterns.hierarchicalglobpattern-matches-exactly-one-within-segment-character-with.2",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "v12"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^v[^\\/]$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "derived-patterns.unit.test.ts: hierarchicalGlobPattern > matches exactly one within-segment character with ?",
+      "id": "patterns.hierarchicalglobpattern-matches-exactly-one-within-segment-character-with.3",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "v"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^v[^\\/]$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "derived-patterns.unit.test.ts: hierarchicalGlobPattern > matches exactly one within-segment character with ?",
+      "id": "patterns.hierarchicalglobpattern-matches-exactly-one-within-segment-character-with.4",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "v/"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^v[^\\/]$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: hierarchicalGlobPattern > reads an odd run of asterisks as ** followed by *",
+      "id": "patterns.hierarchicalglobpattern-reads-an-odd-run-of-asterisks-as-followed-by.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "a/b/c"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a\\/[\\s\\S]*[^\\/]*$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: hierarchicalGlobPattern > reads an odd run of asterisks as ** followed by *",
+      "id": "patterns.hierarchicalglobpattern-reads-an-odd-run-of-asterisks-as-followed-by.2",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "a/b"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a\\/[\\s\\S]*[^\\/]*$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: hierarchicalGlobPattern > treats a backslash as a literal backslash, since this dialect has no escape syntax",
+      "id": "patterns.hierarchicalglobpattern-treats-a-backslash-as-a-literal-backslash-since-this-dialect-has-no-escape-syntax.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "a\\b"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a\\\\b$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "derived-patterns.unit.test.ts: hierarchicalGlobPattern > treats a backslash as a literal backslash, since this dialect has no escape syntax",
+      "id": "patterns.hierarchicalglobpattern-treats-a-backslash-as-a-literal-backslash-since-this-dialect-has-no-escape-syntax.2",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "ab"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a\\\\b$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "derived-patterns.unit.test.ts: three-valued behaviour is inherited from textCompare, not re-decided > an unresolvable subject stays indeterminate rather than compiling to a non-match (the original asserted only the status; recorded: trilean src/evaluator.ts, the reason code)",
+      "id": "patterns.three-valued-behaviour-is-inherited-from-textcompare-not-re-decided-an-unresolvable-subject-stays-indeterminate-rather-than-compiling-to-a-no.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "ls"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "absent",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^ls(?: [\\s\\S]*)?$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "derived-patterns.unit.test.ts: three-valued behaviour is inherited from textCompare, not re-decided > a non-text subject is wrong-type, exactly as a hand-written textCompare would be",
+      "id": "patterns.three-valued-behaviour-is-inherited-from-textcompare-not-re-decided-a-non-text-subject-is-wrong-type-exactly-as-a-hand-written-textcompare-wo.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "anything"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 1
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^[\\s\\S]*$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: end-to-end through createEvaluator, composed with other node kinds > evaluates a compiled pattern inside an and/not composition via the evaluator factory",
+      "id": "patterns.end-to-end-through-createevaluator-composed-with-other-node-kinds-evaluates-a-compiled-pattern-inside-an-and-not-composition-via-the-evaluato.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "git status"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "and",
+        "left": {
+          "kind": "textCompare",
+          "left": {
+            "key": "subject",
+            "kind": "reference"
+          },
+          "op": "matches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^git(?: [\\s\\S]*)?$"
+          }
+        },
+        "right": {
+          "kind": "not",
+          "operand": {
+            "kind": "textCompare",
+            "left": {
+              "key": "subject",
+              "kind": "reference"
+            },
+            "op": "matches",
+            "right": {
+              "kind": "textLiteral",
+              "value": "^git push(?: [\\s\\S]*)?$"
+            }
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "derived-patterns.unit.test.ts: end-to-end through createEvaluator, composed with other node kinds > evaluates a compiled pattern inside an and/not composition via the evaluator factory",
+      "id": "patterns.end-to-end-through-createevaluator-composed-with-other-node-kinds-evaluates-a-compiled-pattern-inside-an-and-not-composition-via-the-evaluato.2",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "git push origin main"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "and",
+        "left": {
+          "kind": "textCompare",
+          "left": {
+            "key": "subject",
+            "kind": "reference"
+          },
+          "op": "matches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^git(?: [\\s\\S]*)?$"
+          }
+        },
+        "right": {
+          "kind": "not",
+          "operand": {
+            "kind": "textCompare",
+            "left": {
+              "key": "subject",
+              "kind": "reference"
+            },
+            "op": "matches",
+            "right": {
+              "kind": "textLiteral",
+              "value": "^git push(?: [\\s\\S]*)?$"
+            }
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "derived-patterns.unit.test.ts: end-to-end through createEvaluator, composed with other node kinds > evaluates a compiled pattern inside an and/not composition via the evaluator factory",
+      "id": "patterns.end-to-end-through-createevaluator-composed-with-other-node-kinds-evaluates-a-compiled-pattern-inside-an-and-not-composition-via-the-evaluato.3",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "npm run build"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "and",
+        "left": {
+          "kind": "textCompare",
+          "left": {
+            "key": "subject",
+            "kind": "reference"
+          },
+          "op": "matches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^git(?: [\\s\\S]*)?$"
+          }
+        },
+        "right": {
+          "kind": "not",
+          "operand": {
+            "kind": "textCompare",
+            "left": {
+              "key": "subject",
+              "kind": "reference"
+            },
+            "op": "matches",
+            "right": {
+              "kind": "textLiteral",
+              "value": "^git push(?: [\\s\\S]*)?$"
+            }
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-patterns.unit.test.ts: derived = composition, not separate logic > escapes the separator inside a hierarchical glob's within-segment character classes, which a v-flagged RegExp rejects unescaped",
+      "id": "patterns.derived-composition-not-separate-logic-escapes-the-separator-inside-a-hierarchical-glob-s-within-segment-character-classes-which-a-v-flagged.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "a/b"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a\\/[^\\/]*$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "derived-patterns.unit.test.ts: derived = composition, not separate logic > escapes the separator inside a hierarchical glob's within-segment character classes, which a v-flagged RegExp rejects unescaped",
+      "id": "patterns.derived-composition-not-separate-logic-escapes-the-separator-inside-a-hierarchical-glob-s-within-segment-character-classes-which-a-v-flagged.2",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "subject",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "a/b/c"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a\\/[^\\/]*$"
+        }
+      }
+    }
+  ]
+}

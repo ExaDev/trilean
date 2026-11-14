@@ -1,0 +1,419 @@
+{
+  "cases": [
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 10
+        }
+      },
+      "from": "derived-values.unit.test.ts: coalesce > returns the first candidate that exists",
+      "id": "values.coalesce-returns-the-first-candidate-that-exists.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "cases": [
+          {
+            "then": {
+              "key": "present",
+              "kind": "reference"
+            },
+            "when": {
+              "kind": "exists",
+              "operand": {
+                "key": "present",
+                "kind": "reference"
+              }
+            }
+          }
+        ],
+        "fallback": {
+          "key": "missing",
+          "kind": "reference"
+        },
+        "kind": "conditional"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 10
+        }
+      },
+      "expectCalls": [
+        {
+          "key": "present",
+          "resolver": "value"
+        },
+        {
+          "key": "present",
+          "resolver": "value"
+        }
+      ],
+      "from": "derived-values.unit.test.ts: coalesce > never evaluates a later candidate once an earlier one exists (the original asserted that the marker was never resolved; the case asserts every resolver call made)",
+      "id": "values.coalesce-never-evaluates-a-later-candidate-once-an-earlier-one-exists.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "cases": [
+          {
+            "then": {
+              "key": "present",
+              "kind": "reference"
+            },
+            "when": {
+              "kind": "exists",
+              "operand": {
+                "key": "present",
+                "kind": "reference"
+              }
+            }
+          }
+        ],
+        "fallback": {
+          "key": "later-candidate-marker",
+          "kind": "reference"
+        },
+        "kind": "conditional"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 10
+        }
+      },
+      "from": "derived-values.unit.test.ts: coalesce > a not-found candidate falls through to the next",
+      "id": "values.coalesce-a-not-found-candidate-falls-through-to-the-next.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "cases": [
+          {
+            "then": {
+              "key": "missing",
+              "kind": "reference"
+            },
+            "when": {
+              "kind": "exists",
+              "operand": {
+                "key": "missing",
+                "kind": "reference"
+              }
+            }
+          }
+        ],
+        "fallback": {
+          "key": "present",
+          "kind": "reference"
+        },
+        "kind": "conditional"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "derived-values.unit.test.ts: coalesce > a wrong-type candidate propagates as wrong-type rather than falling through",
+      "id": "values.coalesce-a-wrong-type-candidate-propagates-as-wrong-type-rather-than-falling-through.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "cases": [
+          {
+            "then": {
+              "kind": "arithmetic",
+              "left": {
+                "kind": "textLiteral",
+                "value": "x"
+              },
+              "op": "add",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 1
+              }
+            },
+            "when": {
+              "kind": "exists",
+              "operand": {
+                "kind": "arithmetic",
+                "left": {
+                  "kind": "textLiteral",
+                  "value": "x"
+                },
+                "op": "add",
+                "right": {
+                  "kind": "numberLiteral",
+                  "value": 1
+                }
+              }
+            }
+          }
+        ],
+        "fallback": {
+          "key": "present",
+          "kind": "reference"
+        },
+        "kind": "conditional"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "domain-error",
+        "status": "indeterminate"
+      },
+      "from": "derived-values.unit.test.ts: coalesce > a domain-error candidate propagates as domain-error rather than falling through",
+      "id": "values.coalesce-a-domain-error-candidate-propagates-as-domain-error-rather-than-falling-through.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "cases": [
+          {
+            "then": {
+              "kind": "arithmetic",
+              "left": {
+                "kind": "numberLiteral",
+                "value": 1
+              },
+              "op": "divide",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 0
+              }
+            },
+            "when": {
+              "kind": "exists",
+              "operand": {
+                "kind": "arithmetic",
+                "left": {
+                  "kind": "numberLiteral",
+                  "value": 1
+                },
+                "op": "divide",
+                "right": {
+                  "kind": "numberLiteral",
+                  "value": 0
+                }
+              }
+            }
+          }
+        ],
+        "fallback": {
+          "key": "present",
+          "kind": "reference"
+        },
+        "kind": "conditional"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "derived-values.unit.test.ts: coalesce > every candidate not-found surfaces the final (un-guarded) candidate's own not-found result",
+      "id": "values.coalesce-every-candidate-not-found-surfaces-the-final-un-guarded-candidate-s-own-not-found-result.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "cases": [
+          {
+            "then": {
+              "key": "missing",
+              "kind": "reference"
+            },
+            "when": {
+              "kind": "exists",
+              "operand": {
+                "key": "missing",
+                "kind": "reference"
+              }
+            }
+          }
+        ],
+        "fallback": {
+          "key": "missing",
+          "kind": "reference"
+        },
+        "kind": "conditional"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 10
+        }
+      },
+      "from": "derived-values.unit.test.ts: coalesce > accepts more than two candidates",
+      "id": "values.coalesce-accepts-more-than-two-candidates.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "cases": [
+          {
+            "then": {
+              "key": "missing",
+              "kind": "reference"
+            },
+            "when": {
+              "kind": "exists",
+              "operand": {
+                "key": "missing",
+                "kind": "reference"
+              }
+            }
+          }
+        ],
+        "fallback": {
+          "cases": [
+            {
+              "then": {
+                "key": "missing",
+                "kind": "reference"
+              },
+              "when": {
+                "kind": "exists",
+                "operand": {
+                  "key": "missing",
+                  "kind": "reference"
+                }
+              }
+            }
+          ],
+          "fallback": {
+            "key": "present",
+            "kind": "reference"
+          },
+          "kind": "conditional"
+        },
+        "kind": "conditional"
+      }
+    }
+  ]
+}

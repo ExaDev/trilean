@@ -1,0 +1,1411 @@
+{
+  "cases": [
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > T XOR T => F",
+      "id": "connectives.xor-worked-correctness-check-readme-md-worked-correctness-check-exclusive-or-t-xor-t-f.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "or",
+        "left": {
+          "kind": "and",
+          "left": {
+            "kind": "allOf",
+            "operands": []
+          },
+          "right": {
+            "kind": "not",
+            "operand": {
+              "kind": "allOf",
+              "operands": []
+            }
+          }
+        },
+        "right": {
+          "kind": "and",
+          "left": {
+            "kind": "not",
+            "operand": {
+              "kind": "allOf",
+              "operands": []
+            }
+          },
+          "right": {
+            "kind": "allOf",
+            "operands": []
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > T XOR F => T",
+      "id": "connectives.xor-worked-correctness-check-readme-md-worked-correctness-check-exclusive-or-t-xor-f-t.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "or",
+        "left": {
+          "kind": "and",
+          "left": {
+            "kind": "allOf",
+            "operands": []
+          },
+          "right": {
+            "kind": "not",
+            "operand": {
+              "kind": "anyOf",
+              "operands": []
+            }
+          }
+        },
+        "right": {
+          "kind": "and",
+          "left": {
+            "kind": "not",
+            "operand": {
+              "kind": "allOf",
+              "operands": []
+            }
+          },
+          "right": {
+            "kind": "anyOf",
+            "operands": []
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > T XOR U => U (the original asserted only the status; recorded: trilean src/evaluator.ts, the reason code)",
+      "id": "connectives.xor-worked-correctness-check-readme-md-worked-correctness-check-exclusive-or-t-xor-u-u.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "or",
+        "left": {
+          "kind": "and",
+          "left": {
+            "kind": "allOf",
+            "operands": []
+          },
+          "right": {
+            "kind": "not",
+            "operand": {
+              "kind": "compare",
+              "left": {
+                "key": "missing",
+                "kind": "reference"
+              },
+              "op": "eq",
+              "right": {
+                "key": "present",
+                "kind": "reference"
+              }
+            }
+          }
+        },
+        "right": {
+          "kind": "and",
+          "left": {
+            "kind": "not",
+            "operand": {
+              "kind": "allOf",
+              "operands": []
+            }
+          },
+          "right": {
+            "kind": "compare",
+            "left": {
+              "key": "missing",
+              "kind": "reference"
+            },
+            "op": "eq",
+            "right": {
+              "key": "present",
+              "kind": "reference"
+            }
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > F XOR T => T",
+      "id": "connectives.xor-worked-correctness-check-readme-md-worked-correctness-check-exclusive-or-f-xor-t-t.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "or",
+        "left": {
+          "kind": "and",
+          "left": {
+            "kind": "anyOf",
+            "operands": []
+          },
+          "right": {
+            "kind": "not",
+            "operand": {
+              "kind": "allOf",
+              "operands": []
+            }
+          }
+        },
+        "right": {
+          "kind": "and",
+          "left": {
+            "kind": "not",
+            "operand": {
+              "kind": "anyOf",
+              "operands": []
+            }
+          },
+          "right": {
+            "kind": "allOf",
+            "operands": []
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > F XOR F => F",
+      "id": "connectives.xor-worked-correctness-check-readme-md-worked-correctness-check-exclusive-or-f-xor-f-f.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "or",
+        "left": {
+          "kind": "and",
+          "left": {
+            "kind": "anyOf",
+            "operands": []
+          },
+          "right": {
+            "kind": "not",
+            "operand": {
+              "kind": "anyOf",
+              "operands": []
+            }
+          }
+        },
+        "right": {
+          "kind": "and",
+          "left": {
+            "kind": "not",
+            "operand": {
+              "kind": "anyOf",
+              "operands": []
+            }
+          },
+          "right": {
+            "kind": "anyOf",
+            "operands": []
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > F XOR U => U (the original asserted only the status; recorded: trilean src/evaluator.ts, the reason code)",
+      "id": "connectives.xor-worked-correctness-check-readme-md-worked-correctness-check-exclusive-or-f-xor-u-u.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "or",
+        "left": {
+          "kind": "and",
+          "left": {
+            "kind": "anyOf",
+            "operands": []
+          },
+          "right": {
+            "kind": "not",
+            "operand": {
+              "kind": "compare",
+              "left": {
+                "key": "missing",
+                "kind": "reference"
+              },
+              "op": "eq",
+              "right": {
+                "key": "present",
+                "kind": "reference"
+              }
+            }
+          }
+        },
+        "right": {
+          "kind": "and",
+          "left": {
+            "kind": "not",
+            "operand": {
+              "kind": "anyOf",
+              "operands": []
+            }
+          },
+          "right": {
+            "kind": "compare",
+            "left": {
+              "key": "missing",
+              "kind": "reference"
+            },
+            "op": "eq",
+            "right": {
+              "key": "present",
+              "kind": "reference"
+            }
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > U XOR T => U (the original asserted only the status; recorded: trilean src/evaluator.ts, the reason code)",
+      "id": "connectives.xor-worked-correctness-check-readme-md-worked-correctness-check-exclusive-or-u-xor-t-u.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "or",
+        "left": {
+          "kind": "and",
+          "left": {
+            "kind": "compare",
+            "left": {
+              "key": "missing",
+              "kind": "reference"
+            },
+            "op": "eq",
+            "right": {
+              "key": "present",
+              "kind": "reference"
+            }
+          },
+          "right": {
+            "kind": "not",
+            "operand": {
+              "kind": "allOf",
+              "operands": []
+            }
+          }
+        },
+        "right": {
+          "kind": "and",
+          "left": {
+            "kind": "not",
+            "operand": {
+              "kind": "compare",
+              "left": {
+                "key": "missing",
+                "kind": "reference"
+              },
+              "op": "eq",
+              "right": {
+                "key": "present",
+                "kind": "reference"
+              }
+            }
+          },
+          "right": {
+            "kind": "allOf",
+            "operands": []
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > U XOR F => U (the original asserted only the status; recorded: trilean src/evaluator.ts, the reason code)",
+      "id": "connectives.xor-worked-correctness-check-readme-md-worked-correctness-check-exclusive-or-u-xor-f-u.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "or",
+        "left": {
+          "kind": "and",
+          "left": {
+            "kind": "compare",
+            "left": {
+              "key": "missing",
+              "kind": "reference"
+            },
+            "op": "eq",
+            "right": {
+              "key": "present",
+              "kind": "reference"
+            }
+          },
+          "right": {
+            "kind": "not",
+            "operand": {
+              "kind": "anyOf",
+              "operands": []
+            }
+          }
+        },
+        "right": {
+          "kind": "and",
+          "left": {
+            "kind": "not",
+            "operand": {
+              "kind": "compare",
+              "left": {
+                "key": "missing",
+                "kind": "reference"
+              },
+              "op": "eq",
+              "right": {
+                "key": "present",
+                "kind": "reference"
+              }
+            }
+          },
+          "right": {
+            "kind": "anyOf",
+            "operands": []
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > U XOR U => U (the original asserted only the status; recorded: trilean src/evaluator.ts, the reason code)",
+      "id": "connectives.xor-worked-correctness-check-readme-md-worked-correctness-check-exclusive-or-u-xor-u-u.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "or",
+        "left": {
+          "kind": "and",
+          "left": {
+            "kind": "compare",
+            "left": {
+              "key": "missing",
+              "kind": "reference"
+            },
+            "op": "eq",
+            "right": {
+              "key": "present",
+              "kind": "reference"
+            }
+          },
+          "right": {
+            "kind": "not",
+            "operand": {
+              "kind": "compare",
+              "left": {
+                "key": "missing",
+                "kind": "reference"
+              },
+              "op": "eq",
+              "right": {
+                "key": "present",
+                "kind": "reference"
+              }
+            }
+          }
+        },
+        "right": {
+          "kind": "and",
+          "left": {
+            "kind": "not",
+            "operand": {
+              "kind": "compare",
+              "left": {
+                "key": "missing",
+                "kind": "reference"
+              },
+              "op": "eq",
+              "right": {
+                "key": "present",
+                "kind": "reference"
+              }
+            }
+          },
+          "right": {
+            "kind": "compare",
+            "left": {
+              "key": "missing",
+              "kind": "reference"
+            },
+            "op": "eq",
+            "right": {
+              "key": "present",
+              "kind": "reference"
+            }
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > has no absorbing value: every combination with at least one U produces U, unlike AND/OR (the original asserted only the status; recorded: trilean src/evaluator.ts, the reason code)",
+      "id": "connectives.xor-worked-correctness-check-readme-md-worked-correctness-check-exclusive-or-has-no-absorbing-value-every-combination-with-at-least-one-u.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "or",
+        "left": {
+          "kind": "and",
+          "left": {
+            "kind": "allOf",
+            "operands": []
+          },
+          "right": {
+            "kind": "not",
+            "operand": {
+              "kind": "compare",
+              "left": {
+                "key": "missing",
+                "kind": "reference"
+              },
+              "op": "eq",
+              "right": {
+                "key": "present",
+                "kind": "reference"
+              }
+            }
+          }
+        },
+        "right": {
+          "kind": "and",
+          "left": {
+            "kind": "not",
+            "operand": {
+              "kind": "allOf",
+              "operands": []
+            }
+          },
+          "right": {
+            "kind": "compare",
+            "left": {
+              "key": "missing",
+              "kind": "reference"
+            },
+            "op": "eq",
+            "right": {
+              "key": "present",
+              "kind": "reference"
+            }
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > has no absorbing value: every combination with at least one U produces U, unlike AND/OR (the original asserted only the status; recorded: trilean src/evaluator.ts, the reason code)",
+      "id": "connectives.xor-worked-correctness-check-readme-md-worked-correctness-check-exclusive-or-has-no-absorbing-value-every-combination-with-at-least-one-u.2",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "or",
+        "left": {
+          "kind": "and",
+          "left": {
+            "kind": "compare",
+            "left": {
+              "key": "missing",
+              "kind": "reference"
+            },
+            "op": "eq",
+            "right": {
+              "key": "present",
+              "kind": "reference"
+            }
+          },
+          "right": {
+            "kind": "not",
+            "operand": {
+              "kind": "allOf",
+              "operands": []
+            }
+          }
+        },
+        "right": {
+          "kind": "and",
+          "left": {
+            "kind": "not",
+            "operand": {
+              "kind": "compare",
+              "left": {
+                "key": "missing",
+                "kind": "reference"
+              },
+              "op": "eq",
+              "right": {
+                "key": "present",
+                "kind": "reference"
+              }
+            }
+          },
+          "right": {
+            "kind": "allOf",
+            "operands": []
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > has no absorbing value: every combination with at least one U produces U, unlike AND/OR (the original asserted only the status; recorded: trilean src/evaluator.ts, the reason code)",
+      "id": "connectives.xor-worked-correctness-check-readme-md-worked-correctness-check-exclusive-or-has-no-absorbing-value-every-combination-with-at-least-one-u.3",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "or",
+        "left": {
+          "kind": "and",
+          "left": {
+            "kind": "anyOf",
+            "operands": []
+          },
+          "right": {
+            "kind": "not",
+            "operand": {
+              "kind": "compare",
+              "left": {
+                "key": "missing",
+                "kind": "reference"
+              },
+              "op": "eq",
+              "right": {
+                "key": "present",
+                "kind": "reference"
+              }
+            }
+          }
+        },
+        "right": {
+          "kind": "and",
+          "left": {
+            "kind": "not",
+            "operand": {
+              "kind": "anyOf",
+              "operands": []
+            }
+          },
+          "right": {
+            "kind": "compare",
+            "left": {
+              "key": "missing",
+              "kind": "reference"
+            },
+            "op": "eq",
+            "right": {
+              "key": "present",
+              "kind": "reference"
+            }
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > has no absorbing value: every combination with at least one U produces U, unlike AND/OR (the original asserted only the status; recorded: trilean src/evaluator.ts, the reason code)",
+      "id": "connectives.xor-worked-correctness-check-readme-md-worked-correctness-check-exclusive-or-has-no-absorbing-value-every-combination-with-at-least-one-u.4",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "or",
+        "left": {
+          "kind": "and",
+          "left": {
+            "kind": "compare",
+            "left": {
+              "key": "missing",
+              "kind": "reference"
+            },
+            "op": "eq",
+            "right": {
+              "key": "present",
+              "kind": "reference"
+            }
+          },
+          "right": {
+            "kind": "not",
+            "operand": {
+              "kind": "anyOf",
+              "operands": []
+            }
+          }
+        },
+        "right": {
+          "kind": "and",
+          "left": {
+            "kind": "not",
+            "operand": {
+              "kind": "compare",
+              "left": {
+                "key": "missing",
+                "kind": "reference"
+              },
+              "op": "eq",
+              "right": {
+                "key": "present",
+                "kind": "reference"
+              }
+            }
+          },
+          "right": {
+            "kind": "anyOf",
+            "operands": []
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-connectives.unit.test.ts: implies spot check > implies(F, U) => T -- a false antecedent is vacuously true regardless of the consequent",
+      "id": "connectives.implies-spot-check-implies-f-u-t-a-false-antecedent-is-vacuously-true-regardless-of-the-consequent.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "or",
+        "left": {
+          "kind": "not",
+          "operand": {
+            "kind": "anyOf",
+            "operands": []
+          }
+        },
+        "right": {
+          "kind": "compare",
+          "left": {
+            "key": "missing",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "key": "present",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-connectives.unit.test.ts: nand > nand(T, F) => T",
+      "id": "connectives.nand-nand-t-f-t.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "not",
+        "operand": {
+          "kind": "and",
+          "left": {
+            "kind": "allOf",
+            "operands": []
+          },
+          "right": {
+            "kind": "anyOf",
+            "operands": []
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "derived-connectives.unit.test.ts: nand > nand(T, T) => F",
+      "id": "connectives.nand-nand-t-t-f.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "not",
+        "operand": {
+          "kind": "and",
+          "left": {
+            "kind": "allOf",
+            "operands": []
+          },
+          "right": {
+            "kind": "allOf",
+            "operands": []
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-connectives.unit.test.ts: nor > nor(F, F) => T",
+      "id": "connectives.nor-nor-f-f-t.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "not",
+        "operand": {
+          "kind": "or",
+          "left": {
+            "kind": "anyOf",
+            "operands": []
+          },
+          "right": {
+            "kind": "anyOf",
+            "operands": []
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "derived-connectives.unit.test.ts: nor > nor(T, F) => F",
+      "id": "connectives.nor-nor-t-f-f.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "not",
+        "operand": {
+          "kind": "or",
+          "left": {
+            "kind": "allOf",
+            "operands": []
+          },
+          "right": {
+            "kind": "anyOf",
+            "operands": []
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-connectives.unit.test.ts: iff > iff(T, T) => T",
+      "id": "connectives.iff-iff-t-t-t.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "not",
+        "operand": {
+          "kind": "or",
+          "left": {
+            "kind": "and",
+            "left": {
+              "kind": "allOf",
+              "operands": []
+            },
+            "right": {
+              "kind": "not",
+              "operand": {
+                "kind": "allOf",
+                "operands": []
+              }
+            }
+          },
+          "right": {
+            "kind": "and",
+            "left": {
+              "kind": "not",
+              "operand": {
+                "kind": "allOf",
+                "operands": []
+              }
+            },
+            "right": {
+              "kind": "allOf",
+              "operands": []
+            }
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "derived-connectives.unit.test.ts: iff > iff(T, F) => F",
+      "id": "connectives.iff-iff-t-f-f.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "not",
+        "operand": {
+          "kind": "or",
+          "left": {
+            "kind": "and",
+            "left": {
+              "kind": "allOf",
+              "operands": []
+            },
+            "right": {
+              "kind": "not",
+              "operand": {
+                "kind": "anyOf",
+                "operands": []
+              }
+            }
+          },
+          "right": {
+            "kind": "and",
+            "left": {
+              "kind": "not",
+              "operand": {
+                "kind": "allOf",
+                "operands": []
+              }
+            },
+            "right": {
+              "kind": "anyOf",
+              "operands": []
+            }
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "derived-connectives.unit.test.ts: none > none(numbers, item > 10) over [1, 2, 3] => definite true (no item satisfies)",
+      "id": "connectives.none-none-numbers-item-10-over-1-2-3-definite-true-no-item-satisfies.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "numbers",
+            "items": [
+              1,
+              2,
+              3
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "context": 1,
+            "key": "self",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 1
+              }
+            }
+          },
+          {
+            "context": 2,
+            "key": "self",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 2
+              }
+            }
+          },
+          {
+            "context": 3,
+            "key": "self",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 3
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "not",
+        "operand": {
+          "collection": "numbers",
+          "item": {
+            "kind": "compare",
+            "left": {
+              "key": "self",
+              "kind": "reference"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 10
+            }
+          },
+          "kind": "some"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "derived-connectives.unit.test.ts: none > none(numbers, item > 1) over [1, 2, 3] => definite false (some item satisfies)",
+      "id": "connectives.none-none-numbers-item-1-over-1-2-3-definite-false-some-item-satisfies.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "numbers",
+            "items": [
+              1,
+              2,
+              3
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "context": 1,
+            "key": "self",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 1
+              }
+            }
+          },
+          {
+            "context": 2,
+            "key": "self",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 2
+              }
+            }
+          },
+          {
+            "context": 3,
+            "key": "self",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 3
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "not",
+        "operand": {
+          "collection": "numbers",
+          "item": {
+            "kind": "compare",
+            "left": {
+              "key": "self",
+              "kind": "reference"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          },
+          "kind": "some"
+        }
+      }
+    }
+  ]
+}

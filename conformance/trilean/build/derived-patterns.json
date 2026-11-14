@@ -1,0 +1,1079 @@
+{
+  "cases": [
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "ls"
+      ],
+      "builder": "prefixPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^ls(?: [\\s\\S]*)?$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree prefixPattern builds)",
+      "id": "patterns-build.prefixpattern-kind-reference-key-subject-ls.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "git commit"
+      ],
+      "builder": "prefixPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^git commit(?: [\\s\\S]*)?$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree prefixPattern builds)",
+      "id": "patterns-build.prefixpattern-kind-reference-key-subject-git-commit.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "a.b"
+      ],
+      "builder": "prefixPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a\\.b(?: [\\s\\S]*)?$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree prefixPattern builds)",
+      "id": "patterns-build.prefixpattern-kind-reference-key-subject-a-b.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "run*"
+      ],
+      "builder": "prefixPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^run\\*(?: [\\s\\S]*)?$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree prefixPattern builds)",
+      "id": "patterns-build.prefixpattern-kind-reference-key-subject-run.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "git status"
+      ],
+      "builder": "wildcardPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^git status$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree wildcardPattern builds)",
+      "id": "patterns-build.wildcardpattern-kind-reference-key-subject-git-status.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "git *"
+      ],
+      "builder": "wildcardPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^git(?: [\\s\\S]*)?$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree wildcardPattern builds)",
+      "id": "patterns-build.wildcardpattern-kind-reference-key-subject-git.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "*.ts"
+      ],
+      "builder": "wildcardPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^[\\s\\S]*\\.ts$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree wildcardPattern builds)",
+      "id": "patterns-build.wildcardpattern-kind-reference-key-subject-ts.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "npm run *"
+      ],
+      "builder": "wildcardPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^npm run(?: [\\s\\S]*)?$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree wildcardPattern builds)",
+      "id": "patterns-build.wildcardpattern-kind-reference-key-subject-npm-run.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "a*c"
+      ],
+      "builder": "wildcardPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a[\\s\\S]*c$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree wildcardPattern builds)",
+      "id": "patterns-build.wildcardpattern-kind-reference-key-subject-a-c.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "a\\*b"
+      ],
+      "builder": "wildcardPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a\\*b$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree wildcardPattern builds)",
+      "id": "patterns-build.wildcardpattern-kind-reference-key-subject-a-b.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "a\\\\b"
+      ],
+      "builder": "wildcardPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a\\\\b$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree wildcardPattern builds)",
+      "id": "patterns-build.wildcardpattern-kind-reference-key-subject-a-b.2",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "\\**"
+      ],
+      "builder": "wildcardPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^\\*[\\s\\S]*$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree wildcardPattern builds)",
+      "id": "patterns-build.wildcardpattern-kind-reference-key-subject.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "git * *"
+      ],
+      "builder": "wildcardPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^git [\\s\\S]* [\\s\\S]*$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree wildcardPattern builds)",
+      "id": "patterns-build.wildcardpattern-kind-reference-key-subject-git.2",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "git*"
+      ],
+      "builder": "wildcardPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^git[\\s\\S]*$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree wildcardPattern builds)",
+      "id": "patterns-build.wildcardpattern-kind-reference-key-subject-git.3",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        " git * "
+      ],
+      "builder": "wildcardPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^git(?: [\\s\\S]*)?$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree wildcardPattern builds)",
+      "id": "patterns-build.wildcardpattern-kind-reference-key-subject-git.4",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "a*b"
+      ],
+      "builder": "wildcardPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a[\\s\\S]*b$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree wildcardPattern builds)",
+      "id": "patterns-build.wildcardpattern-kind-reference-key-subject-a-b.3",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "v1.0 (*)"
+      ],
+      "builder": "wildcardPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^v1\\.0 \\([\\s\\S]*\\)$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree wildcardPattern builds)",
+      "id": "patterns-build.wildcardpattern-kind-reference-key-subject-v1-0.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "src/*"
+      ],
+      "builder": "hierarchicalGlobPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^src\\/[^\\/]*$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree hierarchicalGlobPattern builds)",
+      "id": "patterns-build.hierarchicalglobpattern-kind-reference-key-subject-src.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "src/**"
+      ],
+      "builder": "hierarchicalGlobPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^src\\/[\\s\\S]*$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree hierarchicalGlobPattern builds)",
+      "id": "patterns-build.hierarchicalglobpattern-kind-reference-key-subject-src.2",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "**/*.ts"
+      ],
+      "builder": "hierarchicalGlobPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^[\\s\\S]*\\/[^\\/]*\\.ts$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree hierarchicalGlobPattern builds)",
+      "id": "patterns-build.hierarchicalglobpattern-kind-reference-key-subject-ts.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "*"
+      ],
+      "builder": "hierarchicalGlobPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^[^\\/]*$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree hierarchicalGlobPattern builds)",
+      "id": "patterns-build.hierarchicalglobpattern-kind-reference-key-subject.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "**"
+      ],
+      "builder": "hierarchicalGlobPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^[\\s\\S]*$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree hierarchicalGlobPattern builds)",
+      "id": "patterns-build.hierarchicalglobpattern-kind-reference-key-subject.2",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "docs/readme.md"
+      ],
+      "builder": "hierarchicalGlobPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^docs\\/readme\\.md$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree hierarchicalGlobPattern builds)",
+      "id": "patterns-build.hierarchicalglobpattern-kind-reference-key-subject-docs-readme-md.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "electrical/*/cables"
+      ],
+      "builder": "hierarchicalGlobPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^electrical\\/[^\\/]*\\/cables$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree hierarchicalGlobPattern builds)",
+      "id": "patterns-build.hierarchicalglobpattern-kind-reference-key-subject-electrical-cables.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "electrical/**/cables"
+      ],
+      "builder": "hierarchicalGlobPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^electrical\\/[\\s\\S]*\\/cables$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree hierarchicalGlobPattern builds)",
+      "id": "patterns-build.hierarchicalglobpattern-kind-reference-key-subject-electrical-cables.2",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "src/**/x"
+      ],
+      "builder": "hierarchicalGlobPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^src\\/[\\s\\S]*\\/x$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree hierarchicalGlobPattern builds)",
+      "id": "patterns-build.hierarchicalglobpattern-kind-reference-key-subject-src-x.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "v?"
+      ],
+      "builder": "hierarchicalGlobPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^v[^\\/]$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree hierarchicalGlobPattern builds)",
+      "id": "patterns-build.hierarchicalglobpattern-kind-reference-key-subject-v.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "a/***"
+      ],
+      "builder": "hierarchicalGlobPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a\\/[\\s\\S]*[^\\/]*$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree hierarchicalGlobPattern builds)",
+      "id": "patterns-build.hierarchicalglobpattern-kind-reference-key-subject-a.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "a\\b"
+      ],
+      "builder": "hierarchicalGlobPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a\\\\b$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree hierarchicalGlobPattern builds)",
+      "id": "patterns-build.hierarchicalglobpattern-kind-reference-key-subject-a-b.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "absent",
+          "kind": "reference"
+        },
+        "ls"
+      ],
+      "builder": "prefixPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "absent",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^ls(?: [\\s\\S]*)?$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree prefixPattern builds)",
+      "id": "patterns-build.prefixpattern-kind-reference-key-absent-ls.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "kind": "numberLiteral",
+          "value": 1
+        },
+        "*"
+      ],
+      "builder": "wildcardPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 1
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^[\\s\\S]*$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree wildcardPattern builds)",
+      "id": "patterns-build.wildcardpattern-kind-numberliteral-value-1.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "git push"
+      ],
+      "builder": "prefixPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^git push(?: [\\s\\S]*)?$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree prefixPattern builds)",
+      "id": "patterns-build.prefixpattern-kind-reference-key-subject-git-push.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "ls"
+      ],
+      "builder": "prefixPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^ls(?: [\\s\\S]*)?$"
+        }
+      },
+      "from": "derived-patterns.unit.test.ts: derived = composition, not separate logic > prefixPattern(text, prefix) is an ordinary textCompare 'matches' node with the compiled pattern as a textLiteral",
+      "id": "patterns-build.derived-composition-not-separate-logic-prefixpattern-text-prefix-is-an-ordinary-textcompare-matches-node-with-the-compiled-pattern-as-a.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "a.b/c"
+      ],
+      "builder": "prefixPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a\\.b\\/c(?: [\\s\\S]*)?$"
+        }
+      },
+      "from": "derived-patterns.unit.test.ts: derived = composition, not separate logic > compiles to a flag-free, fully anchored pattern that stays valid unflagged and under both a u- and a v-flagged RegExp (the original asserted that each pattern is anchored and compiles unflagged and under the u and v flags; recorded: trilean src/derived-patterns.ts, the pattern)",
+      "id": "patterns-build.derived-composition-not-separate-logic-compiles-to-a-flag-free-fully-anchored-pattern-that-stays-valid-unflagged-and-under-both-a-u-and.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "a.b/c\\**"
+      ],
+      "builder": "wildcardPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a\\.b\\/c\\*[\\s\\S]*$"
+        }
+      },
+      "from": "derived-patterns.unit.test.ts: derived = composition, not separate logic > compiles to a flag-free, fully anchored pattern that stays valid unflagged and under both a u- and a v-flagged RegExp (the original asserted that each pattern is anchored and compiles unflagged and under the u and v flags; recorded: trilean src/derived-patterns.ts, the pattern)",
+      "id": "patterns-build.derived-composition-not-separate-logic-compiles-to-a-flag-free-fully-anchored-pattern-that-stays-valid-unflagged-and-under-both-a-u-and.2",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "a.b/**/c?"
+      ],
+      "builder": "hierarchicalGlobPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a\\.b\\/[\\s\\S]*\\/c[^\\/]$"
+        }
+      },
+      "from": "derived-patterns.unit.test.ts: derived = composition, not separate logic > compiles to a flag-free, fully anchored pattern that stays valid unflagged and under both a u- and a v-flagged RegExp (the original asserted that each pattern is anchored and compiles unflagged and under the u and v flags; recorded: trilean src/derived-patterns.ts, the pattern)",
+      "id": "patterns-build.derived-composition-not-separate-logic-compiles-to-a-flag-free-fully-anchored-pattern-that-stays-valid-unflagged-and-under-both-a-u-and.3",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "*"
+      ],
+      "builder": "hierarchicalGlobPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^[^\\/]*$"
+        }
+      },
+      "from": "derived-patterns.unit.test.ts: derived = composition, not separate logic > compiles to a flag-free, fully anchored pattern that stays valid unflagged and under both a u- and a v-flagged RegExp (the original asserted that each pattern is anchored and compiles unflagged and under the u and v flags; recorded: trilean src/derived-patterns.ts, the pattern)",
+      "id": "patterns-build.derived-composition-not-separate-logic-compiles-to-a-flag-free-fully-anchored-pattern-that-stays-valid-unflagged-and-under-both-a-u-and.4",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "?"
+      ],
+      "builder": "hierarchicalGlobPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^[^\\/]$"
+        }
+      },
+      "from": "derived-patterns.unit.test.ts: derived = composition, not separate logic > compiles to a flag-free, fully anchored pattern that stays valid unflagged and under both a u- and a v-flagged RegExp (the original asserted that each pattern is anchored and compiles unflagged and under the u and v flags; recorded: trilean src/derived-patterns.ts, the pattern)",
+      "id": "patterns-build.derived-composition-not-separate-logic-compiles-to-a-flag-free-fully-anchored-pattern-that-stays-valid-unflagged-and-under-both-a-u-and.5",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "*/?"
+      ],
+      "builder": "hierarchicalGlobPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^[^\\/]*\\/[^\\/]$"
+        }
+      },
+      "from": "derived-patterns.unit.test.ts: derived = composition, not separate logic > compiles to a flag-free, fully anchored pattern that stays valid unflagged and under both a u- and a v-flagged RegExp (the original asserted that each pattern is anchored and compiles unflagged and under the u and v flags; recorded: trilean src/derived-patterns.ts, the pattern)",
+      "id": "patterns-build.derived-composition-not-separate-logic-compiles-to-a-flag-free-fully-anchored-pattern-that-stays-valid-unflagged-and-under-both-a-u-and.6",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "*"
+      ],
+      "builder": "hierarchicalGlobPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^[^\\/]*$"
+        }
+      },
+      "from": "derived-patterns.unit.test.ts: derived = composition, not separate logic > escapes the separator inside a hierarchical glob's within-segment character classes, which a v-flagged RegExp rejects unescaped",
+      "id": "patterns-build.derived-composition-not-separate-logic-escapes-the-separator-inside-a-hierarchical-glob-s-within-segment-character-classes-which-a-v-fl.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "?"
+      ],
+      "builder": "hierarchicalGlobPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^[^\\/]$"
+        }
+      },
+      "from": "derived-patterns.unit.test.ts: derived = composition, not separate logic > escapes the separator inside a hierarchical glob's within-segment character classes, which a v-flagged RegExp rejects unescaped",
+      "id": "patterns-build.derived-composition-not-separate-logic-escapes-the-separator-inside-a-hierarchical-glob-s-within-segment-character-classes-which-a-v-fl.2",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "a/*"
+      ],
+      "builder": "hierarchicalGlobPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a\\/[^\\/]*$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree hierarchicalGlobPattern builds)",
+      "id": "patterns-build.hierarchicalglobpattern-kind-reference-key-subject-a.2",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "*"
+      ],
+      "builder": "wildcardPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "subject",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^[\\s\\S]*$"
+        }
+      },
+      "from": "derived-patterns.unit.test.ts: derived = composition, not separate logic > spells 'any character' without relying on a dotAll flag the stored pattern cannot carry",
+      "id": "patterns-build.derived-composition-not-separate-logic-spells-any-character-without-relying-on-a-dotall-flag-the-stored-pattern-cannot-carry.1",
+      "kind": "build"
+    }
+  ]
+}
