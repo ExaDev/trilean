@@ -54,7 +54,11 @@ describe("a pattern whose counts would need the automaton to be huge", () => {
     "is refused as %j with a RegexParseError before any memory is asked for",
     (pattern) => {
       const before = memoryPages();
-      for (const compile of [compilePattern, compileEcmascriptSubset, parseRegex]) {
+      for (const compile of [
+        compilePattern,
+        compileEcmascriptSubset,
+        parseRegex,
+      ]) {
         try {
           compile(pattern);
         } catch (error) {
@@ -102,9 +106,7 @@ describe("a call with an argument that is not a string", () => {
   ];
   it.each(calls)("throws a TypeError from %s", (_name, call) => {
     for (const value of notStrings) {
-      expect(() => call(value as never), typeof value).toThrow(
-        TypeError,
-      );
+      expect(() => call(value as never), typeof value).toThrow(TypeError);
     }
   });
 });
@@ -156,7 +158,9 @@ describe("the memory a compiled pattern holds", () => {
     const compiled = compilePattern("a+");
     compiled.free();
     expect(() => {
-      (compiled as unknown as { [Symbol.dispose](): void })[Symbol.dispose]();
+      (compiled as unknown as { [Symbol.dispose]: () => void })[
+        Symbol.dispose
+      ]();
     }).not.toThrow();
   });
 

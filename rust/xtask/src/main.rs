@@ -119,7 +119,9 @@ fn build_npm_package(package: &Package) -> Result<(), String> {
         .join(format!("{}.wasm", package.binding.replace('-', "_")));
     run_checked(
         Command::new("wasm-bindgen")
-            .args(["--target", "web", "--out-name", package.glue, "--out-dir"])
+            // The generated module does not locate the `.wasm` file itself: each `#init` module says where the module is, and a bundler that follows `new URL(..., import.meta.url)` in the generated glue as well as in `init.browser.js` fails in module concatenation (webpack, production).
+            .args(["--target", "web", "--omit-default-module-path"])
+            .args(["--out-name", package.glue, "--out-dir"])
             .arg(&dist)
             .arg(module),
     )?;
