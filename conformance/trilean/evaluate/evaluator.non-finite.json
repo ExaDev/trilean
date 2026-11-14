@@ -1,0 +1,352 @@
+{
+  "cases": [
+    {
+      "as": "expression",
+      "expect": {
+        "code": "domain-error",
+        "message": "result is not a finite number",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.non-finite.unit.test.ts: an arithmetic result outside the finite range > is a domain-error for add, never a definite Infinity",
+      "id": "non-finite.an-arithmetic-result-outside-the-finite-range-is-a-domain-error-for-add-never-a-definite-infinity.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 1.7976931348623157e+308
+        },
+        "op": "add",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1.7976931348623157e+308
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "domain-error",
+        "message": "result is not a finite number",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.non-finite.unit.test.ts: an arithmetic result outside the finite range > is a domain-error for subtract, never a definite Infinity",
+      "id": "non-finite.an-arithmetic-result-outside-the-finite-range-is-a-domain-error-for-subtract-never-a-definite-infinity.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 1.7976931348623157e+308
+        },
+        "op": "subtract",
+        "right": {
+          "kind": "numberLiteral",
+          "value": -1.7976931348623157e+308
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "domain-error",
+        "message": "result is not a finite number",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.non-finite.unit.test.ts: an arithmetic result outside the finite range > is a domain-error for multiply, never a definite Infinity",
+      "id": "non-finite.an-arithmetic-result-outside-the-finite-range-is-a-domain-error-for-multiply-never-a-definite-infinity.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 1.7976931348623157e+308
+        },
+        "op": "multiply",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1.7976931348623157e+308
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "domain-error",
+        "message": "result is not a finite number",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.non-finite.unit.test.ts: an arithmetic result outside the finite range > is a domain-error for divide, never a definite Infinity",
+      "id": "non-finite.an-arithmetic-result-outside-the-finite-range-is-a-domain-error-for-divide-never-a-definite-infinity.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 1.7976931348623157e+308
+        },
+        "op": "divide",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 5e-324
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "domain-error",
+        "message": "result is not a finite number",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.non-finite.unit.test.ts: an arithmetic result outside the finite range > is a domain-error for power, never a definite Infinity",
+      "id": "non-finite.an-arithmetic-result-outside-the-finite-range-is-a-domain-error-for-power-never-a-definite-infinity.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 1.7976931348623157e+308
+        },
+        "op": "power",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 2
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "domain-error",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.non-finite.unit.test.ts: an arithmetic result outside the finite range > is a domain-error for a duration sum, which reports in milliseconds",
+      "id": "non-finite.an-arithmetic-result-outside-the-finite-range-is-a-domain-error-for-a-duration-sum-which-reports-in-milliseconds.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "durationLiteral",
+          "unit": "ms",
+          "value": 1.7976931348623157e+308
+        },
+        "op": "add",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "ms",
+          "value": 1.7976931348623157e+308
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "domain-error",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.non-finite.unit.test.ts: an arithmetic result outside the finite range > is a domain-error when either complex component overflows",
+      "id": "non-finite.an-arithmetic-result-outside-the-finite-range-is-a-domain-error-when-either-complex-component-overflows.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "im": 0,
+          "kind": "complexLiteral",
+          "re": 1.7976931348623157e+308
+        },
+        "op": "multiply",
+        "right": {
+          "im": 0,
+          "kind": "complexLiteral",
+          "re": 1.7976931348623157e+308
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 1.7976931348623157e+308
+        }
+      },
+      "from": "evaluator.non-finite.unit.test.ts: an arithmetic result outside the finite range > leaves a finite result at the edge of the range definite",
+      "id": "non-finite.an-arithmetic-result-outside-the-finite-range-leaves-a-finite-result-at-the-edge-of-the-range-definite.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 1.7976931348623157e+308
+        },
+        "op": "add",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 5e-324
+        }
+      }
+    }
+  ]
+}

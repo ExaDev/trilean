@@ -1,0 +1,618 @@
+{
+  "cases": [
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "duration",
+          "unit": "ms",
+          "value": 60000
+        }
+      },
+      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic -- the four well-defined combination rules > instant - instant => duration, in milliseconds",
+      "id": "temporal.temporal-arithmetic-the-four-well-defined-combination-rules-instant-instant-duration-in-milliseconds.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "instantLiteral",
+          "value": "2026-01-01T00:01:00.000Z"
+        },
+        "op": "subtract",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2026-01-01T00:00:00.000Z"
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "instant",
+          "value": "2026-01-01T00:01:00.000Z"
+        }
+      },
+      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic -- the four well-defined combination rules > instant + duration => instant",
+      "id": "temporal.temporal-arithmetic-the-four-well-defined-combination-rules-instant-duration-instant.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "instantLiteral",
+          "value": "2026-01-01T00:00:00.000Z"
+        },
+        "op": "add",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "min",
+          "value": 1
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "instant",
+          "value": "2026-01-01T00:01:00.000Z"
+        }
+      },
+      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic -- the four well-defined combination rules > duration + instant => instant",
+      "id": "temporal.temporal-arithmetic-the-four-well-defined-combination-rules-duration-instant-instant.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "durationLiteral",
+          "unit": "min",
+          "value": 1
+        },
+        "op": "add",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2026-01-01T00:00:00.000Z"
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "duration",
+          "unit": "ms",
+          "value": 90000
+        }
+      },
+      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic -- the four well-defined combination rules > duration + duration => duration, normalising different units to milliseconds",
+      "id": "temporal.temporal-arithmetic-the-four-well-defined-combination-rules-duration-duration-duration-normalising-different-units-to-milliseconds.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "durationLiteral",
+          "unit": "min",
+          "value": 1
+        },
+        "op": "add",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "s",
+          "value": 30
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic -- wrong-type violations > adding two instants is wrong-type (only instant - instant is defined)",
+      "id": "temporal.temporal-arithmetic-wrong-type-violations-adding-two-instants-is-wrong-type-only-instant-instant-is-defined.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "instantLiteral",
+          "value": "2026-01-01T00:00:00.000Z"
+        },
+        "op": "add",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2026-01-01T00:00:00.000Z"
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic -- wrong-type violations > subtracting a duration from an instant is wrong-type (not one of the defined combinations)",
+      "id": "temporal.temporal-arithmetic-wrong-type-violations-subtracting-a-duration-from-an-instant-is-wrong-type-not-one-of-the-defined-combinations.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "instantLiteral",
+          "value": "2026-01-01T00:00:00.000Z"
+        },
+        "op": "subtract",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "min",
+          "value": 1
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic -- wrong-type violations > comparing an instant against a plain number is wrong-type",
+      "id": "temporal.temporal-arithmetic-wrong-type-violations-comparing-an-instant-against-a-plain-number-is-wrong-type.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "instantLiteral",
+          "value": "2026-01-01T00:00:00.000Z"
+        },
+        "op": "add",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic -- wrong-type violations > an unparseable instant is wrong-type, never a throw or a NaN-derived definite result > instant - instant",
+      "id": "temporal.temporal-arithmetic-wrong-type-violations-an-unparseable-instant-is-wrong-type-never-a-throw-or-a-nan-derived-definite-result-instant-instant.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "instantLiteral",
+          "value": "not-a-timestamp"
+        },
+        "op": "subtract",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2026-01-01T00:00:00.000Z"
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic -- wrong-type violations > an unparseable instant is wrong-type, never a throw or a NaN-derived definite result > instant + duration",
+      "id": "temporal.temporal-arithmetic-wrong-type-violations-an-unparseable-instant-is-wrong-type-never-a-throw-or-a-nan-derived-definite-result-instant-duratio.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "instantLiteral",
+          "value": "not-a-timestamp"
+        },
+        "op": "add",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "h",
+          "value": 1
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic -- wrong-type violations > an unparseable instant is wrong-type, never a throw or a NaN-derived definite result > duration + instant",
+      "id": "temporal.temporal-arithmetic-wrong-type-violations-an-unparseable-instant-is-wrong-type-never-a-throw-or-a-nan-derived-definite-result-duration-instan.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "durationLiteral",
+          "unit": "h",
+          "value": 1
+        },
+        "op": "add",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "not-a-timestamp"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic -- wrong-type violations > an unparseable instant is wrong-type, never a throw or a NaN-derived definite result > compare -- neq between two unparseable instants is not definitely true",
+      "id": "temporal.temporal-arithmetic-wrong-type-violations-an-unparseable-instant-is-wrong-type-never-a-throw-or-a-nan-derived-definite-result-compare-neq-bet.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "instantLiteral",
+          "value": "not-a-timestamp"
+        },
+        "op": "neq",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "not-a-timestamp"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic -- wrong-type violations > an unparseable instant is wrong-type, never a throw or a NaN-derived definite result > memberOf -- an unparseable candidate is not a definite non-match",
+      "id": "temporal.temporal-arithmetic-wrong-type-violations-an-unparseable-instant-is-wrong-type-never-a-throw-or-a-nan-derived-definite-result-memberof-an-unp.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "instantLiteral",
+            "value": "not-a-timestamp"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "kind": "instantLiteral",
+          "value": "2026-01-01T00:00:00.000Z"
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "domain-error",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic -- wrong-type violations > an unparseable instant is wrong-type, never a throw or a NaN-derived definite result > shifting a parseable instant beyond the representable timestamp range is domain-error",
+      "id": "temporal.temporal-arithmetic-wrong-type-violations-an-unparseable-instant-is-wrong-type-never-a-throw-or-a-nan-derived-definite-result-shifting-a-pars.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "instantLiteral",
+          "value": "2026-01-01T00:00:00.000Z"
+        },
+        "op": "add",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "d",
+          "value": 1000000000000000000
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic -- wrong-type violations > multiplying two durations is wrong-type (no representable result unit)",
+      "id": "temporal.temporal-arithmetic-wrong-type-violations-multiplying-two-durations-is-wrong-type-no-representable-result-unit.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "durationLiteral",
+          "unit": "min",
+          "value": 1
+        },
+        "op": "multiply",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "s",
+          "value": 2
+        }
+      }
+    }
+  ]
+}

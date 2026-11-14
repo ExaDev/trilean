@@ -1,0 +1,1493 @@
+{
+  "cases": [
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.membership.unit.test.ts: memberOf > in: a definite match makes the leaf definitely true",
+      "id": "membership.memberof-in-a-definite-match-makes-the-leaf-definitely-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 3
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 5
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "kind": "numberLiteral",
+          "value": 5
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.membership.unit.test.ts: memberOf > notIn: a definite match makes the leaf definitely false",
+      "id": "membership.memberof-notin-a-definite-match-makes-the-leaf-definitely-false.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 5
+          }
+        ],
+        "kind": "memberOf",
+        "op": "notIn",
+        "operand": {
+          "kind": "numberLiteral",
+          "value": 5
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.membership.unit.test.ts: memberOf > boolean operands participate under the same kind-agnostic equality rule as every other kind",
+      "id": "membership.memberof-boolean-operands-participate-under-the-same-kind-agnostic-equality-rule-as-every-other-kind.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "booleanLiteral",
+            "value": false
+          },
+          {
+            "kind": "booleanLiteral",
+            "value": true
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "kind": "booleanLiteral",
+          "value": true
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.membership.unit.test.ts: memberOf > boolean operands participate under the same kind-agnostic equality rule as every other kind",
+      "id": "membership.memberof-boolean-operands-participate-under-the-same-kind-agnostic-equality-rule-as-every-other-kind.2",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "booleanLiteral",
+            "value": false
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "kind": "booleanLiteral",
+          "value": true
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.membership.unit.test.ts: memberOf > is wrong-type when a boolean operand is compared against a non-boolean candidate for membership",
+      "id": "membership.memberof-is-wrong-type-when-a-boolean-operand-is-compared-against-a-non-boolean-candidate-for-membership.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "kind": "booleanLiteral",
+          "value": true
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.membership.unit.test.ts: memberOf > matches a complex candidate on both components at once",
+      "id": "membership.memberof-matches-a-complex-candidate-on-both-components-at-once.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "candidates": [
+          {
+            "im": 4,
+            "kind": "complexLiteral",
+            "re": 3
+          },
+          {
+            "im": -4,
+            "kind": "complexLiteral",
+            "re": 3
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "im": -4,
+          "kind": "complexLiteral",
+          "re": 3
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.membership.unit.test.ts: memberOf > is wrong-type when a complex operand meets a candidate of another kind",
+      "id": "membership.memberof-is-wrong-type-when-a-complex-operand-meets-a-candidate-of-another-kind.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 3
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "im": 0,
+          "kind": "complexLiteral",
+          "re": 3
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.membership.unit.test.ts: memberOf > is wrong-type when a complex candidate carries an incompatible unit",
+      "id": "membership.memberof-is-wrong-type-when-a-complex-candidate-carries-an-incompatible-unit.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "candidates": [
+          {
+            "im": -4,
+            "kind": "complexLiteral",
+            "re": 3,
+            "unit": {
+              "A": 1
+            }
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "im": -4,
+          "kind": "complexLiteral",
+          "re": 3,
+          "unit": {
+            "V": 1
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.membership.unit.test.ts: memberOf > a definite match short-circuits the result past a later indeterminate candidate",
+      "id": "membership.memberof-a-definite-match-short-circuits-the-result-past-a-later-indeterminate-candidate.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 5
+          },
+          {
+            "key": "missing",
+            "kind": "reference"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "kind": "numberLiteral",
+          "value": 5
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.membership.unit.test.ts: memberOf > an empty candidates list is never scanned: in is definitely false, notIn is definitely true",
+      "id": "membership.memberof-an-empty-candidates-list-is-never-scanned-in-is-definitely-false-notin-is-definitely-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "candidates": [],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "kind": "numberLiteral",
+          "value": 5
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.membership.unit.test.ts: memberOf > an empty candidates list is never scanned: in is definitely false, notIn is definitely true",
+      "id": "membership.memberof-an-empty-candidates-list-is-never-scanned-in-is-definitely-false-notin-is-definitely-true.2",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "candidates": [],
+        "kind": "memberOf",
+        "op": "notIn",
+        "operand": {
+          "kind": "numberLiteral",
+          "value": 5
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.membership.unit.test.ts: memberOf > no match among definite, comparable candidates: in is false, notIn is true",
+      "id": "membership.memberof-no-match-among-definite-comparable-candidates-in-is-false-notin-is-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 2
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "kind": "numberLiteral",
+          "value": 5
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.membership.unit.test.ts: memberOf > no match among definite, comparable candidates: in is false, notIn is true",
+      "id": "membership.memberof-no-match-among-definite-comparable-candidates-in-is-false-notin-is-true.2",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 2
+          }
+        ],
+        "kind": "memberOf",
+        "op": "notIn",
+        "operand": {
+          "kind": "numberLiteral",
+          "value": 5
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.membership.unit.test.ts: memberOf > tie-breaks several indeterminate/incompatible candidates to the first's reason, per declared order",
+      "id": "membership.memberof-tie-breaks-several-indeterminate-incompatible-candidates-to-the-first-s-reason-per-declared-order.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "5"
+          },
+          {
+            "key": "missing",
+            "kind": "reference"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "kind": "numberLiteral",
+          "value": 5
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "expectCalls": [
+        {
+          "key": "missing",
+          "resolver": "value"
+        }
+      ],
+      "from": "evaluator.membership.unit.test.ts: memberOf > an indeterminate operand makes the whole leaf indeterminate without ever scanning a candidate",
+      "id": "membership.memberof-an-indeterminate-operand-makes-the-whole-leaf-indeterminate-without-ever-scanning-a-candidate.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "candidates": [
+          {
+            "key": "candidate-marker",
+            "kind": "reference"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "missing",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.membership.unit.test.ts: memberOf > respects units for numeric candidates -- an incompatible unit is wrong-type, never a plain non-match",
+      "id": "membership.memberof-respects-units-for-numeric-candidates-an-incompatible-unit-is-wrong-type-never-a-plain-non-match.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "unit": {
+              "s": 1
+            },
+            "value": 5
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "kind": "numberLiteral",
+          "unit": {
+            "m": 1
+          },
+          "value": 5
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.membership.unit.test.ts: exists > a definite operand makes exists definitely true",
+      "id": "membership.exists-a-definite-operand-makes-exists-definitely-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.membership.unit.test.ts: exists > not-found converts to definitely false",
+      "id": "membership.exists-not-found-converts-to-definitely-false.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "missing",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.membership.unit.test.ts: exists > wrong-type converts to definitely true -- the data point resolved, it just wasn't usable",
+      "id": "membership.exists-wrong-type-converts-to-definitely-true-the-data-point-resolved-it-just-wasn-t-usable.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "present",
+          "kind": "reference",
+          "unit": {
+            "s": 1
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.membership.unit.test.ts: exists > domain-error converts to definitely true -- the data point resolved, it just wasn't usable",
+      "id": "membership.exists-domain-error-converts-to-definitely-true-the-data-point-resolved-it-just-wasn-t-usable.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "kind": "arithmetic",
+          "left": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "op": "divide",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.membership.unit.test.ts: some, every > some is definitely true when at least one participating item's item predicate matches",
+      "id": "membership.some-every-some-is-definitely-true-when-at-least-one-participating-item-s-item-predicate-matches.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "amounts",
+            "items": [
+              {
+                "amount": 1
+              },
+              {
+                "amount": 2
+              },
+              {
+                "amount": 30
+              }
+            ]
+          },
+          {
+            "collection": "grouped",
+            "items": [
+              {
+                "amount": 5,
+                "group": "keep"
+              },
+              {
+                "amount": 999,
+                "group": "skip"
+              }
+            ]
+          },
+          {
+            "collection": "flagged",
+            "items": [
+              {
+                "amount": 100,
+                "flag": 1
+              },
+              {
+                "amount": 5
+              }
+            ]
+          }
+        ],
+        "fromContext": true
+      },
+      "tree": {
+        "collection": "amounts",
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "amount",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 10
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.membership.unit.test.ts: some, every > some is definitely false when no participating item's item predicate matches",
+      "id": "membership.some-every-some-is-definitely-false-when-no-participating-item-s-item-predicate-matches.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "amounts",
+            "items": [
+              {
+                "amount": 1
+              },
+              {
+                "amount": 2
+              },
+              {
+                "amount": 30
+              }
+            ]
+          },
+          {
+            "collection": "grouped",
+            "items": [
+              {
+                "amount": 5,
+                "group": "keep"
+              },
+              {
+                "amount": 999,
+                "group": "skip"
+              }
+            ]
+          },
+          {
+            "collection": "flagged",
+            "items": [
+              {
+                "amount": 100,
+                "flag": 1
+              },
+              {
+                "amount": 5
+              }
+            ]
+          }
+        ],
+        "fromContext": true
+      },
+      "tree": {
+        "collection": "amounts",
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "amount",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1000
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.membership.unit.test.ts: some, every > every is definitely true when every participating item's item predicate matches",
+      "id": "membership.some-every-every-is-definitely-true-when-every-participating-item-s-item-predicate-matches.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "amounts",
+            "items": [
+              {
+                "amount": 1
+              },
+              {
+                "amount": 2
+              },
+              {
+                "amount": 30
+              }
+            ]
+          },
+          {
+            "collection": "grouped",
+            "items": [
+              {
+                "amount": 5,
+                "group": "keep"
+              },
+              {
+                "amount": 999,
+                "group": "skip"
+              }
+            ]
+          },
+          {
+            "collection": "flagged",
+            "items": [
+              {
+                "amount": 100,
+                "flag": 1
+              },
+              {
+                "amount": 5
+              }
+            ]
+          }
+        ],
+        "fromContext": true
+      },
+      "tree": {
+        "collection": "amounts",
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "amount",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.membership.unit.test.ts: some, every > every is definitely false when at least one participating item's item predicate fails to match",
+      "id": "membership.some-every-every-is-definitely-false-when-at-least-one-participating-item-s-item-predicate-fails-to-match.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "amounts",
+            "items": [
+              {
+                "amount": 1
+              },
+              {
+                "amount": 2
+              },
+              {
+                "amount": 30
+              }
+            ]
+          },
+          {
+            "collection": "grouped",
+            "items": [
+              {
+                "amount": 5,
+                "group": "keep"
+              },
+              {
+                "amount": 999,
+                "group": "skip"
+              }
+            ]
+          },
+          {
+            "collection": "flagged",
+            "items": [
+              {
+                "amount": 100,
+                "flag": 1
+              },
+              {
+                "amount": 5
+              }
+            ]
+          }
+        ],
+        "fromContext": true
+      },
+      "tree": {
+        "collection": "amounts",
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "amount",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 10
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.membership.unit.test.ts: some, every > filter excludes an item entirely, as if it had never been in the collection",
+      "id": "membership.some-every-filter-excludes-an-item-entirely-as-if-it-had-never-been-in-the-collection.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "amounts",
+            "items": [
+              {
+                "amount": 1
+              },
+              {
+                "amount": 2
+              },
+              {
+                "amount": 30
+              }
+            ]
+          },
+          {
+            "collection": "grouped",
+            "items": [
+              {
+                "amount": 5,
+                "group": "keep"
+              },
+              {
+                "amount": 999,
+                "group": "skip"
+              }
+            ]
+          },
+          {
+            "collection": "flagged",
+            "items": [
+              {
+                "amount": 100,
+                "flag": 1
+              },
+              {
+                "amount": 5
+              }
+            ]
+          }
+        ],
+        "fromContext": true
+      },
+      "tree": {
+        "collection": "grouped",
+        "filter": {
+          "kind": "textCompare",
+          "left": {
+            "key": "group",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "keep"
+          }
+        },
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "amount",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 500
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.membership.unit.test.ts: some, every > a filter-indeterminate item's own vote is absorbed by a different item's clean match",
+      "id": "membership.some-every-a-filter-indeterminate-item-s-own-vote-is-absorbed-by-a-different-item-s-clean-match.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "amounts",
+            "items": [
+              {
+                "amount": 1
+              },
+              {
+                "amount": 2
+              },
+              {
+                "amount": 30
+              }
+            ]
+          },
+          {
+            "collection": "grouped",
+            "items": [
+              {
+                "amount": 5,
+                "group": "keep"
+              },
+              {
+                "amount": 999,
+                "group": "skip"
+              }
+            ]
+          },
+          {
+            "collection": "flagged",
+            "items": [
+              {
+                "amount": 100,
+                "flag": 1
+              },
+              {
+                "amount": 5
+              }
+            ]
+          }
+        ],
+        "fromContext": true
+      },
+      "tree": {
+        "collection": "flagged",
+        "filter": {
+          "kind": "compare",
+          "left": {
+            "key": "flag",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        },
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "amount",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 10
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.membership.unit.test.ts: some, every > every over an empty collection is definitely true",
+      "id": "membership.some-every-every-over-an-empty-collection-is-definitely-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "amounts",
+            "items": [
+              {
+                "amount": 1
+              },
+              {
+                "amount": 2
+              },
+              {
+                "amount": 30
+              }
+            ]
+          },
+          {
+            "collection": "grouped",
+            "items": [
+              {
+                "amount": 5,
+                "group": "keep"
+              },
+              {
+                "amount": 999,
+                "group": "skip"
+              }
+            ]
+          },
+          {
+            "collection": "flagged",
+            "items": [
+              {
+                "amount": 100,
+                "flag": 1
+              },
+              {
+                "amount": 5
+              }
+            ]
+          }
+        ],
+        "fromContext": true
+      },
+      "tree": {
+        "collection": "nothing-here",
+        "item": {
+          "kind": "compare",
+          "left": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.membership.unit.test.ts: some, every > some over an empty collection is definitely false",
+      "id": "membership.some-every-some-over-an-empty-collection-is-definitely-false.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "amounts",
+            "items": [
+              {
+                "amount": 1
+              },
+              {
+                "amount": 2
+              },
+              {
+                "amount": 30
+              }
+            ]
+          },
+          {
+            "collection": "grouped",
+            "items": [
+              {
+                "amount": 5,
+                "group": "keep"
+              },
+              {
+                "amount": 999,
+                "group": "skip"
+              }
+            ]
+          },
+          {
+            "collection": "flagged",
+            "items": [
+              {
+                "amount": 100,
+                "flag": 1
+              },
+              {
+                "amount": 5
+              }
+            ]
+          }
+        ],
+        "fromContext": true
+      },
+      "tree": {
+        "collection": "nothing-here",
+        "item": {
+          "kind": "compare",
+          "left": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        },
+        "kind": "some"
+      }
+    }
+  ]
+}

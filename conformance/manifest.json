@@ -12,8 +12,82 @@
       "cases": 22,
       "skip": []
     },
+    "trilean/evaluate/evaluator.collections.json": {
+      "cases": 11,
+      "skip": []
+    },
     "trilean/evaluate/evaluator.comparison.json": {
       "cases": 57,
+      "skip": []
+    },
+    "trilean/evaluate/evaluator.complex-arithmetic.json": {
+      "cases": 117,
+      "skip": []
+    },
+    "trilean/evaluate/evaluator.control-flow.json": {
+      "cases": 37,
+      "skip": []
+    },
+    "trilean/evaluate/evaluator.duration-comparison.json": {
+      "cases": 51,
+      "skip": [
+        "duration-comparison.comparing-durations-that-are-not-finite-numbers-eq-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.1",
+        "duration-comparison.comparing-durations-that-are-not-finite-numbers-eq-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.2",
+        "duration-comparison.comparing-durations-that-are-not-finite-numbers-eq-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.3",
+        "duration-comparison.comparing-durations-that-are-not-finite-numbers-finds-equal-infinities-equal-whatever-their-units.1",
+        "duration-comparison.comparing-durations-that-are-not-finite-numbers-finds-equal-infinities-equal-whatever-their-units.2",
+        "duration-comparison.comparing-durations-that-are-not-finite-numbers-finds-equal-infinities-equal-whatever-their-units.3",
+        "duration-comparison.comparing-durations-that-are-not-finite-numbers-gt-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.1",
+        "duration-comparison.comparing-durations-that-are-not-finite-numbers-gt-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.2",
+        "duration-comparison.comparing-durations-that-are-not-finite-numbers-gt-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.3",
+        "duration-comparison.comparing-durations-that-are-not-finite-numbers-gte-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.1",
+        "duration-comparison.comparing-durations-that-are-not-finite-numbers-gte-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.2",
+        "duration-comparison.comparing-durations-that-are-not-finite-numbers-gte-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.3",
+        "duration-comparison.comparing-durations-that-are-not-finite-numbers-lt-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.1",
+        "duration-comparison.comparing-durations-that-are-not-finite-numbers-lt-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.2",
+        "duration-comparison.comparing-durations-that-are-not-finite-numbers-lt-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.3",
+        "duration-comparison.comparing-durations-that-are-not-finite-numbers-lte-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.1",
+        "duration-comparison.comparing-durations-that-are-not-finite-numbers-lte-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.2",
+        "duration-comparison.comparing-durations-that-are-not-finite-numbers-lte-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.3",
+        "duration-comparison.comparing-durations-that-are-not-finite-numbers-neq-with-a-nan-is-true-and-a-nan-is-not-a-member-of-anything.1",
+        "duration-comparison.comparing-durations-that-are-not-finite-numbers-neq-with-a-nan-is-true-and-a-nan-is-not-a-member-of-anything.2",
+        "duration-comparison.comparing-durations-that-are-not-finite-numbers-neq-with-a-nan-is-true-and-a-nan-is-not-a-member-of-anything.3",
+        "duration-comparison.comparing-durations-that-are-not-finite-numbers-orders-infinities-against-finite-values-and-against-each-other.1",
+        "duration-comparison.comparing-durations-that-are-not-finite-numbers-orders-infinities-against-finite-values-and-against-each-other.2",
+        "duration-comparison.comparing-durations-that-are-not-finite-numbers-orders-infinities-against-finite-values-and-against-each-other.3",
+        "duration-comparison.comparing-durations-that-are-not-finite-numbers-orders-infinities-against-finite-values-and-against-each-other.4"
+      ]
+    },
+    "trilean/evaluate/evaluator.functions.json": {
+      "cases": 3,
+      "skip": []
+    },
+    "trilean/evaluate/evaluator.indeterminacy-cases.json": {
+      "cases": 16,
+      "skip": []
+    },
+    "trilean/evaluate/evaluator.indeterminacy-table.json": {
+      "cases": 65,
+      "skip": []
+    },
+    "trilean/evaluate/evaluator.integration.json": {
+      "cases": 7,
+      "skip": []
+    },
+    "trilean/evaluate/evaluator.membership.json": {
+      "cases": 28,
+      "skip": []
+    },
+    "trilean/evaluate/evaluator.non-finite.json": {
+      "cases": 8,
+      "skip": []
+    },
+    "trilean/evaluate/evaluator.not-yet-known.json": {
+      "cases": 65,
+      "skip": []
+    },
+    "trilean/evaluate/evaluator.temporal.json": {
+      "cases": 14,
       "skip": []
     },
     "trilean/evaluate/evaluator.values.json": {

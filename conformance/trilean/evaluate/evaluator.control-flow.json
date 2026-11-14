@@ -1,0 +1,3289 @@
+{
+  "cases": [
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 200
+        }
+      },
+      "from": "evaluator.control-flow.unit.test.ts: conditional > evaluates the then of the first case whose when is definitely true, skipping earlier false cases",
+      "id": "control-flow.conditional-evaluates-the-then-of-the-first-case-whose-when-is-definitely-true-skipping-earlier-false-cases.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "cases": [
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 100
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "kind": "numberLiteral",
+                "value": 1
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 2
+              }
+            }
+          },
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 200
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "kind": "numberLiteral",
+                "value": 1
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 1
+              }
+            }
+          },
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 300
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "kind": "numberLiteral",
+                "value": 1
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 1
+              }
+            }
+          }
+        ],
+        "fallback": {
+          "kind": "numberLiteral",
+          "value": 0
+        },
+        "kind": "conditional"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 999
+        }
+      },
+      "from": "evaluator.control-flow.unit.test.ts: conditional > evaluates fallback when no case matches",
+      "id": "control-flow.conditional-evaluates-fallback-when-no-case-matches.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "cases": [
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 100
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "kind": "numberLiteral",
+                "value": 1
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 2
+              }
+            }
+          }
+        ],
+        "fallback": {
+          "kind": "numberLiteral",
+          "value": 999
+        },
+        "kind": "conditional"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 999
+        }
+      },
+      "from": "evaluator.control-flow.unit.test.ts: conditional > an empty cases list always evaluates to fallback",
+      "id": "control-flow.conditional-an-empty-cases-list-always-evaluates-to-fallback.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "cases": [],
+        "fallback": {
+          "kind": "numberLiteral",
+          "value": 999
+        },
+        "kind": "conditional"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 200
+        }
+      },
+      "expectCalls": [],
+      "from": "evaluator.control-flow.unit.test.ts: conditional > never evaluates a later case's then once an earlier case has already matched",
+      "id": "control-flow.conditional-never-evaluates-a-later-case-s-then-once-an-earlier-case-has-already-matched.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "cases": [
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 200
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "kind": "numberLiteral",
+                "value": 1
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 1
+              }
+            }
+          }
+        ],
+        "fallback": {
+          "key": "later-then-marker",
+          "kind": "reference"
+        },
+        "kind": "conditional"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 200
+        }
+      },
+      "expectCalls": [],
+      "from": "evaluator.control-flow.unit.test.ts: conditional > hitPolicy: 'unique' > exactly one match: returns that case's then, and never evaluates any other case's then",
+      "id": "control-flow.conditional-hitpolicy-unique-exactly-one-match-returns-that-case-s-then-and-never-evaluates-any-other-case-s-then.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "cases": [
+          {
+            "then": {
+              "key": "second-then-marker",
+              "kind": "reference"
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "kind": "numberLiteral",
+                "value": 1
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 2
+              }
+            }
+          },
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 200
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "kind": "numberLiteral",
+                "value": 1
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 1
+              }
+            }
+          }
+        ],
+        "fallback": {
+          "kind": "numberLiteral",
+          "value": 0
+        },
+        "hitPolicy": "unique",
+        "kind": "conditional"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 999
+        }
+      },
+      "from": "evaluator.control-flow.unit.test.ts: conditional > hitPolicy: 'unique' > zero matches: returns fallback, same as 'first'",
+      "id": "control-flow.conditional-hitpolicy-unique-zero-matches-returns-fallback-same-as-first.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "cases": [
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 100
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "kind": "numberLiteral",
+                "value": 1
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 2
+              }
+            }
+          }
+        ],
+        "fallback": {
+          "kind": "numberLiteral",
+          "value": 999
+        },
+        "hitPolicy": "unique",
+        "kind": "conditional"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "domain-error",
+        "message": "more than one case matched under the 'unique' hit policy",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.control-flow.unit.test.ts: conditional > hitPolicy: 'unique' > two matches: domain-error, regardless of case order",
+      "id": "control-flow.conditional-hitpolicy-unique-two-matches-domain-error-regardless-of-case-order.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "cases": [
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 100
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "kind": "numberLiteral",
+                "value": 1
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 1
+              }
+            }
+          },
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 200
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "kind": "numberLiteral",
+                "value": 2
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 2
+              }
+            }
+          }
+        ],
+        "fallback": {
+          "kind": "numberLiteral",
+          "value": 0
+        },
+        "hitPolicy": "unique",
+        "kind": "conditional"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "domain-error",
+        "message": "more than one case matched under the 'unique' hit policy",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.control-flow.unit.test.ts: conditional > hitPolicy: 'unique' > three matches: the same domain-error, not a distinct message",
+      "id": "control-flow.conditional-hitpolicy-unique-three-matches-the-same-domain-error-not-a-distinct-message.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "cases": [
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 1
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "kind": "numberLiteral",
+                "value": 1
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 1
+              }
+            }
+          },
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 2
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "kind": "numberLiteral",
+                "value": 2
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 2
+              }
+            }
+          },
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 3
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "kind": "numberLiteral",
+                "value": 3
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 3
+              }
+            }
+          }
+        ],
+        "fallback": {
+          "kind": "numberLiteral",
+          "value": 0
+        },
+        "hitPolicy": "unique",
+        "kind": "conditional"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.control-flow.unit.test.ts: conditional > hitPolicy: 'unique' > one match plus one unrelated indeterminate case: the whole node is indeterminate, NOT the match's then -- a single confirmed match does not absorb a remaining unresolved sibling under 'unique'",
+      "id": "control-flow.conditional-hitpolicy-unique-one-match-plus-one-unrelated-indeterminate-case-the-whole-node-is-indeterminate-not-the-match-s-then-a-singl.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "cases": [
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 100
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "kind": "numberLiteral",
+                "value": 1
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 1
+              }
+            }
+          },
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 200
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "key": "missing",
+                "kind": "reference"
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 0
+              }
+            }
+          }
+        ],
+        "fallback": {
+          "kind": "numberLiteral",
+          "value": 0
+        },
+        "hitPolicy": "unique",
+        "kind": "conditional"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "domain-error",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.control-flow.unit.test.ts: conditional > hitPolicy: 'unique' > two matches plus a third indeterminate case: still the domain-error -- 2+ matches absorbs even a genuine indeterminate elsewhere",
+      "id": "control-flow.conditional-hitpolicy-unique-two-matches-plus-a-third-indeterminate-case-still-the-domain-error-2-matches-absorbs-even-a-genuine-indeterm.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "cases": [
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 1
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "kind": "numberLiteral",
+                "value": 1
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 1
+              }
+            }
+          },
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 2
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "kind": "numberLiteral",
+                "value": 2
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 2
+              }
+            }
+          },
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 3
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "key": "missing",
+                "kind": "reference"
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 0
+              }
+            }
+          }
+        ],
+        "fallback": {
+          "kind": "numberLiteral",
+          "value": 0
+        },
+        "hitPolicy": "unique",
+        "kind": "conditional"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.control-flow.unit.test.ts: conditional > hitPolicy: 'unique' > zero matches plus one indeterminate case: indeterminate",
+      "id": "control-flow.conditional-hitpolicy-unique-zero-matches-plus-one-indeterminate-case-indeterminate.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "cases": [
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 1
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "kind": "numberLiteral",
+                "value": 1
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 2
+              }
+            }
+          },
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 2
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "key": "missing",
+                "kind": "reference"
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 0
+              }
+            }
+          }
+        ],
+        "fallback": {
+          "kind": "numberLiteral",
+          "value": 0
+        },
+        "hitPolicy": "unique",
+        "kind": "conditional"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 200
+        }
+      },
+      "from": "evaluator.control-flow.unit.test.ts: conditional > hitPolicy: 'unique' > absent hitPolicy behaves identically to explicit 'first'",
+      "id": "control-flow.conditional-hitpolicy-unique-absent-hitpolicy-behaves-identically-to-explicit-first.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "cases": [
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 100
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "kind": "numberLiteral",
+                "value": 1
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 2
+              }
+            }
+          },
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 200
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "kind": "numberLiteral",
+                "value": 1
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 1
+              }
+            }
+          }
+        ],
+        "fallback": {
+          "kind": "numberLiteral",
+          "value": 0
+        },
+        "kind": "conditional"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 200
+        }
+      },
+      "from": "evaluator.control-flow.unit.test.ts: conditional > hitPolicy: 'unique' > absent hitPolicy behaves identically to explicit 'first'",
+      "id": "control-flow.conditional-hitpolicy-unique-absent-hitpolicy-behaves-identically-to-explicit-first.2",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "cases": [
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 100
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "kind": "numberLiteral",
+                "value": 1
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 2
+              }
+            }
+          },
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 200
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "kind": "numberLiteral",
+                "value": 1
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 1
+              }
+            }
+          }
+        ],
+        "fallback": {
+          "kind": "numberLiteral",
+          "value": 0
+        },
+        "hitPolicy": "first",
+        "kind": "conditional"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "expectCalls": [
+        {
+          "key": "when-marker",
+          "resolver": "value"
+        },
+        {
+          "key": "when-marker",
+          "resolver": "value"
+        },
+        {
+          "key": "when-marker",
+          "resolver": "value"
+        }
+      ],
+      "from": "evaluator.control-flow.unit.test.ts: conditional > hitPolicy: 'unique' > evaluates every case's when concurrently, not short-circuited on the first match (the original asserted only that the marker was evaluated once per case; recorded: trilean src/evaluator.ts, the status and reason code)",
+      "id": "control-flow.conditional-hitpolicy-unique-evaluates-every-case-s-when-concurrently-not-short-circuited-on-the-first-match.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "cases": [
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 1
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "key": "when-marker",
+                "kind": "reference"
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 0
+              }
+            }
+          },
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 2
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "key": "when-marker",
+                "kind": "reference"
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 0
+              }
+            }
+          },
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 3
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "key": "when-marker",
+                "kind": "reference"
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 0
+              }
+            }
+          }
+        ],
+        "fallback": {
+          "kind": "numberLiteral",
+          "value": 0
+        },
+        "hitPolicy": "unique",
+        "kind": "conditional"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.control-flow.unit.test.ts: delegate > is wrong-type when no delegate handler is registered",
+      "id": "control-flow.delegate-is-wrong-type-when-no-delegate-handler-is-registered.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "delegate",
+        "payload": {
+          "rate": 0.2
+        },
+        "system": "tax-engine"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 42
+        }
+      },
+      "from": "evaluator.control-flow.unit.test.ts: delegate > resolves via the registered handler when one is provided",
+      "id": "control-flow.delegate-resolves-via-the-registered-handler-when-one-is-provided.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "delegates": [
+          {
+            "payload": null,
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 42
+              }
+            },
+            "system": "tax-engine"
+          }
+        ],
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "delegate",
+        "payload": null,
+        "system": "tax-engine"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.control-flow.unit.test.ts: delegate > is not-found when the registered handler itself reports absence",
+      "id": "control-flow.delegate-is-not-found-when-the-registered-handler-itself-reports-absence.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "delegates": [
+          {
+            "payload": null,
+            "result": {
+              "found": false
+            },
+            "system": "tax-engine"
+          }
+        ],
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "delegate",
+        "payload": null,
+        "system": "tax-engine"
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.control-flow.unit.test.ts: treeReference > evaluatePredicate: is wrong-type when no tree resolver is registered",
+      "id": "control-flow.treereference-evaluatepredicate-is-wrong-type-when-no-tree-resolver-is-registered.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "key": "eligibility",
+        "kind": "treeReference"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.control-flow.unit.test.ts: treeReference > evaluateValue: is wrong-type when no tree resolver is registered",
+      "id": "control-flow.treereference-evaluatevalue-is-wrong-type-when-no-tree-resolver-is-registered.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "key": "pricing",
+        "kind": "treeReference"
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.control-flow.unit.test.ts: treeReference > evaluatePredicate: is not-found when the resolver reports absence",
+      "id": "control-flow.treereference-evaluatepredicate-is-not-found-when-the-resolver-reports-absence.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "trees": [],
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "key": "eligibility",
+        "kind": "treeReference"
+      }
+    },
+    {
+      "as": "predicate",
+      "context": {
+        "age": 21
+      },
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.control-flow.unit.test.ts: treeReference > evaluatePredicate: resolves and evaluates the referenced predicate tree, with context passed through unchanged",
+      "id": "control-flow.treereference-evaluatepredicate-resolves-and-evaluates-the-referenced-predicate-tree-with-context-passed-through-unchanged.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "fromContext": true,
+        "trees": [
+          {
+            "key": "eligibility",
+            "result": {
+              "found": true,
+              "node": {
+                "kind": "compare",
+                "left": {
+                  "key": "age",
+                  "kind": "reference"
+                },
+                "op": "eq",
+                "right": {
+                  "kind": "numberLiteral",
+                  "value": 21
+                }
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "key": "eligibility",
+        "kind": "treeReference"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "unit": {},
+          "value": 10
+        }
+      },
+      "from": "evaluator.control-flow.unit.test.ts: treeReference > evaluateValue: resolves and evaluates the referenced expression tree, with the enclosing fold's accumulator passed through unchanged",
+      "id": "control-flow.treereference-evaluatevalue-resolves-and-evaluates-the-referenced-expression-tree-with-the-enclosing-fold-s-accumulator-passed-through-un.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "items",
+            "items": [
+              {}
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "trees": [
+          {
+            "key": "double-accumulator",
+            "result": {
+              "found": true,
+              "node": {
+                "kind": "arithmetic",
+                "left": {
+                  "kind": "accumulator"
+                },
+                "op": "multiply",
+                "right": {
+                  "kind": "numberLiteral",
+                  "value": 2
+                }
+              }
+            }
+          }
+        ],
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "collection": "items",
+        "combiner": {
+          "combine": {
+            "key": "double-accumulator",
+            "kind": "treeReference"
+          },
+          "initial": {
+            "kind": "numberLiteral",
+            "value": 5
+          },
+          "mode": "reduce"
+        },
+        "kind": "fold"
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.control-flow.unit.test.ts: treeReference > evaluatePredicate: is wrong-type when the resolved node fails to parse as a PredicateNode",
+      "id": "control-flow.treereference-evaluatepredicate-is-wrong-type-when-the-resolved-node-fails-to-parse-as-a-predicatenode.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "trees": [
+          {
+            "key": "malformed",
+            "result": {
+              "found": true,
+              "node": {
+                "kind": "not-a-real-kind"
+              }
+            }
+          }
+        ],
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "key": "malformed",
+        "kind": "treeReference"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.control-flow.unit.test.ts: treeReference > evaluateValue: is wrong-type when the resolved node fails to parse as an ExpressionNode",
+      "id": "control-flow.treereference-evaluatevalue-is-wrong-type-when-the-resolved-node-fails-to-parse-as-an-expressionnode.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "trees": [
+          {
+            "key": "malformed",
+            "result": {
+              "found": true,
+              "node": "just a string, not a node"
+            }
+          }
+        ],
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "key": "malformed",
+        "kind": "treeReference"
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "domain-error",
+        "message": "circular treeReference detected",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.control-flow.unit.test.ts: treeReference > direct self-reference is a domain-error: circular treeReference detected",
+      "id": "control-flow.treereference-direct-self-reference-is-a-domain-error-circular-treereference-detected.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "trees": [
+          {
+            "key": "self",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "self",
+                "kind": "treeReference"
+              }
+            }
+          }
+        ],
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "key": "self",
+        "kind": "treeReference"
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "domain-error",
+        "message": "circular treeReference detected",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.control-flow.unit.test.ts: treeReference > indirect A -> B -> A cycle is a domain-error",
+      "id": "control-flow.treereference-indirect-a-b-a-cycle-is-a-domain-error.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "trees": [
+          {
+            "key": "ruleA",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "ruleB",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "ruleB",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "ruleA",
+                "kind": "treeReference"
+              }
+            }
+          }
+        ],
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "key": "ruleA",
+        "kind": "treeReference"
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "domain-error",
+        "message": "treeReference chain exceeds the maximum depth of 100",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.control-flow.unit.test.ts: treeReference > a long acyclic chain past the maximum depth is a domain-error, not a cycle",
+      "id": "control-flow.treereference-a-long-acyclic-chain-past-the-maximum-depth-is-a-domain-error-not-a-cycle.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "trees": [
+          {
+            "key": "chain-0",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          }
+        ],
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "key": "chain-0",
+        "kind": "treeReference"
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "domain-error",
+        "message": "circular treeReference detected",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.control-flow.unit.test.ts: treeReference > a treeReference nested inside a some/every filter still participates in cycle detection correctly",
+      "id": "control-flow.treereference-a-treereference-nested-inside-a-some-every-filter-still-participates-in-cycle-detection-correctly.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "items",
+            "items": [
+              {}
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "trees": [
+          {
+            "key": "self-in-filter",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "self-in-filter",
+                "kind": "treeReference"
+              }
+            }
+          }
+        ],
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "collection": "items",
+        "filter": {
+          "key": "self-in-filter",
+          "kind": "treeReference"
+        },
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "domain-error",
+        "message": "circular treeReference detected",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.control-flow.unit.test.ts: treeReference > a treeReference nested inside a conditional's when still participates in cycle detection correctly",
+      "id": "control-flow.treereference-a-treereference-nested-inside-a-conditional-s-when-still-participates-in-cycle-detection-correctly.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "trees": [
+          {
+            "key": "self-in-when",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "self-in-when",
+                "kind": "treeReference"
+              }
+            }
+          }
+        ],
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "cases": [
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 1
+            },
+            "when": {
+              "key": "self-in-when",
+              "kind": "treeReference"
+            }
+          }
+        ],
+        "fallback": {
+          "kind": "numberLiteral",
+          "value": 0
+        },
+        "kind": "conditional"
+      }
+    },
+    {
+      "as": "expression",
+      "evaluator": {
+        "functions": {
+          "table": {
+            "double": [
+              {
+                "args": [
+                  {
+                    "kind": "number",
+                    "value": 21
+                  }
+                ],
+                "result": {
+                  "kind": "number",
+                  "value": 42
+                }
+              },
+              {
+                "args": [
+                  {
+                    "kind": "text",
+                    "value": "x"
+                  }
+                ],
+                "result": {
+                  "domainError": "double requires a single number argument"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 42
+        }
+      },
+      "from": "evaluator.control-flow.unit.test.ts: call > invokes the registered function with the resolved arguments",
+      "id": "control-flow.call-invokes-the-registered-function-with-the-resolved-arguments.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "args": [
+          {
+            "kind": "numberLiteral",
+            "value": 21
+          }
+        ],
+        "fn": "double",
+        "kind": "call"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.control-flow.unit.test.ts: call > is wrong-type for an unregistered function name",
+      "id": "control-flow.call-is-wrong-type-for-an-unregistered-function-name.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "args": [],
+        "fn": "doesNotExist",
+        "kind": "call"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.control-flow.unit.test.ts: call > treats the inherited Object.prototype member 'toString' as an unregistered function name",
+      "id": "control-flow.call-treats-the-inherited-object-prototype-member-tostring-as-an-unregistered-function-name.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "args": [],
+        "fn": "toString",
+        "kind": "call"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.control-flow.unit.test.ts: call > treats the inherited Object.prototype member 'valueOf' as an unregistered function name",
+      "id": "control-flow.call-treats-the-inherited-object-prototype-member-valueof-as-an-unregistered-function-name.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "args": [],
+        "fn": "valueOf",
+        "kind": "call"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.control-flow.unit.test.ts: call > treats the inherited Object.prototype member 'constructor' as an unregistered function name",
+      "id": "control-flow.call-treats-the-inherited-object-prototype-member-constructor-as-an-unregistered-function-name.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "args": [],
+        "fn": "constructor",
+        "kind": "call"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.control-flow.unit.test.ts: call > treats the inherited Object.prototype member 'hasOwnProperty' as an unregistered function name",
+      "id": "control-flow.call-treats-the-inherited-object-prototype-member-hasownproperty-as-an-unregistered-function-name.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "args": [],
+        "fn": "hasOwnProperty",
+        "kind": "call"
+      }
+    },
+    {
+      "as": "expression",
+      "evaluator": {
+        "functions": {
+          "table": {
+            "double": [
+              {
+                "args": [
+                  {
+                    "kind": "number",
+                    "value": 21
+                  }
+                ],
+                "result": {
+                  "kind": "number",
+                  "value": 42
+                }
+              },
+              {
+                "args": [
+                  {
+                    "kind": "text",
+                    "value": "x"
+                  }
+                ],
+                "result": {
+                  "domainError": "double requires a single number argument"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "expect": {
+        "code": "domain-error",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.control-flow.unit.test.ts: call > is domain-error when the registered function reports one",
+      "id": "control-flow.call-is-domain-error-when-the-registered-function-reports-one.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "args": [
+          {
+            "kind": "textLiteral",
+            "value": "x"
+          }
+        ],
+        "fn": "double",
+        "kind": "call"
+      }
+    },
+    {
+      "as": "expression",
+      "evaluator": {
+        "functions": {
+          "table": {
+            "double": [
+              {
+                "args": [
+                  {
+                    "kind": "number",
+                    "value": 21
+                  }
+                ],
+                "result": {
+                  "kind": "number",
+                  "value": 42
+                }
+              },
+              {
+                "args": [
+                  {
+                    "kind": "text",
+                    "value": "x"
+                  }
+                ],
+                "result": {
+                  "domainError": "double requires a single number argument"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.control-flow.unit.test.ts: call > evaluates every argument concurrently, tie-breaking an indeterminate outcome to the first in declared order",
+      "id": "control-flow.call-evaluates-every-argument-concurrently-tie-breaking-an-indeterminate-outcome-to-the-first-in-declared-order.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "args": [
+          {
+            "key": "missing",
+            "kind": "reference"
+          },
+          {
+            "key": "also-missing",
+            "kind": "reference"
+          }
+        ],
+        "fn": "double",
+        "kind": "call"
+      }
+    }
+  ]
+}

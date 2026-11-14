@@ -1,0 +1,223 @@
+{
+  "cases": [
+    {
+      "as": "expression",
+      "evaluator": {
+        "functions": {
+          "table": {
+            "needsPositive": [
+              {
+                "args": [
+                  {
+                    "kind": "number",
+                    "value": -1
+                  }
+                ],
+                "result": {
+                  "domainError": "needsPositive requires a number above zero"
+                }
+              }
+            ],
+            "needsText": [
+              {
+                "args": [
+                  {
+                    "kind": "number",
+                    "value": -1
+                  }
+                ],
+                "result": {
+                  "wrongType": "needsText requires a text argument"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "expect": {
+        "code": "wrong-type",
+        "message": "needsText requires a text argument",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.functions.unit.test.ts: a registered function that returns wrongType > is a wrong-type indeterminate result carrying its message",
+      "id": "functions.a-registered-function-that-returns-wrongtype-is-a-wrong-type-indeterminate-result-carrying-its-message.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "args": [
+          {
+            "kind": "numberLiteral",
+            "value": -1
+          }
+        ],
+        "fn": "needsText",
+        "kind": "call"
+      }
+    },
+    {
+      "as": "expression",
+      "evaluator": {
+        "functions": {
+          "table": {
+            "needsPositive": [
+              {
+                "args": [
+                  {
+                    "kind": "number",
+                    "value": -1
+                  }
+                ],
+                "result": {
+                  "domainError": "needsPositive requires a number above zero"
+                }
+              }
+            ],
+            "needsText": [
+              {
+                "args": [
+                  {
+                    "kind": "number",
+                    "value": -1
+                  }
+                ],
+                "result": {
+                  "wrongType": "needsText requires a text argument"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "expect": {
+        "code": "wrong-type",
+        "message": "needsText requires a text argument",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.functions.unit.test.ts: a registered function that returns wrongType > is the same result from the synchronous evaluator",
+      "id": "functions.a-registered-function-that-returns-wrongtype-is-the-same-result-from-the-synchronous-evaluator.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "args": [
+          {
+            "kind": "numberLiteral",
+            "value": -1
+          }
+        ],
+        "fn": "needsText",
+        "kind": "call"
+      }
+    },
+    {
+      "as": "expression",
+      "evaluator": {
+        "functions": {
+          "table": {
+            "needsPositive": [
+              {
+                "args": [
+                  {
+                    "kind": "number",
+                    "value": -1
+                  }
+                ],
+                "result": {
+                  "domainError": "needsPositive requires a number above zero"
+                }
+              }
+            ],
+            "needsText": [
+              {
+                "args": [
+                  {
+                    "kind": "number",
+                    "value": -1
+                  }
+                ],
+                "result": {
+                  "wrongType": "needsText requires a text argument"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "expect": {
+        "code": "domain-error",
+        "message": "needsPositive requires a number above zero",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.functions.unit.test.ts: a registered function that returns wrongType > stays distinct from a domainError, which is still a domain-error",
+      "id": "functions.a-registered-function-that-returns-wrongtype-stays-distinct-from-a-domainerror-which-is-still-a-domain-error.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "args": [
+          {
+            "kind": "numberLiteral",
+            "value": -1
+          }
+        ],
+        "fn": "needsPositive",
+        "kind": "call"
+      }
+    }
+  ]
+}
