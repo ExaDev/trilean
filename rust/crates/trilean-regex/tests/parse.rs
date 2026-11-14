@@ -1,8 +1,8 @@
 //! What the parser accepts and refuses, beyond the cases the conformance corpus pins.
 
 use trilean_regex::{
-    CharClassNode, CharRange, MAX_NESTING_DEPTH, MAX_STATES, RegexNode, RegexParseError,
-    char_class_matches, compile_pattern, parse_regex, parse_regex_utf16,
+    CharClassNode, CharRange, MAX_NESTING_DEPTH, MAX_PATTERN_UNITS, MAX_STATES, RegexNode,
+    RegexParseError, char_class_matches, compile_pattern, parse_regex, parse_regex_utf16,
 };
 
 fn units(text: &str) -> Vec<u16> {
@@ -247,4 +247,37 @@ fn text_and_code_unit_entry_points_agree() {
     for pattern in ["a(", "[b-a]", "x{2,1}", "\u{1F600}+", "(?:a|b)*c"] {
         assert_eq!(parse_regex(pattern), parse_regex_utf16(&units(pattern)));
     }
+}
+
+#[test]
+fn a_pattern_over_the_length_limit_is_refused_unread_and_one_at_it_is_read() {
+    // `a{0}` takes four code units and no states, so a pattern of them can be as long as the limit allows.
+    let at_limit = "a{0}".repeat(MAX_PATTERN_UNITS / 4);
+    assert_eq!(at_limit.len(), MAX_PATTERN_UNITS);
+    assert!(compile_pattern(&at_limit).is_ok());
+    let one_past = format!("{at_limit}a");
+    let error = refusal(&one_past);
+    assert_eq!(error.index(), 0);
+    assert!(
+        error.pattern_utf16().is_empty(),
+        "the refusal echoes no pattern"
+    );
+    assert!(
+        error
+            .reason()
+            .contains(&format!("{} code units long", MAX_PATTERN_UNITS + 1))
+    );
+    assert!(error.reason().contains(&MAX_PATTERN_UNITS.to_string()));
+}
+
+#[test]
+fn a_flat_pattern_of_many_atoms_is_refused_by_length_before_the_state_limit_is_counted() {
+    let error = refusal(&"a".repeat(MAX_PATTERN_UNITS * 5));
+    assert!(error.reason().contains("code units long"));
+}
+
+#[test]
+fn the_length_check_reads_only_the_length() {
+    assert!(trilean_regex::check_pattern_length(MAX_PATTERN_UNITS).is_ok());
+    assert!(trilean_regex::check_pattern_length(MAX_PATTERN_UNITS + 1).is_err());
 }

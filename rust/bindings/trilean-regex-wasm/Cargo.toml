@@ -16,5 +16,9 @@ js-sys.workspace = true
 trilean-regex.workspace = true
 wasm-bindgen.workspace = true
 
+[features]
+# What only the tests of the binding call. The package is built without it, and `cargo xtask npm trilean-regex --test-hooks` builds the copy the tests load.
+test-hooks = []
+
 [lints]
 workspace = true

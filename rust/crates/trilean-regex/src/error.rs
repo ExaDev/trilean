@@ -21,7 +21,20 @@ impl RegexParseError {
         }
     }
 
-    /// The source pattern, as the code units it was parsed from.
+    /// The error for a pattern longer than `MAX_PATTERN_UNITS`, which is refused without being read or copied: it names the length and the limit, and echoes no pattern.
+    pub(crate) fn too_long(length: usize) -> Self {
+        let reason = format!(
+            "the pattern is {length} code units long, and a pattern may be at most {} code units",
+            crate::parser::MAX_PATTERN_UNITS
+        );
+        Self {
+            pattern: Vec::new(),
+            index: 0,
+            reason: reason.encode_utf16().collect(),
+        }
+    }
+
+    /// The source pattern, as the code units it was parsed from. Empty for a pattern refused for its length.
     pub fn pattern_utf16(&self) -> &[u16] {
         &self.pattern
     }

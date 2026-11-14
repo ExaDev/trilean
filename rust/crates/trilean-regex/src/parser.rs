@@ -13,6 +13,17 @@ use crate::shorthand::{
 /// How deeply groups may nest. A deeper pattern is a parse error rather than a stack overflow, which would be a trap in the wasm build and an abort natively. The parser, the compiler and the destructor of the tree each recurse once per level.
 pub const MAX_NESTING_DEPTH: usize = 128;
 
+/// The longest pattern, in UTF-16 code units, that is read: four code units for each state the automaton may have, since a construct takes at least a unit for each state it adds, and `a{0}` takes four for none. A longer pattern is refused before the parser allocates a tree for it, with a `RegexParseError` that echoes no pattern.
+pub const MAX_PATTERN_UNITS: usize = 4 * MAX_STATES;
+
+/// Refuses a pattern of `length` code units if it is longer than `MAX_PATTERN_UNITS`. A caller that has not yet copied the pattern into Rust asks this first, with the length alone, so nothing proportional to the pattern is allocated for one that is refused.
+pub fn check_pattern_length(length: usize) -> Result<(), RegexParseError> {
+    if length > MAX_PATTERN_UNITS {
+        return Err(RegexParseError::too_long(length));
+    }
+    Ok(())
+}
+
 /// A construct whose meaning here differs from its meaning in an unflagged ECMAScript `RegExp`, found while parsing, so that `compile_ecmascript_subset` can name where it is.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub(crate) struct Hazard {
@@ -670,6 +681,7 @@ fn space_construct(letter: ShorthandClassLetter) -> Option<&'static str> {
 pub(crate) fn parse_with_hazards(
     pattern: &[u16],
 ) -> Result<(RegexNode, Vec<Hazard>), RegexParseError> {
+    check_pattern_length(pattern.len())?;
     let mut parser = Parser::new(pattern);
     let node = parser.parse_alternation()?;
     if !parser.at_end() {
