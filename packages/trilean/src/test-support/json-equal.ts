@@ -1,3 +1,5 @@
+import { decodeNumbers } from "./values";
+
 /**
  * How a corpus expectation compares with what an implementation returned. Numbers are equal when `Object.is` says so (`-0` is not `0`), or within `ulps` units in the last place when a case gives a tolerance; an object key whose value is `undefined` counts as absent, since JSON has no `undefined`; every other value must match structurally.
  */
@@ -43,8 +45,16 @@ function definedKeys(value: Readonly<Record<string, unknown>>): string[] {
 /** Whether `actual` equals `expected` under the rules above. */
 export function jsonEquals(
   actual: unknown,
-  expected: unknown,
+  wanted: unknown,
   ulps = 0,
+): boolean {
+  return equalsDecoded(actual, decodeNumbers(wanted), ulps);
+}
+
+function equalsDecoded(
+  actual: unknown,
+  expected: unknown,
+  ulps: number,
 ): boolean {
   if (typeof expected === "number") {
     return typeof actual === "number" && ulpDistance(actual, expected) <= ulps;
@@ -54,7 +64,7 @@ export function jsonEquals(
       Array.isArray(actual) &&
       actual.length === expected.length &&
       expected.every((item: unknown, position) =>
-        jsonEquals(actual[position], item, ulps),
+        equalsDecoded(actual[position], item, ulps),
       )
     );
   }
@@ -67,7 +77,8 @@ export function jsonEquals(
     return (
       definedKeys(actual).length === entries.length &&
       entries.every(
-        ([key, item]) => key in actual && jsonEquals(actual[key], item, ulps),
+        ([key, item]) =>
+          key in actual && equalsDecoded(actual[key], item, ulps),
       )
     );
   }

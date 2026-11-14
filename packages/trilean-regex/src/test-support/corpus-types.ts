@@ -11,6 +11,8 @@ export const UNEXECUTED_KINDS = [
   "inputs",
   "document",
   "cli",
+  "serialise",
+  "number-format",
   "sql-compile",
   "sql-guard",
   "sql-pattern",
@@ -54,6 +56,8 @@ export interface RegexParseCase extends CaseBase {
 
 export interface RegexMatchCase extends CaseBase {
   readonly kind: "regex-match";
+  /** `trilean`, the default, or `ecmascript` for a pattern the host's own `RegExp` reads, whose answers were recorded from it. */
+  readonly dialect?: "trilean" | "ecmascript";
   readonly pattern: Text;
   readonly inputs: readonly {
     readonly input: Text;

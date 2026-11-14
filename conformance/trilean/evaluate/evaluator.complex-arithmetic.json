@@ -667,7 +667,9 @@
       "expect": {
         "status": "definite",
         "value": {
-          "im": 0,
+          "im": {
+            "$number": "-0"
+          },
           "kind": "complex",
           "re": -3e-323,
           "unit": {}
@@ -1553,7 +1555,9 @@
         "op": "power",
         "right": {
           "kind": "numberLiteral",
-          "value": 0
+          "value": {
+            "$number": "-0"
+          }
         }
       }
     },
@@ -2933,7 +2937,9 @@
         "op": "power",
         "right": {
           "kind": "numberLiteral",
-          "value": 0
+          "value": {
+            "$number": "-0"
+          }
         }
       }
     },
@@ -4313,7 +4319,9 @@
         "op": "power",
         "right": {
           "kind": "numberLiteral",
-          "value": 0
+          "value": {
+            "$number": "-0"
+          }
         }
       }
     },

@@ -191,6 +191,12 @@
         },
         {
           "$ref": "#/$defs/sqlExecute"
+        },
+        {
+          "$ref": "#/$defs/serialise"
+        },
+        {
+          "$ref": "#/$defs/numberFormat"
         }
       ]
     },
@@ -697,6 +703,59 @@
         }
       ]
     },
+    "numberFormat": {
+      "additionalProperties": false,
+      "dependentRequired": {
+        "reason": [
+          "skip"
+        ],
+        "skip": [
+          "reason"
+        ]
+      },
+      "properties": {
+        "expect": {
+          "description": "The text `Number.prototype.toString` gives the value.",
+          "type": "string"
+        },
+        "from": {
+          "$ref": "#/$defs/from"
+        },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "const": "number-format"
+        },
+        "reason": {
+          "$ref": "#/$defs/reason"
+        },
+        "skip": {
+          "$ref": "#/$defs/skip"
+        },
+        "tolerance": {
+          "$ref": "#/$defs/tolerance"
+        },
+        "value": {
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "$ref": "#/$defs/specialNumber"
+            }
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "from",
+        "kind",
+        "value",
+        "expect"
+      ],
+      "type": "object"
+    },
     "reason": {
       "description": "Why one side cannot run the case. Required with skip, and only with skip.",
       "minLength": 1,
@@ -713,6 +772,13 @@
         ]
       },
       "properties": {
+        "dialect": {
+          "description": "The language the pattern is in: trilean, the default, or ecmascript, for a pattern an unflagged ECMAScript RegExp reads, with each result recorded from it.",
+          "enum": [
+            "trilean",
+            "ecmascript"
+          ]
+        },
         "from": {
           "$ref": "#/$defs/from"
         },
@@ -1276,12 +1342,82 @@
       },
       "type": "object"
     },
+    "serialise": {
+      "additionalProperties": false,
+      "dependentRequired": {
+        "reason": [
+          "skip"
+        ],
+        "skip": [
+          "reason"
+        ]
+      },
+      "properties": {
+        "expect": {
+          "description": "The exact text the value serialises to.",
+          "type": "string"
+        },
+        "from": {
+          "$ref": "#/$defs/from"
+        },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "input": {
+          "description": "JSON text, whose order of members is the order the text gives.",
+          "type": "string"
+        },
+        "kind": {
+          "const": "serialise"
+        },
+        "reason": {
+          "$ref": "#/$defs/reason"
+        },
+        "schema": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "skip": {
+          "$ref": "#/$defs/skip"
+        },
+        "tolerance": {
+          "$ref": "#/$defs/tolerance"
+        }
+      },
+      "required": [
+        "id",
+        "from",
+        "kind",
+        "schema",
+        "input",
+        "expect"
+      ],
+      "type": "object"
+    },
     "skip": {
       "description": "Names the implementation that skips the case, for a case one implementation cannot run: ts for a case the TypeScript implementation skips, rust for a case every build of the Rust implementation skips, wherever it runs (native, or wasm under Node, a browser or Workers). Always with a reason.",
       "enum": [
         "ts",
         "rust"
       ]
+    },
+    "specialNumber": {
+      "additionalProperties": false,
+      "description": "A number the canonical JSON form cannot hold, written as an object: a negative zero (a canonical form writes it as 0), an infinity or NaN.",
+      "properties": {
+        "$number": {
+          "enum": [
+            "-0",
+            "Infinity",
+            "-Infinity",
+            "NaN"
+          ]
+        }
+      },
+      "required": [
+        "$number"
+      ],
+      "type": "object"
     },
     "sqlCompile": {
       "additionalProperties": false,

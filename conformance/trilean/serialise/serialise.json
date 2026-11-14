@@ -1,0 +1,308 @@
+{
+  "cases": [
+    {
+      "expect": "{\"kind\":\"not\",\"operand\":{\"kind\":\"exists\",\"operand\":{\"kind\":\"numberLiteral\",\"value\":1}}}",
+      "from": "recorded: trilean src/tree.ts (a PredicateNode written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.predicatenode.1",
+      "input": "{\"operand\":{\"operand\":{\"value\":1,\"kind\":\"numberLiteral\"},\"kind\":\"exists\"},\"kind\":\"not\"}",
+      "kind": "serialise",
+      "schema": "PredicateNodeSchema"
+    },
+    {
+      "expect": "{\"kind\":\"and\",\"left\":{\"kind\":\"exists\",\"operand\":{\"kind\":\"numberLiteral\",\"value\":1}},\"right\":{\"kind\":\"exists\",\"operand\":{\"kind\":\"numberLiteral\",\"value\":1}}}",
+      "from": "recorded: trilean src/tree.ts (a PredicateNode written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.predicatenode.2",
+      "input": "{\"right\":{\"operand\":{\"value\":1,\"kind\":\"numberLiteral\"},\"kind\":\"exists\"},\"left\":{\"operand\":{\"value\":1,\"kind\":\"numberLiteral\"},\"kind\":\"exists\"},\"kind\":\"and\"}",
+      "kind": "serialise",
+      "schema": "PredicateNodeSchema"
+    },
+    {
+      "expect": "{\"kind\":\"or\",\"left\":{\"kind\":\"exists\",\"operand\":{\"kind\":\"numberLiteral\",\"value\":1}},\"right\":{\"kind\":\"exists\",\"operand\":{\"kind\":\"numberLiteral\",\"value\":1}}}",
+      "from": "recorded: trilean src/tree.ts (a PredicateNode written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.predicatenode.3",
+      "input": "{\"right\":{\"operand\":{\"value\":1,\"kind\":\"numberLiteral\"},\"kind\":\"exists\"},\"left\":{\"operand\":{\"value\":1,\"kind\":\"numberLiteral\"},\"kind\":\"exists\"},\"kind\":\"or\"}",
+      "kind": "serialise",
+      "schema": "PredicateNodeSchema"
+    },
+    {
+      "expect": "{\"kind\":\"allOf\",\"operands\":[{\"kind\":\"exists\",\"operand\":{\"kind\":\"numberLiteral\",\"value\":1}}]}",
+      "from": "recorded: trilean src/tree.ts (a PredicateNode written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.predicatenode.4",
+      "input": "{\"operands\":[{\"operand\":{\"value\":1,\"kind\":\"numberLiteral\"},\"kind\":\"exists\"}],\"kind\":\"allOf\"}",
+      "kind": "serialise",
+      "schema": "PredicateNodeSchema"
+    },
+    {
+      "expect": "{\"kind\":\"anyOf\",\"operands\":[]}",
+      "from": "recorded: trilean src/tree.ts (a PredicateNode written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.predicatenode.5",
+      "input": "{\"operands\":[],\"kind\":\"anyOf\"}",
+      "kind": "serialise",
+      "schema": "PredicateNodeSchema"
+    },
+    {
+      "expect": "{\"kind\":\"compare\",\"op\":\"gte\",\"left\":{\"kind\":\"numberLiteral\",\"value\":1},\"right\":{\"kind\":\"numberLiteral\",\"value\":2,\"unit\":{\"kg\":2,\"m\":1,\"s\":-1}}}",
+      "from": "recorded: trilean src/tree.ts (a PredicateNode written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.predicatenode.6",
+      "input": "{\"right\":{\"unit\":{\"kg\":2,\"m\":1,\"s\":-1},\"value\":2,\"kind\":\"numberLiteral\"},\"left\":{\"value\":1,\"kind\":\"numberLiteral\"},\"op\":\"gte\",\"kind\":\"compare\"}",
+      "kind": "serialise",
+      "schema": "PredicateNodeSchema"
+    },
+    {
+      "expect": "{\"kind\":\"textCompare\",\"op\":\"portableMatches\",\"left\":{\"kind\":\"textLiteral\",\"value\":\"a\"},\"right\":{\"kind\":\"textLiteral\",\"value\":\"^a$\"}}",
+      "from": "recorded: trilean src/tree.ts (a PredicateNode written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.predicatenode.7",
+      "input": "{\"right\":{\"value\":\"^a$\",\"kind\":\"textLiteral\"},\"left\":{\"value\":\"a\",\"kind\":\"textLiteral\"},\"op\":\"portableMatches\",\"kind\":\"textCompare\"}",
+      "kind": "serialise",
+      "schema": "PredicateNodeSchema"
+    },
+    {
+      "expect": "{\"kind\":\"memberOf\",\"op\":\"notIn\",\"operand\":{\"kind\":\"numberLiteral\",\"value\":1},\"candidates\":[{\"kind\":\"numberLiteral\",\"value\":1}]}",
+      "from": "recorded: trilean src/tree.ts (a PredicateNode written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.predicatenode.8",
+      "input": "{\"candidates\":[{\"value\":1,\"kind\":\"numberLiteral\"}],\"operand\":{\"value\":1,\"kind\":\"numberLiteral\"},\"op\":\"notIn\",\"kind\":\"memberOf\"}",
+      "kind": "serialise",
+      "schema": "PredicateNodeSchema"
+    },
+    {
+      "expect": "{\"kind\":\"exists\",\"operand\":{\"kind\":\"numberLiteral\",\"value\":1}}",
+      "from": "recorded: trilean src/tree.ts (a PredicateNode written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.predicatenode.9",
+      "input": "{\"operand\":{\"value\":1,\"kind\":\"numberLiteral\"},\"kind\":\"exists\"}",
+      "kind": "serialise",
+      "schema": "PredicateNodeSchema"
+    },
+    {
+      "expect": "{\"kind\":\"some\",\"collection\":{\"alpha\":[2,{\"x\":2,\"y\":1}],\"zeta\":1},\"item\":{\"kind\":\"exists\",\"operand\":{\"kind\":\"numberLiteral\",\"value\":1}},\"filter\":{\"kind\":\"exists\",\"operand\":{\"kind\":\"numberLiteral\",\"value\":1}}}",
+      "from": "recorded: trilean src/tree.ts (a PredicateNode written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.predicatenode.10",
+      "input": "{\"filter\":{\"operand\":{\"value\":1,\"kind\":\"numberLiteral\"},\"kind\":\"exists\"},\"item\":{\"operand\":{\"value\":1,\"kind\":\"numberLiteral\"},\"kind\":\"exists\"},\"collection\":{\"alpha\":[2,{\"x\":2,\"y\":1}],\"zeta\":1},\"kind\":\"some\"}",
+      "kind": "serialise",
+      "schema": "PredicateNodeSchema"
+    },
+    {
+      "expect": "{\"kind\":\"every\",\"collection\":\"items\",\"item\":{\"kind\":\"exists\",\"operand\":{\"kind\":\"numberLiteral\",\"value\":1}}}",
+      "from": "recorded: trilean src/tree.ts (a PredicateNode written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.predicatenode.11",
+      "input": "{\"item\":{\"operand\":{\"value\":1,\"kind\":\"numberLiteral\"},\"kind\":\"exists\"},\"collection\":\"items\",\"kind\":\"every\"}",
+      "kind": "serialise",
+      "schema": "PredicateNodeSchema"
+    },
+    {
+      "expect": "{\"kind\":\"treeReference\",\"key\":\"eligibility-rule\"}",
+      "from": "recorded: trilean src/tree.ts (a PredicateNode written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.predicatenode.12",
+      "input": "{\"key\":\"eligibility-rule\",\"kind\":\"treeReference\"}",
+      "kind": "serialise",
+      "schema": "PredicateNodeSchema"
+    },
+    {
+      "expect": "{\"kind\":\"numberLiteral\",\"value\":1e+21,\"unit\":{\"m\":1,\"s\":-1}}",
+      "from": "recorded: trilean src/tree.ts (a ExpressionNode written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.expressionnode.13",
+      "input": "{\"unit\":{\"m\":1,\"s\":-1},\"value\":1e+21,\"kind\":\"numberLiteral\"}",
+      "kind": "serialise",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": "{\"kind\":\"numberLiteral\",\"value\":0}",
+      "from": "recorded: trilean src/tree.ts (a ExpressionNode written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.expressionnode.14",
+      "input": "{\"value\":0,\"kind\":\"numberLiteral\"}",
+      "kind": "serialise",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": "{\"kind\":\"numberLiteral\",\"value\":1e-7}",
+      "from": "recorded: trilean src/tree.ts (a ExpressionNode written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.expressionnode.15",
+      "input": "{\"value\":1e-7,\"kind\":\"numberLiteral\"}",
+      "kind": "serialise",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": "{\"kind\":\"textLiteral\",\"value\":\"a\"}",
+      "from": "recorded: trilean src/tree.ts (a ExpressionNode written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.expressionnode.16",
+      "input": "{\"value\":\"a\",\"kind\":\"textLiteral\"}",
+      "kind": "serialise",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": "{\"kind\":\"booleanLiteral\",\"value\":false}",
+      "from": "recorded: trilean src/tree.ts (a ExpressionNode written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.expressionnode.17",
+      "input": "{\"value\":false,\"kind\":\"booleanLiteral\"}",
+      "kind": "serialise",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": "{\"kind\":\"instantLiteral\",\"value\":\"2026-08-30T00:00:00Z\"}",
+      "from": "recorded: trilean src/tree.ts (a ExpressionNode written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.expressionnode.18",
+      "input": "{\"value\":\"2026-08-30T00:00:00Z\",\"kind\":\"instantLiteral\"}",
+      "kind": "serialise",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": "{\"kind\":\"durationLiteral\",\"value\":5,\"unit\":\"min\"}",
+      "from": "recorded: trilean src/tree.ts (a ExpressionNode written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.expressionnode.19",
+      "input": "{\"unit\":\"min\",\"value\":5,\"kind\":\"durationLiteral\"}",
+      "kind": "serialise",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": "{\"kind\":\"complexLiteral\",\"re\":1,\"im\":-1,\"unit\":{\"A\":-1,\"V\":1}}",
+      "from": "recorded: trilean src/tree.ts (a ExpressionNode written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.expressionnode.20",
+      "input": "{\"unit\":{\"A\":-1,\"V\":1},\"im\":-1,\"re\":1,\"kind\":\"complexLiteral\"}",
+      "kind": "serialise",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": "{\"kind\":\"complexLiteral\",\"magnitude\":2,\"phase\":0.5}",
+      "from": "recorded: trilean src/tree.ts (a ExpressionNode written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.expressionnode.21",
+      "input": "{\"phase\":0.5,\"magnitude\":2,\"kind\":\"complexLiteral\"}",
+      "kind": "serialise",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": "{\"kind\":\"reference\",\"key\":\"x\",\"unit\":{\"m\":-1,\"s\":1}}",
+      "from": "recorded: trilean src/tree.ts (a ExpressionNode written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.expressionnode.22",
+      "input": "{\"unit\":{\"m\":-1,\"s\":1},\"key\":\"x\",\"kind\":\"reference\"}",
+      "kind": "serialise",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": "{\"kind\":\"arithmetic\",\"op\":\"power\",\"left\":{\"kind\":\"numberLiteral\",\"value\":1},\"right\":{\"kind\":\"numberLiteral\",\"value\":1}}",
+      "from": "recorded: trilean src/tree.ts (a ExpressionNode written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.expressionnode.23",
+      "input": "{\"right\":{\"value\":1,\"kind\":\"numberLiteral\"},\"left\":{\"value\":1,\"kind\":\"numberLiteral\"},\"op\":\"power\",\"kind\":\"arithmetic\"}",
+      "kind": "serialise",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": "{\"kind\":\"negate\",\"operand\":{\"kind\":\"numberLiteral\",\"value\":1}}",
+      "from": "recorded: trilean src/tree.ts (a ExpressionNode written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.expressionnode.24",
+      "input": "{\"operand\":{\"value\":1,\"kind\":\"numberLiteral\"},\"kind\":\"negate\"}",
+      "kind": "serialise",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": "{\"kind\":\"call\",\"fn\":\"squareRoot\",\"args\":[{\"kind\":\"numberLiteral\",\"value\":1},{\"kind\":\"textLiteral\",\"value\":\"a\"}]}",
+      "from": "recorded: trilean src/tree.ts (a ExpressionNode written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.expressionnode.25",
+      "input": "{\"args\":[{\"value\":1,\"kind\":\"numberLiteral\"},{\"value\":\"a\",\"kind\":\"textLiteral\"}],\"fn\":\"squareRoot\",\"kind\":\"call\"}",
+      "kind": "serialise",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": "{\"kind\":\"lookup\",\"table\":{\"a\":{\"b\":2,\"d\":4},\"z\":1},\"keys\":[{\"kind\":\"numberLiteral\",\"value\":1}]}",
+      "from": "recorded: trilean src/tree.ts (a ExpressionNode written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.expressionnode.26",
+      "input": "{\"keys\":[{\"value\":1,\"kind\":\"numberLiteral\"}],\"table\":{\"a\":{\"b\":2,\"d\":4},\"z\":1},\"kind\":\"lookup\"}",
+      "kind": "serialise",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": "{\"kind\":\"conditional\",\"hitPolicy\":\"unique\",\"cases\":[{\"when\":{\"kind\":\"exists\",\"operand\":{\"kind\":\"numberLiteral\",\"value\":1}},\"then\":{\"kind\":\"numberLiteral\",\"value\":1}}],\"fallback\":{\"kind\":\"numberLiteral\",\"value\":1}}",
+      "from": "recorded: trilean src/tree.ts (a ExpressionNode written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.expressionnode.27",
+      "input": "{\"fallback\":{\"value\":1,\"kind\":\"numberLiteral\"},\"cases\":[{\"then\":{\"value\":1,\"kind\":\"numberLiteral\"},\"when\":{\"operand\":{\"value\":1,\"kind\":\"numberLiteral\"},\"kind\":\"exists\"}}],\"hitPolicy\":\"unique\",\"kind\":\"conditional\"}",
+      "kind": "serialise",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": "{\"kind\":\"fold\",\"collection\":\"items\",\"filter\":{\"kind\":\"exists\",\"operand\":{\"kind\":\"numberLiteral\",\"value\":1}},\"combiner\":{\"mode\":\"reduce\",\"initial\":{\"kind\":\"numberLiteral\",\"value\":1},\"combine\":{\"kind\":\"accumulator\"}}}",
+      "from": "recorded: trilean src/tree.ts (a ExpressionNode written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.expressionnode.28",
+      "input": "{\"combiner\":{\"combine\":{\"kind\":\"accumulator\"},\"initial\":{\"value\":1,\"kind\":\"numberLiteral\"},\"mode\":\"reduce\"},\"filter\":{\"operand\":{\"value\":1,\"kind\":\"numberLiteral\"},\"kind\":\"exists\"},\"collection\":\"items\",\"kind\":\"fold\"}",
+      "kind": "serialise",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": "{\"kind\":\"fold\",\"collection\":\"items\",\"combiner\":{\"mode\":\"max\",\"item\":{\"kind\":\"numberLiteral\",\"value\":1}}}",
+      "from": "recorded: trilean src/tree.ts (a ExpressionNode written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.expressionnode.29",
+      "input": "{\"combiner\":{\"item\":{\"value\":1,\"kind\":\"numberLiteral\"},\"mode\":\"max\"},\"collection\":\"items\",\"kind\":\"fold\"}",
+      "kind": "serialise",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": "{\"kind\":\"accumulator\"}",
+      "from": "recorded: trilean src/tree.ts (a ExpressionNode written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.expressionnode.30",
+      "input": "{\"kind\":\"accumulator\"}",
+      "kind": "serialise",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": "{\"kind\":\"delegate\",\"system\":\"symbolic-math\",\"payload\":{\"m\":\"x\",\"a\":null,\"z\":[{\"c\":3},{\"a\":2,\"b\":1}]}}",
+      "from": "recorded: trilean src/tree.ts (a ExpressionNode written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.expressionnode.31",
+      "input": "{\"payload\":{\"m\":\"x\",\"a\":null,\"z\":[{\"c\":3},{\"a\":2,\"b\":1}]},\"system\":\"symbolic-math\",\"kind\":\"delegate\"}",
+      "kind": "serialise",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": "{\"kind\":\"treeReference\",\"key\":\"pricing-formula\"}",
+      "from": "recorded: trilean src/tree.ts (a ExpressionNode written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.expressionnode.32",
+      "input": "{\"key\":\"pricing-formula\",\"kind\":\"treeReference\"}",
+      "kind": "serialise",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": "{\"kind\":\"number\",\"value\":3,\"unit\":{\"m\":1,\"s\":-1}}",
+      "from": "recorded: trilean src/tree.ts (a ComputedValue written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.computedvalue.33",
+      "input": "{\"unit\":{\"m\":1,\"s\":-1},\"value\":3,\"kind\":\"number\"}",
+      "kind": "serialise",
+      "schema": "ComputedValueSchema"
+    },
+    {
+      "expect": "{\"kind\":\"text\",\"value\":\"a\"}",
+      "from": "recorded: trilean src/tree.ts (a ComputedValue written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.computedvalue.34",
+      "input": "{\"value\":\"a\",\"kind\":\"text\"}",
+      "kind": "serialise",
+      "schema": "ComputedValueSchema"
+    },
+    {
+      "expect": "{\"kind\":\"boolean\",\"value\":true}",
+      "from": "recorded: trilean src/tree.ts (a ComputedValue written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.computedvalue.35",
+      "input": "{\"value\":true,\"kind\":\"boolean\"}",
+      "kind": "serialise",
+      "schema": "ComputedValueSchema"
+    },
+    {
+      "expect": "{\"kind\":\"instant\",\"value\":\"2026-01-01T00:00:00.000Z\"}",
+      "from": "recorded: trilean src/tree.ts (a ComputedValue written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.computedvalue.36",
+      "input": "{\"value\":\"2026-01-01T00:00:00.000Z\",\"kind\":\"instant\"}",
+      "kind": "serialise",
+      "schema": "ComputedValueSchema"
+    },
+    {
+      "expect": "{\"kind\":\"duration\",\"value\":5,\"unit\":\"min\"}",
+      "from": "recorded: trilean src/tree.ts (a ComputedValue written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.computedvalue.37",
+      "input": "{\"unit\":\"min\",\"value\":5,\"kind\":\"duration\"}",
+      "kind": "serialise",
+      "schema": "ComputedValueSchema"
+    },
+    {
+      "expect": "{\"kind\":\"complex\",\"re\":3,\"im\":4,\"unit\":{\"A\":-1,\"V\":1}}",
+      "from": "recorded: trilean src/tree.ts (a ComputedValue written in reverse member order, parsed and serialised again, byte for byte)",
+      "id": "serialise.computedvalue.38",
+      "input": "{\"unit\":{\"A\":-1,\"V\":1},\"im\":4,\"re\":3,\"kind\":\"complex\"}",
+      "kind": "serialise",
+      "schema": "ComputedValueSchema"
+    }
+  ]
+}

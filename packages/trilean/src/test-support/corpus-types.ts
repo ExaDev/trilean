@@ -157,6 +157,8 @@ export const EXECUTED_KINDS = [
   "inputs",
   "document",
   "cli",
+  "serialise",
+  "number-format",
 ] as const;
 
 export interface BuildCase extends CaseBase {
@@ -164,6 +166,19 @@ export interface BuildCase extends CaseBase {
   readonly builder: string;
   readonly args: readonly Json[];
   readonly expect: Json;
+}
+
+export interface SerialiseCase extends CaseBase {
+  readonly kind: "serialise";
+  readonly schema: string;
+  readonly input: string;
+  readonly expect: string;
+}
+
+export interface NumberFormatCase extends CaseBase {
+  readonly kind: "number-format";
+  readonly value: Json;
+  readonly expect: string;
 }
 
 export interface InputsCase extends CaseBase {
@@ -218,6 +233,8 @@ export type CorpusCase =
   | BuildCase
   | InputsCase
   | DocumentCase
+  | SerialiseCase
+  | NumberFormatCase
   | RegexParseCase
   | OtherCase;
 

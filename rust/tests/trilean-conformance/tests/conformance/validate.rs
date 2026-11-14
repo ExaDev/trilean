@@ -309,8 +309,15 @@ fn check_case(value: &Value, at: &str) -> Check<String> {
                 value,
                 at,
                 &[COMMON_KEYS.as_slice(), &["pattern", "inputs"]].concat(),
-                &OPTIONAL_COMMON_KEYS,
+                &[OPTIONAL_COMMON_KEYS.as_slice(), &["dialect"]].concat(),
             )?;
+            if let Some(dialect) = map.get("dialect")
+                && !matches!(dialect.as_str(), Some("trilean" | "ecmascript"))
+            {
+                return Err(format!(
+                    "{at}: \"dialect\" must be \"trilean\" or \"ecmascript\""
+                ));
+            }
             decode_text(&map["pattern"], at)?;
             check_regex_match_inputs(&map["inputs"], at)?;
         }

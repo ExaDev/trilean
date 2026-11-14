@@ -13,7 +13,7 @@ import type {
   ResolverData,
 } from "./corpus-types";
 import { jsonEquals } from "./json-equal";
-import { toComputedValue } from "./values";
+import { decodeNumbers, toComputedValue } from "./values";
 
 /** One resolver call as the evaluator made it. */
 export interface RecordedCall {
@@ -136,7 +136,7 @@ export function buildResolvers(data: ResolverData): ResolverSet {
         matchesContext(item.context, context),
     );
 
-    return entry === undefined ? [] : [...entry.items];
+    return entry === undefined ? [] : entry.items.map(decodeNumbers);
   };
   const delegate = (
     system: string,
@@ -157,7 +157,7 @@ export function buildResolvers(data: ResolverData): ResolverSet {
     }
 
     return entry.result.found
-      ? { found: true, node: entry.result.node }
+      ? { found: true, node: decodeNumbers(entry.result.node) }
       : entry.result.notYetKnown === true
         ? { found: false, notYetKnown: true }
         : { found: false };

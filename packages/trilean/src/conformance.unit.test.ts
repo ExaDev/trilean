@@ -16,6 +16,10 @@ import {
 import { runBuildCase } from "./test-support/run-build";
 import { runCallCase } from "./test-support/run-call";
 import { runDocumentCase, runInputsCase } from "./test-support/run-document";
+import {
+  runNumberFormatCase,
+  runSerialiseCase,
+} from "./test-support/run-serialise";
 import { runEvaluateCase } from "./test-support/run-evaluate";
 import { runValidateCase } from "./test-support/run-validate";
 import { readJson } from "./test-support/read-json";
@@ -254,6 +258,10 @@ for (const { name, file } of corpus) {
             runValidateCase(testCase);
           } else if (testCase.kind === "evaluate") {
             await runEvaluateCase(testCase);
+          } else if (testCase.kind === "serialise") {
+            runSerialiseCase(testCase);
+          } else if (testCase.kind === "number-format") {
+            runNumberFormatCase(testCase);
           } else if (testCase.kind === "inputs") {
             runInputsCase(testCase);
           } else if (testCase.kind === "document") {

@@ -164,6 +164,18 @@ function runParseCase(testCase: RegexParseCase): void {
 
 function runMatchCase(testCase: RegexMatchCase): void {
   const pattern = textToString(testCase.pattern);
+  if (testCase.dialect === "ecmascript") {
+    // The pattern is in the language of the host's own RegExp, which is what the recorded answers came from, so there is no second engine here to ask.
+    const expression = new RegExp(pattern);
+    for (const { input: text, matches } of testCase.inputs) {
+      expect(
+        expression.test(textToString(text)),
+        `RegExp, input code units ${JSON.stringify(textToCodeUnits(text))}`,
+      ).toBe(matches);
+    }
+
+    return;
+  }
   const compiled = compilePattern(pattern);
   for (const { input: text, matches } of testCase.inputs) {
     const input = textToString(text);
