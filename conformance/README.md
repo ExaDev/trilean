@@ -23,7 +23,7 @@ Every loader applies this one rule, and each runs it over `fixtures/loader-selec
 - A name that starts with a dot is ignored, at any depth.
 - A directory called `fixtures`, `schema` or `runner` is skipped, at any depth, directly under the root included. It holds data cases refer to or the runners themselves, never cases.
 - A name is lower-case ASCII letters, digits, dots, hyphens and underscores, and starts with a letter or digit, so every loader orders names the same way. The root's own files are the exception. A name that is not is a failure.
-- A corpus file is a `.json` file at `<package>/<area>/<name>.json`. The area names the case kind it holds, and a file takes its name from the test file it was extracted from (`parse/parser.json` from `parser.unit.test.ts`).
+- A corpus file is a `.json` file at `<package>/<area>/<name>.json`. The area names the case kind it holds (or, for the regex cases in another dialect, the dialect), and a file takes its name from the test file it was extracted from (`parse/parser.json` from `parser.unit.test.ts`).
 - The root holds only `README.md`, `case.schema.json`, `manifest.json` and `manifest.schema.json` as files.
 - Files and problems are listed in UTF-16 code unit order, directory by directory.
 - Anything else, a stray file, a file of another type, a file or directory at another depth, is a failure in every loader, never ignored by one.
@@ -111,7 +111,7 @@ Where a case compares a result with an expectation, numbers are equal when they 
 { "id": "...", "from": "...", "kind": "call", "function": "round", "args": [ { "kind": "number", "value": 2.5 } ], "expect": { "kind": "number", "value": 3 } }
 ```
 
-`function` is the name of a built-in function and `args` its arguments, as computed values. `expect` is the computed value the function returns, `{ "domainError": true }` for a result that reports an argument outside the function's domain, or `{ "wrongType": true }` for one that reports an argument it cannot accept; either failure may give `messageIncludes`, fragments the failure's message contains in order. A computed value is compared by the rules above, so `-0` is not `0`. A number JSON cannot write is `{ "$number": "Infinity" }`, `"-Infinity"` or `"NaN"`, which the TypeScript runner reads as that number in an argument and a native implementation, which takes its values from JSON, cannot be given: a case that has one carries `skip: "rust"`.
+`function` is the name of a built-in function and `args` its arguments, as computed values. `expect` is the computed value the function returns, `{ "domainError": true }` for a result that reports an argument outside the function's domain, or `{ "wrongType": true }` for one that reports an argument it cannot accept; either failure may give `messageIncludes`, fragments the failure's message contains in order. A computed value is compared by the rules above, so `-0` is not `0`. A number the canonical form cannot hold is written `{ "$number": "-0" }`, `"Infinity"`, `"-Infinity"` or `"NaN"` wherever a case has a number or a value (arguments, trees, contexts, resolver answers and expectations): a negative zero because the canonical form writes it as `0`, and the others because JSON has no such number. A native implementation, which takes its values from JSON, can be given a negative zero but not the others, so a case that has an infinity or a NaN carries `skip: "rust"`.
 
 `evaluate`:
 
@@ -124,6 +124,24 @@ Where a case compares a result with an expectation, numbers are equal when they 
 The resolvers are data. In `resolvers`, `values`, `lookups`, `collections`, `delegates` and `trees` list the answers; the first entry whose key (`key`, `table` with `keys`, `collection`, `system` with `payload`) equals the call, and whose `context` equals the context of the call (an omitted `context`, or `"*"`, matches any), gives the answer. A call that no entry matches gets `default`, `{ "found": false }` when absent, and an unmatched collection is empty. `delegates` or `trees` absent means that resolver is not supplied. `fromContext: true` reads a string key from the context object instead of `values`, taking a boolean, a number or a string as a value without a unit. A resolution is `{ "found": true, "value": <computed value> }`, `{ "found": false }`, `{ "found": false, "notYetKnown": true }` or `{ "throws": "message" }`, and in the asynchronous evaluator any of them takes `settlesAfter` microtask turns to settle. `expectCalls` lists the resolver calls the evaluation makes, in order, each with the key, table, collection or system it names where it gives one.
 
 `evaluator` sets what the evaluator is built with: `functions` (`builtin` for the package's built-in functions, and `table`, per function name the argument lists it answers and the result, a computed value or a failure `{ "domainError": ... }` or `{ "wrongType": ... }`), `maxNodes` and `maxNestingDepth`. `modes` lists the evaluators the case runs under: `async`, `sync` and, for a predicate, `compiled`; omitted, it is every one that applies, so a result that differs between them is a defect of the implementation. A case whose resolvers settle later (`settlesAfter`) lists `async` only.
+
+`serialise`:
+
+```json
+{ "id": "...", "from": "...", "kind": "serialise", "schema": "PredicateNodeSchema", "input": "{\"operand\":{...},\"kind\":\"not\"}", "expect": "{\"kind\":\"not\",\"operand\":{...}}" }
+```
+
+`input` is JSON text, parsed with the named schema, and `expect` is the exact text the parsed value serialises to with no insertion of white space: the case pins the order of the fields (`kind` first, then as the type declares them) and the order of the members of a unit and of an opaque payload, which a JSON object in a corpus file cannot, because the canonical form sorts its keys. Both are strings for that reason.
+
+`number-format`:
+
+```json
+{ "id": "...", "from": "...", "kind": "number-format", "value": 1e21, "expect": "1e+21" }
+```
+
+`expect` is the text `Number.prototype.toString` gives `value`, the formatter the native crate makes public, at the boundaries between its notations. A negative zero is `{ "$number": "-0" }` and formats as `0`.
+
+`regex-match` takes an optional `dialect`: `trilean`, the default, or `ecmascript`, for a pattern in the file `trilean-regex/ecmascript/derived-patterns.json`, which the derived pattern builders of the trilean package produce and an unflagged ECMAScript `RegExp` reads. Each `matches` there is recorded from `new RegExp(pattern).test(input)`, and a generator the trilean package commits writes the file and its tests regenerate it and compare.
 
 ## Adding a case
 

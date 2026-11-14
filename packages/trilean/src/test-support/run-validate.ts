@@ -4,6 +4,7 @@ import * as evaluation from "../evaluation";
 import * as tree from "../tree";
 import type { ValidateCase } from "./corpus-types";
 import { jsonEquals } from "./json-equal";
+import { decodeNumbers } from "./values";
 
 interface Issue {
   readonly path: readonly PropertyKey[];
@@ -43,7 +44,7 @@ export function runValidateCase(testCase: ValidateCase): void {
   if (schema === undefined) {
     throw new Error(`no schema is exported under the name ${testCase.schema}`);
   }
-  const result = schema.safeParse(testCase.input);
+  const result = schema.safeParse(decodeNumbers(testCase.input));
   const wanted = testCase.expect;
   expect(
     result.success,

@@ -22,6 +22,7 @@ import { ExpressionNodeSchema, PredicateNodeSchema } from "../tree";
 import type { ExpressionNode, PredicateNode } from "../tree";
 import type { BuildCase, Json } from "./corpus-types";
 import { jsonEquals } from "./json-equal";
+import { decodeNumbers } from "./values";
 
 /** What one argument of a builder is: a corpus JSON value that must be a predicate tree, an expression tree, a collection reference, or a string. `null` stands for an argument left out. */
 interface Arguments {
@@ -115,7 +116,9 @@ export function runBuildCase(testCase: BuildCase): void {
   if (builder === undefined) {
     throw new Error(`no builder is known by the name ${testCase.builder}`);
   }
-  const built = builder(argumentsOf(testCase.args));
+  const built = builder(
+    argumentsOf(testCase.args.map((arg) => decodeNumbers(arg))),
+  );
   expect(
     jsonEquals(built, testCase.expect, testCase.tolerance?.ulps ?? 0),
     `${testCase.builder} built ${JSON.stringify(built)}`,

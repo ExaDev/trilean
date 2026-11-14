@@ -9,6 +9,7 @@ import { ExpressionNodeSchema, PredicateNodeSchema } from "../tree";
 import type { EvaluateCase, Mode } from "./corpus-types";
 import { jsonEquals } from "./json-equal";
 import { buildResolvers } from "./resolver-data";
+import { decodeNumbers } from "./values";
 import type { RecordedCall } from "./resolver-data";
 
 /** The modes a case runs in: those it names, else every mode that applies (the compiled predicate exists for predicates only). */
@@ -177,13 +178,13 @@ function checkThrown(
 export async function runEvaluateCase(testCase: EvaluateCase): Promise<void> {
   const predicateTree =
     testCase.as === "predicate"
-      ? PredicateNodeSchema.parse(testCase.tree)
+      ? PredicateNodeSchema.parse(decodeNumbers(testCase.tree))
       : undefined;
   const expressionTree =
     testCase.as === "expression"
-      ? ExpressionNodeSchema.parse(testCase.tree)
+      ? ExpressionNodeSchema.parse(decodeNumbers(testCase.tree))
       : undefined;
-  const context = testCase.context ?? null;
+  const context = decodeNumbers(testCase.context ?? null);
   const runMode = async (mode: Mode): Promise<void> => {
     const label = `${testCase.id} [${mode}]`;
     const resolvers = buildResolvers(testCase.resolvers);

@@ -1,5 +1,9 @@
 {
   "files": {
+    "trilean-regex/ecmascript/derived-patterns.json": {
+      "cases": 72,
+      "skip": []
+    },
     "trilean-regex/match/matcher.json": {
       "cases": 48,
       "skip": []
@@ -174,6 +178,14 @@
         "inputs.parseinputs-refuses-a-plain-number-that-is-not-finite.2",
         "inputs.parseinputs-refuses-the-value-of-a-complete-computed-value-that-is-not-finite.1"
       ]
+    },
+    "trilean/number-format/number-format.json": {
+      "cases": 37,
+      "skip": []
+    },
+    "trilean/serialise/serialise.json": {
+      "cases": 38,
+      "skip": []
     },
     "trilean/validate/computed-value.json": {
       "cases": 4,

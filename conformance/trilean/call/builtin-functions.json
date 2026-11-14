@@ -1398,7 +1398,9 @@
     {
       "args": [
         {
-          "im": 0,
+          "im": {
+            "$number": "-0"
+          },
           "kind": "complex",
           "re": -2
         }
@@ -1466,7 +1468,9 @@
     {
       "args": [
         {
-          "im": 0,
+          "im": {
+            "$number": "-0"
+          },
           "kind": "complex",
           "re": 0
         }
@@ -1485,7 +1489,9 @@
         {
           "im": 0,
           "kind": "complex",
-          "re": 0
+          "re": {
+            "$number": "-0"
+          }
         }
       ],
       "expect": {
@@ -1500,9 +1506,13 @@
     {
       "args": [
         {
-          "im": 0,
+          "im": {
+            "$number": "-0"
+          },
           "kind": "complex",
-          "re": 0
+          "re": {
+            "$number": "-0"
+          }
         }
       ],
       "expect": {
@@ -1517,7 +1527,9 @@
     {
       "args": [
         {
-          "im": 0,
+          "im": {
+            "$number": "-0"
+          },
           "kind": "complex",
           "re": 2
         }
@@ -1811,7 +1823,9 @@
     {
       "args": [
         {
-          "im": 0,
+          "im": {
+            "$number": "-0"
+          },
           "kind": "complex",
           "re": -4
         }
@@ -2218,7 +2232,9 @@
     {
       "args": [
         {
-          "im": 0,
+          "im": {
+            "$number": "-0"
+          },
           "kind": "complex",
           "re": -1
         }
@@ -3342,7 +3358,9 @@
         },
         {
           "kind": "number",
-          "value": 0
+          "value": {
+            "$number": "-0"
+          }
         }
       ],
       "expect": {
@@ -3358,7 +3376,9 @@
       "args": [
         {
           "kind": "number",
-          "value": 0
+          "value": {
+            "$number": "-0"
+          }
         },
         {
           "kind": "number",
@@ -3378,11 +3398,15 @@
       "args": [
         {
           "kind": "number",
-          "value": 0
+          "value": {
+            "$number": "-0"
+          }
         },
         {
           "kind": "number",
-          "value": 0
+          "value": {
+            "$number": "-0"
+          }
         }
       ],
       "expect": {

@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "expect": "Infinity",
+      "from": "x.unit.test.ts: a fixture",
+      "id": "fixture.1",
+      "kind": "number-format",
+      "value": {
+        "$number": "Infinity"
+      }
+    }
+  ]
+}

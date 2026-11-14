@@ -1,7 +1,8 @@
 import type { ComputedValue } from "../computed-value";
 import type { Json } from "./corpus-types";
 
-const NON_FINITE: Readonly<Record<string, number>> = {
+const NAMED_NUMBERS: Readonly<Record<string, number>> = {
+  "-0": -0,
   Infinity: Number.POSITIVE_INFINITY,
   "-Infinity": Number.NEGATIVE_INFINITY,
   NaN: Number.NaN,
@@ -11,7 +12,9 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
-/** The value with every `{ "$number": "Infinity" | "-Infinity" | "NaN" }` replaced by the number it names, which is how a corpus file holds a number JSON cannot write. */
+/** The value with every `{ "$number": "-0" | "Infinity" | "-Infinity" | "NaN" }` replaced by the number it names, which is how a corpus file holds a number the canonical JSON form cannot (a negative zero is written as `0` there) or JSON cannot write. */
+export function decodeNumbers(value: Json): Json;
+export function decodeNumbers(value: unknown): unknown;
 export function decodeNumbers(value: unknown): unknown {
   if (Array.isArray(value)) {
     return value.map(decodeNumbers);
@@ -21,10 +24,10 @@ export function decodeNumbers(value: unknown): unknown {
   }
   const named = value.$number;
   if (typeof named === "string" && Object.keys(value).length === 1) {
-    const decoded = NON_FINITE[named];
+    const decoded = NAMED_NUMBERS[named];
     if (decoded === undefined) {
       throw new Error(
-        `$number names ${named}, which is not a non-finite number`,
+        `$number names ${named}, which is not a number a corpus file names`,
       );
     }
 
