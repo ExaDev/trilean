@@ -147,6 +147,26 @@ jobs:
           task: test-workers
           command: pnpm test:workers $TURBO_FLAGS
 
+  # The corpus against the packages built from Rust, as a consumer receives them: each package is packed to the tarball npm would publish, installed, and the corpus run in Node, in headless Chromium through Playwright and in workerd through Miniflare, each through the runtime's own way of loading the module. The runners are conformance/runner/*.mjs. Playwright's browser is pinned by the version of playwright in the lock file.
+  wasm-conformance:
+    name: Wasm conformance
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/setup-workspace
+        with:
+          task: wasm-conformance
+          command: |
+            pnpm --filter trilean-regex build
+            pnpm --filter trilean-regex pack --pack-destination "$RUNNER_TEMP/pack"
+            pnpm exec playwright install --with-deps chromium
+            for runtime in node chromium workerd; do
+              node conformance/runner/$runtime.mjs "$RUNNER_TEMP"/pack/trilean-regex-*.tgz
+            done
+
   # The Rust workspace under rust/ is built and tested by cargo, not turbo, so these jobs sit beside the turbo-driven ones and need no pnpm install. The toolchain is whatever rust/rust-toolchain.toml pins, so the file stays the one place that names a version, and every cargo command runs against the committed Cargo.lock. The commands live in scripts/rust-checks.sh so the pre-push hook runs the same ones.
   rust:
     name: Rust
@@ -179,6 +199,9 @@ jobs:
       - name: Check the dependency allowlist
         run: sh scripts/rust.sh deny
       # cargo-deny cannot fail on an allowed crate nothing uses, so the allowlist is compared with the graph cargo-deny itself reports, separately.
+      # cargo-deny cannot hold a `wrappers` rule beside an allowlist in one file, so which crates may use the libraries that bind to a host is a second pass over the same graph.
+      - name: Check which crates may use the host bindings
+        run: sh scripts/rust.sh deny-boundaries
       - name: Check the allowlist lists exactly the dependency graph
         run: python3 -I scripts/check-deny-allowlist.py
       - name: Test that check against a platform-gated crate
@@ -200,6 +223,7 @@ jobs:
         test-integration,
         test-smoke,
         test-workers,
+        wasm-conformance,
         rust,
         cargo-deny,
       ]
@@ -247,6 +271,8 @@ jobs:
           ref: main
           fetch-depth: 0
           token: ${{ steps.app-token.outputs.token }}
+      # Each package built from Rust is built by the xtask crate, which the package's build script runs through scripts/rust.sh, so the toolchain, the wasm target and wasm-bindgen are installed before anything builds, from the same action CI uses.
+      - uses: ./.github/actions/setup-rust-wasm
       - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v7
         with:
@@ -350,6 +376,7 @@ jobs:
         with:
           # This leg's own tag, not main: a queued release run could have pushed further commits and tags to main between this run's release job finishing and this job starting, and the tag points at the exact release commit whose packages/<name> is the released state.
           ref: ${{ matrix.tag }}
+      - uses: ./.github/actions/setup-rust-wasm
       - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v7
         with:
@@ -393,6 +420,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           ref: ${{ matrix.tag }} # this leg's own release commit the orchestrator tagged, not whatever main has moved on to by now
+      - uses: ./.github/actions/setup-rust-wasm
       - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v7
         with:
@@ -433,6 +461,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           ref: ${{ matrix.tag }} # this leg's own release commit the orchestrator tagged, not whatever main has moved on to by now
+      - uses: ./.github/actions/setup-rust-wasm
       - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v7
         with:
