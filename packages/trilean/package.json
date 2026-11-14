@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "trilean-regex": "1.0.17",
-    "zod": "^4.6.5"
+    "zod": "^4.6.6"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
