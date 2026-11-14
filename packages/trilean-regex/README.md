@@ -2,17 +2,17 @@
 
 [![GitHub](https://img.shields.io/badge/GitHub-181717?logo=github&logoColor=white)](https://github.com/ExaDev/trilean) [![npm](https://img.shields.io/badge/npm-CB3837?logo=npm&logoColor=white)](https://www.npmjs.com/package/trilean-regex) [![Release](https://img.shields.io/github/v/release/ExaDev/trilean?filter=trilean-regex@*&label=release)](https://github.com/ExaDev/trilean/releases?q=trilean-regex%40) [![CI](https://img.shields.io/github/actions/workflow/status/ExaDev/trilean/ci.yml?branch=main)](https://github.com/ExaDev/trilean/actions)
 
-A portable regular-expression grammar -- a true regular language, with its own parser and a Thompson-construction reference matcher -- so a pattern means the same thing wherever it runs: in process here, and pushed down to a database's own engine by [`trilean-sql`](../trilean-sql).
+A portable regular-expression grammar (a true regular language) with its own parser and a Thompson-construction reference matcher, so a pattern means the same thing wherever it runs: in process here, and pushed down to a database's own engine by [`trilean-sql`](../trilean-sql).
 
 ## Why a new grammar
 
-ECMAScript's `RegExp` is not a regular language. Backreferences and lookaround make it strictly more expressive than a finite automaton can recognise, and its backtracking implementation can take exponential time on certain inputs (the well-known "catastrophic backtracking" failure mode). Worse for portability: every SQL engine's own regex support is a *different* language again -- PostgreSQL's POSIX ARE is close to ECMAScript but not identical, and SQLite/D1 have no built-in regex engine at all.
+ECMAScript's `RegExp` is not a regular language. Backreferences and lookaround make it strictly more expressive than a finite automaton can recognise, and its backtracking implementation can take exponential time on certain inputs (the well-known "catastrophic backtracking" failure mode). Worse for portability: every SQL engine's own regex support is a *different* language again, PostgreSQL's POSIX ARE is close to ECMAScript but not identical, and SQLite/D1 have no built-in regex engine at all.
 
-A pattern written in this package's grammar is different on both counts. It is restricted to constructs a finite automaton can express, so it always matches in linear time with no backtracking risk, and its reference matcher is guaranteed to agree with itself regardless of input. And because the grammar is deliberately small, a SQL dialect compiler can translate it structurally instead of trying to detect which subset of an open-ended ECMAScript pattern happens to be "safe" for that dialect -- see `trilean-sql`'s `portableMatches`/`portableNotMatches` compilers, which do exactly this for PostgreSQL and SQLite/D1.
+A pattern written in this package's grammar is different on both counts. It is restricted to constructs a finite automaton can express, so it always matches in linear time with no backtracking risk, and its reference matcher is guaranteed to agree with itself regardless of input. And because the grammar is deliberately small, a SQL dialect compiler can translate it structurally instead of trying to detect which subset of an open-ended ECMAScript pattern happens to be "safe" for that dialect, see `trilean-sql`'s `portableMatches`/`portableNotMatches` compilers, which do exactly this for PostgreSQL and SQLite/D1.
 
 ## Grammar
 
-Patterns are written with ordinary regex-like syntax so nothing new has to be learned, but only the constructs below are legal -- anything else is a parse error naming exactly where parsing failed, never a fuzzy runtime failure.
+Patterns are written with ordinary regex-like syntax so nothing new has to be learned, but only the constructs below are legal, anything else is a parse error naming exactly where parsing failed, never a fuzzy runtime failure.
 
 | Construct | Meaning |
 |---|---|
@@ -41,10 +41,10 @@ Patterns are written with ordinary regex-like syntax so nothing new has to be le
 Everything else the grammar deliberately excludes:
 
 - **No capturing groups.** `(a)` is a parse error directing the author to `(?:a)` instead. There is nothing to capture: this grammar only ever answers whether a pattern matches, never what matched, so a capturing group would be pure syntax with no corresponding capability.
-- **No backreferences** (`\1`), because they make the language context-sensitive rather than regular -- no finite automaton can recognise `(a+)\1`.
+- **No backreferences** (`\1`), because they make the language context-sensitive rather than regular, no finite automaton can recognise `(a+)\1`.
 - **No lookaround** (`(?=...)`, `(?!...)`, `(?<=...)`, `(?<!...)`), for the same reason: lookaround assertions are not part of a regular language's own recognition power.
 - **No lazy or possessive quantifiers** (`a*?`, `a*+`). These only change *which* substring a backtracking engine reports as the match; since this grammar only ever answers a yes/no membership question, greedy and lazy always agree on whether a match exists, so there is no behaviour left for either modifier to control. Stacking a second quantifier onto a first (`a**`, `a*+`, `a*{2}`) is therefore a parse error rather than being silently accepted as a no-op.
-- **No flags** (case-insensitivity, multiline, dotAll). `^`/`$` always mean the absolute start/end of the whole input, never a line boundary, and `.` always matches any character including a line terminator -- there is no flag to make either mean something else, so there is nothing to configure.
+- **No flags** (case-insensitivity, multiline, dotAll). `^`/`$` always mean the absolute start/end of the whole input, never a line boundary, and `.` always matches any character including a line terminator, there is no flag to make either mean something else, so there is nothing to configure.
 
 ## Character encoding
 
@@ -52,15 +52,61 @@ A character is a UTF-16 code unit, exactly matching `RegExp`'s own behaviour wit
 
 ## Matching semantics
 
-`testPattern`/`compilePattern(...).test(...)` report whether **any substring** of the input matches -- the same "search" semantics as a bare `RegExp.prototype.test()` call with no anchors, not a "does the whole string match" test. Anchor the pattern yourself (`^...$`) for a full-string match.
+`testPattern`/`compilePattern(...).test(...)` report whether **any substring** of the input matches, the same "search" semantics as a bare `RegExp.prototype.test()` call with no anchors, not a "does the whole string match" test. Anchor the pattern yourself (`^...$`) for a full-string match.
 
-`^` and `$` can appear anywhere in the pattern -- inside a group, inside an alternation branch -- and always mean the absolute start/end of the whole input, evaluated at whatever position the automaton reaches them, not confined to the very start/end of the pattern text. `^a|z$` matches a string starting with `a`, or one ending with `z` (they are independent branches, each anchored on its own side only).
+`^` and `$` can appear anywhere in the pattern, inside a group or an alternation branch, and always mean the absolute start/end of the whole input, evaluated at whatever position the automaton reaches them, not confined to the very start/end of the pattern text. `^a|z$` matches a string starting with `a`, or one ending with `z` (they are independent branches, each anchored on its own side only).
 
 ## Reference implementation
 
-`parseRegex` is a hand-written recursive-descent parser producing a `RegexNode` AST -- the same AST `trilean-sql`'s dialect compilers pattern-match over to translate a pattern into `LIKE`/`GLOB`/`~` fragments, rather than each compiler re-parsing pattern text itself.
+`parseRegex` is a hand-written recursive-descent parser producing a `RegexNode` AST, the same AST `trilean-sql`'s dialect compilers pattern-match over to translate a pattern into `LIKE`/`GLOB`/`~` fragments, rather than each compiler re-parsing pattern text itself.
 
-`compilePattern`/`compileToNfa` compile that AST to a non-deterministic finite automaton via Thompson's construction, and `matchesNfa` simulates it against an input with the standard "new thread at every position" search algorithm (Cox, ["Regular Expression Matching Can Be Simple And Fast"](https://swtch.com/~rsc/regexp/regexp1.html)). This is what makes the "no catastrophic backtracking" guarantee true by construction rather than merely by convention: simulating an NFA takes time linear in `pattern states x input length` regardless of the pattern's shape, so there is no input this package's own reference matcher can be made to hang on.
+`compilePattern` compiles that AST to a non-deterministic finite automaton by Thompson's construction and simulates it against an input with the standard "new thread at every position" search algorithm (Cox, ["Regular Expression Matching Can Be Simple And Fast"](https://swtch.com/~rsc/regexp/regexp1.html)). This is what makes the "no catastrophic backtracking" guarantee true by construction rather than by convention: simulating an NFA takes at most one visit to each state per position of the input, whatever the pattern's shape, so there is no input this matcher can be made to hang on. The automaton itself is internal: its states hold closures, which have no data form.
+
+Negated shorthand classes (`\D`, `\W`, `\S`) are accepted inside a bracketed class. Over UTF-16 code units the complement of a set is a set of ranges, so `[\S]` and `[\D\da]` parse, and `[\s\S]` is every code unit, which is how a pattern says "any character, a line terminator included".
+
+## ECMAScript compatibility
+
+`compileEcmascriptSubset` compiles a pattern only when every construct in it means the same here as in an unflagged ECMAScript `RegExp`, so a pattern it accepts can be handed to either engine and gives the same answer. It throws `RegexParseError` for a pattern outside the grammar and `UnsupportedConstructError` (with the `index` and `construct` of the first offender) for one of these:
+
+- `.`, which matches a line terminator here and does not in ECMAScript.
+- `\s` and `\S` outside a class that holds every code unit. ECMAScript's `\s` includes U+00A0, U+FEFF, U+2028 and the `Zs` space separators, with or without the `u` flag, where this grammar's is the six ASCII white-space characters.
+- A braced quantifier with nothing to repeat (`{2}` at the start of a pattern, a group or a branch), which is a syntax error in ECMAScript and a literal here.
+
+## Installing and runtime support
+
+The package is one WebAssembly build of the Rust crate, with the same API in Node, Bun, Deno, browsers and Cloudflare Workers. It is ECMAScript modules only (`require()` works through `require(esm)` from Node 20.19 and 22.12). The package's `imports` field selects, by condition, the one module that differs between runtimes, which loads the module: Node, Bun and Deno decode it from base64 text in the package when it is imported, Workers import it as a module, and browsers fetch it. Nothing needs configuring.
+
+### Bundlers
+
+A browser build needs a bundler, because a page cannot resolve the package's `imports` entry on its own. The browser entry waits for the module with top-level await, so the build target must allow it (ES2022 and an ES module output, which is the default of every current bundler; not `iife` or `cjs` output, and webpack 5.83 or later), and anything that imports the package becomes an asynchronous module. The tarball is built with Rollup (with `@rollup/plugin-node-resolve`) and with webpack in production mode, and each output is run in headless Chromium, by `test/bundlers.e2e.test.ts`. Webpack emits the `.wasm` file with its other assets. Rollup and esbuild leave `new URL("./trilean_regex_bg.wasm", import.meta.url)` as it is, so copy `node_modules/trilean-regex/dist/trilean_regex_bg.wasm` next to the browser bundle.
+
+A bundle for a server needs nothing beside it: the Node entry carries the module's bytes as base64 text, decoded once at import, so a single file (a Lambda zip, a container image of one file) runs where it lands. `test/bundlers.e2e.test.ts` builds a consumer with esbuild, Rollup and webpack and runs each output from a directory holding only the bundle. Workers import the `.wasm` file as a module, which a Workers bundler or `wrangler` handles; browsers fetch it.
+
+### Types
+
+The declarations need only the ECMAScript library: no `dom`, no `esnext.disposable`, no Node types, which `test/declarations.test.ts` compiles with. `Symbol.dispose` exists on a `CompiledPattern` at run time and is not declared.
+
+### Arguments
+
+A pattern, a subject and a shorthand letter are strings, and anything else (a number, an object, a `String` object, `null`, `undefined`) is a `TypeError`. `rangeContains` and `charClassMatches` take code units: a number that is not one is in no range, and a range or class whose ends are not code units is a `TypeError`.
+
+### Limits
+
+A string crosses into the module as the UTF-16 code units it is, so an unpaired surrogate behaves exactly as it does in a JavaScript `RegExp` without the `u` flag. A pattern beyond a limit is a `RegexParseError`, before anything is allocated for it:
+
+- groups nest at most 128 deep;
+- a repetition bound is a count that fits in 32 bits;
+- a pattern compiles to at most 100,000 automaton states, the match state included. A count multiplies what it repeats, and counts nest: `a{99999}` is within the limit, `a{100000}` is not, `(?:a{1000}){1000}` is not, and nor are several counts that are each within it and together are not.
+
+The simulation does at most one visit to a state per position of the input, so a test takes at most the pattern's states times the input's length plus one, whatever the pattern is.
+
+### Memory
+
+A `CompiledPattern` owns memory inside the module until it is released. Call `free()` when a pattern is done with, which is safe to call again, or let the finaliser do it, which runs only after the event loop has turned: a synchronous loop that compiles many patterns and drops them holds every one until it yields. The module's memory only grows, and a freed pattern's space is reused by the next. A long-lived process that compiles patterns it is given should `free()` each in a `finally`. `trilean` compiles a `portableMatches` pattern on every evaluation and relies on the finaliser.
+
+### Internal errors
+
+If Rust panics, which no input is known to cause, the call throws an `InternalError` carrying the panic's message and location instead of a bare `RuntimeError: unreachable`. A panic does not finish unwinding, so treat the module as spent after one and report the message.
 
 ```ts
 import { compilePattern, testPattern, parseRegex, RegexParseError } from "trilean-regex";
@@ -68,7 +114,7 @@ import { compilePattern, testPattern, parseRegex, RegexParseError } from "trilea
 testPattern("^[\\w.]+@[\\w]+\\.[a-z]{2,}$", "person@example.com"); // true
 
 const compiled = compilePattern("^ENA-\\d{4,6}$");
-compiled.test("ENA-12345"); // true -- reuse the compiled pattern across many inputs
+compiled.test("ENA-12345"); // true, reuse the compiled pattern across many inputs
 compiled.test("ENA-123");   // false
 
 try {
@@ -83,6 +129,6 @@ try {
 ## Design principles
 
 - **A true regular language, not a documented subset of one.** Every construct this grammar accepts corresponds to something a finite automaton can express; nothing is included on the promise that "most engines happen to agree about it."
-- **A real parser, not pattern validation.** `parseRegex` builds an AST via recursive descent, the same way a general-purpose parser would -- it does not check the input string against a meta-pattern and hope the input itself is then safe to hand to another regex engine.
-- **No indeterminate outcome for a bad pattern here.** A pattern is grammatical or it is not; `parseRegex` throws `RegexParseError` for the latter, naming the exact index. (What a caller does with that error -- `trilean` core's `evaluator.ts` turns an invalid `portableMatches` pattern into `wrong-type`, matching how it already treats an invalid ECMAScript pattern under plain `matches` -- is that caller's decision, not this package's.)
-- **Isomorphic.** No `node:*` import, no `Buffer`, in any runtime module -- enforced by this package's own `eslint.config.ts` isomorphism guard, the same convention `trilean` and `trilean-sql` both follow.
+- **A real parser, not pattern validation.** `parseRegex` builds an AST via recursive descent, the same way a general-purpose parser would, it does not check the input string against a meta-pattern and hope the input itself is then safe to hand to another regex engine.
+- **No indeterminate outcome for a bad pattern here.** A pattern is grammatical or it is not; `parseRegex` throws `RegexParseError` for the latter, naming the exact index. (What a caller does with that error, `trilean` core's `evaluator.ts` turns an invalid `portableMatches` pattern into `wrong-type`, matching how it already treats an invalid ECMAScript pattern under plain `matches`, is that caller's decision, not this package's.)
+- **Isomorphic.** One build runs unchanged in every runtime above; only the module that loads the `.wasm` file differs between them, and the package's `imports` field chooses it.

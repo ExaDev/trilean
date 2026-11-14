@@ -363,6 +363,18 @@ pub struct RegexParse {
 pub struct MatchInput {
     pub input: Text,
     pub matches: bool,
+    /// A bound on the work the matcher does for this input. Only a runner that counts NFA state visits checks it.
+    #[serde(rename = "workBound")]
+    pub work_bound: Option<WorkBound>,
+}
+
+/// A bound on the work of a match, in NFA state visits: at most `factor` times (the pattern's length + 1) times
+/// (the input's length + 1), both lengths in UTF-16 code units.
+#[derive(Shape, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct WorkBound {
+    #[shape(min = 1)]
+    pub factor: u64,
 }
 
 #[derive(Shape, Clone, Copy, Debug, PartialEq, Eq)]

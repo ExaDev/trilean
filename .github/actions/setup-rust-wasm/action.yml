@@ -1,0 +1,20 @@
+name: Set up Rust for the wasm packages
+description: Installs the toolchain rust/rust-toolchain.toml pins, with the wasm target it lists, restores the cargo cache, and installs the wasm-bindgen command line tool at the version rust/Cargo.lock pins. Every job that builds a package from Rust uses it, so the toolchain and the tool are named in one place. Requires checkout before use.
+
+runs:
+  using: composite
+  steps:
+    - name: Install the pinned toolchain
+      shell: bash
+      working-directory: rust
+      run: rustup toolchain install
+
+    # The cache holds the registry, the build output and the binaries cargo installs, so the tool below is installed once for a given lock file and found again afterwards.
+    - uses: Swatinem/rust-cache@v2
+      with:
+        workspaces: rust
+
+    # The command line tool and the wasm-bindgen library the glue is generated for must be the same version, so the version is read from the lock file, never written here: a Dependabot update of the library changes what this installs.
+    - name: Install wasm-bindgen at the locked version
+      shell: bash
+      run: sh scripts/rust.sh install-wasm-bindgen

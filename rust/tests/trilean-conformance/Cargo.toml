@@ -1,6 +1,6 @@
 [package]
 name = "trilean-conformance"
-description = "Loads the language-neutral conformance corpus and checks every file against its format."
+description = "Loads the language-neutral conformance corpus, checks every file against its format and runs the cases of the regex kinds against the native crates."
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
@@ -13,6 +13,7 @@ json-shape.workspace = true
 
 [dev-dependencies]
 serde_json.workspace = true
+trilean-regex.workspace = true
 
 [[test]]
 name = "conformance"

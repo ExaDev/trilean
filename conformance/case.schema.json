@@ -919,6 +919,21 @@
               },
               "matches": {
                 "type": "boolean"
+              },
+              "workBound": {
+                "additionalProperties": false,
+                "description": "A bound on the work the Rust matcher does for this input, in NFA state visits: at most factor times (the pattern's length + 1) times (the input's length + 1), both in UTF-16 code units. Only a runner that counts state visits checks it.",
+                "properties": {
+                  "factor": {
+                    "maximum": 9007199254740991,
+                    "minimum": 1,
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "factor"
+                ],
+                "type": "object"
               }
             },
             "required": [

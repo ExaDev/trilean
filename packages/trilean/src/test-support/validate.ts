@@ -5,8 +5,6 @@ import type { CorpusFile, Manifest } from "./corpus-types";
 
 /**
  * Validates corpus files and the manifest against the schemas in `conformance/`, which is the whole definition of the format. The checks beside the schema are the rules JSON Schema cannot express and `conformance/README.md` lists: a range's `from` is not above its `to`, a repeat's `min` is not above its `max`, a case id is not repeated within a file, a manifest's `skip` lists are in ascending order, and no JSON string holds an unpaired surrogate (content that needs one is written as `{ "codeUnits": [...] }`). Nothing else is validated by hand.
- *
- * This file is a copy of `packages/trilean-regex/src/test-support/validate.ts`, kept as a copy because both are deleted with the TypeScript they test; a change here is made in that file too.
  */
 
 export type Validation<T> =

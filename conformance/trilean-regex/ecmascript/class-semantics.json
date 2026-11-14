@@ -1,0 +1,124 @@
+{
+  "cases": [
+    {
+      "dialect": "ecmascript",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.rs (an ECMAScript class of \\S and the six spaces misses the spaces ECMAScript has beyond them)",
+      "id": "ecmascript.class-semantics.1",
+      "inputs": [
+        {
+          "input": " ",
+          "matches": false
+        },
+        {
+          "input": "﻿",
+          "matches": false
+        },
+        {
+          "input": " ",
+          "matches": false
+        },
+        {
+          "input": "a",
+          "matches": true
+        },
+        {
+          "input": "\n",
+          "matches": true
+        },
+        {
+          "input": " ",
+          "matches": true
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "[\\S \\t\\n\\r\\f\\v]",
+      "reason": "compile_ecmascript_subset refuses this pattern, whose class means something else in ECMAScript, so no Rust entry point runs it; the answers are recorded from an unflagged RegExp",
+      "skip": "rust"
+    },
+    {
+      "dialect": "ecmascript",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.rs (a shorthand class, a hyphen and a range in an ECMAScript class are the three, and the hyphen and the range's end are literals)",
+      "id": "ecmascript.class-semantics.2",
+      "inputs": [
+        {
+          "input": "b",
+          "matches": false
+        },
+        {
+          "input": "-",
+          "matches": true
+        },
+        {
+          "input": "a",
+          "matches": true
+        },
+        {
+          "input": "z",
+          "matches": true
+        },
+        {
+          "input": "5",
+          "matches": true
+        },
+        {
+          "input": "y",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "[\\d-a-z]",
+      "reason": "compile_ecmascript_subset refuses this pattern, whose class means something else in ECMAScript, so no Rust entry point runs it; the answers are recorded from an unflagged RegExp",
+      "skip": "rust"
+    },
+    {
+      "dialect": "ecmascript",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.rs (a class of every shorthand and its negation holds every code unit in both languages)",
+      "id": "ecmascript.class-semantics.3",
+      "inputs": [
+        {
+          "input": " ",
+          "matches": true
+        },
+        {
+          "input": "a",
+          "matches": true
+        },
+        {
+          "input": " ",
+          "matches": true
+        },
+        {
+          "input": {
+            "codeUnits": [
+              55357
+            ]
+          },
+          "matches": true
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "[\\s\\S]"
+    },
+    {
+      "dialect": "ecmascript",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.rs (a hyphen after a shorthand class and no range after it is the same in both languages)",
+      "id": "ecmascript.class-semantics.4",
+      "inputs": [
+        {
+          "input": "-",
+          "matches": true
+        },
+        {
+          "input": "5",
+          "matches": true
+        },
+        {
+          "input": "a",
+          "matches": true
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "[\\d-a]"
+    }
+  ]
+}

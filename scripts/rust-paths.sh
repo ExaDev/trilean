@@ -10,6 +10,6 @@ shared='rust/|conformance/'
 
 case "${1:-}" in
   --full-matrix) grep -Eq "^($shared)" ;;
-  '') grep -Eq "^($shared|scripts/|\\.github/workflows/(ci|advisories)\\.yml\$|\\.husky/pre-push\$)" ;;
+  '') grep -Eq "^($shared|scripts/|\\.github/(workflows/(ci|advisories)\\.yml|actions/setup-rust-wasm/action\\.yml)\$|\\.husky/pre-push\$)" ;;
   *) echo "usage: rust-paths.sh [--full-matrix]" >&2; exit 2 ;;
 esac

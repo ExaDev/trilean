@@ -1,4 +1,3 @@
-/** This file is a copy of `packages/trilean-regex/src/test-support/read-json.ts`, kept as a copy because both are deleted with the TypeScript they test; a change here is made in that file too. */
 import { readFileSync } from "node:fs";
 import { keyProblems } from "./canonical-keys";
 

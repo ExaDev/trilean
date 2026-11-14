@@ -662,18 +662,24 @@
       "inputs": [
         {
           "input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaac",
-          "matches": false
+          "matches": false,
+          "workBound": {
+            "factor": 1
+          }
         },
         {
           "input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaab",
-          "matches": true
+          "matches": true,
+          "workBound": {
+            "factor": 1
+          }
         }
       ],
       "kind": "regex-match",
       "pattern": "^(?:a+)+b$"
     },
     {
-      "from": "recorded: trilean-regex src/matcher.ts (no original test; dot is one code unit)",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/matcher.ts (no original test; dot is one code unit)",
       "id": "match.utf-16-code-units.dot-is-one-code-unit.1",
       "inputs": [
         {
@@ -697,7 +703,7 @@
       "pattern": "^.$"
     },
     {
-      "from": "recorded: trilean-regex src/matcher.ts (no original test; two dots)",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/matcher.ts (no original test; two dots)",
       "id": "match.utf-16-code-units.two-dots.1",
       "inputs": [
         {
@@ -709,7 +715,7 @@
       "pattern": "^..$"
     },
     {
-      "from": "recorded: trilean-regex src/matcher.ts (no original test; astral class one unit)",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/matcher.ts (no original test; astral class one unit)",
       "id": "match.utf-16-code-units.astral-class-one-unit.1",
       "inputs": [
         {
@@ -737,7 +743,7 @@
       "pattern": "^[😀]$"
     },
     {
-      "from": "recorded: trilean-regex src/matcher.ts (no original test; astral class twice)",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/matcher.ts (no original test; astral class twice)",
       "id": "match.utf-16-code-units.astral-class-twice.1",
       "inputs": [
         {
@@ -753,7 +759,7 @@
       "pattern": "^[😀]{2}$"
     },
     {
-      "from": "recorded: trilean-regex src/matcher.ts (no original test; astral quantifier binds to the low surrogate)",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/matcher.ts (no original test; astral quantifier binds to the low surrogate)",
       "id": "match.utf-16-code-units.astral-quantifier-binds-to-the-low-surrogate.1",
       "inputs": [
         {
@@ -779,7 +785,7 @@
       "pattern": "^😀+$"
     },
     {
-      "from": "recorded: trilean-regex src/matcher.ts (no original test; lone surrogate pattern)",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/matcher.ts (no original test; lone surrogate pattern)",
       "id": "match.utf-16-code-units.lone-surrogate-pattern.1",
       "inputs": [
         {
@@ -807,7 +813,7 @@
       }
     },
     {
-      "from": "recorded: trilean-regex src/matcher.ts (no original test; lone surrogate class pattern)",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/matcher.ts (no original test; lone surrogate class pattern)",
       "id": "match.utf-16-code-units.lone-surrogate-class-pattern.1",
       "inputs": [
         {
@@ -839,7 +845,7 @@
       }
     },
     {
-      "from": "recorded: trilean-regex src/matcher.ts (no original test; bmp literal)",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/matcher.ts (no original test; bmp literal)",
       "id": "match.utf-16-code-units.bmp-literal.1",
       "inputs": [
         {
@@ -855,7 +861,7 @@
       "pattern": "^é+$"
     },
     {
-      "from": "recorded: trilean-regex src/matcher.ts (no original test; cjk substring)",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/matcher.ts (no original test; cjk substring)",
       "id": "match.utf-16-code-units.cjk-substring.1",
       "inputs": [
         {
@@ -871,7 +877,7 @@
       "pattern": "日本"
     },
     {
-      "from": "recorded: trilean-regex src/matcher.ts (no original test; cyrillic class)",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/matcher.ts (no original test; cyrillic class)",
       "id": "match.utf-16-code-units.cyrillic-class.1",
       "inputs": [
         {
@@ -885,6 +891,280 @@
       ],
       "kind": "regex-match",
       "pattern": "^[а-я]+$"
+    },
+    {
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/matcher.rs (the matcher's work is bounded by pattern and input, not by how the pattern nests)",
+      "id": "match.recorded.work-bound.star-of-star",
+      "inputs": [
+        {
+          "input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "matches": false,
+          "workBound": {
+            "factor": 1
+          }
+        },
+        {
+          "input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab",
+          "matches": true,
+          "workBound": {
+            "factor": 1
+          }
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "(?:a*)*b"
+    },
+    {
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/matcher.rs (the matcher's work is bounded by pattern and input, not by how the pattern nests)",
+      "id": "match.recorded.work-bound.alternation-of-equals",
+      "inputs": [
+        {
+          "input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "matches": false,
+          "workBound": {
+            "factor": 1
+          }
+        },
+        {
+          "input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab",
+          "matches": true,
+          "workBound": {
+            "factor": 1
+          }
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "(?:a|a)*b"
+    },
+    {
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/matcher.rs (the matcher's work is bounded by pattern and input, not by how the pattern nests)",
+      "id": "match.recorded.work-bound.overlapping-branches",
+      "inputs": [
+        {
+          "input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "matches": false,
+          "workBound": {
+            "factor": 1
+          }
+        },
+        {
+          "input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaac",
+          "matches": false,
+          "workBound": {
+            "factor": 1
+          }
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "(?:a|aa)+b"
+    },
+    {
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/matcher.rs (the matcher's work is bounded by pattern and input, not by how the pattern nests)",
+      "id": "match.recorded.work-bound.star-after-star",
+      "inputs": [
+        {
+          "input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "matches": false,
+          "workBound": {
+            "factor": 1
+          }
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "(?:a*)*(?:a*)*b"
+    },
+    {
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/matcher.rs (the matcher's work is bounded by pattern and input, not by how the pattern nests)",
+      "id": "match.recorded.work-bound.optional-then-mandatory-copies",
+      "inputs": [
+        {
+          "input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "matches": false,
+          "workBound": {
+            "factor": 5
+          }
+        },
+        {
+          "input": "aaaaaaaaaaaaaaaaaaaaaaaaab",
+          "matches": true,
+          "workBound": {
+            "factor": 5
+          }
+        },
+        {
+          "input": "aaaaaaaaaaaaaaaaaaaaaaaab",
+          "matches": false,
+          "workBound": {
+            "factor": 5
+          }
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "(?:a?){25}a{25}b"
+    },
+    {
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/matcher.rs (a class of a shorthand and its negation takes every code unit)",
+      "id": "match.recorded.any-code-unit.class-of-a-shorthand-and-its-negation",
+      "inputs": [
+        {
+          "input": "",
+          "matches": true
+        },
+        {
+          "input": "line\nbreak ",
+          "matches": true
+        },
+        {
+          "input": {
+            "codeUnits": [
+              55357
+            ]
+          },
+          "matches": true
+        },
+        {
+          "input": "😀",
+          "matches": true
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^[\\s\\S]*$"
+    },
+    {
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/matcher.rs (a negated class of a shorthand and its negation takes none)",
+      "id": "match.recorded.any-code-unit.negated-class-of-a-shorthand-and-its-negation",
+      "inputs": [
+        {
+          "input": "",
+          "matches": false
+        },
+        {
+          "input": "a",
+          "matches": false
+        },
+        {
+          "input": "\n",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "[^\\s\\S]"
+    },
+    {
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/matcher.rs (a negated shorthand inside a class matches what it means)",
+      "id": "match.recorded.negated-shorthand-in-class",
+      "inputs": [
+        {
+          "input": "a",
+          "matches": true
+        },
+        {
+          "input": "x",
+          "matches": true
+        },
+        {
+          "input": "5",
+          "matches": false
+        },
+        {
+          "input": "",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^[\\Da]$"
+    },
+    {
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/matcher.rs (a negated space shorthand inside a class takes everything but the six)",
+      "id": "match.recorded.negated-space-in-class",
+      "inputs": [
+        {
+          "input": "a",
+          "matches": true
+        },
+        {
+          "input": " ",
+          "matches": false
+        },
+        {
+          "input": "\t",
+          "matches": false
+        },
+        {
+          "input": " ",
+          "matches": true
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^[\\S]$"
+    },
+    {
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.rs (a class holds the code units its items name in this grammar, a shorthand class and the characters around it included)",
+      "id": "match.recorded.class-of-not-space-and-the-six-spaces",
+      "inputs": [
+        {
+          "input": " ",
+          "matches": true
+        },
+        {
+          "input": "a",
+          "matches": true
+        },
+        {
+          "input": "\n",
+          "matches": true
+        },
+        {
+          "input": " ",
+          "matches": true
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "[\\S \\t\\n\\r\\f\\v]"
+    },
+    {
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.rs (a negated class of those holds nothing)",
+      "id": "match.recorded.negated-class-of-not-space-and-the-six-spaces",
+      "inputs": [
+        {
+          "input": " ",
+          "matches": false
+        },
+        {
+          "input": "a",
+          "matches": false
+        },
+        {
+          "input": "\n",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "[^\\S \\t\\n\\r\\f\\v]"
+    },
+    {
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.rs (a hyphen after a shorthand class is a literal and the range after it is a range)",
+      "id": "match.recorded.shorthand-hyphen-and-range-in-a-class",
+      "inputs": [
+        {
+          "input": "b",
+          "matches": true
+        },
+        {
+          "input": "-",
+          "matches": true
+        },
+        {
+          "input": "5",
+          "matches": true
+        },
+        {
+          "input": "B",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "[\\d-a-z]"
     }
   ]
 }

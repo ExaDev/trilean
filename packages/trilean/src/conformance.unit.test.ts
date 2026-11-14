@@ -555,7 +555,6 @@ describe("the tests that stay outside the corpus", () => {
   const packages = fileURLToPath(new URL("../../", import.meta.url));
   const files = [
     ...testFiles(join(packages, "trilean")),
-    ...testFiles(join(packages, "trilean-regex")),
   ].filter((file) => !file.includes("node_modules"));
   const rowLines = section.filter((line) => /^\| \S+\.test\.ts \|/u.test(line));
   const rows = rowLines.flatMap((line) => {
@@ -596,39 +595,4 @@ describe("the tests that stay outside the corpus", () => {
     expect(listed.filter((key) => !present.includes(key))).toEqual([]);
     expect([...listed].sort()).toEqual([...present].sort());
   });
-});
-
-/** The loader files two packages' runners copy from each other. Both copies are removed with the TypeScript they test, and a change to one is made in the other. */
-describe("the loader files copied between the two runners", () => {
-  const copied = [
-    "canonical-keys",
-    "corpus-files",
-    "corpus",
-    "text",
-    "read-json",
-    "validate",
-  ];
-  const packages = fileURLToPath(new URL("../../", import.meta.url));
-  /** A file without the line that names the other copy, the one place the two differ. */
-  const withoutHeaderLine = (text: string): string =>
-    text
-      .split("\n")
-      .filter((line) => !line.includes("This file is a copy of"))
-      .join("\n");
-
-  it.each(copied)(
-    "%s is the same file in both packages, but for the line naming the other",
-    (name) => {
-      const here = readFileSync(
-        join(packages, "trilean", "src", "test-support", `${name}.ts`),
-        "utf8",
-      );
-      const there = readFileSync(
-        join(packages, "trilean-regex", "src", "test-support", `${name}.ts`),
-        "utf8",
-      );
-      expect(here).toContain("This file is a copy of");
-      expect(withoutHeaderLine(here)).toBe(withoutHeaderLine(there));
-    },
-  );
 });

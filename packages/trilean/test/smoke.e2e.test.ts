@@ -1,8 +1,8 @@
-// Verifies the built package (dist/), not src/ -- the one thing the unit suite can never catch is an `exports` map misconfiguration, since unit tests import src/ directly and never go through package.json's `exports` resolution at all. Runs the same assertions against both the ESM entry (dist/index.js) and the CJS entry (dist/index.cjs) to prove the dual-format build genuinely works both ways, plus one deep-import subpath (dist/tree.{js,cjs}) to prove the "./*" wildcard export resolves to real files. The `import()` bindings below are typed against the built dist/*.d.ts and dist/*.d.cts, which is what makes every assertion in this file type-checked rather than `any`; what they do not establish is that dist/*.cjs is loadable as CommonJS at all, which is why a separate block loads those entries through Node's own require() -- see its own comment for why the distinction matters.
+// Verifies the built package (dist/), not src/ -- the one thing the unit suite can never catch is an `exports` map misconfiguration, since unit tests import src/ directly and never go through package.json's `exports` resolution at all. Runs the same assertions against the entry (dist/index.js) plus one deep-import subpath (dist/tree.js) to prove the "./*" wildcard export resolves to real files. The `import()` bindings below are typed against the built dist/*.d.ts, which is what makes every assertion in this file type-checked rather than `any`. The package is ES modules only, so a separate block loads the entry through Node's own require(), which a consumer on a Node that can require an ES module (20.19, 22.12 and later) uses.
 //
 // This file is allowed ordinary Node APIs (node:fs, node:module) despite the rest of the package being isomorphic: it is test/ tooling that runs the already-built output, not runtime src/, and isomorphism is only enforced within src/ (see eslint.config.ts's `runtimeSrcExemptions`/`no-restricted-imports` scoping).
 //
-// A member of tsconfig.node.json's program like every other test/**/*.ts file, importing straight from the built dist/*.js and dist/*.cjs paths -- turbo's "_typecheck" and "_lint" tasks both depend on "_build" (see turbo.json), so dist/ genuinely exists by the time either tsc or eslint's typed rules resolve these imports.
+// A member of tsconfig.node.json's program like every other test/**/*.ts file, importing straight from the built dist/*.js paths -- turbo's "_typecheck" and "_lint" tasks both depend on "_build" (see turbo.json), so dist/ genuinely exists by the time either tsc or eslint's typed rules resolve these imports.
 
 import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
@@ -12,9 +12,7 @@ import type * as IndexModule from "../dist/index.js";
 import type * as TreeModule from "../dist/tree.js";
 
 const esmIndex: typeof IndexModule = await import("../dist/index.js");
-const cjsIndex: typeof IndexModule = await import("../dist/index.cjs");
 const esmTree: typeof TreeModule = await import("../dist/tree.js");
-const cjsTree: typeof TreeModule = await import("../dist/tree.cjs");
 
 function isPlainRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -77,45 +75,45 @@ const expectedTreeExports: readonly (keyof typeof TreeModule)[] = [
   "ExpressionNodeSchema",
 ];
 
-describe.each([
-  ["ESM (dist/index.js)", esmIndex],
-  ["CJS (dist/index.cjs)", cjsIndex],
-])("built package entry point: %s", (_label, moduleExports) => {
-  it.each(expectedIndexExports)(
-    "exports %s as a %s",
-    (exportName, expectedType) => {
-      expect(typeof moduleExports[exportName]).toBe(expectedType);
-    },
-  );
-});
+describe.each([["ESM (dist/index.js)", esmIndex]])(
+  "built package entry point: %s",
+  (_label, moduleExports) => {
+    it.each(expectedIndexExports)(
+      "exports %s as a %s",
+      (exportName, expectedType) => {
+        expect(typeof moduleExports[exportName]).toBe(expectedType);
+      },
+    );
+  },
+);
 
-describe.each([
-  ["ESM (dist/tree.js)", esmTree],
-  ["CJS (dist/tree.cjs)", cjsTree],
-])("built deep-import subpath: %s", (_label, moduleExports) => {
-  it.each(expectedTreeExports)("exports %s as an object", (exportName) => {
-    expect(typeof moduleExports[exportName]).toBe("object");
-  });
-});
+describe.each([["ESM (dist/tree.js)", esmTree]])(
+  "built deep-import subpath: %s",
+  (_label, moduleExports) => {
+    it.each(expectedTreeExports)("exports %s as an object", (exportName) => {
+      expect(typeof moduleExports[exportName]).toBe("object");
+    });
+  },
+);
 
-// Vitest resolves a plain `import()` through Vite's own module runner rather than through a Node loader, and Vite transforms ESM syntax found inside a .cjs file without complaint -- so every import()-based assertion above still passes against a dist/index.cjs that Node itself rejects with "SyntaxError: Unexpected token 'export'". Node's require() is the only thing here that exercises the CommonJS loader a real consumer would use, so the .cjs entries are additionally loaded through it. Without this block, a dual-format build whose CJS half is not actually CommonJS leaves this whole tier green.
-describe("CommonJS entries loaded through Node's own require()", () => {
-  const requireCjs = createRequire(import.meta.url);
+// A consumer that loads the package with require() gets the same exports, through Node's own loader (require of an ES module, which Node 20.19, 22.12 and later support without a flag) and not through Vite's module runner.
+describe("the entries loaded through Node's own require()", () => {
+  const requireEsm = createRequire(import.meta.url);
 
-  it("dist/index.cjs loads as CommonJS and exposes every expected export", () => {
+  it("dist/index.js exposes every expected export", () => {
     const loaded = asPlainRecord(
-      requireCjs("../dist/index.cjs"),
-      "expected require('../dist/index.cjs') to return a module object",
+      requireEsm("../dist/index.js"),
+      "expected require('../dist/index.js') to return a module object",
     );
     for (const [exportName, expectedType] of expectedIndexExports) {
       expect(typeof loaded[exportName]).toBe(expectedType);
     }
   });
 
-  it("dist/tree.cjs loads as CommonJS and exposes both node-tree schemas", () => {
+  it("dist/tree.js exposes both node-tree schemas", () => {
     const loaded = asPlainRecord(
-      requireCjs("../dist/tree.cjs"),
-      "expected require('../dist/tree.cjs') to return a module object",
+      requireEsm("../dist/tree.js"),
+      "expected require('../dist/tree.js') to return a module object",
     );
     for (const exportName of expectedTreeExports) {
       expect(typeof loaded[exportName]).toBe("object");
@@ -123,7 +121,7 @@ describe("CommonJS entries loaded through Node's own require()", () => {
   });
 });
 
-// Beyond "the exports exist and are the right typeof" above, this section actually RUNS a substantial composed-rule scenario -- fold's `max` combiner, `memberOf`, and the derived `implies` connective, composed together (adapted from test/integration/composed-rules.integration.test.ts's own "fold's max combiner alongside memberOf and a derived connective" scenario) -- against both built entry points, proving the compiled output behaves identically to source for a realistic multi-kind tree, not only for the minimal golden example already covered by src/golden-examples.unit.test.ts and test/workers/trilean.e2e.test.ts. The fixture is duplicated inline, rather than imported from test/integration, to keep this file self-contained (matching its existing style) and independent of TypeScript transpilation.
+// Beyond "the exports exist and are the right typeof" above, this section actually RUNS a substantial composed-rule scenario -- fold's `max` combiner, `memberOf`, and the derived `implies` connective, composed together (adapted from test/integration/composed-rules.integration.test.ts's own "fold's max combiner alongside memberOf and a derived connective" scenario) -- against the built entry point, proving the compiled output behaves identically to source for a realistic multi-kind tree, not only for the minimal golden example already covered by src/golden-examples.unit.test.ts and test/workers/trilean.e2e.test.ts. The fixture is duplicated inline, rather than imported from test/integration, to keep this file self-contained (matching its existing style) and independent of TypeScript transpilation.
 
 function makeAuctionResolvers(): IndexModule.Resolvers {
   return {
@@ -193,10 +191,7 @@ function buildAuctionRule(
   };
 }
 
-describe.each([
-  ["ESM (dist/index.js)", esmIndex],
-  ["CJS (dist/index.cjs)", cjsIndex],
-])(
+describe.each([["ESM (dist/index.js)", esmIndex]])(
   "composed rule (fold max + memberOf + implies) against the built package: %s",
   (_label, moduleExports) => {
     const { evaluatePredicate, implies } = moduleExports;

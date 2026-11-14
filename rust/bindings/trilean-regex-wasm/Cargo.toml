@@ -1,0 +1,20 @@
+[package]
+name = "trilean-regex-wasm"
+description = "The wasm binding of trilean-regex: the same API in Node, Bun, Deno, browsers and Workers."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+js-sys.workspace = true
+trilean-regex.workspace = true
+wasm-bindgen.workspace = true
+
+[lints]
+workspace = true

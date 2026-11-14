@@ -1,19 +1,7 @@
-import { builtinModules } from "node:module";
 import { exadevConfig } from "@exadev/eslint-config";
 import { defineConfig } from "eslint/config";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 import globals from "globals";
-
-const nodeBuiltinBaseModules = [
-  ...new Set(
-    builtinModules
-      .filter((name) => !name.startsWith("_") && !name.startsWith("node:"))
-      .map((name) =>
-        name.includes("/") ? name.slice(0, name.indexOf("/")) : name,
-      ),
-  ),
-].sort();
-const bareNodeBuiltinPattern = `^(${nodeBuiltinBaseModules.join("|")})(/.*)?$`;
 
 export default defineConfig(
   ...exadevConfig(),
@@ -23,7 +11,7 @@ export default defineConfig(
   {
     languageOptions: {
       parserOptions: {
-        project: ["./tsconfig.json", "./tsconfig.node.json"],
+        project: ["./tsconfig.json"],
         tsconfigRootDir: import.meta.dirname,
       },
       globals: { ...globals.node },
@@ -40,43 +28,9 @@ export default defineConfig(
     },
   },
   {
-    files: ["src/**/*.ts"],
-    ignores: ["src/**/*.test.ts", "src/test-support/**"],
-    rules: {
-      "no-restricted-imports": [
-        "error",
-        {
-          patterns: [
-            {
-              group: ["node:*", "node:*/**"],
-              message:
-                "This is an isomorphic library: node:* imports are banned in runtime src.",
-            },
-            {
-              regex: bareNodeBuiltinPattern,
-              message:
-                "This is an isomorphic library: bare Node builtin imports are banned in runtime src.",
-            },
-          ],
-        },
-      ],
-      "no-restricted-globals": [
-        "error",
-        {
-          name: "Buffer",
-          message: "Buffer is Node-only; use Uint8Array/plain objects instead.",
-        },
-      ],
-    },
-  },
-  {
-    files: ["**/*.test.ts"],
-    rules: {
-      "@typescript-eslint/no-empty-function": [
-        "error",
-        { allow: ["arrowFunctions", "asyncFunctions"] },
-      ],
-    },
+    // Test data are numbers: code units, counts, probabilities of a seeded generator. Naming each would hide what the test says behind a table of constants.
+    files: ["test/**/*.ts"],
+    rules: { "@typescript-eslint/no-magic-numbers": "off" },
   },
   eslintPluginPrettierRecommended,
 );

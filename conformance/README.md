@@ -30,11 +30,11 @@ Every loader applies this one rule, and each runs it over `fixtures/loader-selec
 
 ### The manifest
 
-`manifest.json` records, for every corpus file, its case count and, per implementation, the ids of the cases marked to be skipped by it: `skip` is `{ "ts": [...], "rust": [...] }`, each list in ascending order and without repeats, and an id is in the list of the implementation its case names. Every runner checks the corpus against it and fails on any difference, in either list. A runner also asserts the completeness of its own run against its own list, from what it records while it runs and not from what it parsed: the id of every case at the moment the runner registers it, which of them it registers as skipped, and every case whose body starts. The registered cases are the manifest's total for the runner's files, none is registered twice, the cases it registers as skipped are exactly the manifest's list for its implementation, and every other registered case started once. A runner that skips every case, a registration loop that drops or filters cases and a body that never runs each fail it, and so does a Rust runner that skips a case marked `skip: ts` (its own list says otherwise). A run that selects tests by name leaves the completeness test out, since a case it did not run has not started. A case that skips the other implementation is one it executes. A TypeScript runner belongs to one package and executes that package's directory (`trilean/` or `trilean-regex/`), so it counts against the manifest's entries for that directory; the checks of the corpus as a whole (schema, ids, manifest) cover every file. The TypeScript runner counts the cases it registers when it collects them, so the check holds whatever the run does with the registered tests (a name filter, a bail, a retry, a shuffled order).
+`manifest.json` records, for every corpus file, its case count and, per implementation, the ids of the cases marked to be skipped by it: `skip` is `{ "ts": [...], "rust": [...] }`, each list in ascending order and without repeats, and an id is in the list of the implementation its case names. Every runner checks the corpus against it and fails on any difference, in either list. A runner also asserts the completeness of its own run against its own list, from what it records while it runs and not from what it parsed: the id of every case at the moment the runner registers it, which of them it registers as skipped, and every case whose body starts. The registered cases are the manifest's total for the runner's files, none is registered twice, the cases it registers as skipped are exactly the manifest's list for its implementation, and every other registered case started once. A runner that skips every case, a registration loop that drops or filters cases and a body that never runs each fail it, and so does a Rust runner that skips a case marked `skip: ts` (its own list says otherwise). A run that selects tests by name leaves the completeness test out, since a case it did not run has not started. A case that skips the other implementation is one it executes. A runner belongs to one package and executes that package's directory (the TypeScript runner `trilean/`, the wasm runner `trilean-regex/`), so it counts against the manifest's entries for that directory; the wasm runner executes the Rust implementation, so it skips the cases in the manifest's `skip.rust` lists and executes every other, those in `skip.ts` included, and asserts the same completeness rule from the ids it registers, skips and starts; the checks of the corpus as a whole (schema, ids, manifest) cover every file. The TypeScript runner counts the cases it registers when it collects them, so the check holds whatever the run does with the registered tests (a name filter, a bail, a retry, a shuffled order).
 
 A manifest entry may carry `generated: true`, which marks a file the generator writes (see "Generated files"); the generator's test fails for a marked file it does not write and for a file it writes that is not marked.
 
-The Rust loader executes no case. It reads every case of every kind through the Rust types in `rust/tests/trilean-conformance`, which carry the shape of every kind the schema defines and enforce what the schema states (the id rule, a well formed `from`, `skip` and `reason` together, a well formed `tolerance`, and every form and constraint of the kind), so it validates every case in full, and enforces the rules below that a schema cannot express. It counts every case in one of two categories: a case marked `skip: rust` is skipped because it is marked, and any other is skipped for want of a native executor. The two categories and the executed cases add up to the manifest's total. It asserts that the cases it skips as marked `rust` are exactly the manifest's `skip.rust` list for the file. A case is registered when its id is read from the raw document and checked when it passes validation through the types, two observations made by different code, and it asserts per file that the registered cases are the manifest's count and that the checked cases are the registered ones, in the file's order, so a validation that skips a case or checks one twice fails.
+The Rust loader reads every case of every kind through the Rust types in `rust/tests/trilean-conformance`, which carry the shape of every kind the schema defines and enforce what the schema states (the id rule, a well formed `from`, `skip` and `reason` together, a well formed `tolerance`, and every form and constraint of the kind), so it validates every case in full, and enforces the rules below that a schema cannot express. It counts every case in one of three categories: a case marked `skip: rust` is skipped because it is marked, a case of a regex kind (`regex-parse` and `regex-match`) is executed against the native crate, a stated work bound included, and any other is skipped for want of a native executor. The three categories add up to the manifest's total. It asserts that the cases it skips as marked `rust` are exactly the manifest's `skip.rust` list for the file. A case is registered when its id is read from the raw document and checked when it passes validation through the types, two observations made by different code, and it asserts per file that the registered cases are the manifest's count and that the checked cases are the registered ones, in the file's order, so a validation that skips a case or checks one twice fails.
 
 ## Cases
 
@@ -74,22 +74,34 @@ A field the schema types as an integer is at most 2^53-1, the largest the JavaSc
 
 Every rule above has a negative fixture, and every negative fixture has a repaired twin of the same name that differs by that one defect and is valid, so a fixture cannot stay rejected for another reason. The fixtures are in directories, and which loader asserts which pair is part of the contract:
 
-| Directory under `fixtures/` | Holds | Asserted by |
-| --- | --- | --- |
-| `invalid-cases`, `repaired-cases`, `valid-cases` | a rule about one file whose cases are of a regex kind, or a file that every loader must reject or accept | every loader |
-| `refused-kinds/invalid`, `refused-kinds/repaired` | a defect in what every case has (the id, `from`, `kind`, `skip` and `reason`, an id repeated in the file) in a case of a kind other than the regex kinds | every loader |
-| `manifests/invalid`, `manifests/repaired`, `manifests/valid` | a rule about the manifest | every loader |
-| `corpora/invalid`, `corpora/repaired` | a rule across files, or between the corpus and its manifest, a whole corpus root loaded the way the real corpus is | every loader |
-| `schema-only/invalid-cases`, `schema-only/repaired-cases`, `schema-only/valid-cases` | a defect in the shape of a case of a kind other than the regex kinds, and the valid cases that give every optional form | every loader |
-| `generated/invalid-cases`, `generated/repaired-cases` | for every constraint the schema states, one file that breaks it alone and its twin, written by the generator | every loader |
-| `case-schema/emitted.json` | the schema the Rust case types emit, written by the Rust loader's test and compared with the types on every run | the Rust loader (rewritten with `UPDATE_CORPUS_FIXTURES=1`), and the root test, which gives every file of the corpus and of the fixtures to Ajv under it and under `case.schema.json` and requires one verdict |
-| `shape-agreement` | the tables of documents and the schemas that keep the Rust validator derived from a type and the schema it emits equal, in both JSON Schema drafts (the `json-shape` crate's own fixtures, not corpus cases) | the `json-shape` tests and the root test |
-| `canonical-keys/invalid`, `canonical-keys/repaired` | a document whose keys break the key rule, which is any JSON document and not a corpus file, and its twin with the keys in order; the file under `invalid-cases` of the same name as one under `repaired-cases` shows the rule applied to a corpus file | every loader |
-| `loader-selection`, `text-forms` | the file selection rule and the two forms of a text | every loader |
+| Directory under `fixtures/` | Holds | Asserted by | Three-runtime runner |
+| --- | --- | --- | --- |
+| `invalid-cases`, `repaired-cases`, `valid-cases` | a rule about one file whose cases are of a regex kind, or a file that every loader must reject or accept | every loader | asserts |
+| `refused-kinds/invalid`, `refused-kinds/repaired` | a defect in what every case has (the id, `from`, `kind`, `skip` and `reason`, an id repeated in the file) in a case of a kind other than the regex kinds | every loader | asserts |
+| `manifests/invalid`, `manifests/repaired`, `manifests/valid` | a rule about the manifest | every loader | asserts |
+| `corpora/invalid`, `corpora/repaired` | a rule across files, or between the corpus and its manifest, a whole corpus root loaded the way the real corpus is | the Rust and TypeScript loaders | does not (it needs the shared runner core that arrives with issue 156) |
+| `schema-only/invalid-cases`, `schema-only/repaired-cases`, `schema-only/valid-cases` | a defect in the shape of a case of a kind other than the regex kinds, and the valid cases that give every optional form | every loader | asserts |
+| `generated/invalid-cases`, `generated/repaired-cases` | for every constraint the schema states, one file that breaks it alone and its twin, written by the generator | every loader | asserts |
+| `case-schema/emitted.json` | the schema the Rust case types emit, written by the Rust loader's test and compared with the types on every run | the Rust loader (rewritten with `UPDATE_CORPUS_FIXTURES=1`), and the root test, which gives every file of the corpus and of the fixtures to Ajv under it and under `case.schema.json` and requires one verdict | does not (it needs the shared runner core that arrives with issue 156) |
+| `shape-agreement` | the tables of documents and the schemas that keep the Rust validator derived from a type and the schema it emits equal, in both JSON Schema drafts (the `json-shape` crate's own fixtures, not corpus cases) | the `json-shape` tests and the root test | does not (it needs the shared runner core that arrives with issue 156) |
+| `canonical-keys/invalid`, `canonical-keys/repaired` | a document whose keys break the key rule, which is any JSON document and not a corpus file, and its twin with the keys in order; the file under `invalid-cases` of the same name as one under `repaired-cases` shows the rule applied to a corpus file | every loader | asserts |
+| `canonical-keys/differential.json` | documents written by a seeded generator, each with the number of key problems every scanner must find in it | every loader | does not (the runner's key rule is a smaller scanner, which `canonical-keys/invalid` and `canonical-keys/repaired` hold to the rule) |
+| `loader-selection` | the file selection rule | every loader | asserts |
+| `text-forms` | the two forms of a text | every loader | does not (the code units of a text are the corpus's own, which every case exercises) |
 
-A file a loader cannot parse counts as rejected, which is how a loader meets an unpaired surrogate escape. Every real corpus file must be accepted by all of them. A rule added to the format gets a fixture and its twin in the same commit; a constraint added to the schema gets its generated pair when the generator is run, and the generator's test fails until it is.
+Each loader of the corpus is one of these: the Rust loader, the TypeScript runner of `trilean` and the wasm runner of `trilean-regex`, which reads the files with the schema through Ajv in every runtime it runs in. A file a loader cannot parse counts as rejected, which is how a loader meets an unpaired surrogate escape. Every real corpus file must be accepted by all of them. A rule added to the format gets a fixture and its twin in the same commit; a constraint added to the schema gets its generated pair when the generator is run, and the generator's test fails until it is.
 
 The schema accepts nothing that no case exercises: a test of the TypeScript runner walks `case.schema.json` along every case of the corpus and every valid fixture and fails for a property, a `oneOf` branch or an `enum` value of the kinds that package runs that none of them uses. A form is added to the schema together with a case that uses it.
+
+### The wasm runner
+
+`conformance/runner/` holds the runner of the `trilean-regex` package, the one JavaScript this repository allows outside configuration and the Node glue of a package, in `.mjs` files that total at most 16,384 bytes. It runs the corpus against the package as a consumer installs it, from the tarball `pnpm pack` makes, in three runtimes:
+
+- `node conformance/runner/node.mjs <tarball>` installs the tarball under a temporary `node_modules` and imports the package from there.
+- `node conformance/runner/chromium.mjs <tarball>` bundles the runner and the package the way a page would, with the `browser` condition, and runs them in headless Chromium through Playwright.
+- `node conformance/runner/workerd.mjs <tarball>` bundles them for Cloudflare Workers, with the `workerd` condition and the corpus built in, and runs them in workerd through Miniflare.
+
+Each runtime applies the contract of this README to the corpus it reads: the one file selection rule, over the fixture tree as well, every file and the manifest checked with Ajv against the schemas, the rules the schema cannot express for a regex node and for the manifest's skip lists, every negative fixture of `invalid-cases`, `refused-kinds`, `manifests`, `schema-only`, `generated` and `canonical-keys` rejected beside its repaired twin, every valid fixture accepted, and the corpus equal to its manifest. It applies the key rule on the text of a file (the keys, the byte order mark and the depth) and runs the `canonical-keys` pairs. The fixture table above says which fixture sets it asserts and which it does not, and the runner reads that table: it fails when a fixture file is in no row, and when the sets it asserts are not the sets the table says it asserts, so a set added without a row, or a row that claims what the runner does not check, is a failure. What it does not assert (`corpora`, `text-forms`, `canonical-keys/differential.json`, `case-schema` and `shape-agreement`) the Rust and TypeScript loaders assert. It then executes the cases of `trilean-regex/`. The runner is written for a runtime with no file system, so `run.mjs` takes the corpus as a tree of files and the package as a module, and the other files only supply them. The wasm build is the Rust implementation, so the runner skips a case marked `skip: rust` and executes one marked `skip: ts`, and ignores a `workBound`, which only the native runner counts.
 
 ### Generated files
 
@@ -117,9 +129,9 @@ Some files are written by a generator, `packages/trilean/scripts/generate-corpus
 
 Each input is tested against the pattern, through every entry point the implementation offers for testing a pattern (compiled once and reused, and compiled per call), and all of them must give `matches`.
 
-`regex-match` takes an optional `dialect`: `trilean`, the default, is the language of the package's own matcher. `ecmascript` is the language of an unflagged ECMAScript `RegExp`: the pattern is read as that engine reads it, over UTF-16 code units, with no `^` or `$` at a line break (no `m` flag), no `.` that excludes line terminators (the patterns the derived builders write use `[\s\S]` and `[^\/]`, which take every code unit, a line terminator and an unpaired surrogate among them), and `test` finding a match anywhere. Each `matches` was recorded from `new RegExp(pattern).test(input)`. The TypeScript runner replays these cases against the host's `RegExp`, which checks that the recorded answers still hold and tests no implementation of this repository; an implementation with an engine of its own for that language must run each case through it and give the recorded answer.
+`regex-match` takes an optional `dialect`: `trilean`, the default, is the language of the package's own matcher. `ecmascript` is the language of an unflagged ECMAScript `RegExp`: the pattern is read as that engine reads it, over UTF-16 code units, with no `^` or `$` at a line break (no `m` flag), no `.` that excludes line terminators (the patterns the derived builders write use `[\s\S]` and `[^\/]`, which take every code unit, a line terminator and an unpaired surrogate among them), and `test` finding a match anywhere. Each `matches` was recorded from `new RegExp(pattern).test(input)`. The generator that writes these cases (see Generated files) recomputes every answer from the host's `RegExp`, which checks that the recorded answers still hold and tests no implementation of this repository. An implementation compiles each pattern through the entry point it offers for that language, which refuses a construct that means something else there (`compile_ecmascript_subset` in the Rust crate, `compileEcmascriptSubset` in the package), and gives the recorded answer.
 
-The corpus pins answers, never time. A test that bounds how long a pattern takes stays in the implementation's own tests, next to the case that pins its answer, and a port keeps its own time-bound test.
+The corpus pins answers, never time. An input may also state a bound on the work the matcher does for it, `workBound: { "factor": k }`: at most k times (the pattern's length + 1) times (the input's length + 1) NFA state visits, both lengths in UTF-16 code units, where a visit is the epsilon closure expanding a state (`CompiledPattern::test_counted` in the Rust crate reports it). Only a runner that counts visits checks the field: the native runner does, and the runners of the wasm build run the same compiled Rust without the counter and ignore it. The cases that state one are patterns a backtracking engine takes exponential time on, so a matcher that backtracks fails them without a clock. A test that bounds how long something takes stays in the implementation's own tests.
 
 ### trilean
 
@@ -138,8 +150,8 @@ The cases are the specification of the package's behaviour: the reason codes, th
 | `evaluate` | 813 |
 | `inputs` | 13 |
 | `number-format` | 40 |
-| `regex-match` | 120 |
-| `regex-parse` | 87 |
+| `regex-match` | 136 |
+| `regex-parse` | 98 |
 | `serialise` | 38 |
 | `validate` | 127 |
 
@@ -257,7 +269,7 @@ An instant is a text in the ECMAScript date-time string format (`YYYY-MM-DD`, op
 
 ## Tests that stay outside the corpus
 
-A test stays in an implementation's own suite when a case cannot state it. Each is listed here with the reason, since these tests disappear with the TypeScript they test and a port has to cover each behaviour itself. The table covers the tests of `trilean` and `trilean-regex` other than the runners' own (`conformance.unit.test.ts`, `conformance.generated.unit.test.ts`, `conformance.compare.unit.test.ts`, `conformance.schema.unit.test.ts` and the regex package's `conformance.unit.test.ts`), which test the corpus machinery and not a behaviour; another package lists its own tests where its corpus is described. `trilean/src/conformance.unit.test.ts` fails when a test has no row, when a row has no test, when a row's title is not exactly the test's title (a template title is listed as written, placeholders included), when a row is malformed, and when a row's code is not defined above.
+A test stays in an implementation's own suite when a case cannot state it. Each is listed here with the reason, since these tests disappear with the TypeScript they test and a port has to cover each behaviour itself. The table covers the tests of `trilean` other than the runners' own (`conformance.unit.test.ts`, `conformance.generated.unit.test.ts`, `conformance.compare.unit.test.ts` and `conformance.schema.unit.test.ts`), which test the corpus machinery and not a behaviour; another package lists its own tests where its corpus is described. `trilean/src/conformance.unit.test.ts` fails when a test has no row, when a row has no test, when a row's title is not exactly the test's title (a template title is listed as written, placeholders included), when a row is malformed, and when a row's code is not defined above.
 
 | Code | Why a case cannot state it | A port must |
 | --- | --- | --- |
@@ -265,7 +277,7 @@ A test stays in an implementation's own suite when a case cannot state it. Each 
 | T2 | it relates two evaluations of one tree to each other, or enumerates trees, so it has no single expectation to write down | run the same comparison between its own evaluation paths (asynchronous, synchronous, compiled, native and wasm) over the same trees |
 | T3 | it tests a module that is not part of the package's public API (an internal numeric routine or helper), whose results the corpus pins only through the public operations built on it | test the routine it has in its place at the inputs the titles describe, since the corpus reaches these inputs only through `divide`, `power` and the duration comparisons |
 | T4 | it checks the built package (its entry points, declarations, command file and JSON Schema file), which is a build artefact and not a behaviour of the language-neutral contract | check its own build output: the entry points it publishes, its declared types, its command and the schema it emits |
-| T5 | it runs the package inside a Cloudflare Workers isolate, which is a host, not a behaviour; the behaviours it runs are the ones the corpus holds | run the corpus under workerd, as the wasm runner will |
+| T5 | it runs the package inside a Cloudflare Workers isolate, which is a host, not a behaviour; the behaviours it runs are the ones the corpus holds | run the corpus under workerd, as the wasm runner does |
 | T6 | it replaces an internal module with a stub to reach a path the real implementation cannot (a result the evaluator would already have refused) | test that path through its own seam: a result that is not a finite number must be refused by the output check |
 | T7 | it tests the shape of the TypeScript API an embedder composes (resolver objects and the item type), which is host code, not data | test its own embedding API: that an item is scoped to itself however the list was built, that nothing in the inputs reads as an inherited member, and that a returned list is a copy |
 | T8 | it checks that something runs in bounded time or work, which a case, giving an answer, cannot | keep its own time or work bound test next to the cases that pin the answer; the matcher also bounds its work by counting state visits |
@@ -367,8 +379,8 @@ A test stays in an implementation's own suite when a case cannot state it. Each 
 | schema-pipeline.integration.test.ts | survives JSON.parse as a real own key: the control confirming the fixture is genuinely hazardous before validation | T1 |
 | schema-pipeline.integration.test.ts | cannot hijack a downstream copy's prototype once validated, where the unvalidated parse still can | T1 |
 | schema-pipeline.integration.test.ts | never leaks onto the shared Object.prototype, the global half of the attack | T1 |
-| smoke.e2e.test.ts | dist/index.cjs loads as CommonJS and exposes every expected export | T4 |
-| smoke.e2e.test.ts | dist/tree.cjs loads as CommonJS and exposes both node-tree schemas | T4 |
+| smoke.e2e.test.ts | dist/index.js exposes every expected export | T4 |
+| smoke.e2e.test.ts | dist/tree.js exposes both node-tree schemas | T4 |
 | smoke.e2e.test.ts | a pre-approved, discount-authorised winning bid is definitely eligible | T4 |
 | smoke.e2e.test.ts | an empty bid list: fold's max has no first item to seed from: is indeterminate domain-error, not a crash or a silent default | T4 |
 | smoke.e2e.test.ts | is valid, parseable JSON with both node trees defined | T4 |
@@ -397,16 +409,6 @@ A test stays in an implementation's own suite when a case cannot state it. Each 
 | trilean.e2e.test.ts | portableMatches matches via trilean-regex's own compiled NFA | T5 |
 | trilean.e2e.test.ts | portableNotMatches is the negation, still inside the isolate | T5 |
 | trilean.e2e.test.ts | an invalid trilean-regex pattern resolves wrong-type rather than throwing out of the isolate | T5 |
-| ast.unit.test.ts | includes both endpoints and everything between them | T3 |
-| ast.unit.test.ts | excludes values outside the range | T3 |
-| ast.unit.test.ts | matches membership in the positive form | T3 |
-| ast.unit.test.ts | inverts membership when negated | T3 |
-| ast.unit.test.ts | unions multiple ranges | T3 |
-| shorthand-classes.unit.test.ts | \d expands to the ASCII digit range | T3 |
-| shorthand-classes.unit.test.ts | \D negates \d rather than owning its own range table | T3 |
-| shorthand-classes.unit.test.ts | \w matches letters, digits, and underscore only | T3 |
-| shorthand-classes.unit.test.ts | \s matches the ASCII whitespace set | T3 |
-| matcher.unit.test.ts | resolves a classically pathological nested-quantifier pattern instantly | T8 |
 
 ## Adding a case
 
