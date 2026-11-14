@@ -1,0 +1,19 @@
+{
+  "cases": [
+    {
+      "from": "recorded: trilean-regex src/matcher.rs (the matcher's work is bounded by pattern and input, not by how the pattern nests)",
+      "id": "match.recorded.work-bound.star-after-star",
+      "inputs": [
+        {
+          "input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "matches": false,
+          "workBound": {
+            "factor": "not-the-type"
+          }
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "(?:a*)*(?:a*)*b"
+    }
+  ]
+}

@@ -662,11 +662,17 @@
       "inputs": [
         {
           "input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaac",
-          "matches": false
+          "matches": false,
+          "workBound": {
+            "factor": 1
+          }
         },
         {
           "input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaab",
-          "matches": true
+          "matches": true,
+          "workBound": {
+            "factor": 1
+          }
         }
       ],
       "kind": "regex-match",
@@ -885,6 +891,212 @@
       ],
       "kind": "regex-match",
       "pattern": "^[а-я]+$"
+    },
+    {
+      "from": "recorded: trilean-regex src/matcher.rs (the matcher's work is bounded by pattern and input, not by how the pattern nests)",
+      "id": "match.recorded.work-bound.star-of-star",
+      "inputs": [
+        {
+          "input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "matches": false,
+          "workBound": {
+            "factor": 1
+          }
+        },
+        {
+          "input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab",
+          "matches": true,
+          "workBound": {
+            "factor": 1
+          }
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "(?:a*)*b"
+    },
+    {
+      "from": "recorded: trilean-regex src/matcher.rs (the matcher's work is bounded by pattern and input, not by how the pattern nests)",
+      "id": "match.recorded.work-bound.alternation-of-equals",
+      "inputs": [
+        {
+          "input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "matches": false,
+          "workBound": {
+            "factor": 1
+          }
+        },
+        {
+          "input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab",
+          "matches": true,
+          "workBound": {
+            "factor": 1
+          }
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "(?:a|a)*b"
+    },
+    {
+      "from": "recorded: trilean-regex src/matcher.rs (the matcher's work is bounded by pattern and input, not by how the pattern nests)",
+      "id": "match.recorded.work-bound.overlapping-branches",
+      "inputs": [
+        {
+          "input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "matches": false,
+          "workBound": {
+            "factor": 1
+          }
+        },
+        {
+          "input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaac",
+          "matches": false,
+          "workBound": {
+            "factor": 1
+          }
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "(?:a|aa)+b"
+    },
+    {
+      "from": "recorded: trilean-regex src/matcher.rs (the matcher's work is bounded by pattern and input, not by how the pattern nests)",
+      "id": "match.recorded.work-bound.star-after-star",
+      "inputs": [
+        {
+          "input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "matches": false,
+          "workBound": {
+            "factor": 1
+          }
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "(?:a*)*(?:a*)*b"
+    },
+    {
+      "from": "recorded: trilean-regex src/matcher.rs (the matcher's work is bounded by pattern and input, not by how the pattern nests)",
+      "id": "match.recorded.work-bound.optional-then-mandatory-copies",
+      "inputs": [
+        {
+          "input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "matches": false,
+          "workBound": {
+            "factor": 5
+          }
+        },
+        {
+          "input": "aaaaaaaaaaaaaaaaaaaaaaaaab",
+          "matches": true,
+          "workBound": {
+            "factor": 5
+          }
+        },
+        {
+          "input": "aaaaaaaaaaaaaaaaaaaaaaaab",
+          "matches": false,
+          "workBound": {
+            "factor": 5
+          }
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "(?:a?){25}a{25}b"
+    },
+    {
+      "from": "recorded: trilean-regex src/matcher.rs (a class of a shorthand and its negation takes every code unit)",
+      "id": "match.recorded.any-code-unit.class-of-a-shorthand-and-its-negation",
+      "inputs": [
+        {
+          "input": "",
+          "matches": true
+        },
+        {
+          "input": "line\nbreak ",
+          "matches": true
+        },
+        {
+          "input": {
+            "codeUnits": [
+              55357
+            ]
+          },
+          "matches": true
+        },
+        {
+          "input": "😀",
+          "matches": true
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^[\\s\\S]*$"
+    },
+    {
+      "from": "recorded: trilean-regex src/matcher.rs (a negated class of a shorthand and its negation takes none)",
+      "id": "match.recorded.any-code-unit.negated-class-of-a-shorthand-and-its-negation",
+      "inputs": [
+        {
+          "input": "",
+          "matches": false
+        },
+        {
+          "input": "a",
+          "matches": false
+        },
+        {
+          "input": "\n",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "[^\\s\\S]"
+    },
+    {
+      "from": "recorded: trilean-regex src/matcher.rs (a negated shorthand inside a class matches what it means)",
+      "id": "match.recorded.negated-shorthand-in-class",
+      "inputs": [
+        {
+          "input": "a",
+          "matches": true
+        },
+        {
+          "input": "x",
+          "matches": true
+        },
+        {
+          "input": "5",
+          "matches": false
+        },
+        {
+          "input": "",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^[\\Da]$"
+    },
+    {
+      "from": "recorded: trilean-regex src/matcher.rs (a negated space shorthand inside a class takes everything but the six)",
+      "id": "match.recorded.negated-space-in-class",
+      "inputs": [
+        {
+          "input": "a",
+          "matches": true
+        },
+        {
+          "input": " ",
+          "matches": false
+        },
+        {
+          "input": "\t",
+          "matches": false
+        },
+        {
+          "input": " ",
+          "matches": true
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "^[\\S]$"
     }
   ]
 }
