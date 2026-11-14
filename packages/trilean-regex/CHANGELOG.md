@@ -1,3 +1,17 @@
+## [1.0.17](https://github.com/ExaDev/trilean/compare/trilean-regex%401.0.16...trilean-regex%401.0.17) (2026-11-14)
+
+### Tests
+
+* count completeness per implementation and tighten what a corpus file may be ([d814c7e](https://github.com/ExaDev/trilean/commit/d814c7e867f6a51c342a255c31335b44eae62ea6))
+* make corpus text, numbers and the only axis mean the same in every loader ([396adfa](https://github.com/ExaDev/trilean/commit/396adfa0b04b52529696782465aedc94d1bf8d4b))
+* run the trilean-regex parser and matcher cases from the conformance corpus ([0b93d41](https://github.com/ExaDev/trilean/commit/0b93d411a604004ea07cb9d072892a2cfcf3427f))
+* tie every negative fixture to its rule with a repaired twin ([2d30bc8](https://github.com/ExaDev/trilean/commit/2d30bc897f64bc228a22b18ec13a0dfd42ad1a91))
+* validate the corpus with its schema and run every loader by one rule ([0f6bec9](https://github.com/ExaDev/trilean/commit/0f6bec9e155ef101e5595b1f1fe66daa2662ba36))
+
+### Build System
+
+* rerun only trilean-regex tests when the corpus changes ([01782cc](https://github.com/ExaDev/trilean/commit/01782ccb8c152d09f056561d6eb3ef509db359cb))
+
 ## [1.0.16](https://github.com/ExaDev/trilean/compare/trilean-regex%401.0.15...trilean-regex%401.0.16) (2026-10-20)
 
 ### Build System

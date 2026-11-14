@@ -1,3 +1,10 @@
+## [1.13.1](https://github.com/ExaDev/trilean/compare/trilean%401.13.0...trilean%401.13.1) (2026-11-14)
+
+
+### Dependencies
+
+- Updated trilean-regex to 1.0.17
+
 ## [1.13.0](https://github.com/ExaDev/trilean/compare/trilean%401.12.0...trilean%401.13.0) (2026-10-29)
 
 ### Features
