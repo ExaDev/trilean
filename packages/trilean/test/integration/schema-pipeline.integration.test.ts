@@ -57,7 +57,7 @@ describe("a __proto__ key inside an opaque JsonValue payload", () => {
     return payload;
   }
 
-  it("survives JSON.parse as a real own key -- the control confirming the fixture is genuinely hazardous before validation", () => {
+  it("survives JSON.parse as a real own key: the control confirming the fixture is genuinely hazardous before validation", () => {
     expect(Object.keys(unvalidatedPayload())).toEqual(["__proto__", "orderId"]);
   });
 

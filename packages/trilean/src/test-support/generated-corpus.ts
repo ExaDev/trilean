@@ -1,4 +1,4 @@
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { format, isRecord } from "./generated-format";
 import { generatedFixtures } from "./generated-fixtures";
@@ -422,6 +422,7 @@ export function generatedDerived(root: string): ReadonlyMap<string, string> {
 
 /** Writes the generated corpus files under `root`, then what is derived from them and the rest of the corpus. */
 export function writeGeneratedCorpus(root: string): void {
+  rmSync(join(root, "fixtures", "generated"), { recursive: true, force: true });
   for (const [path, content] of generatedCorpus()) {
     const target = join(root, path);
     mkdirSync(dirname(target), { recursive: true });

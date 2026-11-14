@@ -80,7 +80,7 @@ const expectedTreeExports: readonly (keyof typeof TreeModule)[] = [
 describe.each([
   ["ESM (dist/index.js)", esmIndex],
   ["CJS (dist/index.cjs)", cjsIndex],
-])("built package entry point -- %s", (_label, moduleExports) => {
+])("built package entry point: %s", (_label, moduleExports) => {
   it.each(expectedIndexExports)(
     "exports %s as a %s",
     (exportName, expectedType) => {
@@ -92,7 +92,7 @@ describe.each([
 describe.each([
   ["ESM (dist/tree.js)", esmTree],
   ["CJS (dist/tree.cjs)", cjsTree],
-])("built deep-import subpath -- %s", (_label, moduleExports) => {
+])("built deep-import subpath: %s", (_label, moduleExports) => {
   it.each(expectedTreeExports)("exports %s as an object", (exportName) => {
     expect(typeof moduleExports[exportName]).toBe("object");
   });
@@ -197,7 +197,7 @@ describe.each([
   ["ESM (dist/index.js)", esmIndex],
   ["CJS (dist/index.cjs)", cjsIndex],
 ])(
-  "composed rule (fold max + memberOf + implies) against the built package -- %s",
+  "composed rule (fold max + memberOf + implies) against the built package: %s",
   (_label, moduleExports) => {
     const { evaluatePredicate, implies } = moduleExports;
     const auctionRule = buildAuctionRule(implies);
@@ -215,7 +215,7 @@ describe.each([
       expect(result).toEqual({ status: "definite", value: true });
     });
 
-    it("an empty bid list -- fold's max has no first item to seed from -- is indeterminate domain-error, not a crash or a silent default", async () => {
+    it("an empty bid list: fold's max has no first item to seed from: is indeterminate domain-error, not a crash or a silent default", async () => {
       const result: IndexModule.Evaluation<boolean> = await evaluatePredicate(
         auctionRule,
         { bids: [], discountFlag: 1 },

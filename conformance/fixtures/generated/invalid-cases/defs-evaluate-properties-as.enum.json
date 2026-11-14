@@ -3,7 +3,8 @@
     {
       "as": "not-an-allowed-value",
       "expect": {
-        "status": "definite"
+        "status": "definite",
+        "value": true
       },
       "from": "x.unit.test.ts: a fixture",
       "id": "optional.11",

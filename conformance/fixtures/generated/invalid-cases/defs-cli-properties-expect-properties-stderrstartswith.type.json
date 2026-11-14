@@ -1,17 +1,15 @@
 {
   "cases": [
     {
-      "args": [
-        "evaluate",
-        "-"
-      ],
+      "args": [],
       "expect": {
         "exit": 2,
-        "stderrStartsWith": 1
+        "stderrStartsWith": 1,
+        "stdout": ""
       },
       "files": {},
-      "from": "cli-run.integration.test.ts: trilean evaluate > names standard input, not a dash, when it cannot be read",
-      "id": "cli.trilean-evaluate-names-standard-input-not-a-dash-when-it-cannot-be-read.1",
+      "from": "cli-run.integration.test.ts: trilean evaluate > prints usage on standard error and exits 2 when given no arguments",
+      "id": "cli.trilean-evaluate-prints-usage-on-standard-error-and-exits-2-when-given-no-arguments.1",
       "kind": "cli"
     }
   ]

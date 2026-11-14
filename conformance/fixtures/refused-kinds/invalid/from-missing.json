@@ -3,7 +3,8 @@
     {
       "as": "predicate",
       "expect": {
-        "status": "definite"
+        "status": "definite",
+        "value": true
       },
       "id": "fixture.1",
       "kind": "evaluate",

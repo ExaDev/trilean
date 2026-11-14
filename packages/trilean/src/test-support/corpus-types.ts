@@ -178,8 +178,6 @@ export interface CliCase extends CaseBase {
     readonly stdout?: string;
     readonly stderr?: string;
     readonly stdoutJson?: Json;
-    readonly stdoutJsonSubset?: Json;
-    readonly stdoutExcludes?: readonly string[];
     readonly stderrIncludes?: readonly string[];
     readonly stderrStartsWith?: string;
     readonly stdoutStartsWith?: string;

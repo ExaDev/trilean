@@ -3,7 +3,8 @@
     {
       "as": "predicate",
       "expect": {
-        "status": "definite"
+        "status": "definite",
+        "value": true
       },
       "from": "x.unit.test.ts: a fixture",
       "id": "fixture.1",
@@ -17,7 +18,8 @@
     {
       "as": "predicate",
       "expect": {
-        "status": "definite"
+        "status": "definite",
+        "value": true
       },
       "from": "x.unit.test.ts: a fixture",
       "id": "fixture.1",

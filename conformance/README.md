@@ -131,7 +131,7 @@ The cases are the specification of the package's behaviour: the reason codes, th
 | `call` | 181 |
 | `cli` | 52 |
 | `document` | 36 |
-| `evaluate` | 740 |
+| `evaluate` | 746 |
 | `inputs` | 13 |
 | `number-format` | 40 |
 | `regex-match` | 120 |
@@ -193,7 +193,7 @@ Results computed by the engine's `exp`, `log`, `hypot`, `sin`, `cos` and `atan2`
 { "id": "...", "from": "...", "kind": "document", "tree": { ... }, "inputs": { ... }, "as": "predicate", "maxNodes": 100, "expect": { "outcome": "evaluated", "treeKind": "expression", "evaluation": { ... } } }
 ```
 
-A document is a tree and its inputs, evaluated with the package's built-in functions, each `reference` reading a name from the inputs and each collection being a list of items of the inputs. `as` says whether the tree is a predicate or an expression; absent, the kind is read from the root, and a root that is a `treeReference`, valid as either, is rejected with the reason `ambiguous-tree-kind`. `maxNodes` is the budget, 10000 when absent. The outcome is one of three objects: `{ "outcome": "evaluated", "treeKind": "predicate" or "expression", "evaluation": <definite or indeterminate> }`; `{ "outcome": "rejected", "reason": "invalid" or "ambiguous-tree-kind", "issues": [...] }`, where an issue is `<path>: <text>` and nothing was evaluated (the tree or the inputs are invalid); and `{ "outcome": "unrepresentable", "issues": [...] }`, for a definite result that JSON cannot carry. `expect` is the whole outcome. `expectSubset` is given instead where the original asserted only some of it: it names at least one key, and an object matches when every key it gives matches, an array matches element by element at the same length, and any other value must be equal. `expectIssuePaths` lists paths each of which at least one issue names, for a rejection whose issue text is a third-party library's and not the implementation's to pin.
+A document is a tree and its inputs, evaluated with the package's built-in functions, each `reference` reading a name from the inputs and each collection being a list of items of the inputs. `as` says whether the tree is a predicate or an expression; absent, the kind is read from the root, and a root that is a `treeReference`, valid as either, is rejected with the reason `ambiguous-tree-kind`. `maxNodes` is the budget, 10000 when absent. The outcome is one of three objects: `{ "outcome": "evaluated", "treeKind": "predicate" or "expression", "evaluation": <definite or indeterminate> }`; `{ "outcome": "rejected", "reason": "invalid" or "ambiguous-tree-kind", "issues": [...] }`, where an issue is `<path>: <text>` and nothing was evaluated (the tree or the inputs are invalid); and `{ "outcome": "unrepresentable", "issues": [...] }`, for a definite result that JSON cannot carry. `expect` is the whole outcome. A rejected document whose issues hold a schema library's text, which the implementation does not own, gives `expectSubset` instead, the outcome without that text: it names at least one key, an object matches when every key it gives matches, an array matches element by element at the same length, and any other value must be equal; `expectIssuePaths` then lists paths each of which at least one issue names (an issue is `<path>: <text>`).
 
 #### cli
 
@@ -201,7 +201,7 @@ A document is a tree and its inputs, evaluated with the package's built-in funct
 { "id": "...", "from": "...", "kind": "cli", "args": ["evaluate", "tree.json"], "files": { "tree.json": "{...}" }, "stdin": "...", "expect": { "exit": 0, "stdoutJson": { ... } } }
 ```
 
-The command is `evaluate <tree.json>` with the options `--inputs <file>` (a JSON object, read as the inputs of a document), `--as predicate|expression` and `--max-nodes <n>` (a positive integer written in plain digits, no sign, no exponent and no space, at most 2^53-1, given as `--max-nodes N` or `--max-nodes=N`), `--help` (`-h`) and `--version` (`-v`). A path of `-` reads standard input. It prints the evaluation as JSON on standard output and exits `0` for a definite result and `1` for an indeterminate one; it prints nothing on standard output and exits `2`, with the problem on standard error, for bad usage, an unreadable or invalid file, a rejected document or a collection the inputs do not hold. The command is run against an in-memory set of files, `files` (name to text), and `stdin`; a path that is in neither cannot be read. The text of `files` is read as written by a parser that reads a number past the double range as an infinity (`1e999` is infinite), which a standard JSON parser may refuse and the implementation's command must not. `expect` gives the exit status and, where the original asserted it, `stdout` or `stderr` as exact text, `stdoutJson`, the JSON printed, `stdoutJsonSubset`, the same for an original that asserted only some fields (the rule of `expectSubset`), `stdoutExcludes`, fragments standard output does not contain, `stderrIncludes`, fragments standard error contains in order, and `stderrStartsWith` and `stdoutStartsWith`.
+The command is `evaluate <tree.json>` with the options `--inputs <file>` (a JSON object, read as the inputs of a document), `--as predicate|expression` and `--max-nodes <n>` (a positive integer written in plain digits, no sign, no exponent and no space, at most 2^53-1, given as `--max-nodes N` or `--max-nodes=N`), `--help` (`-h`) and `--version` (`-v`). A path of `-` reads standard input. It prints the evaluation as JSON on standard output and exits `0` for a definite result and `1` for an indeterminate one; it prints nothing on standard output and exits `2`, with the problem on standard error, for bad usage, an unreadable or invalid file, a rejected document or a collection the inputs do not hold. The command is run against an in-memory set of files, `files` (name to text), and `stdin`; a path that is in neither cannot be read. The text of `files` is read as written by a parser that reads a number past the double range as an infinity (`1e999` is infinite), which a standard JSON parser may refuse and the implementation's command must not. `expect` gives the exit status and what the command printed: `stdout` or `stderr` as exact text (a command that exits with `2` prints nothing on standard output, and a case says so), `stdoutJson`, the JSON printed, `stderrIncludes`, fragments standard error contains in order, and `stderrStartsWith` and `stdoutStartsWith`.
 
 #### evaluate
 
@@ -211,7 +211,7 @@ The command is `evaluate <tree.json>` with the options `--inputs <file>` (a JSON
 
 `tree` is a predicate or an expression (`as` says which) and is evaluated under `context`, a JSON value. A case without `context` gives the evaluator no context at all, which is not a context of `null`.
 
-`expect` is `{ "status": "definite", "value": ... }` (a boolean for a predicate, a computed value for an expression; `value` is left out where the original asserted only that the result is definite), `{ "status": "indeterminate", "code": ... }` (`code` is left out where the original asserted only that it is indeterminate), optionally with `message`, which must equal the reason's message, or `messageIncludes`, fragments that must occur in the reason's message in order (with `ignoreCase: true`, in any letter case, for an original that matched case-insensitively), or `{ "throws": { "message": ... } }`, for an evaluation that ends in an exception, whose message contains the fragment; an exception comes only from a resolver that throws (a resolution `{ "throws": "message" }`) and is not caught by the evaluator. A case that asserts only the resolver calls (`expectCalls`) gives no `expect`.
+`expect` is `{ "status": "definite", "value": ... }` (a boolean for a predicate, a computed value for an expression), `{ "status": "indeterminate", "code": ... }` (`code` is always given, and a `message` or `messageIncludes` where the implementation words the reason), optionally with `message`, which must equal the reason's message, or `messageIncludes`, fragments that must occur in the reason's message in order (with `ignoreCase: true`, compared without regard to the case of the ASCII letters A to Z, for an original that matched case-insensitively; it applies to `message` too), or `{ "throws": { "message": ... } }`, for an evaluation that ends in an exception, whose message contains the fragment; an exception comes only from a resolver that throws (a resolution `{ "throws": "message" }`) and is not caught by the evaluator. A case that asserts only the resolver calls (`expectCalls`) gives no `expect`.
 
 The resolvers are data. `resolvers` lists the answers a resolver gives, in these forms, and an evaluation asks a resolver for each `reference` (`values`), `lookup` (`lookups`), collection of a `fold`, `some` or `every` (`collections`), `delegate` (`delegates`) and `treeReference` (`trees`). A call is answered by the first entry, in the order listed, that matches it:
 
@@ -253,7 +253,7 @@ An instant is a text in the ECMAScript date-time string format (`YYYY-MM-DD`, op
 
 ## Tests that stay outside the corpus
 
-A test stays in an implementation's own suite when a case cannot state it. Each is listed here with the reason, since these tests disappear with the TypeScript they test and a port has to cover each behaviour itself. `trilean/src/conformance.unit.test.ts` fails when a test is added to, or removed from, these files without a row here, by comparing the titles of the tests with this section (a title that is a template matches up to its first placeholder). The `trilean-sql` tests are listed when its cases are extracted.
+A test stays in an implementation's own suite when a case cannot state it. Each is listed here with the reason, since these tests disappear with the TypeScript they test and a port has to cover each behaviour itself. The table covers the tests of `trilean` and `trilean-regex` other than the runners' own (`conformance.unit.test.ts`, `conformance.generated.unit.test.ts`, `conformance.compare.unit.test.ts`, `conformance.schema.unit.test.ts` and the regex package's `conformance.unit.test.ts`), which test the corpus machinery and not a behaviour; another package lists its own tests where its corpus is described. `trilean/src/conformance.unit.test.ts` fails when a test has no row, when a row has no test, when a row's title is not exactly the test's title (a template title is listed as written, placeholders included), when a row is malformed, and when a row's code is not defined above.
 
 | Code | Why a case cannot state it | A port must |
 | --- | --- | --- |
@@ -264,9 +264,9 @@ A test stays in an implementation's own suite when a case cannot state it. Each 
 | T5 | it runs the package inside a Cloudflare Workers isolate, which is a host, not a behaviour; the behaviours it runs are the ones the corpus holds | run the corpus under workerd, as the wasm runner will |
 | T6 | it replaces an internal module with a stub to reach a path the real implementation cannot (a result the evaluator would already have refused) | test that path through its own seam: a result that is not a finite number must be refused by the output check |
 | T7 | it tests the shape of the TypeScript API an embedder composes (resolver objects and the item type), which is host code, not data | test its own embedding API: that an item is scoped to itself however the list was built, that nothing in the inputs reads as an inherited member, and that a returned list is a copy |
-| T10 | its original asserted an inequality (a sign, finiteness) of a result in the subnormal range, whose last digits differ between conforming implementations, so a case pinning the value would over-constrain it | test the inequality of the original on its own result |
-| T9 | it checks a value the command is given by its host and not by its arguments or files (the version), which a case has nowhere to state | test its own command's version output |
 | T8 | it checks that something runs in bounded time or work, which a case, giving an answer, cannot | keep its own time or work bound test next to the cases that pin the answer; the matcher also bounds its work by counting state visits |
+| T9 | it checks a value the command is given by its host and not by its arguments or files (the version), which a case has nowhere to state | test its own command's version output |
+| T10 | its original asserted an inequality (a sign, finiteness) of a result in the subnormal range, whose last digits differ between conforming implementations, so a case pinning the value would over-constrain it | test the inequality of the original on its own result |
 
 | Test file | Test | Code |
 | --- | --- | --- |
@@ -360,23 +360,23 @@ A test stays in an implementation's own suite when a case cannot state it. Each 
 | json-schema-consistency.integration.test.ts | emits at least one reference, so the assertion below cannot pass vacuously | T4 |
 | json-schema-consistency.integration.test.ts | emits every reference in a form that resolves inside the converted document | T4 |
 | json-schema-consistency.integration.test.ts | %s's mutual recursion converts to resolvable references | T4 |
-| schema-pipeline.integration.test.ts | survives JSON.parse as a real own key -- the control confirming the fixture is genuinely hazardous before validation | T1 |
+| schema-pipeline.integration.test.ts | survives JSON.parse as a real own key: the control confirming the fixture is genuinely hazardous before validation | T1 |
 | schema-pipeline.integration.test.ts | cannot hijack a downstream copy's prototype once validated, where the unvalidated parse still can | T1 |
 | schema-pipeline.integration.test.ts | never leaks onto the shared Object.prototype, the global half of the attack | T1 |
 | smoke.e2e.test.ts | dist/index.cjs loads as CommonJS and exposes every expected export | T4 |
 | smoke.e2e.test.ts | dist/tree.cjs loads as CommonJS and exposes both node-tree schemas | T4 |
 | smoke.e2e.test.ts | a pre-approved, discount-authorised winning bid is definitely eligible | T4 |
-| smoke.e2e.test.ts | an empty bid list -- fold's max has no first item to seed from -- is indeterminate domain-error, not a crash or a silent default | T4 |
+| smoke.e2e.test.ts | an empty bid list: fold's max has no first item to seed from: is indeterminate domain-error, not a crash or a silent default | T4 |
 | smoke.e2e.test.ts | is valid, parseable JSON with both node trees defined | T4 |
 | smoke.e2e.test.ts | is self-contained: every $ref resolves to a definition inside the document | T4 |
 | smoke.e2e.test.ts | carries a version-pinned $id identifying this exact published version on jsDelivr | T4 |
 | smoke.e2e.test.ts | is RFC 8785 (JCS) canonical: re-canonicalizing its parsed content reproduces the file on disk byte for byte | T4 |
 | smoke.e2e.test.ts | satisfies RFC 8785's structural rules read straight off the raw bytes, independently of the canonicalize package | T4 |
-| smoke.e2e.test.ts | built package entry point -- %s | T4 |
+| smoke.e2e.test.ts | built package entry point: %s | T4 |
 | smoke.e2e.test.ts | exports %s as a %s | T4 |
-| smoke.e2e.test.ts | built deep-import subpath -- %s | T4 |
+| smoke.e2e.test.ts | built deep-import subpath: %s | T4 |
 | smoke.e2e.test.ts | exports %s as an object | T4 |
-| smoke.e2e.test.ts | composed rule (fold max + memberOf + implies) against the built package -- %s | T4 |
+| smoke.e2e.test.ts | composed rule (fold max + memberOf + implies) against the built package: %s | T4 |
 | smoke.e2e.test.ts | %s's generated 'kind' consts are exactly the built package's own %s options | T4 |
 | trilean.e2e.test.ts | base case: isActive eq true AND sum(items.amount) via reduce fold > x + y -> definite true | T5 |
 | trilean.e2e.test.ts | items: [] variation -> definite false (the fold-over-empty identity feeds through to and's own absorbing false) | T5 |
@@ -403,7 +403,6 @@ A test stays in an implementation's own suite when a case cannot state it. Each 
 | shorthand-classes.unit.test.ts | \w matches letters, digits, and underscore only | T3 |
 | shorthand-classes.unit.test.ts | \s matches the ASCII whitespace set | T3 |
 | matcher.unit.test.ts | resolves a classically pathological nested-quantifier pattern instantly | T8 |
-| T8 |
 
 ## Adding a case
 

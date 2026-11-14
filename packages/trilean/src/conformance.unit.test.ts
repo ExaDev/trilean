@@ -331,82 +331,92 @@ describe("corpus completeness", () => {
   });
 });
 
-/** The titles of the tests in a source file: the first string of each `it(` and of each `it.each(...)(`, with escapes read as the text they stand for. */
+/** The titles of the tests in a source file: the first string of each `it(` and of each `it.each(...)(`, with escapes read as the text they stand for, a template title as written. */
 function testTitles(source: string): readonly string[] {
   const direct = /\b(?:it|test)\(\s*(["'`])((?:\\.|(?!\1)[\s\S])*)\1/gu;
   const each =
     /\)\(\s*(["'`])((?:\\.|(?!\1)[\s\S])*)\1\s*,\s*(?:async\s*)?\(/gu;
-  const titles = [...source.matchAll(direct), ...source.matchAll(each)].map(
-    (found) => (found[2] ?? "").replace(/\\(.)/gu, "$1"),
-  );
 
-  return titles;
+  return [...source.matchAll(direct), ...source.matchAll(each)].map((found) =>
+    (found[2] ?? "").replace(/\\(.)/gu, "$1"),
+  );
 }
 
-/** The test files under a directory, other than the corpus runners. */
+/** The tests of the corpus machinery itself, which the README table does not list: they test how the corpus is read and not a behaviour of the package. */
+const RUNNER_TESTS: ReadonlySet<string> = new Set([
+  "conformance.unit.test.ts",
+  "conformance.generated.unit.test.ts",
+  "conformance.compare.unit.test.ts",
+  "conformance.schema.unit.test.ts",
+]);
+
+/** The test files under a directory, other than the runners' own. */
 function testFiles(directory: string): readonly string[] {
   return readdirSync(directory, { recursive: true, withFileTypes: true })
     .filter(
       (entry) =>
         entry.isFile() &&
         entry.name.endsWith(".test.ts") &&
-        !entry.name.startsWith("conformance"),
+        !RUNNER_TESTS.has(entry.name) &&
+        !(entry.name === "conformance.unit.test.ts"),
     )
     .map((entry) => join(entry.parentPath, entry.name));
 }
 
+const ROW = /^\| (\S+\.test\.ts) \| (.+) \| (T\d+) \|$/u;
+const LEGEND = /^\| (T\d+) \| ([^|]+) \| ([^|]+) \|$/u;
+
 describe("the tests that stay outside the corpus", () => {
   const readme = readFileSync(join(CORPUS_ROOT, "README.md"), "utf8");
-  const section = readme.slice(
-    readme.indexOf("## Tests that stay outside the corpus"),
-    readme.indexOf("## Adding a case"),
-  );
+  const section = readme
+    .slice(
+      readme.indexOf("## Tests that stay outside the corpus"),
+      readme.indexOf("## Adding a case"),
+    )
+    .split("\n");
   const packages = fileURLToPath(new URL("../../", import.meta.url));
   const files = [
     ...testFiles(join(packages, "trilean")),
     ...testFiles(join(packages, "trilean-regex")),
   ].filter((file) => !file.includes("node_modules"));
+  const rowLines = section.filter((line) => /^\| \S+\.test\.ts \|/u.test(line));
+  const rows = rowLines.flatMap((line) => {
+    const found = ROW.exec(line);
 
-  it("are each listed in the README, under the file they are in", () => {
-    expect(files.length).toBeGreaterThan(0);
-    const missing: string[] = [];
-    for (const file of files) {
-      const name = file.slice(file.lastIndexOf("/") + 1);
-      for (const title of testTitles(readFileSync(file, "utf8"))) {
-        // A title that is a template stands for its rows: it matches up to its first placeholder.
-        const stem = title.split(/[%$]/u)[0] ?? title;
-        const wanted = `| ${name} | ${stem}`;
-        if (!section.includes(wanted)) {
-          missing.push(`${name}: ${title}`);
-        }
-      }
-    }
-    expect(missing).toEqual([]);
+    return found === null
+      ? []
+      : [{ name: found[1] ?? "", title: found[2] ?? "", code: found[3] ?? "" }];
+  });
+  const present = files.flatMap((file) => {
+    const name = file.slice(file.lastIndexOf("/") + 1);
+
+    return testTitles(readFileSync(file, "utf8")).map(
+      (title) => `${name} | ${title}`,
+    );
   });
 
-  it("list no test that is no longer there", () => {
-    const present = new Set(
-      files.flatMap((file) => {
-        const name = file.slice(file.lastIndexOf("/") + 1);
+  it("has only well formed rows, each with a code the legend defines", () => {
+    expect(rowLines.filter((line) => !ROW.test(line))).toEqual([]);
+    const legend = section.filter((line) => /^\| T\d+ \|/u.test(line));
+    expect(legend.filter((line) => !LEGEND.test(line))).toEqual([]);
+    const codes = legend.map((line) => LEGEND.exec(line)?.[1] ?? "");
+    expect(codes).toEqual(
+      [...codes].sort((a, b) => Number(a.slice(1)) - Number(b.slice(1))),
+    );
+    expect(rows.filter(({ code }) => !codes.includes(code))).toEqual([]);
+    expect(rows.length).toBeGreaterThan(0);
+  });
 
-        return testTitles(readFileSync(file, "utf8")).map(
-          (title) => `${name}|${title.split(/[%$]/u)[0] ?? title}`,
-        );
-      }),
-    );
-    const listed = [
-      ...section.matchAll(/^\| (\S+\.test\.ts) \| (.*) \| T\d \|$/gmu),
-    ].map((row) => ({ name: row[1] ?? "", title: row[2] ?? "" }));
-    expect(listed.length).toBeGreaterThan(0);
-    const stale = listed.filter(
-      ({ name, title }) =>
-        ![...present].some(
-          (key) =>
-            key.startsWith(`${name}|`) &&
-            title.startsWith(key.slice(name.length + 1)),
-        ),
-    );
-    expect(stale).toEqual([]);
+  it("lists every test under its exact title", () => {
+    expect(files.length).toBeGreaterThan(0);
+    const listed = rows.map(({ name, title }) => `${name} | ${title}`);
+    expect(present.filter((key) => !listed.includes(key))).toEqual([]);
+  });
+
+  it("lists no test that is not there", () => {
+    const listed = rows.map(({ name, title }) => `${name} | ${title}`);
+    expect(listed.filter((key) => !present.includes(key))).toEqual([]);
+    expect([...listed].sort()).toEqual([...present].sort());
   });
 });
 
