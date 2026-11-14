@@ -2,6 +2,7 @@ import { readdirSync, readFileSync } from "node:fs";
 import Ajv from "ajv";
 import Ajv2020 from "ajv/dist/2020.js";
 import type { ValidateFunction } from "ajv";
+import { format, resolveConfig } from "prettier";
 import { describe, expect, it } from "vitest";
 
 /**
@@ -10,6 +11,9 @@ import { describe, expect, it } from "vitest";
 
 // How many files of each verdict the corpus and its fixtures must hold for the comparison to compare something.
 const MINIMUM_PER_VERDICT = 100;
+
+// How many files the Rust tests write under the corpus: the two tables, two schemas and the emitted case schema.
+const MINIMUM_WRITTEN_FILES = 4;
 
 const CORPUS = `${import.meta.dirname}/conformance`;
 const DIRECTORY = `${CORPUS}/fixtures/shape-agreement`;
@@ -197,5 +201,30 @@ describe("the case schema the Rust types emit", () => {
         file,
       ).toBe(true);
     }
+  });
+});
+
+describe("the files the Rust tests write under conformance", () => {
+  // Rust tests regenerate these files and compare them with the committed text, and the root lint formats every file under conformance with prettier. The two writers share no code, so this runs the formatter over each committed file and requires it to change nothing: the generator's output is the formatter's form, and a content the two format differently fails here, not as a lint rewrite between a lint and a test.
+  const written = [
+    ...jsonFiles("fixtures/shape-agreement"),
+    ...jsonFiles("fixtures/case-schema"),
+  ];
+
+  it("leaves every one unchanged when the formatter runs over it", async () => {
+    expect(written.length).toBeGreaterThan(MINIMUM_WRITTEN_FILES);
+    const formatted = await Promise.all(
+      written.map(async (relative) => {
+        const path = `${CORPUS}/${relative}`;
+        const text = readFileSync(path, "utf8");
+        const options = await resolveConfig(path);
+
+        return (await format(text, { ...options, filepath: path })) === text
+          ? undefined
+          : relative;
+      }),
+    );
+    const changed = formatted.filter((relative) => relative !== undefined);
+    expect(changed).toEqual([]);
   });
 });
