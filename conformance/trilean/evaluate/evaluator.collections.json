@@ -1,0 +1,705 @@
+{
+  "cases": [
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 42
+        }
+      },
+      "from": "evaluator.collections.unit.test.ts: lookup > evaluates every key and passes its resolved value to resolveLookup, in declared order",
+      "id": "collections.lookup-evaluates-every-key-and-passes-its-resolved-value-to-resolvelookup-in-declared-order.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "lookups": [
+          {
+            "keys": [
+              {
+                "kind": "text",
+                "value": "north"
+              },
+              {
+                "kind": "number",
+                "value": 2
+              }
+            ],
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 42
+              }
+            },
+            "table": "pricing"
+          }
+        ],
+        "values": [
+          {
+            "key": "region",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "north"
+              }
+            }
+          },
+          {
+            "key": "tier",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 2
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "keys": [
+          {
+            "key": "region",
+            "kind": "reference"
+          },
+          {
+            "key": "tier",
+            "kind": "reference"
+          }
+        ],
+        "kind": "lookup",
+        "table": "pricing"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.collections.unit.test.ts: lookup > is not-found when the resolver reports no match",
+      "id": "collections.lookup-is-not-found-when-the-resolver-reports-no-match.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "lookups": [
+          {
+            "keys": [
+              {
+                "kind": "text",
+                "value": "north"
+              }
+            ],
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 42
+              }
+            },
+            "table": "pricing"
+          }
+        ],
+        "values": [
+          {
+            "key": "region",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "north"
+              }
+            }
+          },
+          {
+            "key": "tier",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 2
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "keys": [
+          {
+            "key": "region",
+            "kind": "reference"
+          }
+        ],
+        "kind": "lookup",
+        "table": "unknown-table"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "boolean",
+          "value": true
+        }
+      },
+      "from": "evaluator.collections.unit.test.ts: lookup > resolves a boolean value with no schema change beyond the ComputedValue union itself -- lookup carries no kind restriction of its own",
+      "id": "collections.lookup-resolves-a-boolean-value-with-no-schema-change-beyond-the-computedvalue-union-itself-lookup-carries-no-kind-restriction-of-its-own.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "lookups": [
+          {
+            "keys": [
+              {
+                "kind": "text",
+                "value": "north"
+              }
+            ],
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "boolean",
+                "value": true
+              }
+            },
+            "table": "eligibility"
+          }
+        ],
+        "values": [
+          {
+            "key": "region",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "north"
+              }
+            }
+          },
+          {
+            "key": "tier",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 2
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "keys": [
+          {
+            "key": "region",
+            "kind": "reference"
+          }
+        ],
+        "kind": "lookup",
+        "table": "eligibility"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 21
+        }
+      },
+      "from": "evaluator.collections.unit.test.ts: fold > reduce > sums participating items, threading the running total through accumulator",
+      "id": "collections.fold-reduce-sums-participating-items-threading-the-running-total-through-accumulator.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "amounts",
+            "items": [
+              {
+                "amount": 8
+              },
+              {
+                "amount": 12
+              },
+              {
+                "amount": 1
+              }
+            ]
+          },
+          {
+            "collection": "grouped",
+            "items": [
+              {
+                "amount": 5,
+                "group": "keep"
+              },
+              {
+                "amount": 999,
+                "group": "skip"
+              }
+            ]
+          },
+          {
+            "collection": "empty",
+            "items": []
+          }
+        ],
+        "fromContext": true
+      },
+      "tree": {
+        "collection": "amounts",
+        "combiner": {
+          "combine": {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "accumulator"
+            },
+            "op": "add",
+            "right": {
+              "key": "amount",
+              "kind": "reference"
+            }
+          },
+          "initial": {
+            "kind": "numberLiteral",
+            "value": 0
+          },
+          "mode": "reduce"
+        },
+        "kind": "fold"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 5
+        }
+      },
+      "from": "evaluator.collections.unit.test.ts: fold > reduce > filter narrows which items participate, exactly like some/every's own filter",
+      "id": "collections.fold-reduce-filter-narrows-which-items-participate-exactly-like-some-every-s-own-filter.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "amounts",
+            "items": [
+              {
+                "amount": 8
+              },
+              {
+                "amount": 12
+              },
+              {
+                "amount": 1
+              }
+            ]
+          },
+          {
+            "collection": "grouped",
+            "items": [
+              {
+                "amount": 5,
+                "group": "keep"
+              },
+              {
+                "amount": 999,
+                "group": "skip"
+              }
+            ]
+          },
+          {
+            "collection": "empty",
+            "items": []
+          }
+        ],
+        "fromContext": true
+      },
+      "tree": {
+        "collection": "grouped",
+        "combiner": {
+          "combine": {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "accumulator"
+            },
+            "op": "add",
+            "right": {
+              "key": "amount",
+              "kind": "reference"
+            }
+          },
+          "initial": {
+            "kind": "numberLiteral",
+            "value": 0
+          },
+          "mode": "reduce"
+        },
+        "filter": {
+          "kind": "textCompare",
+          "left": {
+            "key": "group",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "keep"
+          }
+        },
+        "kind": "fold"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 7
+        }
+      },
+      "from": "evaluator.collections.unit.test.ts: fold > reduce > over an empty (post-filter) collection evaluates to initial directly, without touching combine",
+      "id": "collections.fold-reduce-over-an-empty-post-filter-collection-evaluates-to-initial-directly-without-touching-combine.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "amounts",
+            "items": [
+              {
+                "amount": 8
+              },
+              {
+                "amount": 12
+              },
+              {
+                "amount": 1
+              }
+            ]
+          },
+          {
+            "collection": "grouped",
+            "items": [
+              {
+                "amount": 5,
+                "group": "keep"
+              },
+              {
+                "amount": 999,
+                "group": "skip"
+              }
+            ]
+          },
+          {
+            "collection": "empty",
+            "items": []
+          }
+        ],
+        "fromContext": true
+      },
+      "tree": {
+        "collection": "empty",
+        "combiner": {
+          "combine": {
+            "kind": "numberLiteral",
+            "value": 999
+          },
+          "initial": {
+            "kind": "numberLiteral",
+            "value": 7
+          },
+          "mode": "reduce"
+        },
+        "kind": "fold"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 12
+        }
+      },
+      "from": "evaluator.collections.unit.test.ts: fold > max, min > max keeps the largest projected value seen",
+      "id": "collections.fold-max-min-max-keeps-the-largest-projected-value-seen.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "amounts",
+            "items": [
+              {
+                "amount": 8
+              },
+              {
+                "amount": 12
+              },
+              {
+                "amount": 1
+              }
+            ]
+          },
+          {
+            "collection": "grouped",
+            "items": [
+              {
+                "amount": 5,
+                "group": "keep"
+              },
+              {
+                "amount": 999,
+                "group": "skip"
+              }
+            ]
+          },
+          {
+            "collection": "empty",
+            "items": []
+          }
+        ],
+        "fromContext": true
+      },
+      "tree": {
+        "collection": "amounts",
+        "combiner": {
+          "item": {
+            "key": "amount",
+            "kind": "reference"
+          },
+          "mode": "max"
+        },
+        "kind": "fold"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 1
+        }
+      },
+      "from": "evaluator.collections.unit.test.ts: fold > max, min > min keeps the smallest projected value seen",
+      "id": "collections.fold-max-min-min-keeps-the-smallest-projected-value-seen.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "amounts",
+            "items": [
+              {
+                "amount": 8
+              },
+              {
+                "amount": 12
+              },
+              {
+                "amount": 1
+              }
+            ]
+          },
+          {
+            "collection": "grouped",
+            "items": [
+              {
+                "amount": 5,
+                "group": "keep"
+              },
+              {
+                "amount": 999,
+                "group": "skip"
+              }
+            ]
+          },
+          {
+            "collection": "empty",
+            "items": []
+          }
+        ],
+        "fromContext": true
+      },
+      "tree": {
+        "collection": "amounts",
+        "combiner": {
+          "item": {
+            "key": "amount",
+            "kind": "reference"
+          },
+          "mode": "min"
+        },
+        "kind": "fold"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "domain-error",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.collections.unit.test.ts: fold > max, min > is domain-error over an empty (post-filter) collection -- there is no first item to seed from",
+      "id": "collections.fold-max-min-is-domain-error-over-an-empty-post-filter-collection-there-is-no-first-item-to-seed-from.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "amounts",
+            "items": [
+              {
+                "amount": 8
+              },
+              {
+                "amount": 12
+              },
+              {
+                "amount": 1
+              }
+            ]
+          },
+          {
+            "collection": "grouped",
+            "items": [
+              {
+                "amount": 5,
+                "group": "keep"
+              },
+              {
+                "amount": 999,
+                "group": "skip"
+              }
+            ]
+          },
+          {
+            "collection": "empty",
+            "items": []
+          }
+        ],
+        "fromContext": true
+      },
+      "tree": {
+        "collection": "empty",
+        "combiner": {
+          "item": {
+            "key": "amount",
+            "kind": "reference"
+          },
+          "mode": "max"
+        },
+        "kind": "fold"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.collections.unit.test.ts: accumulator > is wrong-type when evaluated outside any fold's combine expression",
+      "id": "collections.accumulator-is-wrong-type-when-evaluated-outside-any-fold-s-combine-expression.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "accumulator"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 7
+        }
+      },
+      "from": "evaluator.collections.unit.test.ts: accumulator > resolves to the running value inside a reduce fold's own combine expression",
+      "id": "collections.accumulator-resolves-to-the-running-value-inside-a-reduce-fold-s-own-combine-expression.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "items",
+            "items": [
+              {},
+              {}
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "collection": "items",
+        "combiner": {
+          "combine": {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "accumulator"
+            },
+            "op": "add",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          },
+          "initial": {
+            "kind": "numberLiteral",
+            "value": 5
+          },
+          "mode": "reduce"
+        },
+        "kind": "fold"
+      }
+    }
+  ]
+}

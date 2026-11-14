@@ -1,0 +1,3516 @@
+{
+  "cases": [
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations > eq of two ordinary durations in different units",
+      "id": "duration-comparison.comparing-durations-eq-of-two-ordinary-durations-in-different-units.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "durationLiteral",
+          "unit": "s",
+          "value": 1
+        },
+        "op": "eq",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "ms",
+          "value": 1000
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations > eq of two ordinary durations in different units",
+      "id": "duration-comparison.comparing-durations-eq-of-two-ordinary-durations-in-different-units.2",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "durationLiteral",
+          "unit": "d",
+          "value": 1
+        },
+        "op": "eq",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "h",
+          "value": 24
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations > eq of two ordinary durations in different units",
+      "id": "duration-comparison.comparing-durations-eq-of-two-ordinary-durations-in-different-units.3",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "durationLiteral",
+          "unit": "min",
+          "value": 90
+        },
+        "op": "eq",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "h",
+          "value": 1.5
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations > lt of two ordinary durations in different units",
+      "id": "duration-comparison.comparing-durations-lt-of-two-ordinary-durations-in-different-units.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "durationLiteral",
+          "unit": "s",
+          "value": 59
+        },
+        "op": "lt",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "min",
+          "value": 1
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations > gt of two ordinary durations in different units",
+      "id": "duration-comparison.comparing-durations-gt-of-two-ordinary-durations-in-different-units.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "durationLiteral",
+          "unit": "s",
+          "value": 59
+        },
+        "op": "gt",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "min",
+          "value": 1
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations > neq of two ordinary durations in different units",
+      "id": "duration-comparison.comparing-durations-neq-of-two-ordinary-durations-in-different-units.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "durationLiteral",
+          "unit": "h",
+          "value": 1
+        },
+        "op": "neq",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "min",
+          "value": 61
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations > eq of two different durations that both overflow when written in milliseconds",
+      "id": "duration-comparison.comparing-durations-eq-of-two-different-durations-that-both-overflow-when-written-in-milliseconds.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "durationLiteral",
+          "unit": "d",
+          "value": 1e+305
+        },
+        "op": "eq",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "d",
+          "value": 2e+305
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations > neq of two different durations that both overflow when written in milliseconds",
+      "id": "duration-comparison.comparing-durations-neq-of-two-different-durations-that-both-overflow-when-written-in-milliseconds.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "durationLiteral",
+          "unit": "d",
+          "value": 1e+305
+        },
+        "op": "neq",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "d",
+          "value": 2e+305
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations > lt of two different durations that both overflow when written in milliseconds",
+      "id": "duration-comparison.comparing-durations-lt-of-two-different-durations-that-both-overflow-when-written-in-milliseconds.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "durationLiteral",
+          "unit": "d",
+          "value": 1e+305
+        },
+        "op": "lt",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "d",
+          "value": 2e+305
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations > lte of two different durations that both overflow when written in milliseconds",
+      "id": "duration-comparison.comparing-durations-lte-of-two-different-durations-that-both-overflow-when-written-in-milliseconds.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "durationLiteral",
+          "unit": "d",
+          "value": 1e+305
+        },
+        "op": "lte",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "d",
+          "value": 2e+305
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations > gt of two different durations that both overflow when written in milliseconds",
+      "id": "duration-comparison.comparing-durations-gt-of-two-different-durations-that-both-overflow-when-written-in-milliseconds.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "durationLiteral",
+          "unit": "d",
+          "value": 1e+305
+        },
+        "op": "gt",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "d",
+          "value": 2e+305
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations > gte of two different durations that both overflow when written in milliseconds",
+      "id": "duration-comparison.comparing-durations-gte-of-two-different-durations-that-both-overflow-when-written-in-milliseconds.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "durationLiteral",
+          "unit": "d",
+          "value": 1e+305
+        },
+        "op": "gte",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "d",
+          "value": 2e+305
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations > orders huge durations in different units by their real size",
+      "id": "duration-comparison.comparing-durations-orders-huge-durations-in-different-units-by-their-real-size.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "durationLiteral",
+          "unit": "d",
+          "value": 1e+305
+        },
+        "op": "gt",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "h",
+          "value": 1e+305
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations > orders huge durations in different units by their real size",
+      "id": "duration-comparison.comparing-durations-orders-huge-durations-in-different-units-by-their-real-size.2",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "durationLiteral",
+          "unit": "d",
+          "value": 1e+305
+        },
+        "op": "eq",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "h",
+          "value": 1e+305
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations > finds a huge duration equal to itself",
+      "id": "duration-comparison.comparing-durations-finds-a-huge-duration-equal-to-itself.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "durationLiteral",
+          "unit": "d",
+          "value": 1e+305
+        },
+        "op": "eq",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "d",
+          "value": 1e+305
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: memberOf over durations > matches the same duration written in another unit",
+      "id": "duration-comparison.memberof-over-durations-matches-the-same-duration-written-in-another-unit.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "durationLiteral",
+            "unit": "s",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "kind": "durationLiteral",
+          "unit": "ms",
+          "value": 1000
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: memberOf over durations > tells two different huge durations apart",
+      "id": "duration-comparison.memberof-over-durations-tells-two-different-huge-durations-apart.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "durationLiteral",
+            "unit": "d",
+            "value": 2e+305
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "kind": "durationLiteral",
+          "unit": "d",
+          "value": 1e+305
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: memberOf over durations > tells two different huge durations apart",
+      "id": "duration-comparison.memberof-over-durations-tells-two-different-huge-durations-apart.2",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "durationLiteral",
+            "unit": "d",
+            "value": 1e+305
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "kind": "durationLiteral",
+          "unit": "d",
+          "value": 1e+305
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: memberOf over durations > tells huge durations in different units apart",
+      "id": "duration-comparison.memberof-over-durations-tells-huge-durations-in-different-units-apart.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "durationLiteral",
+            "unit": "h",
+            "value": 1e+305
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "kind": "durationLiteral",
+          "unit": "d",
+          "value": 1e+305
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: durations too small or too close for a division to tell apart > orders the smallest subnormal against zero in a far larger unit",
+      "id": "duration-comparison.durations-too-small-or-too-close-for-a-division-to-tell-apart-orders-the-smallest-subnormal-against-zero-in-a-far-larger-unit.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "durationLiteral",
+          "unit": "ms",
+          "value": 5e-324
+        },
+        "op": "gt",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "d",
+          "value": 0
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: durations too small or too close for a division to tell apart > orders the smallest subnormal against zero in a far larger unit",
+      "id": "duration-comparison.durations-too-small-or-too-close-for-a-division-to-tell-apart-orders-the-smallest-subnormal-against-zero-in-a-far-larger-unit.2",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "durationLiteral",
+          "unit": "ms",
+          "value": 5e-324
+        },
+        "op": "eq",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "d",
+          "value": 0
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: durations too small or too close for a division to tell apart > orders the smallest subnormal against zero in a far larger unit",
+      "id": "duration-comparison.durations-too-small-or-too-close-for-a-division-to-tell-apart-orders-the-smallest-subnormal-against-zero-in-a-far-larger-unit.3",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "durationLiteral",
+            "unit": "d",
+            "value": 0
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "kind": "durationLiteral",
+          "unit": "ms",
+          "value": 5e-324
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: durations too small or too close for a division to tell apart > orders two durations whose quotients round to the same double",
+      "id": "duration-comparison.durations-too-small-or-too-close-for-a-division-to-tell-apart-orders-two-durations-whose-quotients-round-to-the-same-double.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "durationLiteral",
+          "unit": "min",
+          "value": 25959408
+        },
+        "op": "gt",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "d",
+          "value": 18027.366666666665
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: durations too small or too close for a division to tell apart > orders two durations whose quotients round to the same double",
+      "id": "duration-comparison.durations-too-small-or-too-close-for-a-division-to-tell-apart-orders-two-durations-whose-quotients-round-to-the-same-double.2",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "durationLiteral",
+          "unit": "min",
+          "value": 25959408
+        },
+        "op": "eq",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "d",
+          "value": 18027.366666666665
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: durations too small or too close for a division to tell apart > orders two durations whose quotients round to the same double",
+      "id": "duration-comparison.durations-too-small-or-too-close-for-a-division-to-tell-apart-orders-two-durations-whose-quotients-round-to-the-same-double.3",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "durationLiteral",
+            "unit": "d",
+            "value": 18027.366666666665
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "kind": "durationLiteral",
+          "unit": "min",
+          "value": 25959408
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: durations too small or too close for a division to tell apart > still finds the same span written in two units equal",
+      "id": "duration-comparison.durations-too-small-or-too-close-for-a-division-to-tell-apart-still-finds-the-same-span-written-in-two-units-equal.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "durationLiteral",
+          "unit": "d",
+          "value": 1
+        },
+        "op": "eq",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "ms",
+          "value": 86400000
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations that are not finite numbers > eq with a NaN on either side is false, as it is for numbers",
+      "id": "duration-comparison.comparing-durations-that-are-not-finite-numbers-eq-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.1",
+      "kind": "evaluate",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "nanSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": {
+                  "$number": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "key": "fiveSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": 5
+              }
+            }
+          },
+          {
+            "key": "infiniteDays",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "d",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "infiniteMilliseconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "ms",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "negativeInfiniteHours",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "h",
+                "value": {
+                  "$number": "-Infinity"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "skip": "rust",
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "nanSeconds",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "key": "fiveSeconds",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations that are not finite numbers > eq with a NaN on either side is false, as it is for numbers",
+      "id": "duration-comparison.comparing-durations-that-are-not-finite-numbers-eq-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.2",
+      "kind": "evaluate",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "nanSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": {
+                  "$number": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "key": "fiveSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": 5
+              }
+            }
+          },
+          {
+            "key": "infiniteDays",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "d",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "infiniteMilliseconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "ms",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "negativeInfiniteHours",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "h",
+                "value": {
+                  "$number": "-Infinity"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "skip": "rust",
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "fiveSeconds",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "key": "nanSeconds",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations that are not finite numbers > eq with a NaN on either side is false, as it is for numbers",
+      "id": "duration-comparison.comparing-durations-that-are-not-finite-numbers-eq-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.3",
+      "kind": "evaluate",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "nanSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": {
+                  "$number": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "key": "fiveSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": 5
+              }
+            }
+          },
+          {
+            "key": "infiniteDays",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "d",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "infiniteMilliseconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "ms",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "negativeInfiniteHours",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "h",
+                "value": {
+                  "$number": "-Infinity"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "skip": "rust",
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "nanSeconds",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "key": "nanSeconds",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations that are not finite numbers > lt with a NaN on either side is false, as it is for numbers",
+      "id": "duration-comparison.comparing-durations-that-are-not-finite-numbers-lt-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.1",
+      "kind": "evaluate",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "nanSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": {
+                  "$number": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "key": "fiveSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": 5
+              }
+            }
+          },
+          {
+            "key": "infiniteDays",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "d",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "infiniteMilliseconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "ms",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "negativeInfiniteHours",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "h",
+                "value": {
+                  "$number": "-Infinity"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "skip": "rust",
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "nanSeconds",
+          "kind": "reference"
+        },
+        "op": "lt",
+        "right": {
+          "key": "fiveSeconds",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations that are not finite numbers > lt with a NaN on either side is false, as it is for numbers",
+      "id": "duration-comparison.comparing-durations-that-are-not-finite-numbers-lt-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.2",
+      "kind": "evaluate",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "nanSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": {
+                  "$number": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "key": "fiveSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": 5
+              }
+            }
+          },
+          {
+            "key": "infiniteDays",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "d",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "infiniteMilliseconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "ms",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "negativeInfiniteHours",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "h",
+                "value": {
+                  "$number": "-Infinity"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "skip": "rust",
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "fiveSeconds",
+          "kind": "reference"
+        },
+        "op": "lt",
+        "right": {
+          "key": "nanSeconds",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations that are not finite numbers > lt with a NaN on either side is false, as it is for numbers",
+      "id": "duration-comparison.comparing-durations-that-are-not-finite-numbers-lt-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.3",
+      "kind": "evaluate",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "nanSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": {
+                  "$number": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "key": "fiveSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": 5
+              }
+            }
+          },
+          {
+            "key": "infiniteDays",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "d",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "infiniteMilliseconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "ms",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "negativeInfiniteHours",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "h",
+                "value": {
+                  "$number": "-Infinity"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "skip": "rust",
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "nanSeconds",
+          "kind": "reference"
+        },
+        "op": "lt",
+        "right": {
+          "key": "nanSeconds",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations that are not finite numbers > lte with a NaN on either side is false, as it is for numbers",
+      "id": "duration-comparison.comparing-durations-that-are-not-finite-numbers-lte-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.1",
+      "kind": "evaluate",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "nanSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": {
+                  "$number": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "key": "fiveSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": 5
+              }
+            }
+          },
+          {
+            "key": "infiniteDays",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "d",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "infiniteMilliseconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "ms",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "negativeInfiniteHours",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "h",
+                "value": {
+                  "$number": "-Infinity"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "skip": "rust",
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "nanSeconds",
+          "kind": "reference"
+        },
+        "op": "lte",
+        "right": {
+          "key": "fiveSeconds",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations that are not finite numbers > lte with a NaN on either side is false, as it is for numbers",
+      "id": "duration-comparison.comparing-durations-that-are-not-finite-numbers-lte-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.2",
+      "kind": "evaluate",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "nanSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": {
+                  "$number": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "key": "fiveSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": 5
+              }
+            }
+          },
+          {
+            "key": "infiniteDays",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "d",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "infiniteMilliseconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "ms",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "negativeInfiniteHours",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "h",
+                "value": {
+                  "$number": "-Infinity"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "skip": "rust",
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "fiveSeconds",
+          "kind": "reference"
+        },
+        "op": "lte",
+        "right": {
+          "key": "nanSeconds",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations that are not finite numbers > lte with a NaN on either side is false, as it is for numbers",
+      "id": "duration-comparison.comparing-durations-that-are-not-finite-numbers-lte-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.3",
+      "kind": "evaluate",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "nanSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": {
+                  "$number": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "key": "fiveSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": 5
+              }
+            }
+          },
+          {
+            "key": "infiniteDays",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "d",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "infiniteMilliseconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "ms",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "negativeInfiniteHours",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "h",
+                "value": {
+                  "$number": "-Infinity"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "skip": "rust",
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "nanSeconds",
+          "kind": "reference"
+        },
+        "op": "lte",
+        "right": {
+          "key": "nanSeconds",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations that are not finite numbers > gt with a NaN on either side is false, as it is for numbers",
+      "id": "duration-comparison.comparing-durations-that-are-not-finite-numbers-gt-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.1",
+      "kind": "evaluate",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "nanSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": {
+                  "$number": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "key": "fiveSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": 5
+              }
+            }
+          },
+          {
+            "key": "infiniteDays",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "d",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "infiniteMilliseconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "ms",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "negativeInfiniteHours",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "h",
+                "value": {
+                  "$number": "-Infinity"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "skip": "rust",
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "nanSeconds",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "key": "fiveSeconds",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations that are not finite numbers > gt with a NaN on either side is false, as it is for numbers",
+      "id": "duration-comparison.comparing-durations-that-are-not-finite-numbers-gt-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.2",
+      "kind": "evaluate",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "nanSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": {
+                  "$number": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "key": "fiveSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": 5
+              }
+            }
+          },
+          {
+            "key": "infiniteDays",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "d",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "infiniteMilliseconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "ms",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "negativeInfiniteHours",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "h",
+                "value": {
+                  "$number": "-Infinity"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "skip": "rust",
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "fiveSeconds",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "key": "nanSeconds",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations that are not finite numbers > gt with a NaN on either side is false, as it is for numbers",
+      "id": "duration-comparison.comparing-durations-that-are-not-finite-numbers-gt-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.3",
+      "kind": "evaluate",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "nanSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": {
+                  "$number": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "key": "fiveSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": 5
+              }
+            }
+          },
+          {
+            "key": "infiniteDays",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "d",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "infiniteMilliseconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "ms",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "negativeInfiniteHours",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "h",
+                "value": {
+                  "$number": "-Infinity"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "skip": "rust",
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "nanSeconds",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "key": "nanSeconds",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations that are not finite numbers > gte with a NaN on either side is false, as it is for numbers",
+      "id": "duration-comparison.comparing-durations-that-are-not-finite-numbers-gte-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.1",
+      "kind": "evaluate",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "nanSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": {
+                  "$number": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "key": "fiveSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": 5
+              }
+            }
+          },
+          {
+            "key": "infiniteDays",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "d",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "infiniteMilliseconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "ms",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "negativeInfiniteHours",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "h",
+                "value": {
+                  "$number": "-Infinity"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "skip": "rust",
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "nanSeconds",
+          "kind": "reference"
+        },
+        "op": "gte",
+        "right": {
+          "key": "fiveSeconds",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations that are not finite numbers > gte with a NaN on either side is false, as it is for numbers",
+      "id": "duration-comparison.comparing-durations-that-are-not-finite-numbers-gte-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.2",
+      "kind": "evaluate",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "nanSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": {
+                  "$number": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "key": "fiveSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": 5
+              }
+            }
+          },
+          {
+            "key": "infiniteDays",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "d",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "infiniteMilliseconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "ms",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "negativeInfiniteHours",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "h",
+                "value": {
+                  "$number": "-Infinity"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "skip": "rust",
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "fiveSeconds",
+          "kind": "reference"
+        },
+        "op": "gte",
+        "right": {
+          "key": "nanSeconds",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations that are not finite numbers > gte with a NaN on either side is false, as it is for numbers",
+      "id": "duration-comparison.comparing-durations-that-are-not-finite-numbers-gte-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.3",
+      "kind": "evaluate",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "nanSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": {
+                  "$number": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "key": "fiveSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": 5
+              }
+            }
+          },
+          {
+            "key": "infiniteDays",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "d",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "infiniteMilliseconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "ms",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "negativeInfiniteHours",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "h",
+                "value": {
+                  "$number": "-Infinity"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "skip": "rust",
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "nanSeconds",
+          "kind": "reference"
+        },
+        "op": "gte",
+        "right": {
+          "key": "nanSeconds",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations that are not finite numbers > neq with a NaN is true, and a NaN is not a member of anything",
+      "id": "duration-comparison.comparing-durations-that-are-not-finite-numbers-neq-with-a-nan-is-true-and-a-nan-is-not-a-member-of-anything.1",
+      "kind": "evaluate",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "nanSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": {
+                  "$number": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "key": "fiveSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": 5
+              }
+            }
+          },
+          {
+            "key": "infiniteDays",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "d",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "infiniteMilliseconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "ms",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "negativeInfiniteHours",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "h",
+                "value": {
+                  "$number": "-Infinity"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "skip": "rust",
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "nanSeconds",
+          "kind": "reference"
+        },
+        "op": "neq",
+        "right": {
+          "key": "fiveSeconds",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations that are not finite numbers > neq with a NaN is true, and a NaN is not a member of anything",
+      "id": "duration-comparison.comparing-durations-that-are-not-finite-numbers-neq-with-a-nan-is-true-and-a-nan-is-not-a-member-of-anything.2",
+      "kind": "evaluate",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "nanSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": {
+                  "$number": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "key": "fiveSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": 5
+              }
+            }
+          },
+          {
+            "key": "infiniteDays",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "d",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "infiniteMilliseconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "ms",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "negativeInfiniteHours",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "h",
+                "value": {
+                  "$number": "-Infinity"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "skip": "rust",
+      "tree": {
+        "candidates": [
+          {
+            "key": "nanSeconds",
+            "kind": "reference"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "nanSeconds",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations that are not finite numbers > neq with a NaN is true, and a NaN is not a member of anything",
+      "id": "duration-comparison.comparing-durations-that-are-not-finite-numbers-neq-with-a-nan-is-true-and-a-nan-is-not-a-member-of-anything.3",
+      "kind": "evaluate",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "nanSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": {
+                  "$number": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "key": "fiveSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": 5
+              }
+            }
+          },
+          {
+            "key": "infiniteDays",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "d",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "infiniteMilliseconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "ms",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "negativeInfiniteHours",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "h",
+                "value": {
+                  "$number": "-Infinity"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "skip": "rust",
+      "tree": {
+        "candidates": [
+          {
+            "key": "fiveSeconds",
+            "kind": "reference"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "nanSeconds",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations that are not finite numbers > finds equal infinities equal whatever their units",
+      "id": "duration-comparison.comparing-durations-that-are-not-finite-numbers-finds-equal-infinities-equal-whatever-their-units.1",
+      "kind": "evaluate",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "nanSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": {
+                  "$number": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "key": "fiveSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": 5
+              }
+            }
+          },
+          {
+            "key": "infiniteDays",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "d",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "infiniteMilliseconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "ms",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "negativeInfiniteHours",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "h",
+                "value": {
+                  "$number": "-Infinity"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "skip": "rust",
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "infiniteDays",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "key": "infiniteMilliseconds",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations that are not finite numbers > finds equal infinities equal whatever their units",
+      "id": "duration-comparison.comparing-durations-that-are-not-finite-numbers-finds-equal-infinities-equal-whatever-their-units.2",
+      "kind": "evaluate",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "nanSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": {
+                  "$number": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "key": "fiveSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": 5
+              }
+            }
+          },
+          {
+            "key": "infiniteDays",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "d",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "infiniteMilliseconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "ms",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "negativeInfiniteHours",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "h",
+                "value": {
+                  "$number": "-Infinity"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "skip": "rust",
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "infiniteDays",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "key": "infiniteMilliseconds",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations that are not finite numbers > finds equal infinities equal whatever their units",
+      "id": "duration-comparison.comparing-durations-that-are-not-finite-numbers-finds-equal-infinities-equal-whatever-their-units.3",
+      "kind": "evaluate",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "nanSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": {
+                  "$number": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "key": "fiveSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": 5
+              }
+            }
+          },
+          {
+            "key": "infiniteDays",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "d",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "infiniteMilliseconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "ms",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "negativeInfiniteHours",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "h",
+                "value": {
+                  "$number": "-Infinity"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "skip": "rust",
+      "tree": {
+        "candidates": [
+          {
+            "key": "infiniteMilliseconds",
+            "kind": "reference"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "infiniteDays",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations that are not finite numbers > orders infinities against finite values and against each other",
+      "id": "duration-comparison.comparing-durations-that-are-not-finite-numbers-orders-infinities-against-finite-values-and-against-each-other.1",
+      "kind": "evaluate",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "nanSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": {
+                  "$number": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "key": "fiveSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": 5
+              }
+            }
+          },
+          {
+            "key": "infiniteDays",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "d",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "infiniteMilliseconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "ms",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "negativeInfiniteHours",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "h",
+                "value": {
+                  "$number": "-Infinity"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "skip": "rust",
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "infiniteDays",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "key": "fiveSeconds",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations that are not finite numbers > orders infinities against finite values and against each other",
+      "id": "duration-comparison.comparing-durations-that-are-not-finite-numbers-orders-infinities-against-finite-values-and-against-each-other.2",
+      "kind": "evaluate",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "nanSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": {
+                  "$number": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "key": "fiveSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": 5
+              }
+            }
+          },
+          {
+            "key": "infiniteDays",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "d",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "infiniteMilliseconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "ms",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "negativeInfiniteHours",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "h",
+                "value": {
+                  "$number": "-Infinity"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "skip": "rust",
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "negativeInfiniteHours",
+          "kind": "reference"
+        },
+        "op": "lt",
+        "right": {
+          "key": "fiveSeconds",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations that are not finite numbers > orders infinities against finite values and against each other",
+      "id": "duration-comparison.comparing-durations-that-are-not-finite-numbers-orders-infinities-against-finite-values-and-against-each-other.3",
+      "kind": "evaluate",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "nanSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": {
+                  "$number": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "key": "fiveSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": 5
+              }
+            }
+          },
+          {
+            "key": "infiniteDays",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "d",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "infiniteMilliseconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "ms",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "negativeInfiniteHours",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "h",
+                "value": {
+                  "$number": "-Infinity"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "skip": "rust",
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "negativeInfiniteHours",
+          "kind": "reference"
+        },
+        "op": "lt",
+        "right": {
+          "key": "infiniteDays",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.duration-comparison.unit.test.ts: comparing durations that are not finite numbers > orders infinities against finite values and against each other",
+      "id": "duration-comparison.comparing-durations-that-are-not-finite-numbers-orders-infinities-against-finite-values-and-against-each-other.4",
+      "kind": "evaluate",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "nanSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": {
+                  "$number": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "key": "fiveSeconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "s",
+                "value": 5
+              }
+            }
+          },
+          {
+            "key": "infiniteDays",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "d",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "infiniteMilliseconds",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "ms",
+                "value": {
+                  "$number": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "key": "negativeInfiniteHours",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "duration",
+                "unit": "h",
+                "value": {
+                  "$number": "-Infinity"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "skip": "rust",
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "fiveSeconds",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "key": "infiniteDays",
+          "kind": "reference"
+        }
+      }
+    }
+  ]
+}

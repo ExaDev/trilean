@@ -66,9 +66,9 @@ function settle(resolution: Resolution): EvaluatorResolution {
     return { found: true, value: toComputedValue(resolution.value) };
   }
 
-  return resolution.notYetKnown === true
-    ? { found: false, notYetKnown: true }
-    : { found: false };
+  return resolution.notYetKnown === undefined
+    ? { found: false }
+    : { found: false, notYetKnown: resolution.notYetKnown };
 }
 
 async function delay(turns: number | undefined): Promise<void> {
@@ -100,13 +100,16 @@ export function buildResolvers(data: ResolverData): ResolverSet {
 
   const value = (key: Json, context: unknown): Answer<EvaluatorResolution> => {
     calls.push({ resolver: "value", key });
-    if (data.fromContext === true) {
-      return { turns: undefined, give: () => fromContextValue(key, context) };
-    }
     const entry = (data.values ?? []).find(
       (item) =>
         jsonEquals(key, item.key) && matchesContext(item.context, context),
     );
+    if (entry === undefined && data.fromContext === true) {
+      const read = fromContextValue(key, context);
+      if (read.found) {
+        return { turns: undefined, give: () => read };
+      }
+    }
 
     return answer(entry?.result ?? fallback);
   };

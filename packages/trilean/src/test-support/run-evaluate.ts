@@ -183,6 +183,7 @@ export async function runEvaluateCase(testCase: EvaluateCase): Promise<void> {
     testCase.as === "expression"
       ? ExpressionNodeSchema.parse(testCase.tree)
       : undefined;
+  const context = testCase.context ?? null;
   const runMode = async (mode: Mode): Promise<void> => {
     const label = `${testCase.id} [${mode}]`;
     const resolvers = buildResolvers(testCase.resolvers);
@@ -193,19 +194,19 @@ export async function runEvaluateCase(testCase: EvaluateCase): Promise<void> {
         return predicateTree === undefined
           ? await evaluator.evaluateValue(
               expectDefined(expressionTree),
-              testCase.context,
+              context,
               resolvers.asynchronous,
             )
           : await evaluator.evaluatePredicate(
               predicateTree,
-              testCase.context,
+              context,
               resolvers.asynchronous,
             );
       }
       const evaluator = createSyncEvaluator(optionsOf(testCase));
       if (mode === "compiled") {
         return evaluator.compilePredicate(expectDefined(predicateTree))(
-          testCase.context,
+          context,
           resolvers.sync,
         );
       }
@@ -213,14 +214,10 @@ export async function runEvaluateCase(testCase: EvaluateCase): Promise<void> {
       return predicateTree === undefined
         ? evaluator.evaluateValue(
             expectDefined(expressionTree),
-            testCase.context,
+            context,
             resolvers.sync,
           )
-        : evaluator.evaluatePredicate(
-            predicateTree,
-            testCase.context,
-            resolvers.sync,
-          );
+        : evaluator.evaluatePredicate(predicateTree, context, resolvers.sync);
     };
     let outcome: Evaluation<unknown> | undefined;
     let thrown: { readonly error: unknown } | undefined;

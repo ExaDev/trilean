@@ -1,0 +1,3607 @@
+{
+  "cases": [
+    {
+      "as": "expression",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "expectCalls": [
+        {
+          "key": "missing",
+          "resolver": "value"
+        }
+      ],
+      "from": "evaluator.indeterminacy-cases.unit.test.ts: lookup: any-indeterminate-key short-circuit > never calls resolveLookup when a key is indeterminate (the original asserted only the status and that no lookup was made; recorded: trilean src/evaluator.ts, the reason code)",
+      "id": "indeterminacy-cases.lookup-any-indeterminate-key-short-circuit-never-calls-resolvelookup-when-a-key-is-indeterminate.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "single-notfound",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "single-wrongtype",
+            "items": [
+              {
+                "value": "x"
+              }
+            ]
+          },
+          {
+            "collection": "single-domainerror",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "empty",
+            "items": []
+          },
+          {
+            "collection": "one-item",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "nested-outer",
+            "items": [
+              {
+                "values": [
+                  {
+                    "amount": 1
+                  },
+                  {
+                    "amount": 2
+                  }
+                ]
+              },
+              {
+                "values": [
+                  {
+                    "amount": 10
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "collection": "values",
+            "context": {
+              "values": [
+                {
+                  "amount": 1
+                },
+                {
+                  "amount": 2
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 1
+              },
+              {
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "collection": "values",
+            "context": {
+              "values": [
+                {
+                  "amount": 10
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 10
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true,
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          },
+          {
+            "key": "presentText",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "hello"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "keys": [
+          {
+            "key": "missing",
+            "kind": "reference"
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "lookup",
+        "table": "table1"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "expectCalls": [
+        {
+          "key": "missing",
+          "resolver": "value"
+        }
+      ],
+      "from": "evaluator.indeterminacy-cases.unit.test.ts: conditional: must not skip an unresolved guard > never evaluates a later case once an earlier unmatched guard is indeterminate (the original asserted only the status and that the marker was never evaluated; recorded: trilean src/evaluator.ts, the reason code)",
+      "id": "indeterminacy-cases.conditional-must-not-skip-an-unresolved-guard-never-evaluates-a-later-case-once-an-earlier-unmatched-guard-is-indeterminate.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "single-notfound",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "single-wrongtype",
+            "items": [
+              {
+                "value": "x"
+              }
+            ]
+          },
+          {
+            "collection": "single-domainerror",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "empty",
+            "items": []
+          },
+          {
+            "collection": "one-item",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "nested-outer",
+            "items": [
+              {
+                "values": [
+                  {
+                    "amount": 1
+                  },
+                  {
+                    "amount": 2
+                  }
+                ]
+              },
+              {
+                "values": [
+                  {
+                    "amount": 10
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "collection": "values",
+            "context": {
+              "values": [
+                {
+                  "amount": 1
+                },
+                {
+                  "amount": 2
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 1
+              },
+              {
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "collection": "values",
+            "context": {
+              "values": [
+                {
+                  "amount": 10
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 10
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true,
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          },
+          {
+            "key": "presentText",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "hello"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "cases": [
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 1
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "kind": "numberLiteral",
+                "value": 1
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 2
+              }
+            }
+          },
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 2
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "key": "missing",
+                "kind": "reference"
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 1
+              }
+            }
+          },
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 3
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "key": "later-case-marker",
+                "kind": "reference"
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 1
+              }
+            }
+          }
+        ],
+        "fallback": {
+          "kind": "numberLiteral",
+          "value": 0
+        },
+        "kind": "conditional"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "domain-error",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.indeterminacy-cases.unit.test.ts: conditional: 'unique' hit policy > 2+ definite matches absorbs -- domain-error, even with a third case that is itself indeterminate",
+      "id": "indeterminacy-cases.conditional-unique-hit-policy-2-definite-matches-absorbs-domain-error-even-with-a-third-case-that-is-itself-indeterminate.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "single-notfound",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "single-wrongtype",
+            "items": [
+              {
+                "value": "x"
+              }
+            ]
+          },
+          {
+            "collection": "single-domainerror",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "empty",
+            "items": []
+          },
+          {
+            "collection": "one-item",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "nested-outer",
+            "items": [
+              {
+                "values": [
+                  {
+                    "amount": 1
+                  },
+                  {
+                    "amount": 2
+                  }
+                ]
+              },
+              {
+                "values": [
+                  {
+                    "amount": 10
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "collection": "values",
+            "context": {
+              "values": [
+                {
+                  "amount": 1
+                },
+                {
+                  "amount": 2
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 1
+              },
+              {
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "collection": "values",
+            "context": {
+              "values": [
+                {
+                  "amount": 10
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 10
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true,
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          },
+          {
+            "key": "presentText",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "hello"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "cases": [
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 1
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "kind": "numberLiteral",
+                "value": 1
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 1
+              }
+            }
+          },
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 2
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "kind": "numberLiteral",
+                "value": 1
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 1
+              }
+            }
+          },
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 3
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "key": "missing",
+                "kind": "reference"
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 1
+              }
+            }
+          }
+        ],
+        "fallback": {
+          "kind": "numberLiteral",
+          "value": 0
+        },
+        "hitPolicy": "unique",
+        "kind": "conditional"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.indeterminacy-cases.unit.test.ts: conditional: 'unique' hit policy > exactly one definite match plus one indeterminate case does NOT absorb -- the whole node is indeterminate, not the match's then",
+      "id": "indeterminacy-cases.conditional-unique-hit-policy-exactly-one-definite-match-plus-one-indeterminate-case-does-not-absorb-the-whole-node-is-indetermina.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "single-notfound",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "single-wrongtype",
+            "items": [
+              {
+                "value": "x"
+              }
+            ]
+          },
+          {
+            "collection": "single-domainerror",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "empty",
+            "items": []
+          },
+          {
+            "collection": "one-item",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "nested-outer",
+            "items": [
+              {
+                "values": [
+                  {
+                    "amount": 1
+                  },
+                  {
+                    "amount": 2
+                  }
+                ]
+              },
+              {
+                "values": [
+                  {
+                    "amount": 10
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "collection": "values",
+            "context": {
+              "values": [
+                {
+                  "amount": 1
+                },
+                {
+                  "amount": 2
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 1
+              },
+              {
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "collection": "values",
+            "context": {
+              "values": [
+                {
+                  "amount": 10
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 10
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true,
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          },
+          {
+            "key": "presentText",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "hello"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "cases": [
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 1
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "kind": "numberLiteral",
+                "value": 1
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 1
+              }
+            }
+          },
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 2
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "key": "missing",
+                "kind": "reference"
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 1
+              }
+            }
+          }
+        ],
+        "fallback": {
+          "kind": "numberLiteral",
+          "value": 0
+        },
+        "hitPolicy": "unique",
+        "kind": "conditional"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.indeterminacy-cases.unit.test.ts: conditional: 'unique' hit policy > a when that is itself wrong-type propagates that reason, not domain-error",
+      "id": "indeterminacy-cases.conditional-unique-hit-policy-a-when-that-is-itself-wrong-type-propagates-that-reason-not-domain-error.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "single-notfound",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "single-wrongtype",
+            "items": [
+              {
+                "value": "x"
+              }
+            ]
+          },
+          {
+            "collection": "single-domainerror",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "empty",
+            "items": []
+          },
+          {
+            "collection": "one-item",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "nested-outer",
+            "items": [
+              {
+                "values": [
+                  {
+                    "amount": 1
+                  },
+                  {
+                    "amount": 2
+                  }
+                ]
+              },
+              {
+                "values": [
+                  {
+                    "amount": 10
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "collection": "values",
+            "context": {
+              "values": [
+                {
+                  "amount": 1
+                },
+                {
+                  "amount": 2
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 1
+              },
+              {
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "collection": "values",
+            "context": {
+              "values": [
+                {
+                  "amount": 10
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 10
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true,
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          },
+          {
+            "key": "presentText",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "hello"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "cases": [
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 1
+            },
+            "when": {
+              "kind": "compare",
+              "left": {
+                "kind": "textLiteral",
+                "value": "x"
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 1
+              }
+            }
+          }
+        ],
+        "fallback": {
+          "kind": "numberLiteral",
+          "value": 0
+        },
+        "hitPolicy": "unique",
+        "kind": "conditional"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 42
+        }
+      },
+      "expectCalls": [
+        {
+          "collection": "empty",
+          "resolver": "collection"
+        }
+      ],
+      "from": "evaluator.indeterminacy-cases.unit.test.ts: fold: reduce vs max/min over an empty collection > reduce evaluates to initial directly, without ever evaluating combine",
+      "id": "indeterminacy-cases.fold-reduce-vs-max-min-over-an-empty-collection-reduce-evaluates-to-initial-directly-without-ever-evaluating-combine.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "single-notfound",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "single-wrongtype",
+            "items": [
+              {
+                "value": "x"
+              }
+            ]
+          },
+          {
+            "collection": "single-domainerror",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "empty",
+            "items": []
+          },
+          {
+            "collection": "one-item",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "nested-outer",
+            "items": [
+              {
+                "values": [
+                  {
+                    "amount": 1
+                  },
+                  {
+                    "amount": 2
+                  }
+                ]
+              },
+              {
+                "values": [
+                  {
+                    "amount": 10
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "collection": "values",
+            "context": {
+              "values": [
+                {
+                  "amount": 1
+                },
+                {
+                  "amount": 2
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 1
+              },
+              {
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "collection": "values",
+            "context": {
+              "values": [
+                {
+                  "amount": 10
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 10
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true,
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          },
+          {
+            "key": "presentText",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "hello"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "collection": "empty",
+        "combiner": {
+          "combine": {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "accumulator"
+            },
+            "op": "add",
+            "right": {
+              "key": "combine-marker",
+              "kind": "reference"
+            }
+          },
+          "initial": {
+            "kind": "numberLiteral",
+            "value": 42
+          },
+          "mode": "reduce"
+        },
+        "kind": "fold"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "domain-error",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.indeterminacy-cases.unit.test.ts: fold: reduce vs max/min over an empty collection > max/min is domain-error, not initial-untouched -- it has no seed value at all",
+      "id": "indeterminacy-cases.fold-reduce-vs-max-min-over-an-empty-collection-max-min-is-domain-error-not-initial-untouched-it-has-no-seed-value-at-all.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "single-notfound",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "single-wrongtype",
+            "items": [
+              {
+                "value": "x"
+              }
+            ]
+          },
+          {
+            "collection": "single-domainerror",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "empty",
+            "items": []
+          },
+          {
+            "collection": "one-item",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "nested-outer",
+            "items": [
+              {
+                "values": [
+                  {
+                    "amount": 1
+                  },
+                  {
+                    "amount": 2
+                  }
+                ]
+              },
+              {
+                "values": [
+                  {
+                    "amount": 10
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "collection": "values",
+            "context": {
+              "values": [
+                {
+                  "amount": 1
+                },
+                {
+                  "amount": 2
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 1
+              },
+              {
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "collection": "values",
+            "context": {
+              "values": [
+                {
+                  "amount": 10
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 10
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true,
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          },
+          {
+            "key": "presentText",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "hello"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "collection": "empty",
+        "combiner": {
+          "item": {
+            "kind": "numberLiteral",
+            "value": 0
+          },
+          "mode": "max"
+        },
+        "kind": "fold"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 13
+        }
+      },
+      "from": "evaluator.indeterminacy-cases.unit.test.ts: accumulator: nested-fold shadowing > an inner fold's own combine expression refers to the inner running value, not the outer's",
+      "id": "indeterminacy-cases.accumulator-nested-fold-shadowing-an-inner-fold-s-own-combine-expression-refers-to-the-inner-running-value-not-the-outer-s.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "single-notfound",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "single-wrongtype",
+            "items": [
+              {
+                "value": "x"
+              }
+            ]
+          },
+          {
+            "collection": "single-domainerror",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "empty",
+            "items": []
+          },
+          {
+            "collection": "one-item",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "nested-outer",
+            "items": [
+              {
+                "values": [
+                  {
+                    "amount": 1
+                  },
+                  {
+                    "amount": 2
+                  }
+                ]
+              },
+              {
+                "values": [
+                  {
+                    "amount": 10
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "collection": "values",
+            "context": {
+              "values": [
+                {
+                  "amount": 1
+                },
+                {
+                  "amount": 2
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 1
+              },
+              {
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "collection": "values",
+            "context": {
+              "values": [
+                {
+                  "amount": 10
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 10
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true,
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          },
+          {
+            "key": "presentText",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "hello"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "collection": "nested-outer",
+        "combiner": {
+          "combine": {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "accumulator"
+            },
+            "op": "add",
+            "right": {
+              "collection": "values",
+              "combiner": {
+                "combine": {
+                  "kind": "arithmetic",
+                  "left": {
+                    "kind": "accumulator"
+                  },
+                  "op": "add",
+                  "right": {
+                    "key": "amount",
+                    "kind": "reference"
+                  }
+                },
+                "initial": {
+                  "kind": "numberLiteral",
+                  "value": 0
+                },
+                "mode": "reduce"
+              },
+              "kind": "fold"
+            }
+          },
+          "initial": {
+            "kind": "numberLiteral",
+            "value": 0
+          },
+          "mode": "reduce"
+        },
+        "kind": "fold"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "wrong-type",
+        "messageIncludes": [
+          "external-pricing-engine"
+        ],
+        "status": "indeterminate"
+      },
+      "from": "evaluator.indeterminacy-cases.unit.test.ts: delegate: missing-handler message > includes the external system's own name",
+      "id": "indeterminacy-cases.delegate-missing-handler-message-includes-the-external-system-s-own-name.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "single-notfound",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "single-wrongtype",
+            "items": [
+              {
+                "value": "x"
+              }
+            ]
+          },
+          {
+            "collection": "single-domainerror",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "empty",
+            "items": []
+          },
+          {
+            "collection": "one-item",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "nested-outer",
+            "items": [
+              {
+                "values": [
+                  {
+                    "amount": 1
+                  },
+                  {
+                    "amount": 2
+                  }
+                ]
+              },
+              {
+                "values": [
+                  {
+                    "amount": 10
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "collection": "values",
+            "context": {
+              "values": [
+                {
+                  "amount": 1
+                },
+                {
+                  "amount": 2
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 1
+              },
+              {
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "collection": "values",
+            "context": {
+              "values": [
+                {
+                  "amount": 10
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 10
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true,
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          },
+          {
+            "key": "presentText",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "hello"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "delegate",
+        "payload": null,
+        "system": "external-pricing-engine"
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.indeterminacy-cases.unit.test.ts: treeReference: reason-code coverage > wrong-type: no resolveTree resolver registered",
+      "id": "indeterminacy-cases.treereference-reason-code-coverage-wrong-type-no-resolvetree-resolver-registered.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "single-notfound",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "single-wrongtype",
+            "items": [
+              {
+                "value": "x"
+              }
+            ]
+          },
+          {
+            "collection": "single-domainerror",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "empty",
+            "items": []
+          },
+          {
+            "collection": "one-item",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "nested-outer",
+            "items": [
+              {
+                "values": [
+                  {
+                    "amount": 1
+                  },
+                  {
+                    "amount": 2
+                  }
+                ]
+              },
+              {
+                "values": [
+                  {
+                    "amount": 10
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "collection": "values",
+            "context": {
+              "values": [
+                {
+                  "amount": 1
+                },
+                {
+                  "amount": 2
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 1
+              },
+              {
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "collection": "values",
+            "context": {
+              "values": [
+                {
+                  "amount": 10
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 10
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true,
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          },
+          {
+            "key": "presentText",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "hello"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "key": "any",
+        "kind": "treeReference"
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.indeterminacy-cases.unit.test.ts: treeReference: reason-code coverage > not-found: the registered resolver reports absence",
+      "id": "indeterminacy-cases.treereference-reason-code-coverage-not-found-the-registered-resolver-reports-absence.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "single-notfound",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "single-wrongtype",
+            "items": [
+              {
+                "value": "x"
+              }
+            ]
+          },
+          {
+            "collection": "single-domainerror",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "empty",
+            "items": []
+          },
+          {
+            "collection": "one-item",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "nested-outer",
+            "items": [
+              {
+                "values": [
+                  {
+                    "amount": 1
+                  },
+                  {
+                    "amount": 2
+                  }
+                ]
+              },
+              {
+                "values": [
+                  {
+                    "amount": 10
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "collection": "values",
+            "context": {
+              "values": [
+                {
+                  "amount": 1
+                },
+                {
+                  "amount": 2
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 1
+              },
+              {
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "collection": "values",
+            "context": {
+              "values": [
+                {
+                  "amount": 10
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 10
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true,
+        "trees": [],
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          },
+          {
+            "key": "presentText",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "hello"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "key": "any",
+        "kind": "treeReference"
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.indeterminacy-cases.unit.test.ts: treeReference: reason-code coverage > wrong-type: the resolved value fails to parse against the expected schema",
+      "id": "indeterminacy-cases.treereference-reason-code-coverage-wrong-type-the-resolved-value-fails-to-parse-against-the-expected-schema.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "single-notfound",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "single-wrongtype",
+            "items": [
+              {
+                "value": "x"
+              }
+            ]
+          },
+          {
+            "collection": "single-domainerror",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "empty",
+            "items": []
+          },
+          {
+            "collection": "one-item",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "nested-outer",
+            "items": [
+              {
+                "values": [
+                  {
+                    "amount": 1
+                  },
+                  {
+                    "amount": 2
+                  }
+                ]
+              },
+              {
+                "values": [
+                  {
+                    "amount": 10
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "collection": "values",
+            "context": {
+              "values": [
+                {
+                  "amount": 1
+                },
+                {
+                  "amount": 2
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 1
+              },
+              {
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "collection": "values",
+            "context": {
+              "values": [
+                {
+                  "amount": 10
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 10
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true,
+        "trees": [
+          {
+            "key": "any",
+            "result": {
+              "found": true,
+              "node": {
+                "kind": "nonsense"
+              }
+            }
+          }
+        ],
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          },
+          {
+            "key": "presentText",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "hello"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "key": "any",
+        "kind": "treeReference"
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "domain-error",
+        "message": "circular treeReference detected",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.indeterminacy-cases.unit.test.ts: treeReference: reason-code coverage > domain-error: a key already on the current reference chain (cycle)",
+      "id": "indeterminacy-cases.treereference-reason-code-coverage-domain-error-a-key-already-on-the-current-reference-chain-cycle.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "single-notfound",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "single-wrongtype",
+            "items": [
+              {
+                "value": "x"
+              }
+            ]
+          },
+          {
+            "collection": "single-domainerror",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "empty",
+            "items": []
+          },
+          {
+            "collection": "one-item",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "nested-outer",
+            "items": [
+              {
+                "values": [
+                  {
+                    "amount": 1
+                  },
+                  {
+                    "amount": 2
+                  }
+                ]
+              },
+              {
+                "values": [
+                  {
+                    "amount": 10
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "collection": "values",
+            "context": {
+              "values": [
+                {
+                  "amount": 1
+                },
+                {
+                  "amount": 2
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 1
+              },
+              {
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "collection": "values",
+            "context": {
+              "values": [
+                {
+                  "amount": 10
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 10
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true,
+        "trees": [
+          {
+            "key": "self",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "self",
+                "kind": "treeReference"
+              }
+            }
+          }
+        ],
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          },
+          {
+            "key": "presentText",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "hello"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "key": "self",
+        "kind": "treeReference"
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "domain-error",
+        "messageIncludes": [
+          "maximum depth"
+        ],
+        "status": "indeterminate"
+      },
+      "from": "evaluator.indeterminacy-cases.unit.test.ts: treeReference: reason-code coverage > domain-error: the chain already reached the maximum depth",
+      "id": "indeterminacy-cases.treereference-reason-code-coverage-domain-error-the-chain-already-reached-the-maximum-depth.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "single-notfound",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "single-wrongtype",
+            "items": [
+              {
+                "value": "x"
+              }
+            ]
+          },
+          {
+            "collection": "single-domainerror",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "empty",
+            "items": []
+          },
+          {
+            "collection": "one-item",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "nested-outer",
+            "items": [
+              {
+                "values": [
+                  {
+                    "amount": 1
+                  },
+                  {
+                    "amount": 2
+                  }
+                ]
+              },
+              {
+                "values": [
+                  {
+                    "amount": 10
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "collection": "values",
+            "context": {
+              "values": [
+                {
+                  "amount": 1
+                },
+                {
+                  "amount": 2
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 1
+              },
+              {
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "collection": "values",
+            "context": {
+              "values": [
+                {
+                  "amount": 10
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 10
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true,
+        "trees": [
+          {
+            "key": "chain-0",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "chain-0-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next-next",
+                "kind": "treeReference"
+              }
+            }
+          }
+        ],
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          },
+          {
+            "key": "presentText",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "hello"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "key": "chain-0",
+        "kind": "treeReference"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "wrong-type",
+        "messageIncludes": [
+          "doesNotExist"
+        ],
+        "status": "indeterminate"
+      },
+      "from": "evaluator.indeterminacy-cases.unit.test.ts: call: unregistered-name vs out-of-domain-argument distinction > an unregistered function name is wrong-type",
+      "id": "indeterminacy-cases.call-unregistered-name-vs-out-of-domain-argument-distinction-an-unregistered-function-name-is-wrong-type.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "single-notfound",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "single-wrongtype",
+            "items": [
+              {
+                "value": "x"
+              }
+            ]
+          },
+          {
+            "collection": "single-domainerror",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "empty",
+            "items": []
+          },
+          {
+            "collection": "one-item",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "nested-outer",
+            "items": [
+              {
+                "values": [
+                  {
+                    "amount": 1
+                  },
+                  {
+                    "amount": 2
+                  }
+                ]
+              },
+              {
+                "values": [
+                  {
+                    "amount": 10
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "collection": "values",
+            "context": {
+              "values": [
+                {
+                  "amount": 1
+                },
+                {
+                  "amount": 2
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 1
+              },
+              {
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "collection": "values",
+            "context": {
+              "values": [
+                {
+                  "amount": 10
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 10
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true,
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          },
+          {
+            "key": "presentText",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "hello"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "args": [],
+        "fn": "doesNotExist",
+        "kind": "call"
+      }
+    },
+    {
+      "as": "expression",
+      "evaluator": {
+        "functions": {
+          "table": {
+            "reciprocal": [
+              {
+                "args": [
+                  {
+                    "kind": "number",
+                    "value": 0
+                  }
+                ],
+                "result": {
+                  "domainError": "reciprocal of zero is undefined"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "expect": {
+        "code": "domain-error",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.indeterminacy-cases.unit.test.ts: call: unregistered-name vs out-of-domain-argument distinction > a registered function's out-of-domain argument is domain-error, not wrong-type",
+      "id": "indeterminacy-cases.call-unregistered-name-vs-out-of-domain-argument-distinction-a-registered-function-s-out-of-domain-argument-is-domain-error-not-wr.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "single-notfound",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "single-wrongtype",
+            "items": [
+              {
+                "value": "x"
+              }
+            ]
+          },
+          {
+            "collection": "single-domainerror",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "empty",
+            "items": []
+          },
+          {
+            "collection": "one-item",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "nested-outer",
+            "items": [
+              {
+                "values": [
+                  {
+                    "amount": 1
+                  },
+                  {
+                    "amount": 2
+                  }
+                ]
+              },
+              {
+                "values": [
+                  {
+                    "amount": 10
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "collection": "values",
+            "context": {
+              "values": [
+                {
+                  "amount": 1
+                },
+                {
+                  "amount": 2
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 1
+              },
+              {
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "collection": "values",
+            "context": {
+              "values": [
+                {
+                  "amount": 10
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 10
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true,
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          },
+          {
+            "key": "presentText",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "hello"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "args": [
+          {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        ],
+        "fn": "reciprocal",
+        "kind": "call"
+      }
+    }
+  ]
+}
