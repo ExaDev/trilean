@@ -41,7 +41,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: predicate tree > not: parses a minimal node and rejects a missing operand",
@@ -117,7 +116,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: predicate tree > and: parses a minimal node and rejects a wrong-type left",
@@ -206,7 +204,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: predicate tree > or: parses a minimal node and rejects a missing discriminant",
@@ -259,7 +256,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: predicate tree > allOf: parses an empty operand list and rejects a non-array operands field",
@@ -306,7 +302,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: predicate tree > anyOf: parses a populated operand list and rejects a wrong literal kind",
@@ -357,7 +352,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: predicate tree > compare: parses a minimal node and rejects a missing op",
@@ -411,7 +405,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: predicate tree > textCompare: parses a minimal node and rejects an unrecognised op literal",
@@ -470,7 +463,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: predicate tree > memberOf: parses a minimal node and rejects a non-array candidates field",
@@ -515,7 +507,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: predicate tree > exists: parses a minimal node and rejects a missing operand",
@@ -604,7 +595,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: predicate tree > some: parses a node with and without an optional filter, and rejects a missing item",
@@ -649,7 +639,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: predicate tree > every: parses a minimal node and rejects a wrong-type item",
@@ -681,7 +670,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: predicate tree > treeReference: parses a minimal node and rejects a missing key",
@@ -1038,7 +1026,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: predicate tree > round-trips every predicate kind through the top-level discriminated union",
@@ -1093,7 +1080,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: expression tree > numberLiteral: parses with and without an optional unit, and rejects a non-numeric value",
@@ -1124,7 +1110,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: expression tree > textLiteral: parses a minimal node and rejects a missing value",
@@ -1154,7 +1139,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: expression tree > booleanLiteral: parses a minimal node and rejects a non-boolean value",
@@ -1185,7 +1169,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: expression tree > instantLiteral: parses a minimal node and rejects a non-string value",
@@ -1218,7 +1201,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: expression tree > durationLiteral: parses a minimal node and rejects a missing (required) unit",
@@ -1276,7 +1258,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: expression tree > complexLiteral: parses a rectangular value with and without an optional unit, and rejects a node carrying only one rectangular component",
@@ -1334,7 +1315,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: expression tree > complexLiteral: also parses a polar value (magnitude/phase) with and without an optional unit, and rejects a node carrying only one polar component",
@@ -1348,7 +1328,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: expression tree > complexLiteral: rejects both rectangular and polar fields provided at once",
@@ -1365,7 +1344,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: expression tree > complexLiteral: rejects neither rectangular nor polar fields provided",
@@ -1378,7 +1356,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: expression tree > complexLiteral: rejects a mixed payload (one rectangular field, one polar field)",
@@ -1410,7 +1387,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: expression tree > reference: parses with and without an optional unit, and rejects an unrecognised unit shape",
@@ -1458,7 +1434,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: expression tree > arithmetic: parses a minimal node and rejects an unrecognised op",
@@ -1503,7 +1478,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: expression tree > negate: parses a minimal node and rejects a missing operand",
@@ -1545,7 +1519,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: expression tree > call: parses a minimal node and rejects a non-array args field",
@@ -1592,7 +1565,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: expression tree > lookup: parses a minimal node and rejects a non-array keys field",
@@ -1663,7 +1635,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: expression tree > conditional: parses a minimal node and rejects a missing fallback",
@@ -1756,7 +1727,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: expression tree > conditional: hitPolicy is optional and defaults to undefined (not `\"first\"`) when absent, accepts `\"first\"`/`\"unique\"`, and rejects any other string",
@@ -1797,7 +1767,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: expression tree > HitPolicySchema: accepts `\"first\"`/`\"unique\"` and rejects any other value",
@@ -1825,7 +1794,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: expression tree > treeReference: parses a minimal node, rejects a missing key, and is the same schema object valid from a PredicateNode position too",
@@ -1855,7 +1823,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: expression tree > treeReference: parses a minimal node, rejects a missing key, and is the same schema object valid from a PredicateNode position too",
@@ -1983,7 +1950,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: expression tree > fold: parses each combiner mode, with and without an optional filter, and rejects an unrecognised combiner mode",
@@ -2015,7 +1981,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: expression tree > accumulator: parses the zero-field node and rejects an unrelated kind literal",
@@ -2051,7 +2016,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: expression tree > delegate: parses a minimal node and rejects a missing system",
@@ -2428,7 +2392,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "tree.unit.test.ts: expression tree > round-trips every expression kind through the top-level discriminated union",

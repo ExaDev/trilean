@@ -13,6 +13,11 @@
             "minimum": 1,
             "type": "integer"
           },
+          "generated": {
+            "const": true,
+            "description": "True for a file the generator writes (see the README), whose cases are regenerated from the implementation and compared with the file.",
+            "type": "boolean"
+          },
           "skip": {
             "description": "Ids in ascending order, which the schema cannot express and every loader checks.",
             "items": {

@@ -1,6 +1,20 @@
 {
   "cases": [
     {
+      "as": "expression",
+      "expectSubset": {
+        "outcome": "evaluated",
+        "treeKind": "expression"
+      },
+      "from": "evaluate-document.unit.test.ts: evaluateDocument > reads the kind of a root a treeReference would leave ambiguous when told it is an expression (recorded: trilean src/evaluate-document.ts, the outcome of the kind named by `as`)",
+      "id": "document.evaluatedocument-reads-the-kind-of-a-root-a-treereference-would-leave-ambiguous-when-told-it-is-an-expression.1",
+      "kind": "document",
+      "tree": {
+        "key": "stored",
+        "kind": "treeReference"
+      }
+    },
+    {
       "expect": {
         "evaluation": {
           "status": "definite",
@@ -190,14 +204,14 @@
       }
     },
     {
-      "expect": {
-        "issues": [
-          "right.value: Invalid input: expected string, received undefined"
-        ],
+      "expectIssuePaths": [
+        "right.value"
+      ],
+      "expectSubset": {
         "outcome": "rejected",
         "reason": "invalid"
       },
-      "from": "evaluate-document.unit.test.ts: evaluateDocument > rejects a tree that fails its schema, naming the nested path",
+      "from": "evaluate-document.unit.test.ts: evaluateDocument > rejects a tree that fails its schema, naming the nested path (the original asserted the text of the schema library's message as well; the case asserts the path of the issue, which the implementation owns)",
       "id": "document.evaluatedocument-rejects-a-tree-that-fails-its-schema-naming-the-nested-path.1",
       "kind": "document",
       "tree": {
@@ -532,7 +546,7 @@
         "outcome": "evaluated",
         "treeKind": "expression"
       },
-      "from": "evaluate-document.unit.test.ts: evaluateDocument with the complex and trigonometric built-ins > takes the principal logarithm of a negated complex value",
+      "from": "evaluate-document.unit.test.ts: evaluateDocument with the complex and trigonometric built-ins > takes the principal logarithm of a negated complex value (the original asserted the engine's exact digits; held to one unit in the last place, as the README states for results of transcendental functions)",
       "id": "document.evaluatedocument-with-the-complex-and-trigonometric-built-ins-takes-the-principal-logarithm-of-a-negated-complex-value.1",
       "inputs": {
         "z": {
@@ -542,6 +556,9 @@
         }
       },
       "kind": "document",
+      "tolerance": {
+        "ulps": 1
+      },
       "tree": {
         "args": [
           {

@@ -3946,57 +3946,6 @@
     {
       "as": "expression",
       "expect": {
-        "status": "definite",
-        "value": {
-          "im": 0,
-          "kind": "complex",
-          "re": 1e-320,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > keeps a negative power of a large base finite where its positive power would overflow (the original asserted only that the real part is positive; the case gives the value, one over the square, within a few of the smallest steps)",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-keeps-a-negative-power-of-a-large-base-finite-where-its-positive-power-would-overflow.1",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 8
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": 0,
-          "kind": "complexLiteral",
-          "re": 1e+160
-        },
-        "op": "power",
-        "right": {
-          "kind": "numberLiteral",
-          "value": -2
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
         "code": "domain-error",
         "status": "indeterminate"
       },

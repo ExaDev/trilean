@@ -48,7 +48,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "computed-value.unit.test.ts: the complex computed-value kind > rejects a value carrying only one of the two components",
@@ -62,7 +61,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "computed-value.unit.test.ts: the complex computed-value kind > rejects a value carrying only one of the two components",
