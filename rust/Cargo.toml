@@ -1,6 +1,11 @@
 [workspace]
 resolver = "2"
-members = ["crates/json-shape", "crates/json-shape-derive", "tests/trilean-conformance"]
+members = [
+    "crates/json-shape",
+    "crates/json-shape-derive",
+    "tests/compile-fail",
+    "tests/trilean-conformance",
+]
 
 [workspace.package]
 version = "0.0.0"
@@ -19,6 +24,8 @@ serde_json = "1"
 syn = { version = "3", default-features = false, features = ["clone-impls", "derive", "parsing", "printing", "proc-macro"] }
 
 [workspace.lints.rust]
+# `compile_fail` is set by the check of tests/compile-fail, one case name at a time.
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(compile_fail, values(any()))'] }
 # Binding crates that need wasm-bindgen's generated FFI relax this in their own manifest, not here.
 unsafe_code = "deny"
 
