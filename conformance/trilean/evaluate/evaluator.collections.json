@@ -150,7 +150,7 @@
           "value": true
         }
       },
-      "from": "evaluator.collections.unit.test.ts: lookup > resolves a boolean value with no schema change beyond the ComputedValue union itself -- lookup carries no kind restriction of its own",
+      "from": "evaluator.collections.unit.test.ts: lookup > resolves a boolean value with no schema change beyond the ComputedValue union itself: lookup carries no kind restriction of its own",
       "id": "collections.lookup-resolves-a-boolean-value-with-no-schema-change-beyond-the-computedvalue-union-itself-lookup-carries-no-kind-restriction-of-its-own.1",
       "kind": "evaluate",
       "resolvers": {
@@ -553,7 +553,7 @@
         "code": "domain-error",
         "status": "indeterminate"
       },
-      "from": "evaluator.collections.unit.test.ts: fold > max, min > is domain-error over an empty (post-filter) collection -- there is no first item to seed from",
+      "from": "evaluator.collections.unit.test.ts: fold > max, min > is domain-error over an empty (post-filter) collection: there is no first item to seed from",
       "id": "collections.fold-max-min-is-domain-error-over-an-empty-post-filter-collection-there-is-no-first-item-to-seed-from.1",
       "kind": "evaluate",
       "resolvers": {

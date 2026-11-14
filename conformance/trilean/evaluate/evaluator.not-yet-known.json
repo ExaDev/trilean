@@ -3869,7 +3869,8 @@
     {
       "as": "predicate",
       "expect": {
-        "status": "definite"
+        "status": "definite",
+        "value": false
       },
       "from": "evaluator.not-yet-known.unit.test.ts: Kleene connectives with a not-yet-known operand > and: a definite false absorbs, otherwise the result is indeterminate not-yet-known",
       "id": "not-yet-known.kleene-connectives-with-a-not-yet-known-operand-and-a-definite-false-absorbs-otherwise-the-result-is-indeterminate-not-yet-known.1",
@@ -4050,7 +4051,8 @@
     {
       "as": "predicate",
       "expect": {
-        "status": "definite"
+        "status": "definite",
+        "value": false
       },
       "from": "evaluator.not-yet-known.unit.test.ts: Kleene connectives with a not-yet-known operand > and: a definite false absorbs, otherwise the result is indeterminate not-yet-known",
       "id": "not-yet-known.kleene-connectives-with-a-not-yet-known-operand-and-a-definite-false-absorbs-otherwise-the-result-is-indeterminate-not-yet-known.2",
@@ -4595,7 +4597,8 @@
     {
       "as": "predicate",
       "expect": {
-        "status": "definite"
+        "status": "definite",
+        "value": true
       },
       "from": "evaluator.not-yet-known.unit.test.ts: Kleene connectives with a not-yet-known operand > or: a definite true absorbs, otherwise the result is indeterminate not-yet-known",
       "id": "not-yet-known.kleene-connectives-with-a-not-yet-known-operand-or-a-definite-true-absorbs-otherwise-the-result-is-indeterminate-not-yet-known.1",
@@ -4776,7 +4779,8 @@
     {
       "as": "predicate",
       "expect": {
-        "status": "definite"
+        "status": "definite",
+        "value": true
       },
       "from": "evaluator.not-yet-known.unit.test.ts: Kleene connectives with a not-yet-known operand > or: a definite true absorbs, otherwise the result is indeterminate not-yet-known",
       "id": "not-yet-known.kleene-connectives-with-a-not-yet-known-operand-or-a-definite-true-absorbs-otherwise-the-result-is-indeterminate-not-yet-known.2",
@@ -5491,7 +5495,8 @@
     {
       "as": "predicate",
       "expect": {
-        "status": "definite"
+        "status": "definite",
+        "value": false
       },
       "from": "evaluator.not-yet-known.unit.test.ts: Kleene connectives with a not-yet-known operand > allOf and anyOf: absorb like and and or across the list",
       "id": "not-yet-known.kleene-connectives-with-a-not-yet-known-operand-allof-and-anyof-absorb-like-and-and-or-across-the-list.1",
@@ -5870,7 +5875,8 @@
     {
       "as": "predicate",
       "expect": {
-        "status": "definite"
+        "status": "definite",
+        "value": true
       },
       "from": "evaluator.not-yet-known.unit.test.ts: Kleene connectives with a not-yet-known operand > allOf and anyOf: absorb like and and or across the list",
       "id": "not-yet-known.kleene-connectives-with-a-not-yet-known-operand-allof-and-anyof-absorb-like-and-and-or-across-the-list.3",
@@ -7334,7 +7340,8 @@
     {
       "as": "predicate",
       "expect": {
-        "status": "definite"
+        "status": "definite",
+        "value": true
       },
       "from": "evaluator.not-yet-known.unit.test.ts: Kleene connectives with a not-yet-known operand > memberOf: an unknown candidate that could still match outranks an earlier not-found one",
       "id": "not-yet-known.kleene-connectives-with-a-not-yet-known-operand-memberof-an-unknown-candidate-that-could-still-match-outranks-an-earlier-not-found-one.2",
@@ -8866,7 +8873,11 @@
     {
       "as": "expression",
       "expect": {
-        "status": "definite"
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 1
+        }
       },
       "from": "evaluator.not-yet-known.unit.test.ts: conditional > first: an earlier definite match is not affected by a later unknown guard",
       "id": "not-yet-known.conditional-first-an-earlier-definite-match-is-not-affected-by-a-later-unknown-guard.1",
@@ -9686,7 +9697,8 @@
     {
       "as": "predicate",
       "expect": {
-        "status": "definite"
+        "status": "definite",
+        "value": true
       },
       "from": "evaluator.not-yet-known.unit.test.ts: collections > some: a definite true from one item absorbs an item that is not yet known",
       "id": "not-yet-known.collections-some-a-definite-true-from-one-item-absorbs-an-item-that-is-not-yet-known.1",
@@ -10213,7 +10225,8 @@
     {
       "as": "predicate",
       "expect": {
-        "status": "definite"
+        "status": "definite",
+        "value": false
       },
       "from": "evaluator.not-yet-known.unit.test.ts: collections > every: a definite false from one item absorbs an item that is not yet known",
       "id": "not-yet-known.collections-every-a-definite-false-from-one-item-absorbs-an-item-that-is-not-yet-known.1",

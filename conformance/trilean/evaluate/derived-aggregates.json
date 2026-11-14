@@ -159,7 +159,7 @@
           "value": 0
         }
       },
-      "from": "derived-aggregates.unit.test.ts: sum > over an empty collection, the reduce seed (0) is the identity -- no combine step is ever reached",
+      "from": "derived-aggregates.unit.test.ts: sum > over an empty collection, the reduce seed (0) is the identity: no combine step is ever reached",
       "id": "aggregates.sum-over-an-empty-collection-the-reduce-seed-0-is-the-identity-no-combine-step-is-ever-reached.1",
       "kind": "evaluate",
       "resolvers": {
@@ -297,7 +297,7 @@
           "value": 2
         }
       },
-      "from": "derived-aggregates.unit.test.ts: count > a filter excludes an item silently -- the count reflects only what remains, with no indeterminacy",
+      "from": "derived-aggregates.unit.test.ts: count > a filter excludes an item silently: the count reflects only what remains, with no indeterminacy",
       "id": "aggregates.count-a-filter-excludes-an-item-silently-the-count-reflects-only-what-remains-with-no-indeterminacy.1",
       "kind": "evaluate",
       "resolvers": {

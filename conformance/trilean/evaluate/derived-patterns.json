@@ -2772,6 +2772,7 @@
     {
       "as": "predicate",
       "expect": {
+        "code": "not-found",
         "status": "indeterminate"
       },
       "from": "derived-patterns.unit.test.ts: three-valued behaviour is inherited from textCompare, not re-decided > an unresolvable subject stays indeterminate rather than compiling to a non-match",

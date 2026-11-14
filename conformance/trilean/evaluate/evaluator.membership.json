@@ -702,7 +702,7 @@
         "code": "wrong-type",
         "status": "indeterminate"
       },
-      "from": "evaluator.membership.unit.test.ts: memberOf > respects units for numeric candidates -- an incompatible unit is wrong-type, never a plain non-match",
+      "from": "evaluator.membership.unit.test.ts: memberOf > respects units for numeric candidates: an incompatible unit is wrong-type, never a plain non-match",
       "id": "membership.memberof-respects-units-for-numeric-candidates-an-incompatible-unit-is-wrong-type-never-a-plain-non-match.1",
       "kind": "evaluate",
       "resolvers": {
@@ -826,7 +826,7 @@
         "status": "definite",
         "value": true
       },
-      "from": "evaluator.membership.unit.test.ts: exists > wrong-type converts to definitely true -- the data point resolved, it just wasn't usable",
+      "from": "evaluator.membership.unit.test.ts: exists > wrong-type converts to definitely true: the data point resolved, it just wasn't usable",
       "id": "membership.exists-wrong-type-converts-to-definitely-true-the-data-point-resolved-it-just-wasn-t-usable.1",
       "kind": "evaluate",
       "resolvers": {
@@ -866,7 +866,7 @@
         "status": "definite",
         "value": true
       },
-      "from": "evaluator.membership.unit.test.ts: exists > domain-error converts to definitely true -- the data point resolved, it just wasn't usable",
+      "from": "evaluator.membership.unit.test.ts: exists > domain-error converts to definitely true: the data point resolved, it just wasn't usable",
       "id": "membership.exists-domain-error-converts-to-definitely-true-the-data-point-resolved-it-just-wasn-t-usable.1",
       "kind": "evaluate",
       "resolvers": {

@@ -119,6 +119,7 @@
     {
       "as": "predicate",
       "expect": {
+        "code": "not-found",
         "status": "indeterminate"
       },
       "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > T XOR U => U",
@@ -308,6 +309,7 @@
     {
       "as": "predicate",
       "expect": {
+        "code": "not-found",
         "status": "indeterminate"
       },
       "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > F XOR U => U",
@@ -381,6 +383,7 @@
     {
       "as": "predicate",
       "expect": {
+        "code": "not-found",
         "status": "indeterminate"
       },
       "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > U XOR T => U",
@@ -454,6 +457,7 @@
     {
       "as": "predicate",
       "expect": {
+        "code": "not-found",
         "status": "indeterminate"
       },
       "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > U XOR F => U",
@@ -527,6 +531,7 @@
     {
       "as": "predicate",
       "expect": {
+        "code": "not-found",
         "status": "indeterminate"
       },
       "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > U XOR U => U",
@@ -616,6 +621,7 @@
     {
       "as": "predicate",
       "expect": {
+        "code": "not-found",
         "status": "indeterminate"
       },
       "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > has no absorbing value: every combination with at least one U produces U, unlike AND/OR",
@@ -689,6 +695,7 @@
     {
       "as": "predicate",
       "expect": {
+        "code": "not-found",
         "status": "indeterminate"
       },
       "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > has no absorbing value: every combination with at least one U produces U, unlike AND/OR",
@@ -762,6 +769,7 @@
     {
       "as": "predicate",
       "expect": {
+        "code": "not-found",
         "status": "indeterminate"
       },
       "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > has no absorbing value: every combination with at least one U produces U, unlike AND/OR",
@@ -835,6 +843,7 @@
     {
       "as": "predicate",
       "expect": {
+        "code": "not-found",
         "status": "indeterminate"
       },
       "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > has no absorbing value: every combination with at least one U produces U, unlike AND/OR",
@@ -911,7 +920,7 @@
         "status": "definite",
         "value": true
       },
-      "from": "derived-connectives.unit.test.ts: implies spot check > implies(F, U) => T -- a false antecedent is vacuously true regardless of the consequent",
+      "from": "derived-connectives.unit.test.ts: implies spot check > implies(F, U) => T: a false antecedent is vacuously true regardless of the consequent",
       "id": "connectives.implies-spot-check-implies-f-u-t-a-false-antecedent-is-vacuously-true-regardless-of-the-consequent.1",
       "kind": "evaluate",
       "resolvers": {

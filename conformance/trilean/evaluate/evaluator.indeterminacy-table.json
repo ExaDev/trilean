@@ -607,7 +607,8 @@
     {
       "as": "predicate",
       "expect": {
-        "status": "definite"
+        "status": "definite",
+        "value": false
       },
       "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > and: false absorbs an indeterminate other operand regardless of its reason",
       "id": "indeterminacy-table.indeterminacy-reference-table-and-false-absorbs-an-indeterminate-other-operand-regardless-of-its-reason.1",
@@ -930,7 +931,8 @@
     {
       "as": "predicate",
       "expect": {
-        "status": "definite"
+        "status": "definite",
+        "value": true
       },
       "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > or: true absorbs an indeterminate other operand regardless of its reason",
       "id": "indeterminacy-table.indeterminacy-reference-table-or-true-absorbs-an-indeterminate-other-operand-regardless-of-its-reason.1",
@@ -1267,7 +1269,8 @@
     {
       "as": "predicate",
       "expect": {
-        "status": "definite"
+        "status": "definite",
+        "value": false
       },
       "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > allOf: a definitely-false operand absorbs an indeterminate sibling",
       "id": "indeterminacy-table.indeterminacy-reference-table-allof-a-definitely-false-operand-absorbs-an-indeterminate-sibling.1",
@@ -1598,7 +1601,8 @@
     {
       "as": "predicate",
       "expect": {
-        "status": "definite"
+        "status": "definite",
+        "value": true
       },
       "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > anyOf: a definitely-true operand absorbs an indeterminate sibling",
       "id": "indeterminacy-table.indeterminacy-reference-table-anyof-a-definitely-true-operand-absorbs-an-indeterminate-sibling.1",
@@ -3366,9 +3370,10 @@
     {
       "as": "predicate",
       "expect": {
-        "status": "definite"
+        "status": "definite",
+        "value": false
       },
-      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > exists: never not-found -- converts operand not-found to definitely false",
+      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > exists: never not-found: converts operand not-found to definitely false",
       "id": "indeterminacy-table.indeterminacy-reference-table-exists-never-not-found-converts-operand-not-found-to-definitely-false.1",
       "kind": "evaluate",
       "resolvers": {
@@ -3503,9 +3508,10 @@
     {
       "as": "predicate",
       "expect": {
-        "status": "definite"
+        "status": "definite",
+        "value": true
       },
-      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > exists: never wrong-type -- converts operand wrong-type to definitely true",
+      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > exists: never wrong-type: converts operand wrong-type to definitely true",
       "id": "indeterminacy-table.indeterminacy-reference-table-exists-never-wrong-type-converts-operand-wrong-type-to-definitely-true.1",
       "kind": "evaluate",
       "resolvers": {
@@ -3648,9 +3654,10 @@
     {
       "as": "predicate",
       "expect": {
-        "status": "definite"
+        "status": "definite",
+        "value": true
       },
-      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > exists: never domain-error -- converts operand domain-error to definitely true",
+      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > exists: never domain-error: converts operand domain-error to definitely true",
       "id": "indeterminacy-table.indeterminacy-reference-table-exists-never-domain-error-converts-operand-domain-error-to-definitely-true.1",
       "kind": "evaluate",
       "resolvers": {
@@ -4242,7 +4249,11 @@
     {
       "as": "expression",
       "expect": {
-        "status": "definite"
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 1
+        }
       },
       "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > numberLiteral: never indeterminate",
       "id": "indeterminacy-table.indeterminacy-reference-table-numberliteral-never-indeterminate.1",
@@ -4376,7 +4387,11 @@
     {
       "as": "expression",
       "expect": {
-        "status": "definite"
+        "status": "definite",
+        "value": {
+          "kind": "text",
+          "value": "x"
+        }
       },
       "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > textLiteral: never indeterminate",
       "id": "indeterminacy-table.indeterminacy-reference-table-textliteral-never-indeterminate.1",
@@ -4510,7 +4525,11 @@
     {
       "as": "expression",
       "expect": {
-        "status": "definite"
+        "status": "definite",
+        "value": {
+          "kind": "instant",
+          "value": "2026-01-01T00:00:00.000Z"
+        }
       },
       "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > instantLiteral: never indeterminate",
       "id": "indeterminacy-table.indeterminacy-reference-table-instantliteral-never-indeterminate.1",
@@ -4644,7 +4663,12 @@
     {
       "as": "expression",
       "expect": {
-        "status": "definite"
+        "status": "definite",
+        "value": {
+          "kind": "duration",
+          "unit": "min",
+          "value": 1
+        }
       },
       "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > durationLiteral: never indeterminate",
       "id": "indeterminacy-table.indeterminacy-reference-table-durationliteral-never-indeterminate.1",
@@ -4779,7 +4803,12 @@
     {
       "as": "expression",
       "expect": {
-        "status": "definite"
+        "status": "definite",
+        "value": {
+          "im": -1,
+          "kind": "complex",
+          "re": 1
+        }
       },
       "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > complexLiteral: never indeterminate",
       "id": "indeterminacy-table.indeterminacy-reference-table-complexliteral-never-indeterminate.1",
@@ -7887,7 +7916,7 @@
         "code": "not-found",
         "status": "indeterminate"
       },
-      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > fold: an indeterminate filter makes the whole fold indeterminate outright -- no absorption, unlike some/every",
+      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > fold: an indeterminate filter makes the whole fold indeterminate outright: no absorption, unlike some/every",
       "id": "indeterminacy-table.indeterminacy-reference-table-fold-an-indeterminate-filter-makes-the-whole-fold-indeterminate-outright-no-absorption-unlike-some-e.1",
       "kind": "evaluate",
       "resolvers": {
@@ -8045,7 +8074,7 @@
         "code": "domain-error",
         "status": "indeterminate"
       },
-      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > fold (max): domain-error over an empty (post-filter) collection -- no first item to seed from",
+      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > fold (max): domain-error over an empty (post-filter) collection: no first item to seed from",
       "id": "indeterminacy-table.indeterminacy-reference-table-fold-max-domain-error-over-an-empty-post-filter-collection-no-first-item-to-seed-from.1",
       "kind": "evaluate",
       "resolvers": {
@@ -8187,7 +8216,7 @@
         "code": "domain-error",
         "status": "indeterminate"
       },
-      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > fold (min): domain-error over an empty (post-filter) collection -- no first item to seed from",
+      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > fold (min): domain-error over an empty (post-filter) collection: no first item to seed from",
       "id": "indeterminacy-table.indeterminacy-reference-table-fold-min-domain-error-over-an-empty-post-filter-collection-no-first-item-to-seed-from.1",
       "kind": "evaluate",
       "resolvers": {
@@ -8602,7 +8631,11 @@
     {
       "as": "expression",
       "expect": {
-        "status": "definite"
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 5
+        }
       },
       "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > accumulator: definite inside a reduce fold's own combine expression",
       "id": "indeterminacy-table.indeterminacy-reference-table-accumulator-definite-inside-a-reduce-fold-s-own-combine-expression.1",
@@ -9483,7 +9516,11 @@
     {
       "as": "expression",
       "expect": {
-        "status": "definite"
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 1
+        }
       },
       "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > delegate: definite when the registered handler resolves a value",
       "id": "indeterminacy-table.indeterminacy-reference-table-delegate-definite-when-the-registered-handler-resolves-a-value.1",

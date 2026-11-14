@@ -2540,7 +2540,7 @@
         "kind": "number",
         "value": 16331239353195370
       },
-      "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > give a large but finite tangent at the double nearest a pole",
+      "from": "recorded: trilean src/builtin-functions.ts (tangent at the double nearest pi/2, where the original asserted only that the result is finite)",
       "function": "tangent",
       "id": "builtin.sine-cosine-and-tangent-give-a-large-but-finite-tangent-at-the-double-nearest-a-pole.1",
       "kind": "call",

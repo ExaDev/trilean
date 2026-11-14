@@ -3,6 +3,7 @@
     {
       "as": "expression",
       "expect": {
+        "code": "not-found",
         "status": "indeterminate"
       },
       "expectCalls": [
@@ -153,6 +154,7 @@
     {
       "as": "expression",
       "expect": {
+        "code": "not-found",
         "status": "indeterminate"
       },
       "expectCalls": [
@@ -355,7 +357,7 @@
         "code": "domain-error",
         "status": "indeterminate"
       },
-      "from": "evaluator.indeterminacy-cases.unit.test.ts: conditional: 'unique' hit policy > 2+ definite matches absorbs -- domain-error, even with a third case that is itself indeterminate",
+      "from": "evaluator.indeterminacy-cases.unit.test.ts: conditional: 'unique' hit policy > 2+ definite matches absorbs: domain-error, even with a third case that is itself indeterminate",
       "id": "indeterminacy-cases.conditional-unique-hit-policy-2-definite-matches-absorbs-domain-error-even-with-a-third-case-that-is-itself-indeterminate.1",
       "kind": "evaluate",
       "resolvers": {
@@ -550,7 +552,7 @@
         "code": "not-found",
         "status": "indeterminate"
       },
-      "from": "evaluator.indeterminacy-cases.unit.test.ts: conditional: 'unique' hit policy > exactly one definite match plus one indeterminate case does NOT absorb -- the whole node is indeterminate, not the match's then",
+      "from": "evaluator.indeterminacy-cases.unit.test.ts: conditional: 'unique' hit policy > exactly one definite match plus one indeterminate case does NOT absorb: the whole node is indeterminate, not the match's then",
       "id": "indeterminacy-cases.conditional-unique-hit-policy-exactly-one-definite-match-plus-one-indeterminate-case-does-not-absorb-the-whole-node-is-indetermina.1",
       "kind": "evaluate",
       "resolvers": {
@@ -1048,7 +1050,7 @@
         "code": "domain-error",
         "status": "indeterminate"
       },
-      "from": "evaluator.indeterminacy-cases.unit.test.ts: fold: reduce vs max/min over an empty collection > max/min is domain-error, not initial-untouched -- it has no seed value at all",
+      "from": "evaluator.indeterminacy-cases.unit.test.ts: fold: reduce vs max/min over an empty collection > max/min is domain-error, not initial-untouched: it has no seed value at all",
       "id": "indeterminacy-cases.fold-reduce-vs-max-min-over-an-empty-collection-max-min-is-domain-error-not-initial-untouched-it-has-no-seed-value-at-all.1",
       "kind": "evaluate",
       "resolvers": {

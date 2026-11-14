@@ -2,11 +2,18 @@
   "cases": [
     {
       "as": "expression",
-      "expectSubset": {
+      "expect": {
+        "evaluation": {
+          "reason": {
+            "code": "wrong-type",
+            "message": "no tree resolver registered for treeReference nodes"
+          },
+          "status": "indeterminate"
+        },
         "outcome": "evaluated",
         "treeKind": "expression"
       },
-      "from": "evaluate-document.unit.test.ts: evaluateDocument > reads the kind of a root a treeReference would leave ambiguous when told it is an expression (recorded: trilean src/evaluate-document.ts, the outcome of the kind named by `as`)",
+      "from": "evaluate-document.unit.test.ts: evaluateDocument > reads the kind of a root a treeReference would leave ambiguous when told it is an expression (recorded: trilean src/evaluate-document.ts, the outcome of the kind named by `as`) (the original asserted only part of the outcome; the case gives the whole)",
       "id": "document.evaluatedocument-reads-the-kind-of-a-root-a-treereference-would-leave-ambiguous-when-told-it-is-an-expression.1",
       "kind": "document",
       "tree": {
@@ -162,16 +169,18 @@
       }
     },
     {
-      "expectSubset": {
+      "expect": {
         "evaluation": {
           "reason": {
-            "code": "domain-error"
+            "code": "domain-error",
+            "message": "logarithm requires a number above zero"
           },
           "status": "indeterminate"
         },
-        "outcome": "evaluated"
+        "outcome": "evaluated",
+        "treeKind": "expression"
       },
-      "from": "evaluate-document.unit.test.ts: evaluateDocument > reports a built-in's domain error as an indeterminate reason",
+      "from": "evaluate-document.unit.test.ts: evaluateDocument > reports a built-in's domain error as an indeterminate reason (the original asserted only part of the outcome; the case gives the whole)",
       "id": "document.evaluatedocument-reports-a-built-in-s-domain-error-as-an-indeterminate-reason.1",
       "kind": "document",
       "tree": {
@@ -186,15 +195,18 @@
       }
     },
     {
-      "expectSubset": {
+      "expect": {
         "evaluation": {
           "reason": {
-            "code": "wrong-type"
+            "code": "wrong-type",
+            "message": "no function registered under the name 'notARegisteredFunction'"
           },
           "status": "indeterminate"
-        }
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
       },
-      "from": "evaluate-document.unit.test.ts: evaluateDocument > reports an unregistered function as wrong-type",
+      "from": "evaluate-document.unit.test.ts: evaluateDocument > reports an unregistered function as wrong-type (the original asserted only part of the outcome; the case gives the whole)",
       "id": "document.evaluatedocument-reports-an-unregistered-function-as-wrong-type.1",
       "kind": "document",
       "tree": {
@@ -227,10 +239,14 @@
       }
     },
     {
+      "expectIssuePaths": [
+        "kind"
+      ],
       "expectSubset": {
-        "outcome": "rejected"
+        "outcome": "rejected",
+        "reason": "invalid"
       },
-      "from": "evaluate-document.unit.test.ts: evaluateDocument > rejects an unknown root kind as an expression problem",
+      "from": "evaluate-document.unit.test.ts: evaluateDocument > rejects an unknown root kind as an expression problem (the original asserted only part of the outcome; the case gives the outcome without the schema library's issue text, which is not the implementation's to pin)",
       "id": "document.evaluatedocument-rejects-an-unknown-root-kind-as-an-expression-problem.1",
       "kind": "document",
       "tree": {
@@ -238,10 +254,14 @@
       }
     },
     {
+      "expectIssuePaths": [
+        "(root)"
+      ],
       "expectSubset": {
-        "outcome": "rejected"
+        "outcome": "rejected",
+        "reason": "invalid"
       },
-      "from": "evaluate-document.unit.test.ts: evaluateDocument > rejects a tree that is not an object",
+      "from": "evaluate-document.unit.test.ts: evaluateDocument > rejects a tree that is not an object (the original asserted only part of the outcome; the case gives the outcome without the schema library's issue text, which is not the implementation's to pin)",
       "id": "document.evaluatedocument-rejects-a-tree-that-is-not-an-object.1",
       "kind": "document",
       "tree": 3
@@ -264,17 +284,18 @@
     },
     {
       "as": "predicate",
-      "expectSubset": {
+      "expect": {
         "evaluation": {
           "reason": {
-            "code": "wrong-type"
+            "code": "wrong-type",
+            "message": "no tree resolver registered for treeReference nodes"
           },
           "status": "indeterminate"
         },
         "outcome": "evaluated",
         "treeKind": "predicate"
       },
-      "from": "evaluate-document.unit.test.ts: evaluateDocument > asks which tree a treeReference is, and honours `as`",
+      "from": "evaluate-document.unit.test.ts: evaluateDocument > asks which tree a treeReference is, and honours `as` (the original asserted only part of the outcome; the case gives the whole)",
       "id": "document.evaluatedocument-asks-which-tree-a-treereference-is-and-honours-as.2",
       "kind": "document",
       "tree": {
@@ -284,10 +305,14 @@
     },
     {
       "as": "predicate",
+      "expectIssuePaths": [
+        "kind"
+      ],
       "expectSubset": {
-        "outcome": "rejected"
+        "outcome": "rejected",
+        "reason": "invalid"
       },
-      "from": "evaluate-document.unit.test.ts: evaluateDocument > lets `as` override the kind read from the root",
+      "from": "evaluate-document.unit.test.ts: evaluateDocument > lets `as` override the kind read from the root (the original asserted only part of the outcome; the case gives the outcome without the schema library's issue text, which is not the implementation's to pin)",
       "id": "document.evaluatedocument-lets-as-override-the-kind-read-from-the-root.1",
       "kind": "document",
       "tree": {
@@ -366,13 +391,18 @@
       }
     },
     {
-      "expectSubset": {
+      "expect": {
         "evaluation": {
+          "reason": {
+            "code": "domain-error",
+            "message": "evaluation exceeded the maximum of 4 nodes visited in a single call (resource exhausted)"
+          },
           "status": "indeterminate"
         },
-        "outcome": "evaluated"
+        "outcome": "evaluated",
+        "treeKind": "expression"
       },
-      "from": "evaluate-document.unit.test.ts: evaluateDocument maxNodes > refuses a tree larger than the budget with an indeterminate result",
+      "from": "evaluate-document.unit.test.ts: evaluateDocument maxNodes > refuses a tree larger than the budget with an indeterminate result (the original asserted only part of the outcome; the case gives the whole)",
       "id": "document.evaluatedocument-maxnodes-refuses-a-tree-larger-than-the-budget-with-an-indeterminate-result.1",
       "kind": "document",
       "maxNodes": 4,
@@ -398,13 +428,18 @@
       }
     },
     {
-      "expectSubset": {
+      "expect": {
         "evaluation": {
-          "status": "definite"
+          "status": "definite",
+          "value": {
+            "kind": "number",
+            "value": 6
+          }
         },
-        "outcome": "evaluated"
+        "outcome": "evaluated",
+        "treeKind": "expression"
       },
-      "from": "evaluate-document.unit.test.ts: evaluateDocument maxNodes > evaluates the same tree when the budget covers it",
+      "from": "evaluate-document.unit.test.ts: evaluateDocument maxNodes > evaluates the same tree when the budget covers it (the original asserted only part of the outcome; the case gives the whole)",
       "id": "document.evaluatedocument-maxnodes-evaluates-the-same-tree-when-the-budget-covers-it.1",
       "kind": "document",
       "maxNodes": 5,
@@ -485,17 +520,20 @@
       }
     },
     {
-      "expectSubset": {
+      "expect": {
         "evaluation": {
           "status": "definite",
           "value": {
             "im": 10,
             "kind": "complex",
-            "re": 0
+            "re": 0,
+            "unit": {}
           }
-        }
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
       },
-      "from": "evaluate-document.unit.test.ts: evaluateDocument with the complex and trigonometric built-ins > rotates a phasor by exponential(i theta)",
+      "from": "evaluate-document.unit.test.ts: evaluateDocument with the complex and trigonometric built-ins > rotates a phasor by exponential(i theta) (the original asserted only part of the outcome; the case gives the whole)",
       "id": "document.evaluatedocument-with-the-complex-and-trigonometric-built-ins-rotates-a-phasor-by-exponential-i-theta.1",
       "inputs": {
         "V": 10,
@@ -574,15 +612,18 @@
       }
     },
     {
-      "expectSubset": {
+      "expect": {
         "evaluation": {
           "reason": {
-            "code": "domain-error"
+            "code": "domain-error",
+            "message": "logarithm requires a number above zero"
           },
           "status": "indeterminate"
-        }
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
       },
-      "from": "evaluate-document.unit.test.ts: evaluateDocument with the complex and trigonometric built-ins > refuses the logarithm of a real zero as before, as a domain-error",
+      "from": "evaluate-document.unit.test.ts: evaluateDocument with the complex and trigonometric built-ins > refuses the logarithm of a real zero as before, as a domain-error (the original asserted only part of the outcome; the case gives the whole)",
       "id": "document.evaluatedocument-with-the-complex-and-trigonometric-built-ins-refuses-the-logarithm-of-a-real-zero-as-before-as-a-domain-error.1",
       "inputs": {
         "x": 0
@@ -600,16 +641,19 @@
       }
     },
     {
-      "expectSubset": {
+      "expect": {
         "evaluation": {
           "status": "definite",
           "value": {
             "kind": "number",
+            "unit": {},
             "value": 1
           }
-        }
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
       },
-      "from": "evaluate-document.unit.test.ts: evaluateDocument with the complex and trigonometric built-ins > evaluates a worked tree through sine",
+      "from": "evaluate-document.unit.test.ts: evaluateDocument with the complex and trigonometric built-ins > evaluates a worked tree through sine (the original asserted only part of the outcome; the case gives the whole)",
       "id": "document.evaluatedocument-with-the-complex-and-trigonometric-built-ins-evaluates-a-worked-tree-through-sine.1",
       "inputs": {
         "angle": 0.5235987755982988,
@@ -639,16 +683,19 @@
       }
     },
     {
-      "expectSubset": {
+      "expect": {
         "evaluation": {
           "status": "definite",
           "value": {
             "kind": "number",
+            "unit": {},
             "value": 10
           }
-        }
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
       },
-      "from": "evaluate-document.unit.test.ts: evaluateDocument with the complex and trigonometric built-ins > evaluates a worked tree through tangent",
+      "from": "evaluate-document.unit.test.ts: evaluateDocument with the complex and trigonometric built-ins > evaluates a worked tree through tangent (the original asserted only part of the outcome; the case gives the whole)",
       "id": "document.evaluatedocument-with-the-complex-and-trigonometric-built-ins-evaluates-a-worked-tree-through-tangent.1",
       "inputs": {
         "angle": 0.7853981633974483,
@@ -678,16 +725,18 @@
       }
     },
     {
-      "expectSubset": {
+      "expect": {
         "evaluation": {
           "status": "definite",
           "value": {
             "kind": "number",
             "value": 0.5235987755982988
           }
-        }
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
       },
-      "from": "evaluate-document.unit.test.ts: evaluateDocument with the complex and trigonometric built-ins > evaluates a worked tree through arcSine",
+      "from": "evaluate-document.unit.test.ts: evaluateDocument with the complex and trigonometric built-ins > evaluates a worked tree through arcSine (the original asserted only part of the outcome; the case gives the whole)",
       "id": "document.evaluatedocument-with-the-complex-and-trigonometric-built-ins-evaluates-a-worked-tree-through-arcsine.1",
       "inputs": {
         "hypotenuse": {
@@ -729,16 +778,18 @@
       }
     },
     {
-      "expectSubset": {
+      "expect": {
         "evaluation": {
           "status": "definite",
           "value": {
             "kind": "number",
             "value": 1.0471975511965976
           }
-        }
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
       },
-      "from": "evaluate-document.unit.test.ts: evaluateDocument with the complex and trigonometric built-ins > evaluates a worked tree through arcCosine",
+      "from": "evaluate-document.unit.test.ts: evaluateDocument with the complex and trigonometric built-ins > evaluates a worked tree through arcCosine (the original asserted only part of the outcome; the case gives the whole)",
       "id": "document.evaluatedocument-with-the-complex-and-trigonometric-built-ins-evaluates-a-worked-tree-through-arccosine.1",
       "inputs": {
         "adjacent": {
@@ -780,16 +831,18 @@
       }
     },
     {
-      "expectSubset": {
+      "expect": {
         "evaluation": {
           "status": "definite",
           "value": {
             "kind": "number",
             "value": 0.7853981633974483
           }
-        }
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
       },
-      "from": "evaluate-document.unit.test.ts: evaluateDocument with the complex and trigonometric built-ins > evaluates a worked tree through arcTangent",
+      "from": "evaluate-document.unit.test.ts: evaluateDocument with the complex and trigonometric built-ins > evaluates a worked tree through arcTangent (the original asserted only part of the outcome; the case gives the whole)",
       "id": "document.evaluatedocument-with-the-complex-and-trigonometric-built-ins-evaluates-a-worked-tree-through-arctangent.1",
       "inputs": {
         "rise": {
@@ -831,16 +884,18 @@
       }
     },
     {
-      "expectSubset": {
+      "expect": {
         "evaluation": {
           "status": "definite",
           "value": {
             "kind": "number",
             "value": 0.6
           }
-        }
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
       },
-      "from": "evaluate-document.unit.test.ts: evaluateDocument with the complex and trigonometric built-ins > evaluates a worked tree through cosine and arcTangent2",
+      "from": "evaluate-document.unit.test.ts: evaluateDocument with the complex and trigonometric built-ins > evaluates a worked tree through cosine and arcTangent2 (the original asserted only part of the outcome; the case gives the whole)",
       "id": "document.evaluatedocument-with-the-complex-and-trigonometric-built-ins-evaluates-a-worked-tree-through-cosine-and-arctangent2.1",
       "inputs": {
         "P": 3,

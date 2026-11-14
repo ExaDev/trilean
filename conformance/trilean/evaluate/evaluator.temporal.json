@@ -10,7 +10,7 @@
           "value": 60000
         }
       },
-      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic -- the four well-defined combination rules > instant - instant => duration, in milliseconds",
+      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic: the four well-defined combination rules > instant - instant => duration, in milliseconds",
       "id": "temporal.temporal-arithmetic-the-four-well-defined-combination-rules-instant-instant-duration-in-milliseconds.1",
       "kind": "evaluate",
       "resolvers": {
@@ -55,7 +55,7 @@
           "value": "2026-01-01T00:01:00.000Z"
         }
       },
-      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic -- the four well-defined combination rules > instant + duration => instant",
+      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic: the four well-defined combination rules > instant + duration => instant",
       "id": "temporal.temporal-arithmetic-the-four-well-defined-combination-rules-instant-duration-instant.1",
       "kind": "evaluate",
       "resolvers": {
@@ -101,7 +101,7 @@
           "value": "2026-01-01T00:01:00.000Z"
         }
       },
-      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic -- the four well-defined combination rules > duration + instant => instant",
+      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic: the four well-defined combination rules > duration + instant => instant",
       "id": "temporal.temporal-arithmetic-the-four-well-defined-combination-rules-duration-instant-instant.1",
       "kind": "evaluate",
       "resolvers": {
@@ -148,7 +148,7 @@
           "value": 90000
         }
       },
-      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic -- the four well-defined combination rules > duration + duration => duration, normalising different units to milliseconds",
+      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic: the four well-defined combination rules > duration + duration => duration, normalising different units to milliseconds",
       "id": "temporal.temporal-arithmetic-the-four-well-defined-combination-rules-duration-duration-duration-normalising-different-units-to-milliseconds.1",
       "kind": "evaluate",
       "resolvers": {
@@ -192,7 +192,7 @@
         "code": "wrong-type",
         "status": "indeterminate"
       },
-      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic -- wrong-type violations > adding two instants is wrong-type (only instant - instant is defined)",
+      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic: wrong-type violations > adding two instants is wrong-type (only instant - instant is defined)",
       "id": "temporal.temporal-arithmetic-wrong-type-violations-adding-two-instants-is-wrong-type-only-instant-instant-is-defined.1",
       "kind": "evaluate",
       "resolvers": {
@@ -234,7 +234,7 @@
         "code": "wrong-type",
         "status": "indeterminate"
       },
-      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic -- wrong-type violations > subtracting a duration from an instant is wrong-type (not one of the defined combinations)",
+      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic: wrong-type violations > subtracting a duration from an instant is wrong-type (not one of the defined combinations)",
       "id": "temporal.temporal-arithmetic-wrong-type-violations-subtracting-a-duration-from-an-instant-is-wrong-type-not-one-of-the-defined-combinations.1",
       "kind": "evaluate",
       "resolvers": {
@@ -277,7 +277,7 @@
         "code": "wrong-type",
         "status": "indeterminate"
       },
-      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic -- wrong-type violations > comparing an instant against a plain number is wrong-type",
+      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic: wrong-type violations > comparing an instant against a plain number is wrong-type",
       "id": "temporal.temporal-arithmetic-wrong-type-violations-comparing-an-instant-against-a-plain-number-is-wrong-type.1",
       "kind": "evaluate",
       "resolvers": {
@@ -319,7 +319,7 @@
         "code": "wrong-type",
         "status": "indeterminate"
       },
-      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic -- wrong-type violations > an unparseable instant is wrong-type, never a throw or a NaN-derived definite result > instant - instant",
+      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic: wrong-type violations > an unparseable instant is wrong-type, never a throw or a NaN-derived definite result > instant - instant",
       "id": "temporal.temporal-arithmetic-wrong-type-violations-an-unparseable-instant-is-wrong-type-never-a-throw-or-a-nan-derived-definite-result-instant-instant.1",
       "kind": "evaluate",
       "resolvers": {
@@ -361,7 +361,7 @@
         "code": "wrong-type",
         "status": "indeterminate"
       },
-      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic -- wrong-type violations > an unparseable instant is wrong-type, never a throw or a NaN-derived definite result > instant + duration",
+      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic: wrong-type violations > an unparseable instant is wrong-type, never a throw or a NaN-derived definite result > instant + duration",
       "id": "temporal.temporal-arithmetic-wrong-type-violations-an-unparseable-instant-is-wrong-type-never-a-throw-or-a-nan-derived-definite-result-instant-duratio.1",
       "kind": "evaluate",
       "resolvers": {
@@ -404,7 +404,7 @@
         "code": "wrong-type",
         "status": "indeterminate"
       },
-      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic -- wrong-type violations > an unparseable instant is wrong-type, never a throw or a NaN-derived definite result > duration + instant",
+      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic: wrong-type violations > an unparseable instant is wrong-type, never a throw or a NaN-derived definite result > duration + instant",
       "id": "temporal.temporal-arithmetic-wrong-type-violations-an-unparseable-instant-is-wrong-type-never-a-throw-or-a-nan-derived-definite-result-duration-instan.1",
       "kind": "evaluate",
       "resolvers": {
@@ -447,7 +447,7 @@
         "code": "wrong-type",
         "status": "indeterminate"
       },
-      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic -- wrong-type violations > an unparseable instant is wrong-type, never a throw or a NaN-derived definite result > compare -- neq between two unparseable instants is not definitely true",
+      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic: wrong-type violations > an unparseable instant is wrong-type, never a throw or a NaN-derived definite result > compare: neq between two unparseable instants is not definitely true",
       "id": "temporal.temporal-arithmetic-wrong-type-violations-an-unparseable-instant-is-wrong-type-never-a-throw-or-a-nan-derived-definite-result-compare-neq-bet.1",
       "kind": "evaluate",
       "resolvers": {
@@ -489,7 +489,7 @@
         "code": "wrong-type",
         "status": "indeterminate"
       },
-      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic -- wrong-type violations > an unparseable instant is wrong-type, never a throw or a NaN-derived definite result > memberOf -- an unparseable candidate is not a definite non-match",
+      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic: wrong-type violations > an unparseable instant is wrong-type, never a throw or a NaN-derived definite result > memberOf: an unparseable candidate is not a definite non-match",
       "id": "temporal.temporal-arithmetic-wrong-type-violations-an-unparseable-instant-is-wrong-type-never-a-throw-or-a-nan-derived-definite-result-memberof-an-unp.1",
       "kind": "evaluate",
       "resolvers": {
@@ -533,7 +533,7 @@
         "code": "domain-error",
         "status": "indeterminate"
       },
-      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic -- wrong-type violations > an unparseable instant is wrong-type, never a throw or a NaN-derived definite result > shifting a parseable instant beyond the representable timestamp range is domain-error",
+      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic: wrong-type violations > an unparseable instant is wrong-type, never a throw or a NaN-derived definite result > shifting a parseable instant beyond the representable timestamp range is domain-error",
       "id": "temporal.temporal-arithmetic-wrong-type-violations-an-unparseable-instant-is-wrong-type-never-a-throw-or-a-nan-derived-definite-result-shifting-a-pars.1",
       "kind": "evaluate",
       "resolvers": {
@@ -576,7 +576,7 @@
         "code": "wrong-type",
         "status": "indeterminate"
       },
-      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic -- wrong-type violations > multiplying two durations is wrong-type (no representable result unit)",
+      "from": "evaluator.temporal.unit.test.ts: temporal arithmetic: wrong-type violations > multiplying two durations is wrong-type (no representable result unit)",
       "id": "temporal.temporal-arithmetic-wrong-type-violations-multiplying-two-durations-is-wrong-type-no-representable-result-unit.1",
       "kind": "evaluate",
       "resolvers": {

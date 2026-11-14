@@ -1089,7 +1089,8 @@
         "maxNodes": 51
       },
       "expect": {
-        "status": "definite"
+        "status": "definite",
+        "value": true
       },
       "from": "recorded: trilean conformance/README.md (a rule the README states for resolver data)",
       "id": "resolver-data.the-node-limit-is-met-at-the-same-node-in-the-sync-evaluator.1",
@@ -1487,7 +1488,8 @@
         "maxNodes": 51
       },
       "expect": {
-        "status": "definite"
+        "status": "definite",
+        "value": true
       },
       "from": "recorded: trilean conformance/README.md (a rule the README states for resolver data)",
       "id": "resolver-data.the-node-limit-is-met-at-the-same-node-in-the-compiled-evaluator.1",

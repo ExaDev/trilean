@@ -546,7 +546,7 @@
           "value": true
         }
       },
-      "from": "evaluator.values.unit.test.ts: reference > resolves a boolean value with no schema change beyond the ComputedValue union itself -- reference carries no kind restriction of its own",
+      "from": "evaluator.values.unit.test.ts: reference > resolves a boolean value with no schema change beyond the ComputedValue union itself: reference carries no kind restriction of its own",
       "id": "values.reference-resolves-a-boolean-value-with-no-schema-change-beyond-the-computedvalue-union-itself-reference-carries-no-kind-restriction-of-its-own.1",
       "kind": "evaluate",
       "resolvers": {
