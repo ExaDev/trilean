@@ -1,3 +1,9 @@
+## [1.0.20](https://github.com/ExaDev/trilean/compare/trilean-regex%401.0.19...trilean-regex%401.0.20) (2026-11-14)
+
+### Build System
+
+* **deps-dev:** bump tsdown from 0.23.1 to 0.23.7 ([c6dff80](https://github.com/ExaDev/trilean/commit/c6dff80acd570af68b21e37e63e554a062f028c5))
+
 ## [1.0.19](https://github.com/ExaDev/trilean/compare/trilean-regex%401.0.18...trilean-regex%401.0.19) (2026-11-14)
 
 ### Build System
