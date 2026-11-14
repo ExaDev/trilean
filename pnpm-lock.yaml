@@ -360,7 +360,7 @@ importers:
   packages/trilean-sql:
     dependencies:
       trilean:
-        specifier: 1.13.3
+        specifier: 1.13.4
         version: link:../trilean
       trilean-regex:
         specifier: 1.0.17

@@ -1,3 +1,9 @@
+## [1.13.4](https://github.com/ExaDev/trilean/compare/trilean%401.13.3...trilean%401.13.4) (2026-11-14)
+
+### Build System
+
+* **deps-dev:** bump @cloudflare/vitest-plugin from 1.4.0 to 1.6.0 ([7d78460](https://github.com/ExaDev/trilean/commit/7d78460678929b18227bc5bb92c4fb81268c4363))
+
 ## [1.13.3](https://github.com/ExaDev/trilean/compare/trilean%401.13.2...trilean%401.13.3) (2026-11-14)
 
 ### Build System
