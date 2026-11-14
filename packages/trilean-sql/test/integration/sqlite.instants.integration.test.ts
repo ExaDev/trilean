@@ -100,6 +100,24 @@ describe("instants on SQLite select the rows the evaluator selects", () => {
   });
 });
 
+describe("the precision SQLite and the evaluator keep", () => {
+  const equalToTheMillisecond: PredicateNode = {
+    kind: "compare",
+    op: "eq",
+    left: { kind: "reference", key: "at" },
+    right: { kind: "instantLiteral", value: "2019-12-31T23:59:59.999Z" },
+  };
+
+  it("compares to the millisecond: a stored fourth digit is truncated, not kept", async () => {
+    // PostgreSQL compares microseconds, so there the same stored value is not equal; see the PGlite suite.
+    const rows = viaSqlite(equalToTheMillisecond);
+    expect(rows).toContain("x-truncated");
+    expect(rows).toEqual(
+      await evaluatorRows(equalToTheMillisecond, [...MOMENTS, ...SQLITE_ONLY]),
+    );
+  });
+});
+
 describe("a stored value outside the grammar is unknown, whatever SQLite's date functions would make of it", () => {
   const parameters = [...PARAMETERS, ...SQLITE_ONLY_PARAMETERS];
   const trees: readonly { label: string; tree: PredicateNode }[] =

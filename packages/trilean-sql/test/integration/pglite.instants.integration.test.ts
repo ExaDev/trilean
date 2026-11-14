@@ -69,3 +69,14 @@ describe("instants on PostgreSQL select the rows the evaluator selects", () => {
     await expect(viaPostgres(tree)).resolves.toEqual(await evaluatorRows(tree));
   });
 });
+
+describe("the precision PostgreSQL keeps", () => {
+  it("compares microseconds: a stored fourth digit is kept, so it is not equal to the millisecond before it", async () => {
+    // SQLite and the evaluator compare to the millisecond and read the two as equal; see the SQLite suite and #164.
+    const result = await db.query<{ equal: boolean; later: boolean }>(
+      `SELECT $1::timestamptz = $2::timestamptz AS equal, $1::timestamptz > $2::timestamptz AS later`,
+      ["2019-12-31T23:59:59.9996Z", "2019-12-31T23:59:59.999Z"],
+    );
+    expect(result.rows[0]).toEqual({ equal: false, later: true });
+  });
+});

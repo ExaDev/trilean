@@ -3,7 +3,10 @@ import { describe, expect, it } from "vitest";
 import { compilePredicateNode } from "./compile";
 import { UnknownDialectError, UnsupportedNodeError } from "./errors";
 import { findUnpushableNodeKind } from "./guard";
-import { sqliteInstantColumn, sqliteInstantParameter } from "./sqlite-instant";
+import {
+  sqliteInstantColumn,
+  sqliteInstantParameter,
+} from "./internal/sqlite-instant";
 import type { SqlCompileOptions, SqlDialect } from "./options";
 import {
   sqliteSubjectOptions,
@@ -110,6 +113,14 @@ describe("the sqlite dialect", () => {
     "2020-01-01T24:00:00Z",
     "2020-01-01T23:59:60Z",
     "2020-01-01T00:00:00+24:00",
+    "2020-01-01T00:00:00+02:60",
+    "2020-01-01T00:00:00-23:60",
+    "2020-01-01T00:60:00Z",
+    "2020-01-01T25:00:00Z",
+    "2020-13-01T00:00:00Z",
+    "2020-00-10T00:00:00Z",
+    "2020-01-00T00:00:00Z",
+    "1900-02-29T00:00:00Z",
     "2020-01-01T00:00:00Z ",
   ])(
     "binds %j, outside the one grammar, as NULL, so the comparison is unknown",
