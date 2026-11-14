@@ -54,7 +54,12 @@ const config: Pick<
    *
    * The single commit strategy writes its own release commit message, which carries the `Workspace-Release-Commit: true` trailer the orchestrator needs to tell its commits from changes to a listed path. `@semantic-release/git`, whose `message` option would replace it, stays out of the plugin list for the reason in the header above.
    */
-  packageSources: {},
+  packageSources: {
+    "trilean-regex": [
+      "rust/crates/trilean-regex",
+      "rust/bindings/trilean-regex-wasm",
+    ],
+  },
   plugins: [
     "@semantic-release/changelog",
     ["@semantic-release/npm", { npmPublish: true }],
