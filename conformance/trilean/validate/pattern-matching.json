@@ -1,0 +1,37 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "textCompare",
+          "left": {
+            "key": "instruction",
+            "kind": "reference"
+          },
+          "op": "matches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^cat(?: [\\s\\S]*)?$"
+          }
+        }
+      },
+      "from": "pattern-matching.integration.test.ts: pattern builders composed with connectives and quantifiers > survives a round trip through JSON and the wire-format schema, since a compiled pattern is ordinary serialisable tree data",
+      "id": "pattern-matching-validate.pattern-builders-composed-with-connectives-and-quantifiers-survives-a-round-trip-through-json-and-the-wire-format-schema-sin.1",
+      "input": {
+        "kind": "textCompare",
+        "left": {
+          "key": "instruction",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^cat(?: [\\s\\S]*)?$"
+        }
+      },
+      "kind": "validate",
+      "schema": "PredicateNodeSchema"
+    }
+  ]
+}

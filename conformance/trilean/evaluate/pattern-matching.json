@@ -1,0 +1,713 @@
+{
+  "cases": [
+    {
+      "as": "predicate",
+      "context": {
+        "instruction": "ls -la",
+        "target": "workspace/reports/summary.txt"
+      },
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "pattern-matching.integration.test.ts: pattern builders composed with connectives and quantifiers > classifies the listing command as shallow-read-only: true",
+      "id": "pattern-matching.pattern-builders-composed-with-connectives-and-quantifiers-classifies-the-listing-command-as-shallow-read-only-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "commands",
+            "items": [
+              {
+                "instruction": "ls -la",
+                "target": "workspace/reports/summary.txt"
+              },
+              {
+                "instruction": "cat notes.md",
+                "target": "workspace/reports/archive/2020/notes.md"
+              },
+              {
+                "instruction": "publish --now",
+                "target": "workspace/index.html"
+              },
+              {
+                "instruction": "sync-all",
+                "target": "elsewhere/data.bin"
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "kind": "and",
+        "left": {
+          "kind": "anyOf",
+          "operands": [
+            {
+              "kind": "textCompare",
+              "left": {
+                "key": "instruction",
+                "kind": "reference"
+              },
+              "op": "matches",
+              "right": {
+                "kind": "textLiteral",
+                "value": "^ls(?: [\\s\\S]*)?$"
+              }
+            },
+            {
+              "kind": "textCompare",
+              "left": {
+                "key": "instruction",
+                "kind": "reference"
+              },
+              "op": "matches",
+              "right": {
+                "kind": "textLiteral",
+                "value": "^cat(?: [\\s\\S]*)?$"
+              }
+            }
+          ]
+        },
+        "right": {
+          "kind": "textCompare",
+          "left": {
+            "key": "target",
+            "kind": "reference"
+          },
+          "op": "matches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^workspace\\/reports\\/[^\\/]*$"
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "context": {
+        "instruction": "cat notes.md",
+        "target": "workspace/reports/archive/2020/notes.md"
+      },
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "pattern-matching.integration.test.ts: pattern builders composed with connectives and quantifiers > classifies the nestedRead command as shallow-read-only: false",
+      "id": "pattern-matching.pattern-builders-composed-with-connectives-and-quantifiers-classifies-the-nestedread-command-as-shallow-read-only-false.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "commands",
+            "items": [
+              {
+                "instruction": "ls -la",
+                "target": "workspace/reports/summary.txt"
+              },
+              {
+                "instruction": "cat notes.md",
+                "target": "workspace/reports/archive/2020/notes.md"
+              },
+              {
+                "instruction": "publish --now",
+                "target": "workspace/index.html"
+              },
+              {
+                "instruction": "sync-all",
+                "target": "elsewhere/data.bin"
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "kind": "and",
+        "left": {
+          "kind": "anyOf",
+          "operands": [
+            {
+              "kind": "textCompare",
+              "left": {
+                "key": "instruction",
+                "kind": "reference"
+              },
+              "op": "matches",
+              "right": {
+                "kind": "textLiteral",
+                "value": "^ls(?: [\\s\\S]*)?$"
+              }
+            },
+            {
+              "kind": "textCompare",
+              "left": {
+                "key": "instruction",
+                "kind": "reference"
+              },
+              "op": "matches",
+              "right": {
+                "kind": "textLiteral",
+                "value": "^cat(?: [\\s\\S]*)?$"
+              }
+            }
+          ]
+        },
+        "right": {
+          "kind": "textCompare",
+          "left": {
+            "key": "target",
+            "kind": "reference"
+          },
+          "op": "matches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^workspace\\/reports\\/[^\\/]*$"
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "context": {
+        "instruction": "publish --now",
+        "target": "workspace/index.html"
+      },
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "pattern-matching.integration.test.ts: pattern builders composed with connectives and quantifiers > classifies the publish command as shallow-read-only: false",
+      "id": "pattern-matching.pattern-builders-composed-with-connectives-and-quantifiers-classifies-the-publish-command-as-shallow-read-only-false.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "commands",
+            "items": [
+              {
+                "instruction": "ls -la",
+                "target": "workspace/reports/summary.txt"
+              },
+              {
+                "instruction": "cat notes.md",
+                "target": "workspace/reports/archive/2020/notes.md"
+              },
+              {
+                "instruction": "publish --now",
+                "target": "workspace/index.html"
+              },
+              {
+                "instruction": "sync-all",
+                "target": "elsewhere/data.bin"
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "kind": "and",
+        "left": {
+          "kind": "anyOf",
+          "operands": [
+            {
+              "kind": "textCompare",
+              "left": {
+                "key": "instruction",
+                "kind": "reference"
+              },
+              "op": "matches",
+              "right": {
+                "kind": "textLiteral",
+                "value": "^ls(?: [\\s\\S]*)?$"
+              }
+            },
+            {
+              "kind": "textCompare",
+              "left": {
+                "key": "instruction",
+                "kind": "reference"
+              },
+              "op": "matches",
+              "right": {
+                "kind": "textLiteral",
+                "value": "^cat(?: [\\s\\S]*)?$"
+              }
+            }
+          ]
+        },
+        "right": {
+          "kind": "textCompare",
+          "left": {
+            "key": "target",
+            "kind": "reference"
+          },
+          "op": "matches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^workspace\\/reports\\/[^\\/]*$"
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "context": {
+        "instruction": "sync-all",
+        "target": "elsewhere/data.bin"
+      },
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "pattern-matching.integration.test.ts: pattern builders composed with connectives and quantifiers > classifies the unrelated command as shallow-read-only: false",
+      "id": "pattern-matching.pattern-builders-composed-with-connectives-and-quantifiers-classifies-the-unrelated-command-as-shallow-read-only-false.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "commands",
+            "items": [
+              {
+                "instruction": "ls -la",
+                "target": "workspace/reports/summary.txt"
+              },
+              {
+                "instruction": "cat notes.md",
+                "target": "workspace/reports/archive/2020/notes.md"
+              },
+              {
+                "instruction": "publish --now",
+                "target": "workspace/index.html"
+              },
+              {
+                "instruction": "sync-all",
+                "target": "elsewhere/data.bin"
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "kind": "and",
+        "left": {
+          "kind": "anyOf",
+          "operands": [
+            {
+              "kind": "textCompare",
+              "left": {
+                "key": "instruction",
+                "kind": "reference"
+              },
+              "op": "matches",
+              "right": {
+                "kind": "textLiteral",
+                "value": "^ls(?: [\\s\\S]*)?$"
+              }
+            },
+            {
+              "kind": "textCompare",
+              "left": {
+                "key": "instruction",
+                "kind": "reference"
+              },
+              "op": "matches",
+              "right": {
+                "kind": "textLiteral",
+                "value": "^cat(?: [\\s\\S]*)?$"
+              }
+            }
+          ]
+        },
+        "right": {
+          "kind": "textCompare",
+          "left": {
+            "key": "target",
+            "kind": "reference"
+          },
+          "op": "matches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^workspace\\/reports\\/[^\\/]*$"
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "context": {
+        "instruction": "cat notes.md",
+        "target": "workspace/reports/archive/2020/notes.md"
+      },
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "pattern-matching.integration.test.ts: pattern builders composed with connectives and quantifiers > widening the glob from * to ** admits the nested target the single-segment form rejected",
+      "id": "pattern-matching.pattern-builders-composed-with-connectives-and-quantifiers-widening-the-glob-from-to-admits-the-nested-target-the-single-segment-form.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "commands",
+            "items": [
+              {
+                "instruction": "ls -la",
+                "target": "workspace/reports/summary.txt"
+              },
+              {
+                "instruction": "cat notes.md",
+                "target": "workspace/reports/archive/2020/notes.md"
+              },
+              {
+                "instruction": "publish --now",
+                "target": "workspace/index.html"
+              },
+              {
+                "instruction": "sync-all",
+                "target": "elsewhere/data.bin"
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "kind": "and",
+        "left": {
+          "kind": "anyOf",
+          "operands": [
+            {
+              "kind": "textCompare",
+              "left": {
+                "key": "instruction",
+                "kind": "reference"
+              },
+              "op": "matches",
+              "right": {
+                "kind": "textLiteral",
+                "value": "^cat(?: [\\s\\S]*)?$"
+              }
+            }
+          ]
+        },
+        "right": {
+          "kind": "textCompare",
+          "left": {
+            "key": "target",
+            "kind": "reference"
+          },
+          "op": "matches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^workspace\\/reports\\/[\\s\\S]*$"
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "pattern-matching.integration.test.ts: pattern builders composed with connectives and quantifiers > drives the derived `none` quantifier over the whole collection, so each item's own context feeds the compiled pattern",
+      "id": "pattern-matching.pattern-builders-composed-with-connectives-and-quantifiers-drives-the-derived-none-quantifier-over-the-whole-collection-so-each-item.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "commands",
+            "items": [
+              {
+                "instruction": "ls -la",
+                "target": "workspace/reports/summary.txt"
+              },
+              {
+                "instruction": "cat notes.md",
+                "target": "workspace/reports/archive/2020/notes.md"
+              },
+              {
+                "instruction": "publish --now",
+                "target": "workspace/index.html"
+              },
+              {
+                "instruction": "sync-all",
+                "target": "elsewhere/data.bin"
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "kind": "not",
+        "operand": {
+          "collection": "commands",
+          "item": {
+            "kind": "not",
+            "operand": {
+              "kind": "textCompare",
+              "left": {
+                "key": "target",
+                "kind": "reference"
+              },
+              "op": "matches",
+              "right": {
+                "kind": "textLiteral",
+                "value": "^workspace\\/[\\s\\S]*$"
+              }
+            }
+          },
+          "kind": "some"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "pattern-matching.integration.test.ts: pattern builders composed with connectives and quantifiers > drives the derived `none` quantifier over the whole collection, so each item's own context feeds the compiled pattern",
+      "id": "pattern-matching.pattern-builders-composed-with-connectives-and-quantifiers-drives-the-derived-none-quantifier-over-the-whole-collection-so-each-item.2",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "commands",
+            "items": [
+              {
+                "instruction": "ls -la",
+                "target": "workspace/reports/summary.txt"
+              },
+              {
+                "instruction": "cat notes.md",
+                "target": "workspace/reports/archive/2020/notes.md"
+              },
+              {
+                "instruction": "publish --now",
+                "target": "workspace/index.html"
+              },
+              {
+                "instruction": "sync-all",
+                "target": "elsewhere/data.bin"
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "kind": "not",
+        "operand": {
+          "collection": "commands",
+          "item": {
+            "kind": "textCompare",
+            "left": {
+              "key": "instruction",
+              "kind": "reference"
+            },
+            "op": "matches",
+            "right": {
+              "kind": "textLiteral",
+              "value": "^publish(?: [\\s\\S]*)?$"
+            }
+          },
+          "kind": "some"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "pattern-matching.integration.test.ts: pattern builders composed with connectives and quantifiers > drives the derived `none` quantifier over the whole collection, so each item's own context feeds the compiled pattern",
+      "id": "pattern-matching.pattern-builders-composed-with-connectives-and-quantifiers-drives-the-derived-none-quantifier-over-the-whole-collection-so-each-item.3",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "commands",
+            "items": [
+              {
+                "instruction": "ls -la",
+                "target": "workspace/reports/summary.txt"
+              },
+              {
+                "instruction": "cat notes.md",
+                "target": "workspace/reports/archive/2020/notes.md"
+              },
+              {
+                "instruction": "publish --now",
+                "target": "workspace/index.html"
+              },
+              {
+                "instruction": "sync-all",
+                "target": "elsewhere/data.bin"
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "kind": "not",
+        "operand": {
+          "collection": "commands",
+          "item": {
+            "kind": "textCompare",
+            "left": {
+              "key": "instruction",
+              "kind": "reference"
+            },
+            "op": "matches",
+            "right": {
+              "kind": "textLiteral",
+              "value": "^delete(?: [\\s\\S]*)?$"
+            }
+          },
+          "kind": "some"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "context": {
+        "instruction": "ls -la",
+        "target": "workspace/reports/summary.txt"
+      },
+      "expect": {
+        "status": "indeterminate"
+      },
+      "from": "pattern-matching.integration.test.ts: pattern builders composed with connectives and quantifiers > propagates an unresolvable operand as indeterminate rather than collapsing the whole rule to false",
+      "id": "pattern-matching.pattern-builders-composed-with-connectives-and-quantifiers-propagates-an-unresolvable-operand-as-indeterminate-rather-than-collapsing.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "commands",
+            "items": [
+              {
+                "instruction": "ls -la",
+                "target": "workspace/reports/summary.txt"
+              },
+              {
+                "instruction": "cat notes.md",
+                "target": "workspace/reports/archive/2020/notes.md"
+              },
+              {
+                "instruction": "publish --now",
+                "target": "workspace/index.html"
+              },
+              {
+                "instruction": "sync-all",
+                "target": "elsewhere/data.bin"
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "absent",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^ls(?: [\\s\\S]*)?$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "context": {
+        "instruction": "cat notes.md",
+        "target": "workspace/reports/archive/2020/notes.md"
+      },
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "pattern-matching.integration.test.ts: pattern builders composed with connectives and quantifiers > survives a round trip through JSON and the wire-format schema, since a compiled pattern is ordinary serialisable tree data",
+      "id": "pattern-matching.pattern-builders-composed-with-connectives-and-quantifiers-survives-a-round-trip-through-json-and-the-wire-format-schema-since-a-comp.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "commands",
+            "items": [
+              {
+                "instruction": "ls -la",
+                "target": "workspace/reports/summary.txt"
+              },
+              {
+                "instruction": "cat notes.md",
+                "target": "workspace/reports/archive/2020/notes.md"
+              },
+              {
+                "instruction": "publish --now",
+                "target": "workspace/index.html"
+              },
+              {
+                "instruction": "sync-all",
+                "target": "elsewhere/data.bin"
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "instruction",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^cat(?: [\\s\\S]*)?$"
+        }
+      }
+    }
+  ]
+}

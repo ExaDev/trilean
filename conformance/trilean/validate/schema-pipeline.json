@@ -1,0 +1,465 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "and",
+          "left": {
+            "kind": "compare",
+            "left": {
+              "key": "temperature",
+              "kind": "reference"
+            },
+            "op": "gte",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 18
+            }
+          },
+          "right": {
+            "kind": "exists",
+            "operand": {
+              "key": "sensorId",
+              "kind": "reference"
+            }
+          }
+        }
+      },
+      "from": "schema-pipeline.integration.test.ts: a predicate tree round-trips through untrusted JSON text before evaluation > parses, validates via PredicateNodeSchema, and evaluates to the expected outcome",
+      "id": "pipeline-validate.a-predicate-tree-round-trips-through-untrusted-json-text-before-evaluation-parses-validates-via-predicatenodeschema-and-evaluates-to.1",
+      "input": {
+        "kind": "and",
+        "left": {
+          "kind": "compare",
+          "left": {
+            "key": "temperature",
+            "kind": "reference"
+          },
+          "op": "gte",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 18
+          }
+        },
+        "right": {
+          "kind": "exists",
+          "operand": {
+            "key": "sensorId",
+            "kind": "reference"
+          }
+        }
+      },
+      "kind": "validate",
+      "schema": "PredicateNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "arithmetic",
+          "left": {
+            "key": "unitPrice",
+            "kind": "reference"
+          },
+          "op": "multiply",
+          "right": {
+            "key": "quantity",
+            "kind": "reference"
+          }
+        }
+      },
+      "from": "schema-pipeline.integration.test.ts: an expression tree round-trips through untrusted JSON text before evaluation > parses, validates via ExpressionNodeSchema, and evaluates to the expected computed value",
+      "id": "pipeline-validate.an-expression-tree-round-trips-through-untrusted-json-text-before-evaluation-parses-validates-via-expressionnodeschema-and-evaluates.1",
+      "input": {
+        "kind": "arithmetic",
+        "left": {
+          "key": "unitPrice",
+          "kind": "reference"
+        },
+        "op": "multiply",
+        "right": {
+          "key": "quantity",
+          "kind": "reference"
+        }
+      },
+      "kind": "validate",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "allOf",
+          "operands": [
+            {
+              "kind": "compare",
+              "left": {
+                "cases": [
+                  {
+                    "then": {
+                      "collection": "shipments",
+                      "combiner": {
+                        "combine": {
+                          "kind": "arithmetic",
+                          "left": {
+                            "kind": "accumulator"
+                          },
+                          "op": "add",
+                          "right": {
+                            "key": "weight",
+                            "kind": "reference"
+                          }
+                        },
+                        "initial": {
+                          "kind": "numberLiteral",
+                          "value": 0
+                        },
+                        "mode": "reduce"
+                      },
+                      "filter": {
+                        "kind": "textCompare",
+                        "left": {
+                          "key": "status",
+                          "kind": "reference"
+                        },
+                        "op": "equals",
+                        "right": {
+                          "kind": "textLiteral",
+                          "value": "cleared"
+                        }
+                      },
+                      "kind": "fold"
+                    },
+                    "when": {
+                      "collection": "shipments",
+                      "item": {
+                        "kind": "textCompare",
+                        "left": {
+                          "key": "status",
+                          "kind": "reference"
+                        },
+                        "op": "equals",
+                        "right": {
+                          "kind": "textLiteral",
+                          "value": "held"
+                        }
+                      },
+                      "kind": "some"
+                    }
+                  }
+                ],
+                "fallback": {
+                  "kind": "numberLiteral",
+                  "value": 0
+                },
+                "kind": "conditional"
+              },
+              "op": "gt",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 60
+              }
+            },
+            {
+              "kind": "not",
+              "operand": {
+                "collection": "shipments",
+                "item": {
+                  "kind": "compare",
+                  "left": {
+                    "key": "weight",
+                    "kind": "reference"
+                  },
+                  "op": "gt",
+                  "right": {
+                    "kind": "numberLiteral",
+                    "value": 30
+                  }
+                },
+                "kind": "every"
+              }
+            }
+          ]
+        }
+      },
+      "from": "schema-pipeline.integration.test.ts: a deep, mutually recursive tree crosses the predicate/expression boundary in both directions > validates without losing any node in the descent, reproducing the source text exactly",
+      "id": "pipeline-validate.a-deep-mutually-recursive-tree-crosses-the-predicate-expression-boundary-in-both-directions-validates-without-losing-any-node-in-the.1",
+      "input": {
+        "kind": "allOf",
+        "operands": [
+          {
+            "kind": "compare",
+            "left": {
+              "cases": [
+                {
+                  "then": {
+                    "collection": "shipments",
+                    "combiner": {
+                      "combine": {
+                        "kind": "arithmetic",
+                        "left": {
+                          "kind": "accumulator"
+                        },
+                        "op": "add",
+                        "right": {
+                          "key": "weight",
+                          "kind": "reference"
+                        }
+                      },
+                      "initial": {
+                        "kind": "numberLiteral",
+                        "value": 0
+                      },
+                      "mode": "reduce"
+                    },
+                    "filter": {
+                      "kind": "textCompare",
+                      "left": {
+                        "key": "status",
+                        "kind": "reference"
+                      },
+                      "op": "equals",
+                      "right": {
+                        "kind": "textLiteral",
+                        "value": "cleared"
+                      }
+                    },
+                    "kind": "fold"
+                  },
+                  "when": {
+                    "collection": "shipments",
+                    "item": {
+                      "kind": "textCompare",
+                      "left": {
+                        "key": "status",
+                        "kind": "reference"
+                      },
+                      "op": "equals",
+                      "right": {
+                        "kind": "textLiteral",
+                        "value": "held"
+                      }
+                    },
+                    "kind": "some"
+                  }
+                }
+              ],
+              "fallback": {
+                "kind": "numberLiteral",
+                "value": 0
+              },
+              "kind": "conditional"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 60
+            }
+          },
+          {
+            "kind": "not",
+            "operand": {
+              "collection": "shipments",
+              "item": {
+                "kind": "compare",
+                "left": {
+                  "key": "weight",
+                  "kind": "reference"
+                },
+                "op": "gt",
+                "right": {
+                  "kind": "numberLiteral",
+                  "value": 30
+                }
+              },
+              "kind": "every"
+            }
+          }
+        ]
+      },
+      "kind": "validate",
+      "schema": "PredicateNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "compare",
+          "left": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      },
+      "from": "schema-pipeline.integration.test.ts: adversarial input > an extra unexpected key is stripped rather than rejected or silently changing what the node means",
+      "id": "pipeline-validate.adversarial-input-an-extra-unexpected-key-is-stripped-rather-than-rejected-or-silently-changing-what-the-node-means.1",
+      "input": {
+        "kind": "compare",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 1
+        },
+        "op": "eq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        },
+        "signature": "not part of the schema"
+      },
+      "kind": "validate",
+      "schema": "PredicateNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "schema-pipeline.integration.test.ts: adversarial input > a wrong literal type for the 'kind' discriminant is rejected, not coerced",
+      "id": "pipeline-validate.adversarial-input-a-wrong-literal-type-for-the-kind-discriminant-is-rejected-not-coerced.1",
+      "input": {
+        "kind": 123,
+        "left": {
+          "kind": "numberLiteral",
+          "value": 1
+        },
+        "op": "eq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      },
+      "kind": "validate",
+      "schema": "PredicateNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "schema-pipeline.integration.test.ts: adversarial input > a 'kind' string that matches no known node kind is rejected",
+      "id": "pipeline-validate.adversarial-input-a-kind-string-that-matches-no-known-node-kind-is-rejected.1",
+      "input": {
+        "kind": "definitelyNotARealNodeKind"
+      },
+      "kind": "validate",
+      "schema": "PredicateNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "delegate",
+          "payload": {
+            "orderId": "abc123"
+          },
+          "system": "externalPricing"
+        }
+      },
+      "from": "schema-pipeline.integration.test.ts: a __proto__ key inside an opaque JsonValue payload > is dropped by schema validation, leaving only the payload's real keys",
+      "id": "pipeline-validate.a-proto-key-inside-an-opaque-jsonvalue-payload-is-dropped-by-schema-validation-leaving-only-the-payload-s-real-keys.1",
+      "input": {
+        "kind": "delegate",
+        "payload": {
+          "__proto__": {
+            "polluted": true
+          },
+          "orderId": "abc123"
+        },
+        "system": "externalPricing"
+      },
+      "kind": "validate",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "delegate",
+          "payload": {
+            "outer": {
+              "keep": 1
+            }
+          },
+          "system": "externalPricing"
+        }
+      },
+      "from": "schema-pipeline.integration.test.ts: a __proto__ key inside an opaque JsonValue payload > is dropped at every depth, not only at the payload's own top level",
+      "id": "pipeline-validate.a-proto-key-inside-an-opaque-jsonvalue-payload-is-dropped-at-every-depth-not-only-at-the-payload-s-own-top-level.1",
+      "input": {
+        "kind": "delegate",
+        "payload": {
+          "outer": {
+            "__proto__": {
+              "polluted": true
+            },
+            "keep": 1
+          }
+        },
+        "system": "externalPricing"
+      },
+      "kind": "validate",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "exists",
+          "operand": {
+            "key": {
+              "field": "temperature"
+            },
+            "kind": "reference"
+          }
+        }
+      },
+      "from": "schema-pipeline.integration.test.ts: a __proto__ key inside an opaque JsonValue payload > is dropped in every JsonValue slot, not only a delegate payload -- a reference's opaque key is the same schema",
+      "id": "pipeline-validate.a-proto-key-inside-an-opaque-jsonvalue-payload-is-dropped-in-every-jsonvalue-slot-not-only-a-delegate-payload-a-reference-s-opaque-k.1",
+      "input": {
+        "kind": "exists",
+        "operand": {
+          "key": {
+            "__proto__": {
+              "polluted": true
+            },
+            "field": "temperature"
+          },
+          "kind": "reference"
+        }
+      },
+      "kind": "validate",
+      "schema": "PredicateNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "delegate",
+          "payload": {
+            "constructor": "a real business field",
+            "ok": 1
+          },
+          "system": "externalPricing"
+        }
+      },
+      "from": "schema-pipeline.integration.test.ts: a __proto__ key inside an opaque JsonValue payload > leaves a merely suspicious-looking key alone -- an opaque payload is uninterpreted data, and only __proto__ is structurally dangerous",
+      "id": "pipeline-validate.a-proto-key-inside-an-opaque-jsonvalue-payload-leaves-a-merely-suspicious-looking-key-alone-an-opaque-payload-is-uninterpreted-data.1",
+      "input": {
+        "kind": "delegate",
+        "payload": {
+          "constructor": "a real business field",
+          "ok": 1
+        },
+        "system": "externalPricing"
+      },
+      "kind": "validate",
+      "schema": "ExpressionNodeSchema"
+    }
+  ]
+}
