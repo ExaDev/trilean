@@ -1,3 +1,13 @@
+## [1.0.23](https://github.com/ExaDev/trilean/compare/trilean-regex%401.0.22...trilean-regex%401.0.23) (2026-11-14)
+
+### Tests
+
+* define the tolerance and the number forms the corpus runner reads exactly ([83221f8](https://github.com/ExaDev/trilean/commit/83221f8a9cbc053c1bc5c5d10e00818dc70f9194))
+* generate the derived-pattern, serialisation and number-format cases ([bbff0a6](https://github.com/ExaDev/trilean/commit/bbff0a690ee83a0627fb8c5942f73b682b25e892))
+* let a case state only what its original did, and give it the original's tolerance ([b9ff906](https://github.com/ExaDev/trilean/commit/b9ff90674b2a0817b641b889e4f9467b75e7f04e))
+* rename the corpus field only to skip ([f23539c](https://github.com/ExaDev/trilean/commit/f23539cd79ac2d6d1c2c7b544cfb77b8c409df22))
+* run the trilean validate and evaluate cases from the corpus ([b84ad79](https://github.com/ExaDev/trilean/commit/b84ad791c9ef0c0fabb46fbbbc9f2901d4826408))
+
 ## [1.0.22](https://github.com/ExaDev/trilean/compare/trilean-regex%401.0.21...trilean-regex%401.0.22) (2026-11-14)
 
 ### Build System

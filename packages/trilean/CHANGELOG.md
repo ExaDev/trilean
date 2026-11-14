@@ -1,3 +1,27 @@
+## [1.13.10](https://github.com/ExaDev/trilean/compare/trilean%401.13.9...trilean%401.13.10) (2026-11-14)
+
+### Tests
+
+* close computed values to a malformed number name and generate fixtures for regex parse cases ([977fea2](https://github.com/ExaDev/trilean/commit/977fea2cd55939e57e52ec9e98dcb564761b1b48))
+* cover every constraint of the schema with generated fixtures and guard the generated files ([57b8741](https://github.com/ExaDev/trilean/commit/57b87410f36aae0560e1d70cd98b8f385f8dd484))
+* define the tolerance and the number forms the corpus runner reads exactly ([83221f8](https://github.com/ExaDev/trilean/commit/83221f8a9cbc053c1bc5c5d10e00818dc70f9194))
+* generate the derived-pattern, serialisation and number-format cases ([bbff0a6](https://github.com/ExaDev/trilean/commit/bbff0a690ee83a0627fb8c5942f73b682b25e892))
+* let a case state only what its original did, and give it the original's tolerance ([b9ff906](https://github.com/ExaDev/trilean/commit/b9ff90674b2a0817b641b889e4f9467b75e7f04e))
+* pin the evaluation limits, usage and the kept tests in the corpus ([048ea86](https://github.com/ExaDev/trilean/commit/048ea863e12d8c208288cdab1eff07cacd8b1f16))
+* require the value or the code of every evaluate case and match the kept-tests table exactly ([9653fd5](https://github.com/ExaDev/trilean/commit/9653fd54c14c7e60ebfac8c1cc0cdc64e12443b9))
+* run the built-in function cases from the corpus ([a6b92e5](https://github.com/ExaDev/trilean/commit/a6b92e5e77788c941c708413f5fc291cd2d877a4))
+* run the command-line cases from the corpus ([9767309](https://github.com/ExaDev/trilean/commit/9767309ae759a389b6943ce1bb11b1d5473a0f4c))
+* run the composition cases from the corpus ([431e77d](https://github.com/ExaDev/trilean/commit/431e77db5d589d58bb9fbcae4b2a5cd2fc35c0f2))
+* run the derived builder cases from the corpus ([00463f6](https://github.com/ExaDev/trilean/commit/00463f62d0a3ad08f07b572a584de7c2dd79eaab))
+* run the evaluator cases from the corpus ([c5966a9](https://github.com/ExaDev/trilean/commit/c5966a9ba20885787da643db8d9c1c409af4de39))
+* run the inputs and document cases from the corpus ([d29f5ff](https://github.com/ExaDev/trilean/commit/d29f5ff64e1c3a87172027a5697e59f9157f14a9))
+* run the trilean validate and evaluate cases from the corpus ([b84ad79](https://github.com/ExaDev/trilean/commit/b84ad791c9ef0c0fabb46fbbbc9f2901d4826408))
+
+
+### Dependencies
+
+- Updated trilean-regex to 1.0.23
+
 ## [1.13.9](https://github.com/ExaDev/trilean/compare/trilean%401.13.8...trilean%401.13.9) (2026-11-14)
 
 ### Build System
