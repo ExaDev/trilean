@@ -1,0 +1,15 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "ast": {
+          "codeUnit": 97
+        }
+      },
+      "from": "x.unit.test.ts: a fixture",
+      "id": "fixture.astral-text",
+      "kind": "regex-parse",
+      "pattern": "😀"
+    }
+  ]
+}

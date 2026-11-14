@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": {
+            "$number": "Infinity"
+          }
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 1
+      },
+      "from": "x.unit.test.ts: a fixture",
+      "function": "absoluteValue",
+      "id": "fixture.1",
+      "kind": "call"
+    }
+  ]
+}

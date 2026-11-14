@@ -1,0 +1,20 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "ast": {
+          "kind": "star",
+          "operand": {
+            "codeUnit": 97,
+            "kind": "literal"
+          },
+          "unexpectedMember": 1
+        }
+      },
+      "from": "parser.unit.test.ts: quantifiers > parses *, +, ?",
+      "id": "parse.quantifiers.parses.1",
+      "kind": "regex-parse",
+      "pattern": "a*"
+    }
+  ]
+}

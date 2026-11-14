@@ -1,0 +1,15 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "ast": {
+          "kind": "alternation"
+        }
+      },
+      "from": "parser.unit.test.ts: alternation > parses two branches",
+      "id": "parse.alternation.parses-two-branches.1",
+      "kind": "regex-parse",
+      "pattern": "a|b"
+    }
+  ]
+}

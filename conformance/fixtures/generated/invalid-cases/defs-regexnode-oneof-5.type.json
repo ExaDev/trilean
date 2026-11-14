@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "ast": "not-the-type"
+      },
+      "from": "parser.unit.test.ts: quantifiers > parses *, +, ?",
+      "id": "parse.quantifiers.parses.1",
+      "kind": "regex-parse",
+      "pattern": "a*"
+    }
+  ]
+}

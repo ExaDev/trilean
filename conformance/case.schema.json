@@ -359,6 +359,9 @@
       "type": "object"
     },
     "computedValue": {
+      "additionalProperties": {
+        "$ref": "#/$defs/json"
+      },
       "description": "A ComputedValue as the trilean package represents it; validated by the runner of the package that owns it.",
       "properties": {
         "kind": {
