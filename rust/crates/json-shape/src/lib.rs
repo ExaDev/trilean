@@ -17,7 +17,9 @@
 //!
 //! - Numbers are `f64`s, and a literal is read as the nearest double, as `JSON.parse` reads it (`serde_json` is built
 //!   with `float_roundtrip` for that). Written back, [`Value`]'s `Display` is the text `JSON.stringify` writes, and
-//!   its `Serialize` writes the same text, for every finite double, through `serde_json` (see [`Value`]). Integer types are bounded by
+//!   its `Serialize` writes the same text, for every finite double, through `serde_json`'s raw value (see [`Value`]): it is
+//!   written for `serde_json`'s serialisers, and another serialiser shows a number that is not a whole number below 2^53 as
+//!   that type's marker, not as a number. Integer types are bounded by
 //!   [`MAX_SAFE_INTEGER`] in both the validator and the schema.
 //! - Reading goes through `serde_json`, which refuses nesting deeper than 128 levels and an unpaired surrogate
 //!   escape. A JSON Schema validator in JavaScript accepts both, so the schema accepts documents this crate cannot
