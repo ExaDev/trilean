@@ -1,5 +1,12 @@
 {
   "files": {
+    "trilean-regex/ecmascript/class-semantics.json": {
+      "cases": 4,
+      "skip": [
+        "ecmascript.class-semantics.1",
+        "ecmascript.class-semantics.2"
+      ]
+    },
     "trilean-regex/ecmascript/derived-patterns.json": {
       "cases": 72,
       "generated": true,

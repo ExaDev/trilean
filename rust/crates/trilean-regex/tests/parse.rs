@@ -1,8 +1,8 @@
 //! What the parser accepts and refuses, beyond the cases the conformance corpus pins.
 
 use trilean_regex::{
-    CharClassNode, CharRange, MAX_NESTING_DEPTH, RegexNode, RegexParseError, char_class_matches,
-    parse_regex, parse_regex_utf16,
+    CharClassNode, CharRange, MAX_NESTING_DEPTH, MAX_STATES, RegexNode, RegexParseError,
+    char_class_matches, compile_pattern, parse_regex, parse_regex_utf16,
 };
 
 fn units(text: &str) -> Vec<u16> {
@@ -136,15 +136,10 @@ fn groups_nest_to_the_limit_and_no_further() {
 }
 
 #[test]
-fn a_bound_is_a_count_that_fits_in_a_u32() {
-    assert_eq!(
-        parse_regex("a{4294967295}"),
-        Ok(RegexNode::Repeat {
-            operand: Box::new(RegexNode::Literal { code_unit: 97 }),
-            min: u32::MAX,
-            max: Some(u32::MAX),
-        })
-    );
+fn a_bound_is_a_count_that_fits_in_a_u32_and_in_the_state_limit() {
+    let error = refusal("a{4294967295}");
+    assert_eq!(error.index(), 1);
+    assert!(error.reason().contains("automaton states"));
     let error = refusal("a{4294967296}");
     assert_eq!(error.index(), 1);
     assert!(error.reason().contains("too large"));
@@ -153,6 +148,52 @@ fn a_bound_is_a_count_that_fits_in_a_u32() {
             .reason()
             .contains("too large")
     );
+}
+
+#[test]
+fn the_state_limit_is_exact_for_a_single_count() {
+    let at_limit = MAX_STATES - 1;
+    assert!(
+        compile_pattern(&format!("a{{{at_limit}}}")).is_ok_and(|p| p.state_count() == MAX_STATES)
+    );
+    let error = refusal(&format!("a{{{MAX_STATES}}}"));
+    assert_eq!(error.index(), 1);
+    assert!(error.reason().contains(&MAX_STATES.to_string()));
+    assert!(
+        refusal(&format!("a{{0,{MAX_STATES}}}"))
+            .reason()
+            .contains("automaton states")
+    );
+    assert!(
+        refusal(&format!("a{{{MAX_STATES},}}"))
+            .reason()
+            .contains("automaton states")
+    );
+}
+
+#[test]
+fn nested_counts_multiply_before_anything_is_allocated() {
+    let error = refusal("(?:a{1000}){1000}");
+    assert_eq!(error.index(), 11);
+    assert!(
+        refusal("(?:(?:a{100}){100}){100}")
+            .reason()
+            .contains("automaton states")
+    );
+    assert!(
+        refusal("(?:(?:(?:(?:a{1000}){1000}){1000}){1000})")
+            .reason()
+            .contains("automaton states")
+    );
+    assert!(compile_pattern("(?:a{100}){100}").is_ok());
+}
+
+#[test]
+fn several_counts_that_are_each_within_the_limit_are_refused_for_their_sum() {
+    let pattern = "a{20000}".repeat(6);
+    let error = refusal(&pattern);
+    assert_eq!(error.index(), 0);
+    assert!(error.reason().contains("automaton states"));
 }
 
 #[test]

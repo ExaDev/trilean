@@ -106,3 +106,46 @@ fn the_error_names_the_construct_and_the_index() {
         "the construct '.' at index 1 does not mean the same in an ECMAScript regular expression"
     );
 }
+
+#[test]
+fn a_class_holding_s_and_the_six_white_space_characters_is_not_every_code_unit_in_ecmascript() {
+    assert_eq!(unsupported(r"[\S \t\n\r\f\v]"), (1, "\\S"));
+    assert_eq!(unsupported(r"[^\S \t\n\r\f\v]"), (2, "\\S"));
+}
+
+#[test]
+fn a_class_is_judged_by_the_set_it_holds_not_by_its_spelling() {
+    for pattern in [
+        r"[\s\S]",
+        r"[\S\s]",
+        r"[^\s\S]",
+        "[\\s\\S\u{a0}]",
+        r"[\d-a]",
+        r"[\w-\d]",
+        "[a-\u{7f}\\d-]",
+        "[\\S\u{a0}\\s]",
+        r"[a\w-b-d]",
+    ] {
+        assert!(compile_ecmascript_subset(pattern).is_ok(), "{pattern}");
+    }
+}
+
+#[test]
+fn a_shorthand_class_chained_to_a_range_by_a_hyphen_is_a_union_in_ecmascript() {
+    assert_eq!(unsupported(r"[\d-a-z]"), (3, "-"));
+    assert_eq!(unsupported("[^\\W-\u{0}-9]"), (4, "-"));
+    assert_eq!(unsupported(r"[a\d-b-d]"), (4, "-"));
+}
+
+#[test]
+fn the_pattern_is_refused_for_the_one_construct_that_differs_and_accepted_when_none_does() {
+    assert!(compile_ecmascript_subset(r"[\d-]").is_ok());
+    assert!(compile_ecmascript_subset(r"[\d-\w]").is_ok());
+    assert!(compile_ecmascript_subset(r"[a-z\d]").is_ok());
+}
+
+#[test]
+fn a_class_ecmascript_refuses_as_a_syntax_error_is_refused_not_read_as_another_set() {
+    // ECMAScript reads `\D-!` as a union and then `--\t` as a range from `-` down to a tab, which is out of order there.
+    assert_eq!(unsupported(r"[^\/\D-!--\t]"), (6, "-"));
+}

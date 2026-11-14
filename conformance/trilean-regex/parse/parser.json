@@ -292,6 +292,7 @@
     {
       "expect": {
         "error": {
+          "index": 0,
           "message": [
             "unknown escape"
           ]
@@ -305,6 +306,7 @@
     {
       "expect": {
         "error": {
+          "index": 1,
           "message": [
             "trailing backslash"
           ]
@@ -397,10 +399,13 @@
     {
       "expect": {
         "error": {
-          "index": 1
+          "index": 1,
+          "message": [
+            "unexpected character -- if this was meant literally, escape it with a backslash"
+          ]
         }
       },
-      "from": "parser.unit.test.ts: literals and concatenation > treats an unescaped closing paren or bracket at the top level as an error (the original asserted only the error type; recorded: trilean-regex src/parser.ts, the index)",
+      "from": "parser.unit.test.ts: literals and concatenation > treats an unescaped closing paren or bracket at the top level as an error (the original asserted only the error type; recorded: trilean-regex rust/crates/trilean-regex/src/parser.ts, the index)",
       "id": "parse.literals-and-concatenation.treats-an-unescaped-closing-paren-or-bracket-at-the-top-level-as-an-error.1",
       "kind": "regex-parse",
       "pattern": "a)"
@@ -519,6 +524,7 @@
     {
       "expect": {
         "error": {
+          "index": 0,
           "message": [
             "anchor",
             "cannot be quantified"
@@ -533,6 +539,7 @@
     {
       "expect": {
         "error": {
+          "index": 0,
           "message": [
             "anchor",
             "cannot be quantified"
@@ -690,6 +697,7 @@
     {
       "expect": {
         "error": {
+          "index": 0,
           "message": [
             "capturing groups are not supported"
           ]
@@ -703,6 +711,7 @@
     {
       "expect": {
         "error": {
+          "index": 5,
           "message": [
             "expected ')'"
           ]
@@ -835,6 +844,7 @@
     {
       "expect": {
         "error": {
+          "index": 1,
           "message": [
             "backwards"
           ]
@@ -848,6 +858,7 @@
     {
       "expect": {
         "error": {
+          "index": 0,
           "message": [
             "nothing to repeat"
           ]
@@ -861,6 +872,7 @@
     {
       "expect": {
         "error": {
+          "index": 0,
           "message": [
             "nothing to repeat"
           ]
@@ -874,6 +886,7 @@
     {
       "expect": {
         "error": {
+          "index": 2,
           "message": [
             "cannot itself be quantified"
           ]
@@ -887,6 +900,7 @@
     {
       "expect": {
         "error": {
+          "index": 2,
           "message": [
             "cannot itself be quantified"
           ]
@@ -900,6 +914,7 @@
     {
       "expect": {
         "error": {
+          "index": 2,
           "message": [
             "cannot itself be quantified"
           ]
@@ -969,6 +984,7 @@
     {
       "expect": {
         "error": {
+          "index": 2,
           "message": [
             "reversed"
           ]
@@ -1044,6 +1060,7 @@
     {
       "expect": {
         "error": {
+          "index": 1,
           "message": [
             "at least one item"
           ]
@@ -1057,6 +1074,7 @@
     {
       "expect": {
         "error": {
+          "index": 2,
           "message": [
             "at least one item"
           ]
@@ -1070,6 +1088,7 @@
     {
       "expect": {
         "error": {
+          "index": 0,
           "message": [
             "unterminated character class"
           ]
@@ -1123,7 +1142,7 @@
           ]
         }
       },
-      "from": "recorded: trilean-regex src/parser.rs (a negated shorthand inside a class is the ranges of its complement)",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.rs (a negated shorthand inside a class is the ranges of its complement)",
       "id": "parse.recorded.negated-shorthand-in-class.d",
       "kind": "regex-parse",
       "pattern": "[\\Da]"
@@ -1157,7 +1176,7 @@
           ]
         }
       },
-      "from": "recorded: trilean-regex src/parser.rs (a negated shorthand inside a class is the ranges of its complement)",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.rs (a negated shorthand inside a class is the ranges of its complement)",
       "id": "parse.recorded.negated-shorthand-in-class.w",
       "kind": "regex-parse",
       "pattern": "[\\W]"
@@ -1183,7 +1202,7 @@
           ]
         }
       },
-      "from": "recorded: trilean-regex src/parser.rs (a negated shorthand inside a class is the ranges of its complement)",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.rs (a negated shorthand inside a class is the ranges of its complement)",
       "id": "parse.recorded.negated-shorthand-in-class.s",
       "kind": "regex-parse",
       "pattern": "[\\S]"
@@ -1205,7 +1224,7 @@
           ]
         }
       },
-      "from": "recorded: trilean-regex src/parser.rs (a negated shorthand inside a negated class)",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.rs (a negated shorthand inside a negated class)",
       "id": "parse.recorded.negated-shorthand-in-class.negated-class",
       "kind": "regex-parse",
       "pattern": "[^\\D]"
@@ -1255,7 +1274,7 @@
           ]
         }
       },
-      "from": "recorded: trilean-regex src/parser.rs (a class of \\s and \\S holds every code unit)",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.rs (a class of \\s and \\S holds every code unit)",
       "id": "parse.recorded.negated-shorthand-in-class.space-and-its-negation",
       "kind": "regex-parse",
       "pattern": "[\\s\\S]"
@@ -1269,7 +1288,7 @@
           ]
         }
       },
-      "from": "recorded: trilean-regex src/parser.rs (a negated shorthand class is not a range endpoint)",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.rs (a negated shorthand class is not a range endpoint)",
       "id": "parse.recorded.negated-shorthand-is-not-a-range-endpoint",
       "kind": "regex-parse",
       "pattern": "[a-\\D]"
@@ -1281,7 +1300,7 @@
           "kind": "literal"
         }
       },
-      "from": "recorded: trilean-regex src/parser.rs (an unpaired surrogate is a literal character)",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.rs (an unpaired surrogate is a literal character)",
       "id": "parse.recorded.unpaired-surrogate-literal",
       "kind": "regex-parse",
       "pattern": {
@@ -1306,7 +1325,7 @@
           ]
         }
       },
-      "from": "recorded: trilean-regex src/parser.rs (a reason quotes an unpaired surrogate)",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.rs (a reason quotes an unpaired surrogate)",
       "id": "parse.recorded.unpaired-surrogates-in-a-reversed-range",
       "kind": "regex-parse",
       "pattern": {
@@ -1328,7 +1347,7 @@
           ]
         }
       },
-      "from": "recorded: trilean-regex src/parser.rs (an index counts code units, so an astral character counts as two)",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.rs (an index counts code units, so an astral character counts as two)",
       "id": "parse.recorded.index-counts-code-units",
       "kind": "regex-parse",
       "pattern": "😀("
@@ -1342,7 +1361,7 @@
           ]
         }
       },
-      "from": "recorded: trilean-regex src/parser.rs (groups nest to a limit)",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.rs (groups nest to a limit)",
       "id": "parse.recorded.groups-nested-too-deeply",
       "kind": "regex-parse",
       "pattern": "(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:a)))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))"
@@ -1356,7 +1375,7 @@
           ]
         }
       },
-      "from": "recorded: trilean-regex src/parser.rs (a bound is a count that fits in 32 bits)",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.rs (a bound is a count that fits in 32 bits)",
       "id": "parse.recorded.bound-too-large",
       "kind": "regex-parse",
       "pattern": "a{4294967296}"
@@ -1368,7 +1387,7 @@
           "kind": "literal"
         }
       },
-      "from": "recorded: trilean-regex src/parser.rs (groups nest to a limit)",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.rs (groups nest to a limit)",
       "id": "parse.recorded.groups-nested-to-the-limit",
       "kind": "regex-parse",
       "pattern": "(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:(?:a))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))"
@@ -1376,6 +1395,7 @@
     {
       "expect": {
         "error": {
+          "index": 3,
           "message": [
             "cannot be a range endpoint"
           ]
@@ -1455,7 +1475,10 @@
     {
       "expect": {
         "error": {
-          "index": 2
+          "index": 2,
+          "message": [
+            "unknown escape sequence '\\q'"
+          ]
         }
       },
       "from": "parser.unit.test.ts: error positions > names the exact offending index",
@@ -1479,7 +1502,7 @@
           ]
         }
       },
-      "from": "recorded: trilean-regex src/parser.ts (no original test; astral literal)",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.ts (no original test; astral literal)",
       "id": "parse.utf-16-code-units.astral-literal.1",
       "kind": "regex-parse",
       "pattern": "😀"
@@ -1503,7 +1526,7 @@
           ]
         }
       },
-      "from": "recorded: trilean-regex src/parser.ts (no original test; astral quantified)",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.ts (no original test; astral quantified)",
       "id": "parse.utf-16-code-units.astral-quantified.1",
       "kind": "regex-parse",
       "pattern": "😀+"
@@ -1525,7 +1548,7 @@
           ]
         }
       },
-      "from": "recorded: trilean-regex src/parser.ts (no original test; astral in class)",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.ts (no original test; astral in class)",
       "id": "parse.utf-16-code-units.astral-in-class.1",
       "kind": "regex-parse",
       "pattern": "[😀]"
@@ -1539,7 +1562,7 @@
           ]
         }
       },
-      "from": "recorded: trilean-regex src/parser.ts (no original test; astral range)",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.ts (no original test; astral range)",
       "id": "parse.utf-16-code-units.astral-range.1",
       "kind": "regex-parse",
       "pattern": "[😀-😁]"
@@ -1551,7 +1574,7 @@
           "kind": "literal"
         }
       },
-      "from": "recorded: trilean-regex src/parser.ts (no original test; lone surrogate)",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.ts (no original test; lone surrogate)",
       "id": "parse.utf-16-code-units.lone-surrogate.1",
       "kind": "regex-parse",
       "pattern": {
@@ -1573,7 +1596,7 @@
           ]
         }
       },
-      "from": "recorded: trilean-regex src/parser.ts (no original test; lone surrogate in class)",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.ts (no original test; lone surrogate in class)",
       "id": "parse.utf-16-code-units.lone-surrogate-in-class.1",
       "kind": "regex-parse",
       "pattern": {
@@ -1593,7 +1616,7 @@
           ]
         }
       },
-      "from": "recorded: trilean-regex src/parser.ts (no original test; error after astral)",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.ts (no original test; error after astral)",
       "id": "parse.utf-16-code-units.error-after-astral.1",
       "kind": "regex-parse",
       "pattern": "😀\\q"
@@ -1608,7 +1631,7 @@
           }
         }
       },
-      "from": "recorded: trilean-regex src/parser.ts (no original test; bmp literal)",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.ts (no original test; bmp literal)",
       "id": "parse.utf-16-code-units.bmp-literal.1",
       "kind": "regex-parse",
       "pattern": "é+"
@@ -1626,7 +1649,7 @@
           ]
         }
       },
-      "from": "recorded: trilean-regex src/parser.ts (no original test; bmp class)",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.ts (no original test; bmp class)",
       "id": "parse.utf-16-code-units.bmp-class.1",
       "kind": "regex-parse",
       "pattern": "[а-я]"
@@ -1647,7 +1670,7 @@
           ]
         }
       },
-      "from": "recorded: trilean-regex src/parser.ts (no original test; cjk)",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/parser.ts (no original test; cjk)",
       "id": "parse.utf-16-code-units.cjk.1",
       "kind": "regex-parse",
       "pattern": "日本"

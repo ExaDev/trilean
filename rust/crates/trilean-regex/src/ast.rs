@@ -5,14 +5,18 @@
 /// An inclusive range of code units, `from <= to`. A single character `c` is `{ from: c, to: c }`.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct CharRange {
+    /// The first code unit of the range.
     pub from: u16,
+    /// The last code unit of the range, never below `from`.
     pub to: u16,
 }
 
 /// `[...]` and `[^...]`, and the standalone shorthand classes once expanded. `ranges` is the positive set and `negated` flips membership, so a negated class still reports the ranges it was written against.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct CharClassNode {
+    /// Whether the class holds the code units outside `ranges` instead of the ones inside.
     pub negated: bool,
+    /// The positive set, in the order written.
     pub ranges: Vec<CharRange>,
 }
 
@@ -21,10 +25,12 @@ pub struct CharClassNode {
 pub enum RegexNode {
     /// One character, by its code unit.
     Literal {
+        /// The code unit matched.
         code_unit: u16,
     },
     /// `.`: exactly one code unit of any value, a line terminator included.
     AnyChar,
+    /// A bracketed class, or a shorthand class used as an atom.
     CharClass(CharClassNode),
     /// `^`: the position is the start of the input.
     AnchorStart,
@@ -34,13 +40,19 @@ pub enum RegexNode {
     Concat(Vec<RegexNode>),
     /// One of the branches. The parser never builds one with fewer than two.
     Alternation(Vec<RegexNode>),
+    /// `a*`: zero or more repetitions.
     Star(Box<RegexNode>),
+    /// `a+`: one or more repetitions.
     Plus(Box<RegexNode>),
+    /// `a?`: zero or one repetition.
     Optional(Box<RegexNode>),
-    /// Between `min` and `max` repetitions, `max: None` meaning no upper bound. The parser never builds `min > max`, and never builds a shape `Star`, `Plus` or `Optional` already covers.
+    /// Between `min` and `max` repetitions, `max: None` meaning no upper bound. The parser builds it for a braced count only, `{0,}`, `{1,}` and `{0,1}` included, and never with `min > max`. `*`, `+` and `?` are `Star`, `Plus` and `Optional`.
     Repeat {
+        /// What is repeated.
         operand: Box<RegexNode>,
+        /// The fewest repetitions.
         min: u32,
+        /// The most repetitions, `None` for no limit.
         max: Option<u32>,
     },
 }
