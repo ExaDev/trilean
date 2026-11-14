@@ -1,6 +1,6 @@
 {
   "name": "trilean",
-  "description": "Three-valued predicate and expression evaluation trees, stored as JSON and evaluated against injected resolvers, for domain logic — business rules, eligibility checks, formulas, search filters, and more — that needs to be data instead of code.",
+  "description": "Three-valued predicate and expression evaluation trees, stored as JSON and evaluated against injected resolvers, for domain logic \u2014 business rules, eligibility checks, formulas, search filters, and more \u2014 that needs to be data instead of code.",
   "version": "1.13.12",
   "bin": {
     "trilean": "./dist-cli/trilean.mjs"
@@ -34,24 +34,16 @@
     "vitest": "^5.1.0"
   },
   "engines": {
-    "node": ">=20"
+    "node": "^20.19.0 || >=22.12.0"
   },
   "exports": {
     ".": {
-      "types": {
-        "import": "./dist/index.d.ts",
-        "require": "./dist/index.d.cts"
-      },
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
     },
     "./*": {
-      "types": {
-        "import": "./dist/*.d.ts",
-        "require": "./dist/*.d.cts"
-      },
-      "import": "./dist/*.js",
-      "require": "./dist/*.cjs"
+      "types": "./dist/*.d.ts",
+      "default": "./dist/*.js"
     },
     "./schemas/*.schema.json": "./schemas/*.schema.json"
   },
@@ -72,8 +64,6 @@
     "zod"
   ],
   "license": "MIT",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
   "publishConfig": {
     "access": "public",
     "provenance": true,
@@ -94,10 +84,10 @@
     "_test:smoke": "vitest run --project smoke",
     "_test:workers": "vitest run --project workers",
     "_typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.node.json",
-    "_typecheck:attw": "attw --pack",
+    "_typecheck:attw": "attw --pack --profile esm-only",
     "build": "turbo run _build",
     "lint": "turbo run _lint",
-    "prepublishOnly": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run test:integration && pnpm run build && pnpm run test:smoke && publint && attw --pack",
+    "prepublishOnly": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run test:integration && pnpm run build && pnpm run test:smoke && publint && attw --pack --profile esm-only",
     "prepush": "turbo run _prepush",
     "test": "turbo run _test",
     "test:coverage": "turbo run _test:coverage",
