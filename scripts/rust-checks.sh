@@ -9,6 +9,7 @@ sh scripts/check-scripts-tested.sh
 sh scripts/test-check-cargo-entry.sh
 sh scripts/test-check-scripts-tested.sh
 sh scripts/test-pre-push-rust.sh
+sh scripts/test-turbo-scope.sh
 python3 -I scripts/test_check_workspace_members.py
 python3 -I scripts/test_check_tool_pins.py
 python3 -I scripts/check-workspace-members.py

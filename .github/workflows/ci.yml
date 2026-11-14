@@ -81,13 +81,6 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
-      # The conformance corpus belongs to no package, so --affected selects no test task for a pull request that changes only it, and the conformance runner would first run on main. A change to the corpus therefore runs every package's tests.
-      - name: Run every package when the conformance corpus changed
-        if: github.event_name == 'pull_request'
-        run: |
-          if ! git diff --quiet "$TURBO_SCM_BASE" HEAD -- conformance; then
-            echo "TURBO_FLAGS=" >> "$GITHUB_ENV"
-          fi
       - uses: ./.github/actions/setup-workspace
         with:
           task: test
