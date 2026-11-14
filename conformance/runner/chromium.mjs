@@ -1,4 +1,3 @@
-// node conformance/runner/chromium.mjs <package tarball>: the corpus against the package bundled as a page would, in headless Chromium.
 import { readFileSync } from "node:fs";
 import { chromium } from "playwright";
 import { bundle, install, readTree, report } from "./host.mjs";

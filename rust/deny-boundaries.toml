@@ -13,7 +13,10 @@ wildcards = "allow"
 deny = [
     # The derives are the only place a type declaration is parsed and code is written, so no other crate gets a parser
     # or a code generator in its graph by accident.
-    { crate = "syn", wrappers = ["json-shape-derive", "serde_derive"], reason = "Only the derive macros parse Rust syntax; serde_derive is a dev-dependency of json-shape, for a test." },
-    { crate = "quote", wrappers = ["json-shape-derive", "serde_derive", "syn"], reason = "Only the derive macros generate code; syn's printing feature uses it." },
-    { crate = "proc-macro2", wrappers = ["json-shape-derive", "quote", "serde_derive", "syn"], reason = "The token types of the derive macros and the two crates they are written with." },
+    { crate = "syn", wrappers = ["json-shape-derive", "serde_derive", "wasm-bindgen-macro-support"], reason = "Only the derive macros parse Rust syntax; serde_derive is a dev-dependency of json-shape, for a test, and wasm-bindgen-macro-support is the macro crate wasm-bindgen is written with, which a binding crate alone may use." },
+    { crate = "quote", wrappers = ["json-shape-derive", "serde_derive", "syn", "wasm-bindgen-macro", "wasm-bindgen-macro-support"], reason = "Only the derive macros generate code; syn's printing feature uses it." },
+    { crate = "proc-macro2", wrappers = ["json-shape-derive", "quote", "serde_derive", "syn", "wasm-bindgen-macro-support"], reason = "The token types of the derive macros and the crates they are written with." },
+    # The libraries that cross the boundary to JavaScript belong in a binding crate, never in a crate that carries logic, which builds and tests natively without a wasm toolchain.
+    { crate = "wasm-bindgen", wrappers = ["js-sys", "trilean-regex-wasm"], reason = "The glue to JavaScript belongs in a binding crate, never in a crate that carries logic." },
+    { crate = "js-sys", wrappers = ["trilean-regex-wasm"], reason = "JavaScript's built-in objects belong in a binding crate, never in a crate that carries logic." },
 ]

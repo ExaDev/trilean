@@ -2,10 +2,13 @@
   "files": {
     "trilean-regex/ecmascript/class-semantics.json": {
       "cases": 4,
-      "skip": [
-        "ecmascript.class-semantics.1",
-        "ecmascript.class-semantics.2"
-      ]
+      "skip": {
+        "rust": [
+          "ecmascript.class-semantics.1",
+          "ecmascript.class-semantics.2"
+        ],
+        "ts": []
+      }
     },
     "trilean-regex/ecmascript/derived-patterns.json": {
       "cases": 72,
@@ -16,14 +19,14 @@
       }
     },
     "trilean-regex/match/matcher.json": {
-      "cases": 48,
+      "cases": 60,
       "skip": {
         "rust": [],
         "ts": []
       }
     },
     "trilean-regex/parse/parser.json": {
-      "cases": 87,
+      "cases": 98,
       "skip": {
         "rust": [],
         "ts": []

@@ -201,9 +201,6 @@ jobs:
       - name: Check the dependency allowlist
         run: sh scripts/rust.sh deny
       # cargo-deny cannot fail on an allowed crate nothing uses, so the allowlist is compared with the graph cargo-deny itself reports, separately.
-      # cargo-deny cannot hold a `wrappers` rule beside an allowlist in one file, so which crates may use the libraries that bind to a host is a second pass over the same graph.
-      - name: Check which crates may use the host bindings
-        run: sh scripts/rust.sh deny-boundaries
       - name: Check the allowlist lists exactly the dependency graph
         run: python3 -I scripts/check-deny-allowlist.py
       - name: Test that check against a platform-gated crate

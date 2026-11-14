@@ -3,6 +3,7 @@ import {
   CompiledPattern,
   InternalError,
   RegexParseError,
+  UnsupportedConstructError,
   charClassMatches,
   compileEcmascriptSubset,
   compilePattern,
@@ -106,6 +107,28 @@ describe("a call with an argument that is not a string", () => {
       );
     }
   });
+});
+
+describe("a refusal of the ECMAScript subset", () => {
+  it.each([
+    [".", 0, "."],
+    ["a\\s", 1, "\\s"],
+    ["[\\s]", 1, "\\s"],
+    ["x|{2}", 2, "{"],
+  ] as const)(
+    "is an UnsupportedConstructError with the index and the construct, for %j",
+    (pattern, index, construct) => {
+      try {
+        compileEcmascriptSubset(pattern);
+      } catch (error) {
+        expect(error).toBeInstanceOf(UnsupportedConstructError);
+        expect(error).toMatchObject({ index, construct });
+
+        return;
+      }
+      throw new Error(`${pattern} compiled`);
+    },
+  );
 });
 
 describe("the class helpers", () => {

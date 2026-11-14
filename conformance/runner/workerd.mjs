@@ -1,4 +1,3 @@
-// node conformance/runner/workerd.mjs <package tarball>: the corpus against the package bundled for Workers, in workerd.
 import { readFileSync, writeFileSync } from "node:fs";
 import { Miniflare } from "miniflare";
 import { bundle, install, readTree, report } from "./host.mjs";

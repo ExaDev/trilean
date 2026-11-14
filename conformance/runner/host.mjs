@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 import { build } from "esbuild";
 
 const here = fileURLToPath(new URL(".", import.meta.url));
-const utf8 = new TextDecoder("utf-8", { fatal: true });
+const utf8 = new TextDecoder("utf-8", { fatal: true, ignoreBOM: true });
 
 /**
  * Every file under the corpus root but the runner itself: its text, null when it is not UTF-8, false when it is not a file.
