@@ -42,7 +42,7 @@
       "skip": []
     },
     "trilean/cli/max-nodes-grammar.json": {
-      "cases": 24,
+      "cases": 43,
       "skip": []
     },
     "trilean/document/evaluate-document.collections.json": {
@@ -142,7 +142,7 @@
       "skip": []
     },
     "trilean/evaluate/exists-budget.json": {
-      "cases": 12,
+      "cases": 67,
       "skip": []
     },
     "trilean/evaluate/function-registry.json": {

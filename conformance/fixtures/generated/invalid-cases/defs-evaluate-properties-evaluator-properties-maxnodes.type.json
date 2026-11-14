@@ -7,40 +7,29 @@
       },
       "expect": {
         "status": "definite",
-        "value": true
+        "value": false
       },
-      "from": "recorded: trilean src/evaluator.ts (an exhausted node budget inside an exists operand)",
-      "id": "exists-budget.exists-with-a-budget-an-exists-whose-operand-visits-four-nodes-the-node-limit-at.1",
+      "from": "recorded: trilean src/evaluator.ts (an exists inside a not with the node limit one step short)",
+      "id": "exists-budget.exists-inside-another-node-a-not-around-an-exists-whose-operand-stays-one-step-inside-the-node-limit.1",
       "kind": "evaluate",
       "resolvers": {
         "default": {
           "found": false
         },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
+        "trees": []
       },
       "tree": {
-        "kind": "exists",
+        "kind": "not",
         "operand": {
-          "kind": "negate",
+          "kind": "exists",
           "operand": {
             "kind": "negate",
             "operand": {
-              "kind": "numberLiteral",
-              "value": 1
+              "kind": "negate",
+              "operand": {
+                "kind": "numberLiteral",
+                "value": 1
+              }
             }
           }
         }
