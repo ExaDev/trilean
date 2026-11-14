@@ -1,4 +1,5 @@
 import { UnknownDialectError } from "./errors";
+import { sqliteInstantColumn, sqliteInstantParameter } from "./sqlite-instant";
 
 /** The declared SQL value kind of a mapped column. `"timestamp"` names trilean's `instant` kind, whose values are ISO-8601 strings. */
 export type SqlParamType = "text" | "number" | "boolean" | "timestamp";
@@ -91,6 +92,14 @@ export interface DialectConfig {
   placeholder: (index: number, castTo: SqlParamType) => string;
   /** Appended to the bare `NULL` in the two forms an empty `memberOf` candidate list compiles to, for a dialect that needs the resulting expression annotated with a boolean type. */
   emptyMemberOfNullSuffix: string;
+  /**
+   * Renders an instant-valued column expression as the value the dialect compares. PostgreSQL's `timestamptz` already is a point in time and needs nothing; SQLite holds an instant as text in whatever form the writer chose (an offset, a `Z`, any number of fractional digits), and text compares by its characters rather than by the instant, so the text is read as a point in time first: whole milliseconds since the epoch, as an integer.
+   */
+  instantColumn: (columnSql: string) => string;
+  /**
+   * The bind value of an `instantLiteral`, for a comparison the dialect makes with {@link DialectConfig.instantColumn}. PostgreSQL parses the text itself and casts it. SQLite compares milliseconds since the epoch, read from a text in the one grammar of `sqlite-instant.ts`; a text outside the grammar of `sqlite-instant.ts` is `null`, which makes the comparison unknown.
+   */
+  instantParameter: (iso: string) => unknown;
 }
 
 export const DIALECT_CONFIG: Readonly<Record<SqlDialect, DialectConfig>> = {
@@ -105,6 +114,8 @@ export const DIALECT_CONFIG: Readonly<Record<SqlDialect, DialectConfig>> = {
     placeholder: (index, castTo) =>
       `$${String(index)}::${POSTGRES_TYPE_NAME[castTo]}`,
     emptyMemberOfNullSuffix: "::boolean",
+    instantColumn: (columnSql) => columnSql,
+    instantParameter: (iso) => iso,
   },
   sqlite: {
     // SQLite has no built-in regular-expression support: `REGEXP` is reserved syntax for a `regexp(pattern, value)` function the connection must register itself, and an unregistered one fails loudly at query time with "no such function: REGEXP" rather than answering wrongly. See the "Regular expressions" section in README.md for the registration the SQLite dialect therefore requires of its caller.
@@ -117,6 +128,9 @@ export const DIALECT_CONFIG: Readonly<Record<SqlDialect, DialectConfig>> = {
     placeholder: () => "?",
     // SQLite has no boolean type to annotate: `NULL` alone already carries the three-valued behaviour the empty-`memberOf` forms depend on.
     emptyMemberOfNullSuffix: "",
+    // A stored value is read as an instant only if it is text in the one grammar `sqlite-instant.ts` states, and is NULL (unknown) otherwise, so no text SQLite's date functions would read as a date can make the result depend on the clock or on a Julian day. The parameter is read by the same grammar when the tree is compiled.
+    instantColumn: sqliteInstantColumn,
+    instantParameter: sqliteInstantParameter,
   },
 };
 
