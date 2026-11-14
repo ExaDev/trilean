@@ -14,9 +14,11 @@ use std::fmt;
 use std::sync::{Arc, Mutex};
 
 /// How many times each pattern source has been compiled, for a test that a pattern is compiled once per source.
+#[cfg(test)]
 static COMPILATIONS: Mutex<Option<HashMap<String, usize>>> = Mutex::new(None);
 
 /// How many times `Pattern::new` has compiled `source`.
+#[cfg(test)]
 pub fn compilations_of(source: &str) -> usize {
     COMPILATIONS.lock().map_or(0, |counts| {
         counts
@@ -376,6 +378,7 @@ impl Pattern {
 
     /// Compiles `pattern`, or says which part of it is outside the supported subset.
     pub fn new(pattern: &str) -> Result<Pattern, PatternError> {
+        #[cfg(test)]
         if let Ok(mut counts) = COMPILATIONS.lock() {
             *counts
                 .get_or_insert_with(HashMap::new)

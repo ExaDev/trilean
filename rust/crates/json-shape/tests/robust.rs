@@ -6,8 +6,8 @@
 )]
 
 use json_shape::{
-    Definitions, Draft, Issue, Map, SchemaOptions, Shape, Value, check_with_work,
-    schema_definitions, schema_of,
+    Definitions, Draft, Issue, SchemaOptions, Shape, Value, check_with_work, schema_definitions,
+    schema_of,
 };
 
 fn parse(text: &str) -> Value {
@@ -387,42 +387,6 @@ fn a_pattern_in_a_message_is_a_json_string() {
     );
 }
 
-#[derive(Shape)]
-struct Counted {
-    #[shape(pattern = "^unique-counted-[0-9]+$")]
-    name: String,
-}
-
-#[derive(Shape)]
-struct Keyed {
-    #[shape(property_names = "^unique-keyed-[0-9]+$")]
-    names: Map<u8>,
-}
-
-#[test]
-fn a_pattern_is_compiled_once_however_many_values_are_checked() {
-    let source = "^unique-counted-[0-9]+$";
-    let document = Value::Object(vec![(
-        "name".to_owned(),
-        Value::String("unique-counted-1".to_owned()),
-    )]);
-    for _ in 0..1000 {
-        assert!(Counted::accepts(&document));
-    }
-    assert_eq!(json_shape::private::compilations_of(source), 1);
-    let keys: Vec<String> = (0..500)
-        .map(|n| format!("\"unique-keyed-{n}\":1"))
-        .collect();
-    assert!(Keyed::accepts(&parse(&format!(
-        r#"{{"names":{{{}}}}}"#,
-        keys.join(",")
-    ))));
-    assert_eq!(
-        json_shape::private::compilations_of("^unique-keyed-[0-9]+$"),
-        1
-    );
-}
-
 #[test]
 fn a_path_cannot_carry_a_memory_from_one_document_to_the_next() {
     #[derive(Shape, Debug, PartialEq)]
@@ -438,4 +402,78 @@ fn a_path_cannot_carry_a_memory_from_one_document_to_the_next() {
             Ok(Either::Text("a".to_owned()))
         );
     }
+}
+
+/// Doubles and the text `JSON.stringify` writes for them in V8, around the points where the text changes form: 2^53,
+/// 2^63, 2^64, 9e18, 1e20 and 1e21 (whole numbers written as digits and zeros, then an exponent), 1e-6 and 1e-7
+/// (a fraction, then an exponent), the smallest double and a large one.
+const JAVASCRIPT_WRITINGS: [(&str, u64); 42] = [
+    ("9007199254740991", 0x433fffffffffffff),
+    ("9007199254740992", 0x4340000000000000),
+    ("9007199254740994", 0x4340000000000001),
+    ("9223372036854775000", 0x43dfffffffffffff),
+    ("9223372036854776000", 0x43e0000000000000),
+    ("9223372036854778000", 0x43e0000000000001),
+    ("8999999999999999000", 0x43df399b1438a0ff),
+    ("9000000000000000000", 0x43df399b1438a100),
+    ("9000000000000001000", 0x43df399b1438a101),
+    ("99999999999999980000", 0x4415af1d78b58c3f),
+    ("100000000000000000000", 0x4415af1d78b58c40),
+    ("100000000000000020000", 0x4415af1d78b58c41),
+    ("999999999999999900000", 0x444b1ae4d6e2ef4f),
+    ("1e+21", 0x444b1ae4d6e2ef50),
+    ("1.0000000000000001e+21", 0x444b1ae4d6e2ef51),
+    ("18446744073709550000", 0x43efffffffffffff),
+    ("18446744073709552000", 0x43f0000000000000),
+    ("18446744073709556000", 0x43f0000000000001),
+    ("9.999999999999997e-7", 0x3eb0c6f7a0b5ed8c),
+    ("0.000001", 0x3eb0c6f7a0b5ed8d),
+    ("0.0000010000000000000002", 0x3eb0c6f7a0b5ed8e),
+    ("9.999999999999998e-8", 0x3e7ad7f29abcaf47),
+    ("1e-7", 0x3e7ad7f29abcaf48),
+    ("1.0000000000000001e-7", 0x3e7ad7f29abcaf49),
+    ("123456789012345670000", 0x441ac53a7e04bcd9),
+    ("123456789012345680000", 0x441ac53a7e04bcda),
+    ("123456789012345700000", 0x441ac53a7e04bcdb),
+    ("0", 0x0),
+    ("5e-324", 0x1),
+    ("1e-323", 0x2),
+    ("0.09999999999999999", 0x3fb9999999999999),
+    ("0.1", 0x3fb999999999999a),
+    ("0.10000000000000002", 0x3fb999999999999b),
+    ("99.99999999999999", 0x4058ffffffffffff),
+    ("100", 0x4059000000000000),
+    ("100.00000000000001", 0x4059000000000001),
+    ("9999999999999998", 0x4341c37937e07fff),
+    ("10000000000000000", 0x4341c37937e08000),
+    ("10000000000000002", 0x4341c37937e08001),
+    ("1.4999999999999998e+300", 0x7e41eb2d66005834),
+    ("1.5e+300", 0x7e41eb2d66005835),
+    ("1.5000000000000004e+300", 0x7e41eb2d66005836),
+];
+
+#[test]
+fn serialize_writes_the_text_json_stringify_writes() {
+    let mut differing = Vec::new();
+    for (text, bits) in JAVASCRIPT_WRITINGS {
+        let number = Value::Number(f64::from_bits(bits));
+        let serialised = serde_json::to_string(&number).expect("JSON");
+        if serialised != text {
+            differing.push(format!(
+                "{bits:#x}: Serialize writes {serialised}, JSON.stringify writes {text}"
+            ));
+        }
+        if number.to_string() != text {
+            differing.push(format!(
+                "{bits:#x}: Display writes {number}, JSON.stringify writes {text}"
+            ));
+        }
+        let converted = serde_json::to_value(&number).expect("a number converts");
+        assert_eq!(
+            converted.as_f64().map(f64::to_bits),
+            Some(bits),
+            "to_value of {text}"
+        );
+    }
+    assert!(differing.is_empty(), "{}", differing.join("\n"));
 }

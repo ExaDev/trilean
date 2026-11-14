@@ -445,3 +445,39 @@ impl<'a> Checker<'a> {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::{Definitions, Kind, ShapeDef, Value, check};
+
+    #[test]
+    fn a_pattern_is_compiled_once_however_many_values_are_checked() {
+        let source = "^unique-counted-[0-9]+$";
+        let shape = ShapeDef::new(Kind::Array {
+            items: Box::new(ShapeDef::new(Kind::String {
+                min_length: None,
+                pattern: Some(source.to_owned()),
+            })),
+            min_items: None,
+            max_items: None,
+            unique: false,
+        });
+        let strings = (0..1000)
+            .map(|n| Value::String(format!("unique-counted-{n}")))
+            .collect();
+        assert!(check(&Definitions::default(), &shape, &Value::Array(strings)).is_empty());
+        assert_eq!(crate::pattern::compilations_of(source), 1);
+
+        let key_source = "^unique-keyed-[0-9]+$";
+        let keyed = ShapeDef::new(Kind::Map {
+            values: Box::new(ShapeDef::new(Kind::Any)),
+            min_properties: None,
+            key_pattern: Some(key_source.to_owned()),
+        });
+        let members = (0..500)
+            .map(|n| (format!("unique-keyed-{n}"), Value::Null))
+            .collect();
+        assert!(check(&Definitions::default(), &keyed, &Value::Object(members)).is_empty());
+        assert_eq!(crate::pattern::compilations_of(key_source), 1);
+    }
+}
