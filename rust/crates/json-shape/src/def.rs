@@ -207,7 +207,7 @@ impl ShapeDef {
 }
 
 fn check_pattern(source: &str) {
-    if let Err(error) = Pattern::new(source) {
+    if let Err(error) = Pattern::shared(source) {
         panic!("{error}");
     }
 }

@@ -9,7 +9,22 @@
 //! and `$`. Anything else (counted repetition, lazy quantifiers, `\d`-style classes, lookaround) is refused, so a
 //! pattern that would mean something else in another engine does not compile.
 
+use std::collections::HashMap;
 use std::fmt;
+use std::sync::{Arc, Mutex};
+
+/// How many times each pattern source has been compiled, for a test that a pattern is compiled once per source.
+static COMPILATIONS: Mutex<Option<HashMap<String, usize>>> = Mutex::new(None);
+
+/// How many times `Pattern::new` has compiled `source`.
+pub fn compilations_of(source: &str) -> usize {
+    COMPILATIONS.lock().map_or(0, |counts| {
+        counts
+            .as_ref()
+            .and_then(|counts| counts.get(source).copied())
+            .unwrap_or(0)
+    })
+}
 
 /// Why a pattern is not in the supported subset.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -18,12 +33,36 @@ pub struct PatternError {
     pub reason: String,
 }
 
+/// The text as a JSON string literal, which is how every message writes a string. The escapes are the ones
+/// `JSON.stringify` writes: `\"`, `\\`, the short forms of the control characters that have one, and `\u00XX` for
+/// the rest below U+0020; everything else is written as it is.
+pub fn json_quote(text: &str) -> String {
+    let mut quoted = String::with_capacity(text.len() + 2);
+    quoted.push('"');
+    for character in text.chars() {
+        match character {
+            '"' => quoted.push_str("\\\""),
+            '\\' => quoted.push_str("\\\\"),
+            '\n' => quoted.push_str("\\n"),
+            '\r' => quoted.push_str("\\r"),
+            '\t' => quoted.push_str("\\t"),
+            '\u{8}' => quoted.push_str("\\b"),
+            '\u{c}' => quoted.push_str("\\f"),
+            control if control < ' ' => quoted.push_str(&format!("\\u{:04x}", u32::from(control))),
+            other => quoted.push(other),
+        }
+    }
+    quoted.push('"');
+    quoted
+}
+
 impl fmt::Display for PatternError {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
             formatter,
-            "pattern {:?} is not supported: {}",
-            self.pattern, self.reason
+            "pattern {} is not supported: {}",
+            json_quote(&self.pattern),
+            self.reason
         )
     }
 }
@@ -65,6 +104,12 @@ enum State {
     End(usize),
     Match,
 }
+
+/// The patterns compiled so far, by source: a pattern is a pure function of its source, and a shape names a handful.
+static SHARED: Mutex<Option<HashMap<String, Compiled>>> = Mutex::new(None);
+
+/// The outcome of compiling one source, shared by every check that uses it.
+type Compiled = Result<Arc<Pattern>, PatternError>;
 
 /// A compiled pattern, matched by simulating a Thompson automaton: no backtracking and no recursion over the text,
 /// so matching costs time linear in the text times the size of the pattern, and constant stack, whatever the text.
@@ -316,8 +361,27 @@ impl Frontier {
 }
 
 impl Pattern {
+    /// The compiled pattern of `source`, compiled the first time it is asked for and shared afterwards, so a check
+    /// of any number of values compiles each pattern once.
+    pub fn shared(source: &str) -> Compiled {
+        let mut shared = SHARED
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner);
+        shared
+            .get_or_insert_with(HashMap::new)
+            .entry(source.to_owned())
+            .or_insert_with(|| Pattern::new(source).map(Arc::new))
+            .clone()
+    }
+
     /// Compiles `pattern`, or says which part of it is outside the supported subset.
     pub fn new(pattern: &str) -> Result<Pattern, PatternError> {
+        if let Ok(mut counts) = COMPILATIONS.lock() {
+            *counts
+                .get_or_insert_with(HashMap::new)
+                .entry(pattern.to_owned())
+                .or_insert(0) += 1;
+        }
         let mut parser = Parser {
             pattern,
             chars: pattern.chars().collect(),
