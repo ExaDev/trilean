@@ -159,6 +159,20 @@ export const EXECUTED_KINDS = [
   "cli",
 ] as const;
 
+/** What a built-in function reports instead of a value: the failure and the fragments its message contains. */
+export interface CallFailure {
+  readonly domainError?: true;
+  readonly wrongType?: true;
+  readonly messageIncludes?: readonly string[];
+}
+
+export interface CallCase extends CaseBase {
+  readonly kind: "call";
+  readonly function: string;
+  readonly args: readonly ComputedValueJson[];
+  readonly expect: ComputedValueJson | CallFailure;
+}
+
 /** A trilean-regex parse case, of which this package reads only the tree to check its ranges and bounds. */
 export interface RegexParseCase extends CaseBase {
   readonly kind: "regex-parse";
@@ -173,14 +187,13 @@ export interface OtherCase extends CaseBase {
   readonly kind:
     | Exclude<(typeof FOREIGN_KINDS)[number], "regex-parse">
     | "build"
-    | "call"
     | "inputs"
     | "document"
     | "cli";
 }
 
 export type CorpusCase =
-  ValidateCase | EvaluateCase | RegexParseCase | OtherCase;
+  ValidateCase | EvaluateCase | CallCase | RegexParseCase | OtherCase;
 
 export interface CorpusFile {
   readonly cases: readonly CorpusCase[];

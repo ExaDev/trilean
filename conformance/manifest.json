@@ -8,6 +8,29 @@
       "cases": 87,
       "skip": []
     },
+    "trilean/call/builtin-functions.json": {
+      "cases": 180,
+      "skip": [
+        "builtin.a-result-that-is-not-a-finite-number-is-a-domain-error-from-absolutevalue-even-when-the-argument-already-was-one.1",
+        "builtin.a-result-that-is-not-a-finite-number-is-a-domain-error-from-magnitude-even-when-the-argument-already-was-one.1",
+        "builtin.a-result-that-is-not-a-finite-number-is-a-domain-error-from-maximum-even-when-the-argument-already-was-one.1",
+        "builtin.a-result-that-is-not-a-finite-number-is-a-domain-error-from-minimum-even-when-the-argument-already-was-one.1",
+        "builtin.a-result-that-is-not-a-finite-number-is-a-domain-error-from-round-even-when-the-argument-already-was-one.1",
+        "builtin.arcsine-arccosine-and-arctangent-arccosine-refuses-a-number-outside-1-to-1-as-a-domain-error.3",
+        "builtin.arcsine-arccosine-and-arctangent-arcsine-refuses-a-number-outside-1-to-1-as-a-domain-error.3",
+        "builtin.arctangent2-is-a-domain-error-for-an-argument-that-is-not-finite.1",
+        "builtin.arctangent2-is-a-domain-error-for-an-argument-that-is-not-finite.2",
+        "builtin.phase-is-a-domain-error-when-a-component-is-not-finite-as-the-other-built-ins-are-for-a-result-that-is-not.1",
+        "builtin.phase-is-a-domain-error-when-a-component-is-not-finite-as-the-other-built-ins-are-for-a-result-that-is-not.2",
+        "builtin.phase-is-a-domain-error-when-a-component-is-not-finite-as-the-other-built-ins-are-for-a-result-that-is-not.3",
+        "builtin.phase-is-a-domain-error-when-a-component-is-not-finite-as-the-other-built-ins-are-for-a-result-that-is-not.4",
+        "builtin.phase-is-a-domain-error-when-a-component-is-not-finite-as-the-other-built-ins-are-for-a-result-that-is-not.5",
+        "builtin.phase-is-a-domain-error-when-a-component-is-not-finite-as-the-other-built-ins-are-for-a-result-that-is-not.6",
+        "builtin.sine-cosine-and-tangent-cosine-is-a-domain-error-for-an-angle-that-is-not-finite.1",
+        "builtin.sine-cosine-and-tangent-sine-is-a-domain-error-for-an-angle-that-is-not-finite.1",
+        "builtin.sine-cosine-and-tangent-tangent-is-a-domain-error-for-an-angle-that-is-not-finite.1"
+      ]
+    },
     "trilean/evaluate/evaluator.arithmetic.json": {
       "cases": 22,
       "skip": []

@@ -1,0 +1,3545 @@
+{
+  "cases": [
+    {
+      "args": [
+        {
+          "kind": "number",
+          "unit": {
+            "m": 1
+          },
+          "value": 3
+        },
+        {
+          "kind": "number",
+          "unit": {
+            "m": 1
+          },
+          "value": 1
+        },
+        {
+          "kind": "number",
+          "unit": {
+            "m": 1
+          },
+          "value": 2
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "unit": {
+          "m": 1
+        },
+        "value": 1
+      },
+      "from": "builtin-functions.unit.test.ts: minimum and maximum > pick the smallest and largest argument, keeping its unit",
+      "function": "minimum",
+      "id": "builtin.minimum-and-maximum-pick-the-smallest-and-largest-argument-keeping-its-unit.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "unit": {
+            "m": 1
+          },
+          "value": 3
+        },
+        {
+          "kind": "number",
+          "unit": {
+            "m": 1
+          },
+          "value": 1
+        },
+        {
+          "kind": "number",
+          "unit": {
+            "m": 1
+          },
+          "value": 2
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "unit": {
+          "m": 1
+        },
+        "value": 3
+      },
+      "from": "builtin-functions.unit.test.ts: minimum and maximum > pick the smallest and largest argument, keeping its unit",
+      "function": "maximum",
+      "id": "builtin.minimum-and-maximum-pick-the-smallest-and-largest-argument-keeping-its-unit.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 4
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 4
+      },
+      "from": "builtin-functions.unit.test.ts: minimum and maximum > accept a single argument",
+      "function": "minimum",
+      "id": "builtin.minimum-and-maximum-accept-a-single-argument.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "unit": {
+            "m": 1
+          },
+          "value": 1
+        },
+        {
+          "kind": "number",
+          "unit": {
+            "s": 1
+          },
+          "value": 1
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "same unit"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: minimum and maximum > refuse mixed units as wrong-type rather than converting",
+      "function": "maximum",
+      "id": "builtin.minimum-and-maximum-refuse-mixed-units-as-wrong-type-rather-than-converting.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "unit": {
+            "m": 1
+          },
+          "value": 1
+        },
+        {
+          "kind": "number",
+          "value": 2
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "same unit"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: minimum and maximum > refuse mixed units as wrong-type rather than converting",
+      "function": "minimum",
+      "id": "builtin.minimum-and-maximum-refuse-mixed-units-as-wrong-type-rather-than-converting.2",
+      "kind": "call"
+    },
+    {
+      "args": [],
+      "expect": {
+        "messageIncludes": [
+          "at least one"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: minimum and maximum > refuse no arguments and non-numbers as wrong-type",
+      "function": "minimum",
+      "id": "builtin.minimum-and-maximum-refuse-no-arguments-and-non-numbers-as-wrong-type.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1
+        },
+        {
+          "kind": "text",
+          "value": "a"
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "number arguments only"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: minimum and maximum > refuse no arguments and non-numbers as wrong-type",
+      "function": "minimum",
+      "id": "builtin.minimum-and-maximum-refuse-no-arguments-and-non-numbers-as-wrong-type.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "unit": {
+            "A": 1
+          },
+          "value": -2.5
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "unit": {
+          "A": 1
+        },
+        "value": 2.5
+      },
+      "from": "builtin-functions.unit.test.ts: absoluteValue > drops the sign and keeps the unit",
+      "function": "absoluteValue",
+      "id": "builtin.absolutevalue-drops-the-sign-and-keeps-the-unit.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1
+        },
+        {
+          "kind": "number",
+          "value": 2
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "exactly one"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: absoluteValue > refuses a surplus argument, a non-number and a complex value as wrong-type",
+      "function": "absoluteValue",
+      "id": "builtin.absolutevalue-refuses-a-surplus-argument-a-non-number-and-a-complex-value-as-wrong-type.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "text",
+          "value": "a"
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "exactly one"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: absoluteValue > refuses a surplus argument, a non-number and a complex value as wrong-type",
+      "function": "absoluteValue",
+      "id": "builtin.absolutevalue-refuses-a-surplus-argument-a-non-number-and-a-complex-value-as-wrong-type.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 1,
+          "kind": "complex",
+          "re": 1
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "exactly one"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: absoluteValue > refuses a surplus argument, a non-number and a complex value as wrong-type",
+      "function": "absoluteValue",
+      "id": "builtin.absolutevalue-refuses-a-surplus-argument-a-non-number-and-a-complex-value-as-wrong-type.3",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 2.5
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 3
+      },
+      "from": "builtin-functions.unit.test.ts: round > rounds to a whole number with halves away from zero",
+      "function": "round",
+      "id": "builtin.round-rounds-to-a-whole-number-with-halves-away-from-zero.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": -2.5
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": -3
+      },
+      "from": "builtin-functions.unit.test.ts: round > rounds to a whole number with halves away from zero",
+      "function": "round",
+      "id": "builtin.round-rounds-to-a-whole-number-with-halves-away-from-zero.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 2.4
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 2
+      },
+      "from": "builtin-functions.unit.test.ts: round > rounds to a whole number with halves away from zero",
+      "function": "round",
+      "id": "builtin.round-rounds-to-a-whole-number-with-halves-away-from-zero.3",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "unit": {
+            "m": 1
+          },
+          "value": 1.2345
+        },
+        {
+          "kind": "number",
+          "value": 2
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "unit": {
+          "m": 1
+        },
+        "value": 1.23
+      },
+      "from": "builtin-functions.unit.test.ts: round > rounds to a count of decimal places and keeps the unit",
+      "function": "round",
+      "id": "builtin.round-rounds-to-a-count-of-decimal-places-and-keeps-the-unit.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1.005
+        },
+        {
+          "kind": "number",
+          "value": 2
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 1.01
+      },
+      "from": "builtin-functions.unit.test.ts: round > rounds the decimal number written, not its binary approximation",
+      "function": "round",
+      "id": "builtin.round-rounds-the-decimal-number-written-not-its-binary-approximation.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": -1.005
+        },
+        {
+          "kind": "number",
+          "value": 2
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": -1.01
+      },
+      "from": "builtin-functions.unit.test.ts: round > rounds the decimal number written, not its binary approximation",
+      "function": "round",
+      "id": "builtin.round-rounds-the-decimal-number-written-not-its-binary-approximation.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 8.345
+        },
+        {
+          "kind": "number",
+          "value": 2
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 8.35
+      },
+      "from": "builtin-functions.unit.test.ts: round > rounds the decimal number written, not its binary approximation",
+      "function": "round",
+      "id": "builtin.round-rounds-the-decimal-number-written-not-its-binary-approximation.3",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1250
+        },
+        {
+          "kind": "number",
+          "value": -2
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 1300
+      },
+      "from": "builtin-functions.unit.test.ts: round > rounds to a negative count of places",
+      "function": "round",
+      "id": "builtin.round-rounds-to-a-negative-count-of-places.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1.5e-7
+        },
+        {
+          "kind": "number",
+          "value": 7
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 2e-7
+      },
+      "from": "builtin-functions.unit.test.ts: round > handles values written in exponent notation",
+      "function": "round",
+      "id": "builtin.round-handles-values-written-in-exponent-notation.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1.5e+21
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 1.5e+21
+      },
+      "from": "builtin-functions.unit.test.ts: round > handles values written in exponent notation",
+      "function": "round",
+      "id": "builtin.round-handles-values-written-in-exponent-notation.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1.5
+        },
+        {
+          "kind": "number",
+          "value": 400
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 1.5
+      },
+      "from": "builtin-functions.unit.test.ts: round > returns a value unchanged when it has no digits at that precision",
+      "function": "round",
+      "id": "builtin.round-returns-a-value-unchanged-when-it-has-no-digits-at-that-precision.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1e+300
+        },
+        {
+          "kind": "number",
+          "value": 10
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 1e+300
+      },
+      "from": "builtin-functions.unit.test.ts: round > returns a value unchanged when it has no digits at that precision",
+      "function": "round",
+      "id": "builtin.round-returns-a-value-unchanged-when-it-has-no-digits-at-that-precision.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1.5
+        },
+        {
+          "kind": "number",
+          "value": 9007199254740991
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 1.5
+      },
+      "from": "builtin-functions.unit.test.ts: round > returns a value unchanged when it has no digits at that precision",
+      "function": "round",
+      "id": "builtin.round-returns-a-value-unchanged-when-it-has-no-digits-at-that-precision.3",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1.5
+        },
+        {
+          "kind": "number",
+          "value": -400
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 0
+      },
+      "from": "builtin-functions.unit.test.ts: round > rounds to zero when the places are far below the value",
+      "function": "round",
+      "id": "builtin.round-rounds-to-zero-when-the-places-are-far-below-the-value.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1.5
+        },
+        {
+          "kind": "number",
+          "value": -9007199254740991
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 0
+      },
+      "from": "builtin-functions.unit.test.ts: round > rounds to zero when the places are far below the value",
+      "function": "round",
+      "id": "builtin.round-rounds-to-zero-when-the-places-are-far-below-the-value.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": -0.4
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 0
+      },
+      "from": "builtin-functions.unit.test.ts: round > never returns a negative zero",
+      "function": "round",
+      "id": "builtin.round-never-returns-a-negative-zero.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1
+        },
+        {
+          "kind": "number",
+          "unit": {
+            "m": 1
+          },
+          "value": 1
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "dimensionless"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: round > refuses decimal places with a unit as wrong-type and a fraction as a domain-error",
+      "function": "round",
+      "id": "builtin.round-refuses-decimal-places-with-a-unit-as-wrong-type-and-a-fraction-as-a-domain-error.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1
+        },
+        {
+          "kind": "number",
+          "value": 1.5
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "integer"
+        ]
+      },
+      "from": "builtin-functions.unit.test.ts: round > refuses decimal places with a unit as wrong-type and a fraction as a domain-error",
+      "function": "round",
+      "id": "builtin.round-refuses-decimal-places-with-a-unit-as-wrong-type-and-a-fraction-as-a-domain-error.2",
+      "kind": "call"
+    },
+    {
+      "args": [],
+      "expect": {
+        "messageIncludes": [
+          "optional count"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: round > refuses a missing value, a non-number and surplus arguments as wrong-type",
+      "function": "round",
+      "id": "builtin.round-refuses-a-missing-value-a-non-number-and-surplus-arguments-as-wrong-type.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "text",
+          "value": "a"
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "optional count"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: round > refuses a missing value, a non-number and surplus arguments as wrong-type",
+      "function": "round",
+      "id": "builtin.round-refuses-a-missing-value-a-non-number-and-surplus-arguments-as-wrong-type.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1
+        },
+        {
+          "kind": "number",
+          "value": 1
+        },
+        {
+          "kind": "number",
+          "value": 1
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "optional count"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: round > refuses a missing value, a non-number and surplus arguments as wrong-type",
+      "function": "round",
+      "id": "builtin.round-refuses-a-missing-value-a-non-number-and-surplus-arguments-as-wrong-type.3",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "unit": {
+            "m": 2,
+            "s": -4
+          },
+          "value": 9
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "unit": {
+          "m": 1,
+          "s": -2
+        },
+        "value": 3
+      },
+      "from": "builtin-functions.unit.test.ts: squareRoot > halves each unit exponent",
+      "function": "squareRoot",
+      "id": "builtin.squareroot-halves-each-unit-exponent.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 16
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 4
+      },
+      "from": "builtin-functions.unit.test.ts: squareRoot > returns a unit-less number for a unit-less one",
+      "function": "squareRoot",
+      "id": "builtin.squareroot-returns-a-unit-less-number-for-a-unit-less-one.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "unit": {
+            "m": 0
+          },
+          "value": 4
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "unit": {},
+        "value": 2
+      },
+      "from": "builtin-functions.unit.test.ts: squareRoot > ignores zero exponents",
+      "function": "squareRoot",
+      "id": "builtin.squareroot-ignores-zero-exponents.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": -1
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "negative"
+        ]
+      },
+      "from": "builtin-functions.unit.test.ts: squareRoot > refuses a negative number as a domain-error",
+      "function": "squareRoot",
+      "id": "builtin.squareroot-refuses-a-negative-number-as-a-domain-error.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "unit": {
+            "m": 1
+          },
+          "value": 4
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "even"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: squareRoot > refuses an odd unit exponent and a non-number as wrong-type",
+      "function": "squareRoot",
+      "id": "builtin.squareroot-refuses-an-odd-unit-exponent-and-a-non-number-as-wrong-type.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "text",
+          "value": "a"
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "exactly one"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: squareRoot > refuses an odd unit exponent and a non-number as wrong-type",
+      "function": "squareRoot",
+      "id": "builtin.squareroot-refuses-an-odd-unit-exponent-and-a-non-number-as-wrong-type.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 0
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 1
+      },
+      "from": "builtin-functions.unit.test.ts: exponential > is e to the power of a dimensionless number",
+      "function": "exponential",
+      "id": "builtin.exponential-is-e-to-the-power-of-a-dimensionless-number.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 2.718281828459045
+      },
+      "from": "builtin-functions.unit.test.ts: exponential > is e to the power of a dimensionless number",
+      "function": "exponential",
+      "id": "builtin.exponential-is-e-to-the-power-of-a-dimensionless-number.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "unit": {
+            "m": 1
+          },
+          "value": 1
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "dimensionless"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: exponential > refuses a unit as wrong-type and an overflow as a domain-error",
+      "function": "exponential",
+      "id": "builtin.exponential-refuses-a-unit-as-wrong-type-and-an-overflow-as-a-domain-error.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1000
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "not a finite number"
+        ]
+      },
+      "from": "builtin-functions.unit.test.ts: exponential > refuses a unit as wrong-type and an overflow as a domain-error",
+      "function": "exponential",
+      "id": "builtin.exponential-refuses-a-unit-as-wrong-type-and-an-overflow-as-a-domain-error.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 2.718281828459045
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 1
+      },
+      "from": "builtin-functions.unit.test.ts: logarithm > is natural by default and to a base when given one",
+      "function": "logarithm",
+      "id": "builtin.logarithm-is-natural-by-default-and-to-a-base-when-given-one.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 27
+        },
+        {
+          "kind": "number",
+          "value": 3
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 3.0000000000000004
+      },
+      "from": "builtin-functions.unit.test.ts: logarithm > is natural by default and to a base when given one",
+      "function": "logarithm",
+      "id": "builtin.logarithm-is-natural-by-default-and-to-a-base-when-given-one.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1000
+        },
+        {
+          "kind": "number",
+          "value": 10
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 3
+      },
+      "from": "builtin-functions.unit.test.ts: logarithm > is exact for powers of the bases 10 and 2",
+      "function": "logarithm",
+      "id": "builtin.logarithm-is-exact-for-powers-of-the-bases-10-and-2.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 8
+        },
+        {
+          "kind": "number",
+          "value": 2
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 3
+      },
+      "from": "builtin-functions.unit.test.ts: logarithm > is exact for powers of the bases 10 and 2",
+      "function": "logarithm",
+      "id": "builtin.logarithm-is-exact-for-powers-of-the-bases-10-and-2.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 0
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "above zero"
+        ]
+      },
+      "from": "builtin-functions.unit.test.ts: logarithm > refuses zero and negatives as a domain-error and a unit as wrong-type",
+      "function": "logarithm",
+      "id": "builtin.logarithm-refuses-zero-and-negatives-as-a-domain-error-and-a-unit-as-wrong-type.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": -1
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "above zero"
+        ]
+      },
+      "from": "builtin-functions.unit.test.ts: logarithm > refuses zero and negatives as a domain-error and a unit as wrong-type",
+      "function": "logarithm",
+      "id": "builtin.logarithm-refuses-zero-and-negatives-as-a-domain-error-and-a-unit-as-wrong-type.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "unit": {
+            "m": 1
+          },
+          "value": 2
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "dimensionless"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: logarithm > refuses zero and negatives as a domain-error and a unit as wrong-type",
+      "function": "logarithm",
+      "id": "builtin.logarithm-refuses-zero-and-negatives-as-a-domain-error-and-a-unit-as-wrong-type.3",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 2
+        },
+        {
+          "kind": "number",
+          "value": 1
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "base"
+        ]
+      },
+      "from": "builtin-functions.unit.test.ts: logarithm > refuses a base of one or below zero as a domain-error and a base with a unit as wrong-type",
+      "function": "logarithm",
+      "id": "builtin.logarithm-refuses-a-base-of-one-or-below-zero-as-a-domain-error-and-a-base-with-a-unit-as-wrong-type.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 2
+        },
+        {
+          "kind": "number",
+          "value": -2
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "base"
+        ]
+      },
+      "from": "builtin-functions.unit.test.ts: logarithm > refuses a base of one or below zero as a domain-error and a base with a unit as wrong-type",
+      "function": "logarithm",
+      "id": "builtin.logarithm-refuses-a-base-of-one-or-below-zero-as-a-domain-error-and-a-base-with-a-unit-as-wrong-type.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 2
+        },
+        {
+          "kind": "number",
+          "unit": {
+            "m": 1
+          },
+          "value": 2
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "base"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: logarithm > refuses a base of one or below zero as a domain-error and a base with a unit as wrong-type",
+      "function": "logarithm",
+      "id": "builtin.logarithm-refuses-a-base-of-one-or-below-zero-as-a-domain-error-and-a-base-with-a-unit-as-wrong-type.3",
+      "kind": "call"
+    },
+    {
+      "args": [],
+      "expect": {
+        "messageIncludes": [
+          "optional base"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: logarithm > refuses a missing value, a non-number and surplus arguments as wrong-type",
+      "function": "logarithm",
+      "id": "builtin.logarithm-refuses-a-missing-value-a-non-number-and-surplus-arguments-as-wrong-type.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "text",
+          "value": "a"
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "optional base"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: logarithm > refuses a missing value, a non-number and surplus arguments as wrong-type",
+      "function": "logarithm",
+      "id": "builtin.logarithm-refuses-a-missing-value-a-non-number-and-surplus-arguments-as-wrong-type.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 2
+        },
+        {
+          "kind": "number",
+          "value": 2
+        },
+        {
+          "kind": "number",
+          "value": 2
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "optional base"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: logarithm > refuses a missing value, a non-number and surplus arguments as wrong-type",
+      "function": "logarithm",
+      "id": "builtin.logarithm-refuses-a-missing-value-a-non-number-and-surplus-arguments-as-wrong-type.3",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": {
+            "$number": "Infinity"
+          }
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "not a finite number"
+        ]
+      },
+      "from": "builtin-functions.unit.test.ts: a result that is not a finite number > is a domain-error from minimum even when the argument already was one",
+      "function": "minimum",
+      "id": "builtin.a-result-that-is-not-a-finite-number-is-a-domain-error-from-minimum-even-when-the-argument-already-was-one.1",
+      "kind": "call",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "skip": "rust"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": {
+            "$number": "Infinity"
+          }
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "not a finite number"
+        ]
+      },
+      "from": "builtin-functions.unit.test.ts: a result that is not a finite number > is a domain-error from maximum even when the argument already was one",
+      "function": "maximum",
+      "id": "builtin.a-result-that-is-not-a-finite-number-is-a-domain-error-from-maximum-even-when-the-argument-already-was-one.1",
+      "kind": "call",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "skip": "rust"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": {
+            "$number": "Infinity"
+          }
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "not a finite number"
+        ]
+      },
+      "from": "builtin-functions.unit.test.ts: a result that is not a finite number > is a domain-error from absoluteValue even when the argument already was one",
+      "function": "absoluteValue",
+      "id": "builtin.a-result-that-is-not-a-finite-number-is-a-domain-error-from-absolutevalue-even-when-the-argument-already-was-one.1",
+      "kind": "call",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "skip": "rust"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": {
+            "$number": "Infinity"
+          }
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "not a finite number"
+        ]
+      },
+      "from": "builtin-functions.unit.test.ts: a result that is not a finite number > is a domain-error from round even when the argument already was one",
+      "function": "round",
+      "id": "builtin.a-result-that-is-not-a-finite-number-is-a-domain-error-from-round-even-when-the-argument-already-was-one.1",
+      "kind": "call",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "skip": "rust"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": {
+            "$number": "Infinity"
+          }
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "not a finite number"
+        ]
+      },
+      "from": "builtin-functions.unit.test.ts: a result that is not a finite number > is a domain-error from magnitude even when the argument already was one",
+      "function": "magnitude",
+      "id": "builtin.a-result-that-is-not-a-finite-number-is-a-domain-error-from-magnitude-even-when-the-argument-already-was-one.1",
+      "kind": "call",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "skip": "rust"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "unit": {
+            "A": 1
+          },
+          "value": -2.5
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "unit": {
+          "A": 1
+        },
+        "value": 2.5
+      },
+      "from": "builtin-functions.unit.test.ts: magnitude > is the absolute value of a real number, in its unit",
+      "function": "magnitude",
+      "id": "builtin.magnitude-is-the-absolute-value-of-a-real-number-in-its-unit.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": -4,
+          "kind": "complex",
+          "re": 3,
+          "unit": {
+            "V": 1
+          }
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "unit": {
+          "V": 1
+        },
+        "value": 5
+      },
+      "from": "builtin-functions.unit.test.ts: magnitude > is the modulus of a complex number, in the unit it carries",
+      "function": "magnitude",
+      "id": "builtin.magnitude-is-the-modulus-of-a-complex-number-in-the-unit-it-carries.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 1.7976931348623157e+308,
+          "kind": "complex",
+          "re": 1.7976931348623157e+308
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "not a finite number"
+        ]
+      },
+      "from": "builtin-functions.unit.test.ts: magnitude > is a domain-error where the modulus leaves the finite range",
+      "function": "magnitude",
+      "id": "builtin.magnitude-is-a-domain-error-where-the-modulus-leaves-the-finite-range.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "text",
+          "value": "a"
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "number or a complex number"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: magnitude > is a wrong-type for anything else or for a wrong count",
+      "function": "magnitude",
+      "id": "builtin.magnitude-is-a-wrong-type-for-anything-else-or-for-a-wrong-count.1",
+      "kind": "call"
+    },
+    {
+      "args": [],
+      "expect": {
+        "messageIncludes": [
+          "exactly one"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: magnitude > is a wrong-type for anything else or for a wrong count",
+      "function": "magnitude",
+      "id": "builtin.magnitude-is-a-wrong-type-for-anything-else-or-for-a-wrong-count.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1
+        },
+        {
+          "kind": "number",
+          "value": 2
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "exactly one"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: magnitude > is a wrong-type for anything else or for a wrong count",
+      "function": "magnitude",
+      "id": "builtin.magnitude-is-a-wrong-type-for-anything-else-or-for-a-wrong-count.3",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 2,
+          "kind": "complex",
+          "re": 0,
+          "unit": {
+            "ohm": 1
+          }
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 1.5707963267948966
+      },
+      "from": "builtin-functions.unit.test.ts: phase > is the angle of a complex number in radians, dimensionless whatever its unit",
+      "function": "phase",
+      "id": "builtin.phase-is-the-angle-of-a-complex-number-in-radians-dimensionless-whatever-its-unit.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 0,
+          "kind": "complex",
+          "re": -1
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 3.141592653589793
+      },
+      "from": "builtin-functions.unit.test.ts: phase > is the angle of a complex number in radians, dimensionless whatever its unit",
+      "function": "phase",
+      "id": "builtin.phase-is-the-angle-of-a-complex-number-in-radians-dimensionless-whatever-its-unit.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 0,
+          "kind": "complex",
+          "re": -2
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 3.141592653589793
+      },
+      "from": "builtin-functions.unit.test.ts: phase > is +pi for a negative real number whatever the sign of its zero imaginary part",
+      "function": "phase",
+      "id": "builtin.phase-is-pi-for-a-negative-real-number-whatever-the-sign-of-its-zero-imaginary-part.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 0,
+          "kind": "complex",
+          "re": -2
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 3.141592653589793
+      },
+      "from": "builtin-functions.unit.test.ts: phase > is +pi for a negative real number whatever the sign of its zero imaginary part",
+      "function": "phase",
+      "id": "builtin.phase-is-pi-for-a-negative-real-number-whatever-the-sign-of-its-zero-imaginary-part.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": -5e-324,
+          "kind": "complex",
+          "re": -1
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": -3.141592653589793
+      },
+      "from": "builtin-functions.unit.test.ts: phase > rounds to exactly -pi for a tiny negative imaginary part, so the range is closed",
+      "function": "phase",
+      "id": "builtin.phase-rounds-to-exactly-pi-for-a-tiny-negative-imaginary-part-so-the-range-is-closed.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": -1e-17,
+          "kind": "complex",
+          "re": -1
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": -3.141592653589793
+      },
+      "from": "builtin-functions.unit.test.ts: phase > rounds to exactly -pi for a tiny negative imaginary part, so the range is closed",
+      "function": "phase",
+      "id": "builtin.phase-rounds-to-exactly-pi-for-a-tiny-negative-imaginary-part-so-the-range-is-closed.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 0,
+          "kind": "complex",
+          "re": 0
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 0
+      },
+      "from": "builtin-functions.unit.test.ts: phase > is zero for a zero of either sign, and for a positive real number whatever the zero's sign",
+      "function": "phase",
+      "id": "builtin.phase-is-zero-for-a-zero-of-either-sign-and-for-a-positive-real-number-whatever-the-zero-s-sign.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 0,
+          "kind": "complex",
+          "re": 0
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 0
+      },
+      "from": "builtin-functions.unit.test.ts: phase > is zero for a zero of either sign, and for a positive real number whatever the zero's sign",
+      "function": "phase",
+      "id": "builtin.phase-is-zero-for-a-zero-of-either-sign-and-for-a-positive-real-number-whatever-the-zero-s-sign.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 0,
+          "kind": "complex",
+          "re": 0
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 0
+      },
+      "from": "builtin-functions.unit.test.ts: phase > is zero for a zero of either sign, and for a positive real number whatever the zero's sign",
+      "function": "phase",
+      "id": "builtin.phase-is-zero-for-a-zero-of-either-sign-and-for-a-positive-real-number-whatever-the-zero-s-sign.3",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 0,
+          "kind": "complex",
+          "re": 0
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 0
+      },
+      "from": "builtin-functions.unit.test.ts: phase > is zero for a zero of either sign, and for a positive real number whatever the zero's sign",
+      "function": "phase",
+      "id": "builtin.phase-is-zero-for-a-zero-of-either-sign-and-for-a-positive-real-number-whatever-the-zero-s-sign.4",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 0,
+          "kind": "complex",
+          "re": 2
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 0
+      },
+      "from": "builtin-functions.unit.test.ts: phase > is zero for a zero of either sign, and for a positive real number whatever the zero's sign",
+      "function": "phase",
+      "id": "builtin.phase-is-zero-for-a-zero-of-either-sign-and-for-a-positive-real-number-whatever-the-zero-s-sign.5",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 1,
+          "kind": "complex",
+          "re": {
+            "$number": "NaN"
+          }
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "finite"
+        ]
+      },
+      "from": "builtin-functions.unit.test.ts: phase > is a domain-error when a component is not finite, as the other built-ins are for a result that is not",
+      "function": "phase",
+      "id": "builtin.phase-is-a-domain-error-when-a-component-is-not-finite-as-the-other-built-ins-are-for-a-result-that-is-not.1",
+      "kind": "call",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "skip": "rust"
+    },
+    {
+      "args": [
+        {
+          "im": {
+            "$number": "NaN"
+          },
+          "kind": "complex",
+          "re": 1
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "finite"
+        ]
+      },
+      "from": "builtin-functions.unit.test.ts: phase > is a domain-error when a component is not finite, as the other built-ins are for a result that is not",
+      "function": "phase",
+      "id": "builtin.phase-is-a-domain-error-when-a-component-is-not-finite-as-the-other-built-ins-are-for-a-result-that-is-not.2",
+      "kind": "call",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "skip": "rust"
+    },
+    {
+      "args": [
+        {
+          "im": 1,
+          "kind": "complex",
+          "re": {
+            "$number": "Infinity"
+          }
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "finite"
+        ]
+      },
+      "from": "builtin-functions.unit.test.ts: phase > is a domain-error when a component is not finite, as the other built-ins are for a result that is not",
+      "function": "phase",
+      "id": "builtin.phase-is-a-domain-error-when-a-component-is-not-finite-as-the-other-built-ins-are-for-a-result-that-is-not.3",
+      "kind": "call",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "skip": "rust"
+    },
+    {
+      "args": [
+        {
+          "im": {
+            "$number": "Infinity"
+          },
+          "kind": "complex",
+          "re": 1
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "finite"
+        ]
+      },
+      "from": "builtin-functions.unit.test.ts: phase > is a domain-error when a component is not finite, as the other built-ins are for a result that is not",
+      "function": "phase",
+      "id": "builtin.phase-is-a-domain-error-when-a-component-is-not-finite-as-the-other-built-ins-are-for-a-result-that-is-not.4",
+      "kind": "call",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "skip": "rust"
+    },
+    {
+      "args": [
+        {
+          "im": 1,
+          "kind": "complex",
+          "re": {
+            "$number": "-Infinity"
+          }
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "finite"
+        ]
+      },
+      "from": "builtin-functions.unit.test.ts: phase > is a domain-error when a component is not finite, as the other built-ins are for a result that is not",
+      "function": "phase",
+      "id": "builtin.phase-is-a-domain-error-when-a-component-is-not-finite-as-the-other-built-ins-are-for-a-result-that-is-not.5",
+      "kind": "call",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "skip": "rust"
+    },
+    {
+      "args": [
+        {
+          "im": {
+            "$number": "-Infinity"
+          },
+          "kind": "complex",
+          "re": 1
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "finite"
+        ]
+      },
+      "from": "builtin-functions.unit.test.ts: phase > is a domain-error when a component is not finite, as the other built-ins are for a result that is not",
+      "function": "phase",
+      "id": "builtin.phase-is-a-domain-error-when-a-component-is-not-finite-as-the-other-built-ins-are-for-a-result-that-is-not.6",
+      "kind": "call",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "skip": "rust"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "complex"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: phase > is a wrong-type for a real number, text or a wrong count",
+      "function": "phase",
+      "id": "builtin.phase-is-a-wrong-type-for-a-real-number-text-or-a-wrong-count.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "text",
+          "value": "a"
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "complex"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: phase > is a wrong-type for a real number, text or a wrong count",
+      "function": "phase",
+      "id": "builtin.phase-is-a-wrong-type-for-a-real-number-text-or-a-wrong-count.2",
+      "kind": "call"
+    },
+    {
+      "args": [],
+      "expect": {
+        "messageIncludes": [
+          "exactly one"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: phase > is a wrong-type for a real number, text or a wrong count",
+      "function": "phase",
+      "id": "builtin.phase-is-a-wrong-type-for-a-real-number-text-or-a-wrong-count.3",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 0,
+          "kind": "complex",
+          "re": -4
+        }
+      ],
+      "expect": {
+        "im": 2,
+        "kind": "complex",
+        "re": 0
+      },
+      "from": "builtin-functions.unit.test.ts: squareRoot of a complex number > is exact where the principal root is representable",
+      "function": "squareRoot",
+      "id": "builtin.squareroot-of-a-complex-number-is-exact-where-the-principal-root-is-representable.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 4,
+          "kind": "complex",
+          "re": 3
+        }
+      ],
+      "expect": {
+        "im": 1,
+        "kind": "complex",
+        "re": 2
+      },
+      "from": "builtin-functions.unit.test.ts: squareRoot of a complex number > is exact where the principal root is representable",
+      "function": "squareRoot",
+      "id": "builtin.squareroot-of-a-complex-number-is-exact-where-the-principal-root-is-representable.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": -4,
+          "kind": "complex",
+          "re": 3
+        }
+      ],
+      "expect": {
+        "im": -1,
+        "kind": "complex",
+        "re": 2
+      },
+      "from": "builtin-functions.unit.test.ts: squareRoot of a complex number > is exact where the principal root is representable",
+      "function": "squareRoot",
+      "id": "builtin.squareroot-of-a-complex-number-is-exact-where-the-principal-root-is-representable.3",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 4,
+          "kind": "complex",
+          "re": -3
+        }
+      ],
+      "expect": {
+        "im": 2,
+        "kind": "complex",
+        "re": 1
+      },
+      "from": "builtin-functions.unit.test.ts: squareRoot of a complex number > is exact where the principal root is representable",
+      "function": "squareRoot",
+      "id": "builtin.squareroot-of-a-complex-number-is-exact-where-the-principal-root-is-representable.4",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": -4,
+          "kind": "complex",
+          "re": -3
+        }
+      ],
+      "expect": {
+        "im": -2,
+        "kind": "complex",
+        "re": 1
+      },
+      "from": "builtin-functions.unit.test.ts: squareRoot of a complex number > is exact where the principal root is representable",
+      "function": "squareRoot",
+      "id": "builtin.squareroot-of-a-complex-number-is-exact-where-the-principal-root-is-representable.5",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 0,
+          "kind": "complex",
+          "re": -4
+        }
+      ],
+      "expect": {
+        "im": 2,
+        "kind": "complex",
+        "re": 0
+      },
+      "from": "builtin-functions.unit.test.ts: squareRoot of a complex number > puts the root of a negative real number on the positive imaginary axis whatever the sign of its zero",
+      "function": "squareRoot",
+      "id": "builtin.squareroot-of-a-complex-number-puts-the-root-of-a-negative-real-number-on-the-positive-imaginary-axis-whatever-the-sign-of-its-zero.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 0,
+          "kind": "complex",
+          "re": 4
+        }
+      ],
+      "expect": {
+        "im": 0,
+        "kind": "complex",
+        "re": 2
+      },
+      "from": "builtin-functions.unit.test.ts: squareRoot of a complex number > stays complex when the imaginary part comes out zero, and is zero at zero",
+      "function": "squareRoot",
+      "id": "builtin.squareroot-of-a-complex-number-stays-complex-when-the-imaginary-part-comes-out-zero-and-is-zero-at-zero.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 0,
+          "kind": "complex",
+          "re": 0
+        }
+      ],
+      "expect": {
+        "im": 0,
+        "kind": "complex",
+        "re": 0
+      },
+      "from": "builtin-functions.unit.test.ts: squareRoot of a complex number > stays complex when the imaginary part comes out zero, and is zero at zero",
+      "function": "squareRoot",
+      "id": "builtin.squareroot-of-a-complex-number-stays-complex-when-the-imaginary-part-comes-out-zero-and-is-zero-at-zero.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 1.7,
+          "kind": "complex",
+          "re": 0.3
+        }
+      ],
+      "expect": {
+        "im": 0.8444725129224773,
+        "kind": "complex",
+        "re": 1.0065454908157918
+      },
+      "from": "builtin-functions.unit.test.ts: squareRoot of a complex number > squares back to its argument with a real part that is not negative, in every quadrant (the original asserted that the root squares back to its argument within a few roundings and has a real part that is not negative; recorded: trilean src/builtin-functions.ts, the exact result)",
+      "function": "squareRoot",
+      "id": "builtin.squareroot-of-a-complex-number-squares-back-to-its-argument-with-a-real-part-that-is-not-negative-in-every-quadrant.1",
+      "kind": "call",
+      "tolerance": {
+        "ulps": 4
+      }
+    },
+    {
+      "args": [
+        {
+          "im": 0.1,
+          "kind": "complex",
+          "re": -2.5
+        }
+      ],
+      "expect": {
+        "im": 1.5814548998690037,
+        "kind": "complex",
+        "re": 0.03161645646938249
+      },
+      "from": "builtin-functions.unit.test.ts: squareRoot of a complex number > squares back to its argument with a real part that is not negative, in every quadrant (the original asserted that the root squares back to its argument within a few roundings and has a real part that is not negative; recorded: trilean src/builtin-functions.ts, the exact result)",
+      "function": "squareRoot",
+      "id": "builtin.squareroot-of-a-complex-number-squares-back-to-its-argument-with-a-real-part-that-is-not-negative-in-every-quadrant.2",
+      "kind": "call",
+      "tolerance": {
+        "ulps": 4
+      }
+    },
+    {
+      "args": [
+        {
+          "im": -6,
+          "kind": "complex",
+          "re": -1e-9
+        }
+      ],
+      "expect": {
+        "im": -1.7320508077132148,
+        "kind": "complex",
+        "re": 1.7320508074245398
+      },
+      "from": "builtin-functions.unit.test.ts: squareRoot of a complex number > squares back to its argument with a real part that is not negative, in every quadrant (the original asserted that the root squares back to its argument within a few roundings and has a real part that is not negative; recorded: trilean src/builtin-functions.ts, the exact result)",
+      "function": "squareRoot",
+      "id": "builtin.squareroot-of-a-complex-number-squares-back-to-its-argument-with-a-real-part-that-is-not-negative-in-every-quadrant.3",
+      "kind": "call",
+      "tolerance": {
+        "ulps": 4
+      }
+    },
+    {
+      "args": [
+        {
+          "im": -1e-12,
+          "kind": "complex",
+          "re": 7
+        }
+      ],
+      "expect": {
+        "im": -1.889822365046136e-13,
+        "kind": "complex",
+        "re": 2.6457513110645907
+      },
+      "from": "builtin-functions.unit.test.ts: squareRoot of a complex number > squares back to its argument with a real part that is not negative, in every quadrant (the original asserted that the root squares back to its argument within a few roundings and has a real part that is not negative; recorded: trilean src/builtin-functions.ts, the exact result)",
+      "function": "squareRoot",
+      "id": "builtin.squareroot-of-a-complex-number-squares-back-to-its-argument-with-a-real-part-that-is-not-negative-in-every-quadrant.4",
+      "kind": "call",
+      "tolerance": {
+        "ulps": 4
+      }
+    },
+    {
+      "args": [
+        {
+          "im": 0,
+          "kind": "complex",
+          "re": -4,
+          "unit": {
+            "ohm": 2
+          }
+        }
+      ],
+      "expect": {
+        "im": 2,
+        "kind": "complex",
+        "re": 0,
+        "unit": {
+          "ohm": 1
+        }
+      },
+      "from": "builtin-functions.unit.test.ts: squareRoot of a complex number > halves each unit exponent of a complex value and refuses an odd one as wrong-type",
+      "function": "squareRoot",
+      "id": "builtin.squareroot-of-a-complex-number-halves-each-unit-exponent-of-a-complex-value-and-refuses-an-odd-one-as-wrong-type.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 0,
+          "kind": "complex",
+          "re": -4,
+          "unit": {
+            "m": 1
+          }
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "even"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: squareRoot of a complex number > halves each unit exponent of a complex value and refuses an odd one as wrong-type",
+      "function": "squareRoot",
+      "id": "builtin.squareroot-of-a-complex-number-halves-each-unit-exponent-of-a-complex-value-and-refuses-an-odd-one-as-wrong-type.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 0,
+          "kind": "complex",
+          "re": 1.7976931348623157e+308
+        }
+      ],
+      "expect": {
+        "im": 0,
+        "kind": "complex",
+        "re": 1.3407807929942596e+154
+      },
+      "from": "builtin-functions.unit.test.ts: squareRoot of a complex number > keeps a root whose argument's terms sum past the largest double",
+      "function": "squareRoot",
+      "id": "builtin.squareroot-of-a-complex-number-keeps-a-root-whose-argument-s-terms-sum-past-the-largest-double.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 0,
+          "kind": "complex",
+          "re": 5e-324
+        }
+      ],
+      "expect": {
+        "im": 0,
+        "kind": "complex",
+        "re": 2.2227587494850775e-162
+      },
+      "from": "builtin-functions.unit.test.ts: squareRoot of a complex number > keeps the root of the smallest subnormal, whose half would round to zero",
+      "function": "squareRoot",
+      "id": "builtin.squareroot-of-a-complex-number-keeps-the-root-of-the-smallest-subnormal-whose-half-would-round-to-zero.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 1.7976931348623157e+308,
+          "kind": "complex",
+          "re": 1.7976931348623157e+308
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "not a finite number"
+        ]
+      },
+      "from": "builtin-functions.unit.test.ts: squareRoot of a complex number > is a domain-error when the modulus leaves the finite range",
+      "function": "squareRoot",
+      "id": "builtin.squareroot-of-a-complex-number-is-a-domain-error-when-the-modulus-leaves-the-finite-range.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 0,
+          "kind": "complex",
+          "re": 0
+        }
+      ],
+      "expect": {
+        "im": 0,
+        "kind": "complex",
+        "re": 1
+      },
+      "from": "builtin-functions.unit.test.ts: exponential of a complex number > is one at zero, and stays complex",
+      "function": "exponential",
+      "id": "builtin.exponential-of-a-complex-number-is-one-at-zero-and-stays-complex.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 3.141592653589793,
+          "kind": "complex",
+          "re": 0
+        }
+      ],
+      "expect": {
+        "im": 1.2246467991473532e-16,
+        "kind": "complex",
+        "re": -1
+      },
+      "from": "builtin-functions.unit.test.ts: exponential of a complex number > is -1 at i pi, and e i at 1 + i pi/2, within one rounding of the unit circle (the original asserted each component to within one rounding of the unit circle; recorded: trilean src/builtin-functions.ts, the exact result)",
+      "function": "exponential",
+      "id": "builtin.exponential-of-a-complex-number-is-1-at-i-pi-and-e-i-at-1-i-pi-2-within-one-rounding-of-the-unit-circle.1",
+      "kind": "call",
+      "tolerance": {
+        "ulps": 4
+      }
+    },
+    {
+      "args": [
+        {
+          "im": 1.5707963267948966,
+          "kind": "complex",
+          "re": 1
+        }
+      ],
+      "expect": {
+        "im": 2.718281828459045,
+        "kind": "complex",
+        "re": 1.664467570201392e-16
+      },
+      "from": "builtin-functions.unit.test.ts: exponential of a complex number > is -1 at i pi, and e i at 1 + i pi/2, within one rounding of the unit circle (the original asserted each component to within one rounding of the unit circle; recorded: trilean src/builtin-functions.ts, the exact result)",
+      "function": "exponential",
+      "id": "builtin.exponential-of-a-complex-number-is-1-at-i-pi-and-e-i-at-1-i-pi-2-within-one-rounding-of-the-unit-circle.2",
+      "kind": "call",
+      "tolerance": {
+        "ulps": 4
+      }
+    },
+    {
+      "args": [
+        {
+          "im": 1,
+          "kind": "complex",
+          "re": 0,
+          "unit": {
+            "m": 1
+          }
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "dimensionless"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: exponential of a complex number > refuses a complex value with a unit as wrong-type and an overflow as a domain-error",
+      "function": "exponential",
+      "id": "builtin.exponential-of-a-complex-number-refuses-a-complex-value-with-a-unit-as-wrong-type-and-an-overflow-as-a-domain-error.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 0,
+          "kind": "complex",
+          "re": 1000
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "not a finite number"
+        ]
+      },
+      "from": "builtin-functions.unit.test.ts: exponential of a complex number > refuses a complex value with a unit as wrong-type and an overflow as a domain-error",
+      "function": "exponential",
+      "id": "builtin.exponential-of-a-complex-number-refuses-a-complex-value-with-a-unit-as-wrong-type-and-an-overflow-as-a-domain-error.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "text",
+          "value": "a"
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "exactly one"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: exponential of a complex number > refuses a non-number and a wrong count as wrong-type",
+      "function": "exponential",
+      "id": "builtin.exponential-of-a-complex-number-refuses-a-non-number-and-a-wrong-count-as-wrong-type.1",
+      "kind": "call"
+    },
+    {
+      "args": [],
+      "expect": {
+        "messageIncludes": [
+          "exactly one"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: exponential of a complex number > refuses a non-number and a wrong count as wrong-type",
+      "function": "exponential",
+      "id": "builtin.exponential-of-a-complex-number-refuses-a-non-number-and-a-wrong-count-as-wrong-type.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 1,
+          "kind": "complex",
+          "re": 0
+        }
+      ],
+      "expect": {
+        "im": 1.5707963267948966,
+        "kind": "complex",
+        "re": 0
+      },
+      "from": "builtin-functions.unit.test.ts: logarithm of a complex number > is the principal value, i pi/2 at i and i pi at -1, whatever the sign of -1's zero",
+      "function": "logarithm",
+      "id": "builtin.logarithm-of-a-complex-number-is-the-principal-value-i-pi-2-at-i-and-i-pi-at-1-whatever-the-sign-of-1-s-zero.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 0,
+          "kind": "complex",
+          "re": -1
+        }
+      ],
+      "expect": {
+        "im": 3.141592653589793,
+        "kind": "complex",
+        "re": 0
+      },
+      "from": "builtin-functions.unit.test.ts: logarithm of a complex number > is the principal value, i pi/2 at i and i pi at -1, whatever the sign of -1's zero",
+      "function": "logarithm",
+      "id": "builtin.logarithm-of-a-complex-number-is-the-principal-value-i-pi-2-at-i-and-i-pi-at-1-whatever-the-sign-of-1-s-zero.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 0,
+          "kind": "complex",
+          "re": -1
+        }
+      ],
+      "expect": {
+        "im": 3.141592653589793,
+        "kind": "complex",
+        "re": 0
+      },
+      "from": "builtin-functions.unit.test.ts: logarithm of a complex number > is the principal value, i pi/2 at i and i pi at -1, whatever the sign of -1's zero",
+      "function": "logarithm",
+      "id": "builtin.logarithm-of-a-complex-number-is-the-principal-value-i-pi-2-at-i-and-i-pi-at-1-whatever-the-sign-of-1-s-zero.3",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 0,
+          "kind": "complex",
+          "re": 1
+        }
+      ],
+      "expect": {
+        "im": 0,
+        "kind": "complex",
+        "re": 0
+      },
+      "from": "builtin-functions.unit.test.ts: logarithm of a complex number > stays complex at a positive real number",
+      "function": "logarithm",
+      "id": "builtin.logarithm-of-a-complex-number-stays-complex-at-a-positive-real-number.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 4,
+          "kind": "complex",
+          "re": 3
+        }
+      ],
+      "expect": {
+        "im": 0.9272952180016122,
+        "kind": "complex",
+        "re": 1.6094379124341003
+      },
+      "from": "builtin-functions.unit.test.ts: logarithm of a complex number > is ln|z| + i arg(z) in general (the original asserted each component to within the epsilon scaled by the real part; recorded: trilean src/builtin-functions.ts, the exact result)",
+      "function": "logarithm",
+      "id": "builtin.logarithm-of-a-complex-number-is-ln-z-i-arg-z-in-general.1",
+      "kind": "call",
+      "tolerance": {
+        "ulps": 4
+      }
+    },
+    {
+      "args": [
+        {
+          "im": 100,
+          "kind": "complex",
+          "re": 0
+        },
+        {
+          "kind": "number",
+          "value": 10
+        }
+      ],
+      "expect": {
+        "im": 0.6821881769209206,
+        "kind": "complex",
+        "re": 2
+      },
+      "from": "builtin-functions.unit.test.ts: logarithm of a complex number > divides through by the base's natural logarithm, exact in the real part for a power of ten (the original asserted the imaginary part to within an epsilon and the real part exactly two; recorded: trilean src/builtin-functions.ts, the exact result)",
+      "function": "logarithm",
+      "id": "builtin.logarithm-of-a-complex-number-divides-through-by-the-base-s-natural-logarithm-exact-in-the-real-part-for-a-power-of-ten.1",
+      "kind": "call",
+      "tolerance": {
+        "ulps": 4
+      }
+    },
+    {
+      "args": [
+        {
+          "im": 0,
+          "kind": "complex",
+          "re": 0
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "other than zero"
+        ]
+      },
+      "from": "builtin-functions.unit.test.ts: logarithm of a complex number > refuses a complex zero and a base of one as a domain-error",
+      "function": "logarithm",
+      "id": "builtin.logarithm-of-a-complex-number-refuses-a-complex-zero-and-a-base-of-one-as-a-domain-error.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 1,
+          "kind": "complex",
+          "re": 0
+        },
+        {
+          "kind": "number",
+          "value": 1
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "base"
+        ]
+      },
+      "from": "builtin-functions.unit.test.ts: logarithm of a complex number > refuses a complex zero and a base of one as a domain-error",
+      "function": "logarithm",
+      "id": "builtin.logarithm-of-a-complex-number-refuses-a-complex-zero-and-a-base-of-one-as-a-domain-error.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 1,
+          "kind": "complex",
+          "re": 1,
+          "unit": {
+            "m": 1
+          }
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "dimensionless"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: logarithm of a complex number > refuses a unit, a complex base and a surplus argument as wrong-type",
+      "function": "logarithm",
+      "id": "builtin.logarithm-of-a-complex-number-refuses-a-unit-a-complex-base-and-a-surplus-argument-as-wrong-type.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 1,
+          "kind": "complex",
+          "re": 1
+        },
+        {
+          "im": 0,
+          "kind": "complex",
+          "re": 2
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "base"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: logarithm of a complex number > refuses a unit, a complex base and a surplus argument as wrong-type",
+      "function": "logarithm",
+      "id": "builtin.logarithm-of-a-complex-number-refuses-a-unit-a-complex-base-and-a-surplus-argument-as-wrong-type.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 1,
+          "kind": "complex",
+          "re": 1
+        },
+        {
+          "kind": "number",
+          "value": 2
+        },
+        {
+          "kind": "number",
+          "value": 2
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "optional base"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: logarithm of a complex number > refuses a unit, a complex base and a surplus argument as wrong-type",
+      "function": "logarithm",
+      "id": "builtin.logarithm-of-a-complex-number-refuses-a-unit-a-complex-base-and-a-surplus-argument-as-wrong-type.3",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 0
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 0
+      },
+      "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > take an angle in radians",
+      "function": "sine",
+      "id": "builtin.sine-cosine-and-tangent-take-an-angle-in-radians.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1.5707963267948966
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 1
+      },
+      "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > take an angle in radians",
+      "function": "sine",
+      "id": "builtin.sine-cosine-and-tangent-take-an-angle-in-radians.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 0
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 1
+      },
+      "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > take an angle in radians",
+      "function": "cosine",
+      "id": "builtin.sine-cosine-and-tangent-take-an-angle-in-radians.3",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 3.141592653589793
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": -1
+      },
+      "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > take an angle in radians",
+      "function": "cosine",
+      "id": "builtin.sine-cosine-and-tangent-take-an-angle-in-radians.4",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 0.7853981633974483
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 0.9999999999999999
+      },
+      "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > take an angle in radians (the original asserted that the result is within an epsilon of one; recorded: trilean src/builtin-functions.ts, the exact result)",
+      "function": "tangent",
+      "id": "builtin.sine-cosine-and-tangent-take-an-angle-in-radians.5",
+      "kind": "call",
+      "tolerance": {
+        "ulps": 4
+      }
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1.5707963267948966
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 16331239353195370
+      },
+      "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > give a large but finite tangent at the double nearest a pole (the original asserted only that the result is a finite number; recorded: trilean src/builtin-functions.ts, the exact result)",
+      "function": "tangent",
+      "id": "builtin.sine-cosine-and-tangent-give-a-large-but-finite-tangent-at-the-double-nearest-a-pole.1",
+      "kind": "call",
+      "tolerance": {
+        "ulps": 4
+      }
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "unit": {
+            "m": 1
+          },
+          "value": 1
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "dimensionless"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > sine refuses a unit, a complex value, text and a wrong count as wrong-type",
+      "function": "sine",
+      "id": "builtin.sine-cosine-and-tangent-sine-refuses-a-unit-a-complex-value-text-and-a-wrong-count-as-wrong-type.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 1,
+          "kind": "complex",
+          "re": 1
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "exactly one"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > sine refuses a unit, a complex value, text and a wrong count as wrong-type",
+      "function": "sine",
+      "id": "builtin.sine-cosine-and-tangent-sine-refuses-a-unit-a-complex-value-text-and-a-wrong-count-as-wrong-type.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "text",
+          "value": "a"
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "exactly one"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > sine refuses a unit, a complex value, text and a wrong count as wrong-type",
+      "function": "sine",
+      "id": "builtin.sine-cosine-and-tangent-sine-refuses-a-unit-a-complex-value-text-and-a-wrong-count-as-wrong-type.3",
+      "kind": "call"
+    },
+    {
+      "args": [],
+      "expect": {
+        "messageIncludes": [
+          "exactly one"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > sine refuses a unit, a complex value, text and a wrong count as wrong-type",
+      "function": "sine",
+      "id": "builtin.sine-cosine-and-tangent-sine-refuses-a-unit-a-complex-value-text-and-a-wrong-count-as-wrong-type.4",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1
+        },
+        {
+          "kind": "number",
+          "value": 1
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "exactly one"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > sine refuses a unit, a complex value, text and a wrong count as wrong-type",
+      "function": "sine",
+      "id": "builtin.sine-cosine-and-tangent-sine-refuses-a-unit-a-complex-value-text-and-a-wrong-count-as-wrong-type.5",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "unit": {
+            "m": 1
+          },
+          "value": 1
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "dimensionless"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > cosine refuses a unit, a complex value, text and a wrong count as wrong-type",
+      "function": "cosine",
+      "id": "builtin.sine-cosine-and-tangent-cosine-refuses-a-unit-a-complex-value-text-and-a-wrong-count-as-wrong-type.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 1,
+          "kind": "complex",
+          "re": 1
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "exactly one"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > cosine refuses a unit, a complex value, text and a wrong count as wrong-type",
+      "function": "cosine",
+      "id": "builtin.sine-cosine-and-tangent-cosine-refuses-a-unit-a-complex-value-text-and-a-wrong-count-as-wrong-type.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "text",
+          "value": "a"
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "exactly one"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > cosine refuses a unit, a complex value, text and a wrong count as wrong-type",
+      "function": "cosine",
+      "id": "builtin.sine-cosine-and-tangent-cosine-refuses-a-unit-a-complex-value-text-and-a-wrong-count-as-wrong-type.3",
+      "kind": "call"
+    },
+    {
+      "args": [],
+      "expect": {
+        "messageIncludes": [
+          "exactly one"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > cosine refuses a unit, a complex value, text and a wrong count as wrong-type",
+      "function": "cosine",
+      "id": "builtin.sine-cosine-and-tangent-cosine-refuses-a-unit-a-complex-value-text-and-a-wrong-count-as-wrong-type.4",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1
+        },
+        {
+          "kind": "number",
+          "value": 1
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "exactly one"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > cosine refuses a unit, a complex value, text and a wrong count as wrong-type",
+      "function": "cosine",
+      "id": "builtin.sine-cosine-and-tangent-cosine-refuses-a-unit-a-complex-value-text-and-a-wrong-count-as-wrong-type.5",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "unit": {
+            "m": 1
+          },
+          "value": 1
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "dimensionless"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > tangent refuses a unit, a complex value, text and a wrong count as wrong-type",
+      "function": "tangent",
+      "id": "builtin.sine-cosine-and-tangent-tangent-refuses-a-unit-a-complex-value-text-and-a-wrong-count-as-wrong-type.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 1,
+          "kind": "complex",
+          "re": 1
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "exactly one"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > tangent refuses a unit, a complex value, text and a wrong count as wrong-type",
+      "function": "tangent",
+      "id": "builtin.sine-cosine-and-tangent-tangent-refuses-a-unit-a-complex-value-text-and-a-wrong-count-as-wrong-type.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "text",
+          "value": "a"
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "exactly one"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > tangent refuses a unit, a complex value, text and a wrong count as wrong-type",
+      "function": "tangent",
+      "id": "builtin.sine-cosine-and-tangent-tangent-refuses-a-unit-a-complex-value-text-and-a-wrong-count-as-wrong-type.3",
+      "kind": "call"
+    },
+    {
+      "args": [],
+      "expect": {
+        "messageIncludes": [
+          "exactly one"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > tangent refuses a unit, a complex value, text and a wrong count as wrong-type",
+      "function": "tangent",
+      "id": "builtin.sine-cosine-and-tangent-tangent-refuses-a-unit-a-complex-value-text-and-a-wrong-count-as-wrong-type.4",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1
+        },
+        {
+          "kind": "number",
+          "value": 1
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "exactly one"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > tangent refuses a unit, a complex value, text and a wrong count as wrong-type",
+      "function": "tangent",
+      "id": "builtin.sine-cosine-and-tangent-tangent-refuses-a-unit-a-complex-value-text-and-a-wrong-count-as-wrong-type.5",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "unit": {
+            "m": 1
+          },
+          "value": 1
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "dimensionless"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > arcTangent refuses a unit, a complex value, text and a wrong count as wrong-type",
+      "function": "arcTangent",
+      "id": "builtin.sine-cosine-and-tangent-arctangent-refuses-a-unit-a-complex-value-text-and-a-wrong-count-as-wrong-type.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 1,
+          "kind": "complex",
+          "re": 1
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "exactly one"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > arcTangent refuses a unit, a complex value, text and a wrong count as wrong-type",
+      "function": "arcTangent",
+      "id": "builtin.sine-cosine-and-tangent-arctangent-refuses-a-unit-a-complex-value-text-and-a-wrong-count-as-wrong-type.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "text",
+          "value": "a"
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "exactly one"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > arcTangent refuses a unit, a complex value, text and a wrong count as wrong-type",
+      "function": "arcTangent",
+      "id": "builtin.sine-cosine-and-tangent-arctangent-refuses-a-unit-a-complex-value-text-and-a-wrong-count-as-wrong-type.3",
+      "kind": "call"
+    },
+    {
+      "args": [],
+      "expect": {
+        "messageIncludes": [
+          "exactly one"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > arcTangent refuses a unit, a complex value, text and a wrong count as wrong-type",
+      "function": "arcTangent",
+      "id": "builtin.sine-cosine-and-tangent-arctangent-refuses-a-unit-a-complex-value-text-and-a-wrong-count-as-wrong-type.4",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1
+        },
+        {
+          "kind": "number",
+          "value": 1
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "exactly one"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > arcTangent refuses a unit, a complex value, text and a wrong count as wrong-type",
+      "function": "arcTangent",
+      "id": "builtin.sine-cosine-and-tangent-arctangent-refuses-a-unit-a-complex-value-text-and-a-wrong-count-as-wrong-type.5",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": {
+            "$number": "Infinity"
+          }
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "not a finite number"
+        ]
+      },
+      "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > sine is a domain-error for an angle that is not finite",
+      "function": "sine",
+      "id": "builtin.sine-cosine-and-tangent-sine-is-a-domain-error-for-an-angle-that-is-not-finite.1",
+      "kind": "call",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "skip": "rust"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": {
+            "$number": "Infinity"
+          }
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "not a finite number"
+        ]
+      },
+      "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > cosine is a domain-error for an angle that is not finite",
+      "function": "cosine",
+      "id": "builtin.sine-cosine-and-tangent-cosine-is-a-domain-error-for-an-angle-that-is-not-finite.1",
+      "kind": "call",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "skip": "rust"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": {
+            "$number": "Infinity"
+          }
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "not a finite number"
+        ]
+      },
+      "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > tangent is a domain-error for an angle that is not finite",
+      "function": "tangent",
+      "id": "builtin.sine-cosine-and-tangent-tangent-is-a-domain-error-for-an-angle-that-is-not-finite.1",
+      "kind": "call",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "skip": "rust"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 1.5707963267948966
+      },
+      "from": "builtin-functions.unit.test.ts: arcSine, arcCosine and arcTangent > return an angle in radians",
+      "function": "arcSine",
+      "id": "builtin.arcsine-arccosine-and-arctangent-return-an-angle-in-radians.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": -1
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": -1.5707963267948966
+      },
+      "from": "builtin-functions.unit.test.ts: arcSine, arcCosine and arcTangent > return an angle in radians",
+      "function": "arcSine",
+      "id": "builtin.arcsine-arccosine-and-arctangent-return-an-angle-in-radians.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": -1
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 3.141592653589793
+      },
+      "from": "builtin-functions.unit.test.ts: arcSine, arcCosine and arcTangent > return an angle in radians",
+      "function": "arcCosine",
+      "id": "builtin.arcsine-arccosine-and-arctangent-return-an-angle-in-radians.3",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 0
+      },
+      "from": "builtin-functions.unit.test.ts: arcSine, arcCosine and arcTangent > return an angle in radians",
+      "function": "arcCosine",
+      "id": "builtin.arcsine-arccosine-and-arctangent-return-an-angle-in-radians.4",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 0.7853981633974483
+      },
+      "from": "builtin-functions.unit.test.ts: arcSine, arcCosine and arcTangent > return an angle in radians",
+      "function": "arcTangent",
+      "id": "builtin.arcsine-arccosine-and-arctangent-return-an-angle-in-radians.5",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1.5
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "-1 to 1"
+        ]
+      },
+      "from": "builtin-functions.unit.test.ts: arcSine, arcCosine and arcTangent > arcSine refuses a number outside -1 to 1 as a domain-error",
+      "function": "arcSine",
+      "id": "builtin.arcsine-arccosine-and-arctangent-arcsine-refuses-a-number-outside-1-to-1-as-a-domain-error.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": -1.5
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "-1 to 1"
+        ]
+      },
+      "from": "builtin-functions.unit.test.ts: arcSine, arcCosine and arcTangent > arcSine refuses a number outside -1 to 1 as a domain-error",
+      "function": "arcSine",
+      "id": "builtin.arcsine-arccosine-and-arctangent-arcsine-refuses-a-number-outside-1-to-1-as-a-domain-error.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": {
+            "$number": "Infinity"
+          }
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "-1 to 1"
+        ]
+      },
+      "from": "builtin-functions.unit.test.ts: arcSine, arcCosine and arcTangent > arcSine refuses a number outside -1 to 1 as a domain-error",
+      "function": "arcSine",
+      "id": "builtin.arcsine-arccosine-and-arctangent-arcsine-refuses-a-number-outside-1-to-1-as-a-domain-error.3",
+      "kind": "call",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "skip": "rust"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "unit": {
+            "m": 1
+          },
+          "value": 0.5
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "dimensionless"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: arcSine, arcCosine and arcTangent > arcSine refuses a unit, a complex value and a wrong count as wrong-type",
+      "function": "arcSine",
+      "id": "builtin.arcsine-arccosine-and-arctangent-arcsine-refuses-a-unit-a-complex-value-and-a-wrong-count-as-wrong-type.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 1,
+          "kind": "complex",
+          "re": 1
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "exactly one"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: arcSine, arcCosine and arcTangent > arcSine refuses a unit, a complex value and a wrong count as wrong-type",
+      "function": "arcSine",
+      "id": "builtin.arcsine-arccosine-and-arctangent-arcsine-refuses-a-unit-a-complex-value-and-a-wrong-count-as-wrong-type.2",
+      "kind": "call"
+    },
+    {
+      "args": [],
+      "expect": {
+        "messageIncludes": [
+          "exactly one"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: arcSine, arcCosine and arcTangent > arcSine refuses a unit, a complex value and a wrong count as wrong-type",
+      "function": "arcSine",
+      "id": "builtin.arcsine-arccosine-and-arctangent-arcsine-refuses-a-unit-a-complex-value-and-a-wrong-count-as-wrong-type.3",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1.5
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "-1 to 1"
+        ]
+      },
+      "from": "builtin-functions.unit.test.ts: arcSine, arcCosine and arcTangent > arcCosine refuses a number outside -1 to 1 as a domain-error",
+      "function": "arcCosine",
+      "id": "builtin.arcsine-arccosine-and-arctangent-arccosine-refuses-a-number-outside-1-to-1-as-a-domain-error.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": -1.5
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "-1 to 1"
+        ]
+      },
+      "from": "builtin-functions.unit.test.ts: arcSine, arcCosine and arcTangent > arcCosine refuses a number outside -1 to 1 as a domain-error",
+      "function": "arcCosine",
+      "id": "builtin.arcsine-arccosine-and-arctangent-arccosine-refuses-a-number-outside-1-to-1-as-a-domain-error.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": {
+            "$number": "Infinity"
+          }
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "-1 to 1"
+        ]
+      },
+      "from": "builtin-functions.unit.test.ts: arcSine, arcCosine and arcTangent > arcCosine refuses a number outside -1 to 1 as a domain-error",
+      "function": "arcCosine",
+      "id": "builtin.arcsine-arccosine-and-arctangent-arccosine-refuses-a-number-outside-1-to-1-as-a-domain-error.3",
+      "kind": "call",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "skip": "rust"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "unit": {
+            "m": 1
+          },
+          "value": 0.5
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "dimensionless"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: arcSine, arcCosine and arcTangent > arcCosine refuses a unit, a complex value and a wrong count as wrong-type",
+      "function": "arcCosine",
+      "id": "builtin.arcsine-arccosine-and-arctangent-arccosine-refuses-a-unit-a-complex-value-and-a-wrong-count-as-wrong-type.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 1,
+          "kind": "complex",
+          "re": 1
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "exactly one"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: arcSine, arcCosine and arcTangent > arcCosine refuses a unit, a complex value and a wrong count as wrong-type",
+      "function": "arcCosine",
+      "id": "builtin.arcsine-arccosine-and-arctangent-arccosine-refuses-a-unit-a-complex-value-and-a-wrong-count-as-wrong-type.2",
+      "kind": "call"
+    },
+    {
+      "args": [],
+      "expect": {
+        "messageIncludes": [
+          "exactly one"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: arcSine, arcCosine and arcTangent > arcCosine refuses a unit, a complex value and a wrong count as wrong-type",
+      "function": "arcCosine",
+      "id": "builtin.arcsine-arccosine-and-arctangent-arccosine-refuses-a-unit-a-complex-value-and-a-wrong-count-as-wrong-type.3",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1
+        },
+        {
+          "kind": "number",
+          "value": 1
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 0.7853981633974483
+      },
+      "from": "builtin-functions.unit.test.ts: arcTangent2 > is the angle of the point (x, y), called with y first",
+      "function": "arcTangent2",
+      "id": "builtin.arctangent2-is-the-angle-of-the-point-x-y-called-with-y-first.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1
+        },
+        {
+          "kind": "number",
+          "value": -1
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 2.356194490192345
+      },
+      "from": "builtin-functions.unit.test.ts: arcTangent2 > is the angle of the point (x, y), called with y first",
+      "function": "arcTangent2",
+      "id": "builtin.arctangent2-is-the-angle-of-the-point-x-y-called-with-y-first.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": -1
+        },
+        {
+          "kind": "number",
+          "value": 0
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": -1.5707963267948966
+      },
+      "from": "builtin-functions.unit.test.ts: arcTangent2 > is the angle of the point (x, y), called with y first",
+      "function": "arcTangent2",
+      "id": "builtin.arctangent2-is-the-angle-of-the-point-x-y-called-with-y-first.3",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 0
+        },
+        {
+          "kind": "number",
+          "value": -1
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 3.141592653589793
+      },
+      "from": "builtin-functions.unit.test.ts: arcTangent2 > shares phase's signed-zero handling: +pi on the negative x axis, zero at the origin",
+      "function": "arcTangent2",
+      "id": "builtin.arctangent2-shares-phase-s-signed-zero-handling-pi-on-the-negative-x-axis-zero-at-the-origin.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 0
+        },
+        {
+          "kind": "number",
+          "value": 0
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 0
+      },
+      "from": "builtin-functions.unit.test.ts: arcTangent2 > shares phase's signed-zero handling: +pi on the negative x axis, zero at the origin",
+      "function": "arcTangent2",
+      "id": "builtin.arctangent2-shares-phase-s-signed-zero-handling-pi-on-the-negative-x-axis-zero-at-the-origin.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 0
+        },
+        {
+          "kind": "number",
+          "value": -1
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 3.141592653589793
+      },
+      "from": "builtin-functions.unit.test.ts: arcTangent2 > shares phase's signed-zero handling: +pi on the negative x axis, zero at the origin",
+      "function": "arcTangent2",
+      "id": "builtin.arctangent2-shares-phase-s-signed-zero-handling-pi-on-the-negative-x-axis-zero-at-the-origin.3",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 0
+        },
+        {
+          "kind": "number",
+          "value": 0
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 0
+      },
+      "from": "builtin-functions.unit.test.ts: arcTangent2 > shares phase's signed-zero handling: +pi on the negative x axis, zero at the origin",
+      "function": "arcTangent2",
+      "id": "builtin.arctangent2-shares-phase-s-signed-zero-handling-pi-on-the-negative-x-axis-zero-at-the-origin.4",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "unit": {
+            "m": 1
+          },
+          "value": 1
+        },
+        {
+          "kind": "number",
+          "unit": {
+            "m": 1
+          },
+          "value": 1
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "dimensionless"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: arcTangent2 > refuses a unit, a complex value and a wrong count as wrong-type",
+      "function": "arcTangent2",
+      "id": "builtin.arctangent2-refuses-a-unit-a-complex-value-and-a-wrong-count-as-wrong-type.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "im": 1,
+          "kind": "complex",
+          "re": 1
+        },
+        {
+          "kind": "number",
+          "value": 1
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "exactly two"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: arcTangent2 > refuses a unit, a complex value and a wrong count as wrong-type",
+      "function": "arcTangent2",
+      "id": "builtin.arctangent2-refuses-a-unit-a-complex-value-and-a-wrong-count-as-wrong-type.2",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "exactly two"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: arcTangent2 > refuses a unit, a complex value and a wrong count as wrong-type",
+      "function": "arcTangent2",
+      "id": "builtin.arctangent2-refuses-a-unit-a-complex-value-and-a-wrong-count-as-wrong-type.3",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1
+        },
+        {
+          "kind": "number",
+          "value": 1
+        },
+        {
+          "kind": "number",
+          "value": 1
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "exactly two"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: arcTangent2 > refuses a unit, a complex value and a wrong count as wrong-type",
+      "function": "arcTangent2",
+      "id": "builtin.arctangent2-refuses-a-unit-a-complex-value-and-a-wrong-count-as-wrong-type.4",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": {
+            "$number": "Infinity"
+          }
+        },
+        {
+          "kind": "number",
+          "value": 1
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "finite"
+        ]
+      },
+      "from": "builtin-functions.unit.test.ts: arcTangent2 > is a domain-error for an argument that is not finite",
+      "function": "arcTangent2",
+      "id": "builtin.arctangent2-is-a-domain-error-for-an-argument-that-is-not-finite.1",
+      "kind": "call",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "skip": "rust"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1
+        },
+        {
+          "kind": "number",
+          "value": {
+            "$number": "NaN"
+          }
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "finite"
+        ]
+      },
+      "from": "builtin-functions.unit.test.ts: arcTangent2 > is a domain-error for an argument that is not finite",
+      "function": "arcTangent2",
+      "id": "builtin.arctangent2-is-a-domain-error-for-an-argument-that-is-not-finite.2",
+      "kind": "call",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "skip": "rust"
+    }
+  ]
+}
