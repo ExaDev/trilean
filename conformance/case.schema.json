@@ -78,6 +78,15 @@
                 "domainError": {
                   "const": true,
                   "type": "boolean"
+                },
+                "messageIncludes": {
+                  "description": "Fragments the failure's message contains, each after the end of the one before.",
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array"
                 }
               },
               "required": [
@@ -88,6 +97,15 @@
             {
               "additionalProperties": false,
               "properties": {
+                "messageIncludes": {
+                  "description": "Fragments the failure's message contains, each after the end of the one before.",
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array"
+                },
                 "wrongType": {
                   "const": true,
                   "type": "boolean"

@@ -105,6 +105,14 @@ Where a case compares a result with an expectation, numbers are equal when they 
 
 `schema` is the export name of a schema of the package (`NotNodeSchema`, `PredicateNodeSchema`, `ComputedValueSchema`), so an implementation with no object of that name still names the same type. `expect` is `{ "ok": true }` with an optional `value`, the parsed value, which must be equal to it, or `{ "ok": false, "issues": [...] }`. Every listed issue must be among those reported, each with the same `path` (strings and integers) and, where it gives a `message`, a reported message that contains it. An empty list asserts only the refusal, which is what a test that asserted only `success === false` is recorded as.
 
+`call`:
+
+```json
+{ "id": "...", "from": "...", "kind": "call", "function": "round", "args": [ { "kind": "number", "value": 2.5 } ], "expect": { "kind": "number", "value": 3 } }
+```
+
+`function` is the name of a built-in function and `args` its arguments, as computed values. `expect` is the computed value the function returns, `{ "domainError": true }` for a result that reports an argument outside the function's domain, or `{ "wrongType": true }` for one that reports an argument it cannot accept; either failure may give `messageIncludes`, fragments the failure's message contains in order. A computed value is compared by the rules above, so `-0` is not `0`. A number JSON cannot write is `{ "$number": "Infinity" }`, `"-Infinity"` or `"NaN"`, which the TypeScript runner reads as that number in an argument and a native implementation, which takes its values from JSON, cannot be given: a case that has one carries `skip: "rust"`.
+
 `evaluate`:
 
 ```json

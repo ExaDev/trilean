@@ -13,6 +13,7 @@ import {
   FOREIGN_KINDS,
   SKIP_VALUES,
 } from "./test-support/corpus-types";
+import { runCallCase } from "./test-support/run-call";
 import { runEvaluateCase } from "./test-support/run-evaluate";
 import { runValidateCase } from "./test-support/run-validate";
 import { readJson } from "./test-support/read-json";
@@ -251,6 +252,8 @@ for (const { name, file } of corpus) {
             runValidateCase(testCase);
           } else if (testCase.kind === "evaluate") {
             await runEvaluateCase(testCase);
+          } else if (testCase.kind === "call") {
+            runCallCase(testCase);
           } else {
             throw new Error(
               `no executor for the ${testCase.kind} kind in this package`,

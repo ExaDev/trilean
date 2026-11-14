@@ -1,0 +1,20 @@
+{
+  "cases": [
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": []
+      },
+      "from": "x.unit.test.ts: a fixture",
+      "function": "squareRoot",
+      "id": "fixture.1",
+      "kind": "call"
+    }
+  ]
+}
