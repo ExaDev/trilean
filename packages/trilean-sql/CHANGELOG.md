@@ -1,3 +1,15 @@
+## [2.2.38](https://github.com/ExaDev/trilean/compare/trilean-sql%402.2.37...trilean-sql%402.2.38) (2026-11-14)
+
+### Build System
+
+* **deps-dev:** bump globals from 17.13.0 to 17.14.0 ([eb6c14c](https://github.com/ExaDev/trilean/commit/eb6c14c7d288e5720091e69bf9755f4904007e45))
+
+
+### Dependencies
+
+- Updated trilean-regex to 1.0.22
+- Updated trilean to 1.13.9
+
 ## [2.2.37](https://github.com/ExaDev/trilean/compare/trilean-sql%402.2.36...trilean-sql%402.2.37) (2026-11-14)
 
 ### Build System
