@@ -1,303 +1,2714 @@
 [
-{"case":"minimal","document":{"name":"a"},"type":"Closed","valid":true},
-{"case":"note present","document":{"name":"a","note":"a"},"type":"Closed","valid":true},
-{"case":"not an object","document":1,"type":"Closed","valid":false},
-{"case":"an array","document":[],"type":"Closed","valid":false},
-{"case":"name missing","document":{},"type":"Closed","valid":false},
-{"case":"name, not a string","document":{"name":1},"type":"Closed","valid":false},
-{"case":"note, not a string","document":{"name":"a","note":1},"type":"Closed","valid":false},
-{"case":"an unknown property","document":{"name":"a","zz_unknown":0},"type":"Closed","valid":false},
-{"case":"minimal","document":{"name":"a"},"type":"Open","valid":true},
-{"case":"not an object","document":1,"type":"Open","valid":false},
-{"case":"an array","document":[],"type":"Open","valid":false},
-{"case":"name missing","document":{},"type":"Open","valid":false},
-{"case":"name, not a string","document":{"name":1},"type":"Open","valid":false},
-{"case":"minimal","document":"red","type":"Colour","valid":true},
-{"case":"the option green","document":"green","type":"Colour","valid":true},
-{"case":"an unlisted value","document":"~","type":"Colour","valid":false},
-{"case":"not a string","document":1,"type":"Colour","valid":false},
-{"case":"minimal","document":{"kind":"dot"},"type":"Figure","valid":true},
-{"case":"variant circle","document":{"kind":"circle","radius":0},"type":"Figure","valid":true},
-{"case":"variant square","document":{"kind":"square","side":0},"type":"Figure","valid":true},
-{"case":"square, side, at the maximum","document":{"kind":"square","side":255},"type":"Figure","valid":true},
-{"case":"variant group","document":{"kind":"group","members":[]},"type":"Figure","valid":true},
-{"case":"group, members, item, variant dot","document":{"kind":"group","members":[{"kind":"dot"}]},"type":"Figure","valid":true},
-{"case":"group, members, item, variant circle","document":{"kind":"group","members":[{"kind":"circle","radius":0}]},"type":"Figure","valid":true},
-{"case":"group, members, item, variant square","document":{"kind":"group","members":[{"kind":"square","side":0}]},"type":"Figure","valid":true},
-{"case":"group, members, item, square, side, at the maximum","document":{"kind":"group","members":[{"kind":"square","side":255}]},"type":"Figure","valid":true},
-{"case":"group, members, item, variant group","document":{"kind":"group","members":[{"kind":"group","members":[]}]},"type":"Figure","valid":true},
-{"case":"not an object","document":1,"type":"Figure","valid":false},
-{"case":"an unknown kind","document":{"kind":"~"},"type":"Figure","valid":false},
-{"case":"a kind that is not a string","document":{"kind":1},"type":"Figure","valid":false},
-{"case":"no kind","document":{},"type":"Figure","valid":false},
-{"case":"dot, an array","document":[],"type":"Figure","valid":false},
-{"case":"dot, kind, a different string","document":{"kind":"dot~"},"type":"Figure","valid":false},
-{"case":"dot, an unknown property","document":{"kind":"dot","zz_unknown":0},"type":"Figure","valid":false},
-{"case":"circle, kind missing","document":{"radius":0},"type":"Figure","valid":false},
-{"case":"circle, radius missing","document":{"kind":"circle"},"type":"Figure","valid":false},
-{"case":"circle, kind, a different string","document":{"kind":"circle~","radius":0},"type":"Figure","valid":false},
-{"case":"circle, kind, not a string","document":{"kind":1,"radius":0},"type":"Figure","valid":false},
-{"case":"circle, radius, not a number","document":{"kind":"circle","radius":"x"},"type":"Figure","valid":false},
-{"case":"circle, radius, below the minimum","document":{"kind":"circle","radius":-1},"type":"Figure","valid":false},
-{"case":"circle, an unknown property","document":{"kind":"circle","radius":0,"zz_unknown":0},"type":"Figure","valid":false},
-{"case":"square, kind missing","document":{"side":0},"type":"Figure","valid":false},
-{"case":"square, side missing","document":{"kind":"square"},"type":"Figure","valid":false},
-{"case":"square, kind, a different string","document":{"kind":"square~","side":0},"type":"Figure","valid":false},
-{"case":"square, kind, not a string","document":{"kind":1,"side":0},"type":"Figure","valid":false},
-{"case":"square, side, not a number","document":{"kind":"square","side":"x"},"type":"Figure","valid":false},
-{"case":"square, side, a fraction","document":{"kind":"square","side":0.5},"type":"Figure","valid":false},
-{"case":"square, side, below the minimum","document":{"kind":"square","side":-1},"type":"Figure","valid":false},
-{"case":"square, side, above the maximum","document":{"kind":"square","side":256},"type":"Figure","valid":false},
-{"case":"square, an unknown property","document":{"kind":"square","side":0,"zz_unknown":0},"type":"Figure","valid":false},
-{"case":"group, kind missing","document":{"members":[]},"type":"Figure","valid":false},
-{"case":"group, members missing","document":{"kind":"group"},"type":"Figure","valid":false},
-{"case":"group, kind, a different string","document":{"kind":"group~","members":[]},"type":"Figure","valid":false},
-{"case":"group, kind, not a string","document":{"kind":1,"members":[]},"type":"Figure","valid":false},
-{"case":"group, members, not an array","document":{"kind":"group","members":"x"},"type":"Figure","valid":false},
-{"case":"group, members, item, not an object","document":{"kind":"group","members":[1]},"type":"Figure","valid":false},
-{"case":"group, members, item, an unknown kind","document":{"kind":"group","members":[{"kind":"~"}]},"type":"Figure","valid":false},
-{"case":"group, members, item, a kind that is not a string","document":{"kind":"group","members":[{"kind":1}]},"type":"Figure","valid":false},
-{"case":"group, members, item, no kind","document":{"kind":"group","members":[{}]},"type":"Figure","valid":false},
-{"case":"group, members, item, dot, an array","document":{"kind":"group","members":[[]]},"type":"Figure","valid":false},
-{"case":"group, members, item, dot, kind, a different string","document":{"kind":"group","members":[{"kind":"dot~"}]},"type":"Figure","valid":false},
-{"case":"group, members, item, dot, an unknown property","document":{"kind":"group","members":[{"kind":"dot","zz_unknown":0}]},"type":"Figure","valid":false},
-{"case":"group, members, item, circle, kind missing","document":{"kind":"group","members":[{"radius":0}]},"type":"Figure","valid":false},
-{"case":"group, members, item, circle, radius missing","document":{"kind":"group","members":[{"kind":"circle"}]},"type":"Figure","valid":false},
-{"case":"group, members, item, circle, kind, a different string","document":{"kind":"group","members":[{"kind":"circle~","radius":0}]},"type":"Figure","valid":false},
-{"case":"group, members, item, circle, kind, not a string","document":{"kind":"group","members":[{"kind":1,"radius":0}]},"type":"Figure","valid":false},
-{"case":"group, members, item, circle, radius, not a number","document":{"kind":"group","members":[{"kind":"circle","radius":"x"}]},"type":"Figure","valid":false},
-{"case":"group, members, item, circle, radius, below the minimum","document":{"kind":"group","members":[{"kind":"circle","radius":-1}]},"type":"Figure","valid":false},
-{"case":"group, members, item, circle, an unknown property","document":{"kind":"group","members":[{"kind":"circle","radius":0,"zz_unknown":0}]},"type":"Figure","valid":false},
-{"case":"group, members, item, square, kind missing","document":{"kind":"group","members":[{"side":0}]},"type":"Figure","valid":false},
-{"case":"group, members, item, square, side missing","document":{"kind":"group","members":[{"kind":"square"}]},"type":"Figure","valid":false},
-{"case":"group, members, item, square, kind, a different string","document":{"kind":"group","members":[{"kind":"square~","side":0}]},"type":"Figure","valid":false},
-{"case":"group, members, item, square, kind, not a string","document":{"kind":"group","members":[{"kind":1,"side":0}]},"type":"Figure","valid":false},
-{"case":"group, members, item, square, side, not a number","document":{"kind":"group","members":[{"kind":"square","side":"x"}]},"type":"Figure","valid":false},
-{"case":"group, members, item, square, side, a fraction","document":{"kind":"group","members":[{"kind":"square","side":0.5}]},"type":"Figure","valid":false},
-{"case":"group, members, item, square, side, below the minimum","document":{"kind":"group","members":[{"kind":"square","side":-1}]},"type":"Figure","valid":false},
-{"case":"group, members, item, square, side, above the maximum","document":{"kind":"group","members":[{"kind":"square","side":256}]},"type":"Figure","valid":false},
-{"case":"group, members, item, square, an unknown property","document":{"kind":"group","members":[{"kind":"square","side":0,"zz_unknown":0}]},"type":"Figure","valid":false},
-{"case":"group, members, item, group, kind missing","document":{"kind":"group","members":[{"members":[]}]},"type":"Figure","valid":false},
-{"case":"group, members, item, group, members missing","document":{"kind":"group","members":[{"kind":"group"}]},"type":"Figure","valid":false},
-{"case":"group, members, item, group, kind, a different string","document":{"kind":"group","members":[{"kind":"group~","members":[]}]},"type":"Figure","valid":false},
-{"case":"group, members, item, group, kind, not a string","document":{"kind":"group","members":[{"kind":1,"members":[]}]},"type":"Figure","valid":false},
-{"case":"group, members, item, group, members, not an array","document":{"kind":"group","members":[{"kind":"group","members":"x"}]},"type":"Figure","valid":false},
-{"case":"group, members, item, group, an unknown property","document":{"kind":"group","members":[{"kind":"group","members":[],"zz_unknown":0}]},"type":"Figure","valid":false},
-{"case":"group, an unknown property","document":{"kind":"group","members":[],"zz_unknown":0},"type":"Figure","valid":false},
-{"case":"minimal","document":0,"type":"Either","valid":true},
-{"case":"alternative 1","document":"a","type":"Either","valid":true},
-{"case":"alternative 2","document":{"first":"a","second":"a"},"type":"Either","valid":true},
-{"case":"alternative 3","document":null,"type":"Either","valid":true},
-{"case":"a value no alternative accepts","document":true,"type":"Either","valid":false},
-{"case":"minimal","document":{},"type":"Bounds","valid":true},
-{"case":"small present","document":{"small":0},"type":"Bounds","valid":true},
-{"case":"small, at the maximum","document":{"small":255},"type":"Bounds","valid":true},
-{"case":"wide present","document":{"wide":0},"type":"Bounds","valid":true},
-{"case":"wide, at the maximum","document":{"wide":9007199254740991},"type":"Bounds","valid":true},
-{"case":"signed present","document":{"signed":-9007199254740991},"type":"Bounds","valid":true},
-{"case":"signed, at the maximum","document":{"signed":9007199254740991},"type":"Bounds","valid":true},
-{"case":"ranged present","document":{"ranged":10},"type":"Bounds","valid":true},
-{"case":"ranged, at the maximum","document":{"ranged":20},"type":"Bounds","valid":true},
-{"case":"ratio present","document":{"ratio":0},"type":"Bounds","valid":true},
-{"case":"ratio, at the maximum","document":{"ratio":1},"type":"Bounds","valid":true},
-{"case":"not an object","document":1,"type":"Bounds","valid":false},
-{"case":"an array","document":[],"type":"Bounds","valid":false},
-{"case":"small, not a number","document":{"small":"x"},"type":"Bounds","valid":false},
-{"case":"small, a fraction","document":{"small":0.5},"type":"Bounds","valid":false},
-{"case":"small, below the minimum","document":{"small":-1},"type":"Bounds","valid":false},
-{"case":"small, above the maximum","document":{"small":256},"type":"Bounds","valid":false},
-{"case":"wide, not a number","document":{"wide":"x"},"type":"Bounds","valid":false},
-{"case":"wide, a fraction","document":{"wide":0.5},"type":"Bounds","valid":false},
-{"case":"wide, below the minimum","document":{"wide":-1},"type":"Bounds","valid":false},
-{"case":"wide, above the maximum","document":{"wide":9007199254740992.0},"type":"Bounds","valid":false},
-{"case":"signed, not a number","document":{"signed":"x"},"type":"Bounds","valid":false},
-{"case":"signed, a fraction","document":{"signed":0.5},"type":"Bounds","valid":false},
-{"case":"signed, below the minimum","document":{"signed":-9007199254740992.0},"type":"Bounds","valid":false},
-{"case":"signed, above the maximum","document":{"signed":9007199254740992.0},"type":"Bounds","valid":false},
-{"case":"ranged, not a number","document":{"ranged":"x"},"type":"Bounds","valid":false},
-{"case":"ranged, a fraction","document":{"ranged":0.5},"type":"Bounds","valid":false},
-{"case":"ranged, below the minimum","document":{"ranged":9},"type":"Bounds","valid":false},
-{"case":"ranged, above the maximum","document":{"ranged":21},"type":"Bounds","valid":false},
-{"case":"ratio, not a number","document":{"ratio":"x"},"type":"Bounds","valid":false},
-{"case":"ratio, below the minimum","document":{"ratio":-1},"type":"Bounds","valid":false},
-{"case":"ratio, above the maximum","document":{"ratio":2},"type":"Bounds","valid":false},
-{"case":"an unknown property","document":{"zz_unknown":0},"type":"Bounds","valid":false},
-{"case":"minimal","document":{},"type":"Lengths","valid":true},
-{"case":"items present","document":{"items":["a"]},"type":"Lengths","valid":true},
-{"case":"items, at the maximum item count","document":{"items":["a","a","a"]},"type":"Lengths","valid":true},
-{"case":"distinct present","document":{"distinct":[]},"type":"Lengths","valid":true},
-{"case":"distinct, item, at the minimum","document":{"distinct":[0]},"type":"Lengths","valid":true},
-{"case":"distinct, item, at the maximum","document":{"distinct":[255]},"type":"Lengths","valid":true},
-{"case":"text present","document":{"text":"ab"},"type":"Lengths","valid":true},
-{"case":"text, at the minimum length","document":{"text":"aa"},"type":"Lengths","valid":true},
-{"case":"not an object","document":1,"type":"Lengths","valid":false},
-{"case":"an array","document":[],"type":"Lengths","valid":false},
-{"case":"items, not an array","document":{"items":"x"},"type":"Lengths","valid":false},
-{"case":"items, below the minimum item count","document":{"items":[]},"type":"Lengths","valid":false},
-{"case":"items, above the maximum item count","document":{"items":["a","a","a","a"]},"type":"Lengths","valid":false},
-{"case":"items, item, not a string","document":{"items":[1]},"type":"Lengths","valid":false},
-{"case":"distinct, not an array","document":{"distinct":"x"},"type":"Lengths","valid":false},
-{"case":"distinct, a repeated item","document":{"distinct":[0,0]},"type":"Lengths","valid":false},
-{"case":"distinct, item, not a number","document":{"distinct":["x"]},"type":"Lengths","valid":false},
-{"case":"distinct, item, a fraction","document":{"distinct":[0.5]},"type":"Lengths","valid":false},
-{"case":"distinct, item, below the minimum","document":{"distinct":[-1]},"type":"Lengths","valid":false},
-{"case":"distinct, item, above the maximum","document":{"distinct":[256]},"type":"Lengths","valid":false},
-{"case":"text, not a string","document":{"text":1},"type":"Lengths","valid":false},
-{"case":"text, below the minimum length","document":{"text":"a"},"type":"Lengths","valid":false},
-{"case":"an unknown property","document":{"zz_unknown":0},"type":"Lengths","valid":false},
-{"case":"minimal","document":{},"type":"Patterned","valid":true},
-{"case":"id present","document":{"id":"a"},"type":"Patterned","valid":true},
-{"case":"from present","document":{"from":"recorded: x"},"type":"Patterned","valid":true},
-{"case":"unanchored present","document":{"unanchored":"a0"},"type":"Patterned","valid":true},
-{"case":"one_slash present","document":{"one_slash":"a/b"},"type":"Patterned","valid":true},
-{"case":"single present","document":{"single":"a"},"type":"Patterned","valid":true},
-{"case":"not an object","document":1,"type":"Patterned","valid":false},
-{"case":"an array","document":[],"type":"Patterned","valid":false},
-{"case":"id, not a string","document":{"id":1},"type":"Patterned","valid":false},
-{"case":"id, outside the pattern","document":{"id":""},"type":"Patterned","valid":false},
-{"case":"from, not a string","document":{"from":1},"type":"Patterned","valid":false},
-{"case":"from, outside the pattern","document":{"from":""},"type":"Patterned","valid":false},
-{"case":"unanchored, not a string","document":{"unanchored":1},"type":"Patterned","valid":false},
-{"case":"unanchored, outside the pattern","document":{"unanchored":""},"type":"Patterned","valid":false},
-{"case":"one_slash, not a string","document":{"one_slash":1},"type":"Patterned","valid":false},
-{"case":"one_slash, outside the pattern","document":{"one_slash":""},"type":"Patterned","valid":false},
-{"case":"single, not a string","document":{"single":1},"type":"Patterned","valid":false},
-{"case":"single, outside the pattern","document":{"single":""},"type":"Patterned","valid":false},
-{"case":"an unknown property","document":{"zz_unknown":0},"type":"Patterned","valid":false},
-{"case":"minimal","document":{"files":{"a.json":"a"}},"type":"Files","valid":true},
-{"case":"not an object","document":1,"type":"Files","valid":false},
-{"case":"an array","document":[],"type":"Files","valid":false},
-{"case":"files missing","document":{},"type":"Files","valid":false},
-{"case":"files, not an object","document":{"files":1},"type":"Files","valid":false},
-{"case":"files, below the minimum property count","document":{"files":{}},"type":"Files","valid":false},
-{"case":"files, a key outside the pattern","document":{"files":{"":"a"}},"type":"Files","valid":false},
-{"case":"files, value, not a string","document":{"files":{"a.json":1}},"type":"Files","valid":false},
-{"case":"an unknown property","document":{"files":{"a.json":"a"},"zz_unknown":0},"type":"Files","valid":false},
-{"case":"minimal","document":{},"type":"Together","valid":true},
-{"case":"only present","document":{"only":"a","reason":"a"},"type":"Together","valid":true},
-{"case":"not an object","document":1,"type":"Together","valid":false},
-{"case":"an array","document":[],"type":"Together","valid":false},
-{"case":"only, not a string","document":{"only":1,"reason":"a"},"type":"Together","valid":false},
-{"case":"reason, not a string","document":{"only":"a","reason":1},"type":"Together","valid":false},
-{"case":"an unknown property","document":{"zz_unknown":0},"type":"Together","valid":false},
-{"case":"only without reason","document":{"only":"a"},"type":"Together","valid":false},
-{"case":"reason without only","document":{"reason":"a"},"type":"Together","valid":false},
-{"case":"minimal","document":{"ok":true},"type":"Constants","valid":true},
-{"case":"label present","document":{"label":"x","ok":true},"type":"Constants","valid":true},
-{"case":"not an object","document":1,"type":"Constants","valid":false},
-{"case":"an array","document":[],"type":"Constants","valid":false},
-{"case":"ok missing","document":{},"type":"Constants","valid":false},
-{"case":"ok, the other boolean","document":{"ok":false},"type":"Constants","valid":false},
-{"case":"label, a different string","document":{"label":"x~","ok":true},"type":"Constants","valid":false},
-{"case":"label, not a string","document":{"label":1,"ok":true},"type":"Constants","valid":false},
-{"case":"an unknown property","document":{"ok":true,"zz_unknown":0},"type":"Constants","valid":false},
-{"case":"minimal","document":{"value":0},"type":"Chain","valid":true},
-{"case":"value, at the maximum","document":{"value":255},"type":"Chain","valid":true},
-{"case":"next present","document":{"next":{"value":0},"value":0},"type":"Chain","valid":true},
-{"case":"next, value, at the maximum","document":{"next":{"value":255},"value":0},"type":"Chain","valid":true},
-{"case":"next, next present","document":{"next":{"next":{"value":0},"value":0},"value":0},"type":"Chain","valid":true},
-{"case":"not an object","document":1,"type":"Chain","valid":false},
-{"case":"an array","document":[],"type":"Chain","valid":false},
-{"case":"value missing","document":{},"type":"Chain","valid":false},
-{"case":"value, not a number","document":{"value":"x"},"type":"Chain","valid":false},
-{"case":"value, a fraction","document":{"value":0.5},"type":"Chain","valid":false},
-{"case":"value, below the minimum","document":{"value":-1},"type":"Chain","valid":false},
-{"case":"value, above the maximum","document":{"value":256},"type":"Chain","valid":false},
-{"case":"next, not an object","document":{"next":1,"value":0},"type":"Chain","valid":false},
-{"case":"next, an array","document":{"next":[],"value":0},"type":"Chain","valid":false},
-{"case":"next, value missing","document":{"next":{},"value":0},"type":"Chain","valid":false},
-{"case":"next, value, not a number","document":{"next":{"value":"x"},"value":0},"type":"Chain","valid":false},
-{"case":"next, value, a fraction","document":{"next":{"value":0.5},"value":0},"type":"Chain","valid":false},
-{"case":"next, value, below the minimum","document":{"next":{"value":-1},"value":0},"type":"Chain","valid":false},
-{"case":"next, value, above the maximum","document":{"next":{"value":256},"value":0},"type":"Chain","valid":false},
-{"case":"next, an unknown property","document":{"next":{"value":0,"zz_unknown":0},"value":0},"type":"Chain","valid":false},
-{"case":"an unknown property","document":{"value":0,"zz_unknown":0},"type":"Chain","valid":false},
-{"case":"minimal","document":{"id":"a"},"type":"Flat","valid":true},
-{"case":"extra present","document":{"extra":0,"id":"a"},"type":"Flat","valid":true},
-{"case":"extra, at the maximum","document":{"extra":255,"id":"a"},"type":"Flat","valid":true},
-{"case":"not an object","document":1,"type":"Flat","valid":false},
-{"case":"an array","document":[],"type":"Flat","valid":false},
-{"case":"id missing","document":{},"type":"Flat","valid":false},
-{"case":"id, not a string","document":{"id":1},"type":"Flat","valid":false},
-{"case":"extra, not a number","document":{"extra":"x","id":"a"},"type":"Flat","valid":false},
-{"case":"extra, a fraction","document":{"extra":0.5,"id":"a"},"type":"Flat","valid":false},
-{"case":"extra, below the minimum","document":{"extra":-1,"id":"a"},"type":"Flat","valid":false},
-{"case":"extra, above the maximum","document":{"extra":256,"id":"a"},"type":"Flat","valid":false},
-{"case":"an unknown property","document":{"id":"a","zz_unknown":0},"type":"Flat","valid":false},
-{"case":"minimal","document":{"any":null,"nested":[],"object":{}},"type":"Raw","valid":true},
-{"case":"nested, item, item, name present","document":{"any":null,"nested":[[{"name":"a"}]],"object":{}},"type":"Raw","valid":true},
-{"case":"nested, item, item, note present","document":{"any":null,"nested":[[{"name":"a","note":"a"}]],"object":{}},"type":"Raw","valid":true},
-{"case":"not an object","document":1,"type":"Raw","valid":false},
-{"case":"an array","document":[],"type":"Raw","valid":false},
-{"case":"any missing","document":{"nested":[],"object":{}},"type":"Raw","valid":false},
-{"case":"object missing","document":{"any":null,"nested":[]},"type":"Raw","valid":false},
-{"case":"nested missing","document":{"any":null,"object":{}},"type":"Raw","valid":false},
-{"case":"object, not an object","document":{"any":null,"nested":[],"object":1},"type":"Raw","valid":false},
-{"case":"object, an array","document":{"any":null,"nested":[],"object":[]},"type":"Raw","valid":false},
-{"case":"nested, not an array","document":{"any":null,"nested":"x","object":{}},"type":"Raw","valid":false},
-{"case":"nested, item, not an array","document":{"any":null,"nested":["x"],"object":{}},"type":"Raw","valid":false},
-{"case":"nested, item, item, not an object","document":{"any":null,"nested":[[1]],"object":{}},"type":"Raw","valid":false},
-{"case":"nested, item, item, an array","document":{"any":null,"nested":[[[]]],"object":{}},"type":"Raw","valid":false},
-{"case":"nested, item, item, name missing","document":{"any":null,"nested":[[{}]],"object":{}},"type":"Raw","valid":false},
-{"case":"nested, item, item, name, not a string","document":{"any":null,"nested":[[{"name":1}]],"object":{}},"type":"Raw","valid":false},
-{"case":"nested, item, item, note, not a string","document":{"any":null,"nested":[[{"name":"a","note":1}]],"object":{}},"type":"Raw","valid":false},
-{"case":"nested, item, item, an unknown property","document":{"any":null,"nested":[[{"name":"a","zz_unknown":0}]],"object":{}},"type":"Raw","valid":false},
-{"case":"minimal","document":{"firstName":"a"},"type":"Renamed","valid":true},
-{"case":"other-key present","document":{"firstName":"a","other-key":0},"type":"Renamed","valid":true},
-{"case":"other-key, at the maximum","document":{"firstName":"a","other-key":255},"type":"Renamed","valid":true},
-{"case":"flag present","document":{"firstName":"a","flag":true},"type":"Renamed","valid":true},
-{"case":"not an object","document":1,"type":"Renamed","valid":false},
-{"case":"an array","document":[],"type":"Renamed","valid":false},
-{"case":"firstName missing","document":{},"type":"Renamed","valid":false},
-{"case":"firstName, not a string","document":{"firstName":1},"type":"Renamed","valid":false},
-{"case":"other-key, not a number","document":{"firstName":"a","other-key":"x"},"type":"Renamed","valid":false},
-{"case":"other-key, a fraction","document":{"firstName":"a","other-key":0.5},"type":"Renamed","valid":false},
-{"case":"other-key, below the minimum","document":{"firstName":"a","other-key":-1},"type":"Renamed","valid":false},
-{"case":"other-key, above the maximum","document":{"firstName":"a","other-key":256},"type":"Renamed","valid":false},
-{"case":"flag, not a boolean","document":{"firstName":"a","flag":"x"},"type":"Renamed","valid":false},
-{"case":"an unknown property","document":{"firstName":"a","zz_unknown":0},"type":"Renamed","valid":false},
-{"case":"minimal","document":{"kind":"Plain","name":"a"},"type":"Wrapper","valid":true},
-{"case":"Plain, note present","document":{"kind":"Plain","name":"a","note":"a"},"type":"Wrapper","valid":true},
-{"case":"variant Other","document":{"kind":"Other","name":"a"},"type":"Wrapper","valid":true},
-{"case":"not an object","document":1,"type":"Wrapper","valid":false},
-{"case":"an unknown kind","document":{"kind":"~"},"type":"Wrapper","valid":false},
-{"case":"a kind that is not a string","document":{"kind":1},"type":"Wrapper","valid":false},
-{"case":"no kind","document":{},"type":"Wrapper","valid":false},
-{"case":"Plain, an array","document":[],"type":"Wrapper","valid":false},
-{"case":"Plain, kind missing","document":{"name":"a"},"type":"Wrapper","valid":false},
-{"case":"Plain, name missing","document":{"kind":"Plain"},"type":"Wrapper","valid":false},
-{"case":"Plain, kind, a different string","document":{"kind":"Plain~","name":"a"},"type":"Wrapper","valid":false},
-{"case":"Plain, kind, not a string","document":{"kind":1,"name":"a"},"type":"Wrapper","valid":false},
-{"case":"Plain, name, not a string","document":{"kind":"Plain","name":1},"type":"Wrapper","valid":false},
-{"case":"Plain, note, not a string","document":{"kind":"Plain","name":"a","note":1},"type":"Wrapper","valid":false},
-{"case":"Plain, an unknown property","document":{"kind":"Plain","name":"a","zz_unknown":0},"type":"Wrapper","valid":false},
-{"case":"Other, name missing","document":{"kind":"Other"},"type":"Wrapper","valid":false},
-{"case":"Other, kind, a different string","document":{"kind":"Other~","name":"a"},"type":"Wrapper","valid":false},
-{"case":"Other, name, not a string","document":{"kind":"Other","name":1},"type":"Wrapper","valid":false},
-{"case":"minimal","document":0,"type":"Overlap","valid":true},
-{"case":"a value no alternative accepts","document":true,"type":"Overlap","valid":false},
-{"case":"minimal","document":{"a":0,"b":0},"type":"Sparse","valid":true},
-{"case":"a, at the maximum","document":{"a":255,"b":0},"type":"Sparse","valid":true},
-{"case":"b, at the maximum","document":{"a":0,"b":255},"type":"Sparse","valid":true},
-{"case":"c present","document":{"a":0,"b":0,"c":0},"type":"Sparse","valid":true},
-{"case":"c, at the maximum","document":{"a":0,"b":0,"c":255},"type":"Sparse","valid":true},
-{"case":"not an object","document":1,"type":"Sparse","valid":false},
-{"case":"an array","document":[],"type":"Sparse","valid":false},
-{"case":"a, not a number","document":{"a":"x","b":0},"type":"Sparse","valid":false},
-{"case":"a, a fraction","document":{"a":0.5,"b":0},"type":"Sparse","valid":false},
-{"case":"a, below the minimum","document":{"a":-1,"b":0},"type":"Sparse","valid":false},
-{"case":"a, above the maximum","document":{"a":256,"b":0},"type":"Sparse","valid":false},
-{"case":"b, not a number","document":{"a":0,"b":"x"},"type":"Sparse","valid":false},
-{"case":"b, a fraction","document":{"a":0,"b":0.5},"type":"Sparse","valid":false},
-{"case":"b, below the minimum","document":{"a":0,"b":-1},"type":"Sparse","valid":false},
-{"case":"b, above the maximum","document":{"a":0,"b":256},"type":"Sparse","valid":false},
-{"case":"c, not a number","document":{"a":0,"b":0,"c":"x"},"type":"Sparse","valid":false},
-{"case":"c, a fraction","document":{"a":0,"b":0,"c":0.5},"type":"Sparse","valid":false},
-{"case":"c, below the minimum","document":{"a":0,"b":0,"c":-1},"type":"Sparse","valid":false},
-{"case":"c, above the maximum","document":{"a":0,"b":0,"c":256},"type":"Sparse","valid":false},
-{"case":"below the minimum property count","document":{},"type":"Sparse","valid":false},
-{"case":"minimal","document":"ab","type":"Shaped","valid":true},
-{"case":"alternative 1","document":1,"type":"Shaped","valid":true},
-{"case":"alternative 2","document":null,"type":"Shaped","valid":true},
-{"case":"a value no alternative accepts","document":true,"type":"Shaped","valid":false}
+  {
+    "case": "minimal",
+    "document": {
+      "name": "a"
+    },
+    "type": "Closed",
+    "valid": true
+  },
+  {
+    "case": "note present",
+    "document": {
+      "name": "a",
+      "note": "a"
+    },
+    "type": "Closed",
+    "valid": true
+  },
+  {
+    "case": "not an object",
+    "document": 1,
+    "type": "Closed",
+    "valid": false
+  },
+  {
+    "case": "an array",
+    "document": [],
+    "type": "Closed",
+    "valid": false
+  },
+  {
+    "case": "name missing",
+    "document": {},
+    "type": "Closed",
+    "valid": false
+  },
+  {
+    "case": "name, not a string",
+    "document": {
+      "name": 1
+    },
+    "type": "Closed",
+    "valid": false
+  },
+  {
+    "case": "note, not a string",
+    "document": {
+      "name": "a",
+      "note": 1
+    },
+    "type": "Closed",
+    "valid": false
+  },
+  {
+    "case": "an unknown property",
+    "document": {
+      "name": "a",
+      "zz_unknown": 0
+    },
+    "type": "Closed",
+    "valid": false
+  },
+  {
+    "case": "minimal",
+    "document": {
+      "name": "a"
+    },
+    "type": "Open",
+    "valid": true
+  },
+  {
+    "case": "not an object",
+    "document": 1,
+    "type": "Open",
+    "valid": false
+  },
+  {
+    "case": "an array",
+    "document": [],
+    "type": "Open",
+    "valid": false
+  },
+  {
+    "case": "name missing",
+    "document": {},
+    "type": "Open",
+    "valid": false
+  },
+  {
+    "case": "name, not a string",
+    "document": {
+      "name": 1
+    },
+    "type": "Open",
+    "valid": false
+  },
+  {
+    "case": "minimal",
+    "document": "red",
+    "type": "Colour",
+    "valid": true
+  },
+  {
+    "case": "the option green",
+    "document": "green",
+    "type": "Colour",
+    "valid": true
+  },
+  {
+    "case": "an unlisted value",
+    "document": "~",
+    "type": "Colour",
+    "valid": false
+  },
+  {
+    "case": "not a string",
+    "document": 1,
+    "type": "Colour",
+    "valid": false
+  },
+  {
+    "case": "minimal",
+    "document": {
+      "kind": "dot"
+    },
+    "type": "Figure",
+    "valid": true
+  },
+  {
+    "case": "variant circle",
+    "document": {
+      "kind": "circle",
+      "radius": 0
+    },
+    "type": "Figure",
+    "valid": true
+  },
+  {
+    "case": "variant square",
+    "document": {
+      "kind": "square",
+      "side": 0
+    },
+    "type": "Figure",
+    "valid": true
+  },
+  {
+    "case": "square, side, at the maximum",
+    "document": {
+      "kind": "square",
+      "side": 255
+    },
+    "type": "Figure",
+    "valid": true
+  },
+  {
+    "case": "variant group",
+    "document": {
+      "kind": "group",
+      "members": []
+    },
+    "type": "Figure",
+    "valid": true
+  },
+  {
+    "case": "group, members, item, variant dot",
+    "document": {
+      "kind": "group",
+      "members": [
+        {
+          "kind": "dot"
+        }
+      ]
+    },
+    "type": "Figure",
+    "valid": true
+  },
+  {
+    "case": "group, members, item, variant circle",
+    "document": {
+      "kind": "group",
+      "members": [
+        {
+          "kind": "circle",
+          "radius": 0
+        }
+      ]
+    },
+    "type": "Figure",
+    "valid": true
+  },
+  {
+    "case": "group, members, item, variant square",
+    "document": {
+      "kind": "group",
+      "members": [
+        {
+          "kind": "square",
+          "side": 0
+        }
+      ]
+    },
+    "type": "Figure",
+    "valid": true
+  },
+  {
+    "case": "group, members, item, square, side, at the maximum",
+    "document": {
+      "kind": "group",
+      "members": [
+        {
+          "kind": "square",
+          "side": 255
+        }
+      ]
+    },
+    "type": "Figure",
+    "valid": true
+  },
+  {
+    "case": "group, members, item, variant group",
+    "document": {
+      "kind": "group",
+      "members": [
+        {
+          "kind": "group",
+          "members": []
+        }
+      ]
+    },
+    "type": "Figure",
+    "valid": true
+  },
+  {
+    "case": "not an object",
+    "document": 1,
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "an unknown kind",
+    "document": {
+      "kind": "~"
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "a kind that is not a string",
+    "document": {
+      "kind": 1
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "no kind",
+    "document": {},
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "dot, an array",
+    "document": [],
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "dot, kind, a different string",
+    "document": {
+      "kind": "dot~"
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "dot, an unknown property",
+    "document": {
+      "kind": "dot",
+      "zz_unknown": 0
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "circle, kind missing",
+    "document": {
+      "radius": 0
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "circle, radius missing",
+    "document": {
+      "kind": "circle"
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "circle, kind, a different string",
+    "document": {
+      "kind": "circle~",
+      "radius": 0
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "circle, kind, not a string",
+    "document": {
+      "kind": 1,
+      "radius": 0
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "circle, radius, not a number",
+    "document": {
+      "kind": "circle",
+      "radius": "x"
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "circle, radius, below the minimum",
+    "document": {
+      "kind": "circle",
+      "radius": -1
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "circle, an unknown property",
+    "document": {
+      "kind": "circle",
+      "radius": 0,
+      "zz_unknown": 0
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "square, kind missing",
+    "document": {
+      "side": 0
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "square, side missing",
+    "document": {
+      "kind": "square"
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "square, kind, a different string",
+    "document": {
+      "kind": "square~",
+      "side": 0
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "square, kind, not a string",
+    "document": {
+      "kind": 1,
+      "side": 0
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "square, side, not a number",
+    "document": {
+      "kind": "square",
+      "side": "x"
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "square, side, a fraction",
+    "document": {
+      "kind": "square",
+      "side": 0.5
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "square, side, below the minimum",
+    "document": {
+      "kind": "square",
+      "side": -1
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "square, side, above the maximum",
+    "document": {
+      "kind": "square",
+      "side": 256
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "square, an unknown property",
+    "document": {
+      "kind": "square",
+      "side": 0,
+      "zz_unknown": 0
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "group, kind missing",
+    "document": {
+      "members": []
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "group, members missing",
+    "document": {
+      "kind": "group"
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "group, kind, a different string",
+    "document": {
+      "kind": "group~",
+      "members": []
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "group, kind, not a string",
+    "document": {
+      "kind": 1,
+      "members": []
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "group, members, not an array",
+    "document": {
+      "kind": "group",
+      "members": "x"
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "group, members, item, not an object",
+    "document": {
+      "kind": "group",
+      "members": [
+        1
+      ]
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "group, members, item, an unknown kind",
+    "document": {
+      "kind": "group",
+      "members": [
+        {
+          "kind": "~"
+        }
+      ]
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "group, members, item, a kind that is not a string",
+    "document": {
+      "kind": "group",
+      "members": [
+        {
+          "kind": 1
+        }
+      ]
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "group, members, item, no kind",
+    "document": {
+      "kind": "group",
+      "members": [
+        {}
+      ]
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "group, members, item, dot, an array",
+    "document": {
+      "kind": "group",
+      "members": [
+        []
+      ]
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "group, members, item, dot, kind, a different string",
+    "document": {
+      "kind": "group",
+      "members": [
+        {
+          "kind": "dot~"
+        }
+      ]
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "group, members, item, dot, an unknown property",
+    "document": {
+      "kind": "group",
+      "members": [
+        {
+          "kind": "dot",
+          "zz_unknown": 0
+        }
+      ]
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "group, members, item, circle, kind missing",
+    "document": {
+      "kind": "group",
+      "members": [
+        {
+          "radius": 0
+        }
+      ]
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "group, members, item, circle, radius missing",
+    "document": {
+      "kind": "group",
+      "members": [
+        {
+          "kind": "circle"
+        }
+      ]
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "group, members, item, circle, kind, a different string",
+    "document": {
+      "kind": "group",
+      "members": [
+        {
+          "kind": "circle~",
+          "radius": 0
+        }
+      ]
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "group, members, item, circle, kind, not a string",
+    "document": {
+      "kind": "group",
+      "members": [
+        {
+          "kind": 1,
+          "radius": 0
+        }
+      ]
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "group, members, item, circle, radius, not a number",
+    "document": {
+      "kind": "group",
+      "members": [
+        {
+          "kind": "circle",
+          "radius": "x"
+        }
+      ]
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "group, members, item, circle, radius, below the minimum",
+    "document": {
+      "kind": "group",
+      "members": [
+        {
+          "kind": "circle",
+          "radius": -1
+        }
+      ]
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "group, members, item, circle, an unknown property",
+    "document": {
+      "kind": "group",
+      "members": [
+        {
+          "kind": "circle",
+          "radius": 0,
+          "zz_unknown": 0
+        }
+      ]
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "group, members, item, square, kind missing",
+    "document": {
+      "kind": "group",
+      "members": [
+        {
+          "side": 0
+        }
+      ]
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "group, members, item, square, side missing",
+    "document": {
+      "kind": "group",
+      "members": [
+        {
+          "kind": "square"
+        }
+      ]
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "group, members, item, square, kind, a different string",
+    "document": {
+      "kind": "group",
+      "members": [
+        {
+          "kind": "square~",
+          "side": 0
+        }
+      ]
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "group, members, item, square, kind, not a string",
+    "document": {
+      "kind": "group",
+      "members": [
+        {
+          "kind": 1,
+          "side": 0
+        }
+      ]
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "group, members, item, square, side, not a number",
+    "document": {
+      "kind": "group",
+      "members": [
+        {
+          "kind": "square",
+          "side": "x"
+        }
+      ]
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "group, members, item, square, side, a fraction",
+    "document": {
+      "kind": "group",
+      "members": [
+        {
+          "kind": "square",
+          "side": 0.5
+        }
+      ]
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "group, members, item, square, side, below the minimum",
+    "document": {
+      "kind": "group",
+      "members": [
+        {
+          "kind": "square",
+          "side": -1
+        }
+      ]
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "group, members, item, square, side, above the maximum",
+    "document": {
+      "kind": "group",
+      "members": [
+        {
+          "kind": "square",
+          "side": 256
+        }
+      ]
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "group, members, item, square, an unknown property",
+    "document": {
+      "kind": "group",
+      "members": [
+        {
+          "kind": "square",
+          "side": 0,
+          "zz_unknown": 0
+        }
+      ]
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "group, members, item, group, kind missing",
+    "document": {
+      "kind": "group",
+      "members": [
+        {
+          "members": []
+        }
+      ]
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "group, members, item, group, members missing",
+    "document": {
+      "kind": "group",
+      "members": [
+        {
+          "kind": "group"
+        }
+      ]
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "group, members, item, group, kind, a different string",
+    "document": {
+      "kind": "group",
+      "members": [
+        {
+          "kind": "group~",
+          "members": []
+        }
+      ]
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "group, members, item, group, kind, not a string",
+    "document": {
+      "kind": "group",
+      "members": [
+        {
+          "kind": 1,
+          "members": []
+        }
+      ]
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "group, members, item, group, members, not an array",
+    "document": {
+      "kind": "group",
+      "members": [
+        {
+          "kind": "group",
+          "members": "x"
+        }
+      ]
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "group, members, item, group, an unknown property",
+    "document": {
+      "kind": "group",
+      "members": [
+        {
+          "kind": "group",
+          "members": [],
+          "zz_unknown": 0
+        }
+      ]
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "group, an unknown property",
+    "document": {
+      "kind": "group",
+      "members": [],
+      "zz_unknown": 0
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "minimal",
+    "document": 0,
+    "type": "Either",
+    "valid": true
+  },
+  {
+    "case": "alternative 1",
+    "document": "a",
+    "type": "Either",
+    "valid": true
+  },
+  {
+    "case": "alternative 2",
+    "document": {
+      "first": "a",
+      "second": "a"
+    },
+    "type": "Either",
+    "valid": true
+  },
+  {
+    "case": "alternative 3",
+    "document": null,
+    "type": "Either",
+    "valid": true
+  },
+  {
+    "case": "a value no alternative accepts",
+    "document": true,
+    "type": "Either",
+    "valid": false
+  },
+  {
+    "case": "minimal",
+    "document": {},
+    "type": "Bounds",
+    "valid": true
+  },
+  {
+    "case": "small present",
+    "document": {
+      "small": 0
+    },
+    "type": "Bounds",
+    "valid": true
+  },
+  {
+    "case": "small, at the maximum",
+    "document": {
+      "small": 255
+    },
+    "type": "Bounds",
+    "valid": true
+  },
+  {
+    "case": "wide present",
+    "document": {
+      "wide": 0
+    },
+    "type": "Bounds",
+    "valid": true
+  },
+  {
+    "case": "wide, at the maximum",
+    "document": {
+      "wide": 9007199254740991
+    },
+    "type": "Bounds",
+    "valid": true
+  },
+  {
+    "case": "signed present",
+    "document": {
+      "signed": -9007199254740991
+    },
+    "type": "Bounds",
+    "valid": true
+  },
+  {
+    "case": "signed, at the maximum",
+    "document": {
+      "signed": 9007199254740991
+    },
+    "type": "Bounds",
+    "valid": true
+  },
+  {
+    "case": "ranged present",
+    "document": {
+      "ranged": 10
+    },
+    "type": "Bounds",
+    "valid": true
+  },
+  {
+    "case": "ranged, at the maximum",
+    "document": {
+      "ranged": 20
+    },
+    "type": "Bounds",
+    "valid": true
+  },
+  {
+    "case": "ratio present",
+    "document": {
+      "ratio": 0
+    },
+    "type": "Bounds",
+    "valid": true
+  },
+  {
+    "case": "ratio, at the maximum",
+    "document": {
+      "ratio": 1
+    },
+    "type": "Bounds",
+    "valid": true
+  },
+  {
+    "case": "not an object",
+    "document": 1,
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "an array",
+    "document": [],
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "small, not a number",
+    "document": {
+      "small": "x"
+    },
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "small, a fraction",
+    "document": {
+      "small": 0.5
+    },
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "small, below the minimum",
+    "document": {
+      "small": -1
+    },
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "small, above the maximum",
+    "document": {
+      "small": 256
+    },
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "wide, not a number",
+    "document": {
+      "wide": "x"
+    },
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "wide, a fraction",
+    "document": {
+      "wide": 0.5
+    },
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "wide, below the minimum",
+    "document": {
+      "wide": -1
+    },
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "wide, above the maximum",
+    "document": {
+      "wide": 9007199254740992
+    },
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "signed, not a number",
+    "document": {
+      "signed": "x"
+    },
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "signed, a fraction",
+    "document": {
+      "signed": 0.5
+    },
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "signed, below the minimum",
+    "document": {
+      "signed": -9007199254740992
+    },
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "signed, above the maximum",
+    "document": {
+      "signed": 9007199254740992
+    },
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "ranged, not a number",
+    "document": {
+      "ranged": "x"
+    },
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "ranged, a fraction",
+    "document": {
+      "ranged": 0.5
+    },
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "ranged, below the minimum",
+    "document": {
+      "ranged": 9
+    },
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "ranged, above the maximum",
+    "document": {
+      "ranged": 21
+    },
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "ratio, not a number",
+    "document": {
+      "ratio": "x"
+    },
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "ratio, below the minimum",
+    "document": {
+      "ratio": -1
+    },
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "ratio, above the maximum",
+    "document": {
+      "ratio": 2
+    },
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "an unknown property",
+    "document": {
+      "zz_unknown": 0
+    },
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "minimal",
+    "document": {},
+    "type": "Lengths",
+    "valid": true
+  },
+  {
+    "case": "items present",
+    "document": {
+      "items": [
+        "a"
+      ]
+    },
+    "type": "Lengths",
+    "valid": true
+  },
+  {
+    "case": "items, at the maximum item count",
+    "document": {
+      "items": [
+        "a",
+        "a",
+        "a"
+      ]
+    },
+    "type": "Lengths",
+    "valid": true
+  },
+  {
+    "case": "distinct present",
+    "document": {
+      "distinct": []
+    },
+    "type": "Lengths",
+    "valid": true
+  },
+  {
+    "case": "distinct, item, at the minimum",
+    "document": {
+      "distinct": [
+        0
+      ]
+    },
+    "type": "Lengths",
+    "valid": true
+  },
+  {
+    "case": "distinct, item, at the maximum",
+    "document": {
+      "distinct": [
+        255
+      ]
+    },
+    "type": "Lengths",
+    "valid": true
+  },
+  {
+    "case": "text present",
+    "document": {
+      "text": "ab"
+    },
+    "type": "Lengths",
+    "valid": true
+  },
+  {
+    "case": "text, at the minimum length",
+    "document": {
+      "text": "aa"
+    },
+    "type": "Lengths",
+    "valid": true
+  },
+  {
+    "case": "not an object",
+    "document": 1,
+    "type": "Lengths",
+    "valid": false
+  },
+  {
+    "case": "an array",
+    "document": [],
+    "type": "Lengths",
+    "valid": false
+  },
+  {
+    "case": "items, not an array",
+    "document": {
+      "items": "x"
+    },
+    "type": "Lengths",
+    "valid": false
+  },
+  {
+    "case": "items, below the minimum item count",
+    "document": {
+      "items": []
+    },
+    "type": "Lengths",
+    "valid": false
+  },
+  {
+    "case": "items, above the maximum item count",
+    "document": {
+      "items": [
+        "a",
+        "a",
+        "a",
+        "a"
+      ]
+    },
+    "type": "Lengths",
+    "valid": false
+  },
+  {
+    "case": "items, item, not a string",
+    "document": {
+      "items": [
+        1
+      ]
+    },
+    "type": "Lengths",
+    "valid": false
+  },
+  {
+    "case": "distinct, not an array",
+    "document": {
+      "distinct": "x"
+    },
+    "type": "Lengths",
+    "valid": false
+  },
+  {
+    "case": "distinct, a repeated item",
+    "document": {
+      "distinct": [
+        0,
+        0
+      ]
+    },
+    "type": "Lengths",
+    "valid": false
+  },
+  {
+    "case": "distinct, item, not a number",
+    "document": {
+      "distinct": [
+        "x"
+      ]
+    },
+    "type": "Lengths",
+    "valid": false
+  },
+  {
+    "case": "distinct, item, a fraction",
+    "document": {
+      "distinct": [
+        0.5
+      ]
+    },
+    "type": "Lengths",
+    "valid": false
+  },
+  {
+    "case": "distinct, item, below the minimum",
+    "document": {
+      "distinct": [
+        -1
+      ]
+    },
+    "type": "Lengths",
+    "valid": false
+  },
+  {
+    "case": "distinct, item, above the maximum",
+    "document": {
+      "distinct": [
+        256
+      ]
+    },
+    "type": "Lengths",
+    "valid": false
+  },
+  {
+    "case": "text, not a string",
+    "document": {
+      "text": 1
+    },
+    "type": "Lengths",
+    "valid": false
+  },
+  {
+    "case": "text, below the minimum length",
+    "document": {
+      "text": "a"
+    },
+    "type": "Lengths",
+    "valid": false
+  },
+  {
+    "case": "an unknown property",
+    "document": {
+      "zz_unknown": 0
+    },
+    "type": "Lengths",
+    "valid": false
+  },
+  {
+    "case": "minimal",
+    "document": {},
+    "type": "Patterned",
+    "valid": true
+  },
+  {
+    "case": "id present",
+    "document": {
+      "id": "a"
+    },
+    "type": "Patterned",
+    "valid": true
+  },
+  {
+    "case": "from present",
+    "document": {
+      "from": "recorded: x"
+    },
+    "type": "Patterned",
+    "valid": true
+  },
+  {
+    "case": "unanchored present",
+    "document": {
+      "unanchored": "a0"
+    },
+    "type": "Patterned",
+    "valid": true
+  },
+  {
+    "case": "one_slash present",
+    "document": {
+      "one_slash": "a/b"
+    },
+    "type": "Patterned",
+    "valid": true
+  },
+  {
+    "case": "single present",
+    "document": {
+      "single": "a"
+    },
+    "type": "Patterned",
+    "valid": true
+  },
+  {
+    "case": "not an object",
+    "document": 1,
+    "type": "Patterned",
+    "valid": false
+  },
+  {
+    "case": "an array",
+    "document": [],
+    "type": "Patterned",
+    "valid": false
+  },
+  {
+    "case": "id, not a string",
+    "document": {
+      "id": 1
+    },
+    "type": "Patterned",
+    "valid": false
+  },
+  {
+    "case": "id, outside the pattern",
+    "document": {
+      "id": ""
+    },
+    "type": "Patterned",
+    "valid": false
+  },
+  {
+    "case": "from, not a string",
+    "document": {
+      "from": 1
+    },
+    "type": "Patterned",
+    "valid": false
+  },
+  {
+    "case": "from, outside the pattern",
+    "document": {
+      "from": ""
+    },
+    "type": "Patterned",
+    "valid": false
+  },
+  {
+    "case": "unanchored, not a string",
+    "document": {
+      "unanchored": 1
+    },
+    "type": "Patterned",
+    "valid": false
+  },
+  {
+    "case": "unanchored, outside the pattern",
+    "document": {
+      "unanchored": ""
+    },
+    "type": "Patterned",
+    "valid": false
+  },
+  {
+    "case": "one_slash, not a string",
+    "document": {
+      "one_slash": 1
+    },
+    "type": "Patterned",
+    "valid": false
+  },
+  {
+    "case": "one_slash, outside the pattern",
+    "document": {
+      "one_slash": ""
+    },
+    "type": "Patterned",
+    "valid": false
+  },
+  {
+    "case": "single, not a string",
+    "document": {
+      "single": 1
+    },
+    "type": "Patterned",
+    "valid": false
+  },
+  {
+    "case": "single, outside the pattern",
+    "document": {
+      "single": ""
+    },
+    "type": "Patterned",
+    "valid": false
+  },
+  {
+    "case": "an unknown property",
+    "document": {
+      "zz_unknown": 0
+    },
+    "type": "Patterned",
+    "valid": false
+  },
+  {
+    "case": "minimal",
+    "document": {
+      "files": {
+        "a.json": "a"
+      }
+    },
+    "type": "Files",
+    "valid": true
+  },
+  {
+    "case": "not an object",
+    "document": 1,
+    "type": "Files",
+    "valid": false
+  },
+  {
+    "case": "an array",
+    "document": [],
+    "type": "Files",
+    "valid": false
+  },
+  {
+    "case": "files missing",
+    "document": {},
+    "type": "Files",
+    "valid": false
+  },
+  {
+    "case": "files, not an object",
+    "document": {
+      "files": 1
+    },
+    "type": "Files",
+    "valid": false
+  },
+  {
+    "case": "files, below the minimum property count",
+    "document": {
+      "files": {}
+    },
+    "type": "Files",
+    "valid": false
+  },
+  {
+    "case": "files, a key outside the pattern",
+    "document": {
+      "files": {
+        "": "a"
+      }
+    },
+    "type": "Files",
+    "valid": false
+  },
+  {
+    "case": "files, value, not a string",
+    "document": {
+      "files": {
+        "a.json": 1
+      }
+    },
+    "type": "Files",
+    "valid": false
+  },
+  {
+    "case": "an unknown property",
+    "document": {
+      "files": {
+        "a.json": "a"
+      },
+      "zz_unknown": 0
+    },
+    "type": "Files",
+    "valid": false
+  },
+  {
+    "case": "minimal",
+    "document": {},
+    "type": "Together",
+    "valid": true
+  },
+  {
+    "case": "only present",
+    "document": {
+      "only": "a",
+      "reason": "a"
+    },
+    "type": "Together",
+    "valid": true
+  },
+  {
+    "case": "not an object",
+    "document": 1,
+    "type": "Together",
+    "valid": false
+  },
+  {
+    "case": "an array",
+    "document": [],
+    "type": "Together",
+    "valid": false
+  },
+  {
+    "case": "only, not a string",
+    "document": {
+      "only": 1,
+      "reason": "a"
+    },
+    "type": "Together",
+    "valid": false
+  },
+  {
+    "case": "reason, not a string",
+    "document": {
+      "only": "a",
+      "reason": 1
+    },
+    "type": "Together",
+    "valid": false
+  },
+  {
+    "case": "an unknown property",
+    "document": {
+      "zz_unknown": 0
+    },
+    "type": "Together",
+    "valid": false
+  },
+  {
+    "case": "only without reason",
+    "document": {
+      "only": "a"
+    },
+    "type": "Together",
+    "valid": false
+  },
+  {
+    "case": "reason without only",
+    "document": {
+      "reason": "a"
+    },
+    "type": "Together",
+    "valid": false
+  },
+  {
+    "case": "minimal",
+    "document": {
+      "ok": true
+    },
+    "type": "Constants",
+    "valid": true
+  },
+  {
+    "case": "label present",
+    "document": {
+      "label": "x",
+      "ok": true
+    },
+    "type": "Constants",
+    "valid": true
+  },
+  {
+    "case": "not an object",
+    "document": 1,
+    "type": "Constants",
+    "valid": false
+  },
+  {
+    "case": "an array",
+    "document": [],
+    "type": "Constants",
+    "valid": false
+  },
+  {
+    "case": "ok missing",
+    "document": {},
+    "type": "Constants",
+    "valid": false
+  },
+  {
+    "case": "ok, the other boolean",
+    "document": {
+      "ok": false
+    },
+    "type": "Constants",
+    "valid": false
+  },
+  {
+    "case": "label, a different string",
+    "document": {
+      "label": "x~",
+      "ok": true
+    },
+    "type": "Constants",
+    "valid": false
+  },
+  {
+    "case": "label, not a string",
+    "document": {
+      "label": 1,
+      "ok": true
+    },
+    "type": "Constants",
+    "valid": false
+  },
+  {
+    "case": "an unknown property",
+    "document": {
+      "ok": true,
+      "zz_unknown": 0
+    },
+    "type": "Constants",
+    "valid": false
+  },
+  {
+    "case": "minimal",
+    "document": {
+      "value": 0
+    },
+    "type": "Chain",
+    "valid": true
+  },
+  {
+    "case": "value, at the maximum",
+    "document": {
+      "value": 255
+    },
+    "type": "Chain",
+    "valid": true
+  },
+  {
+    "case": "next present",
+    "document": {
+      "next": {
+        "value": 0
+      },
+      "value": 0
+    },
+    "type": "Chain",
+    "valid": true
+  },
+  {
+    "case": "next, value, at the maximum",
+    "document": {
+      "next": {
+        "value": 255
+      },
+      "value": 0
+    },
+    "type": "Chain",
+    "valid": true
+  },
+  {
+    "case": "next, next present",
+    "document": {
+      "next": {
+        "next": {
+          "value": 0
+        },
+        "value": 0
+      },
+      "value": 0
+    },
+    "type": "Chain",
+    "valid": true
+  },
+  {
+    "case": "not an object",
+    "document": 1,
+    "type": "Chain",
+    "valid": false
+  },
+  {
+    "case": "an array",
+    "document": [],
+    "type": "Chain",
+    "valid": false
+  },
+  {
+    "case": "value missing",
+    "document": {},
+    "type": "Chain",
+    "valid": false
+  },
+  {
+    "case": "value, not a number",
+    "document": {
+      "value": "x"
+    },
+    "type": "Chain",
+    "valid": false
+  },
+  {
+    "case": "value, a fraction",
+    "document": {
+      "value": 0.5
+    },
+    "type": "Chain",
+    "valid": false
+  },
+  {
+    "case": "value, below the minimum",
+    "document": {
+      "value": -1
+    },
+    "type": "Chain",
+    "valid": false
+  },
+  {
+    "case": "value, above the maximum",
+    "document": {
+      "value": 256
+    },
+    "type": "Chain",
+    "valid": false
+  },
+  {
+    "case": "next, not an object",
+    "document": {
+      "next": 1,
+      "value": 0
+    },
+    "type": "Chain",
+    "valid": false
+  },
+  {
+    "case": "next, an array",
+    "document": {
+      "next": [],
+      "value": 0
+    },
+    "type": "Chain",
+    "valid": false
+  },
+  {
+    "case": "next, value missing",
+    "document": {
+      "next": {},
+      "value": 0
+    },
+    "type": "Chain",
+    "valid": false
+  },
+  {
+    "case": "next, value, not a number",
+    "document": {
+      "next": {
+        "value": "x"
+      },
+      "value": 0
+    },
+    "type": "Chain",
+    "valid": false
+  },
+  {
+    "case": "next, value, a fraction",
+    "document": {
+      "next": {
+        "value": 0.5
+      },
+      "value": 0
+    },
+    "type": "Chain",
+    "valid": false
+  },
+  {
+    "case": "next, value, below the minimum",
+    "document": {
+      "next": {
+        "value": -1
+      },
+      "value": 0
+    },
+    "type": "Chain",
+    "valid": false
+  },
+  {
+    "case": "next, value, above the maximum",
+    "document": {
+      "next": {
+        "value": 256
+      },
+      "value": 0
+    },
+    "type": "Chain",
+    "valid": false
+  },
+  {
+    "case": "next, an unknown property",
+    "document": {
+      "next": {
+        "value": 0,
+        "zz_unknown": 0
+      },
+      "value": 0
+    },
+    "type": "Chain",
+    "valid": false
+  },
+  {
+    "case": "an unknown property",
+    "document": {
+      "value": 0,
+      "zz_unknown": 0
+    },
+    "type": "Chain",
+    "valid": false
+  },
+  {
+    "case": "minimal",
+    "document": {
+      "id": "a"
+    },
+    "type": "Flat",
+    "valid": true
+  },
+  {
+    "case": "extra present",
+    "document": {
+      "extra": 0,
+      "id": "a"
+    },
+    "type": "Flat",
+    "valid": true
+  },
+  {
+    "case": "extra, at the maximum",
+    "document": {
+      "extra": 255,
+      "id": "a"
+    },
+    "type": "Flat",
+    "valid": true
+  },
+  {
+    "case": "not an object",
+    "document": 1,
+    "type": "Flat",
+    "valid": false
+  },
+  {
+    "case": "an array",
+    "document": [],
+    "type": "Flat",
+    "valid": false
+  },
+  {
+    "case": "id missing",
+    "document": {},
+    "type": "Flat",
+    "valid": false
+  },
+  {
+    "case": "id, not a string",
+    "document": {
+      "id": 1
+    },
+    "type": "Flat",
+    "valid": false
+  },
+  {
+    "case": "extra, not a number",
+    "document": {
+      "extra": "x",
+      "id": "a"
+    },
+    "type": "Flat",
+    "valid": false
+  },
+  {
+    "case": "extra, a fraction",
+    "document": {
+      "extra": 0.5,
+      "id": "a"
+    },
+    "type": "Flat",
+    "valid": false
+  },
+  {
+    "case": "extra, below the minimum",
+    "document": {
+      "extra": -1,
+      "id": "a"
+    },
+    "type": "Flat",
+    "valid": false
+  },
+  {
+    "case": "extra, above the maximum",
+    "document": {
+      "extra": 256,
+      "id": "a"
+    },
+    "type": "Flat",
+    "valid": false
+  },
+  {
+    "case": "an unknown property",
+    "document": {
+      "id": "a",
+      "zz_unknown": 0
+    },
+    "type": "Flat",
+    "valid": false
+  },
+  {
+    "case": "minimal",
+    "document": {
+      "any": null,
+      "nested": [],
+      "object": {}
+    },
+    "type": "Raw",
+    "valid": true
+  },
+  {
+    "case": "nested, item, item, name present",
+    "document": {
+      "any": null,
+      "nested": [
+        [
+          {
+            "name": "a"
+          }
+        ]
+      ],
+      "object": {}
+    },
+    "type": "Raw",
+    "valid": true
+  },
+  {
+    "case": "nested, item, item, note present",
+    "document": {
+      "any": null,
+      "nested": [
+        [
+          {
+            "name": "a",
+            "note": "a"
+          }
+        ]
+      ],
+      "object": {}
+    },
+    "type": "Raw",
+    "valid": true
+  },
+  {
+    "case": "not an object",
+    "document": 1,
+    "type": "Raw",
+    "valid": false
+  },
+  {
+    "case": "an array",
+    "document": [],
+    "type": "Raw",
+    "valid": false
+  },
+  {
+    "case": "any missing",
+    "document": {
+      "nested": [],
+      "object": {}
+    },
+    "type": "Raw",
+    "valid": false
+  },
+  {
+    "case": "object missing",
+    "document": {
+      "any": null,
+      "nested": []
+    },
+    "type": "Raw",
+    "valid": false
+  },
+  {
+    "case": "nested missing",
+    "document": {
+      "any": null,
+      "object": {}
+    },
+    "type": "Raw",
+    "valid": false
+  },
+  {
+    "case": "object, not an object",
+    "document": {
+      "any": null,
+      "nested": [],
+      "object": 1
+    },
+    "type": "Raw",
+    "valid": false
+  },
+  {
+    "case": "object, an array",
+    "document": {
+      "any": null,
+      "nested": [],
+      "object": []
+    },
+    "type": "Raw",
+    "valid": false
+  },
+  {
+    "case": "nested, not an array",
+    "document": {
+      "any": null,
+      "nested": "x",
+      "object": {}
+    },
+    "type": "Raw",
+    "valid": false
+  },
+  {
+    "case": "nested, item, not an array",
+    "document": {
+      "any": null,
+      "nested": [
+        "x"
+      ],
+      "object": {}
+    },
+    "type": "Raw",
+    "valid": false
+  },
+  {
+    "case": "nested, item, item, not an object",
+    "document": {
+      "any": null,
+      "nested": [
+        [
+          1
+        ]
+      ],
+      "object": {}
+    },
+    "type": "Raw",
+    "valid": false
+  },
+  {
+    "case": "nested, item, item, an array",
+    "document": {
+      "any": null,
+      "nested": [
+        [
+          []
+        ]
+      ],
+      "object": {}
+    },
+    "type": "Raw",
+    "valid": false
+  },
+  {
+    "case": "nested, item, item, name missing",
+    "document": {
+      "any": null,
+      "nested": [
+        [
+          {}
+        ]
+      ],
+      "object": {}
+    },
+    "type": "Raw",
+    "valid": false
+  },
+  {
+    "case": "nested, item, item, name, not a string",
+    "document": {
+      "any": null,
+      "nested": [
+        [
+          {
+            "name": 1
+          }
+        ]
+      ],
+      "object": {}
+    },
+    "type": "Raw",
+    "valid": false
+  },
+  {
+    "case": "nested, item, item, note, not a string",
+    "document": {
+      "any": null,
+      "nested": [
+        [
+          {
+            "name": "a",
+            "note": 1
+          }
+        ]
+      ],
+      "object": {}
+    },
+    "type": "Raw",
+    "valid": false
+  },
+  {
+    "case": "nested, item, item, an unknown property",
+    "document": {
+      "any": null,
+      "nested": [
+        [
+          {
+            "name": "a",
+            "zz_unknown": 0
+          }
+        ]
+      ],
+      "object": {}
+    },
+    "type": "Raw",
+    "valid": false
+  },
+  {
+    "case": "minimal",
+    "document": {
+      "firstName": "a"
+    },
+    "type": "Renamed",
+    "valid": true
+  },
+  {
+    "case": "other-key present",
+    "document": {
+      "firstName": "a",
+      "other-key": 0
+    },
+    "type": "Renamed",
+    "valid": true
+  },
+  {
+    "case": "other-key, at the maximum",
+    "document": {
+      "firstName": "a",
+      "other-key": 255
+    },
+    "type": "Renamed",
+    "valid": true
+  },
+  {
+    "case": "flag present",
+    "document": {
+      "firstName": "a",
+      "flag": true
+    },
+    "type": "Renamed",
+    "valid": true
+  },
+  {
+    "case": "not an object",
+    "document": 1,
+    "type": "Renamed",
+    "valid": false
+  },
+  {
+    "case": "an array",
+    "document": [],
+    "type": "Renamed",
+    "valid": false
+  },
+  {
+    "case": "firstName missing",
+    "document": {},
+    "type": "Renamed",
+    "valid": false
+  },
+  {
+    "case": "firstName, not a string",
+    "document": {
+      "firstName": 1
+    },
+    "type": "Renamed",
+    "valid": false
+  },
+  {
+    "case": "other-key, not a number",
+    "document": {
+      "firstName": "a",
+      "other-key": "x"
+    },
+    "type": "Renamed",
+    "valid": false
+  },
+  {
+    "case": "other-key, a fraction",
+    "document": {
+      "firstName": "a",
+      "other-key": 0.5
+    },
+    "type": "Renamed",
+    "valid": false
+  },
+  {
+    "case": "other-key, below the minimum",
+    "document": {
+      "firstName": "a",
+      "other-key": -1
+    },
+    "type": "Renamed",
+    "valid": false
+  },
+  {
+    "case": "other-key, above the maximum",
+    "document": {
+      "firstName": "a",
+      "other-key": 256
+    },
+    "type": "Renamed",
+    "valid": false
+  },
+  {
+    "case": "flag, not a boolean",
+    "document": {
+      "firstName": "a",
+      "flag": "x"
+    },
+    "type": "Renamed",
+    "valid": false
+  },
+  {
+    "case": "an unknown property",
+    "document": {
+      "firstName": "a",
+      "zz_unknown": 0
+    },
+    "type": "Renamed",
+    "valid": false
+  },
+  {
+    "case": "minimal",
+    "document": {
+      "kind": "Plain",
+      "name": "a"
+    },
+    "type": "Wrapper",
+    "valid": true
+  },
+  {
+    "case": "Plain, note present",
+    "document": {
+      "kind": "Plain",
+      "name": "a",
+      "note": "a"
+    },
+    "type": "Wrapper",
+    "valid": true
+  },
+  {
+    "case": "variant Other",
+    "document": {
+      "kind": "Other",
+      "name": "a"
+    },
+    "type": "Wrapper",
+    "valid": true
+  },
+  {
+    "case": "not an object",
+    "document": 1,
+    "type": "Wrapper",
+    "valid": false
+  },
+  {
+    "case": "an unknown kind",
+    "document": {
+      "kind": "~"
+    },
+    "type": "Wrapper",
+    "valid": false
+  },
+  {
+    "case": "a kind that is not a string",
+    "document": {
+      "kind": 1
+    },
+    "type": "Wrapper",
+    "valid": false
+  },
+  {
+    "case": "no kind",
+    "document": {},
+    "type": "Wrapper",
+    "valid": false
+  },
+  {
+    "case": "Plain, an array",
+    "document": [],
+    "type": "Wrapper",
+    "valid": false
+  },
+  {
+    "case": "Plain, kind missing",
+    "document": {
+      "name": "a"
+    },
+    "type": "Wrapper",
+    "valid": false
+  },
+  {
+    "case": "Plain, name missing",
+    "document": {
+      "kind": "Plain"
+    },
+    "type": "Wrapper",
+    "valid": false
+  },
+  {
+    "case": "Plain, kind, a different string",
+    "document": {
+      "kind": "Plain~",
+      "name": "a"
+    },
+    "type": "Wrapper",
+    "valid": false
+  },
+  {
+    "case": "Plain, kind, not a string",
+    "document": {
+      "kind": 1,
+      "name": "a"
+    },
+    "type": "Wrapper",
+    "valid": false
+  },
+  {
+    "case": "Plain, name, not a string",
+    "document": {
+      "kind": "Plain",
+      "name": 1
+    },
+    "type": "Wrapper",
+    "valid": false
+  },
+  {
+    "case": "Plain, note, not a string",
+    "document": {
+      "kind": "Plain",
+      "name": "a",
+      "note": 1
+    },
+    "type": "Wrapper",
+    "valid": false
+  },
+  {
+    "case": "Plain, an unknown property",
+    "document": {
+      "kind": "Plain",
+      "name": "a",
+      "zz_unknown": 0
+    },
+    "type": "Wrapper",
+    "valid": false
+  },
+  {
+    "case": "Other, name missing",
+    "document": {
+      "kind": "Other"
+    },
+    "type": "Wrapper",
+    "valid": false
+  },
+  {
+    "case": "Other, kind, a different string",
+    "document": {
+      "kind": "Other~",
+      "name": "a"
+    },
+    "type": "Wrapper",
+    "valid": false
+  },
+  {
+    "case": "Other, name, not a string",
+    "document": {
+      "kind": "Other",
+      "name": 1
+    },
+    "type": "Wrapper",
+    "valid": false
+  },
+  {
+    "case": "minimal",
+    "document": 0,
+    "type": "Overlap",
+    "valid": true
+  },
+  {
+    "case": "a value no alternative accepts",
+    "document": true,
+    "type": "Overlap",
+    "valid": false
+  },
+  {
+    "case": "minimal",
+    "document": {
+      "a": 0,
+      "b": 0
+    },
+    "type": "Sparse",
+    "valid": true
+  },
+  {
+    "case": "a, at the maximum",
+    "document": {
+      "a": 255,
+      "b": 0
+    },
+    "type": "Sparse",
+    "valid": true
+  },
+  {
+    "case": "b, at the maximum",
+    "document": {
+      "a": 0,
+      "b": 255
+    },
+    "type": "Sparse",
+    "valid": true
+  },
+  {
+    "case": "c present",
+    "document": {
+      "a": 0,
+      "b": 0,
+      "c": 0
+    },
+    "type": "Sparse",
+    "valid": true
+  },
+  {
+    "case": "c, at the maximum",
+    "document": {
+      "a": 0,
+      "b": 0,
+      "c": 255
+    },
+    "type": "Sparse",
+    "valid": true
+  },
+  {
+    "case": "not an object",
+    "document": 1,
+    "type": "Sparse",
+    "valid": false
+  },
+  {
+    "case": "an array",
+    "document": [],
+    "type": "Sparse",
+    "valid": false
+  },
+  {
+    "case": "a, not a number",
+    "document": {
+      "a": "x",
+      "b": 0
+    },
+    "type": "Sparse",
+    "valid": false
+  },
+  {
+    "case": "a, a fraction",
+    "document": {
+      "a": 0.5,
+      "b": 0
+    },
+    "type": "Sparse",
+    "valid": false
+  },
+  {
+    "case": "a, below the minimum",
+    "document": {
+      "a": -1,
+      "b": 0
+    },
+    "type": "Sparse",
+    "valid": false
+  },
+  {
+    "case": "a, above the maximum",
+    "document": {
+      "a": 256,
+      "b": 0
+    },
+    "type": "Sparse",
+    "valid": false
+  },
+  {
+    "case": "b, not a number",
+    "document": {
+      "a": 0,
+      "b": "x"
+    },
+    "type": "Sparse",
+    "valid": false
+  },
+  {
+    "case": "b, a fraction",
+    "document": {
+      "a": 0,
+      "b": 0.5
+    },
+    "type": "Sparse",
+    "valid": false
+  },
+  {
+    "case": "b, below the minimum",
+    "document": {
+      "a": 0,
+      "b": -1
+    },
+    "type": "Sparse",
+    "valid": false
+  },
+  {
+    "case": "b, above the maximum",
+    "document": {
+      "a": 0,
+      "b": 256
+    },
+    "type": "Sparse",
+    "valid": false
+  },
+  {
+    "case": "c, not a number",
+    "document": {
+      "a": 0,
+      "b": 0,
+      "c": "x"
+    },
+    "type": "Sparse",
+    "valid": false
+  },
+  {
+    "case": "c, a fraction",
+    "document": {
+      "a": 0,
+      "b": 0,
+      "c": 0.5
+    },
+    "type": "Sparse",
+    "valid": false
+  },
+  {
+    "case": "c, below the minimum",
+    "document": {
+      "a": 0,
+      "b": 0,
+      "c": -1
+    },
+    "type": "Sparse",
+    "valid": false
+  },
+  {
+    "case": "c, above the maximum",
+    "document": {
+      "a": 0,
+      "b": 0,
+      "c": 256
+    },
+    "type": "Sparse",
+    "valid": false
+  },
+  {
+    "case": "below the minimum property count",
+    "document": {},
+    "type": "Sparse",
+    "valid": false
+  },
+  {
+    "case": "minimal",
+    "document": "ab",
+    "type": "Shaped",
+    "valid": true
+  },
+  {
+    "case": "alternative 1",
+    "document": 1,
+    "type": "Shaped",
+    "valid": true
+  },
+  {
+    "case": "alternative 2",
+    "document": null,
+    "type": "Shaped",
+    "valid": true
+  },
+  {
+    "case": "a value no alternative accepts",
+    "document": true,
+    "type": "Shaped",
+    "valid": false
+  }
 ]

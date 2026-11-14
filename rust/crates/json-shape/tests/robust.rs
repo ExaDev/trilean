@@ -276,3 +276,18 @@ fn unique_items_is_decided_by_canonical_text() {
         many.join(",")
     ))));
 }
+
+#[test]
+fn whole_numbers_serialise_without_a_fraction_up_to_what_i64_holds() {
+    for (number, text) in [
+        (9_007_199_254_740_992.0, "9007199254740992"),
+        (-9_007_199_254_740_993.0, "-9007199254740992"),
+        (100.0, "100"),
+        (0.5, "0.5"),
+    ] {
+        assert_eq!(
+            serde_json::to_string(&Value::Number(number)).expect("JSON"),
+            text
+        );
+    }
+}

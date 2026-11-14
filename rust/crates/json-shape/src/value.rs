@@ -254,7 +254,8 @@ impl Serialize for Value {
             Value::Null => serializer.serialize_unit(),
             Value::Bool(flag) => serializer.serialize_bool(*flag),
             Value::Number(number) => {
-                if number.fract() == 0.0 && number.abs() <= MAX_SAFE_INTEGER {
+                // A whole number is written without a fraction, as `JSON.stringify` writes it, wherever `i64` holds it.
+                if number.fract() == 0.0 && number.abs() < 9.0e18 {
                     serializer.serialize_i64(*number as i64)
                 } else {
                     serializer.serialize_f64(*number)
