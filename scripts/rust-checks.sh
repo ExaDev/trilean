@@ -1,5 +1,5 @@
 #!/bin/sh
-# The Rust checks that run both in CI's rust job and in the pre-push hook, so the two cannot drift: the guards (only scripts/rust.sh runs cargo, the workspace crates take the shared settings), the tests of those guards, formatting, clippy with warnings denied, and the tests. Every cargo invocation is in scripts/rust.sh, against the committed Cargo.lock and the pinned toolchain.
+# The Rust checks that run both in CI's rust job and in the pre-push hook, so the two cannot drift: the guards (only scripts/rust.sh runs cargo, the workspace crates take the shared settings), the tests of those guards, formatting, clippy with warnings denied, the tests, and the constructs the derive must refuse to compile. Every cargo invocation is in scripts/rust.sh, against the committed Cargo.lock and the pinned toolchain.
 set -eu
 
 cd "$(dirname "$0")/.."
@@ -17,3 +17,4 @@ python3 -I scripts/check-workspace-members.py
 sh scripts/rust.sh fmt
 sh scripts/rust.sh clippy
 sh scripts/rust.sh test
+sh scripts/rust.sh compile-fail

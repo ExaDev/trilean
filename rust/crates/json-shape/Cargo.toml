@@ -13,5 +13,9 @@ json-shape-derive.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 
+[dev-dependencies]
+# The derive of serde itself, which the rename_all test compares the shape's keys with.
+serde = { workspace = true, features = ["derive"] }
+
 [lints]
 workspace = true

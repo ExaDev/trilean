@@ -9,6 +9,7 @@
 #   advisories                  cargo-deny's advisories, which change with the advisory database
 #   deny-bans <manifest> <config>        the bans check of another workspace with its own configuration (absolute paths)
 #   deny-bans-json <manifest> <config>   the same, with cargo-deny's diagnostics as JSON lines on stderr
+#   compile-fail                every file in rust/tests/compile-fail/cases must fail to compile with the text its `// expect:` line gives
 #   metadata [manifest]         the workspace members as cargo metadata JSON on stdout
 set -eu
 
@@ -27,6 +28,28 @@ case "$check" in
   advisories) cargo deny --locked check advisories ;;
   deny-bans) cargo deny --locked --manifest-path "$1" --config "$2" check bans ;;
   deny-bans-json) cargo deny --locked --manifest-path "$1" --config "$2" --format json -L info check bans ;;
+  compile-fail)
+    # One build per case, with the case's name as a cfg flag on the final crate only, so the dependencies are built once. A case that compiles, or fails with other text, fails the check.
+    failures=0
+    for case in tests/compile-fail/cases/*.rs; do
+      name=$(basename "$case" .rs)
+      expected=$(sed -n 's|^// expect: ||p' "$case")
+      if [ -z "$expected" ]; then
+        echo "FAIL $name has no // expect: line" >&2
+        failures=$((failures + 1))
+      elif output=$(cargo rustc --locked -p json-shape-compile-fail --lib -- --cfg "compile_fail=\"$name\"" 2>&1); then
+        echo "FAIL $name compiled, and must be refused" >&2
+        failures=$((failures + 1))
+      elif printf '%s\n' "$output" | grep -qF -- "$expected"; then
+        echo "ok   $name is refused"
+      else
+        echo "FAIL $name failed without the expected text: $expected" >&2
+        printf '%s\n' "$output" >&2
+        failures=$((failures + 1))
+      fi
+    done
+    [ "$failures" -eq 0 ]
+    ;;
   metadata)
     if [ "$#" -gt 0 ]; then
       cargo metadata --locked --no-deps --format-version 1 --manifest-path "$1"
@@ -35,7 +58,7 @@ case "$check" in
     fi
     ;;
   *)
-    echo "usage: rust.sh fmt|clippy|test|deny|advisories|deny-bans|deny-bans-json|metadata [arguments]" >&2
+    echo "usage: rust.sh fmt|clippy|test|compile-fail|deny|advisories|deny-bans|deny-bans-json|metadata [arguments]" >&2
     exit 2
     ;;
 esac

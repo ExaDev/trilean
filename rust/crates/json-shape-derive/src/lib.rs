@@ -104,7 +104,8 @@ fn variant_name(name: &str, case: Option<Case>) -> String {
     }
 }
 
-/// The name of a field (written in snake_case) under a `rename_all` rule, as serde writes it.
+/// The name of a field (written in snake_case) under a `rename_all` rule, as serde writes it. `tests/serde_names.rs`
+/// in `json-shape` compares both name functions with serde's own derive.
 fn field_name(name: &str, case: Option<Case>) -> String {
     fn pascal(name: &str) -> String {
         let mut pascal = String::new();
@@ -122,8 +123,8 @@ fn field_name(name: &str, case: Option<Case>) -> String {
         pascal
     }
     match case {
-        None | Some(Case::Snake) => name.to_owned(),
-        Some(Case::Lower) => name.to_ascii_lowercase(),
+        // serde leaves a field name as written under `lowercase` and `snake_case`, since a field is already snake_case.
+        None | Some(Case::Snake | Case::Lower) => name.to_owned(),
         Some(Case::Upper | Case::ScreamingSnake) => name.to_ascii_uppercase(),
         Some(Case::Pascal) => pascal(name),
         Some(Case::Camel) => {
@@ -1632,6 +1633,8 @@ mod tests {
             ("code_unit", Case::ScreamingKebab, "CODE-UNIT"),
             ("code_unit", Case::Upper, "CODE_UNIT"),
             ("code_unit", Case::Lower, "code_unit"),
+            ("Mixed_Case", Case::Lower, "Mixed_Case"),
+            ("Mixed_Case", Case::Snake, "Mixed_Case"),
             ("code_unit", Case::Snake, "code_unit"),
             ("x_1_y", Case::Pascal, "X1Y"),
             ("x_1_y", Case::Camel, "x1Y"),
