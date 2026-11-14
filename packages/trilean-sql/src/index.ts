@@ -12,6 +12,7 @@ export { findUnpushableNodeKind } from "./guard";
 export { compilePredicateNode } from "./compile";
 
 export {
+  InvalidCollectionTableError,
   InvalidColumnError,
   TrileanSqlError,
   UnknownDialectError,

@@ -15,6 +15,7 @@ import {
   UnsupportedNodeError,
 } from "./errors";
 import { findUnpushableNodeKind } from "./guard";
+import { identifierProblem } from "./identifier";
 import {
   renderPostgresPattern,
   renderSqliteGlobPattern,
@@ -25,6 +26,7 @@ import type {
   SqlCollectionBinding,
   SqlColumnBinding,
   SqlCompileOptions,
+  SqlDialect,
   SqlParamType,
 } from "./options";
 import { assertImplementedDialect, DIALECT_CONFIG } from "./options";
@@ -99,17 +101,14 @@ function placeholder(
 function quoteColumn(
   referenceKey: string,
   binding: Readonly<SqlColumnBinding>,
+  dialect: SqlDialect,
 ): string {
-  const segments = binding.column.split(".");
-  if (segments.some((segment) => segment.length === 0)) {
-    throw new InvalidColumnError(
-      referenceKey,
-      binding.column,
-      binding.column.length === 0
-        ? "the name is empty"
-        : "a dot-separated segment is empty",
-    );
+  // `findUnpushableNodeKind` has already refused every such name; this is the drift safety net, the same check from the same function.
+  const problem = identifierProblem("column", binding.column, dialect);
+  if (problem !== undefined) {
+    throw new InvalidColumnError(referenceKey, binding.column, problem);
   }
+  const segments = binding.column.split(".");
 
   return segments
     .map((segment) => `"${segment.replaceAll('"', '""')}"`)
@@ -121,17 +120,16 @@ function quoteColumn(
  *
  * Takes the already-resolved table string rather than the whole `SqlCollectionBinding`, since every call site here has already destructured it -- unlike `quoteColumn`, which reads `binding.column` itself because its own call site still has the whole `SqlColumnBinding` in hand.
  */
-function quoteTable(collectionKey: string, table: string): string {
-  const segments = table.split(".");
-  if (segments.some((segment) => segment.length === 0)) {
-    throw new InvalidCollectionTableError(
-      collectionKey,
-      table,
-      table.length === 0
-        ? "the name is empty"
-        : "a dot-separated segment is empty",
-    );
+function quoteTable(
+  collectionKey: string,
+  table: string,
+  dialect: SqlDialect,
+): string {
+  const problem = identifierProblem("table", table, dialect);
+  if (problem !== undefined) {
+    throw new InvalidCollectionTableError(collectionKey, table, problem);
   }
+  const segments = table.split(".");
 
   return segments
     .map((segment) => `"${segment.replaceAll('"', '""')}"`)
@@ -187,7 +185,11 @@ function compileCollection(
     return refuse(node.kind, layer);
   }
   const binding = context.options.collectionFor(node.collection);
-  const table = quoteTable(node.collection, binding.table);
+  const table = quoteTable(
+    node.collection,
+    binding.table,
+    context.options.dialect,
+  );
   const itemContext: CompileContext = {
     ...context,
     options: { ...context.options, columnFor: binding.columnFor },
@@ -237,7 +239,11 @@ function compileExpression(
       const resolved = bindingOf(context, node);
       if (resolved === undefined) return refuse(node.kind, "expression");
 
-      return quoteColumn(resolved.referenceKey, resolved.binding);
+      return quoteColumn(
+        resolved.referenceKey,
+        resolved.binding,
+        context.options.dialect,
+      );
     }
     case "textLiteral":
     case "numberLiteral":
@@ -311,7 +317,13 @@ function compilePredicate(
       return `(${left} ${COMPARISON_SQL[node.op]} ${right})`;
     }
     case "textCompare": {
-      const left = compileExpression(node.left, context);
+      const subject = compileExpression(node.left, context);
+      // SQLite's GLOB reads its subject only up to the first NUL, so a stored value holding one would match as a shorter text. Such a value is unknown, never a wrong row, and the subject is written once.
+      const left =
+        context.options.dialect === "sqlite" &&
+        (node.op === "portableMatches" || node.op === "portableNotMatches")
+          ? `(SELECT CASE WHEN instr(CAST("v" AS BLOB), x'00') > 0 THEN NULL ELSE "v" END FROM (SELECT ${subject} AS "v"))`
+          : subject;
       const right =
         node.op === "portableMatches" || node.op === "portableNotMatches"
           ? compilePortablePattern(node, context)
@@ -384,7 +396,8 @@ function compilePredicate(
  * Every caller-supplied literal becomes a bind parameter. Nothing but structure, operators, and quoted column identifiers is ever written into the returned `sql`.
  * @throws `UnknownDialectError` if `options.dialect` names a dialect this version does not implement.
  * @throws `UnsupportedNodeError` if any node in the tree is one this compiler will not translate -- see `findUnpushableNodeKind`, which this runs first and which a caller can run itself to choose between pushdown and in-process evaluation without provoking an exception.
- * @throws `InvalidColumnError` if `columnFor` returns a column that cannot be rendered as an identifier.
+ * @throws `InvalidColumnError` if `columnFor` returns a column that cannot be rendered as an identifier: an empty name or segment, or a character a quoted identifier cannot carry.
+ * @throws `InvalidCollectionTableError` if `collectionFor` returns a table that cannot be rendered as an identifier, for the same reasons.
  */
 export function compilePredicateNode(
   node: PredicateNode,
@@ -436,7 +449,24 @@ export function compilePredicateNode(
   };
 
   const unpushable = findUnpushableNodeKind(node, memoised);
-  if (unpushable !== undefined) throw new UnsupportedNodeError(unpushable);
+  if (unpushable !== undefined) {
+    if (unpushable.identifier?.role === "column") {
+      throw new InvalidColumnError(
+        unpushable.identifier.key,
+        memoised.columnFor(unpushable.identifier.key).column,
+        unpushable.identifier.problem,
+      );
+    }
+    if (unpushable.identifier?.role === "table") {
+      const table = memoised.collectionFor?.(unpushable.identifier.key).table;
+      throw new InvalidCollectionTableError(
+        unpushable.identifier.key,
+        table ?? "",
+        unpushable.identifier.problem,
+      );
+    }
+    throw new UnsupportedNodeError(unpushable);
+  }
 
   const dialect = DIALECT_CONFIG[options.dialect];
   const context: CompileContext = {
