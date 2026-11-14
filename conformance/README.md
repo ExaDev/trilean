@@ -131,7 +131,7 @@ The cases are the specification of the package's behaviour: the reason codes, th
 | `call` | 181 |
 | `cli` | 52 |
 | `document` | 36 |
-| `evaluate` | 746 |
+| `evaluate` | 758 |
 | `inputs` | 13 |
 | `number-format` | 40 |
 | `regex-match` | 120 |
@@ -229,7 +229,7 @@ A resolution is `{ "found": true, "value": <computed value> }`, `{ "found": fals
 
 #### The evaluation budget
 
-A call may visit at most 10000 nodes and may nest at most 500 levels deep unless `evaluator.maxNodes` or `evaluator.maxNestingDepth` says otherwise (a positive integer). The count is of visits, not of the size of the tree: every node costs one visit each time it is evaluated, so a reduce fold costs one visit for itself, one for its initial expression and, for each item of its collection, one for each node of its combine expression. A tree that visits exactly the limit evaluates; one visit more is indeterminate with the code `domain-error` and the message `evaluation exceeded the maximum of N nodes visited in a single call (resource exhausted)`. The depth of a node is the number of nodes on the path from the root to it, a referenced tree continuing the path of the `treeReference` that named it, and a path of exactly the limit evaluates while one node longer is indeterminate with `evaluation nesting depth exceeds the maximum of N (resource exhausted)`. A chain of `treeReference` nodes is limited separately, to 100 trees. The cases in `trilean/evaluate/evaluator.integration.json` pin each of these at the boundary, with the defaults and with explicit limits, and `trilean/cli/cli-run.json` pins the same for the command.
+A call may visit at most 10000 nodes and may nest at most 500 levels deep unless `evaluator.maxNodes` or `evaluator.maxNestingDepth` says otherwise (a positive integer). The count is of visits, not of the size of the tree: every node costs one visit each time it is evaluated, so a reduce fold costs one visit for itself, one for its initial expression and, for each item of its collection, one for each node of its combine expression. A tree that visits exactly the limit evaluates; one visit more is indeterminate with the code `domain-error` and the message `evaluation exceeded the maximum of N nodes visited in a single call (resource exhausted)`. The depth of a node is the number of nodes on the path from the root to it, a referenced tree continuing the path of the `treeReference` that named it, and a path of exactly the limit evaluates while one node longer is indeterminate with `evaluation nesting depth exceeds the maximum of N (resource exhausted)`. A chain of `treeReference` nodes is limited separately, to 100 trees. An exhausted limit of any of the three, reached inside the operand of an `exists`, is the result of the `exists` as well, with the limit's own code and message: it is never a definite `true`. The cases in `trilean/evaluate/evaluator.integration.json` pin each of these at the boundary, with the defaults and with explicit limits, `trilean/evaluate/exists-budget.json` pins the three inside an `exists` (one under, at and one over, under every evaluator), and `trilean/cli/cli-run.json` pins the same for the command.
 
 #### Instants and durations
 

@@ -8,6 +8,8 @@ import {
 import {
   type EvaluationBudget,
   MAX_TREE_REFERENCE_DEPTH,
+  isResourceExhaustion,
+  resourceExhausted,
 } from "./evaluator-budget";
 import {
   firstFilterIndeterminate,
@@ -293,9 +295,12 @@ export function* evaluatePredicateInternal(
         budget,
         nestingDepth + 1,
       );
-      // The data point resolved to *something* unless it was flatly not-found; a resolved-but-unusable value (wrong-type/domain-error) still counts as existing. A not-yet-known operand is neither: answering either way would turn a value that may still arrive into a definite answer that a later evaluation could contradict, so the question stays open and `exists` is indeterminate with that same reason. This is also what keeps `coalesce` from falling through to its next candidate before the earlier one is known.
+      // The data point resolved to *something* unless it was flatly not-found; a resolved-but-unusable value (wrong-type/domain-error) still counts as existing. A not-yet-known operand is neither: answering either way would turn a value that may still arrive into a definite answer that a later evaluation could contradict, so the question stays open and `exists` is indeterminate with that same reason. This is also what keeps `coalesce` from falling through to its next candidate before the earlier one is known. An exhausted resource limit is likewise no statement about the data point: the operand was not evaluated to its end, so the limit's own indeterminate result propagates.
       if (operandResult.status === "indeterminate") {
-        if (operandResult.reason.code === "not-yet-known") {
+        if (
+          operandResult.reason.code === "not-yet-known" ||
+          isResourceExhaustion(operandResult.reason)
+        ) {
           return operandResult;
         }
         if (operandResult.reason.code === "not-found") {
@@ -359,8 +364,7 @@ export function* evaluatePredicateInternal(
         return indeterminate("domain-error", "circular treeReference detected");
       }
       if (treeReferenceDepth >= MAX_TREE_REFERENCE_DEPTH) {
-        return indeterminate(
-          "domain-error",
+        return resourceExhausted(
           `treeReference chain exceeds the maximum depth of ${MAX_TREE_REFERENCE_DEPTH.toString()}`,
         );
       }
@@ -785,8 +789,7 @@ export function* evaluateValueInternal(
         return indeterminate("domain-error", "circular treeReference detected");
       }
       if (treeReferenceDepth >= MAX_TREE_REFERENCE_DEPTH) {
-        return indeterminate(
-          "domain-error",
+        return resourceExhausted(
           `treeReference chain exceeds the maximum depth of ${MAX_TREE_REFERENCE_DEPTH.toString()}`,
         );
       }

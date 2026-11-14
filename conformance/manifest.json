@@ -137,6 +137,10 @@
       "cases": 16,
       "skip": []
     },
+    "trilean/evaluate/exists-budget.json": {
+      "cases": 12,
+      "skip": []
+    },
     "trilean/evaluate/function-registry.json": {
       "cases": 3,
       "skip": []

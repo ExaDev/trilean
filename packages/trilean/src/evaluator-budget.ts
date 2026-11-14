@@ -1,5 +1,23 @@
-import type { Evaluation } from "./evaluation";
+import type { Evaluation, IndeterminateReason } from "./evaluation";
 import { indeterminate } from "./evaluation";
+
+/** The reason objects that report an exhausted resource limit (node budget, nesting depth, treeReference chain depth). Every such reason has the code `domain-error`, so the code alone cannot tell a limit from any other domain error; membership here is what `exists` reads to let a limit propagate instead of counting as "the value resolved". Identity is preserved by every node that forwards an operand's reason, so a reason keeps its membership as it propagates. */
+const exhaustedReasons = new WeakSet<IndeterminateReason>();
+
+/** The indeterminate result for an exhausted resource limit: code `domain-error` with the limit's own message, recorded so `isResourceExhaustion` recognises it. */
+export function resourceExhausted(message: string): Evaluation<never> {
+  const result = indeterminate("domain-error", message);
+  if (result.status === "indeterminate") exhaustedReasons.add(result.reason);
+
+  return result;
+}
+
+/** Whether `reason` reports an exhausted resource limit, as opposed to any other indeterminacy. */
+export function isResourceExhaustion(
+  reason: Readonly<IndeterminateReason>,
+): boolean {
+  return exhaustedReasons.has(reason);
+}
 
 /** A defense-in-depth guard against a long acyclic `treeReference` chain exhausting the call stack -- distinct from, and layered on top of, the cycle detector in evaluator.ts (`visitedTreeKeys`), which catches an actual repeat immediately and more precisely. */
 export const MAX_TREE_REFERENCE_DEPTH = 100;
@@ -32,15 +50,13 @@ export function createEvaluationBudget(
     checkNode(nestingDepth) {
       nodesVisited += 1;
       if (nodesVisited > maxNodes) {
-        return indeterminate(
-          "domain-error",
+        return resourceExhausted(
           `evaluation exceeded the maximum of ${maxNodes.toString()} nodes visited in a single call (resource exhausted)`,
         );
       }
       // Distinct from `MAX_TREE_REFERENCE_DEPTH`'s own chain-depth counter: `nestingDepth` advances on every recursive descent into a child predicate/expression node, not only at `treeReference` resolution.
       if (nestingDepth >= maxNestingDepth) {
-        return indeterminate(
-          "domain-error",
+        return resourceExhausted(
           `evaluation nesting depth exceeds the maximum of ${maxNestingDepth.toString()} (resource exhausted)`,
         );
       }
