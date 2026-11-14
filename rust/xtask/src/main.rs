@@ -161,6 +161,13 @@ fn dist_paths(manifest: &str) -> BTreeSet<String> {
 fn check_package_manifest(path: &Path, written: &generate::Written) -> Result<(), String> {
     let manifest =
         fs::read_to_string(path).map_err(|error| format!("{}: {error}", path.display()))?;
+    // `sideEffects` is a promise to every bundler about which modules may be dropped when nothing they export is used. The entry point has effects (it starts the module and registers the error classes), so a list that leaves it out, which is the mistake that is easy to make, makes a bundler drop them and the first call fail. No list is written, and a false one cannot be added.
+    if manifest.contains("\"sideEffects\"") {
+        return Err(format!(
+            "{} has a sideEffects field; the entry point has effects, and a bundler that is told otherwise drops them",
+            path.display()
+        ));
+    }
     let named = dist_paths(&manifest);
     let wanted: BTreeSet<String> = written
         .entry_points
@@ -222,6 +229,12 @@ mod tests {
         fs::write(
             &manifest,
             r#"{ "a": "./dist/index.js", "b": "./dist/init.node.js", "c": "./dist/other.js" }"#,
+        )
+        .expect("write");
+        assert!(check_package_manifest(&manifest, &written).is_err());
+        fs::write(
+            &manifest,
+            r#"{ "sideEffects": false, "a": "./dist/index.js", "b": "./dist/init.node.js" }"#,
         )
         .expect("write");
         assert!(check_package_manifest(&manifest, &written).is_err());

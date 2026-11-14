@@ -2,6 +2,7 @@ import { exadevConfig } from "@exadev/eslint-config";
 import { defineConfig } from "eslint/config";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 import globals from "globals";
+import tseslint from "typescript-eslint";
 
 /**
  * Lints the workspace root's own files -- its TypeScript tooling configs and its prose and data -- and nothing else.
@@ -41,6 +42,23 @@ export default defineConfig(
         { fixStyle: "inline-type-imports" },
       ],
     },
+  },
+  {
+    // The conformance runners are plain JavaScript, which no TypeScript program includes, so they are linted without type information: typescript-eslint's rules that need it are off, and so are this repository's own that need it (the ones that throw when a file has none), and every other rule applies.
+    files: ["conformance/runner/**/*.mjs"],
+    extends: [tseslint.configs.disableTypeChecked],
+    languageOptions: { globals: { ...globals.node, ...globals.browser } },
+    rules: Object.fromEntries(
+      [
+        "exadev/no-array-isarray-mutation",
+        "exadev/no-enum-number-widening",
+        "exadev/no-enum-reverse-lookup-widening",
+        "exadev/no-map-instanceof-mutation",
+        "exadev/no-set-instanceof-mutation",
+        "exadev/prefer-numeric-sort-compare",
+        "exadev/prefer-readonly-object-param",
+      ].map((rule) => [rule, "off"]),
+    ),
   },
   eslintPluginPrettierRecommended,
 );
