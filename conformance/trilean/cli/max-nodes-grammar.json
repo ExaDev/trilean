@@ -1,0 +1,472 @@
+{
+  "cases": [
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--max-nodes=05"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderr": "--max-nodes must be a positive safe integer, not \"05\"\n",
+        "stdout": ""
+      },
+      "files": {
+        "t.json": "{\"kind\":\"numberLiteral\",\"value\":1}"
+      },
+      "from": "recorded: trilean cli/run.ts (the command's own check of the value of --max-nodes)",
+      "id": "cli-max-nodes.the-max-nodes-value-the-joined-form-rejects-05.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--max-nodes=0"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderr": "--max-nodes must be a positive safe integer, not \"0\"\n",
+        "stdout": ""
+      },
+      "files": {
+        "t.json": "{\"kind\":\"numberLiteral\",\"value\":1}"
+      },
+      "from": "recorded: trilean cli/run.ts (the command's own check of the value of --max-nodes)",
+      "id": "cli-max-nodes.the-max-nodes-value-the-joined-form-rejects-0.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--max-nodes="
+      ],
+      "expect": {
+        "exit": 2,
+        "stderr": "--max-nodes must be a positive safe integer, not \"\"\n",
+        "stdout": ""
+      },
+      "files": {
+        "t.json": "{\"kind\":\"numberLiteral\",\"value\":1}"
+      },
+      "from": "recorded: trilean cli/run.ts (the command's own check of the value of --max-nodes)",
+      "id": "cli-max-nodes.the-max-nodes-value-the-joined-form-rejects.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--max-nodes=9007199254740992"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderr": "--max-nodes must be a positive safe integer, not \"9007199254740992\"\n",
+        "stdout": ""
+      },
+      "files": {
+        "t.json": "{\"kind\":\"numberLiteral\",\"value\":1}"
+      },
+      "from": "recorded: trilean cli/run.ts (the command's own check of the value of --max-nodes)",
+      "id": "cli-max-nodes.the-max-nodes-value-the-joined-form-rejects-9007199254740992.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--max-nodes=9007199254740993"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderr": "--max-nodes must be a positive safe integer, not \"9007199254740993\"\n",
+        "stdout": ""
+      },
+      "files": {
+        "t.json": "{\"kind\":\"numberLiteral\",\"value\":1}"
+      },
+      "from": "recorded: trilean cli/run.ts (the command's own check of the value of --max-nodes)",
+      "id": "cli-max-nodes.the-max-nodes-value-the-joined-form-rejects-9007199254740993.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--max-nodes=00"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderr": "--max-nodes must be a positive safe integer, not \"00\"\n",
+        "stdout": ""
+      },
+      "files": {
+        "t.json": "{\"kind\":\"numberLiteral\",\"value\":1}"
+      },
+      "from": "recorded: trilean cli/run.ts (the command's own check of the value of --max-nodes)",
+      "id": "cli-max-nodes.the-max-nodes-value-the-joined-form-rejects-00.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--max-nodes=1_0"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderr": "--max-nodes must be a positive safe integer, not \"1_0\"\n",
+        "stdout": ""
+      },
+      "files": {
+        "t.json": "{\"kind\":\"numberLiteral\",\"value\":1}"
+      },
+      "from": "recorded: trilean cli/run.ts (the command's own check of the value of --max-nodes)",
+      "id": "cli-max-nodes.the-max-nodes-value-the-joined-form-rejects-1-0.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--max-nodes=0x10"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderr": "--max-nodes must be a positive safe integer, not \"0x10\"\n",
+        "stdout": ""
+      },
+      "files": {
+        "t.json": "{\"kind\":\"numberLiteral\",\"value\":1}"
+      },
+      "from": "recorded: trilean cli/run.ts (the command's own check of the value of --max-nodes)",
+      "id": "cli-max-nodes.the-max-nodes-value-the-joined-form-rejects-0x10.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--max-nodes=١٢"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderr": "--max-nodes must be a positive safe integer, not \"١٢\"\n",
+        "stdout": ""
+      },
+      "files": {
+        "t.json": "{\"kind\":\"numberLiteral\",\"value\":1}"
+      },
+      "from": "recorded: trilean cli/run.ts (the command's own check of the value of --max-nodes)",
+      "id": "cli-max-nodes.the-max-nodes-value-the-joined-form-rejects.2",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--max-nodes=1"
+      ],
+      "expect": {
+        "exit": 0,
+        "stdoutJson": {
+          "status": "definite",
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        }
+      },
+      "files": {
+        "t.json": "{\"kind\":\"numberLiteral\",\"value\":1}"
+      },
+      "from": "recorded: trilean cli/run.ts (the command's own check of the value of --max-nodes)",
+      "id": "cli-max-nodes.the-max-nodes-value-the-joined-form-accepts-1.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--max-nodes=9007199254740991"
+      ],
+      "expect": {
+        "exit": 0,
+        "stdoutJson": {
+          "status": "definite",
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        }
+      },
+      "files": {
+        "t.json": "{\"kind\":\"numberLiteral\",\"value\":1}"
+      },
+      "from": "recorded: trilean cli/run.ts (the command's own check of the value of --max-nodes)",
+      "id": "cli-max-nodes.the-max-nodes-value-the-joined-form-accepts-9007199254740991.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--max-nodes",
+        "05"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderr": "--max-nodes must be a positive safe integer, not \"05\"\n",
+        "stdout": ""
+      },
+      "files": {
+        "t.json": "{\"kind\":\"numberLiteral\",\"value\":1}"
+      },
+      "from": "recorded: trilean cli/run.ts (the command's own check of the value of --max-nodes)",
+      "id": "cli-max-nodes.the-max-nodes-value-the-separate-form-rejects-05.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--max-nodes",
+        "0"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderr": "--max-nodes must be a positive safe integer, not \"0\"\n",
+        "stdout": ""
+      },
+      "files": {
+        "t.json": "{\"kind\":\"numberLiteral\",\"value\":1}"
+      },
+      "from": "recorded: trilean cli/run.ts (the command's own check of the value of --max-nodes)",
+      "id": "cli-max-nodes.the-max-nodes-value-the-separate-form-rejects-0.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--max-nodes",
+        ""
+      ],
+      "expect": {
+        "exit": 2,
+        "stderr": "--max-nodes must be a positive safe integer, not \"\"\n",
+        "stdout": ""
+      },
+      "files": {
+        "t.json": "{\"kind\":\"numberLiteral\",\"value\":1}"
+      },
+      "from": "recorded: trilean cli/run.ts (the command's own check of the value of --max-nodes)",
+      "id": "cli-max-nodes.the-max-nodes-value-the-separate-form-rejects.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--max-nodes",
+        "9007199254740992"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderr": "--max-nodes must be a positive safe integer, not \"9007199254740992\"\n",
+        "stdout": ""
+      },
+      "files": {
+        "t.json": "{\"kind\":\"numberLiteral\",\"value\":1}"
+      },
+      "from": "recorded: trilean cli/run.ts (the command's own check of the value of --max-nodes)",
+      "id": "cli-max-nodes.the-max-nodes-value-the-separate-form-rejects-9007199254740992.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--max-nodes",
+        "9007199254740993"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderr": "--max-nodes must be a positive safe integer, not \"9007199254740993\"\n",
+        "stdout": ""
+      },
+      "files": {
+        "t.json": "{\"kind\":\"numberLiteral\",\"value\":1}"
+      },
+      "from": "recorded: trilean cli/run.ts (the command's own check of the value of --max-nodes)",
+      "id": "cli-max-nodes.the-max-nodes-value-the-separate-form-rejects-9007199254740993.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--max-nodes",
+        "00"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderr": "--max-nodes must be a positive safe integer, not \"00\"\n",
+        "stdout": ""
+      },
+      "files": {
+        "t.json": "{\"kind\":\"numberLiteral\",\"value\":1}"
+      },
+      "from": "recorded: trilean cli/run.ts (the command's own check of the value of --max-nodes)",
+      "id": "cli-max-nodes.the-max-nodes-value-the-separate-form-rejects-00.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--max-nodes",
+        "1_0"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderr": "--max-nodes must be a positive safe integer, not \"1_0\"\n",
+        "stdout": ""
+      },
+      "files": {
+        "t.json": "{\"kind\":\"numberLiteral\",\"value\":1}"
+      },
+      "from": "recorded: trilean cli/run.ts (the command's own check of the value of --max-nodes)",
+      "id": "cli-max-nodes.the-max-nodes-value-the-separate-form-rejects-1-0.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--max-nodes",
+        "0x10"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderr": "--max-nodes must be a positive safe integer, not \"0x10\"\n",
+        "stdout": ""
+      },
+      "files": {
+        "t.json": "{\"kind\":\"numberLiteral\",\"value\":1}"
+      },
+      "from": "recorded: trilean cli/run.ts (the command's own check of the value of --max-nodes)",
+      "id": "cli-max-nodes.the-max-nodes-value-the-separate-form-rejects-0x10.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--max-nodes",
+        "١٢"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderr": "--max-nodes must be a positive safe integer, not \"١٢\"\n",
+        "stdout": ""
+      },
+      "files": {
+        "t.json": "{\"kind\":\"numberLiteral\",\"value\":1}"
+      },
+      "from": "recorded: trilean cli/run.ts (the command's own check of the value of --max-nodes)",
+      "id": "cli-max-nodes.the-max-nodes-value-the-separate-form-rejects.2",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--max-nodes",
+        "1"
+      ],
+      "expect": {
+        "exit": 0,
+        "stdoutJson": {
+          "status": "definite",
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        }
+      },
+      "files": {
+        "t.json": "{\"kind\":\"numberLiteral\",\"value\":1}"
+      },
+      "from": "recorded: trilean cli/run.ts (the command's own check of the value of --max-nodes)",
+      "id": "cli-max-nodes.the-max-nodes-value-the-separate-form-accepts-1.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--max-nodes",
+        "9007199254740991"
+      ],
+      "expect": {
+        "exit": 0,
+        "stdoutJson": {
+          "status": "definite",
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        }
+      },
+      "files": {
+        "t.json": "{\"kind\":\"numberLiteral\",\"value\":1}"
+      },
+      "from": "recorded: trilean cli/run.ts (the command's own check of the value of --max-nodes)",
+      "id": "cli-max-nodes.the-max-nodes-value-the-separate-form-accepts-9007199254740991.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--max-depth=5"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderrIncludes": [
+          "max-depth"
+        ],
+        "stdout": ""
+      },
+      "files": {
+        "t.json": "{\"kind\":\"numberLiteral\",\"value\":1}"
+      },
+      "from": "recorded: trilean cli/run.ts (the command has no option for the nesting depth)",
+      "id": "cli-max-nodes.the-command-s-options-the-joined-form-refuses-max-depth-which-is-not-an-option.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--max-depth",
+        "5"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderrIncludes": [
+          "max-depth"
+        ],
+        "stdout": ""
+      },
+      "files": {
+        "t.json": "{\"kind\":\"numberLiteral\",\"value\":1}"
+      },
+      "from": "recorded: trilean cli/run.ts (the command has no option for the nesting depth)",
+      "id": "cli-max-nodes.the-command-s-options-the-separate-form-refuses-max-depth-which-is-not-an-option.1",
+      "kind": "cli"
+    }
+  ]
+}

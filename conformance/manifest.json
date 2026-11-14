@@ -41,6 +41,10 @@
       "cases": 52,
       "skip": []
     },
+    "trilean/cli/max-nodes-grammar.json": {
+      "cases": 24,
+      "skip": []
+    },
     "trilean/document/evaluate-document.collections.json": {
       "cases": 10,
       "skip": []

@@ -129,7 +129,7 @@ The cases are the specification of the package's behaviour: the reason codes, th
 | --- | ---: |
 | `build` | 88 |
 | `call` | 181 |
-| `cli` | 52 |
+| `cli` | 76 |
 | `document` | 36 |
 | `evaluate` | 758 |
 | `inputs` | 13 |
@@ -141,7 +141,7 @@ The cases are the specification of the package's behaviour: the reason codes, th
 
 Reason codes an expectation names: `domain-error`, `not-found`, `not-yet-known`, `wrong-type`.
 
-Command flags the cases pass: `-`, `--as`, `--help`, `--inputs`, `--max-nodes`, `--nope`, `-h`.
+Command flags the cases pass: `-`, `--as`, `--help`, `--inputs`, `--max-depth`, `--max-nodes`, `--nope`, `-h`.
 
 Exit codes the cases expect of the command: `0`, `1`, `2`.
 
@@ -201,7 +201,7 @@ A document is a tree and its inputs, evaluated with the package's built-in funct
 { "id": "...", "from": "...", "kind": "cli", "args": ["evaluate", "tree.json"], "files": { "tree.json": "{...}" }, "stdin": "...", "expect": { "exit": 0, "stdoutJson": { ... } } }
 ```
 
-The command is `evaluate <tree.json>` with the options `--inputs <file>` (a JSON object, read as the inputs of a document), `--as predicate|expression` and `--max-nodes <n>` (a positive integer written in plain digits, no sign, no exponent and no space, at most 2^53-1, given as `--max-nodes N` or `--max-nodes=N`), `--help` (`-h`) and `--version` (`-v`). A path of `-` reads standard input. It prints the evaluation as JSON on standard output and exits `0` for a definite result and `1` for an indeterminate one; it prints nothing on standard output and exits `2`, with the problem on standard error, for bad usage, an unreadable or invalid file, a rejected document or a collection the inputs do not hold. The command is run against an in-memory set of files, `files` (name to text), and `stdin`; a path that is in neither cannot be read. The text of `files` is read as written by a parser that reads a number past the double range as an infinity (`1e999` is infinite), which a standard JSON parser may refuse and the implementation's command must not. `expect` gives the exit status and what the command printed: `stdout` or `stderr` as exact text (a command that exits with `2` prints nothing on standard output, and a case says so), `stdoutJson`, the JSON printed, `stderrIncludes`, fragments standard error contains in order, and `stderrStartsWith` and `stdoutStartsWith`.
+The command is `evaluate <tree.json>` with the options `--inputs <file>` (a JSON object, read as the inputs of a document), `--as predicate|expression` and `--max-nodes <n>` (a positive integer written in plain digits, no sign, no exponent and no space, at most 2^53-1, given as `--max-nodes N` or `--max-nodes=N`; the digits are `0` to `9` only and the first is not `0`, so `0`, `00`, `05`, `1_0`, `0x10`, an empty value and a value past 2^53-1 are all refused, in both forms, with the message `--max-nodes must be a positive safe integer, not "<value as written>"` and exit `2`; `trilean/cli/max-nodes-grammar.json` pins each. There is no option for the nesting depth: the command always evaluates with the default depth limit, and an option it does not know, `--max-depth` included, is bad usage with exit `2`), `--help` (`-h`) and `--version` (`-v`). A path of `-` reads standard input. It prints the evaluation as JSON on standard output and exits `0` for a definite result and `1` for an indeterminate one; it prints nothing on standard output and exits `2`, with the problem on standard error, for bad usage, an unreadable or invalid file, a rejected document or a collection the inputs do not hold. The command is run against an in-memory set of files, `files` (name to text), and `stdin`; a path that is in neither cannot be read. The text of `files` is read as written by a parser that reads a number past the double range as an infinity (`1e999` is infinite), which a standard JSON parser may refuse and the implementation's command must not. `expect` gives the exit status and what the command printed: `stdout` or `stderr` as exact text (a command that exits with `2` prints nothing on standard output, and a case says so), `stdoutJson`, the JSON printed, `stderrIncludes`, fragments standard error contains in order, and `stderrStartsWith` and `stdoutStartsWith`.
 
 #### evaluate
 
