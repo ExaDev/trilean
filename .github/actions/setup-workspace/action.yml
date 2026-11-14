@@ -16,6 +16,9 @@ inputs:
 runs:
   using: composite
   steps:
+    # Every job that builds the workspace builds trilean-regex from Rust first, since the packages that depend on it resolve it through its build.
+    - uses: ./.github/actions/setup-rust-wasm
+
     - uses: pnpm/action-setup@v6
 
     - uses: actions/setup-node@v7
