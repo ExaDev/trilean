@@ -1,3 +1,14 @@
+## [1.13.12](https://github.com/ExaDev/trilean/compare/trilean%401.13.11...trilean%401.13.12) (2026-11-14)
+
+### Tests
+
+* check key order, list skips per implementation and count what runs ([8009d18](https://github.com/ExaDev/trilean/commit/8009d1863e17165834c52d35d9522c1645ccddce))
+
+
+### Dependencies
+
+- Updated trilean-regex to 1.0.24
+
 ## [1.13.11](https://github.com/ExaDev/trilean/compare/trilean%401.13.10...trilean%401.13.11) (2026-11-14)
 
 ### Bug Fixes
