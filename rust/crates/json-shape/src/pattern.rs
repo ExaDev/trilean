@@ -1,14 +1,13 @@
 //! The regular expressions a `pattern` constraint may use: the subset of ECMAScript patterns whose meaning is the
-//! same in JSON Schema validators, so the validator here and one written for the emitted schema agree. A pattern is
-//! unanchored unless it says `^` and `$`, and is matched over UTF-16 code units, as ECMAScript does without the `u`
-//! flag.
+//! same in every JSON Schema validator, so the validator here and one written for the emitted schema agree. A pattern
+//! is unanchored unless it says `^` and `$`, and is matched over Unicode scalar values, as ECMAScript does with the
+//! `u` flag, which is how Ajv compiles a schema's patterns.
 //!
-//! Supported: literal characters of the Basic Multilingual Plane, `.` (any code unit except a line terminator),
-//! escaped punctuation (`\.`, `\\`, `\/` and the other syntax characters), classes with ranges and negation
-//! (`[a-z0-9._-]`, `[^/]`), groups (`(...)` and `(?:...)`), alternation, the greedy quantifiers `*`, `+` and `?`, and
-//! the anchors `^` and `$`. Anything else (counted repetition, lazy quantifiers, `\d`-style classes, lookaround,
-//! characters outside the Basic Multilingual Plane) is refused, so a pattern that would mean something else in
-//! another engine does not compile.
+//! Supported: literal characters, `.` (any character except a line terminator), escaped punctuation (`\.`, `\\`,
+//! `\/` and the other syntax characters, and `\-` inside a class), classes with ranges and negation (`[a-z0-9._-]`,
+//! `[^/]`), groups (`(...)` and `(?:...)`), alternation, the greedy quantifiers `*`, `+` and `?`, and the anchors `^`
+//! and `$`. Anything else (counted repetition, lazy quantifiers, `\d`-style classes, lookaround) is refused, so a
+//! pattern that would mean something else in another engine does not compile.
 
 use std::fmt;
 
@@ -33,11 +32,11 @@ impl std::error::Error for PatternError {}
 
 #[derive(Clone, Debug)]
 enum Atom {
-    Unit(u16),
-    AnyUnit,
+    Char(char),
+    AnyChar,
     Class {
         negated: bool,
-        ranges: Vec<(u16, u16)>,
+        ranges: Vec<(char, char)>,
     },
     Group(Vec<Vec<Item>>),
     Start,
@@ -59,7 +58,7 @@ pub struct Pattern {
 
 struct Parser<'a> {
     pattern: &'a str,
-    units: Vec<u16>,
+    chars: Vec<char>,
     position: usize,
 }
 
@@ -67,16 +66,16 @@ impl Parser<'_> {
     fn fail<T>(&self, reason: &str) -> Result<T, PatternError> {
         Err(PatternError {
             pattern: self.pattern.to_owned(),
-            reason: format!("{reason} (at code unit {})", self.position),
+            reason: format!("{reason} (at character {})", self.position),
         })
     }
 
-    fn peek(&self) -> Option<u16> {
-        self.units.get(self.position).copied()
+    fn peek(&self) -> Option<char> {
+        self.chars.get(self.position).copied()
     }
 
-    fn eat(&mut self, unit: char) -> bool {
-        if self.peek() == Some(unit as u16) {
+    fn eat(&mut self, expected: char) -> bool {
+        if self.peek() == Some(expected) {
             self.position += 1;
             true
         } else {
@@ -89,7 +88,7 @@ impl Parser<'_> {
         while self.eat('|') {
             alternatives.push(self.sequence()?);
         }
-        if nested && self.peek() != Some(')' as u16) {
+        if nested && self.peek() != Some(')') {
             return self.fail("a group is not closed");
         }
         Ok(alternatives)
@@ -97,8 +96,8 @@ impl Parser<'_> {
 
     fn sequence(&mut self) -> Result<Vec<Item>, PatternError> {
         let mut items = Vec::new();
-        while let Some(unit) = self.peek() {
-            if unit == '|' as u16 || unit == ')' as u16 {
+        while let Some(next) = self.peek() {
+            if next == '|' || next == ')' {
                 break;
             }
             let atom = self.atom()?;
@@ -111,8 +110,7 @@ impl Parser<'_> {
             } else {
                 (1, Some(1))
             };
-            if matches!(self.peek(), Some(next) if next == '*' as u16 || next == '+' as u16 || next == '?' as u16 || next == '{' as u16)
-            {
+            if matches!(self.peek(), Some('*' | '+' | '?' | '{')) {
                 return self.fail("a second quantifier, a lazy quantifier and counted repetition are not supported");
             }
             if matches!(atom, Atom::Start | Atom::End) && (min, max) != (1, Some(1)) {
@@ -123,31 +121,32 @@ impl Parser<'_> {
         Ok(items)
     }
 
-    fn escaped(&mut self) -> Result<u16, PatternError> {
-        let Some(unit) = self.peek() else {
+    /// The character an escape after a backslash stands for: punctuation only, and `-` only inside a class, as the
+    /// `u` flag allows.
+    fn escaped(&mut self, in_class: bool) -> Result<char, PatternError> {
+        let Some(escaped) = self.peek() else {
             return self.fail("a pattern ends with a backslash");
         };
         self.position += 1;
-        match char::from_u32(u32::from(unit)) {
-            Some(
-                '^' | '$' | '\\' | '.' | '*' | '+' | '?' | '(' | ')' | '[' | ']' | '{' | '}' | '|'
-                | '/' | '-',
-            ) => Ok(unit),
+        match escaped {
+            '^' | '$' | '\\' | '.' | '*' | '+' | '?' | '(' | ')' | '[' | ']' | '{' | '}' | '|'
+            | '/' => Ok(escaped),
+            '-' if in_class => Ok(escaped),
             _ => self.fail("only escaped punctuation is supported"),
         }
     }
 
     fn atom(&mut self) -> Result<Atom, PatternError> {
-        let Some(unit) = self.peek() else {
+        let Some(next) = self.peek() else {
             return self.fail("a pattern ends where an atom is expected");
         };
         self.position += 1;
-        match char::from_u32(u32::from(unit)) {
-            Some('.') => Ok(Atom::AnyUnit),
-            Some('^') => Ok(Atom::Start),
-            Some('$') => Ok(Atom::End),
-            Some('\\') => self.escaped().map(Atom::Unit),
-            Some('(') => {
+        match next {
+            '.' => Ok(Atom::AnyChar),
+            '^' => Ok(Atom::Start),
+            '$' => Ok(Atom::End),
+            '\\' => self.escaped(false).map(Atom::Char),
+            '(' => {
                 if self.eat('?') && !self.eat(':') {
                     return self.fail("only the (?: group form is supported");
                 }
@@ -155,27 +154,23 @@ impl Parser<'_> {
                 self.position += 1;
                 Ok(Atom::Group(alternatives))
             }
-            Some('[') => self.class(),
-            Some('*' | '+' | '?' | '{' | '}' | ']') => {
+            '[' => self.class(),
+            '*' | '+' | '?' | '{' | '}' | ']' => {
                 self.fail("a quantifier or bracket has nothing to apply to")
             }
-            Some(_) => Ok(Atom::Unit(unit)),
-            None => self.fail("characters outside the Basic Multilingual Plane are not supported"),
+            other => Ok(Atom::Char(other)),
         }
     }
 
-    fn class_unit(&mut self) -> Result<u16, PatternError> {
-        let Some(unit) = self.peek() else {
+    fn class_char(&mut self) -> Result<char, PatternError> {
+        let Some(next) = self.peek() else {
             return self.fail("a class is not closed");
         };
         self.position += 1;
-        if unit == '\\' as u16 {
-            return self.escaped();
+        if next == '\\' {
+            return self.escaped(true);
         }
-        if (0xD800..=0xDFFF).contains(&unit) {
-            return self.fail("characters outside the Basic Multilingual Plane are not supported");
-        }
-        Ok(unit)
+        Ok(next)
     }
 
     fn class(&mut self) -> Result<Atom, PatternError> {
@@ -184,21 +179,21 @@ impl Parser<'_> {
         loop {
             match self.peek() {
                 None => return self.fail("a class is not closed"),
-                Some(unit) if unit == ']' as u16 => {
+                Some(']') => {
                     self.position += 1;
                     break;
                 }
                 Some(_) => {}
             }
-            let from = self.class_unit()?;
-            let is_range = self.peek() == Some('-' as u16)
+            let from = self.class_char()?;
+            let is_range = self.peek() == Some('-')
                 && self
-                    .units
+                    .chars
                     .get(self.position + 1)
-                    .is_some_and(|next| *next != ']' as u16);
+                    .is_some_and(|next| *next != ']');
             if is_range {
                 self.position += 1;
-                let to = self.class_unit()?;
+                let to = self.class_char()?;
                 if from > to {
                     return self.fail("a class range runs backwards");
                 }
@@ -219,26 +214,26 @@ impl Pattern {
     pub fn new(pattern: &str) -> Result<Pattern, PatternError> {
         let mut parser = Parser {
             pattern,
-            units: pattern.encode_utf16().collect(),
+            chars: pattern.chars().collect(),
             position: 0,
         };
         let alternatives = parser.alternatives(false)?;
-        if parser.position != parser.units.len() {
+        if parser.position != parser.chars.len() {
             return parser.fail("an unmatched closing parenthesis");
         }
         Ok(Pattern { alternatives })
     }
 
-    /// Whether the pattern matches anywhere in `text`, as `new RegExp(pattern).test(text)` does.
+    /// Whether the pattern matches anywhere in `text`, as `new RegExp(pattern, "u").test(text)` does.
     pub fn is_match(&self, text: &str) -> bool {
-        let input: Vec<u16> = text.encode_utf16().collect();
+        let input: Vec<char> = text.chars().collect();
         let matcher = Matcher { input: &input };
         (0..=input.len()).any(|start| matcher.alternatives(&self.alternatives, start, &|_| true))
     }
 }
 
 struct Matcher<'a> {
-    input: &'a [u16],
+    input: &'a [char],
 }
 
 impl Matcher<'_> {
@@ -274,18 +269,18 @@ impl Matcher<'_> {
     }
 
     fn atom(&self, atom: &Atom, at: usize, then: &dyn Fn(usize) -> bool) -> bool {
-        let unit = self.input.get(at).copied();
+        let current = self.input.get(at).copied();
         match atom {
-            Atom::Unit(expected) => unit == Some(*expected) && then(at + 1),
-            Atom::AnyUnit => {
-                unit.is_some_and(|unit| !matches!(unit, 0x0A | 0x0D | 0x2028 | 0x2029))
+            Atom::Char(expected) => current == Some(*expected) && then(at + 1),
+            Atom::AnyChar => {
+                current.is_some_and(|found| !matches!(found, '\n' | '\r' | '\u{2028}' | '\u{2029}'))
                     && then(at + 1)
             }
             Atom::Class { negated, ranges } => {
-                unit.is_some_and(|unit| {
+                current.is_some_and(|found| {
                     ranges
                         .iter()
-                        .any(|(from, to)| (*from..=*to).contains(&unit))
+                        .any(|(from, to)| (*from..=*to).contains(&found))
                         != *negated
                 }) && then(at + 1)
             }
@@ -327,31 +322,23 @@ mod tests {
     }
 
     #[test]
-    fn dot_stops_at_a_line_terminator_and_counts_code_units() {
+    fn dot_stops_at_a_line_terminator_and_counts_characters() {
         assert!(!matches("^.$", "\n"));
         assert!(!matches("^.$", "\u{2028}"));
-        assert!(matches("^..$", "\u{1F600}"));
-        assert!(!matches("^.$", "\u{1F600}"));
+        assert!(matches("^.$", "\u{1F600}"));
+        assert!(!matches("^..$", "\u{1F600}"));
+        assert!(matches("^[^/]$", "\u{1F600}"));
+        assert!(matches("^\u{1F600}$", "\u{1F600}"));
     }
 
     #[test]
     fn unsupported_syntax_is_refused() {
         for source in [
-            "a{2}",
-            "a*?",
-            r"\d",
-            "(?=a)",
-            "(a",
-            "a)",
-            "[",
-            "[]",
-            "\u{1F600}",
-            "[z-a]",
-            "*",
-            "^*",
+            "a{2}", "a*?", r"\d", r"a\-b", "(?=a)", "(a", "a)", "[", "[]", "[z-a]", "*", "^*",
         ] {
             assert!(Pattern::new(source).is_err(), "{source} must be refused");
         }
+        assert!(Pattern::new(r"[a\-z]").is_ok());
     }
 
     #[test]
