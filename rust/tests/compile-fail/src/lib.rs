@@ -5,6 +5,9 @@
 //!
 //! A case with no line here compiles to nothing, so the check reports it as a case that compiles and fails.
 
+// The cases name the crate; built without a case, nothing does.
+use json_shape as _;
+
 #[cfg(compile_fail = "constraint_on_wrong_kind")]
 #[path = "../cases/constraint_on_wrong_kind.rs"]
 mod constraint_on_wrong_kind;
@@ -60,3 +63,11 @@ mod externally_tagged_enum;
 #[cfg(compile_fail = "generic_type")]
 #[path = "../cases/generic_type.rs"]
 mod generic_type;
+
+#[cfg(compile_fail = "exclusive_min_on_string")]
+#[path = "../cases/exclusive_min_on_string.rs"]
+mod exclusive_min_on_string;
+
+#[cfg(compile_fail = "catch_all_in_a_strict_struct")]
+#[path = "../cases/catch_all_in_a_strict_struct.rs"]
+mod catch_all_in_a_strict_struct;

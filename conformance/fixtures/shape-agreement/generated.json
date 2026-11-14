@@ -2710,5 +2710,389 @@
     "document": true,
     "type": "Shaped",
     "valid": false
+  },
+  {
+    "case": "minimal",
+    "document": {
+      "kind": "a"
+    },
+    "type": "CatchAll",
+    "valid": true
+  },
+  {
+    "case": "an extra member",
+    "document": {
+      "kind": "a",
+      "zz_extra": 0
+    },
+    "type": "CatchAll",
+    "valid": true
+  },
+  {
+    "case": "not an object",
+    "document": 1,
+    "type": "CatchAll",
+    "valid": false
+  },
+  {
+    "case": "an array",
+    "document": [],
+    "type": "CatchAll",
+    "valid": false
+  },
+  {
+    "case": "kind missing",
+    "document": {},
+    "type": "CatchAll",
+    "valid": false
+  },
+  {
+    "case": "kind, not a string",
+    "document": {
+      "kind": 1
+    },
+    "type": "CatchAll",
+    "valid": false
+  },
+  {
+    "case": "an extra member, not a number",
+    "document": {
+      "kind": "a",
+      "zz_extra": "x"
+    },
+    "type": "CatchAll",
+    "valid": false
+  },
+  {
+    "case": "an extra member, a fraction",
+    "document": {
+      "kind": "a",
+      "zz_extra": 0.5
+    },
+    "type": "CatchAll",
+    "valid": false
+  },
+  {
+    "case": "an extra member, below the minimum",
+    "document": {
+      "kind": "a",
+      "zz_extra": -1
+    },
+    "type": "CatchAll",
+    "valid": false
+  },
+  {
+    "case": "an extra member, above the maximum",
+    "document": {
+      "kind": "a",
+      "zz_extra": 256
+    },
+    "type": "CatchAll",
+    "valid": false
+  },
+  {
+    "case": "minimal",
+    "document": {
+      "first": 0
+    },
+    "type": "AnyOfKeys",
+    "valid": true
+  },
+  {
+    "case": "first, at the maximum",
+    "document": {
+      "first": 255
+    },
+    "type": "AnyOfKeys",
+    "valid": true
+  },
+  {
+    "case": "second present",
+    "document": {
+      "first": 0,
+      "second": "a"
+    },
+    "type": "AnyOfKeys",
+    "valid": true
+  },
+  {
+    "case": "not an object",
+    "document": 1,
+    "type": "AnyOfKeys",
+    "valid": false
+  },
+  {
+    "case": "an array",
+    "document": [],
+    "type": "AnyOfKeys",
+    "valid": false
+  },
+  {
+    "case": "first, not a number",
+    "document": {
+      "first": "x"
+    },
+    "type": "AnyOfKeys",
+    "valid": false
+  },
+  {
+    "case": "first, a fraction",
+    "document": {
+      "first": 0.5
+    },
+    "type": "AnyOfKeys",
+    "valid": false
+  },
+  {
+    "case": "first, below the minimum",
+    "document": {
+      "first": -1
+    },
+    "type": "AnyOfKeys",
+    "valid": false
+  },
+  {
+    "case": "first, above the maximum",
+    "document": {
+      "first": 256
+    },
+    "type": "AnyOfKeys",
+    "valid": false
+  },
+  {
+    "case": "second, not a string",
+    "document": {
+      "first": 0,
+      "second": 1
+    },
+    "type": "AnyOfKeys",
+    "valid": false
+  },
+  {
+    "case": "none of the grouped keys",
+    "document": {},
+    "type": "AnyOfKeys",
+    "valid": false
+  },
+  {
+    "case": "minimal",
+    "document": {
+      "first": 0
+    },
+    "type": "OneOfKeys",
+    "valid": true
+  },
+  {
+    "case": "first, at the maximum",
+    "document": {
+      "first": 255
+    },
+    "type": "OneOfKeys",
+    "valid": true
+  },
+  {
+    "case": "second present",
+    "document": {
+      "second": "a"
+    },
+    "type": "OneOfKeys",
+    "valid": true
+  },
+  {
+    "case": "not an object",
+    "document": 1,
+    "type": "OneOfKeys",
+    "valid": false
+  },
+  {
+    "case": "an array",
+    "document": [],
+    "type": "OneOfKeys",
+    "valid": false
+  },
+  {
+    "case": "first, not a number",
+    "document": {
+      "first": "x"
+    },
+    "type": "OneOfKeys",
+    "valid": false
+  },
+  {
+    "case": "first, a fraction",
+    "document": {
+      "first": 0.5
+    },
+    "type": "OneOfKeys",
+    "valid": false
+  },
+  {
+    "case": "first, below the minimum",
+    "document": {
+      "first": -1
+    },
+    "type": "OneOfKeys",
+    "valid": false
+  },
+  {
+    "case": "first, above the maximum",
+    "document": {
+      "first": 256
+    },
+    "type": "OneOfKeys",
+    "valid": false
+  },
+  {
+    "case": "second, not a string",
+    "document": {
+      "second": 1
+    },
+    "type": "OneOfKeys",
+    "valid": false
+  },
+  {
+    "case": "none of the grouped keys",
+    "document": {},
+    "type": "OneOfKeys",
+    "valid": false
+  },
+  {
+    "case": "more than one of the exclusive keys",
+    "document": {
+      "first": 0,
+      "second": "a"
+    },
+    "type": "OneOfKeys",
+    "valid": false
+  },
+  {
+    "case": "minimal",
+    "document": {
+      "above": 1
+    },
+    "type": "Exclusive",
+    "valid": true
+  },
+  {
+    "case": "above, just above the exclusive minimum",
+    "document": {
+      "above": 0.5
+    },
+    "type": "Exclusive",
+    "valid": true
+  },
+  {
+    "case": "count present",
+    "document": {
+      "above": 1,
+      "count": 2
+    },
+    "type": "Exclusive",
+    "valid": true
+  },
+  {
+    "case": "count, at the maximum",
+    "document": {
+      "above": 1,
+      "count": 3
+    },
+    "type": "Exclusive",
+    "valid": true
+  },
+  {
+    "case": "not an object",
+    "document": 1,
+    "type": "Exclusive",
+    "valid": false
+  },
+  {
+    "case": "an array",
+    "document": [],
+    "type": "Exclusive",
+    "valid": false
+  },
+  {
+    "case": "above missing",
+    "document": {},
+    "type": "Exclusive",
+    "valid": false
+  },
+  {
+    "case": "above, not a number",
+    "document": {
+      "above": "x"
+    },
+    "type": "Exclusive",
+    "valid": false
+  },
+  {
+    "case": "above, at the exclusive minimum",
+    "document": {
+      "above": 0
+    },
+    "type": "Exclusive",
+    "valid": false
+  },
+  {
+    "case": "above, below the exclusive minimum",
+    "document": {
+      "above": -1
+    },
+    "type": "Exclusive",
+    "valid": false
+  },
+  {
+    "case": "count, not a number",
+    "document": {
+      "above": 1,
+      "count": "x"
+    },
+    "type": "Exclusive",
+    "valid": false
+  },
+  {
+    "case": "count, a fraction",
+    "document": {
+      "above": 1,
+      "count": 0.5
+    },
+    "type": "Exclusive",
+    "valid": false
+  },
+  {
+    "case": "count, below the minimum",
+    "document": {
+      "above": 1,
+      "count": -1
+    },
+    "type": "Exclusive",
+    "valid": false
+  },
+  {
+    "case": "count, at the exclusive minimum",
+    "document": {
+      "above": 1,
+      "count": 1
+    },
+    "type": "Exclusive",
+    "valid": false
+  },
+  {
+    "case": "count, below the exclusive minimum",
+    "document": {
+      "above": 1,
+      "count": 0
+    },
+    "type": "Exclusive",
+    "valid": false
+  },
+  {
+    "case": "count, above the maximum",
+    "document": {
+      "above": 1,
+      "count": 4
+    },
+    "type": "Exclusive",
+    "valid": false
   }
 ]

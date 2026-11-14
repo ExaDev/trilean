@@ -192,6 +192,7 @@ impl Position {
 #[derive(Clone)]
 enum Spec {
     Min(f64),
+    ExclusiveMin(f64),
     Max(f64),
     MinLength(usize),
     Pattern(String),
@@ -206,6 +207,7 @@ impl Spec {
     fn name(&self) -> &'static str {
         match self {
             Spec::Min(_) => "min",
+            Spec::ExclusiveMin(_) => "exclusive_min",
             Spec::Max(_) => "max",
             Spec::MinLength(_) => "min_length",
             Spec::Pattern(_) => "pattern",
@@ -220,7 +222,7 @@ impl Spec {
     /// The `Class` variants a type may have for this constraint to apply to it.
     fn classes(&self) -> &'static [&'static str] {
         match self {
-            Spec::Min(_) | Spec::Max(_) => &["Integer", "Number"],
+            Spec::Min(_) | Spec::ExclusiveMin(_) | Spec::Max(_) => &["Integer", "Number"],
             Spec::MinLength(_) | Spec::Pattern(_) => &["String"],
             Spec::MinItems(_) | Spec::MaxItems(_) | Spec::UniqueItems => &["Array"],
             Spec::MinProperties(_) => &["Map", "OpenObject"],
@@ -231,6 +233,7 @@ impl Spec {
     fn tokens(&self) -> TokenStream2 {
         match self {
             Spec::Min(bound) => quote! { ::json_shape::Constraint::Min(#bound) },
+            Spec::ExclusiveMin(bound) => quote! { ::json_shape::Constraint::ExclusiveMin(#bound) },
             Spec::Max(bound) => quote! { ::json_shape::Constraint::Max(#bound) },
             Spec::MinLength(length) => quote! { ::json_shape::Constraint::MinLength(#length) },
             Spec::Pattern(source) => {
@@ -274,6 +277,8 @@ struct Attrs {
     strict: bool,
     name: Option<String>,
     together: Vec<(Span, Vec<Ident>)>,
+    any_of: Vec<(Span, Vec<Ident>)>,
+    one_of: Vec<(Span, Vec<Ident>)>,
     container_min_properties: Option<usize>,
     rename: Option<String>,
     default: bool,
@@ -332,7 +337,7 @@ fn read(attributes: &[Attribute], position: Position) -> Result<Attrs> {
             };
             let key = name_of(ident);
             let source = if from_serde { "serde" } else { "shape" };
-            if key != "together" && !seen.insert(format!("{source}:{key}")) {
+            if !matches!(key.as_str(), "together" | "any_of" | "one_of") && !seen.insert(format!("{source}:{key}")) {
                 return Err(meta.error(format!("`{key}` is given twice")));
             }
             let span = meta.path.span();
@@ -395,7 +400,7 @@ fn read(attributes: &[Attribute], position: Position) -> Result<Attrs> {
                     applies_to(&[Position::Container])?;
                     attrs.name = Some(meta.value()?.parse::<LitStr>()?.value());
                 }
-                "together" => {
+                "together" | "any_of" | "one_of" => {
                     applies_to(&[Position::Container])?;
                     let mut names = Vec::new();
                     meta.parse_nested_meta(|inner| {
@@ -406,7 +411,11 @@ fn read(attributes: &[Attribute], position: Position) -> Result<Attrs> {
                         names.push(ident.clone());
                         Ok(())
                     })?;
-                    attrs.together.push((span, names));
+                    match key.as_str() {
+                        "together" => attrs.together.push((span, names)),
+                        "any_of" => attrs.any_of.push((span, names)),
+                        _ => attrs.one_of.push((span, names)),
+                    }
                 }
                 "min_properties" if position == Position::Container => {
                     attrs.container_min_properties = Some(count_of(&meta.value()?.parse::<Lit>()?)?);
@@ -416,12 +425,14 @@ fn read(attributes: &[Attribute], position: Position) -> Result<Attrs> {
                     let count = count_of(&meta.value()?.parse::<Lit>()?)?;
                     attrs.constraints.push(constrained(Spec::MinProperties(count)));
                 }
-                "min" | "max" => {
+                "min" | "max" | "exclusive_min" => {
                     applies_to(&on_member)?;
                     let bound = number_of(&meta.value()?.parse::<Expr>()?)?;
-                    attrs
-                        .constraints
-                        .push(constrained(if key == "min" { Spec::Min(bound) } else { Spec::Max(bound) }));
+                    attrs.constraints.push(constrained(match key.as_str() {
+                        "min" => Spec::Min(bound),
+                        "max" => Spec::Max(bound),
+                        _ => Spec::ExclusiveMin(bound),
+                    }));
                 }
                 "min_length" | "min_items" | "max_items" => {
                     applies_to(&on_member)?;
@@ -592,8 +603,8 @@ fn member_assertions(members: &[Member]) -> TokenStream2 {
             let span = member.span;
             quote_spanned! { span =>
                 const _: () = ::core::assert!(
-                    <#ty as ::json_shape::Shape>::IS_OBJECT,
-                    "a flattened field must be a struct that derives Shape"
+                    <#ty as ::json_shape::Shape>::IS_OBJECT || <#ty as ::json_shape::Shape>::CATCH_ALL,
+                    "a flattened field must be a struct that derives Shape, or a Map or OpenObject that takes the other members"
                 );
             }
         } else {
@@ -624,12 +635,16 @@ fn fields_definition(members: &[Member]) -> TokenStream2 {
         let key = &member.key;
         if member.attrs.flatten {
             return quote! {
-                match <#ty as ::json_shape::Shape>::definition().kind {
-                    ::json_shape::Kind::Object(__inner) => {
-                        __fields.extend(__inner.fields);
-                        __dependent.extend(__inner.dependent_required);
+                if <#ty as ::json_shape::Shape>::CATCH_ALL {
+                    __additional = <#ty as ::json_shape::Shape>::catch_all_shape().map(::std::boxed::Box::new);
+                } else {
+                    match <#ty as ::json_shape::Shape>::definition().kind {
+                        ::json_shape::Kind::Object(__inner) => {
+                            __fields.extend(__inner.fields);
+                            __dependent.extend(__inner.dependent_required);
+                        }
+                        _ => ::core::unreachable!("a flattened field is checked to be a struct at compile time"),
                     }
-                    _ => ::core::unreachable!("a flattened field is checked to be a struct at compile time"),
                 }
             };
         }
@@ -666,47 +681,105 @@ fn fields_definition(members: &[Member]) -> TokenStream2 {
     quote! { #(#steps)* }
 }
 
-/// An expression that is the `ObjectDef` of the members, after `fields_definition`'s statements.
-fn object_definition(
-    strict: bool,
-    min_properties: Option<usize>,
-    together: &[(Span, Vec<Ident>)],
+/// The groups of fields a container attribute names.
+#[derive(Clone, Copy)]
+struct Groups<'a> {
+    together: &'a [(Span, Vec<Ident>)],
+    any_of: &'a [(Span, Vec<Ident>)],
+    one_of: &'a [(Span, Vec<Ident>)],
+}
+
+impl<'a> Groups<'a> {
+    const NONE: Groups<'static> = Groups {
+        together: &[],
+        any_of: &[],
+        one_of: &[],
+    };
+
+    fn of(attrs: &'a Attrs) -> Self {
+        Groups {
+            together: &attrs.together,
+            any_of: &attrs.any_of,
+            one_of: &attrs.one_of,
+        }
+    }
+}
+
+/// The keys of the fields a group names, each group at least two fields, none flattened.
+fn group_keys(
+    groups: &[(Span, Vec<Ident>)],
+    what: &str,
     members: &[Member],
-) -> Result<TokenStream2> {
-    let mut groups = Vec::new();
-    for (span, names) in together {
+) -> Result<Vec<Vec<String>>> {
+    let mut found = Vec::new();
+    for (span, names) in groups {
         let mut keys = Vec::new();
         for name in names {
             let Some(member) = members.iter().find(|member| member.ident == *name) else {
                 return Err(syn::Error::new(
                     name.span(),
-                    format!("together names {name}, which is not a field"),
+                    format!("{what} names {name}, which is not a field"),
                 ));
             };
+            if member.attrs.flatten {
+                return Err(syn::Error::new(
+                    name.span(),
+                    format!("{what} names {name}, which is flattened"),
+                ));
+            }
             keys.push(member.key.clone());
         }
         if keys.len() < 2 {
-            return Err(syn::Error::new(*span, "together needs at least two fields"));
+            return Err(syn::Error::new(
+                *span,
+                format!("{what} needs at least two fields"),
+            ));
         }
-        groups.push(keys);
+        found.push(keys);
     }
+    Ok(found)
+}
+
+/// An expression that is the `ObjectDef` of the members, after `fields_definition`'s statements.
+fn object_definition(
+    strict: bool,
+    min_properties: Option<usize>,
+    groups: Groups<'_>,
+    members: &[Member],
+) -> Result<TokenStream2> {
+    let together_groups = group_keys(groups.together, "together", members)?;
+    let any_of = group_keys(groups.any_of, "any_of", members)?;
+    let one_of = group_keys(groups.one_of, "one_of", members)?;
+    if any_of.len() > 1 || one_of.len() > 1 {
+        return Err(syn::Error::new(
+            Span::call_site(),
+            "any_of and one_of each name one group of fields",
+        ));
+    }
+    let any_of_keys = any_of.into_iter().next().unwrap_or_default();
+    let one_of_keys = one_of.into_iter().next().unwrap_or_default();
     let minimum = match min_properties {
         Some(count) => quote! { ::core::option::Option::Some(#count) },
         None => quote! { ::core::option::Option::None },
     };
-    let together = groups.iter().map(|keys| {
+    let together = together_groups.iter().map(|keys| {
         let entries = keys.iter().map(|key| {
             let others: Vec<&String> = keys.iter().filter(|other| *other != key).collect();
             quote! { __dependent.push((#key.to_owned(), vec![#(#others.to_owned()),*])); }
         });
         quote! { #(#entries)* }
     });
+    // A flattened catch-all sets `__additional`; that it never meets `deny_unknown_fields` is a compile-time
+    // assertion on the field's type (see `expand_struct`).
     Ok(quote! {
         {
             #(#together)*
             ::json_shape::ObjectDef {
                 fields: __fields,
-                closed: #strict,
+                closed: #strict && __additional.is_none(),
+                additional: __additional,
+                any_of_keys: ::std::vec![#(#any_of_keys.to_owned()),*],
+                one_of_keys: ::std::vec![#(#one_of_keys.to_owned()),*],
                 min_properties: #minimum,
                 dependent_required: __dependent,
             }
@@ -715,7 +788,18 @@ fn object_definition(
 }
 
 /// The fields of a struct literal that read the members out of `__value`.
-fn member_builds(members: &[Member]) -> Vec<TokenStream2> {
+fn member_builds(members: &[Member], tag: Option<&str>) -> Vec<TokenStream2> {
+    let own: Vec<&String> = members
+        .iter()
+        .filter(|member| !member.attrs.flatten)
+        .map(|member| &member.key)
+        .collect();
+    let flattened: Vec<&Type> = members
+        .iter()
+        .filter(|member| member.attrs.flatten)
+        .map(|member| &member.ty)
+        .collect();
+    let tag: Vec<&str> = tag.into_iter().collect();
     members
         .iter()
         .map(|member| {
@@ -723,7 +807,15 @@ fn member_builds(members: &[Member]) -> Vec<TokenStream2> {
             let ty = &member.ty;
             let key = &member.key;
             if member.attrs.flatten {
-                return quote! { #ident: <#ty as ::json_shape::Shape>::build(__value, __path)? };
+                return quote! {
+                    #ident: if <#ty as ::json_shape::Shape>::CATCH_ALL {
+                        let mut __known: ::std::vec::Vec<&str> = ::std::vec![#(#tag,)* #(#own,)*];
+                        #( __known.extend(<#flattened as ::json_shape::Shape>::KEYS.iter().copied()); )*
+                        <#ty as ::json_shape::Shape>::build_rest(__value, __path, &__known)?
+                    } else {
+                        <#ty as ::json_shape::Shape>::build(__value, __path)?
+                    }
+                };
             }
             let missing = if member.attrs.default {
                 quote! { ::core::default::Default::default() }
@@ -771,19 +863,21 @@ fn member_registers(members: &[Member]) -> Vec<TokenStream2> {
 fn object_shape(
     strict: bool,
     min_properties: Option<usize>,
-    together: &[(Span, Vec<Ident>)],
+    groups: Groups<'_>,
     members: &[Member],
     doc: Option<&String>,
     head: Option<TokenStream2>,
 ) -> Result<TokenStream2> {
     let steps = fields_definition(members);
-    let object = object_definition(strict, min_properties, together, members)?;
+    let object = object_definition(strict, min_properties, groups, members)?;
     let described = doc.map(|text| quote! { .described(#text) });
     Ok(quote! {
         {
             let mut __fields: ::std::vec::Vec<::json_shape::FieldDef> = ::std::vec::Vec::new();
             let mut __dependent: ::std::vec::Vec<(::std::string::String, ::std::vec::Vec<::std::string::String>)> =
                 ::std::vec::Vec::new();
+            let mut __additional: ::core::option::Option<::std::boxed::Box<::json_shape::ShapeDef>> =
+                ::core::option::Option::None;
             #head
             #steps
             ::json_shape::ShapeDef::new(::json_shape::Kind::Object(#object)) #described
@@ -914,13 +1008,13 @@ fn expand_struct(
     let definition = object_shape(
         container.strict,
         container.container_min_properties,
-        &container.together,
+        Groups::of(container),
         &members,
         doc,
         None,
     )?;
     let registers = member_registers(&members);
-    let builds = member_builds(&members);
+    let builds = member_builds(&members, None);
     let parts = key_parts(None, &members);
     let own = members
         .iter()
@@ -938,6 +1032,17 @@ fn expand_struct(
         member_assertions(&members),
         unique_keys_assertion(None, &members, span),
     ];
+    if container.strict {
+        for member in members.iter().filter(|member| member.attrs.flatten) {
+            let ty = &member.ty;
+            assertions.push(quote_spanned! { member.span =>
+                const _: () = ::core::assert!(
+                    !<#ty as ::json_shape::Shape>::CATCH_ALL,
+                    "a flattened Map or OpenObject takes the other members, so the struct cannot also deny unknown fields"
+                );
+            });
+        }
+    }
     assertions.retain(|assertion| !assertion.is_empty());
     Ok(Parts {
         definition,
@@ -1053,6 +1158,9 @@ fn tagged_variant(
                     ::json_shape::ShapeDef::new(::json_shape::Kind::Object(::json_shape::ObjectDef {
                         fields: __fields,
                         closed: #strict,
+                        additional: ::core::option::Option::None,
+                        any_of_keys: ::std::vec::Vec::new(),
+                        one_of_keys: ::std::vec::Vec::new(),
                         min_properties: ::core::option::Option::None,
                         dependent_required: ::std::vec::Vec::new(),
                     })) #described
@@ -1066,7 +1174,7 @@ fn tagged_variant(
                 .assertions
                 .push(unique_keys_assertion(Some(tag), &members, span));
             parts.registers.extend(member_registers(&members));
-            object_shape(strict, None, &[], &members, doc, Some(tag_field))
+            object_shape(strict, None, Groups::NONE, &members, doc, Some(tag_field))
         }
         Fields::Unnamed(_) => {
             let Some((ty, field)) = newtype(info.variant)? else {
@@ -1132,10 +1240,14 @@ fn expand_enum(
     variants: &[&Variant],
 ) -> Result<Parts> {
     let described = doc.map(|text| quote! { .described(#text) });
-    if !container.together.is_empty() || container.container_min_properties.is_some() {
+    if !container.together.is_empty()
+        || !container.any_of.is_empty()
+        || !container.one_of.is_empty()
+        || container.container_min_properties.is_some()
+    {
         return Err(syn::Error::new(
             name.span(),
-            "together and min_properties describe one object, so they apply to structs",
+            "together, any_of, one_of and min_properties describe one object, so they apply to structs",
         ));
     }
     if variants.is_empty() {
@@ -1213,7 +1325,7 @@ fn expand_enum(
                 }
                 Fields::Named(fields) => {
                     let members = members(fields, None)?;
-                    let builds = member_builds(&members);
+                    let builds = member_builds(&members, Some(tag));
                     arms.push(quote! { #key => ::core::result::Result::Ok(Self::#ident { #(#builds),* }), });
                 }
                 Fields::Unnamed(_) => {
@@ -1297,12 +1409,12 @@ fn expand_enum(
                     alternatives.push(object_shape(
                         container.strict,
                         None,
-                        &[],
+                        Groups::NONE,
                         &members,
                         doc,
                         None,
                     )?);
-                    let builds = member_builds(&members);
+                    let builds = member_builds(&members, None);
                     arms.push(quote! { #position => ::core::result::Result::Ok(Self::#ident { #(#builds),* }), });
                 }
                 Fields::Unnamed(_) => {
@@ -1440,6 +1552,54 @@ mod tests {
             (
                 "#[shape(together(a, b))] enum E { A { a: u8, b: u8 } }",
                 "apply to structs",
+            ),
+            (
+                "#[shape(any_of(a, b))] enum E { A { a: u8, b: u8 } }",
+                "apply to structs",
+            ),
+            (
+                "#[shape(any_of(a))] struct A { a: u8 }",
+                "any_of needs at least two fields",
+            ),
+            (
+                "#[shape(one_of(a, z))] struct A { a: u8 }",
+                "one_of names z, which is not a field",
+            ),
+            (
+                "#[shape(any_of(a, b), any_of(a, b))] struct A { a: u8, b: u8 }",
+                "any_of and one_of each name one group of fields",
+            ),
+            (
+                "#[shape(any_of(a, b))] struct A { a: u8, #[serde(flatten)] b: B }",
+                "any_of names b, which is flattened",
+            ),
+            (
+                "struct A { #[shape(exclusive_min = 1, exclusive_min = 2)] a: u8 }",
+                "`exclusive_min` is given twice",
+            ),
+            (
+                "struct A { #[shape(exclusive_min = \"x\")] a: u8 }",
+                "expected a number",
+            ),
+            (
+                "#[shape(one_of(a, z))] struct A { a: u8 }",
+                "one_of names z, which is not a field",
+            ),
+            (
+                "#[shape(any_of(a, b), any_of(a, b))] struct A { a: u8, b: u8 }",
+                "any_of and one_of each name one group of fields",
+            ),
+            (
+                "#[shape(any_of(a, b))] struct A { a: u8, #[serde(flatten)] b: B }",
+                "any_of names b, which is flattened",
+            ),
+            (
+                "struct A { #[shape(exclusive_min = 1, exclusive_min = 2)] a: u8 }",
+                "`exclusive_min` is given twice",
+            ),
+            (
+                "struct A { #[shape(exclusive_min = \"x\")] a: u8 }",
+                "expected a number",
             ),
             // named field
             (

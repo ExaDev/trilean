@@ -96,8 +96,16 @@ fn shape_schema(shape: &ShapeDef, options: Writer<'_>) -> Value {
             }
             pairs
         }
-        Kind::Integer { min, max } => bounded("integer", *min, *max),
-        Kind::Number { min, max } => bounded("number", *min, *max),
+        Kind::Integer {
+            min,
+            exclusive_min,
+            max,
+        } => bounded("integer", [*min, *exclusive_min, *max]),
+        Kind::Number {
+            min,
+            exclusive_min,
+            max,
+        } => bounded("number", [*min, *exclusive_min, *max]),
         Kind::Array {
             items,
             min_items,
@@ -161,6 +169,8 @@ fn shape_schema(shape: &ShapeDef, options: Writer<'_>) -> Value {
                     .collect(),
             ),
         )],
+        Kind::Not(inner) => vec![("not".to_owned(), shape_schema(inner, options))],
+        Kind::AllOf(parts) => merged_or_all_of(parts, options),
         Kind::Ref(name) => vec![(
             "$ref".to_owned(),
             text(&format!("{}/{}", options.pointer, reference_token(name))),
@@ -172,10 +182,39 @@ fn shape_schema(shape: &ShapeDef, options: Writer<'_>) -> Value {
     object(pairs)
 }
 
-fn bounded(name: &str, min: Option<f64>, max: Option<f64>) -> Vec<(String, Value)> {
+/// The parts as one node when no keyword is used by two of them, which is what a reader of the schema expects of a
+/// shape built from several; as `allOf` otherwise.
+fn merged_or_all_of(parts: &[ShapeDef], options: Writer<'_>) -> Vec<(String, Value)> {
+    let written: Vec<Vec<(String, Value)>> = parts
+        .iter()
+        .map(|part| match shape_schema(part, options) {
+            Value::Object(pairs) => pairs,
+            other => unreachable!("a shape's schema is an object, not {other}"),
+        })
+        .collect();
+    let mut merged: Vec<(String, Value)> = Vec::new();
+    for pairs in &written {
+        if pairs
+            .iter()
+            .any(|(key, _)| merged.iter().any(|(known, _)| known == key))
+        {
+            return vec![(
+                "allOf".to_owned(),
+                Value::Array(written.into_iter().map(Value::Object).collect()),
+            )];
+        }
+        merged.extend(pairs.iter().cloned());
+    }
+    merged
+}
+
+fn bounded(name: &str, [min, exclusive_min, max]: [Option<f64>; 3]) -> Vec<(String, Value)> {
     let mut pairs = typed(name);
     if let Some(least) = min {
         push(&mut pairs, "minimum", number(least));
+    }
+    if let Some(above) = exclusive_min {
+        push(&mut pairs, "exclusiveMinimum", number(above));
     }
     if let Some(most) = max {
         push(&mut pairs, "maximum", number(most));
@@ -207,8 +246,35 @@ fn object_pairs(definition: &ObjectDef, options: Writer<'_>) -> Vec<(String, Val
     if !required.is_empty() {
         push(&mut pairs, "required", Value::Array(required));
     }
-    if definition.closed {
+    if let Some(additional) = &definition.additional {
+        push(
+            &mut pairs,
+            "additionalProperties",
+            shape_schema(additional, options),
+        );
+    } else if definition.closed {
         push(&mut pairs, "additionalProperties", Value::Bool(false));
+    }
+    for (keyword, keys) in [
+        ("anyOf", &definition.any_of_keys),
+        ("oneOf", &definition.one_of_keys),
+    ] {
+        if !keys.is_empty() {
+            let alternatives = keys
+                .iter()
+                .map(|key| {
+                    object(vec![
+                        (
+                            "properties".to_owned(),
+                            object(vec![(key.clone(), Value::Object(Vec::new()))]),
+                        ),
+                        ("required".to_owned(), Value::Array(vec![text(key)])),
+                        ("type".to_owned(), text("object")),
+                    ])
+                })
+                .collect();
+            push(&mut pairs, keyword, Value::Array(alternatives));
+        }
     }
     if let Some(least) = definition.min_properties {
         push(&mut pairs, "minProperties", count(least));
@@ -323,13 +389,20 @@ fn mentions(shape: &ShapeDef, name: &str) -> bool {
         Kind::Ref(target) => target == name,
         Kind::Array { items, .. } => mentions(items, name),
         Kind::Map { values, .. } => mentions(values, name),
-        Kind::Object(definition) => definition
-            .fields
-            .iter()
-            .any(|field| mentions(&field.shape, name)),
-        Kind::OneOf(alternatives) => alternatives
+        Kind::Object(definition) => {
+            definition
+                .fields
+                .iter()
+                .any(|field| mentions(&field.shape, name))
+                || definition
+                    .additional
+                    .as_ref()
+                    .is_some_and(|additional| mentions(additional, name))
+        }
+        Kind::OneOf(alternatives) | Kind::AllOf(alternatives) => alternatives
             .iter()
             .any(|alternative| mentions(alternative, name)),
+        Kind::Not(inner) => mentions(inner, name),
         Kind::Tagged { variants, .. } => {
             variants.iter().any(|(_, variant)| mentions(variant, name))
         }

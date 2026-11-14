@@ -15,6 +15,7 @@ license = "MIT"
 repository = "https://github.com/ExaDev/trilean"
 
 [workspace.dependencies]
+json-shape = { path = "crates/json-shape" }
 json-shape-derive = { path = "crates/json-shape-derive" }
 proc-macro2 = "1"
 quote = "1"

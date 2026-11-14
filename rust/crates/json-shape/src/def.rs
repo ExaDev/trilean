@@ -44,10 +44,12 @@ pub enum Kind {
     /// A whole number between the bounds. A number written with a zero fraction (`97.0`) is whole, as in JSON Schema.
     Integer {
         min: Option<f64>,
+        exclusive_min: Option<f64>,
         max: Option<f64>,
     },
     Number {
         min: Option<f64>,
+        exclusive_min: Option<f64>,
         max: Option<f64>,
     },
     Array {
@@ -70,6 +72,11 @@ pub enum Kind {
         tag: String,
         variants: Vec<(String, ShapeDef)>,
     },
+    /// A value that does not match the shape.
+    Not(Box<ShapeDef>),
+    /// A value that matches every shape. Written as one schema node when the shapes use different keywords, and as
+    /// `allOf` when they do not.
+    AllOf(Vec<ShapeDef>),
     /// A named definition.
     Ref(String),
 }
@@ -95,6 +102,12 @@ pub struct ObjectDef {
     pub fields: Vec<FieldDef>,
     /// Whether a key outside `fields` is refused.
     pub closed: bool,
+    /// The shape of the value of a key outside `fields`, for an object that holds any key but types its value.
+    pub additional: Option<Box<ShapeDef>>,
+    /// When not empty, at least one of these keys is present.
+    pub any_of_keys: Vec<String>,
+    /// When not empty, exactly one of these keys is present.
+    pub one_of_keys: Vec<String>,
     pub min_properties: Option<usize>,
     /// For each key, the keys that must be present whenever it is.
     pub dependent_required: Vec<(String, Vec<String>)>,
@@ -104,6 +117,7 @@ pub struct ObjectDef {
 #[derive(Clone, Debug, PartialEq)]
 pub enum Constraint {
     Min(f64),
+    ExclusiveMin(f64),
     Max(f64),
     MinLength(usize),
     Pattern(String),
@@ -150,6 +164,12 @@ impl ShapeDef {
         match (&mut self.kind, constraint) {
             (Kind::Integer { min, .. } | Kind::Number { min, .. }, Constraint::Min(bound)) => {
                 *min = Some(bound);
+            }
+            (
+                Kind::Integer { exclusive_min, .. } | Kind::Number { exclusive_min, .. },
+                Constraint::ExclusiveMin(bound),
+            ) => {
+                *exclusive_min = Some(bound);
             }
             (Kind::Integer { max, .. } | Kind::Number { max, .. }, Constraint::Max(bound)) => {
                 *max = Some(bound);

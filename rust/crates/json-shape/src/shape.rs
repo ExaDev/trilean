@@ -19,6 +19,14 @@ pub trait Shape: Sized {
     /// Whether the type is a struct, which is what a flattened field and a newtype variant of a tagged enum must be.
     const IS_OBJECT: bool = false;
 
+    /// Whether the type collects the members of an object that no field names, so a flattened field of it types them.
+    const CATCH_ALL: bool = false;
+
+    /// The shape of those members, for a type with `CATCH_ALL`.
+    fn catch_all_shape() -> Option<ShapeDef> {
+        None
+    }
+
     /// The keys of the object this type is, own and flattened, which a derive checks for duplicates at compile time.
     const KEYS: &'static [&'static str] = &[];
 
@@ -48,6 +56,12 @@ pub trait Shape: Sized {
     /// The definitions this type is described by.
     fn definitions() -> Cow<'static, Definitions> {
         Cow::Owned(Definitions::of::<Self>())
+    }
+
+    /// Converts the members of an object that are not in `known`, for a type with `CATCH_ALL`.
+    fn build_rest(value: &Value, path: &mut Path, known: &[&str]) -> Result<Self, Issues> {
+        let _ = (value, known);
+        mismatch(path, "a type that collects the other members")
     }
 
     /// Converts a value that already matches this type's shape. A mismatch means the shape and the conversion
@@ -113,6 +127,7 @@ impl Shape for f64 {
     fn reference() -> ShapeDef {
         ShapeDef::new(Kind::Number {
             min: None,
+            exclusive_min: None,
             max: None,
         })
     }
@@ -144,6 +159,7 @@ macro_rules! integer_shape {
             fn reference() -> ShapeDef {
                 ShapeDef::new(Kind::Integer {
                     min: Some($min),
+                    exclusive_min: None,
                     max: Some($max),
                 })
             }
@@ -249,6 +265,26 @@ pub struct Map<T>(pub Vec<(String, T)>);
 
 impl<T: Shape> Shape for Map<T> {
     const CLASS: Class = Class::Map;
+    const CATCH_ALL: bool = true;
+    fn catch_all_shape() -> Option<ShapeDef> {
+        Some(T::reference())
+    }
+    fn build_rest(value: &Value, path: &mut Path, known: &[&str]) -> Result<Self, Issues> {
+        let Some(pairs) = value.as_object() else {
+            return mismatch(path, "an object");
+        };
+        let mut built = Vec::new();
+        for (key, entry) in pairs
+            .iter()
+            .filter(|(key, _)| !known.contains(&key.as_str()))
+        {
+            path.push_key(key);
+            let item = T::build(entry, path);
+            path.pop();
+            built.push((key.clone(), item?));
+        }
+        Ok(Map(built))
+    }
     fn reference() -> ShapeDef {
         ShapeDef::new(Kind::Map {
             values: Box::new(T::reference()),
@@ -280,6 +316,22 @@ pub struct OpenObject(pub Vec<(String, Value)>);
 
 impl Shape for OpenObject {
     const CLASS: Class = Class::OpenObject;
+    const CATCH_ALL: bool = true;
+    fn catch_all_shape() -> Option<ShapeDef> {
+        Some(ShapeDef::new(Kind::Any))
+    }
+    fn build_rest(value: &Value, path: &mut Path, known: &[&str]) -> Result<Self, Issues> {
+        match value.as_object() {
+            Some(pairs) => Ok(OpenObject(
+                pairs
+                    .iter()
+                    .filter(|(key, _)| !known.contains(&key.as_str()))
+                    .cloned()
+                    .collect(),
+            )),
+            None => mismatch(path, "an object"),
+        }
+    }
     fn reference() -> ShapeDef {
         ShapeDef::new(Kind::Object(crate::def::ObjectDef::default()))
     }

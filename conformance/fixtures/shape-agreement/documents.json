@@ -1474,5 +1474,335 @@
     "text": "{\"kind\":\"circle\",\"radius\":1,\"kind\":\"nope\"}",
     "type": "Figure",
     "valid": false
+  },
+  {
+    "case": "the named member alone",
+    "document": {
+      "kind": "k"
+    },
+    "type": "CatchAll",
+    "valid": true
+  },
+  {
+    "case": "other members of the typed shape",
+    "document": {
+      "a": 1,
+      "b": 255,
+      "kind": "k"
+    },
+    "type": "CatchAll",
+    "valid": true
+  },
+  {
+    "case": "an other member of the wrong type",
+    "document": {
+      "a": "x",
+      "kind": "k"
+    },
+    "type": "CatchAll",
+    "valid": false
+  },
+  {
+    "case": "an other member out of range",
+    "document": {
+      "a": 256,
+      "kind": "k"
+    },
+    "type": "CatchAll",
+    "valid": false
+  },
+  {
+    "case": "the named member missing",
+    "document": {
+      "a": 1
+    },
+    "type": "CatchAll",
+    "valid": false
+  },
+  {
+    "case": "the named member of the wrong type",
+    "document": {
+      "kind": 1
+    },
+    "type": "CatchAll",
+    "valid": false
+  },
+  {
+    "case": "the first key",
+    "document": {
+      "first": 1
+    },
+    "type": "AnyOfKeys",
+    "valid": true
+  },
+  {
+    "case": "the second key",
+    "document": {
+      "second": "x"
+    },
+    "type": "AnyOfKeys",
+    "valid": true
+  },
+  {
+    "case": "both keys",
+    "document": {
+      "first": 1,
+      "second": "x"
+    },
+    "type": "AnyOfKeys",
+    "valid": true
+  },
+  {
+    "case": "neither key",
+    "document": {},
+    "type": "AnyOfKeys",
+    "valid": false
+  },
+  {
+    "case": "a key of the wrong type",
+    "document": {
+      "first": "x"
+    },
+    "type": "AnyOfKeys",
+    "valid": false
+  },
+  {
+    "case": "the first key",
+    "document": {
+      "first": 1
+    },
+    "type": "OneOfKeys",
+    "valid": true
+  },
+  {
+    "case": "the second key",
+    "document": {
+      "second": "x"
+    },
+    "type": "OneOfKeys",
+    "valid": true
+  },
+  {
+    "case": "both keys",
+    "document": {
+      "first": 1,
+      "second": "x"
+    },
+    "type": "OneOfKeys",
+    "valid": false
+  },
+  {
+    "case": "neither key",
+    "document": {},
+    "type": "OneOfKeys",
+    "valid": false
+  },
+  {
+    "case": "a value above the exclusive minimum",
+    "document": {
+      "above": 0.001
+    },
+    "type": "Exclusive",
+    "valid": true
+  },
+  {
+    "case": "a value at the exclusive minimum",
+    "document": {
+      "above": 0
+    },
+    "type": "Exclusive",
+    "valid": false
+  },
+  {
+    "case": "a count above its exclusive minimum and at its maximum",
+    "document": {
+      "above": 1,
+      "count": 3
+    },
+    "type": "Exclusive",
+    "valid": true
+  },
+  {
+    "case": "a count at its exclusive minimum",
+    "document": {
+      "above": 1,
+      "count": 1
+    },
+    "type": "Exclusive",
+    "valid": false
+  },
+  {
+    "case": "a count above its maximum",
+    "document": {
+      "above": 1,
+      "count": 4
+    },
+    "type": "Exclusive",
+    "valid": false
+  },
+  {
+    "case": "the named member alone",
+    "document": {
+      "kind": "k"
+    },
+    "type": "CatchAll",
+    "valid": true
+  },
+  {
+    "case": "other members of the typed shape",
+    "document": {
+      "a": 1,
+      "b": 255,
+      "kind": "k"
+    },
+    "type": "CatchAll",
+    "valid": true
+  },
+  {
+    "case": "an other member of the wrong type",
+    "document": {
+      "a": "x",
+      "kind": "k"
+    },
+    "type": "CatchAll",
+    "valid": false
+  },
+  {
+    "case": "an other member out of range",
+    "document": {
+      "a": 256,
+      "kind": "k"
+    },
+    "type": "CatchAll",
+    "valid": false
+  },
+  {
+    "case": "the named member missing",
+    "document": {
+      "a": 1
+    },
+    "type": "CatchAll",
+    "valid": false
+  },
+  {
+    "case": "the named member of the wrong type",
+    "document": {
+      "kind": 1
+    },
+    "type": "CatchAll",
+    "valid": false
+  },
+  {
+    "case": "the first key",
+    "document": {
+      "first": 1
+    },
+    "type": "AnyOfKeys",
+    "valid": true
+  },
+  {
+    "case": "the second key",
+    "document": {
+      "second": "x"
+    },
+    "type": "AnyOfKeys",
+    "valid": true
+  },
+  {
+    "case": "both keys",
+    "document": {
+      "first": 1,
+      "second": "x"
+    },
+    "type": "AnyOfKeys",
+    "valid": true
+  },
+  {
+    "case": "neither key",
+    "document": {},
+    "type": "AnyOfKeys",
+    "valid": false
+  },
+  {
+    "case": "a key of the wrong type",
+    "document": {
+      "first": "x"
+    },
+    "type": "AnyOfKeys",
+    "valid": false
+  },
+  {
+    "case": "the first key",
+    "document": {
+      "first": 1
+    },
+    "type": "OneOfKeys",
+    "valid": true
+  },
+  {
+    "case": "the second key",
+    "document": {
+      "second": "x"
+    },
+    "type": "OneOfKeys",
+    "valid": true
+  },
+  {
+    "case": "both keys",
+    "document": {
+      "first": 1,
+      "second": "x"
+    },
+    "type": "OneOfKeys",
+    "valid": false
+  },
+  {
+    "case": "neither key",
+    "document": {},
+    "type": "OneOfKeys",
+    "valid": false
+  },
+  {
+    "case": "a value above the exclusive minimum",
+    "document": {
+      "above": 0.001
+    },
+    "type": "Exclusive",
+    "valid": true
+  },
+  {
+    "case": "a value at the exclusive minimum",
+    "document": {
+      "above": 0
+    },
+    "type": "Exclusive",
+    "valid": false
+  },
+  {
+    "case": "a count above its exclusive minimum and at its maximum",
+    "document": {
+      "above": 1,
+      "count": 3
+    },
+    "type": "Exclusive",
+    "valid": true
+  },
+  {
+    "case": "a count at its exclusive minimum",
+    "document": {
+      "above": 1,
+      "count": 1
+    },
+    "type": "Exclusive",
+    "valid": false
+  },
+  {
+    "case": "a count above its maximum",
+    "document": {
+      "above": 1,
+      "count": 4
+    },
+    "type": "Exclusive",
+    "valid": false
   }
 ]

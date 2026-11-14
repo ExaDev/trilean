@@ -39,7 +39,12 @@ fn object_type(object: &ObjectDef, indent: &str) -> String {
             type_of(&field.shape, &inner)
         ));
     }
-    if !object.closed {
+    if let Some(additional) = &object.additional {
+        lines.push_str(&format!(
+            "{inner}[key: string]: {};\n",
+            type_of(additional, &inner)
+        ));
+    } else if !object.closed {
         lines.push_str(&format!("{inner}[key: string]: unknown;\n"));
     }
     lines.push_str(indent);
@@ -71,7 +76,9 @@ fn type_of(shape: &ShapeDef, indent: &str) -> String {
             }
         }
         Kind::Map { values, .. } => format!("{{ [key: string]: {} }}", type_of(values, indent)),
-        Kind::Object(object) if object.fields.is_empty() && !object.closed => {
+        Kind::Object(object)
+            if object.fields.is_empty() && !object.closed && object.additional.is_none() =>
+        {
             "{ [key: string]: unknown }".to_owned()
         }
         Kind::Object(object) => object_type(object, indent),
@@ -87,6 +94,12 @@ fn type_of(shape: &ShapeDef, indent: &str) -> String {
                 .map(|(_, variant)| type_of(variant, indent))
                 .collect(),
         ),
+        Kind::Not(_) => "unknown".to_owned(),
+        Kind::AllOf(parts) => parts
+            .iter()
+            .map(|part| type_of(part, indent))
+            .collect::<Vec<_>>()
+            .join(" & "),
         Kind::Ref(name) => name.clone(),
     }
 }
