@@ -1,6 +1,6 @@
-import { readFileSync, writeFileSync } from "node:fs";
+import { writeFileSync } from "node:fs";
 import { Miniflare } from "miniflare";
-import { bundle, install, readTree, report } from "./host.mjs";
+import { bundle, install, readTree, report, wasm } from "./host.mjs";
 
 const dir = install(process.argv[2]);
 writeFileSync(`${dir}/tree.json`, JSON.stringify(readTree()));
@@ -17,9 +17,7 @@ const mf = new Miniflare({
     {
       type: "CompiledWasm",
       path: `${dir}/trilean_regex_bg.wasm`,
-      contents: readFileSync(
-        `${dir}/node_modules/trilean-regex/dist/trilean_regex_bg.wasm`,
-      ),
+      contents: wasm(dir),
     },
   ],
   compatibilityDate: "2026-01-01",
