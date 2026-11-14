@@ -228,6 +228,18 @@ struct Exclusive {
     count: Option<u8>,
 }
 
+#[derive(Shape)]
+struct NumberBounds {
+    #[shape(max = 2.2200644002808204e22)]
+    big: Option<f64>,
+    #[shape(min = 1.0000000000000073)]
+    small: Option<f64>,
+    #[shape(exclusive_min = 0.1)]
+    above: Option<f64>,
+    #[shape(unique_items)]
+    list: Option<Vec<f64>>,
+}
+
 macro_rules! roots {
     ($($root:ident),* $(,)?) => {
         /// The types the tables name, each with a document of every verdict.
@@ -248,10 +260,45 @@ macro_rules! roots {
 }
 
 roots!(
-    Closed, Open, Colour, Figure, Either, Bounds, Lengths, Patterned, Files, Together, Constants,
-    Chain, Flat, Raw, Renamed, Wrapper, Overlap, Sparse, Shaped, CatchAll, AnyOfKeys, OneOfKeys,
+    Closed,
+    Open,
+    Colour,
+    Figure,
+    Either,
+    Bounds,
+    Lengths,
+    Patterned,
+    Files,
+    Together,
+    Constants,
+    Chain,
+    Flat,
+    Raw,
+    Renamed,
+    Wrapper,
+    Overlap,
+    Sparse,
+    Shaped,
+    CatchAll,
+    AnyOfKeys,
+    OneOfKeys,
     Exclusive,
+    NumberBounds,
 );
+
+/// A number outside a bound: one more or one less, or the next double when one more is the bound again.
+fn beyond(bound: f64, upwards: bool) -> f64 {
+    let moved = if upwards { bound + 1.0 } else { bound - 1.0 };
+    if moved == bound {
+        if upwards {
+            bound.next_up()
+        } else {
+            bound.next_down()
+        }
+    } else {
+        moved
+    }
+}
 
 fn fixtures() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../conformance/fixtures/shape-agreement")
@@ -780,14 +827,17 @@ impl Generator<'_> {
                     add!("a fraction", Value::Number(0.5));
                 }
                 if let Some(low) = min {
-                    add!("below the minimum", Value::Number(low - 1.0));
+                    add!("below the minimum", Value::Number(beyond(*low, false)));
                 }
                 if let Some(above) = exclusive_min {
                     add!("at the exclusive minimum", Value::Number(*above));
-                    add!("below the exclusive minimum", Value::Number(above - 1.0));
+                    add!(
+                        "below the exclusive minimum",
+                        Value::Number(beyond(*above, false))
+                    );
                 }
                 if let Some(high) = max {
-                    add!("above the maximum", Value::Number(high + 1.0));
+                    add!("above the maximum", Value::Number(beyond(*high, true)));
                 }
             }
             Kind::Array {

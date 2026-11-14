@@ -1804,5 +1804,71 @@
     },
     "type": "Exclusive",
     "valid": false
+  },
+  {
+    "case": "a literal JavaScript reads as the bound",
+    "text": "{\"big\":22200644002808206446864}",
+    "type": "NumberBounds",
+    "valid": true
+  },
+  {
+    "case": "a literal one double above the bound",
+    "text": "{\"big\":22200644002808208000000}",
+    "type": "NumberBounds",
+    "valid": false
+  },
+  {
+    "case": "the bound written in exponent form",
+    "text": "{\"big\":2.2200644002808204e22}",
+    "type": "NumberBounds",
+    "valid": true
+  },
+  {
+    "case": "a literal JavaScript reads as the lower bound",
+    "text": "{\"small\":1.0000000000000073}",
+    "type": "NumberBounds",
+    "valid": true
+  },
+  {
+    "case": "a literal one double below the lower bound",
+    "text": "{\"small\":1.0000000000000071}",
+    "type": "NumberBounds",
+    "valid": false
+  },
+  {
+    "case": "a 20-digit integer, as JavaScript reads it",
+    "text": "{\"small\":12345678901234567890}",
+    "type": "NumberBounds",
+    "valid": true
+  },
+  {
+    "case": "the exclusive minimum written with more digits than a double holds",
+    "text": "{\"above\":0.1000000000000000055511151231257827}",
+    "type": "NumberBounds",
+    "valid": false
+  },
+  {
+    "case": "two literals JavaScript reads as one number",
+    "text": "{\"list\":[22200644002808206446864,2.2200644002808204e22]}",
+    "type": "NumberBounds",
+    "valid": false
+  },
+  {
+    "case": "two different numbers",
+    "text": "{\"list\":[1.0000000000000073,1.0000000000000071]}",
+    "type": "NumberBounds",
+    "valid": true
+  },
+  {
+    "case": "a number past the largest double is not JSON here",
+    "text": "{\"big\":1e999}",
+    "type": "NumberBounds",
+    "valid": false
+  },
+  {
+    "case": "the next double above the exclusive minimum",
+    "text": "{\"above\":0.10000000000000002}",
+    "type": "NumberBounds",
+    "valid": true
   }
 ]

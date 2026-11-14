@@ -6,8 +6,8 @@
 )]
 
 use json_shape::{
-    Definitions, Draft, Issue, SchemaOptions, Shape, Value, check_with_work, schema_definitions,
-    schema_of,
+    Definitions, Draft, Issue, Map, SchemaOptions, Shape, Value, check_with_work,
+    schema_definitions, schema_of,
 };
 
 fn parse(text: &str) -> Value {
@@ -288,6 +288,154 @@ fn whole_numbers_serialise_without_a_fraction_up_to_what_i64_holds() {
         assert_eq!(
             serde_json::to_string(&Value::Number(number)).expect("JSON"),
             text
+        );
+    }
+}
+
+/// Number literals and the bits `JSON.parse` reads them as (`Number(text)` in V8). `serde_json` without its
+/// `float_roundtrip` feature reads several of them one unit in the last place away.
+const JAVASCRIPT_READINGS: [(&str, u64); 14] = [
+    ("1.0000000000000073", 0x3ff0_0000_0000_0021),
+    ("5.978651090953677262", 0x4017_ea23_82f7_5cf2),
+    ("566.955730063951723929144", 0x4081_b7a5_55cd_c3d0),
+    ("22200644002808206446864", 0x4492_cdff_4e82_0105),
+    ("12345678901234567890", 0x43e5_6a95_319d_63e1),
+    ("123456789012345680000", 0x441a_c53a_7e04_bcda),
+    ("9007199254740993", 0x4340_0000_0000_0000),
+    ("2.2200644002808204e22", 0x4492_cdff_4e82_0105),
+    ("1.7976931348623157e308", 0x7fef_ffff_ffff_ffff),
+    ("4.9e-324", 0x1),
+    ("0.1", 0x3fb9_9999_9999_999a),
+    ("1e23", 0x44b5_2d02_c7e1_4af6),
+    ("8.41e21", 0x447c_7e83_209e_90b2),
+    ("3.0000000000000003", 0x4008_0000_0000_0001),
+];
+
+#[test]
+fn number_literals_are_read_as_javascript_reads_them() {
+    let mut differing = Vec::new();
+    for (text, bits) in JAVASCRIPT_READINGS {
+        let read = parse(text).as_f64().expect("a number").to_bits();
+        if read != bits {
+            differing.push(format!(
+                "{text}: read as {read:#x}, JavaScript reads {bits:#x}"
+            ));
+        }
+    }
+    assert!(differing.is_empty(), "{}", differing.join("\n"));
+}
+
+#[derive(Shape)]
+struct Bounded {
+    #[shape(max = 2.2200644002808204e22)]
+    big: f64,
+}
+
+#[test]
+fn a_bound_is_met_by_the_literal_javascript_reads_as_the_bound() {
+    assert!(Bounded::accepts(&parse(
+        r#"{"big":22200644002808206446864}"#
+    )));
+    assert!(!Bounded::accepts(&parse(
+        r#"{"big":22200644002808208000000}"#
+    )));
+}
+
+#[test]
+fn written_numbers_read_back_as_the_same_double() {
+    for (text, bits) in JAVASCRIPT_READINGS {
+        let value = parse(text);
+        let displayed = parse(&value.to_string());
+        assert_eq!(
+            displayed.as_f64().map(f64::to_bits),
+            Some(bits),
+            "Display of {text}"
+        );
+        let serialised = serde_json::to_string(&value).expect("JSON");
+        assert_eq!(
+            parse(&serialised).as_f64().map(f64::to_bits),
+            Some(bits),
+            "Serialize of {text}"
+        );
+    }
+}
+
+#[derive(Shape)]
+struct Unique {
+    #[shape(unique_items)]
+    items: Vec<f64>,
+}
+
+#[test]
+fn two_literals_javascript_reads_as_one_number_are_one_item() {
+    assert!(!Unique::accepts(&parse(
+        r#"{"items":[22200644002808206446864,2.2200644002808204e22]}"#
+    )));
+}
+
+#[test]
+fn a_pattern_in_a_message_is_a_json_string() {
+    #[derive(Shape, Debug)]
+    struct Named {
+        #[shape(pattern = r"^\.json$")]
+        name: String,
+    }
+    let issues = Named::from_json(&parse(r#"{"name":"x"}"#)).expect_err("outside the pattern");
+    assert_eq!(
+        issues.0[0].message,
+        r#"expected a string matching "^\\.json$""#
+    );
+}
+
+#[derive(Shape)]
+struct Counted {
+    #[shape(pattern = "^unique-counted-[0-9]+$")]
+    name: String,
+}
+
+#[derive(Shape)]
+struct Keyed {
+    #[shape(property_names = "^unique-keyed-[0-9]+$")]
+    names: Map<u8>,
+}
+
+#[test]
+fn a_pattern_is_compiled_once_however_many_values_are_checked() {
+    let source = "^unique-counted-[0-9]+$";
+    let document = Value::Object(vec![(
+        "name".to_owned(),
+        Value::String("unique-counted-1".to_owned()),
+    )]);
+    for _ in 0..1000 {
+        assert!(Counted::accepts(&document));
+    }
+    assert_eq!(json_shape::private::compilations_of(source), 1);
+    let keys: Vec<String> = (0..500)
+        .map(|n| format!("\"unique-keyed-{n}\":1"))
+        .collect();
+    assert!(Keyed::accepts(&parse(&format!(
+        r#"{{"names":{{{}}}}}"#,
+        keys.join(",")
+    ))));
+    assert_eq!(
+        json_shape::private::compilations_of("^unique-keyed-[0-9]+$"),
+        1
+    );
+}
+
+#[test]
+fn a_path_cannot_carry_a_memory_from_one_document_to_the_next() {
+    #[derive(Shape, Debug, PartialEq)]
+    #[serde(untagged)]
+    enum Either {
+        Count(u8),
+        Text(String),
+    }
+    for _ in 0..50 {
+        assert_eq!(Either::from_json(&parse("1")), Ok(Either::Count(1)));
+        assert_eq!(
+            Either::from_json(&parse(r#""a""#)),
+            Ok(Either::Text("a".to_owned()))
         );
     }
 }

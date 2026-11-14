@@ -12,9 +12,12 @@ pub const MAX_SAFE_INTEGER: f64 = 9_007_199_254_740_991.0;
 
 /// A JSON value.
 ///
-/// Numbers are finite `f64`s, as `JSON.parse` produces them: an integer above 2^53 is rounded when it is read (which
+/// Numbers are finite `f64`s, each read as the nearest double to its literal, as `JSON.parse` reads it: an integer above 2^53 is rounded when it is read (which
 /// is why no integer type accepts one), `-0` and `0` are one value, and a number is not distinguishable from the
-/// same number written another way (`1e2` and `100`), so a document does not round-trip digit for digit.
+/// same number written another way (`1e2` and `100`), so a document does not round-trip digit for digit. `Display`
+/// writes a number as `JSON.stringify` does. `Serialize` writes the same double, a whole number as an integer wherever
+/// `i64` holds it and any other with `serde_json`'s float text, which reads back as the same double but is not always
+/// the text `JSON.stringify` writes (`1e21` is `1000000000000000000000.0`).
 ///
 /// An object is a list of pairs in input order, and a duplicate key keeps its first position and its last value, as
 /// `JSON.parse` does. `==` (from `PartialEq`) compares objects in that order and numbers as `f64`s; use
