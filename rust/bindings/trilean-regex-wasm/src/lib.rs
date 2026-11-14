@@ -7,8 +7,8 @@ use std::cell::RefCell;
 use js_sys::{Array, Function, JsString, Object, Reflect};
 use trilean_regex::{
     CharClassNode, CharRange, CompiledPattern, EcmaSubsetError, RegexNode, RegexParseError,
-    ShorthandClassLetter, compile_ecmascript_subset_utf16, compile_pattern_utf16,
-    expand_shorthand_class, parse_regex_utf16,
+    ShorthandClassLetter, check_pattern_length, compile_ecmascript_subset_utf16,
+    compile_pattern_utf16, expand_shorthand_class, parse_regex_utf16,
 };
 use wasm_bindgen::prelude::*;
 
@@ -148,7 +148,8 @@ pub fn register_error_classes(
     }));
 }
 
-/// Panics on purpose, so that a test can see the panic hook turn it into an `InternalError`. The package's entry point does not export it.
+/// Panics on purpose, so that a test can see the panic hook turn it into an `InternalError`. It exists only in the build with the `test-hooks` feature, which is never published.
+#[cfg(feature = "test-hooks")]
 #[wasm_bindgen(js_name = panicForTesting)]
 pub fn panic_for_testing() {
     panic!("deliberate panic for the test of the panic hook");
@@ -179,6 +180,20 @@ fn construct(class: impl Fn(&ErrorClasses) -> &Function, arguments: &[JsValue]) 
     })
 }
 
+/// A JavaScript string of the code units, built in pieces: `String.fromCharCode` takes its arguments from the call stack, so one call for a long message overflows it.
+fn js_string(units: &[u16]) -> JsString {
+    const PIECE: usize = 4096;
+    units.chunks(PIECE).fold(JsString::from(""), |text, piece| {
+        text.concat(&JsString::from_char_code(piece))
+    })
+}
+
+/// The code units of a JavaScript string, after its length is checked against the crate's limit, so a pattern that is refused is never copied into the module. A pattern given as anything but a string is a `TypeError` first.
+fn checked_units(text: &JsString) -> Result<Vec<u16>, JsValue> {
+    check_pattern_length(text.length() as usize).map_err(|error| parse_error(&error, text))?;
+    Ok(code_units(text))
+}
+
 /// The code units of a JavaScript string, read one at a time so that an unpaired surrogate is kept, which converting to a Rust `String` would replace.
 fn code_units(text: &JsString) -> Vec<u16> {
     text.iter().collect()
@@ -192,7 +207,7 @@ fn parse_error(error: &RegexParseError, pattern: &JsString) -> JsValue {
     construct(
         |classes| &classes.parse_error,
         &[
-            JsString::from_char_code(&error.message_utf16()).into(),
+            js_string(&error.message_utf16()).into(),
             pattern.into(),
             index_to_js(error.index()).into(),
         ],
@@ -385,7 +400,7 @@ pub fn parse_regex(
     #[wasm_bindgen(unchecked_param_type = "string")] pattern: &JsValue,
 ) -> Result<JsValue, JsValue> {
     let pattern = &string_argument(pattern, "pattern")?;
-    parse_regex_utf16(&code_units(pattern))
+    parse_regex_utf16(&checked_units(pattern)?)
         .map(|node| node_to_js(&node))
         .map_err(|error| parse_error(&error, pattern))
 }
@@ -418,7 +433,7 @@ pub fn compile_pattern(
     #[wasm_bindgen(unchecked_param_type = "string")] pattern: &JsValue,
 ) -> Result<JsCompiledPattern, JsValue> {
     let pattern = &string_argument(pattern, "pattern")?;
-    compile_pattern_utf16(&code_units(pattern))
+    compile_pattern_utf16(&checked_units(pattern)?)
         .map(|compiled| JsCompiledPattern { compiled })
         .map_err(|error| parse_error(&error, pattern))
 }
@@ -435,7 +450,7 @@ pub fn test_pattern(
         &string_argument(pattern, "pattern")?,
         string_argument(input, "input")?,
     );
-    compile_pattern_utf16(&code_units(pattern))
+    compile_pattern_utf16(&checked_units(pattern)?)
         .map(|compiled| compiled.test_utf16(&code_units(&input)))
         .map_err(|error| parse_error(&error, pattern))
 }
@@ -450,7 +465,7 @@ pub fn compile_ecmascript_subset(
     #[wasm_bindgen(unchecked_param_type = "string")] pattern: &JsValue,
 ) -> Result<JsCompiledPattern, JsValue> {
     let pattern = &string_argument(pattern, "pattern")?;
-    compile_ecmascript_subset_utf16(&code_units(pattern))
+    compile_ecmascript_subset_utf16(&checked_units(pattern)?)
         .map(|compiled| JsCompiledPattern { compiled })
         .map_err(|error| subset_error(&error, pattern))
 }
