@@ -39,8 +39,8 @@ Every case has:
 - `id`: unique across the whole corpus, in lower-case ASCII letters, digits, dots, hyphens and underscores.
 - `from`: either `<test file>.test.ts: <describe> > <test>`, the original test title the case came from, so a failure points back to the behaviour it pinned, or `recorded: <package> <source file> (<what>)` for a recorded case. The schema and every loader refuse a `from` in neither form. Where the original asserted less than the case records, `from` says so.
 - `kind`: selects the shape below.
-- `skip`, optional, with a `reason` that says why: the implementation that does not run the case, `ts` for a case the TypeScript implementation skips and `rust` for a case the Rust implementation skips. The axis is the implementation, never the host: a wasm build of the Rust engine is `rust` wherever it runs (native, Node, a browser or Workers). A case one implementation cannot run carries it; nothing else does. A `reason` without `skip` is refused.
-- `tolerance`, optional: `{ "ulps": n }`. Numbers compare exactly (`-0` included) unless a case gives one.
+- `skip`, optional, with a `reason` that says why: the implementation that does not run the case, `ts` for a case the TypeScript implementation skips and `rust` for a case the Rust implementation skips. The axis is the implementation, never the host: a wasm build of the Rust engine is `rust` wherever it runs (native, Node, a browser or Workers). A case one implementation cannot run in any build carries it; nothing else does. A number JSON cannot write, an infinity or a NaN, is no reason to skip: it is written as `{ "$number": "Infinity" }` (below) and runs in every implementation. A `reason` without `skip` is refused.
+- `tolerance`, optional: `{ "ulps": n }`, units in the last place, or `{ "absolute": x }`, a distance, never both. Numbers compare exactly (`-0` included) unless a case gives one. A case that gives one carries the tolerance its original test used: the same digits of `toBeCloseTo`, the same bound on a difference, with the number the original compared against (computed independently of the implementation, or a literal) as the expectation. The implementation's own exact digits appear only in the generated files.
 
 A case comes from an existing test, with the same inputs and the same expectation, and an expectation is never weaker than the original's. The exception is a recorded case: one written for the corpus because no test covered the behaviour, whose expectation is what the TypeScript implementation does today. Its `from` starts `recorded:` and names the source file the behaviour comes from (`recorded: trilean-regex src/parser.ts (...)`), so a reader can tell a pinned original from a recorded behaviour, and a loader checks the form. A recorded behaviour that is a defect is fixed and its case changed together, never left pinned.
 
@@ -95,7 +95,7 @@ The corpus pins answers, never time. A test that bounds how long a pattern takes
 
 ### trilean
 
-Where a case compares a result with an expectation, numbers are equal when they are the same double (`-0` is not `0`) or, when the case gives a `tolerance`, within that many units in the last place; an object member whose value the implementation leaves undefined is absent; every other value must be equal structurally.
+Where a case compares a result with an expectation, numbers are equal when they are the same double (`-0` is not `0`) or, when the case gives a `tolerance`, within it; an object member whose value the implementation leaves undefined is absent; every other value must be equal structurally.
 
 `validate`:
 
@@ -111,7 +111,31 @@ Where a case compares a result with an expectation, numbers are equal when they 
 { "id": "...", "from": "...", "kind": "call", "function": "round", "args": [ { "kind": "number", "value": 2.5 } ], "expect": { "kind": "number", "value": 3 } }
 ```
 
-`function` is the name of a built-in function and `args` its arguments, as computed values. `expect` is the computed value the function returns, `{ "domainError": true }` for a result that reports an argument outside the function's domain, or `{ "wrongType": true }` for one that reports an argument it cannot accept; either failure may give `messageIncludes`, fragments the failure's message contains in order. A computed value is compared by the rules above, so `-0` is not `0`. A number the canonical form cannot hold is written `{ "$number": "-0" }`, `"Infinity"`, `"-Infinity"` or `"NaN"` wherever a case has a number or a value (arguments, trees, contexts, resolver answers and expectations): a negative zero because the canonical form writes it as `0`, and the others because JSON has no such number. A native implementation, which takes its values from JSON, can be given a negative zero but not the others, so a case that has an infinity or a NaN carries `skip: "rust"`.
+`function` is the name of a built-in function and `args` its arguments, as computed values. `expect` is the computed value the function returns, `{ "domainError": true }` for a result that reports an argument outside the function's domain, or `{ "wrongType": true }` for one that reports an argument it cannot accept; either failure may give `messageIncludes`, fragments the failure's message contains in order. A computed value is compared by the rules above, so `-0` is not `0`. A number the canonical form cannot hold is written `{ "$number": "-0" }`, `"Infinity"`, `"-Infinity"` or `"NaN"` wherever a case has a number or a value (arguments, trees, contexts, resolver answers and expectations): a negative zero because the canonical form writes it as `0`, and the others because JSON has no such number. Every implementation reads the four forms as the numbers they name, so a case that has one runs in all of them and carries no `skip`.
+
+`build`:
+
+```json
+{ "id": "...", "from": "...", "kind": "build", "builder": "xor", "args": [ { ... }, { ... } ], "expect": { ... } }
+```
+
+`builder` is the name of a function of the package that builds a tree (`not`, `and`, `or`, `xor`, `nand`, `nor`, `implies`, `iff`, `none`, `sum`, `average`, `count`, `presenceOf`, `coalesce`, `prefixPattern`, `wildcardPattern`, `hierarchicalGlobPattern`), `args` its arguments in order (trees, a collection reference, a string; `null` for an argument left out) and `expect` the tree it returns, compared by the rules above. A case that only pins the tree a test went on to evaluate is recorded, and says so in `from`.
+
+`inputs`:
+
+```json
+{ "id": "...", "from": "...", "kind": "inputs", "raw": { "a": 1 }, "expect": { "ok": true, "inputs": { "a": { "kind": "number", "value": 1 } }, "collections": {} } }
+```
+
+`raw` is parsed as the inputs of a document. `expect` is `{ "ok": true, "inputs": ..., "collections": ... }`, the named values and the lists of items (each item an object of named values) as JSON objects, whose order of members is not compared, or `{ "ok": false, "issues": [...] }`, the issue texts in order.
+
+`document`:
+
+```json
+{ "id": "...", "from": "...", "kind": "document", "tree": { ... }, "inputs": { ... }, "as": "predicate", "maxNodes": 100, "expect": { "outcome": "evaluated", "treeKind": "expression", "evaluation": { ... } } }
+```
+
+The document is evaluated with the package's built-in functions. `expect` is the whole outcome, compared by the rules above. `expectSubset` is given instead where the original asserted only some of it: it names at least one key, and an object matches when every key it gives matches, an array matches element by element at the same length, and any other value must be equal (numbers by the case's `tolerance`).
 
 `cli`:
 
@@ -119,7 +143,7 @@ Where a case compares a result with an expectation, numbers are equal when they 
 { "id": "...", "from": "...", "kind": "cli", "args": ["evaluate", "tree.json"], "files": { "tree.json": "{...}" }, "stdin": "...", "expect": { "exit": 0, "stdoutJson": { ... } } }
 ```
 
-The command is run with `args` against an in-memory set of files, `files` (name to text, which a parser reads as written, so `1e999` is an infinite number) and `stdin`, which the path `-` reads; a path that is in neither cannot be read. `expect` gives the exit status and, where the original asserted it, `stdout` or `stderr` as exact text, `stdoutJson`, the JSON the command printed, compared by the rules above, `stderrIncludes`, fragments standard error contains in order, and `stderrStartsWith`.
+The command is run with `args` against an in-memory set of files, `files` (name to text, which a parser reads as written, so `1e999` is an infinite number) and `stdin`, which the path `-` reads; a path that is in neither cannot be read. `expect` gives the exit status and, where the original asserted it, `stdout` or `stderr` as exact text, `stdoutJson`, the JSON the command printed, compared by the rules above, `stdoutJsonSubset`, the same for an original that asserted only some fields (it names at least one key; an object matches when every key it gives matches, an array matches element by element at the same length, any other value must be equal), `stdoutExcludes`, fragments standard output does not contain, `stderrIncludes`, fragments standard error contains in order, and `stderrStartsWith`.
 
 `evaluate`:
 
@@ -127,9 +151,9 @@ The command is run with `args` against an in-memory set of files, `files` (name 
 { "id": "...", "from": "...", "kind": "evaluate", "as": "predicate", "tree": { ... }, "context": { ... }, "resolvers": { ... }, "expect": { "status": "definite", "value": true } }
 ```
 
-`tree` is a predicate or an expression (`as` says which) and is evaluated against `context` (a JSON value, absent when the test passed none). `expect` is `{ "status": "definite", "value": ... }` (a boolean for a predicate, a computed value for an expression), `{ "status": "indeterminate", "code": ... }`, optionally with `message`, which must equal the reason's message, or `messageIncludes`, a list of fragments that must occur in the reason's message in order, or `{ "throws": { "from": ..., "message"? } }` for an evaluation that throws, where `from` names what threw (`resolver`, `function`, or `type-error` for a `TypeError`) and `message` must occur in the exception's message. Each assertion is given only where the original test made it.
+`tree` is a predicate or an expression (`as` says which) and is evaluated against `context` (a JSON value, absent when the test passed none). `expect` is `{ "status": "definite", "value": ... }` (a boolean for a predicate, a computed value for an expression; `value` is left out where the original asserted only that the result is definite), `{ "status": "indeterminate", "code": ... }` (`code` is left out where the original asserted only that it is indeterminate), optionally with `message`, which must equal the reason's message, or `messageIncludes`, a list of fragments that must occur in the reason's message in order, or `{ "throws": { "from": ..., "message"? } }` for an evaluation that throws, where `from` names what threw (`resolver`, `function`, or `type-error` for a `TypeError`) and `message` must occur in the exception's message. Each assertion is given only where the original test made it, and a case that asserts only the resolver calls its original counted (`expectCalls`) gives no `expect`.
 
-The resolvers are data. In `resolvers`, `values`, `lookups`, `collections`, `delegates` and `trees` list the answers; the first entry whose key (`key`, `table` with `keys`, `collection`, `system` with `payload`) equals the call, and whose `context` equals the context of the call (an omitted `context`, or `"*"`, matches any), gives the answer. A call that no entry matches gets `default`, `{ "found": false }` when absent, and an unmatched collection is empty. `delegates` or `trees` absent means that resolver is not supplied. `fromContext: true` reads a string key from the context object instead of `values`, taking a boolean, a number or a string as a value without a unit. A resolution is `{ "found": true, "value": <computed value> }`, `{ "found": false }`, `{ "found": false, "notYetKnown": true }` or `{ "throws": "message" }`, and in the asynchronous evaluator any of them takes `settlesAfter` microtask turns to settle. `expectCalls` lists the resolver calls the evaluation makes, in order, each with the key, table, collection or system it names where it gives one.
+The resolvers are data. In `resolvers`, `values`, `lookups`, `collections`, `delegates` and `trees` list the answers; the first entry whose key (`key`, `table` with `keys`, `collection`, `system` with `payload`) equals the call (a delegate entry too may give a `context`, which defaults to any), and whose `context` equals the context of the call (an omitted `context`, or `"*"`, matches any), gives the answer. A call that no entry matches gets `default`, `{ "found": false }` when absent, and an unmatched collection is empty. `delegates` or `trees` absent means that resolver is not supplied. `fromContext: true` reads a string key from the context object instead of `values`, taking a boolean, a number or a string as a value without a unit. A resolution is `{ "found": true, "value": <computed value> }`, `{ "found": false }`, `{ "found": false, "notYetKnown": true }` or `{ "throws": "message" }`, and in the asynchronous evaluator any of them takes `settlesAfter` microtask turns to settle. `expectCalls` lists the resolver calls the evaluation makes, in order, each with the key, table, collection or system it names where it gives one.
 
 `evaluator` sets what the evaluator is built with: `functions` (`builtin` for the package's built-in functions, and `table`, per function name the argument lists it answers and the result, a computed value or a failure `{ "domainError": ... }` or `{ "wrongType": ... }`), `maxNodes` and `maxNestingDepth`. `modes` lists the evaluators the case runs under: `async`, `sync` and, for a predicate, `compiled`; omitted, it is every one that applies, so a result that differs between them is a defect of the implementation. A case whose resolvers settle later (`settlesAfter`) lists `async` only.
 

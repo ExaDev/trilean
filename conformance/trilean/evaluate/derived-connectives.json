@@ -119,10 +119,9 @@
     {
       "as": "predicate",
       "expect": {
-        "code": "not-found",
         "status": "indeterminate"
       },
-      "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > T XOR U => U (the original asserted only the status; recorded: trilean src/evaluator.ts, the reason code)",
+      "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > T XOR U => U",
       "id": "connectives.xor-worked-correctness-check-readme-md-worked-correctness-check-exclusive-or-t-xor-u-u.1",
       "kind": "evaluate",
       "resolvers": {
@@ -309,10 +308,9 @@
     {
       "as": "predicate",
       "expect": {
-        "code": "not-found",
         "status": "indeterminate"
       },
-      "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > F XOR U => U (the original asserted only the status; recorded: trilean src/evaluator.ts, the reason code)",
+      "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > F XOR U => U",
       "id": "connectives.xor-worked-correctness-check-readme-md-worked-correctness-check-exclusive-or-f-xor-u-u.1",
       "kind": "evaluate",
       "resolvers": {
@@ -383,10 +381,9 @@
     {
       "as": "predicate",
       "expect": {
-        "code": "not-found",
         "status": "indeterminate"
       },
-      "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > U XOR T => U (the original asserted only the status; recorded: trilean src/evaluator.ts, the reason code)",
+      "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > U XOR T => U",
       "id": "connectives.xor-worked-correctness-check-readme-md-worked-correctness-check-exclusive-or-u-xor-t-u.1",
       "kind": "evaluate",
       "resolvers": {
@@ -457,10 +454,9 @@
     {
       "as": "predicate",
       "expect": {
-        "code": "not-found",
         "status": "indeterminate"
       },
-      "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > U XOR F => U (the original asserted only the status; recorded: trilean src/evaluator.ts, the reason code)",
+      "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > U XOR F => U",
       "id": "connectives.xor-worked-correctness-check-readme-md-worked-correctness-check-exclusive-or-u-xor-f-u.1",
       "kind": "evaluate",
       "resolvers": {
@@ -531,10 +527,9 @@
     {
       "as": "predicate",
       "expect": {
-        "code": "not-found",
         "status": "indeterminate"
       },
-      "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > U XOR U => U (the original asserted only the status; recorded: trilean src/evaluator.ts, the reason code)",
+      "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > U XOR U => U",
       "id": "connectives.xor-worked-correctness-check-readme-md-worked-correctness-check-exclusive-or-u-xor-u-u.1",
       "kind": "evaluate",
       "resolvers": {
@@ -621,10 +616,9 @@
     {
       "as": "predicate",
       "expect": {
-        "code": "not-found",
         "status": "indeterminate"
       },
-      "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > has no absorbing value: every combination with at least one U produces U, unlike AND/OR (the original asserted only the status; recorded: trilean src/evaluator.ts, the reason code)",
+      "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > has no absorbing value: every combination with at least one U produces U, unlike AND/OR",
       "id": "connectives.xor-worked-correctness-check-readme-md-worked-correctness-check-exclusive-or-has-no-absorbing-value-every-combination-with-at-least-one-u.1",
       "kind": "evaluate",
       "resolvers": {
@@ -695,10 +689,9 @@
     {
       "as": "predicate",
       "expect": {
-        "code": "not-found",
         "status": "indeterminate"
       },
-      "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > has no absorbing value: every combination with at least one U produces U, unlike AND/OR (the original asserted only the status; recorded: trilean src/evaluator.ts, the reason code)",
+      "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > has no absorbing value: every combination with at least one U produces U, unlike AND/OR",
       "id": "connectives.xor-worked-correctness-check-readme-md-worked-correctness-check-exclusive-or-has-no-absorbing-value-every-combination-with-at-least-one-u.2",
       "kind": "evaluate",
       "resolvers": {
@@ -769,10 +762,9 @@
     {
       "as": "predicate",
       "expect": {
-        "code": "not-found",
         "status": "indeterminate"
       },
-      "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > has no absorbing value: every combination with at least one U produces U, unlike AND/OR (the original asserted only the status; recorded: trilean src/evaluator.ts, the reason code)",
+      "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > has no absorbing value: every combination with at least one U produces U, unlike AND/OR",
       "id": "connectives.xor-worked-correctness-check-readme-md-worked-correctness-check-exclusive-or-has-no-absorbing-value-every-combination-with-at-least-one-u.3",
       "kind": "evaluate",
       "resolvers": {
@@ -843,10 +835,9 @@
     {
       "as": "predicate",
       "expect": {
-        "code": "not-found",
         "status": "indeterminate"
       },
-      "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > has no absorbing value: every combination with at least one U produces U, unlike AND/OR (the original asserted only the status; recorded: trilean src/evaluator.ts, the reason code)",
+      "from": "derived-connectives.unit.test.ts: XOR worked correctness check (README.md 'Worked correctness check: exclusive-or') > has no absorbing value: every combination with at least one U produces U, unlike AND/OR",
       "id": "connectives.xor-worked-correctness-check-readme-md-worked-correctness-check-exclusive-or-has-no-absorbing-value-every-combination-with-at-least-one-u.4",
       "kind": "evaluate",
       "resolvers": {

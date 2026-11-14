@@ -253,9 +253,25 @@ fn check_regex_match_inputs(value: &Value, at: &str) -> Check<()> {
     Ok(())
 }
 
+/// A tolerance gives either `ulps`, an integer, or `absolute`, a non-negative number, and never both.
 fn check_tolerance(value: &Value, at: &str) -> Check<()> {
-    let map = exact_keys(value, at, &["ulps"], &[])?;
-    integer_field(map, "ulps", at).map(drop)
+    let map = object(value, at)?;
+    match (map.contains_key("ulps"), map.contains_key("absolute")) {
+        (true, false) => {
+            exact_keys(value, at, &["ulps"], &[])?;
+            integer_field(map, "ulps", at).map(drop)
+        }
+        (false, true) => {
+            exact_keys(value, at, &["absolute"], &[])?;
+            match map["absolute"].as_f64() {
+                Some(absolute) if absolute >= 0.0 => Ok(()),
+                _ => Err(format!("{at}: \"absolute\" must be a non-negative number")),
+            }
+        }
+        _ => Err(format!(
+            "{at}: a tolerance gives exactly one of \"ulps\" and \"absolute\""
+        )),
+    }
 }
 
 /// Checks one case and returns its id. Only the regex kinds are validated in full; any other kind is refused,

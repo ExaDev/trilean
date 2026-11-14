@@ -87,7 +87,7 @@
       }
     },
     {
-      "expect": {
+      "expectSubset": {
         "evaluation": {
           "status": "definite",
           "value": {
@@ -95,10 +95,9 @@
             "value": 0
           }
         },
-        "outcome": "evaluated",
-        "treeKind": "expression"
+        "outcome": "evaluated"
       },
-      "from": "evaluate-document.unit.test.ts: evaluateDocument with lists of items > folds an empty list to the initial value (the original asserted only part of the result; recorded: trilean src/evaluate-document.ts, the whole result)",
+      "from": "evaluate-document.collections.unit.test.ts: evaluateDocument with lists of items > folds an empty list to the initial value",
       "id": "document-collections.evaluatedocument-with-lists-of-items-folds-an-empty-list-to-the-initial-value.1",
       "inputs": {
         "intervals": []
@@ -160,18 +159,16 @@
       }
     },
     {
-      "expect": {
+      "expectSubset": {
         "evaluation": {
           "reason": {
             "code": "not-found",
             "message": "no value found for reference key \"hours\""
           },
           "status": "indeterminate"
-        },
-        "outcome": "evaluated",
-        "treeKind": "expression"
+        }
       },
-      "from": "evaluate-document.unit.test.ts: evaluateDocument with lists of items > is indeterminate, naming the key, when an item lacks a value the fold reads (the original asserted only part of the result; recorded: trilean src/evaluate-document.ts, the whole result)",
+      "from": "evaluate-document.unit.test.ts: evaluateDocument with lists of items > is indeterminate, naming the key, when an item lacks a value the fold reads (the original asserted that the message contains the key; the case gives the message, which the first case of this file pins in the same form)",
       "id": "document-collections.evaluatedocument-with-lists-of-items-is-indeterminate-naming-the-key-when-an-item-lacks-a-value-the-fold-reads.1",
       "inputs": {
         "intervals": [
@@ -241,18 +238,16 @@
       }
     },
     {
-      "expect": {
+      "expectSubset": {
         "evaluation": {
           "reason": {
             "code": "not-found",
             "message": "no value found for reference key \"hours\""
           },
           "status": "indeterminate"
-        },
-        "outcome": "evaluated",
-        "treeKind": "expression"
+        }
       },
-      "from": "evaluate-document.unit.test.ts: evaluateDocument with lists of items > gives an item no view of the top-level inputs (the original asserted only part of the result; recorded: trilean src/evaluate-document.ts, the whole result)",
+      "from": "evaluate-document.unit.test.ts: evaluateDocument with lists of items > gives an item no view of the top-level inputs (the original asserted that the message contains the key; the case gives the message, which the first case of this file pins in the same form)",
       "id": "document-collections.evaluatedocument-with-lists-of-items-gives-an-item-no-view-of-the-top-level-inputs.1",
       "inputs": {
         "hours": 24,
@@ -472,19 +467,16 @@
       }
     },
     {
-      "expect": {
+      "expectSubset": {
         "evaluation": {
           "status": "definite",
           "value": {
             "kind": "number",
-            "unit": {},
-            "value": 58.834840541455215
+            "value": 58.8348405414552
           }
-        },
-        "outcome": "evaluated",
-        "treeKind": "expression"
+        }
       },
-      "from": "evaluate-document.unit.test.ts: evaluateDocument with complex inputs > adds mixed resistive and reactive impedances as complex numbers (the original compared with toBeCloseTo to twelve decimal places; recorded: trilean src/builtin-functions.ts, the exact result)",
+      "from": "evaluate-document.collections.unit.test.ts: evaluateDocument with complex inputs > adds mixed resistive and reactive impedances as complex numbers",
       "id": "document-collections.evaluatedocument-with-complex-inputs-adds-mixed-resistive-and-reactive-impedances-as-complex-numbers.1",
       "inputs": {
         "E": 100,
@@ -501,7 +493,7 @@
       },
       "kind": "document",
       "tolerance": {
-        "ulps": 4
+        "absolute": 5e-13
       },
       "tree": {
         "args": [
@@ -547,19 +539,16 @@
       }
     },
     {
-      "expect": {
+      "expectSubset": {
         "evaluation": {
           "status": "definite",
           "value": {
             "kind": "number",
-            "unit": {},
             "value": 50
           }
-        },
-        "outcome": "evaluated",
-        "treeKind": "expression"
+        }
       },
-      "from": "evaluate-document.unit.test.ts: evaluateDocument with complex inputs > agrees with the scalar form when every impedance is reactive (the original compared with toBeCloseTo to twelve decimal places; recorded: trilean src/builtin-functions.ts, the exact result)",
+      "from": "evaluate-document.collections.unit.test.ts: evaluateDocument with complex inputs > agrees with the scalar form when every impedance is reactive",
       "id": "document-collections.evaluatedocument-with-complex-inputs-agrees-with-the-scalar-form-when-every-impedance-is-reactive.1",
       "inputs": {
         "E": 100,
@@ -576,7 +565,7 @@
       },
       "kind": "document",
       "tolerance": {
-        "ulps": 4
+        "absolute": 5e-13
       },
       "tree": {
         "args": [

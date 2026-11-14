@@ -27,7 +27,10 @@ interface CaseBase {
   readonly from: string;
   readonly skip?: (typeof SKIP_VALUES)[number];
   readonly reason?: string;
-  readonly tolerance?: { readonly ulps: number };
+  readonly tolerance?: {
+    readonly ulps?: number;
+    readonly absolute?: number;
+  };
 }
 
 export interface ValidateCase extends CaseBase {
@@ -86,6 +89,7 @@ export interface ResolverData {
   readonly delegates?: readonly {
     readonly system: string;
     readonly payload: Json;
+    readonly context?: ContextMatch;
     readonly result: Resolution;
   }[];
   readonly trees?: readonly {
@@ -99,10 +103,10 @@ export interface ResolverData {
 }
 
 export type EvaluateExpectation =
-  | { readonly status: "definite"; readonly value: Json }
+  | { readonly status: "definite"; readonly value?: Json }
   | {
       readonly status: "indeterminate";
-      readonly code: string;
+      readonly code?: string;
       readonly message?: string;
       readonly messageIncludes?: readonly string[];
     }
@@ -144,7 +148,7 @@ export interface EvaluateCase extends CaseBase {
     readonly maxNodes?: Json;
   };
   readonly modes?: readonly Mode[];
-  readonly expect: EvaluateExpectation;
+  readonly expect?: EvaluateExpectation;
   readonly expectCalls?: readonly ExpectedCall[];
 }
 
@@ -191,6 +195,8 @@ export interface CliCase extends CaseBase {
     readonly stdout?: string;
     readonly stderr?: string;
     readonly stdoutJson?: Json;
+    readonly stdoutJsonSubset?: Json;
+    readonly stdoutExcludes?: readonly string[];
     readonly stderrIncludes?: readonly string[];
     readonly stderrStartsWith?: string;
   };
@@ -210,7 +216,8 @@ export interface DocumentCase extends CaseBase {
   readonly as?: "predicate" | "expression";
   readonly inputs?: Json;
   readonly maxNodes?: Json;
-  readonly expect: Json;
+  readonly expect?: Json;
+  readonly expectSubset?: Json;
 }
 
 /** What a built-in function reports instead of a value: the failure and the fragments its message contains. */

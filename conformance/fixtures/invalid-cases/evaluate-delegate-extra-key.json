@@ -1,0 +1,33 @@
+{
+  "cases": [
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite"
+      },
+      "from": "x.unit.test.ts: a fixture",
+      "id": "fixture.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "delegates": [
+          {
+            "context": {
+              "a": 1
+            },
+            "extra": 1,
+            "payload": null,
+            "result": {
+              "found": false
+            },
+            "system": "s"
+          }
+        ]
+      },
+      "tree": {
+        "kind": "delegate",
+        "payload": null,
+        "system": "s"
+      }
+    }
+  ]
+}

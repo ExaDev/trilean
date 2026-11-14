@@ -2,7 +2,7 @@ import { expect } from "vitest";
 import { evaluateDocument } from "../evaluate-document";
 import { parseInputs } from "../input-resolvers";
 import type { DocumentCase, InputsCase } from "./corpus-types";
-import { jsonEquals } from "./json-equal";
+import { jsonEquals, subsetMatches } from "./json-equal";
 import { decodeNumbers } from "./values";
 
 /** Parses the raw inputs and compares the verdict: the named values and lists of items, or the issues. */
@@ -18,13 +18,13 @@ export function runInputsCase(testCase: InputsCase): void {
         items.map((item) => Object.fromEntries(item)),
       ]),
     );
-    const ulps = testCase.tolerance?.ulps ?? 0;
+    const tolerance = testCase.tolerance;
     expect(
-      jsonEquals(inputs, wanted.inputs, ulps),
+      jsonEquals(inputs, wanted.inputs, tolerance),
       `inputs ${JSON.stringify(inputs)}`,
     ).toBe(true);
     expect(
-      jsonEquals(collections, wanted.collections, ulps),
+      jsonEquals(collections, wanted.collections, tolerance),
       `collections ${JSON.stringify(collections)}`,
     ).toBe(true);
   } else if (!result.ok && !wanted.ok) {
@@ -44,8 +44,11 @@ export function runDocumentCase(testCase: DocumentCase): void {
       ? { maxNodes: testCase.maxNodes }
       : {}),
   });
-  expect(
-    jsonEquals(result, testCase.expect, testCase.tolerance?.ulps ?? 0),
-    `the document evaluated to ${JSON.stringify(result)}`,
-  ).toBe(true);
+  const matches =
+    testCase.expectSubset === undefined
+      ? jsonEquals(result, testCase.expect, testCase.tolerance)
+      : subsetMatches(result, testCase.expectSubset, testCase.tolerance);
+  expect(matches, `the document evaluated to ${JSON.stringify(result)}`).toBe(
+    true,
+  );
 }

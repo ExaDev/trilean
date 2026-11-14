@@ -1,0 +1,15 @@
+{
+  "cases": [
+    {
+      "as": "predicate",
+      "from": "x.unit.test.ts: a fixture",
+      "id": "fixture.1",
+      "kind": "evaluate",
+      "resolvers": {},
+      "tree": {
+        "kind": "allOf",
+        "operands": []
+      }
+    }
+  ]
+}

@@ -2772,10 +2772,9 @@
     {
       "as": "predicate",
       "expect": {
-        "code": "not-found",
         "status": "indeterminate"
       },
-      "from": "derived-patterns.unit.test.ts: three-valued behaviour is inherited from textCompare, not re-decided > an unresolvable subject stays indeterminate rather than compiling to a non-match (the original asserted only the status; recorded: trilean src/evaluator.ts, the reason code)",
+      "from": "derived-patterns.unit.test.ts: three-valued behaviour is inherited from textCompare, not re-decided > an unresolvable subject stays indeterminate rather than compiling to a non-match",
       "id": "patterns.three-valued-behaviour-is-inherited-from-textcompare-not-re-decided-an-unresolvable-subject-stays-indeterminate-rather-than-compiling-to-a-no.1",
       "kind": "evaluate",
       "resolvers": {

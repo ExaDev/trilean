@@ -1132,9 +1132,7 @@
       "from": "builtin-functions.unit.test.ts: a result that is not a finite number > is a domain-error from minimum even when the argument already was one",
       "function": "minimum",
       "id": "builtin.a-result-that-is-not-a-finite-number-is-a-domain-error-from-minimum-even-when-the-argument-already-was-one.1",
-      "kind": "call",
-      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
-      "skip": "rust"
+      "kind": "call"
     },
     {
       "args": [
@@ -1154,9 +1152,7 @@
       "from": "builtin-functions.unit.test.ts: a result that is not a finite number > is a domain-error from maximum even when the argument already was one",
       "function": "maximum",
       "id": "builtin.a-result-that-is-not-a-finite-number-is-a-domain-error-from-maximum-even-when-the-argument-already-was-one.1",
-      "kind": "call",
-      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
-      "skip": "rust"
+      "kind": "call"
     },
     {
       "args": [
@@ -1176,9 +1172,7 @@
       "from": "builtin-functions.unit.test.ts: a result that is not a finite number > is a domain-error from absoluteValue even when the argument already was one",
       "function": "absoluteValue",
       "id": "builtin.a-result-that-is-not-a-finite-number-is-a-domain-error-from-absolutevalue-even-when-the-argument-already-was-one.1",
-      "kind": "call",
-      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
-      "skip": "rust"
+      "kind": "call"
     },
     {
       "args": [
@@ -1198,9 +1192,7 @@
       "from": "builtin-functions.unit.test.ts: a result that is not a finite number > is a domain-error from round even when the argument already was one",
       "function": "round",
       "id": "builtin.a-result-that-is-not-a-finite-number-is-a-domain-error-from-round-even-when-the-argument-already-was-one.1",
-      "kind": "call",
-      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
-      "skip": "rust"
+      "kind": "call"
     },
     {
       "args": [
@@ -1220,9 +1212,7 @@
       "from": "builtin-functions.unit.test.ts: a result that is not a finite number > is a domain-error from magnitude even when the argument already was one",
       "function": "magnitude",
       "id": "builtin.a-result-that-is-not-a-finite-number-is-a-domain-error-from-magnitude-even-when-the-argument-already-was-one.1",
-      "kind": "call",
-      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
-      "skip": "rust"
+      "kind": "call"
     },
     {
       "args": [
@@ -1562,9 +1552,7 @@
       "from": "builtin-functions.unit.test.ts: phase > is a domain-error when a component is not finite, as the other built-ins are for a result that is not",
       "function": "phase",
       "id": "builtin.phase-is-a-domain-error-when-a-component-is-not-finite-as-the-other-built-ins-are-for-a-result-that-is-not.1",
-      "kind": "call",
-      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
-      "skip": "rust"
+      "kind": "call"
     },
     {
       "args": [
@@ -1585,9 +1573,7 @@
       "from": "builtin-functions.unit.test.ts: phase > is a domain-error when a component is not finite, as the other built-ins are for a result that is not",
       "function": "phase",
       "id": "builtin.phase-is-a-domain-error-when-a-component-is-not-finite-as-the-other-built-ins-are-for-a-result-that-is-not.2",
-      "kind": "call",
-      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
-      "skip": "rust"
+      "kind": "call"
     },
     {
       "args": [
@@ -1608,9 +1594,7 @@
       "from": "builtin-functions.unit.test.ts: phase > is a domain-error when a component is not finite, as the other built-ins are for a result that is not",
       "function": "phase",
       "id": "builtin.phase-is-a-domain-error-when-a-component-is-not-finite-as-the-other-built-ins-are-for-a-result-that-is-not.3",
-      "kind": "call",
-      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
-      "skip": "rust"
+      "kind": "call"
     },
     {
       "args": [
@@ -1631,9 +1615,7 @@
       "from": "builtin-functions.unit.test.ts: phase > is a domain-error when a component is not finite, as the other built-ins are for a result that is not",
       "function": "phase",
       "id": "builtin.phase-is-a-domain-error-when-a-component-is-not-finite-as-the-other-built-ins-are-for-a-result-that-is-not.4",
-      "kind": "call",
-      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
-      "skip": "rust"
+      "kind": "call"
     },
     {
       "args": [
@@ -1654,9 +1636,7 @@
       "from": "builtin-functions.unit.test.ts: phase > is a domain-error when a component is not finite, as the other built-ins are for a result that is not",
       "function": "phase",
       "id": "builtin.phase-is-a-domain-error-when-a-component-is-not-finite-as-the-other-built-ins-are-for-a-result-that-is-not.5",
-      "kind": "call",
-      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
-      "skip": "rust"
+      "kind": "call"
     },
     {
       "args": [
@@ -1677,9 +1657,7 @@
       "from": "builtin-functions.unit.test.ts: phase > is a domain-error when a component is not finite, as the other built-ins are for a result that is not",
       "function": "phase",
       "id": "builtin.phase-is-a-domain-error-when-a-component-is-not-finite-as-the-other-built-ins-are-for-a-result-that-is-not.6",
-      "kind": "call",
-      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
-      "skip": "rust"
+      "kind": "call"
     },
     {
       "args": [
@@ -1889,12 +1867,12 @@
         "kind": "complex",
         "re": 1.0065454908157918
       },
-      "from": "builtin-functions.unit.test.ts: squareRoot of a complex number > squares back to its argument with a real part that is not negative, in every quadrant (the original asserted that the root squares back to its argument within a few roundings and has a real part that is not negative; recorded: trilean src/builtin-functions.ts, the exact result)",
+      "from": "builtin-functions.unit.test.ts: squareRoot of a complex number > squares back to its argument with a real part that is not negative, in every quadrant (the original checked that the square of the root is the argument to four roundings; the case gives the principal root and the bound on it that follows)",
       "function": "squareRoot",
       "id": "builtin.squareroot-of-a-complex-number-squares-back-to-its-argument-with-a-real-part-that-is-not-negative-in-every-quadrant.1",
       "kind": "call",
       "tolerance": {
-        "ulps": 4
+        "absolute": 5.834777333286799e-16
       }
     },
     {
@@ -1910,12 +1888,12 @@
         "kind": "complex",
         "re": 0.03161645646938249
       },
-      "from": "builtin-functions.unit.test.ts: squareRoot of a complex number > squares back to its argument with a real part that is not negative, in every quadrant (the original asserted that the root squares back to its argument within a few roundings and has a real part that is not negative; recorded: trilean src/builtin-functions.ts, the exact result)",
+      "from": "builtin-functions.unit.test.ts: squareRoot of a complex number > squares back to its argument with a real part that is not negative, in every quadrant (the original checked that the square of the root is the argument to four roundings; the case gives the principal root and the bound on it that follows)",
       "function": "squareRoot",
       "id": "builtin.squareroot-of-a-complex-number-squares-back-to-its-argument-with-a-real-part-that-is-not-negative-in-every-quadrant.2",
       "kind": "call",
       "tolerance": {
-        "ulps": 4
+        "absolute": 7.024473920299324e-16
       }
     },
     {
@@ -1931,12 +1909,12 @@
         "kind": "complex",
         "re": 1.7320508074245398
       },
-      "from": "builtin-functions.unit.test.ts: squareRoot of a complex number > squares back to its argument with a real part that is not negative, in every quadrant (the original asserted that the root squares back to its argument within a few roundings and has a real part that is not negative; recorded: trilean src/builtin-functions.ts, the exact result)",
+      "from": "builtin-functions.unit.test.ts: squareRoot of a complex number > squares back to its argument with a real part that is not negative, in every quadrant (the original checked that the square of the root is the argument to four roundings; the case gives the principal root and the bound on it that follows)",
       "function": "squareRoot",
       "id": "builtin.squareroot-of-a-complex-number-squares-back-to-its-argument-with-a-real-part-that-is-not-negative-in-every-quadrant.3",
       "kind": "call",
       "tolerance": {
-        "ulps": 4
+        "absolute": 1.0877919644084146e-15
       }
     },
     {
@@ -1952,12 +1930,12 @@
         "kind": "complex",
         "re": 2.6457513110645907
       },
-      "from": "builtin-functions.unit.test.ts: squareRoot of a complex number > squares back to its argument with a real part that is not negative, in every quadrant (the original asserted that the root squares back to its argument within a few roundings and has a real part that is not negative; recorded: trilean src/builtin-functions.ts, the exact result)",
+      "from": "builtin-functions.unit.test.ts: squareRoot of a complex number > squares back to its argument with a real part that is not negative, in every quadrant (the original checked that the square of the root is the argument to four roundings; the case gives the principal root and the bound on it that follows)",
       "function": "squareRoot",
       "id": "builtin.squareroot-of-a-complex-number-squares-back-to-its-argument-with-a-real-part-that-is-not-negative-in-every-quadrant.4",
       "kind": "call",
       "tolerance": {
-        "ulps": 4
+        "absolute": 1.1749496091904413e-15
       }
     },
     {
@@ -2088,16 +2066,16 @@
         }
       ],
       "expect": {
-        "im": 1.2246467991473532e-16,
+        "im": 0,
         "kind": "complex",
         "re": -1
       },
-      "from": "builtin-functions.unit.test.ts: exponential of a complex number > is -1 at i pi, and e i at 1 + i pi/2, within one rounding of the unit circle (the original asserted each component to within one rounding of the unit circle; recorded: trilean src/builtin-functions.ts, the exact result)",
+      "from": "builtin-functions.unit.test.ts: exponential of a complex number > is -1 at i pi, and e i at 1 + i pi/2, within one rounding of the unit circle",
       "function": "exponential",
       "id": "builtin.exponential-of-a-complex-number-is-1-at-i-pi-and-e-i-at-1-i-pi-2-within-one-rounding-of-the-unit-circle.1",
       "kind": "call",
       "tolerance": {
-        "ulps": 4
+        "absolute": 2.220446049250313e-16
       }
     },
     {
@@ -2111,14 +2089,14 @@
       "expect": {
         "im": 2.718281828459045,
         "kind": "complex",
-        "re": 1.664467570201392e-16
+        "re": 0
       },
-      "from": "builtin-functions.unit.test.ts: exponential of a complex number > is -1 at i pi, and e i at 1 + i pi/2, within one rounding of the unit circle (the original asserted each component to within one rounding of the unit circle; recorded: trilean src/builtin-functions.ts, the exact result)",
+      "from": "builtin-functions.unit.test.ts: exponential of a complex number > is -1 at i pi, and e i at 1 + i pi/2, within one rounding of the unit circle",
       "function": "exponential",
       "id": "builtin.exponential-of-a-complex-number-is-1-at-i-pi-and-e-i-at-1-i-pi-2-within-one-rounding-of-the-unit-circle.2",
       "kind": "call",
       "tolerance": {
-        "ulps": 4
+        "absolute": 6.035798146750804e-16
       }
     },
     {
@@ -2280,37 +2258,12 @@
         "kind": "complex",
         "re": 1.6094379124341003
       },
-      "from": "builtin-functions.unit.test.ts: logarithm of a complex number > is ln|z| + i arg(z) in general (the original asserted each component to within the epsilon scaled by the real part; recorded: trilean src/builtin-functions.ts, the exact result)",
+      "from": "builtin-functions.unit.test.ts: logarithm of a complex number > is ln|z| + i arg(z) in general",
       "function": "logarithm",
       "id": "builtin.logarithm-of-a-complex-number-is-ln-z-i-arg-z-in-general.1",
       "kind": "call",
       "tolerance": {
-        "ulps": 4
-      }
-    },
-    {
-      "args": [
-        {
-          "im": 100,
-          "kind": "complex",
-          "re": 0
-        },
-        {
-          "kind": "number",
-          "value": 10
-        }
-      ],
-      "expect": {
-        "im": 0.6821881769209206,
-        "kind": "complex",
-        "re": 2
-      },
-      "from": "builtin-functions.unit.test.ts: logarithm of a complex number > divides through by the base's natural logarithm, exact in the real part for a power of ten (the original asserted the imaginary part to within an epsilon and the real part exactly two; recorded: trilean src/builtin-functions.ts, the exact result)",
-      "function": "logarithm",
-      "id": "builtin.logarithm-of-a-complex-number-divides-through-by-the-base-s-natural-logarithm-exact-in-the-real-part-for-a-power-of-ten.1",
-      "kind": "call",
-      "tolerance": {
-        "ulps": 4
+        "absolute": 3.5736700541779693e-16
       }
     },
     {
@@ -2501,33 +2454,14 @@
       ],
       "expect": {
         "kind": "number",
-        "value": 0.9999999999999999
+        "value": 1
       },
-      "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > take an angle in radians (the original asserted that the result is within an epsilon of one; recorded: trilean src/builtin-functions.ts, the exact result)",
+      "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > take an angle in radians",
       "function": "tangent",
       "id": "builtin.sine-cosine-and-tangent-take-an-angle-in-radians.5",
       "kind": "call",
       "tolerance": {
-        "ulps": 4
-      }
-    },
-    {
-      "args": [
-        {
-          "kind": "number",
-          "value": 1.5707963267948966
-        }
-      ],
-      "expect": {
-        "kind": "number",
-        "value": 16331239353195370
-      },
-      "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > give a large but finite tangent at the double nearest a pole (the original asserted only that the result is a finite number; recorded: trilean src/builtin-functions.ts, the exact result)",
-      "function": "tangent",
-      "id": "builtin.sine-cosine-and-tangent-give-a-large-but-finite-tangent-at-the-double-nearest-a-pole.1",
-      "kind": "call",
-      "tolerance": {
-        "ulps": 4
+        "absolute": 2.220446049250313e-16
       }
     },
     {
@@ -2920,9 +2854,7 @@
       "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > sine is a domain-error for an angle that is not finite",
       "function": "sine",
       "id": "builtin.sine-cosine-and-tangent-sine-is-a-domain-error-for-an-angle-that-is-not-finite.1",
-      "kind": "call",
-      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
-      "skip": "rust"
+      "kind": "call"
     },
     {
       "args": [
@@ -2942,9 +2874,7 @@
       "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > cosine is a domain-error for an angle that is not finite",
       "function": "cosine",
       "id": "builtin.sine-cosine-and-tangent-cosine-is-a-domain-error-for-an-angle-that-is-not-finite.1",
-      "kind": "call",
-      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
-      "skip": "rust"
+      "kind": "call"
     },
     {
       "args": [
@@ -2964,9 +2894,7 @@
       "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > tangent is a domain-error for an angle that is not finite",
       "function": "tangent",
       "id": "builtin.sine-cosine-and-tangent-tangent-is-a-domain-error-for-an-angle-that-is-not-finite.1",
-      "kind": "call",
-      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
-      "skip": "rust"
+      "kind": "call"
     },
     {
       "args": [
@@ -3102,9 +3030,7 @@
       "from": "builtin-functions.unit.test.ts: arcSine, arcCosine and arcTangent > arcSine refuses a number outside -1 to 1 as a domain-error",
       "function": "arcSine",
       "id": "builtin.arcsine-arccosine-and-arctangent-arcsine-refuses-a-number-outside-1-to-1-as-a-domain-error.3",
-      "kind": "call",
-      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
-      "skip": "rust"
+      "kind": "call"
     },
     {
       "args": [
@@ -3213,9 +3139,7 @@
       "from": "builtin-functions.unit.test.ts: arcSine, arcCosine and arcTangent > arcCosine refuses a number outside -1 to 1 as a domain-error",
       "function": "arcCosine",
       "id": "builtin.arcsine-arccosine-and-arctangent-arccosine-refuses-a-number-outside-1-to-1-as-a-domain-error.3",
-      "kind": "call",
-      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
-      "skip": "rust"
+      "kind": "call"
     },
     {
       "args": [
@@ -3535,9 +3459,7 @@
       "from": "builtin-functions.unit.test.ts: arcTangent2 > is a domain-error for an argument that is not finite",
       "function": "arcTangent2",
       "id": "builtin.arctangent2-is-a-domain-error-for-an-argument-that-is-not-finite.1",
-      "kind": "call",
-      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
-      "skip": "rust"
+      "kind": "call"
     },
     {
       "args": [
@@ -3561,9 +3483,7 @@
       "from": "builtin-functions.unit.test.ts: arcTangent2 > is a domain-error for an argument that is not finite",
       "function": "arcTangent2",
       "id": "builtin.arctangent2-is-a-domain-error-for-an-argument-that-is-not-finite.2",
-      "kind": "call",
-      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
-      "skip": "rust"
+      "kind": "call"
     }
   ]
 }

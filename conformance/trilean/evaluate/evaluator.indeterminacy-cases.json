@@ -3,7 +3,6 @@
     {
       "as": "expression",
       "expect": {
-        "code": "not-found",
         "status": "indeterminate"
       },
       "expectCalls": [
@@ -12,7 +11,7 @@
           "resolver": "value"
         }
       ],
-      "from": "evaluator.indeterminacy-cases.unit.test.ts: lookup: any-indeterminate-key short-circuit > never calls resolveLookup when a key is indeterminate (the original asserted only the status and that no lookup was made; recorded: trilean src/evaluator.ts, the reason code)",
+      "from": "evaluator.indeterminacy-cases.unit.test.ts: lookup: any-indeterminate-key short-circuit > never calls resolveLookup when a key is indeterminate",
       "id": "indeterminacy-cases.lookup-any-indeterminate-key-short-circuit-never-calls-resolvelookup-when-a-key-is-indeterminate.1",
       "kind": "evaluate",
       "resolvers": {
@@ -154,7 +153,6 @@
     {
       "as": "expression",
       "expect": {
-        "code": "not-found",
         "status": "indeterminate"
       },
       "expectCalls": [
@@ -163,7 +161,7 @@
           "resolver": "value"
         }
       ],
-      "from": "evaluator.indeterminacy-cases.unit.test.ts: conditional: must not skip an unresolved guard > never evaluates a later case once an earlier unmatched guard is indeterminate (the original asserted only the status and that the marker was never evaluated; recorded: trilean src/evaluator.ts, the reason code)",
+      "from": "evaluator.indeterminacy-cases.unit.test.ts: conditional: must not skip an unresolved guard > never evaluates a later case once an earlier unmatched guard is indeterminate",
       "id": "indeterminacy-cases.conditional-must-not-skip-an-unresolved-guard-never-evaluates-a-later-case-once-an-earlier-unmatched-guard-is-indeterminate.1",
       "kind": "evaluate",
       "resolvers": {

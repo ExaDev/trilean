@@ -29,27 +29,8 @@
       "skip": []
     },
     "trilean/call/builtin-functions.json": {
-      "cases": 180,
-      "skip": [
-        "builtin.a-result-that-is-not-a-finite-number-is-a-domain-error-from-absolutevalue-even-when-the-argument-already-was-one.1",
-        "builtin.a-result-that-is-not-a-finite-number-is-a-domain-error-from-magnitude-even-when-the-argument-already-was-one.1",
-        "builtin.a-result-that-is-not-a-finite-number-is-a-domain-error-from-maximum-even-when-the-argument-already-was-one.1",
-        "builtin.a-result-that-is-not-a-finite-number-is-a-domain-error-from-minimum-even-when-the-argument-already-was-one.1",
-        "builtin.a-result-that-is-not-a-finite-number-is-a-domain-error-from-round-even-when-the-argument-already-was-one.1",
-        "builtin.arcsine-arccosine-and-arctangent-arccosine-refuses-a-number-outside-1-to-1-as-a-domain-error.3",
-        "builtin.arcsine-arccosine-and-arctangent-arcsine-refuses-a-number-outside-1-to-1-as-a-domain-error.3",
-        "builtin.arctangent2-is-a-domain-error-for-an-argument-that-is-not-finite.1",
-        "builtin.arctangent2-is-a-domain-error-for-an-argument-that-is-not-finite.2",
-        "builtin.phase-is-a-domain-error-when-a-component-is-not-finite-as-the-other-built-ins-are-for-a-result-that-is-not.1",
-        "builtin.phase-is-a-domain-error-when-a-component-is-not-finite-as-the-other-built-ins-are-for-a-result-that-is-not.2",
-        "builtin.phase-is-a-domain-error-when-a-component-is-not-finite-as-the-other-built-ins-are-for-a-result-that-is-not.3",
-        "builtin.phase-is-a-domain-error-when-a-component-is-not-finite-as-the-other-built-ins-are-for-a-result-that-is-not.4",
-        "builtin.phase-is-a-domain-error-when-a-component-is-not-finite-as-the-other-built-ins-are-for-a-result-that-is-not.5",
-        "builtin.phase-is-a-domain-error-when-a-component-is-not-finite-as-the-other-built-ins-are-for-a-result-that-is-not.6",
-        "builtin.sine-cosine-and-tangent-cosine-is-a-domain-error-for-an-angle-that-is-not-finite.1",
-        "builtin.sine-cosine-and-tangent-sine-is-a-domain-error-for-an-angle-that-is-not-finite.1",
-        "builtin.sine-cosine-and-tangent-tangent-is-a-domain-error-for-an-angle-that-is-not-finite.1"
-      ]
+      "cases": 178,
+      "skip": []
     },
     "trilean/cli/cli-run.json": {
       "cases": 45,
@@ -61,9 +42,7 @@
     },
     "trilean/document/evaluate-document.json": {
       "cases": 25,
-      "skip": [
-        "document.evaluatedocument-inputs-that-do-not-fit-rejects-a-plain-input-number-that-is-not-finite.1"
-      ]
+      "skip": []
     },
     "trilean/evaluate/derived-aggregates.json": {
       "cases": 10,
@@ -94,7 +73,7 @@
       "skip": []
     },
     "trilean/evaluate/evaluator.complex-arithmetic.json": {
-      "cases": 117,
+      "cases": 80,
       "skip": []
     },
     "trilean/evaluate/evaluator.control-flow.json": {
@@ -103,33 +82,7 @@
     },
     "trilean/evaluate/evaluator.duration-comparison.json": {
       "cases": 51,
-      "skip": [
-        "duration-comparison.comparing-durations-that-are-not-finite-numbers-eq-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.1",
-        "duration-comparison.comparing-durations-that-are-not-finite-numbers-eq-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.2",
-        "duration-comparison.comparing-durations-that-are-not-finite-numbers-eq-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.3",
-        "duration-comparison.comparing-durations-that-are-not-finite-numbers-finds-equal-infinities-equal-whatever-their-units.1",
-        "duration-comparison.comparing-durations-that-are-not-finite-numbers-finds-equal-infinities-equal-whatever-their-units.2",
-        "duration-comparison.comparing-durations-that-are-not-finite-numbers-finds-equal-infinities-equal-whatever-their-units.3",
-        "duration-comparison.comparing-durations-that-are-not-finite-numbers-gt-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.1",
-        "duration-comparison.comparing-durations-that-are-not-finite-numbers-gt-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.2",
-        "duration-comparison.comparing-durations-that-are-not-finite-numbers-gt-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.3",
-        "duration-comparison.comparing-durations-that-are-not-finite-numbers-gte-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.1",
-        "duration-comparison.comparing-durations-that-are-not-finite-numbers-gte-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.2",
-        "duration-comparison.comparing-durations-that-are-not-finite-numbers-gte-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.3",
-        "duration-comparison.comparing-durations-that-are-not-finite-numbers-lt-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.1",
-        "duration-comparison.comparing-durations-that-are-not-finite-numbers-lt-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.2",
-        "duration-comparison.comparing-durations-that-are-not-finite-numbers-lt-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.3",
-        "duration-comparison.comparing-durations-that-are-not-finite-numbers-lte-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.1",
-        "duration-comparison.comparing-durations-that-are-not-finite-numbers-lte-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.2",
-        "duration-comparison.comparing-durations-that-are-not-finite-numbers-lte-with-a-nan-on-either-side-is-false-as-it-is-for-numbers.3",
-        "duration-comparison.comparing-durations-that-are-not-finite-numbers-neq-with-a-nan-is-true-and-a-nan-is-not-a-member-of-anything.1",
-        "duration-comparison.comparing-durations-that-are-not-finite-numbers-neq-with-a-nan-is-true-and-a-nan-is-not-a-member-of-anything.2",
-        "duration-comparison.comparing-durations-that-are-not-finite-numbers-neq-with-a-nan-is-true-and-a-nan-is-not-a-member-of-anything.3",
-        "duration-comparison.comparing-durations-that-are-not-finite-numbers-orders-infinities-against-finite-values-and-against-each-other.1",
-        "duration-comparison.comparing-durations-that-are-not-finite-numbers-orders-infinities-against-finite-values-and-against-each-other.2",
-        "duration-comparison.comparing-durations-that-are-not-finite-numbers-orders-infinities-against-finite-values-and-against-each-other.3",
-        "duration-comparison.comparing-durations-that-are-not-finite-numbers-orders-infinities-against-finite-values-and-against-each-other.4"
-      ]
+      "skip": []
     },
     "trilean/evaluate/evaluator.functions.json": {
       "cases": 3,
@@ -177,11 +130,7 @@
     },
     "trilean/inputs/input-resolvers.json": {
       "cases": 13,
-      "skip": [
-        "inputs.parseinputs-refuses-a-plain-number-that-is-not-finite.1",
-        "inputs.parseinputs-refuses-a-plain-number-that-is-not-finite.2",
-        "inputs.parseinputs-refuses-the-value-of-a-complete-computed-value-that-is-not-finite.1"
-      ]
+      "skip": []
     },
     "trilean/number-format/number-format.json": {
       "cases": 37,

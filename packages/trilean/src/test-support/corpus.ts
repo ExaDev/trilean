@@ -6,6 +6,8 @@ import { validateCorpusFile, validateManifest } from "./validate";
 
 /**
  * Loads and checks a whole corpus root by every rule `conformance/README.md` states: the files selected, each file valid, ids unique across files, and the corpus equal to its manifest. The real corpus and every fixture corpus under `conformance/fixtures/corpora` go through this one function, so a rule has one definition.
+ *
+ * This file is a copy of `packages/trilean-regex/src/test-support/corpus.ts`, kept as a copy because both are deleted with the TypeScript they test; a change here is made in that file too.
  */
 
 export interface LoadedFile {

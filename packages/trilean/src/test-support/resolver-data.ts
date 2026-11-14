@@ -141,10 +141,14 @@ export function buildResolvers(data: ResolverData): ResolverSet {
   const delegate = (
     system: string,
     payload: Json,
+    context: unknown,
   ): Answer<EvaluatorResolution> => {
     calls.push({ resolver: "delegate", system });
     const entry = (data.delegates ?? []).find(
-      (item) => item.system === system && jsonEquals(payload, item.payload),
+      (item) =>
+        item.system === system &&
+        jsonEquals(payload, item.payload) &&
+        matchesContext(item.context, context),
     );
 
     return answer(entry?.result ?? fallback);
@@ -172,8 +176,8 @@ export function buildResolvers(data: ResolverData): ResolverSet {
     resolveCollection: (name, context) => collection(name, context),
     ...(hasDelegates
       ? {
-          resolveDelegate: (system, payload) =>
-            delegate(system, payload).give(),
+          resolveDelegate: (system, payload, context) =>
+            delegate(system, payload, context).give(),
         }
       : {}),
     ...(hasTrees ? { resolveTree: (key) => tree(key) } : {}),
@@ -191,8 +195,8 @@ export function buildResolvers(data: ResolverData): ResolverSet {
       Promise.resolve(collection(name, context)),
     ...(hasDelegates
       ? {
-          resolveDelegate: async (system, payload) =>
-            later(delegate(system, payload)),
+          resolveDelegate: async (system, payload, context) =>
+            later(delegate(system, payload, context)),
         }
       : {}),
     ...(hasTrees

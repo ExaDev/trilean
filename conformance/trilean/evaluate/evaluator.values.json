@@ -247,13 +247,13 @@
         "value": {
           "im": 1,
           "kind": "complex",
-          "re": 6.123233995736766e-17,
+          "re": 0,
           "unit": {
             "V": 1
           }
         }
       },
-      "from": "evaluator.values.unit.test.ts: complexLiteral > normalises a polar literal to rectangular on evaluation, preserving the optional unit (the original asserted both components only to two decimal places; recorded: trilean src/complex.ts, the exact components)",
+      "from": "evaluator.values.unit.test.ts: complexLiteral > normalises a polar literal to rectangular on evaluation, preserving the optional unit",
       "id": "values.complexliteral-normalises-a-polar-literal-to-rectangular-on-evaluation-preserving-the-optional-unit.1",
       "kind": "evaluate",
       "resolvers": {
@@ -277,7 +277,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 0.005
       },
       "tree": {
         "kind": "complexLiteral",

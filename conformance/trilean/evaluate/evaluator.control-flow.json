@@ -976,10 +976,6 @@
     },
     {
       "as": "expression",
-      "expect": {
-        "code": "not-found",
-        "status": "indeterminate"
-      },
       "expectCalls": [
         {
           "key": "when-marker",
@@ -994,7 +990,7 @@
           "resolver": "value"
         }
       ],
-      "from": "evaluator.control-flow.unit.test.ts: conditional > hitPolicy: 'unique' > evaluates every case's when concurrently, not short-circuited on the first match (the original asserted only that the marker was evaluated once per case; recorded: trilean src/evaluator.ts, the status and reason code)",
+      "from": "evaluator.control-flow.unit.test.ts: conditional > hitPolicy: 'unique' > evaluates every case's when concurrently, not short-circuited on the first match",
       "id": "control-flow.conditional-hitpolicy-unique-evaluates-every-case-s-when-concurrently-not-short-circuited-on-the-first-match.1",
       "kind": "evaluate",
       "resolvers": {

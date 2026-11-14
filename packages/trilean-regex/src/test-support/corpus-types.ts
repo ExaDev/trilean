@@ -35,7 +35,10 @@ interface CaseBase {
   readonly from: string;
   readonly skip?: (typeof SKIP_VALUES)[number];
   readonly reason?: string;
-  readonly tolerance?: { readonly ulps: number };
+  readonly tolerance?: {
+    readonly ulps?: number;
+    readonly absolute?: number;
+  };
 }
 
 export type RegexParseExpectation =

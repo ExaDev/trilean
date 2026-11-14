@@ -2,6 +2,8 @@ import type { Text } from "./corpus-types";
 
 /**
  * The corpus carries every pattern, input and message fragment as a sequence of UTF-16 code units, either as a JSON string or as the code units themselves (`conformance/README.md`). A JavaScript string is already that sequence, so decoding is the identity for the first form and `String.fromCharCode` for the second.
+ *
+ * This file is a copy of `packages/trilean/src/test-support/text.ts`, kept as a copy because both are deleted with the TypeScript they test; a change here is made in that file too.
  */
 
 /** The string a corpus text denotes. */

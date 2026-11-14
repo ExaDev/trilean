@@ -120,7 +120,7 @@ export function runBuildCase(testCase: BuildCase): void {
     argumentsOf(testCase.args.map((arg) => decodeNumbers(arg))),
   );
   expect(
-    jsonEquals(built, testCase.expect, testCase.tolerance?.ulps ?? 0),
+    jsonEquals(built, testCase.expect, testCase.tolerance),
     `${testCase.builder} built ${JSON.stringify(built)}`,
   ).toBe(true);
 }
