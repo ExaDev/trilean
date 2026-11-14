@@ -97,7 +97,7 @@ describe("the sqlite dialect", () => {
     ["portableMatches", "GLOB"],
     ["portableNotMatches", "NOT GLOB"],
   ] as const)(
-    "compiles '%s' to '%s' against the pattern translated into a GLOB wildcard",
+    "compiles '%s' to '%s' against the pattern translated into a GLOB wildcard, over a subject that is unknown when it holds a NUL",
     (op, sqlOperator) => {
       expect(
         compileSqlite({
@@ -107,7 +107,7 @@ describe("the sqlite dialect", () => {
           right: { kind: "textLiteral", value: "^a.*c$" },
         }),
       ).toEqual({
-        sql: `("name" ${sqlOperator} ?)`,
+        sql: `((SELECT CASE WHEN instr(CAST("v" AS BLOB), x'00') > 0 THEN NULL ELSE "v" END FROM (SELECT "name" AS "v")) ${sqlOperator} ?)`,
         params: ["a*c"],
       });
     },

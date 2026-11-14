@@ -2,7 +2,7 @@ import Database from "better-sqlite3";
 import type { PredicateNode } from "trilean";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { compilePredicateNode } from "../../src/compile";
-import { InvalidColumnError } from "../../src/errors";
+import { InvalidColumnError, UnsupportedNodeError } from "../../src/errors";
 
 /**
  * A compiled statement reaches the engine only when its identifiers can all be carried: a tree whose column cannot is refused at compile time and nothing is prepared or run, so the statement SQLite parses is always the statement that was compiled.
@@ -83,5 +83,49 @@ describe("a text value holding a NUL", () => {
       )
       .all(...compiled.params);
     expect(rows.map((row) => row.id)).toEqual(["nul"]);
+  });
+});
+
+describe("a pattern or a subject with a NUL, which GLOB reads only up to", () => {
+  const portable = (value: string): PredicateNode => ({
+    kind: "textCompare",
+    op: "portableMatches",
+    left: { kind: "reference", key: "note" },
+    right: { kind: "textLiteral", value },
+  });
+  const options = {
+    dialect: "sqlite",
+    columnFor: () => ({ column: "note" }),
+  } as const;
+
+  function rows(tree: PredicateNode): string[] {
+    const compiled = compilePredicateNode(tree, options);
+
+    return db
+      .prepare<unknown[], { id: string }>(
+        `SELECT id FROM subjects WHERE ${compiled.sql} ORDER BY id`,
+      )
+      .all(...compiled.params)
+      .map((row) => row.id);
+  }
+
+  it("refuses a pattern with a NUL, which GLOB would read as a shorter one", () => {
+    const prepare = vi.spyOn(db, "prepare");
+    expect(() => rows(portable("^a\u0000b$"))).toThrow(UnsupportedNodeError);
+    expect(prepare).not.toHaveBeenCalled();
+    prepare.mockRestore();
+  });
+
+  it("matches a stored value without a NUL as the evaluator does, and never selects one with a NUL", () => {
+    const insert = db.prepare("INSERT INTO subjects (id, note) VALUES (?, ?)");
+    insert.run("glob-plain", "abc");
+    insert.run("glob-nul", "a\u0000bc");
+    insert.run("glob-nul-tail", "abc\u0000");
+    // The evaluator matches `^a.*c$` against "a\u0000bc" and selects it; SQLite's GLOB would read it as "a". The value is unknown, so it is not selected, and its negation does not select it either.
+    expect(rows(portable("^a.*c$"))).toEqual(["glob-plain"]);
+    expect(rows({ kind: "not", operand: portable("^a.*c$") })).not.toContain(
+      "glob-nul",
+    );
+    expect(rows(portable("^a.*c$"))).not.toContain("glob-nul-tail");
   });
 });
