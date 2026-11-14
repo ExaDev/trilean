@@ -99,7 +99,14 @@ const LITERALS: readonly string[] = [
   "\\\\",
 ];
 
-const SHORTHANDS: readonly string[] = ["\\d", "\\D", "\\w", "\\W", "\\s", "\\S"];
+const SHORTHANDS: readonly string[] = [
+  "\\d",
+  "\\D",
+  "\\w",
+  "\\W",
+  "\\s",
+  "\\S",
+];
 
 /** Characters a range may start or end at, in ascending order of code unit within each pair. */
 const RANGES: readonly string[] = [
@@ -132,7 +139,12 @@ function genClass(random: Random): string {
     } else if (kind < 0.7) {
       items.push("-");
     } else {
-      items.push(pick(random, LITERALS.filter((text) => text !== "]")));
+      items.push(
+        pick(
+          random,
+          LITERALS.filter((text) => text !== "]"),
+        ),
+      );
     }
   }
 

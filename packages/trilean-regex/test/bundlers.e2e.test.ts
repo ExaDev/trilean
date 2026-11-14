@@ -9,7 +9,7 @@ import {
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
-import { basename, join, resolve } from "node:path";
+import { join, resolve } from "node:path";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import { build as esbuild } from "esbuild";
 import { chromium } from "playwright";
@@ -85,7 +85,10 @@ afterAll(() => {
 });
 
 /** Serves a directory to a page in headless Chromium and returns what the page left in `window.done`. */
-async function runInBrowser(directory: string, script: string): Promise<unknown> {
+async function runInBrowser(
+  directory: string,
+  script: string,
+): Promise<unknown> {
   const browser = await chromium.launch();
   try {
     const page = await browser.newPage();
@@ -188,21 +191,17 @@ function runInNode(directory: string, file: string): unknown {
   return JSON.parse(output);
 }
 
-describe("a server bundle of the packed package", () => {
-  it("does not run from a lone file, which is why the README says to copy the module file", async () => {
-    const out = join(work, "esbuild-alone");
-    await esbuild({
-      entryPoints: [join(installed, "consumer.mjs")],
-      bundle: true,
-      platform: "node",
-      format: "esm",
-      outfile: join(out, "bundle.mjs"),
-      logLevel: "silent",
-    });
-    expect(() => runInNode(out, "bundle.mjs")).toThrow(/trilean_regex_bg\.wasm/);
-  });
+/** A copy of the bundle alone in a new directory, as a Lambda zip or a container image of one file would hold it. */
+function alone(directory: string): string {
+  const lone = `${directory}-alone`;
+  mkdirSync(lone, { recursive: true });
+  copyFileSync(join(directory, "bundle.mjs"), join(lone, "bundle.mjs"));
 
-  it("runs when built by esbuild with the module file copied beside the bundle", async () => {
+  return lone;
+}
+
+describe("a server bundle of the packed package", () => {
+  it("runs when built by esbuild, from a directory holding only the bundle", async () => {
     const out = join(work, "esbuild-node");
     await esbuild({
       entryPoints: [join(installed, "consumer.mjs")],
@@ -212,14 +211,10 @@ describe("a server bundle of the packed package", () => {
       outfile: join(out, "bundle.mjs"),
       logLevel: "silent",
     });
-    copyFileSync(
-      join(installed, "node_modules/trilean-regex/dist", WASM),
-      join(out, WASM),
-    );
-    expect(runInNode(out, "bundle.mjs")).toEqual(EXPECTED);
+    expect(runInNode(alone(out), "bundle.mjs")).toEqual(EXPECTED);
   });
 
-  it("runs when built by Rollup with the module file copied beside the bundle", async () => {
+  it("runs when built by Rollup, from a directory holding only the bundle", async () => {
     const out = join(work, "rollup-node");
     const bundle = await rollup({
       input: join(installed, "consumer.mjs"),
@@ -229,14 +224,10 @@ describe("a server bundle of the packed package", () => {
     });
     await bundle.write({ file: join(out, "bundle.mjs"), format: "es" });
     await bundle.close();
-    copyFileSync(
-      join(installed, "node_modules/trilean-regex/dist", WASM),
-      join(out, WASM),
-    );
-    expect(runInNode(out, "bundle.mjs")).toEqual(EXPECTED);
+    expect(runInNode(alone(out), "bundle.mjs")).toEqual(EXPECTED);
   });
 
-  it("runs when built by webpack, which emits the module file itself", async () => {
+  it("runs when built by webpack, from a directory holding only the bundle", async () => {
     const out = join(work, "webpack-node");
     await new Promise<void>((done, fail) => {
       webpack(
@@ -267,7 +258,6 @@ describe("a server bundle of the packed package", () => {
         },
       );
     });
-    expect(basename(out)).toBe("webpack-node");
-    expect(runInNode(out, "bundle.mjs")).toEqual(EXPECTED);
+    expect(runInNode(alone(out), "bundle.mjs")).toEqual(EXPECTED);
   });
 });

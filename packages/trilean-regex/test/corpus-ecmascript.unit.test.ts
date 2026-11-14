@@ -4,7 +4,10 @@ import { describe, expect, it } from "vitest";
 
 /** Every answer the corpus records for the `ecmascript` dialect is what an unflagged `RegExp` says, whichever implementation runs the case or skips it: the recording is the claim, and nothing else in the repository reads the host's engine for the cases written by hand. */
 
-const AREA = resolve(import.meta.dirname, "../../../conformance/trilean-regex/ecmascript");
+const AREA = resolve(
+  import.meta.dirname,
+  "../../../conformance/trilean-regex/ecmascript",
+);
 
 type Text = string | { readonly codeUnits: readonly number[] };
 
@@ -12,7 +15,10 @@ interface Case {
   readonly id: string;
   readonly dialect?: string;
   readonly pattern: Text;
-  readonly inputs: readonly { readonly input: Text; readonly matches: boolean }[];
+  readonly inputs: readonly {
+    readonly input: Text;
+    readonly matches: boolean;
+  }[];
 }
 
 function isText(value: unknown): value is Text {
