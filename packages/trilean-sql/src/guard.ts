@@ -6,6 +6,7 @@ import type {
   SqlDialect,
   SqlParamType,
 } from "./options";
+import { identifierProblem, valueProblem } from "./identifier";
 import { assertImplementedDialect } from "./options";
 import {
   renderPostgresPattern,
@@ -18,6 +19,8 @@ export interface UnpushableNode {
   /** A dotted path from the root of the tree, e.g. `$.operands[1].left`. */
   path: string;
   reason: string;
+  /** Set when the refusal is a mapped name the dialect cannot render as an identifier: which mapping returned it and under which key. `compilePredicateNode` reports it as `InvalidColumnError` or `InvalidCollectionTableError`. */
+  identifier?: { role: "column" | "table"; key: string; problem: string };
 }
 
 /**
@@ -68,8 +71,6 @@ interface DialectDivergence {
   textOrdering: (operandPath: string) => string;
   /** How the engine orders booleans, as the trailing clause of a `whereas ...`. */
   booleanOrdering: string;
-  /** Why a text value holding the NUL character cannot be bound, or `undefined` for an engine that carries one. */
-  nulInText: string | undefined;
 }
 
 const DIALECT_DIVERGENCE: Readonly<Record<SqlDialect, DialectDivergence>> = {
@@ -81,8 +82,6 @@ const DIALECT_DIVERGENCE: Readonly<Record<SqlDialect, DialectDivergence>> = {
     textOrdering: (operandPath) =>
       `PostgreSQL would order the text operand at ${operandPath} collation-wise and answer definitely`,
     booleanOrdering: "PostgreSQL orders false before true",
-    nulInText:
-      "PostgreSQL cannot carry the NUL character (code zero) in a text value, and rejects the statement with an invalid byte sequence error",
   },
   sqlite: {
     complexNumbers: "SQLite has no complex number type",
@@ -94,7 +93,6 @@ const DIALECT_DIVERGENCE: Readonly<Record<SqlDialect, DialectDivergence>> = {
       `SQLite would answer definitely for the text operand at ${operandPath}, comparing it under the text affinity it applies to the other side ('9' > 5 is true there, while '10' > 5 is not)`,
     booleanOrdering:
       "SQLite stores booleans as the integers 0 and 1 and orders them as integers",
-    nulInText: undefined,
   },
 };
 
@@ -145,6 +143,19 @@ function resolveCollectionForGuard(
   }
   const binding: Readonly<SqlCollectionBinding> =
     options.collectionFor(collection);
+  const tableProblem = identifierProblem(
+    "table",
+    binding.table,
+    options.dialect,
+  );
+  if (tableProblem !== undefined) {
+    return {
+      kind,
+      path,
+      reason: `the table mapped for this collection cannot be used: ${tableProblem}`,
+      identifier: { role: "table", key: collection, problem: tableProblem },
+    };
+  }
 
   return {
     itemOptions: { ...options, columnFor: binding.columnFor },
@@ -178,6 +189,26 @@ function findUnpushableExpression(
         };
       }
 
+      if (options !== undefined) {
+        const columnProblem = identifierProblem(
+          "column",
+          options.columnFor(node.key).column,
+          options.dialect,
+        );
+        if (columnProblem !== undefined) {
+          return {
+            kind: node.kind,
+            path,
+            reason: `the column mapped for this reference cannot be used: ${columnProblem}`,
+            identifier: {
+              role: "column",
+              key: node.key,
+              problem: columnProblem,
+            },
+          };
+        }
+      }
+
       return undefined;
     }
     case "numberLiteral":
@@ -196,12 +227,17 @@ function findUnpushableExpression(
 
       return undefined;
     case "textLiteral":
-    case "instantLiteral":
-      if (divergence.nulInText !== undefined && node.value.includes("\u0000")) {
-        return { kind: node.kind, path, reason: divergence.nulInText };
-      }
+    case "instantLiteral": {
+      const problem = valueProblem(
+        node.value,
+        options?.dialect ?? "postgres",
+        "text",
+      );
 
-      return undefined;
+      return problem === undefined
+        ? undefined
+        : { kind: node.kind, path, reason: problem };
+    }
     case "booleanLiteral":
       return undefined;
     case "durationLiteral":
@@ -478,6 +514,25 @@ function findUnpushablePredicate(
           };
         }
       }
+      // A pattern is read differently from a value: SQLite's GLOB and LIKE stop at the first NUL.
+      if (
+        node.right.kind === "textLiteral" &&
+        node.op !== "equals" &&
+        node.op !== "notEquals"
+      ) {
+        const patternProblem = valueProblem(
+          node.right.value,
+          options?.dialect ?? "postgres",
+          "pattern",
+        );
+        if (patternProblem !== undefined) {
+          return {
+            kind: node.kind,
+            path: `${path}.right`,
+            reason: patternProblem,
+          };
+        }
+      }
       // PostgreSQL is the one dialect with a real server-side regular-expression operator to push `matches`/`notMatches` to, and the one whose regular-expression dialect (POSIX ARE) is a fixed property of the server rather than something a caller supplies -- unlike SQLite's REGEXP, which a caller registers and can therefore give exactly trilean's own ECMAScript semantics. ARE and ECMAScript diverge in ways that are not always a syntax error the guard could catch structurally: the same pattern text compiles and executes under both and can still answer a different set of rows for the same data (see `postgresRegexpPushdown`'s own doc comment in options.ts for concrete examples), so this is refused by default rather than left to the per-kind walk above, which has no way to see into a pattern's content. None of this applies to portableMatches/portableNotMatches below: their pattern is translated into each dialect's own syntax and proven equivalent by this package's own integration tests, not passed through sight unseen, so there is no divergence for a flag to gate.
       const dialect = options?.dialect ?? "postgres";
       if (
@@ -600,7 +655,7 @@ function findUnpushablePredicate(
  *
  * Passing `options` widens the check: without them the walk is purely structural, and with them it also applies the operand-kind rules that depend on each mapped column's declared `paramType` (and therefore calls `columnFor`).
  *
- * Which nodes are refused does not depend on the dialect -- every divergence refused here is real in both -- so a structural walk given no `options` refuses exactly what a walk given them would. What `options` also settles is which engine each `reason` describes; with none to read a dialect from, the reasons describe PostgreSQL, the dialect these refusals were first derived against.
+ * Which nodes are refused does not depend on the dialect -- every divergence refused here is real in both -- except what a dialect cannot carry (see `valueProblem` and `identifierProblem`), which is decided for the dialect `options` names, and for PostgreSQL when there are none. A structural walk given no `options` otherwise refuses exactly what a walk given them would. What `options` also settles is which engine each `reason` describes; with none to read a dialect from, the reasons describe PostgreSQL, the dialect these refusals were first derived against.
  * @throws `UnknownDialectError` if `options` names a dialect this version does not implement. Reporting a tree as pushable is a promise that `compilePredicateNode` will compile it, and under a dialect that does not exist it cannot -- so this is refused here rather than left to surface from the compiler, which is the one caller this function's answer is for.
  */
 export function findUnpushableNodeKind(
