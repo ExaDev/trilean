@@ -84,7 +84,7 @@ Returns `{ sql, params }`. Throws rather than approximating; see [Refusal](#refu
 
 ### `findUnpushableNodeKind(node, options?)`
 
-Returns `{ kind, path, reason }` for the first node the compiler will not translate, or `undefined` if the whole tree is pushable. `compilePredicateNode` runs it first and throws on any result, so call it yourself only to *choose* between pushdown and in-process evaluation without provoking an exception:
+Returns `{ kind, path, reason }` for the first node the compiler will not translate, or `undefined` if the whole tree is pushable. When the refusal is a column or table name the mapping returned and the dialect cannot render as an identifier, the result also carries `identifier: { role, key, problem }`: `role` is `"column"` or `"table"`, `key` the reference or collection key the mapping was asked about, and `problem` the same description the thrown `InvalidColumnError` or `InvalidCollectionTableError` gives. `compilePredicateNode` runs it first and throws on any result, so call it yourself only to *choose* between pushdown and in-process evaluation without provoking an exception:
 
 ```ts
 const blocker = findUnpushableNodeKind(rule, options);
