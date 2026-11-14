@@ -1,0 +1,19 @@
+{
+  "cases": [
+    {
+      "from": "x.unit.test.ts: a fixture",
+      "id": "fixture.1",
+      "inputs": [
+        {
+          "input": "a",
+          "matches": true,
+          "workBound": {
+            "factor": 0
+          }
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "a"
+    }
+  ]
+}

@@ -1,0 +1,179 @@
+//! The files of `dist` that `wasm-bindgen` does not write.
+
+use std::collections::BTreeSet;
+use std::fs;
+use std::path::Path;
+
+use crate::packages::Package;
+
+/// What `write_support_files` wrote that a package manifest must name.
+pub struct Written {
+    /// The files of `dist` the manifest's `exports` and `imports` point at.
+    pub entry_points: BTreeSet<String>,
+}
+
+/// The `#init` module for Node, Bun and Deno, which read the module from disk and compile it synchronously, so the exports are usable the moment the package is imported.
+fn init_node(package: &Package) -> String {
+    format!(
+        "import {{ readFileSync }} from \"node:fs\";\nimport {{ initSync }} from \"./{glue}.js\";\n\ninitSync({{ module: readFileSync(new URL(\"./{glue}_bg.wasm\", import.meta.url)) }});\n",
+        glue = package.glue
+    )
+}
+
+/// The `#init` module for Cloudflare Workers, which imports a `.wasm` file as an already compiled module.
+fn init_workerd(package: &Package) -> String {
+    format!(
+        "import {{ initSync }} from \"./{glue}.js\";\nimport wasm from \"./{glue}_bg.wasm\";\n\ninitSync({{ module: wasm }});\n",
+        glue = package.glue
+    )
+}
+
+/// The `#init` module for browsers and bundlers, which fetch the module and wait for it with top-level await.
+fn init_browser(package: &Package) -> String {
+    format!(
+        "import init from \"./{glue}.js\";\n\nawait init({{ module_or_path: new URL(\"./{glue}_bg.wasm\", import.meta.url) }});\n",
+        glue = package.glue
+    )
+}
+
+/// The names `wasm-bindgen` exports, one declaration per line, by the keyword that introduces it. The glue and its declarations are the generator's output, one `export <keyword> <name>` to a line.
+fn exported(text: &str, keywords: &[&str]) -> Vec<String> {
+    let mut names = Vec::new();
+    for line in text.lines() {
+        let Some(rest) = line.strip_prefix("export ") else {
+            continue;
+        };
+        let rest = rest.strip_prefix("declare ").unwrap_or(rest);
+        for keyword in keywords {
+            if let Some(after) = rest.strip_prefix(keyword)
+                && let Some(after) = after.strip_prefix(' ')
+            {
+                let name: String = after
+                    .chars()
+                    .take_while(|c| c.is_alphanumeric() || *c == '_' || *c == '$')
+                    .collect();
+                if !name.is_empty() {
+                    names.push(name);
+                }
+            }
+        }
+    }
+    names
+}
+
+/// The function of the binding that is handed the error classes, which the entry point calls and does not offer.
+const REGISTER_ERRORS: &str = "registerErrorClasses";
+
+/// What `wasm-bindgen` exports only to start the module, which the `#init` modules call and the package does not offer.
+fn is_loader_name(name: &str) -> bool {
+    matches!(
+        name,
+        "initSync" | "InitInput" | "InitOutput" | "SyncInitInput" | REGISTER_ERRORS
+    )
+}
+
+fn public_names(text: &str, keywords: &[&str]) -> Vec<String> {
+    exported(text, keywords)
+        .into_iter()
+        .filter(|name| !is_loader_name(name))
+        .collect()
+}
+
+/// The package's entry point, which starts the module through `#init` and re-exports the generated API and the error classes.
+fn index_js(package: &Package, glue_js: &str, errors: &[String]) -> String {
+    let values = public_names(glue_js, &["function", "class"]).join(", ");
+    format!(
+        "import \"#init\";\nimport {{ {REGISTER_ERRORS} }} from \"./{glue}.js\";\nimport {{ {errors} }} from \"./errors.js\";\n\n{REGISTER_ERRORS}({errors});\n\nexport {{ {values} }} from \"./{glue}.js\";\nexport {{ {errors} }} from \"./errors.js\";\n",
+        glue = package.glue,
+        errors = errors.join(", ")
+    )
+}
+
+fn index_declarations(package: &Package, glue_declarations: &str, errors: &[String]) -> String {
+    let values = public_names(glue_declarations, &["function", "class"]).join(", ");
+    let types = public_names(glue_declarations, &["interface", "type"]).join(", ");
+    format!(
+        "export {{ {values} }} from \"./{glue}.js\";\nexport type {{ {types} }} from \"./{glue}.js\";\nexport {{ {errors} }} from \"./errors.js\";\n",
+        glue = package.glue,
+        errors = errors.join(", ")
+    )
+}
+
+/// Writes the entry point, the `#init` modules and the error classes beside what `wasm-bindgen` wrote.
+pub fn write_support_files(package: &Package, dist: &Path) -> Result<Written, String> {
+    let read = |name: String| {
+        fs::read_to_string(dist.join(&name)).map_err(|error| format!("{name}: {error}"))
+    };
+    let glue_js = read(format!("{}.js", package.glue))?;
+    let glue_declarations = read(format!("{}.d.ts", package.glue))?;
+    let errors = exported(package.errors_js, &["class"]);
+    let files = [
+        ("errors.js", package.errors_js.to_owned()),
+        ("errors.d.ts", package.errors_declarations.to_owned()),
+        ("init.node.js", init_node(package)),
+        ("init.workerd.js", init_workerd(package)),
+        ("init.browser.js", init_browser(package)),
+        ("index.js", index_js(package, &glue_js, &errors)),
+        (
+            "index.d.ts",
+            index_declarations(package, &glue_declarations, &errors),
+        ),
+    ];
+    for (name, contents) in &files {
+        fs::write(dist.join(name), contents).map_err(|error| format!("{name}: {error}"))?;
+    }
+    Ok(Written {
+        entry_points: [
+            "index.js",
+            "index.d.ts",
+            "init.node.js",
+            "init.workerd.js",
+            "init.browser.js",
+        ]
+        .map(str::to_owned)
+        .into(),
+    })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    const GLUE: &str = "export function parseRegex(pattern) {}\nexport class CompiledPattern {}\nexport function registerErrorClasses(a, b) {}\nexport function initSync(module) {}\nexport default function __wbg_init() {}\nfunction notExported() {}\n";
+    const DECLARATIONS: &str = "export interface LiteralNode { }\nexport type RegexNode = LiteralNode;\nexport function parseRegex(pattern: string): RegexNode;\nexport class CompiledPattern { }\nexport type InitInput = RequestInfo;\nexport interface InitOutput { }\nexport function initSync(module: SyncInitInput): InitOutput;\nexport default function __wbg_init(): Promise<InitOutput>;\n";
+
+    #[test]
+    fn the_entry_point_re_exports_the_api_and_leaves_the_loader_out() {
+        let package = Package::named("trilean-regex").expect("package");
+        let errors = exported(package.errors_js, &["class"]);
+        assert_eq!(errors, ["RegexParseError", "UnsupportedConstructError"]);
+        let index = index_js(package, GLUE, &errors);
+        assert!(index.starts_with("import \"#init\";"));
+        assert!(
+            index.contains("export { parseRegex, CompiledPattern } from \"./trilean_regex.js\";")
+        );
+        assert!(!index.contains("initSync"));
+        assert!(!index.contains("default"));
+        assert!(
+            index.contains("registerErrorClasses(RegexParseError, UnsupportedConstructError);")
+        );
+        assert_eq!(index.matches("registerErrorClasses").count(), 2);
+    }
+
+    #[test]
+    fn the_declarations_name_values_and_types_apart_and_leave_the_loader_out() {
+        let package = Package::named("trilean-regex").expect("package");
+        let declarations = index_declarations(package, DECLARATIONS, &[]);
+        assert!(declarations.contains("export { parseRegex, CompiledPattern } from"));
+        assert!(declarations.contains("export type { LiteralNode, RegexNode } from"));
+        assert!(!declarations.contains("Init"));
+    }
+
+    #[test]
+    fn each_init_module_loads_the_module_its_runtime_way() {
+        let package = Package::named("trilean-regex").expect("package");
+        assert!(init_node(package).contains("readFileSync"));
+        assert!(init_workerd(package).contains("import wasm from \"./trilean_regex_bg.wasm\""));
+        assert!(init_browser(package).contains("await init("));
+    }
+}
