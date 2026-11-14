@@ -14,6 +14,7 @@ import { nodeResolve } from "@rollup/plugin-node-resolve";
 import { build as esbuild } from "esbuild";
 import { chromium } from "playwright";
 import { rollup } from "rollup";
+import { build as viteBuild } from "vite";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import webpack from "webpack";
 
@@ -149,6 +150,44 @@ describe("a browser build of the packed package", () => {
       join(installed, "node_modules/trilean-regex/dist", WASM),
       join(out, WASM),
     );
+    expect(await runInBrowser(out, "bundle.js")).toEqual(EXPECTED);
+  });
+
+  it("runs when built by esbuild, with the module file copied beside the bundle", async () => {
+    const out = join(work, "esbuild-browser");
+    await esbuild({
+      entryPoints: [join(installed, "consumer.mjs")],
+      bundle: true,
+      platform: "browser",
+      format: "esm",
+      target: "es2022",
+      outfile: join(out, "bundle.js"),
+      logLevel: "silent",
+    });
+    copyFileSync(
+      join(installed, "node_modules/trilean-regex/dist", WASM),
+      join(out, WASM),
+    );
+    expect(await runInBrowser(out, "bundle.js")).toEqual(EXPECTED);
+  });
+
+  it("runs when built by Vite (Rolldown) in production mode, which emits the module file itself", async () => {
+    const out = join(work, "vite-browser");
+    await viteBuild({
+      root: installed,
+      configFile: false,
+      logLevel: "silent",
+      build: {
+        outDir: out,
+        target: "es2022",
+        minify: true,
+        lib: {
+          entry: join(installed, "consumer.mjs"),
+          formats: ["es"],
+          fileName: () => "bundle.js",
+        },
+      },
+    });
     expect(await runInBrowser(out, "bundle.js")).toEqual(EXPECTED);
   });
 
