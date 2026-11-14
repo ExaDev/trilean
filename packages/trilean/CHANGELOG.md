@@ -1,3 +1,14 @@
+## [1.13.8](https://github.com/ExaDev/trilean/compare/trilean%401.13.7...trilean%401.13.8) (2026-11-14)
+
+### Build System
+
+* **deps-dev:** bump eslint from 10.12.0 to 10.14.0 ([168c02f](https://github.com/ExaDev/trilean/commit/168c02f204df728993276e41d49d93df8c1410cd))
+
+
+### Dependencies
+
+- Updated trilean-regex to 1.0.21
+
 ## [1.13.7](https://github.com/ExaDev/trilean/compare/trilean%401.13.6...trilean%401.13.7) (2026-11-14)
 
 ### Build System
