@@ -2,10 +2,8 @@ version: 2
 
 updates:
   - package-ecosystem: "npm"
-    # `directories` (plural, glob-capable) covers the workspace root's own manifest plus every package's, in one entry rather than one per manifest -- a `directory: "/"` entry alone would leave every dependency declared inside packages/* unwatched.
-    directories:
-      - "/"
-      - "/packages/*"
+    # The workspace root only. For a pnpm workspace the root entry reads `pnpm-workspace.yaml` and updates every package's manifest and the one `pnpm-lock.yaml` together, and Dependabot refuses (`misconfigured_tooling`) to update from a package directory whose lock file and workspace file are both in a parent directory, so listing `/packages/*` as well made those jobs fail and opened a duplicate pull request per package for the same bump.
+    directory: "/"
     schedule:
       interval: "daily"
     cooldown:
