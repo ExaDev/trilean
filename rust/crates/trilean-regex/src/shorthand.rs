@@ -7,11 +7,17 @@ use crate::ast::{CharClassNode, CharRange};
 /// The letter a shorthand class is written with: upper case negates the class of the lower case.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum ShorthandClassLetter {
+    /// `\d`, the ASCII digits.
     D,
+    /// `\D`, everything but the ASCII digits.
     UpperD,
+    /// `\w`, the ASCII letters, digits and underscore.
     W,
+    /// `\W`, everything but those.
     UpperW,
+    /// `\s`, the six ASCII white-space characters.
     S,
+    /// `\S`, everything but those.
     UpperS,
 }
 
@@ -136,13 +142,40 @@ pub(crate) fn complement(ranges: &[CharRange]) -> Vec<CharRange> {
     gaps
 }
 
-/// Whether the ranges between them hold every code unit.
-pub(crate) fn covers_every_code_unit(ranges: &[CharRange]) -> bool {
-    normalise(ranges)
-        == [CharRange {
-            from: 0,
-            to: u16::MAX,
-        }]
+/// The ranges a shorthand letter holds in an unflagged ECMAScript `RegExp`, where it differs from this grammar's only for `\s` and `\S`: ECMAScript's `\s` is every white-space and line-terminator code point, which includes U+00A0, U+FEFF, U+2028, U+2029 and the `Zs` separators, with or without the `u` flag.
+pub(crate) fn ecmascript_member_ranges(letter: ShorthandClassLetter) -> Vec<CharRange> {
+    let spaces = || {
+        let unit = |unit: u16| CharRange {
+            from: unit,
+            to: unit,
+        };
+        vec![
+            CharRange {
+                from: 0x09,
+                to: 0x0D,
+            },
+            unit(0x20),
+            unit(0xA0),
+            unit(0x1680),
+            CharRange {
+                from: 0x2000,
+                to: 0x200A,
+            },
+            CharRange {
+                from: 0x2028,
+                to: 0x2029,
+            },
+            unit(0x202F),
+            unit(0x205F),
+            unit(0x3000),
+            unit(0xFEFF),
+        ]
+    };
+    match letter {
+        ShorthandClassLetter::S => spaces(),
+        ShorthandClassLetter::UpperS => complement(&spaces()),
+        other => class_member_ranges(other),
+    }
 }
 
 #[cfg(test)]
@@ -233,8 +266,6 @@ mod tests {
         }];
         assert_eq!(complement(&[]), all);
         assert_eq!(complement(&all), []);
-        assert!(covers_every_code_unit(&all));
-        assert!(!covers_every_code_unit(&[]));
     }
 
     #[test]

@@ -1,7 +1,7 @@
 {
   "cases": [
     {
-      "from": "recorded: trilean-regex src/matcher.rs (the matcher's work is bounded by pattern and input, not by how the pattern nests)",
+      "from": "recorded: trilean-regex rust/crates/trilean-regex/src/matcher.rs (the matcher's work is bounded by pattern and input, not by how the pattern nests)",
       "id": "match.recorded.work-bound.star-after-star",
       "inputs": [
         {

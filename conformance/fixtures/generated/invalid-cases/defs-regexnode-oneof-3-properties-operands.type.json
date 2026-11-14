@@ -3,14 +3,23 @@
     {
       "expect": {
         "ast": {
-          "kind": "concat",
-          "operands": "not-the-type"
+          "branches": [
+            {
+              "codeUnit": 97,
+              "kind": "literal"
+            },
+            {
+              "kind": "concat",
+              "operands": "not-the-type"
+            }
+          ],
+          "kind": "alternation"
         }
       },
-      "from": "recorded: trilean-regex src/parser.ts (no original test; cjk)",
-      "id": "parse.utf-16-code-units.cjk.1",
+      "from": "parser.unit.test.ts: alternation > allows an empty branch",
+      "id": "parse.alternation.allows-an-empty-branch.1",
       "kind": "regex-parse",
-      "pattern": "日本"
+      "pattern": "a|"
     }
   ]
 }
