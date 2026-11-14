@@ -889,7 +889,7 @@
         "kind": "number",
         "value": 1
       },
-      "from": "builtin-functions.unit.test.ts: logarithm > is natural by default and to a base when given one (the original asserted exactly 1, which holds only where the engine's natural logarithm of the nearest double to e is exactly 1; held to one unit in the last place, as the README states for results of transcendental functions)",
+      "from": "builtin-functions.unit.test.ts: logarithm > is natural by default and to a base when given one (the original asserted exactly 1; held to one unit in the last place, as the README states for the natural logarithm)",
       "function": "logarithm",
       "id": "builtin.logarithm-is-natural-by-default-and-to-a-base-when-given-one.1",
       "kind": "call",
@@ -935,7 +935,7 @@
         "kind": "number",
         "value": 3
       },
-      "from": "builtin-functions.unit.test.ts: logarithm > is exact for powers of the bases 10 and 2 (exact by the rule for the bases 10 and 2 that the README states, so no tolerance)",
+      "from": "builtin-functions.unit.test.ts: logarithm > is exact for powers of the bases 10 and 2 (exact by the README's base rule)",
       "function": "logarithm",
       "id": "builtin.logarithm-is-exact-for-powers-of-the-bases-10-and-2.1",
       "kind": "call"
@@ -955,7 +955,7 @@
         "kind": "number",
         "value": 3
       },
-      "from": "builtin-functions.unit.test.ts: logarithm > is exact for powers of the bases 10 and 2 (exact by the rule for the bases 10 and 2 that the README states, so no tolerance)",
+      "from": "builtin-functions.unit.test.ts: logarithm > is exact for powers of the bases 10 and 2 (exact by the README's base rule)",
       "function": "logarithm",
       "id": "builtin.logarithm-is-exact-for-powers-of-the-bases-10-and-2.2",
       "kind": "call"

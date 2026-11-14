@@ -3,53 +3,32 @@
     {
       "as": "predicate",
       "evaluator": {
-        "maxNestingDepth": 10,
-        "maxNodes": 50
+        "maxNestingDepth": 5
       },
       "expect": {
         "status": "definite",
         "value": false
       },
-      "from": "evaluator.integration.test.ts: evaluation resource limits > a tree well within both caps evaluates normally and correctly",
-      "id": "integration.evaluation-resource-limits-a-tree-well-within-both-caps-evaluates-normally-and-correctly.1",
+      "from": "recorded: trilean src/evaluator.ts (an exists inside a not with the depth limit one step short)",
+      "id": "exists-budget.exists-inside-another-node-a-not-around-an-exists-whose-operand-stays-one-step-inside-the-depth-limit.1",
       "kind": "evaluate",
       "resolvers": {
         "default": {
           "found": false
         },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
+        "trees": []
       },
       "tree": {
         "kind": "not",
         "operand": {
-          "kind": "not",
+          "kind": "exists",
           "operand": {
-            "kind": "not",
+            "kind": "negate",
             "operand": {
-              "kind": "not",
+              "kind": "negate",
               "operand": {
-                "kind": "not",
-                "operand": {
-                  "kind": "exists",
-                  "operand": {
-                    "kind": "numberLiteral",
-                    "value": 1
-                  }
-                }
+                "kind": "numberLiteral",
+                "value": 1
               }
             }
           }
