@@ -3,21 +3,20 @@
     {
       "args": [
         "evaluate",
+        "-",
+        "--inputs",
         "-"
       ],
       "expect": {
-        "exit": 0,
-        "stdoutJsonSubset": {
-          "value": {
-            "value": 7
-          }
-        }
+        "exit": 2,
+        "stderr": "the tree and --inputs cannot both be read from standard input\n",
+        "stdout": ""
       },
       "files": {},
-      "from": "cli-run.integration.test.ts: trilean evaluate > reads the tree from standard input for -",
-      "id": "cli.trilean-evaluate-reads-the-tree-from-standard-input-for.1",
+      "from": "cli-run.integration.test.ts: trilean evaluate > refuses to read both the tree and the inputs from standard input",
+      "id": "cli.trilean-evaluate-refuses-to-read-both-the-tree-and-the-inputs-from-standard-input.1",
       "kind": "cli",
-      "stdin": "{\"kind\":\"numberLiteral\",\"value\":7}"
+      "stdin": "{\"kind\":\"numberLiteral\",\"value\":1}"
     }
   ]
 }

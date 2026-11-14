@@ -1,0 +1,19 @@
+{
+  "cases": [
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "x.unit.test.ts: a fixture",
+      "id": "fixture.1",
+      "kind": "evaluate",
+      "resolvers": {},
+      "tree": {
+        "kind": "allOf",
+        "operands": []
+      }
+    }
+  ]
+}

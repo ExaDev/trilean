@@ -1,13 +1,18 @@
 {
   "cases": [
     {
-      "expectSubset": {
+      "expect": {
         "evaluation": {
-          "status": "definite"
+          "status": "definite",
+          "value": {
+            "kind": "number",
+            "value": 6
+          }
         },
-        "outcome": "evaluated"
+        "outcome": "evaluated",
+        "treeKind": "expression"
       },
-      "from": "evaluate-document.unit.test.ts: evaluateDocument maxNodes > evaluates the same tree when the budget covers it",
+      "from": "evaluate-document.unit.test.ts: evaluateDocument maxNodes > evaluates the same tree when the budget covers it (the original asserted only part of the outcome; the case gives the whole)",
       "id": "document.evaluatedocument-maxnodes-evaluates-the-same-tree-when-the-budget-covers-it.1",
       "kind": "document",
       "maxNodes": 5,

@@ -123,7 +123,9 @@ function checkExpectation(
     expect(got.code, label).toBe(wanted.code);
   }
   const fold = (text: string): string =>
-    wanted.ignoreCase === true ? text.toLowerCase() : text;
+    wanted.ignoreCase === true
+      ? text.replace(/[A-Z]/gu, (letter) => letter.toLowerCase())
+      : text;
   if (wanted.message !== undefined) {
     expect(fold(String(got.message)), label).toBe(fold(wanted.message));
   }
@@ -182,6 +184,29 @@ function checkThrown(
     error instanceof Error ? error.message : String(error),
     label,
   ).toContain(expectation.message);
+}
+
+/** What the asynchronous evaluator makes of the case, for the tool that records the answer a new case should give; a case whose evaluation throws has none. */
+export async function evaluateOnce(
+  testCase: EvaluateCase,
+): Promise<Evaluation<unknown>> {
+  const options = optionsOf(testCase);
+  const resolvers = buildResolvers(testCase.resolvers);
+  const context = decodeNumbers(testCase.context);
+  const { evaluatePredicate, evaluateValue } = createEvaluator(options);
+  const tree = decodeNumbers(testCase.tree);
+
+  return testCase.as === "predicate"
+    ? evaluatePredicate(
+        PredicateNodeSchema.parse(tree),
+        context,
+        resolvers.asynchronous,
+      )
+    : evaluateValue(
+        ExpressionNodeSchema.parse(tree),
+        context,
+        resolvers.asynchronous,
+      );
 }
 
 /** Evaluates the case in every mode it names and checks the result, and the resolver calls where it lists them. */

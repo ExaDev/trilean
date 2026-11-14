@@ -291,22 +291,8 @@
             "stdout": {
               "type": "string"
             },
-            "stdoutExcludes": {
-              "description": "Fragments standard output does not contain.",
-              "items": {
-                "minLength": 1,
-                "type": "string"
-              },
-              "minItems": 1,
-              "type": "array"
-            },
             "stdoutJson": {
               "$ref": "#/$defs/json"
-            },
-            "stdoutJsonSubset": {
-              "description": "The JSON the command printed, compared as `expectSubset` is.",
-              "minProperties": 1,
-              "type": "object"
             },
             "stdoutStartsWith": {
               "description": "The text standard output begins with.",
@@ -418,7 +404,7 @@
           "$ref": "#/$defs/json"
         },
         "expectIssuePaths": {
-          "description": "Paths each of which at least one issue of a rejected document names: an issue is `<path>: <text>`, and only the path is the implementation's to pin.",
+          "description": "Paths each of which at least one issue of a rejected document names: an issue is `<path>: <text>`, and the text is a schema library's, not the implementation's to pin.",
           "items": {
             "minLength": 1,
             "type": "string"
@@ -427,7 +413,7 @@
           "type": "array"
         },
         "expectSubset": {
-          "description": "For a document whose original asserted only some fields of the outcome: an object that names at least one key. An object matches when every key it gives matches; an array matches element by element and has the same length; any other value must be equal.",
+          "description": "For a rejected document whose issues hold a third-party library's text, which the implementation does not own: the outcome without the issue text, with `expectIssuePaths` for the paths. It names at least one key; an object matches when every key it gives matches, an array matches element by element at the same length, any other value must be equal.",
           "minProperties": 1,
           "type": "object"
         },
@@ -568,11 +554,13 @@
                   "const": "definite"
                 },
                 "value": {
-                  "$ref": "#/$defs/json"
+                  "$ref": "#/$defs/json",
+                  "description": "The value the evaluation settles on; a case always states it."
                 }
               },
               "required": [
-                "status"
+                "status",
+                "value"
               ],
               "type": "object"
             },
@@ -604,7 +592,8 @@
                 }
               },
               "required": [
-                "status"
+                "status",
+                "code"
               ],
               "type": "object"
             },

@@ -2,7 +2,9 @@
   "cases": [
     {
       "as": "predicate",
-      "expect": {},
+      "expect": {
+        "value": true
+      },
       "from": "x.unit.test.ts: a fixture",
       "id": "optional.11",
       "kind": "evaluate",

@@ -4,7 +4,8 @@
       "as": "predicate",
       "expect": {
         "status": "definite",
-        "unexpectedMember": 1
+        "unexpectedMember": 1,
+        "value": true
       },
       "from": "x.unit.test.ts: a fixture",
       "id": "optional.11",

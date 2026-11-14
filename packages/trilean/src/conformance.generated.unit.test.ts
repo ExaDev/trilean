@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
@@ -31,6 +31,18 @@ describe("the generated files", () => {
       )
       .map(([path]) => path);
     expect(differing).toEqual([]);
+  });
+
+  it("include every file under the generated fixture directories, and no other", () => {
+    const expected = [...generatedDerived(CORPUS_ROOT).keys()]
+      .filter((path) => path.startsWith("fixtures/generated/"))
+      .sort();
+    const present = ["invalid-cases", "repaired-cases"].flatMap((directory) =>
+      readdirSync(join(CORPUS_ROOT, "fixtures", "generated", directory)).map(
+        (name) => `fixtures/generated/${directory}/${name}`,
+      ),
+    );
+    expect(present.sort()).toEqual(expected);
   });
 
   it("are the files the manifest marks as generated, and no others", () => {

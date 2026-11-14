@@ -1,8 +1,11 @@
 {
   "cases": [
     {
+      "expectIssuePaths": [
+        "(root)"
+      ],
       "expectSubset": "not-the-type",
-      "from": "evaluate-document.unit.test.ts: evaluateDocument > rejects a tree that is not an object",
+      "from": "evaluate-document.unit.test.ts: evaluateDocument > rejects a tree that is not an object (the original asserted only part of the outcome; the case gives the outcome without the schema library's issue text, which is not the implementation's to pin)",
       "id": "document.evaluatedocument-rejects-a-tree-that-is-not-an-object.1",
       "kind": "document",
       "tree": 3

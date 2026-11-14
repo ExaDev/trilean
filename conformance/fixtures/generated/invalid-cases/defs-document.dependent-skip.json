@@ -1,14 +1,28 @@
 {
   "cases": [
     {
-      "expectSubset": {
-        "outcome": "rejected"
+      "expect": {
+        "evaluation": {
+          "status": "definite",
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
       },
-      "from": "evaluate-document.unit.test.ts: evaluateDocument > rejects a tree that is not an object",
-      "id": "document.evaluatedocument-rejects-a-tree-that-is-not-an-object.1",
+      "from": "x.unit.test.ts: a fixture",
+      "id": "optional.6",
       "kind": "document",
       "skip": "ts",
-      "tree": 3
+      "tolerance": {
+        "ulps": 1
+      },
+      "tree": {
+        "kind": "numberLiteral",
+        "value": 1
+      }
     }
   ]
 }

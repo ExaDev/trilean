@@ -3,6 +3,7 @@
     {
       "as": "predicate",
       "expect": {
+        "code": "not-found",
         "ignoreCase": "yes",
         "messageIncludes": [
           "node"
