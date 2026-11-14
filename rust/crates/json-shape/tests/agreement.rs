@@ -864,20 +864,22 @@ fn generated_rows() -> Vec<Row> {
         .collect()
 }
 
+/// The table as the repository's formatter writes a corpus JSON file (`json-stringify`: sorted keys, one element per
+/// line), so the root lint's `--fix` leaves the committed file as it is and the comparison below does not depend on
+/// whether lint ran first.
 fn generated_text(rows: &[Row]) -> String {
-    let lines: Vec<String> = rows
+    let entries: Vec<serde_json::Value> = rows
         .iter()
         .map(|row| {
-            let entry = serde_json::json!({
+            serde_json::json!({
                 "type": row.root,
                 "case": row.case,
                 "valid": row.valid,
                 "document": serde_json::to_value(&row.document).expect("JSON"),
-            });
-            serde_json::to_string(&entry).expect("JSON")
+            })
         })
         .collect();
-    format!("[\n{}\n]\n", lines.join(",\n"))
+    serde_json::to_string_pretty(&entries).expect("JSON") + "\n"
 }
 
 fn read_json(name: &str) -> serde_json::Value {
