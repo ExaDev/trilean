@@ -2,10 +2,8 @@
  * The key rule of canonical corpus files, checked on the text of a file because a parsed object has already lost the order of its keys (JavaScript lists integer-like keys first, in numeric order, whatever order the text gave them). In every object the keys are in strictly ascending UTF-16 code-unit order, which for an integer-like key is the order of the strings (`"10"` before `"2"`), and no key holds an unpaired surrogate. A key is compared as the text it stands for, so an escaped spelling is read first.
  *
  * The same scan states two more rules, so that every loader gives one verdict: a document does not begin with a byte order mark, and no array or object is nested deeper than `MAX_DEPTH`. The TypeScript and the Rust JSON parsers would otherwise differ on both (one strips a mark and the other refuses it; their recursion limits differ).
- 
-`conformance/README.md` states the rules, and each loader implements them over `conformance/fixtures/canonical-keys`.
  *
- * This file is a copy of `packages/trilean-regex/src/test-support/canonical-keys.ts`, kept as a copy because both are deleted with the TypeScript they test; a change here is made in that file too.
+ * `conformance/README.md` states the rules, and each loader implements them over `conformance/fixtures/canonical-keys`.
  */
 
 const SIMPLE_ESCAPES: Readonly<Record<string, string>> = {

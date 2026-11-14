@@ -13,7 +13,7 @@ json-shape.workspace = true
 
 [dev-dependencies]
 serde_json.workspace = true
-trilean-regex = { path = "../../crates/trilean-regex" }
+trilean-regex.workspace = true
 
 [[test]]
 name = "conformance"

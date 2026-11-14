@@ -29,7 +29,6 @@ case "$check" in
   test) cargo test --locked --all-targets --all-features ;;
   deny) cargo deny --locked check bans licenses sources ;;
   advisories) cargo deny --locked check advisories ;;
-  deny-boundaries) cargo deny --locked --config deny-boundaries.toml check bans ;;
   deny-bans) cargo deny --locked --manifest-path "$1" --config "$2" check bans ;;
   deny-bans-json) cargo deny --locked --manifest-path "$1" --config "$2" --format json -L info check bans ;;
   compile-fail)
@@ -71,7 +70,7 @@ case "$check" in
     fi
     ;;
   *)
-    echo "usage: rust.sh fmt|clippy|test|compile-fail|deny|advisories|deny-bans|deny-bans-json|metadata [arguments]" >&2
+    echo "usage: rust.sh fmt|clippy|test|compile-fail|deny|advisories|deny-bans|deny-bans-json|metadata|metadata-resolved|xtask|install-wasm-bindgen [arguments]" >&2
     exit 2
     ;;
 esac

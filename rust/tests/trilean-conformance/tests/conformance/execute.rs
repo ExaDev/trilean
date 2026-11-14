@@ -16,7 +16,7 @@ pub struct Outcome {
     pub failures: Vec<String>,
 }
 
-/// Executes every case of a validated file that this implementation does not skip. A case marked `skip: ts` is executed, since the mark names the implementation that skips it.
+/// Executes every case of a validated file that is of a regex kind and that this implementation does not skip. A case marked `skip: ts` is executed, since the mark names the implementation that skips it.
 pub fn run_file(name: &str, file: &Value) -> Outcome {
     let mut outcome = Outcome {
         executed: 0,
@@ -24,7 +24,9 @@ pub fn run_file(name: &str, file: &Value) -> Outcome {
     };
     let cases = file["cases"].as_array().map_or(&[][..], Vec::as_slice);
     for case in cases {
-        if case.get("skip").and_then(Value::as_str) == Some("rust") {
+        if !matches!(case["kind"].as_str(), Some("regex-parse" | "regex-match"))
+            || case.get("skip").and_then(Value::as_str) == Some("rust")
+        {
             continue;
         }
         outcome.executed += 1;
@@ -136,7 +138,7 @@ fn contains_in_order(text: &[u16], fragments: &[Vec<u16>]) -> bool {
 }
 
 fn run_parse_case(case: &Value) -> Check<()> {
-    let pattern = decode_text(&case["pattern"], "pattern")?;
+    let pattern = decode_text(&case["pattern"])?;
     let parsed = parse_regex_utf16(&pattern);
     let expectation = &case["expect"];
     if let Some(ast) = expectation.get("ast") {
@@ -177,7 +179,7 @@ fn run_parse_case(case: &Value) -> Check<()> {
     if let Some(fragments) = expected.get("message").and_then(Value::as_array) {
         let fragments = fragments
             .iter()
-            .map(|fragment| decode_text(fragment, "message"))
+            .map(decode_text)
             .collect::<Check<Vec<_>>>()?;
         if !contains_in_order(error.reason_utf16(), &fragments) {
             return Err(format!(
@@ -195,7 +197,7 @@ fn work_limit(factor: u64, pattern: &[u16], input: &[u16]) -> u128 {
 }
 
 fn run_match_case(case: &Value) -> Check<()> {
-    let pattern = decode_text(&case["pattern"], "pattern")?;
+    let pattern = decode_text(&case["pattern"])?;
     let ecmascript = case.get("dialect").and_then(Value::as_str) == Some("ecmascript");
     let compile = |units: &[u16]| {
         if ecmascript {
@@ -208,7 +210,7 @@ fn run_match_case(case: &Value) -> Check<()> {
         .map_err(|error| format!("{} was refused: {error}", units_text(&pattern)))?;
     let pattern_text = String::from_utf16(&pattern).ok();
     for item in case["inputs"].as_array().map_or(&[][..], Vec::as_slice) {
-        let input = decode_text(&item["input"], "input")?;
+        let input = decode_text(&item["input"])?;
         let expected = item["matches"].as_bool().unwrap_or(false);
         let label = units_text(&input);
         let check = |entry: &str, actual: bool| {
