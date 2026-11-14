@@ -98,6 +98,12 @@ export function prepare(tree) {
         try { run(pkg, c); } catch (e) { failures.push(`${c.id}: ${e.message}`); }
       }
     }
+    // The refusals of compileEcmascriptSubset are not corpus cases, so the class they are thrown as is checked through the real boundary here.
+    for (const [p, index, construct] of [[".", 0, "."], ["a\\s", 1, "\\s"], ["[\\s]", 1, "\\s"], ["x|{2}", 2, "{"]]) {
+      try { pkg.compileEcmascriptSubset(p); failures.push(`${p} compiled`); } catch (e) { if (!(e instanceof pkg.UnsupportedConstructError && e.index === index && e.construct === construct)) failures.push(`${p}: ${e}`); }
+    }
+    const nonDigit = pkg.expandShorthandClass("D"), digits = pkg.expandShorthandClass("d");
+    if (pkg.charClassMatches(nonDigit, 53) || !pkg.charClassMatches(nonDigit, 97) || !pkg.charClassMatches(digits, 53) || !pkg.rangeContains({ from: 1, to: 3 }, 3) || pkg.rangeContains({ from: 1, to: 3 }, 4)) failures.push("class helpers");
     const total = regexFiles.reduce((n, f) => n + manifest[f].cases, 0);
     if (executed + skipped !== total) failures.push(`executed ${executed} plus skipped ${skipped} is not the manifest's ${total}`);
     return { executed, skipped, failures };
