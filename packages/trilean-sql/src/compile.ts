@@ -228,21 +228,64 @@ function compilePortablePattern(
   }
 }
 
+/**
+ * Whether an operand is an instant, as far as the compiler can tell without running anything: an `instantLiteral`, a column declared `"timestamp"`, or a `fold(max|min)` over one. A comparison or membership with any such operand compares all its operands as points in time ({@link DialectConfig.instantColumn}), since the other side of a comparison the evaluator answers definitely is an instant too.
+ */
+function isInstant(node: ExpressionNode, context: CompileContext): boolean {
+  if (node.kind === "instantLiteral") return true;
+  if (node.kind === "reference") {
+    return bindingOf(context, node)?.binding.paramType === "timestamp";
+  }
+  if (
+    node.kind === "fold" &&
+    node.combiner.mode !== "reduce" &&
+    typeof node.collection === "string" &&
+    context.options.collectionFor !== undefined
+  ) {
+    const binding = context.options.collectionFor(node.collection);
+
+    return isInstant(node.combiner.item, {
+      ...context,
+      options: { ...context.options, columnFor: binding.columnFor },
+    });
+  }
+
+  return false;
+}
+
+/** Whether any of the operands of a comparison or membership is an instant. */
+function anyInstant(
+  nodes: readonly ExpressionNode[],
+  context: CompileContext,
+): boolean {
+  return nodes.some((node) => isInstant(node, context));
+}
+
+/**
+ * Compiles an expression. `asInstant` renders an instant-valued operand as the dialect's comparable point in time rather than as its stored text ({@link DialectConfig.instantColumn}); it is set for every operand of a comparison or membership that has an instant operand, and reaches the item of a `fold` so a maximum or minimum is of points in time, not of text.
+ */
 function compileExpression(
   node: ExpressionNode,
   context: CompileContext,
+  asInstant = false,
 ): string {
   switch (node.kind) {
     case "reference": {
       const resolved = bindingOf(context, node);
       if (resolved === undefined) return refuse(node.kind, "expression");
+      const column = quoteColumn(resolved.referenceKey, resolved.binding);
 
-      return quoteColumn(resolved.referenceKey, resolved.binding);
+      return asInstant ? context.dialect.instantColumn(column) : column;
     }
+    case "instantLiteral":
+      return placeholder(
+        context,
+        asInstant ? context.dialect.instantParameter(node.value) : node.value,
+        PARAM_TYPE_OF_LITERAL[node.kind],
+      );
     case "textLiteral":
     case "numberLiteral":
     case "booleanLiteral":
-    case "instantLiteral":
       return placeholder(context, node.value, PARAM_TYPE_OF_LITERAL[node.kind]);
     case "fold": {
       if (node.combiner.mode === "reduce")
@@ -253,7 +296,11 @@ function compileExpression(
         context,
         "expression",
       );
-      const itemValueSql = compileExpression(node.combiner.item, itemContext);
+      const itemValueSql = compileExpression(
+        node.combiner.item,
+        itemContext,
+        asInstant,
+      );
       const filterColumn = filterSql ?? "TRUE";
       const participating =
         `SELECT "filter_ok", "item_value" FROM ` +
@@ -305,8 +352,9 @@ function compilePredicate(
       return `(${node.operands.map((operand) => compilePredicate(operand, context)).join(joiner)})`;
     }
     case "compare": {
-      const left = compileExpression(node.left, context);
-      const right = compileExpression(node.right, context);
+      const instants = anyInstant([node.left, node.right], context);
+      const left = compileExpression(node.left, context, instants);
+      const right = compileExpression(node.right, context, instants);
 
       return `(${left} ${COMPARISON_SQL[node.op]} ${right})`;
     }
@@ -320,7 +368,8 @@ function compilePredicate(
       return `(${left} ${context.textComparison[node.op]} ${right})`;
     }
     case "memberOf": {
-      const operand = compileExpression(node.operand, context);
+      const instants = anyInstant([node.operand, ...node.candidates], context);
+      const operand = compileExpression(node.operand, context, instants);
       if (node.candidates.length === 0) {
         // `IN ()` is a syntax error, and the two constants it would be tempting to fold to are both wrong: an empty `in` is false and an empty `notIn` is true only once the operand itself is known, and stay unknown while it is NULL. These two forms reproduce that exactly -- `NULL IS NULL AND NULL` is NULL while `<value> IS NULL AND NULL` is FALSE, and the `notIn` form is its mirror image -- which a bare FALSE/TRUE would not, most visibly under a surrounding NOT. The suffix is the dialect's own boolean annotation on that bare NULL, empty for a dialect with no boolean type to annotate.
         const nullLiteral = `NULL${context.dialect.emptyMemberOfNullSuffix}`;
@@ -330,7 +379,7 @@ function compilePredicate(
           : `(${operand} IS NOT NULL OR ${nullLiteral})`;
       }
       const candidates = node.candidates
-        .map((candidate) => compileExpression(candidate, context))
+        .map((candidate) => compileExpression(candidate, context, instants))
         .join(", ");
 
       return `(${operand} ${node.op === "in" ? "IN" : "NOT IN"} (${candidates}))`;
