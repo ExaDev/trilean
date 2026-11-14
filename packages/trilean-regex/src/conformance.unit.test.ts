@@ -36,6 +36,9 @@ const CORPUS_ROOT = fileURLToPath(
 );
 const FIXTURES = join(CORPUS_ROOT, "fixtures");
 
+/** The corpus directory this package executes; the other packages' directories belong to their own runners. */
+const PACKAGE_DIRECTORY = "trilean-regex/";
+
 // The length of the run of "a" in the nested-quantifier case the corpus pins and matcher.unit.test.ts bounds in time.
 const NESTED_QUANTIFIER_RUN = 30;
 
@@ -347,7 +350,9 @@ const checked = checkCorpus(CORPUS_ROOT);
 if (checked.problems.length > 0) {
   throw new Error(`the corpus is malformed:\n${checked.problems.join("\n")}`);
 }
-const corpus = checked.files;
+const corpus = checked.files.filter(({ name }) =>
+  name.startsWith(PACKAGE_DIRECTORY),
+);
 
 // What this run registers, computed while the tests are collected, so the completeness check below holds whatever the run does with them afterwards: a name filter, a bail, a retry or a shuffled order changes which registered tests run, never which are registered.
 const { registered, skipped } = collect(corpus);
@@ -383,7 +388,9 @@ describe("corpus completeness", () => {
     if (!manifest.ok) {
       throw new Error(manifest.problems.join("\n"));
     }
-    const entries = Object.values(manifest.value.files);
+    const entries = Object.entries(manifest.value.files)
+      .filter(([name]) => name.startsWith(PACKAGE_DIRECTORY))
+      .map(([, entry]) => entry);
     expect(
       completenessProblems(
         entries.reduce((sum, entry) => sum + entry.cases, 0),

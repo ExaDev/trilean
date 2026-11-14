@@ -424,6 +424,15 @@
                 "message": {
                   "type": "string"
                 },
+                "messageIncludes": {
+                  "description": "Fragments the reason's message contains, each after the end of the one before.",
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array"
+                },
                 "status": {
                   "const": "indeterminate"
                 }

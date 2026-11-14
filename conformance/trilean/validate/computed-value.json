@@ -1,0 +1,78 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "im": 4,
+          "kind": "complex",
+          "re": 3
+        }
+      },
+      "from": "computed-value.unit.test.ts: the complex computed-value kind > parses with and without an optional unit",
+      "id": "computed-value.the-complex-computed-value-kind-parses-with-and-without-an-optional-unit.1",
+      "input": {
+        "im": 4,
+        "kind": "complex",
+        "re": 3
+      },
+      "kind": "validate",
+      "schema": "ComputedValueSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "im": 4,
+          "kind": "complex",
+          "re": 3,
+          "unit": {
+            "A": -1,
+            "V": 1
+          }
+        }
+      },
+      "from": "computed-value.unit.test.ts: the complex computed-value kind > parses with and without an optional unit",
+      "id": "computed-value.the-complex-computed-value-kind-parses-with-and-without-an-optional-unit.2",
+      "input": {
+        "im": 4,
+        "kind": "complex",
+        "re": 3,
+        "unit": {
+          "A": -1,
+          "V": 1
+        }
+      },
+      "kind": "validate",
+      "schema": "ComputedValueSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "computed-value.unit.test.ts: the complex computed-value kind > rejects a value carrying only one of the two components",
+      "id": "computed-value.the-complex-computed-value-kind-rejects-a-value-carrying-only-one-of-the-two-components.1",
+      "input": {
+        "kind": "complex",
+        "re": 3
+      },
+      "kind": "validate",
+      "schema": "ComputedValueSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "computed-value.unit.test.ts: the complex computed-value kind > rejects a value carrying only one of the two components",
+      "id": "computed-value.the-complex-computed-value-kind-rejects-a-value-carrying-only-one-of-the-two-components.2",
+      "input": {
+        "im": 4,
+        "kind": "complex"
+      },
+      "kind": "validate",
+      "schema": "ComputedValueSchema"
+    }
+  ]
+}

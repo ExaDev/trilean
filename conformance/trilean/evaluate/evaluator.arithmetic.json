@@ -1,0 +1,986 @@
+{
+  "cases": [
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 2
+        }
+      },
+      "from": "evaluator.arithmetic.unit.test.ts: arithmetic indeterminate propagation (no absorbing value) > definite + definite => definite",
+      "id": "arithmetic.arithmetic-indeterminate-propagation-no-absorbing-value-definite-definite-definite.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 1
+        },
+        "op": "add",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.arithmetic.unit.test.ts: arithmetic indeterminate propagation (no absorbing value) > indeterminate + definite => indeterminate (left's reason, unlike OR's absorbing true)",
+      "id": "arithmetic.arithmetic-indeterminate-propagation-no-absorbing-value-indeterminate-definite-indeterminate-left-s-reason-unlike-or-s-absorbing-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "key": "missing",
+          "kind": "reference"
+        },
+        "op": "add",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.arithmetic.unit.test.ts: arithmetic indeterminate propagation (no absorbing value) > definite + indeterminate => indeterminate (right's reason)",
+      "id": "arithmetic.arithmetic-indeterminate-propagation-no-absorbing-value-definite-indeterminate-indeterminate-right-s-reason.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 1
+        },
+        "op": "add",
+        "right": {
+          "key": "missing",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.arithmetic.unit.test.ts: arithmetic indeterminate propagation (no absorbing value) > indeterminate + indeterminate => indeterminate, tie-broken left before right",
+      "id": "arithmetic.arithmetic-indeterminate-propagation-no-absorbing-value-indeterminate-indeterminate-indeterminate-tie-broken-left-before-right.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "key": "missing",
+          "kind": "reference"
+        },
+        "op": "add",
+        "right": {
+          "key": "also-missing",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "unit": {
+            "m": 1
+          },
+          "value": 7
+        }
+      },
+      "from": "evaluator.arithmetic.unit.test.ts: arithmetic on numbers -- units > add requires identical unit maps",
+      "id": "arithmetic.arithmetic-on-numbers-units-add-requires-identical-unit-maps.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "numberLiteral",
+          "unit": {
+            "m": 1
+          },
+          "value": 3
+        },
+        "op": "add",
+        "right": {
+          "kind": "numberLiteral",
+          "unit": {
+            "m": 1
+          },
+          "value": 4
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.arithmetic.unit.test.ts: arithmetic on numbers -- units > subtract is wrong-type on mismatched units",
+      "id": "arithmetic.arithmetic-on-numbers-units-subtract-is-wrong-type-on-mismatched-units.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "numberLiteral",
+          "unit": {
+            "m": 1
+          },
+          "value": 3
+        },
+        "op": "subtract",
+        "right": {
+          "kind": "numberLiteral",
+          "unit": {
+            "s": 1
+          },
+          "value": 4
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "unit": {
+            "m": 1,
+            "s": -1
+          },
+          "value": 12
+        }
+      },
+      "from": "evaluator.arithmetic.unit.test.ts: arithmetic on numbers -- units > multiply combines units dimensionally",
+      "id": "arithmetic.arithmetic-on-numbers-units-multiply-combines-units-dimensionally.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "numberLiteral",
+          "unit": {
+            "m": 1
+          },
+          "value": 3
+        },
+        "op": "multiply",
+        "right": {
+          "kind": "numberLiteral",
+          "unit": {
+            "s": -1
+          },
+          "value": 4
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "unit": {
+            "m": 1,
+            "s": -1
+          },
+          "value": 5
+        }
+      },
+      "from": "evaluator.arithmetic.unit.test.ts: arithmetic on numbers -- units > divide combines units dimensionally",
+      "id": "arithmetic.arithmetic-on-numbers-units-divide-combines-units-dimensionally.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "numberLiteral",
+          "unit": {
+            "m": 1
+          },
+          "value": 10
+        },
+        "op": "divide",
+        "right": {
+          "kind": "numberLiteral",
+          "unit": {
+            "s": 1
+          },
+          "value": 2
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "unit": {},
+          "value": 5
+        }
+      },
+      "from": "evaluator.arithmetic.unit.test.ts: arithmetic on numbers -- units > dividing a unit by itself normalises to dimensionless",
+      "id": "arithmetic.arithmetic-on-numbers-units-dividing-a-unit-by-itself-normalises-to-dimensionless.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "numberLiteral",
+          "unit": {
+            "m": 1
+          },
+          "value": 10
+        },
+        "op": "divide",
+        "right": {
+          "kind": "numberLiteral",
+          "unit": {
+            "m": 1
+          },
+          "value": 2
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "domain-error",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.arithmetic.unit.test.ts: arithmetic domain errors > division by zero is domain-error",
+      "id": "arithmetic.arithmetic-domain-errors-division-by-zero-is-domain-error.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 1
+        },
+        "op": "divide",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "domain-error",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.arithmetic.unit.test.ts: arithmetic domain errors > modulo by zero is domain-error",
+      "id": "arithmetic.arithmetic-domain-errors-modulo-by-zero-is-domain-error.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 7
+        },
+        "op": "modulo",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "domain-error",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.arithmetic.unit.test.ts: arithmetic domain errors > a negative base raised to a non-integer power is domain-error",
+      "id": "arithmetic.arithmetic-domain-errors-a-negative-base-raised-to-a-non-integer-power-is-domain-error.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "numberLiteral",
+          "value": -1
+        },
+        "op": "power",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0.5
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "domain-error",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.arithmetic.unit.test.ts: arithmetic domain errors > a zero base raised to a negative power is domain-error, not a definite infinity",
+      "id": "arithmetic.arithmetic-domain-errors-a-zero-base-raised-to-a-negative-power-is-domain-error-not-a-definite-infinity.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 0
+        },
+        "op": "power",
+        "right": {
+          "kind": "numberLiteral",
+          "value": -1
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 8
+        }
+      },
+      "from": "evaluator.arithmetic.unit.test.ts: arithmetic domain errors > power and modulo are otherwise ordinary numeric operations",
+      "id": "arithmetic.arithmetic-domain-errors-power-and-modulo-are-otherwise-ordinary-numeric-operations.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 2
+        },
+        "op": "power",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 3
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 1
+        }
+      },
+      "from": "evaluator.arithmetic.unit.test.ts: arithmetic domain errors > power and modulo are otherwise ordinary numeric operations",
+      "id": "arithmetic.arithmetic-domain-errors-power-and-modulo-are-otherwise-ordinary-numeric-operations.2",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 7
+        },
+        "op": "modulo",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 3
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.arithmetic.unit.test.ts: arithmetic on non-numeric, non-temporal operands > is wrong-type when an operand is text",
+      "id": "arithmetic.arithmetic-on-non-numeric-non-temporal-operands-is-wrong-type-when-an-operand-is-text.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "textLiteral",
+          "value": "active"
+        },
+        "op": "add",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "unit": {
+            "m": 1
+          },
+          "value": -5
+        }
+      },
+      "from": "evaluator.arithmetic.unit.test.ts: negate > flips a number's sign, preserving its unit",
+      "id": "arithmetic.negate-flips-a-number-s-sign-preserving-its-unit.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "negate",
+        "operand": {
+          "kind": "numberLiteral",
+          "unit": {
+            "m": 1
+          },
+          "value": 5
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "duration",
+          "unit": "min",
+          "value": -5
+        }
+      },
+      "from": "evaluator.arithmetic.unit.test.ts: negate > reverses a duration's magnitude, preserving its unit -- not sugar for zero minus the value",
+      "id": "arithmetic.negate-reverses-a-duration-s-magnitude-preserving-its-unit-not-sugar-for-zero-minus-the-value.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "negate",
+        "operand": {
+          "kind": "durationLiteral",
+          "unit": "min",
+          "value": 5
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "im": 4,
+          "kind": "complex",
+          "re": -3,
+          "unit": {
+            "V": 1
+          }
+        }
+      },
+      "from": "evaluator.arithmetic.unit.test.ts: negate > flips both components of a complex value, preserving its unit",
+      "id": "arithmetic.negate-flips-both-components-of-a-complex-value-preserving-its-unit.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "negate",
+        "operand": {
+          "im": -4,
+          "kind": "complexLiteral",
+          "re": 3,
+          "unit": {
+            "V": 1
+          }
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.arithmetic.unit.test.ts: negate > is wrong-type on an instant",
+      "id": "arithmetic.negate-is-wrong-type-on-an-instant.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "negate",
+        "operand": {
+          "kind": "instantLiteral",
+          "value": "2026-01-01T00:00:00.000Z"
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.arithmetic.unit.test.ts: negate > is wrong-type on a boolean -- negate has no logical-NOT meaning here",
+      "id": "arithmetic.negate-is-wrong-type-on-a-boolean-negate-has-no-logical-not-meaning-here.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "negate",
+        "operand": {
+          "kind": "booleanLiteral",
+          "value": true
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.arithmetic.unit.test.ts: negate > propagates an indeterminate operand",
+      "id": "arithmetic.negate-propagates-an-indeterminate-operand.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "negate",
+        "operand": {
+          "key": "missing",
+          "kind": "reference"
+        }
+      }
+    }
+  ]
+}

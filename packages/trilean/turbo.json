@@ -1,0 +1,13 @@
+{
+  "$schema": "https://turborepo.com/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    // `$TURBO_ROOT$/conformance/**` is the language-neutral corpus this package's conformance runner reads from outside its own directory, so an edit to it must rerun the unit tests here and nowhere else. It is added to the root definition's inputs ($TURBO_EXTENDS$) in this package alone, because an input listed in the root `turbo.json` would apply to every package's task.
+    "_test": {
+      "inputs": ["$TURBO_EXTENDS$", "$TURBO_ROOT$/conformance/**"]
+    },
+    "_test:coverage": {
+      "inputs": ["$TURBO_EXTENDS$", "$TURBO_ROOT$/conformance/**"]
+    }
+  }
+}

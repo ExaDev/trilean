@@ -1,0 +1,580 @@
+{
+  "cases": [
+    {
+      "as": "predicate",
+      "context": {
+        "isActive": true,
+        "items": [
+          {
+            "amount": 8
+          },
+          {
+            "amount": 12
+          },
+          {
+            "amount": 1
+          }
+        ],
+        "x": 10,
+        "y": 5
+      },
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "golden-examples.unit.test.ts: golden example (README.md worked example) > base case: isActive eq true AND sum(items.amount) via reduce fold > x + y -> definite true",
+      "id": "golden.golden-example-readme-md-worked-example-base-case-isactive-eq-true-and-sum-items-amount-via-reduce-fold-x-y-definite-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "items",
+            "context": {
+              "isActive": true,
+              "items": [
+                {
+                  "amount": 8
+                },
+                {
+                  "amount": 12
+                },
+                {
+                  "amount": 1
+                }
+              ],
+              "x": 10,
+              "y": 5
+            },
+            "items": [
+              {
+                "amount": 8
+              },
+              {
+                "amount": 12
+              },
+              {
+                "amount": 1
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "context": {
+              "isActive": true,
+              "items": [
+                {
+                  "amount": 8
+                },
+                {
+                  "amount": 12
+                },
+                {
+                  "amount": 1
+                }
+              ],
+              "x": 10,
+              "y": 5
+            },
+            "key": "isActive",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "boolean",
+                "value": true
+              }
+            }
+          },
+          {
+            "context": {
+              "isActive": true,
+              "items": [
+                {
+                  "amount": 8
+                },
+                {
+                  "amount": 12
+                },
+                {
+                  "amount": 1
+                }
+              ],
+              "x": 10,
+              "y": 5
+            },
+            "key": "x",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 10
+              }
+            }
+          },
+          {
+            "context": {
+              "isActive": true,
+              "items": [
+                {
+                  "amount": 8
+                },
+                {
+                  "amount": 12
+                },
+                {
+                  "amount": 1
+                }
+              ],
+              "x": 10,
+              "y": 5
+            },
+            "key": "y",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 5
+              }
+            }
+          },
+          {
+            "context": {
+              "amount": 8
+            },
+            "key": "amount",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 8
+              }
+            }
+          },
+          {
+            "context": {
+              "amount": 12
+            },
+            "key": "amount",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 12
+              }
+            }
+          },
+          {
+            "context": {
+              "amount": 1
+            },
+            "key": "amount",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 1
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "and",
+        "left": {
+          "kind": "compare",
+          "left": {
+            "key": "isActive",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "booleanLiteral",
+            "value": true
+          }
+        },
+        "right": {
+          "kind": "compare",
+          "left": {
+            "collection": "items",
+            "combiner": {
+              "combine": {
+                "kind": "arithmetic",
+                "left": {
+                  "kind": "accumulator"
+                },
+                "op": "add",
+                "right": {
+                  "key": "amount",
+                  "kind": "reference"
+                }
+              },
+              "initial": {
+                "kind": "numberLiteral",
+                "value": 0
+              },
+              "mode": "reduce"
+            },
+            "kind": "fold"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "arithmetic",
+            "left": {
+              "key": "x",
+              "kind": "reference"
+            },
+            "op": "add",
+            "right": {
+              "key": "y",
+              "kind": "reference"
+            }
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "context": {
+        "isActive": true,
+        "items": [],
+        "x": 10,
+        "y": 5
+      },
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "golden-examples.unit.test.ts: golden example (README.md worked example) > items: [] variation -> definite false (the fold-over-empty identity feeds through to and's own absorbing false)",
+      "id": "golden.golden-example-readme-md-worked-example-items-variation-definite-false-the-fold-over-empty-identity-feeds-through-to-and-s-own-absorbing-false.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "items",
+            "context": {
+              "isActive": true,
+              "items": [],
+              "x": 10,
+              "y": 5
+            },
+            "items": []
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "context": {
+              "isActive": true,
+              "items": [],
+              "x": 10,
+              "y": 5
+            },
+            "key": "isActive",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "boolean",
+                "value": true
+              }
+            }
+          },
+          {
+            "context": {
+              "isActive": true,
+              "items": [],
+              "x": 10,
+              "y": 5
+            },
+            "key": "x",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 10
+              }
+            }
+          },
+          {
+            "context": {
+              "isActive": true,
+              "items": [],
+              "x": 10,
+              "y": 5
+            },
+            "key": "y",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 5
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "and",
+        "left": {
+          "kind": "compare",
+          "left": {
+            "key": "isActive",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "booleanLiteral",
+            "value": true
+          }
+        },
+        "right": {
+          "kind": "compare",
+          "left": {
+            "collection": "items",
+            "combiner": {
+              "combine": {
+                "kind": "arithmetic",
+                "left": {
+                  "kind": "accumulator"
+                },
+                "op": "add",
+                "right": {
+                  "key": "amount",
+                  "kind": "reference"
+                }
+              },
+              "initial": {
+                "kind": "numberLiteral",
+                "value": 0
+              },
+              "mode": "reduce"
+            },
+            "kind": "fold"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "arithmetic",
+            "left": {
+              "key": "x",
+              "kind": "reference"
+            },
+            "op": "add",
+            "right": {
+              "key": "y",
+              "kind": "reference"
+            }
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "context": {
+        "isActive": true,
+        "items": [
+          {
+            "amount": 8
+          },
+          {
+            "amount": 12
+          },
+          {
+            "amount": 1
+          }
+        ],
+        "y": 5
+      },
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "golden-examples.unit.test.ts: golden example (README.md worked example) > x missing from data variation -> indeterminate not-found (and does NOT absorb here)",
+      "id": "golden.golden-example-readme-md-worked-example-x-missing-from-data-variation-indeterminate-not-found-and-does-not-absorb-here.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "items",
+            "context": {
+              "isActive": true,
+              "items": [
+                {
+                  "amount": 8
+                },
+                {
+                  "amount": 12
+                },
+                {
+                  "amount": 1
+                }
+              ],
+              "y": 5
+            },
+            "items": [
+              {
+                "amount": 8
+              },
+              {
+                "amount": 12
+              },
+              {
+                "amount": 1
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "context": {
+              "isActive": true,
+              "items": [
+                {
+                  "amount": 8
+                },
+                {
+                  "amount": 12
+                },
+                {
+                  "amount": 1
+                }
+              ],
+              "y": 5
+            },
+            "key": "isActive",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "boolean",
+                "value": true
+              }
+            }
+          },
+          {
+            "context": {
+              "isActive": true,
+              "items": [
+                {
+                  "amount": 8
+                },
+                {
+                  "amount": 12
+                },
+                {
+                  "amount": 1
+                }
+              ],
+              "y": 5
+            },
+            "key": "y",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 5
+              }
+            }
+          },
+          {
+            "context": {
+              "amount": 8
+            },
+            "key": "amount",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 8
+              }
+            }
+          },
+          {
+            "context": {
+              "amount": 12
+            },
+            "key": "amount",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 12
+              }
+            }
+          },
+          {
+            "context": {
+              "amount": 1
+            },
+            "key": "amount",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 1
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "and",
+        "left": {
+          "kind": "compare",
+          "left": {
+            "key": "isActive",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "booleanLiteral",
+            "value": true
+          }
+        },
+        "right": {
+          "kind": "compare",
+          "left": {
+            "collection": "items",
+            "combiner": {
+              "combine": {
+                "kind": "arithmetic",
+                "left": {
+                  "kind": "accumulator"
+                },
+                "op": "add",
+                "right": {
+                  "key": "amount",
+                  "kind": "reference"
+                }
+              },
+              "initial": {
+                "kind": "numberLiteral",
+                "value": 0
+              },
+              "mode": "reduce"
+            },
+            "kind": "fold"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "arithmetic",
+            "left": {
+              "key": "x",
+              "kind": "reference"
+            },
+            "op": "add",
+            "right": {
+              "key": "y",
+              "kind": "reference"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

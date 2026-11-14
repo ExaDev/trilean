@@ -1,0 +1,956 @@
+{
+  "cases": [
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "truth-tables.unit.test.ts: AND truth table > T AND T => T",
+      "id": "truth-tables.and-truth-table-t-and-t-t.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "and",
+        "left": {
+          "kind": "allOf",
+          "operands": []
+        },
+        "right": {
+          "kind": "allOf",
+          "operands": []
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "truth-tables.unit.test.ts: AND truth table > T AND F => F",
+      "id": "truth-tables.and-truth-table-t-and-f-f.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "and",
+        "left": {
+          "kind": "allOf",
+          "operands": []
+        },
+        "right": {
+          "kind": "anyOf",
+          "operands": []
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "truth-tables.unit.test.ts: AND truth table > T AND U => U (the original asserted only the status; recorded: trilean src/evaluator.ts, the reason code)",
+      "id": "truth-tables.and-truth-table-t-and-u-u.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "and",
+        "left": {
+          "kind": "allOf",
+          "operands": []
+        },
+        "right": {
+          "kind": "compare",
+          "left": {
+            "key": "missing",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "key": "present",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "truth-tables.unit.test.ts: AND truth table > F AND T => F",
+      "id": "truth-tables.and-truth-table-f-and-t-f.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "and",
+        "left": {
+          "kind": "anyOf",
+          "operands": []
+        },
+        "right": {
+          "kind": "allOf",
+          "operands": []
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "truth-tables.unit.test.ts: AND truth table > F AND F => F",
+      "id": "truth-tables.and-truth-table-f-and-f-f.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "and",
+        "left": {
+          "kind": "anyOf",
+          "operands": []
+        },
+        "right": {
+          "kind": "anyOf",
+          "operands": []
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "truth-tables.unit.test.ts: AND truth table > F AND U => F",
+      "id": "truth-tables.and-truth-table-f-and-u-f.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "and",
+        "left": {
+          "kind": "anyOf",
+          "operands": []
+        },
+        "right": {
+          "kind": "compare",
+          "left": {
+            "key": "missing",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "key": "present",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "truth-tables.unit.test.ts: AND truth table > U AND T => U (the original asserted only the status; recorded: trilean src/evaluator.ts, the reason code)",
+      "id": "truth-tables.and-truth-table-u-and-t-u.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "and",
+        "left": {
+          "kind": "compare",
+          "left": {
+            "key": "missing",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "key": "present",
+            "kind": "reference"
+          }
+        },
+        "right": {
+          "kind": "allOf",
+          "operands": []
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "truth-tables.unit.test.ts: AND truth table > U AND F => F",
+      "id": "truth-tables.and-truth-table-u-and-f-f.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "and",
+        "left": {
+          "kind": "compare",
+          "left": {
+            "key": "missing",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "key": "present",
+            "kind": "reference"
+          }
+        },
+        "right": {
+          "kind": "anyOf",
+          "operands": []
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "truth-tables.unit.test.ts: AND truth table > U AND U => U (the original asserted only the status; recorded: trilean src/evaluator.ts, the reason code)",
+      "id": "truth-tables.and-truth-table-u-and-u-u.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "and",
+        "left": {
+          "kind": "compare",
+          "left": {
+            "key": "missing",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "key": "present",
+            "kind": "reference"
+          }
+        },
+        "right": {
+          "kind": "compare",
+          "left": {
+            "key": "missing",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "key": "present",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "truth-tables.unit.test.ts: OR truth table > T OR T => T",
+      "id": "truth-tables.or-truth-table-t-or-t-t.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "or",
+        "left": {
+          "kind": "allOf",
+          "operands": []
+        },
+        "right": {
+          "kind": "allOf",
+          "operands": []
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "truth-tables.unit.test.ts: OR truth table > T OR F => T",
+      "id": "truth-tables.or-truth-table-t-or-f-t.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "or",
+        "left": {
+          "kind": "allOf",
+          "operands": []
+        },
+        "right": {
+          "kind": "anyOf",
+          "operands": []
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "truth-tables.unit.test.ts: OR truth table > T OR U => T",
+      "id": "truth-tables.or-truth-table-t-or-u-t.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "or",
+        "left": {
+          "kind": "allOf",
+          "operands": []
+        },
+        "right": {
+          "kind": "compare",
+          "left": {
+            "key": "missing",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "key": "present",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "truth-tables.unit.test.ts: OR truth table > F OR T => T",
+      "id": "truth-tables.or-truth-table-f-or-t-t.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "or",
+        "left": {
+          "kind": "anyOf",
+          "operands": []
+        },
+        "right": {
+          "kind": "allOf",
+          "operands": []
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "truth-tables.unit.test.ts: OR truth table > F OR F => F",
+      "id": "truth-tables.or-truth-table-f-or-f-f.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "or",
+        "left": {
+          "kind": "anyOf",
+          "operands": []
+        },
+        "right": {
+          "kind": "anyOf",
+          "operands": []
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "truth-tables.unit.test.ts: OR truth table > F OR U => U (the original asserted only the status; recorded: trilean src/evaluator.ts, the reason code)",
+      "id": "truth-tables.or-truth-table-f-or-u-u.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "or",
+        "left": {
+          "kind": "anyOf",
+          "operands": []
+        },
+        "right": {
+          "kind": "compare",
+          "left": {
+            "key": "missing",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "key": "present",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "truth-tables.unit.test.ts: OR truth table > U OR T => T",
+      "id": "truth-tables.or-truth-table-u-or-t-t.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "or",
+        "left": {
+          "kind": "compare",
+          "left": {
+            "key": "missing",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "key": "present",
+            "kind": "reference"
+          }
+        },
+        "right": {
+          "kind": "allOf",
+          "operands": []
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "truth-tables.unit.test.ts: OR truth table > U OR F => U (the original asserted only the status; recorded: trilean src/evaluator.ts, the reason code)",
+      "id": "truth-tables.or-truth-table-u-or-f-u.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "or",
+        "left": {
+          "kind": "compare",
+          "left": {
+            "key": "missing",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "key": "present",
+            "kind": "reference"
+          }
+        },
+        "right": {
+          "kind": "anyOf",
+          "operands": []
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "truth-tables.unit.test.ts: OR truth table > U OR U => U (the original asserted only the status; recorded: trilean src/evaluator.ts, the reason code)",
+      "id": "truth-tables.or-truth-table-u-or-u-u.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "or",
+        "left": {
+          "kind": "compare",
+          "left": {
+            "key": "missing",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "key": "present",
+            "kind": "reference"
+          }
+        },
+        "right": {
+          "kind": "compare",
+          "left": {
+            "key": "missing",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "key": "present",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "truth-tables.unit.test.ts: NOT truth table > NOT T => F",
+      "id": "truth-tables.not-truth-table-not-t-f.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "not",
+        "operand": {
+          "kind": "allOf",
+          "operands": []
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "truth-tables.unit.test.ts: NOT truth table > NOT F => T",
+      "id": "truth-tables.not-truth-table-not-f-t.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "not",
+        "operand": {
+          "kind": "anyOf",
+          "operands": []
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "truth-tables.unit.test.ts: NOT truth table > NOT U => U (the original asserted only the status; recorded: trilean src/evaluator.ts, the reason code)",
+      "id": "truth-tables.not-truth-table-not-u-u.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "not",
+        "operand": {
+          "kind": "compare",
+          "left": {
+            "key": "missing",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "key": "present",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "truth-tables.unit.test.ts: allOf/anyOf empty-list identities > allOf([]) is definitely true",
+      "id": "truth-tables.allof-anyof-empty-list-identities-allof-is-definitely-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "allOf",
+        "operands": []
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "truth-tables.unit.test.ts: allOf/anyOf empty-list identities > anyOf([]) is definitely false",
+      "id": "truth-tables.allof-anyof-empty-list-identities-anyof-is-definitely-false.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "anyOf",
+        "operands": []
+      }
+    }
+  ]
+}

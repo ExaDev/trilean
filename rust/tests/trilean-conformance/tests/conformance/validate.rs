@@ -323,6 +323,42 @@ fn check_case(value: &Value, at: &str) -> Check<String> {
     Ok(id.to_owned())
 }
 
+/// The case kinds this loader validates in full; every other kind is refused.
+const VALIDATED_KINDS: [&str; 2] = ["regex-parse", "regex-match"];
+
+/// What a corpus file of kinds this loader does not validate holds, read without judging the shape of any case: the
+/// ids and which cases carry `skip`. It exists so that the run can report such a file as refused, and still check it
+/// against the manifest, instead of failing on it. A file with any case of a validated kind, or without the ids,
+/// is not read this way and stays the error `validate_file` reports.
+pub fn refused_facts(value: &Value) -> Option<FileFacts> {
+    let cases = value
+        .get("cases")?
+        .as_array()
+        .filter(|cases| !cases.is_empty())?;
+    let mut facts = FileFacts {
+        ids: Vec::new(),
+        skip_ids: Vec::new(),
+        rust_skip_ids: Vec::new(),
+    };
+    for case in cases {
+        if VALIDATED_KINDS.contains(&case.get("kind")?.as_str()?) {
+            return None;
+        }
+        let id = case.get("id")?.as_str()?.to_owned();
+        if let Some(skip) = case.get("skip") {
+            facts.skip_ids.push(id.clone());
+            if skip.as_str() == Some("rust") {
+                facts.rust_skip_ids.push(id.clone());
+            }
+        }
+        facts.ids.push(id);
+    }
+    facts.skip_ids.sort();
+    facts.rust_skip_ids.sort();
+
+    Some(facts)
+}
+
 /// What a valid corpus file holds, for the checks that compare files with each other and with the manifest.
 pub struct FileFacts {
     pub ids: Vec<String>,
