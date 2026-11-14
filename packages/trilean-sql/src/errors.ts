@@ -71,7 +71,7 @@ export class InvalidColumnError extends TrileanSqlError {
 
   constructor(referenceKey: string, column: string, reason: string) {
     super(
-      `columnFor(${JSON.stringify(referenceKey)}) returned ${JSON.stringify(column)}, which is not a usable column identifier: ${reason}`,
+      `columnFor(${JSON.stringify(referenceKey)}) returned a name that is not a usable column identifier: ${reason}`,
     );
     this.name = "InvalidColumnError";
     this.referenceKey = referenceKey;
@@ -91,7 +91,7 @@ export class InvalidCollectionTableError extends TrileanSqlError {
 
   constructor(collectionKey: string, table: string, reason: string) {
     super(
-      `collectionFor(${JSON.stringify(collectionKey)}) returned ${JSON.stringify(table)}, which is not a usable table identifier: ${reason}`,
+      `collectionFor(${JSON.stringify(collectionKey)}) returned a name that is not a usable table identifier: ${reason}`,
     );
     this.name = "InvalidCollectionTableError";
     this.collectionKey = collectionKey;
