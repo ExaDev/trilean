@@ -228,6 +228,17 @@
               "type": "string"
             },
             "stderrIncludes": {
+              "description": "Fragments standard error contains, each after the end of the one before.",
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            "stderrStartsWith": {
+              "description": "The text standard error begins with.",
+              "minLength": 1,
               "type": "string"
             },
             "stdout": {

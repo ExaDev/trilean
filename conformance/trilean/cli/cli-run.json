@@ -1,0 +1,905 @@
+{
+  "cases": [
+    {
+      "args": [
+        "evaluate",
+        "area.json",
+        "--inputs",
+        "in.json"
+      ],
+      "expect": {
+        "exit": 0,
+        "stderr": "",
+        "stdoutJson": {
+          "status": "definite",
+          "value": {
+            "kind": "number",
+            "unit": {},
+            "value": 12
+          }
+        }
+      },
+      "files": {
+        "area.json": "{\"kind\":\"arithmetic\",\"op\":\"multiply\",\"left\":{\"kind\":\"reference\",\"key\":\"width\"},\"right\":{\"kind\":\"reference\",\"key\":\"height\"}}",
+        "in.json": "{\"width\":3,\"height\":4}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate > prints a definite result and exits 0",
+      "id": "cli.trilean-evaluate-prints-a-definite-result-and-exits-0.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "area.json"
+      ],
+      "expect": {
+        "exit": 1,
+        "stdoutJson": {
+          "reason": {
+            "code": "not-found",
+            "message": "no value found for reference key \"width\""
+          },
+          "status": "indeterminate"
+        }
+      },
+      "files": {
+        "area.json": "{\"kind\":\"arithmetic\",\"op\":\"multiply\",\"left\":{\"kind\":\"reference\",\"key\":\"width\"},\"right\":{\"kind\":\"reference\",\"key\":\"height\"}}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate > prints an indeterminate result and exits 1 when an input is missing (the original matched part of the output; recorded: trilean cli/run.ts, the whole output)",
+      "id": "cli.trilean-evaluate-prints-an-indeterminate-result-and-exits-1-when-an-input-is-missing.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "p.json"
+      ],
+      "expect": {
+        "exit": 0,
+        "stdoutJson": {
+          "status": "definite",
+          "value": true
+        }
+      },
+      "files": {
+        "p.json": "{\"kind\":\"compare\",\"op\":\"lt\",\"left\":{\"kind\":\"numberLiteral\",\"value\":1},\"right\":{\"kind\":\"numberLiteral\",\"value\":2}}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate > evaluates a predicate to a boolean",
+      "id": "cli.trilean-evaluate-evaluates-a-predicate-to-a-boolean.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "-"
+      ],
+      "expect": {
+        "exit": 0,
+        "stdoutJson": {
+          "status": "definite",
+          "value": {
+            "kind": "number",
+            "value": 7
+          }
+        }
+      },
+      "files": {},
+      "from": "cli-run.integration.test.ts: trilean evaluate > reads the tree from standard input for - (the original matched part of the output; recorded: trilean cli/run.ts, the whole output)",
+      "id": "cli.trilean-evaluate-reads-the-tree-from-standard-input-for.1",
+      "kind": "cli",
+      "stdin": "{\"kind\":\"numberLiteral\",\"value\":7}"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderr": "(root): a treeReference is valid as a predicate and as an expression; pass --as predicate or --as expression\n"
+      },
+      "files": {
+        "t.json": "{\"kind\":\"treeReference\",\"key\":\"k\"}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate > passes --as through to a treeReference root",
+      "id": "cli.trilean-evaluate-passes-as-through-to-a-treereference-root.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--as",
+        "predicate"
+      ],
+      "expect": {
+        "exit": 1
+      },
+      "files": {
+        "t.json": "{\"kind\":\"treeReference\",\"key\":\"k\"}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate > passes --as through to a treeReference root",
+      "id": "cli.trilean-evaluate-passes-as-through-to-a-treereference-root.2",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "missing.json"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderrIncludes": [
+          "cannot read missing.json"
+        ],
+        "stdout": ""
+      },
+      "files": {},
+      "from": "cli-run.integration.test.ts: trilean evaluate > exits 2 and explains a missing tree file",
+      "id": "cli.trilean-evaluate-exits-2-and-explains-a-missing-tree-file.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "bad.json"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderrIncludes": [
+          "bad.json is not valid JSON"
+        ],
+        "stdout": ""
+      },
+      "files": {
+        "bad.json": "{"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate > exits 2 and explains a tree that is not JSON",
+      "id": "cli.trilean-evaluate-exits-2-and-explains-a-tree-that-is-not-json.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "area.json",
+        "--inputs",
+        "none.json"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderrIncludes": [
+          "cannot read none.json"
+        ],
+        "stdout": ""
+      },
+      "files": {
+        "area.json": "{\"kind\":\"arithmetic\",\"op\":\"multiply\",\"left\":{\"kind\":\"reference\",\"key\":\"width\"},\"right\":{\"kind\":\"reference\",\"key\":\"height\"}}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate > exits 2 and explains a missing inputs file",
+      "id": "cli.trilean-evaluate-exits-2-and-explains-a-missing-inputs-file.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "bad.json"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderrIncludes": [
+          "kind: "
+        ],
+        "stdout": ""
+      },
+      "files": {
+        "bad.json": "{\"kind\":\"nope\"}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate > exits 2 and explains a tree that fails its schema",
+      "id": "cli.trilean-evaluate-exits-2-and-explains-a-tree-that-fails-its-schema.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "area.json",
+        "--inputs",
+        "in.json"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderrIncludes": [
+          "inputs.width"
+        ],
+        "stdout": ""
+      },
+      "files": {
+        "area.json": "{\"kind\":\"arithmetic\",\"op\":\"multiply\",\"left\":{\"kind\":\"reference\",\"key\":\"width\"},\"right\":{\"kind\":\"reference\",\"key\":\"height\"}}",
+        "in.json": "{\"width\":null}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate > exits 2 and explains inputs that are not values",
+      "id": "cli.trilean-evaluate-exits-2-and-explains-inputs-that-are-not-values.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "fold.json"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderrIncludes": [
+          "evaluation could not run: ",
+          "the inputs hold no list of items under that name"
+        ],
+        "stdout": ""
+      },
+      "files": {
+        "fold.json": "{\"kind\":\"fold\",\"collection\":\"loads\",\"combiner\":{\"mode\":\"max\",\"item\":{\"kind\":\"numberLiteral\",\"value\":1}}}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate > exits 2 and explains a tree that needs a list the inputs do not hold",
+      "id": "cli.trilean-evaluate-exits-2-and-explains-a-tree-that-needs-a-list-the-inputs-do-not-hold.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "fold.json",
+        "--inputs",
+        "in.json"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderrIncludes": [
+          "inputs.loads[0]: expected an object of named values"
+        ],
+        "stdout": ""
+      },
+      "files": {
+        "fold.json": "{\"kind\":\"fold\",\"collection\":\"loads\",\"combiner\":{\"mode\":\"max\",\"item\":{\"kind\":\"numberLiteral\",\"value\":1}}}",
+        "in.json": "{\"loads\":[1]}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate > exits 2 and explains a list with an element that is not an object of values",
+      "id": "cli.trilean-evaluate-exits-2-and-explains-a-list-with-an-element-that-is-not-an-object-of-values.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "a.json",
+        "--as",
+        "other"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderrIncludes": [
+          "--as must be"
+        ],
+        "stdout": ""
+      },
+      "files": {
+        "a.json": "1"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate > exits 2 and explains an invalid --as",
+      "id": "cli.trilean-evaluate-exits-2-and-explains-an-invalid-as.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "frobnicate",
+        "a.json"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderrIncludes": [
+          "expected: trilean evaluate"
+        ],
+        "stdout": ""
+      },
+      "files": {},
+      "from": "cli-run.integration.test.ts: trilean evaluate > exits 2 and explains an unknown command",
+      "id": "cli.trilean-evaluate-exits-2-and-explains-an-unknown-command.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "a.json",
+        "--nope"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderrIncludes": [
+          "nope"
+        ],
+        "stdout": ""
+      },
+      "files": {},
+      "from": "cli-run.integration.test.ts: trilean evaluate > exits 2 and explains an unknown flag",
+      "id": "cli.trilean-evaluate-exits-2-and-explains-an-unknown-flag.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "a.json",
+        "b.json"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderrIncludes": [
+          "expected: trilean evaluate"
+        ],
+        "stdout": ""
+      },
+      "files": {},
+      "from": "cli-run.integration.test.ts: trilean evaluate > exits 2 and explains a surplus argument",
+      "id": "cli.trilean-evaluate-exits-2-and-explains-a-surplus-argument.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "-"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderrStartsWith": "standard input is not valid JSON: "
+      },
+      "files": {},
+      "from": "cli-run.integration.test.ts: trilean evaluate > names standard input, not a dash, when it is not valid JSON",
+      "id": "cli.trilean-evaluate-names-standard-input-not-a-dash-when-it-is-not-valid-json.1",
+      "kind": "cli",
+      "stdin": "{"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--inputs",
+        "-"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderrStartsWith": "standard input is not valid JSON: "
+      },
+      "files": {
+        "t.json": "{\"kind\":\"numberLiteral\",\"value\":1}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate > names standard input for inputs that are not valid JSON",
+      "id": "cli.trilean-evaluate-names-standard-input-for-inputs-that-are-not-valid-json.1",
+      "kind": "cli",
+      "stdin": "{"
+    },
+    {
+      "args": [
+        "evaluate",
+        "-",
+        "--inputs",
+        "-"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderr": "the tree and --inputs cannot both be read from standard input\n",
+        "stdout": ""
+      },
+      "files": {},
+      "from": "cli-run.integration.test.ts: trilean evaluate > refuses to read both the tree and the inputs from standard input",
+      "id": "cli.trilean-evaluate-refuses-to-read-both-the-tree-and-the-inputs-from-standard-input.1",
+      "kind": "cli",
+      "stdin": "{\"kind\":\"numberLiteral\",\"value\":1}"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--inputs",
+        "first.json",
+        "--inputs",
+        "second.json"
+      ],
+      "expect": {
+        "exit": 0,
+        "stdoutJson": {
+          "status": "definite",
+          "value": {
+            "kind": "number",
+            "value": 2
+          }
+        }
+      },
+      "files": {
+        "first.json": "{\"x\":1}",
+        "second.json": "{\"x\":2}",
+        "t.json": "{\"kind\":\"reference\",\"key\":\"x\"}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate > takes the last of a repeated --inputs",
+      "id": "cli.trilean-evaluate-takes-the-last-of-a-repeated-inputs.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json"
+      ],
+      "expect": {
+        "exit": 1,
+        "stdoutJson": {
+          "reason": {
+            "code": "wrong-type",
+            "message": "minimum requires arguments in the same unit"
+          },
+          "status": "indeterminate"
+        }
+      },
+      "files": {
+        "t.json": "{\"kind\":\"call\",\"fn\":\"minimum\",\"args\":[{\"kind\":\"numberLiteral\",\"value\":1,\"unit\":{\"m\":1}},{\"kind\":\"numberLiteral\",\"value\":2}]}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate > reports a wrong-type argument to a built-in as an indeterminate result, not a rejection (the original matched part of the output; recorded: trilean cli/run.ts, the whole output)",
+      "id": "cli.trilean-evaluate-reports-a-wrong-type-argument-to-a-built-in-as-an-indeterminate-result-not-a-rejection.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json"
+      ],
+      "expect": {
+        "exit": 1,
+        "stdoutJson": {
+          "reason": {
+            "code": "domain-error",
+            "message": "result is not a finite number"
+          },
+          "status": "indeterminate"
+        }
+      },
+      "files": {
+        "t.json": "{\"kind\":\"arithmetic\",\"op\":\"multiply\",\"left\":{\"kind\":\"numberLiteral\",\"value\":1.7976931348623157e+308},\"right\":{\"kind\":\"numberLiteral\",\"value\":1.7976931348623157e+308}}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate > reports an overflow as a domain-error and never prints null (the original matched part of the output; recorded: trilean cli/run.ts, the whole output)",
+      "id": "cli.trilean-evaluate-reports-an-overflow-as-a-domain-error-and-never-prints-null.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--inputs",
+        "in.json"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderrIncludes": [
+          "inputs.x: expected a finite number"
+        ]
+      },
+      "files": {
+        "in.json": "{\"x\":1e999}",
+        "t.json": "{\"kind\":\"reference\",\"key\":\"x\"}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate > rejects an input that is not finite, as the JSON text 1e999 parses to infinity",
+      "id": "cli.trilean-evaluate-rejects-an-input-that-is-not-finite-as-the-json-text-1e999-parses-to-infinity.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json"
+      ],
+      "expect": {
+        "exit": 1,
+        "stdoutJson": {
+          "reason": {
+            "code": "not-found",
+            "message": "no match found in lookup table \"t\""
+          },
+          "status": "indeterminate"
+        }
+      },
+      "files": {
+        "t.json": "{\"kind\":\"lookup\",\"table\":\"t\",\"keys\":[]}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate > the resolvers the command cannot supply > a lookup is not-found, so the exit is 1 (the original matched part of the output; recorded: trilean cli/run.ts, the whole output)",
+      "id": "cli.trilean-evaluate-the-resolvers-the-command-cannot-supply-a-lookup-is-not-found-so-the-exit-is-1.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json"
+      ],
+      "expect": {
+        "exit": 1,
+        "stdoutJson": {
+          "reason": {
+            "code": "wrong-type",
+            "message": "no delegate handler registered for external system 's'"
+          },
+          "status": "indeterminate"
+        }
+      },
+      "files": {
+        "t.json": "{\"kind\":\"delegate\",\"system\":\"s\",\"payload\":null}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate > the resolvers the command cannot supply > a delegate is wrong-type, so the exit is 1 (the original matched part of the output; recorded: trilean cli/run.ts, the whole output)",
+      "id": "cli.trilean-evaluate-the-resolvers-the-command-cannot-supply-a-delegate-is-wrong-type-so-the-exit-is-1.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--as",
+        "predicate"
+      ],
+      "expect": {
+        "exit": 1,
+        "stdoutJson": {
+          "reason": {
+            "code": "wrong-type",
+            "message": "no tree resolver registered for treeReference nodes"
+          },
+          "status": "indeterminate"
+        }
+      },
+      "files": {
+        "t.json": "{\"kind\":\"treeReference\",\"key\":\"k\"}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate > the resolvers the command cannot supply > a treeReference is wrong-type, so the exit is 1 (the original matched part of the output; recorded: trilean cli/run.ts, the whole output)",
+      "id": "cli.trilean-evaluate-the-resolvers-the-command-cannot-supply-a-treereference-is-wrong-type-so-the-exit-is-1.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderrIncludes": [
+          "the inputs hold no list of items under that name"
+        ]
+      },
+      "files": {
+        "t.json": "{\"kind\":\"some\",\"collection\":\"loads\",\"item\":{\"kind\":\"compare\",\"op\":\"gt\",\"left\":{\"kind\":\"reference\",\"key\":\"self\"},\"right\":{\"kind\":\"numberLiteral\",\"value\":1}}}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate > the resolvers the command cannot supply > exits 2 for a quantifier over a list the inputs do not hold",
+      "id": "cli.trilean-evaluate-the-resolvers-the-command-cannot-supply-exits-2-for-a-quantifier-over-a-list-the-inputs-do-not-hold.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json"
+      ],
+      "expect": {
+        "exit": 2
+      },
+      "files": {
+        "t.json": "{\"kind\":\"and\",\"left\":{\"kind\":\"compare\",\"op\":\"gt\",\"left\":{\"kind\":\"numberLiteral\",\"value\":1},\"right\":{\"kind\":\"numberLiteral\",\"value\":2}},\"right\":{\"kind\":\"some\",\"collection\":\"loads\",\"item\":{\"kind\":\"compare\",\"op\":\"gt\",\"left\":{\"kind\":\"reference\",\"key\":\"self\"},\"right\":{\"kind\":\"numberLiteral\",\"value\":1}}}}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate > the resolvers the command cannot supply > exits 2 even when a false operand would settle an `and`, because the evaluator asks for the collection",
+      "id": "cli.trilean-evaluate-the-resolvers-the-command-cannot-supply-exits-2-even-when-a-false-operand-would-settle-an-and-because-the-evaluator-asks-for-the.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "life.json",
+        "--inputs",
+        "in.json"
+      ],
+      "expect": {
+        "exit": 0,
+        "stdoutJson": {
+          "status": "definite",
+          "value": {
+            "kind": "number",
+            "value": 34.5
+          }
+        }
+      },
+      "files": {
+        "in.json": "{\"intervals\":[{\"theta_h\":98,\"hours\":24},{\"theta_h\":110,\"hours\":2},{\"theta_h\":86,\"hours\":10}]}",
+        "life.json": "{\"kind\":\"fold\",\"collection\":\"intervals\",\"combiner\":{\"mode\":\"reduce\",\"initial\":{\"kind\":\"numberLiteral\",\"value\":0},\"combine\":{\"kind\":\"arithmetic\",\"op\":\"add\",\"left\":{\"kind\":\"accumulator\"},\"right\":{\"kind\":\"arithmetic\",\"op\":\"multiply\",\"left\":{\"kind\":\"arithmetic\",\"op\":\"power\",\"left\":{\"kind\":\"numberLiteral\",\"value\":2},\"right\":{\"kind\":\"arithmetic\",\"op\":\"divide\",\"left\":{\"kind\":\"arithmetic\",\"op\":\"subtract\",\"left\":{\"kind\":\"reference\",\"key\":\"theta_h\"},\"right\":{\"kind\":\"numberLiteral\",\"value\":98}},\"right\":{\"kind\":\"numberLiteral\",\"value\":6}}},\"right\":{\"kind\":\"reference\",\"key\":\"hours\"}}}}}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate with lists of items and complex values > sums over a list of items in the inputs and exits 0 (the original matched part of the output; recorded: trilean cli/run.ts, the whole output)",
+      "id": "cli.trilean-evaluate-with-lists-of-items-and-complex-values-sums-over-a-list-of-items-in-the-inputs-and-exits-0.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--inputs",
+        "in.json"
+      ],
+      "expect": {
+        "exit": 0,
+        "stdoutJson": {
+          "status": "definite",
+          "value": {
+            "kind": "number",
+            "value": 5
+          }
+        }
+      },
+      "files": {
+        "in.json": "{\"z\":{\"kind\":\"complex\",\"re\":3,\"im\":-4}}",
+        "t.json": "{\"kind\":\"call\",\"fn\":\"magnitude\",\"args\":[{\"kind\":\"reference\",\"key\":\"z\"}]}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate with lists of items and complex values > takes the magnitude of a complex input and exits 0 (the original matched part of the output; recorded: trilean cli/run.ts, the whole output)",
+      "id": "cli.trilean-evaluate-with-lists-of-items-and-complex-values-takes-the-magnitude-of-a-complex-input-and-exits-0.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--max-nodes=3"
+      ],
+      "expect": {
+        "exit": 0
+      },
+      "files": {
+        "t.json": "{\"kind\":\"arithmetic\",\"op\":\"add\",\"left\":{\"kind\":\"numberLiteral\",\"value\":1},\"right\":{\"kind\":\"numberLiteral\",\"value\":2}}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate with lists of items and complex values > the node budget > lowers the budget below the default as well as raising it",
+      "id": "cli.trilean-evaluate-with-lists-of-items-and-complex-values-the-node-budget-lowers-the-budget-below-the-default-as-well-as-raising-it.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--max-nodes=2"
+      ],
+      "expect": {
+        "exit": 1
+      },
+      "files": {
+        "t.json": "{\"kind\":\"arithmetic\",\"op\":\"add\",\"left\":{\"kind\":\"numberLiteral\",\"value\":1},\"right\":{\"kind\":\"numberLiteral\",\"value\":2}}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate with lists of items and complex values > the node budget > lowers the budget below the default as well as raising it",
+      "id": "cli.trilean-evaluate-with-lists-of-items-and-complex-values-the-node-budget-lowers-the-budget-below-the-default-as-well-as-raising-it.2",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--max-nodes=0"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderr": "--max-nodes must be a positive safe integer, not \"0\"\n",
+        "stdout": ""
+      },
+      "files": {
+        "t.json": "{\"kind\":\"numberLiteral\",\"value\":1}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate with lists of items and complex values > the node budget > rejects --max-nodes=\"0\" and says what it takes",
+      "id": "cli.trilean-evaluate-with-lists-of-items-and-complex-values-the-node-budget-rejects-max-nodes-0-and-says-what-it-takes.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--max-nodes=-1"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderr": "--max-nodes must be a positive safe integer, not \"-1\"\n",
+        "stdout": ""
+      },
+      "files": {
+        "t.json": "{\"kind\":\"numberLiteral\",\"value\":1}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate with lists of items and complex values > the node budget > rejects --max-nodes=\"-1\" and says what it takes",
+      "id": "cli.trilean-evaluate-with-lists-of-items-and-complex-values-the-node-budget-rejects-max-nodes-1-and-says-what-it-takes.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--max-nodes=1.5"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderr": "--max-nodes must be a positive safe integer, not \"1.5\"\n",
+        "stdout": ""
+      },
+      "files": {
+        "t.json": "{\"kind\":\"numberLiteral\",\"value\":1}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate with lists of items and complex values > the node budget > rejects --max-nodes=\"1.5\" and says what it takes",
+      "id": "cli.trilean-evaluate-with-lists-of-items-and-complex-values-the-node-budget-rejects-max-nodes-1-5-and-says-what-it-takes.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--max-nodes=abc"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderr": "--max-nodes must be a positive safe integer, not \"abc\"\n",
+        "stdout": ""
+      },
+      "files": {
+        "t.json": "{\"kind\":\"numberLiteral\",\"value\":1}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate with lists of items and complex values > the node budget > rejects --max-nodes=\"abc\" and says what it takes",
+      "id": "cli.trilean-evaluate-with-lists-of-items-and-complex-values-the-node-budget-rejects-max-nodes-abc-and-says-what-it-takes.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--max-nodes=1e3"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderr": "--max-nodes must be a positive safe integer, not \"1e3\"\n",
+        "stdout": ""
+      },
+      "files": {
+        "t.json": "{\"kind\":\"numberLiteral\",\"value\":1}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate with lists of items and complex values > the node budget > rejects --max-nodes=\"1e3\" and says what it takes",
+      "id": "cli.trilean-evaluate-with-lists-of-items-and-complex-values-the-node-budget-rejects-max-nodes-1e3-and-says-what-it-takes.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--max-nodes=+5"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderr": "--max-nodes must be a positive safe integer, not \"+5\"\n",
+        "stdout": ""
+      },
+      "files": {
+        "t.json": "{\"kind\":\"numberLiteral\",\"value\":1}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate with lists of items and complex values > the node budget > rejects --max-nodes=\"+5\" and says what it takes",
+      "id": "cli.trilean-evaluate-with-lists-of-items-and-complex-values-the-node-budget-rejects-max-nodes-5-and-says-what-it-takes.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--max-nodes="
+      ],
+      "expect": {
+        "exit": 2,
+        "stderr": "--max-nodes must be a positive safe integer, not \"\"\n",
+        "stdout": ""
+      },
+      "files": {
+        "t.json": "{\"kind\":\"numberLiteral\",\"value\":1}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate with lists of items and complex values > the node budget > rejects --max-nodes=\"\" and says what it takes",
+      "id": "cli.trilean-evaluate-with-lists-of-items-and-complex-values-the-node-budget-rejects-max-nodes-and-says-what-it-takes.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--max-nodes= 5"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderr": "--max-nodes must be a positive safe integer, not \" 5\"\n",
+        "stdout": ""
+      },
+      "files": {
+        "t.json": "{\"kind\":\"numberLiteral\",\"value\":1}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate with lists of items and complex values > the node budget > rejects --max-nodes=\" 5\" and says what it takes",
+      "id": "cli.trilean-evaluate-with-lists-of-items-and-complex-values-the-node-budget-rejects-max-nodes-5-and-says-what-it-takes.2",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--max-nodes=9007199254740993"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderr": "--max-nodes must be a positive safe integer, not \"9007199254740993\"\n",
+        "stdout": ""
+      },
+      "files": {
+        "t.json": "{\"kind\":\"numberLiteral\",\"value\":1}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate with lists of items and complex values > the node budget > rejects --max-nodes=\"9007199254740993\" and says what it takes",
+      "id": "cli.trilean-evaluate-with-lists-of-items-and-complex-values-the-node-budget-rejects-max-nodes-9007199254740993-and-says-what-it-takes.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--inputs",
+        "in.json"
+      ],
+      "expect": {
+        "exit": 0,
+        "stdoutJson": {
+          "status": "definite",
+          "value": {
+            "kind": "number",
+            "value": 3.141592653589793
+          }
+        }
+      },
+      "files": {
+        "in.json": "{\"z\":{\"kind\":\"complex\",\"re\":-2,\"im\":-0}}",
+        "t.json": "{\"kind\":\"call\",\"fn\":\"phase\",\"args\":[{\"kind\":\"reference\",\"key\":\"z\"}]}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate with lists of items and complex values > the phase of a complex value > is +pi for a negative real input written with a negative zero imaginary part (the original matched part of the output; recorded: trilean cli/run.ts, the whole output)",
+      "id": "cli.trilean-evaluate-with-lists-of-items-and-complex-values-the-phase-of-a-complex-value-is-pi-for-a-negative-real-input-written-with-a-negative-zero.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--inputs",
+        "in.json"
+      ],
+      "expect": {
+        "exit": 0,
+        "stdoutJson": {
+          "status": "definite",
+          "value": {
+            "kind": "number",
+            "value": 3.141592653589793
+          }
+        }
+      },
+      "files": {
+        "in.json": "{\"z\":{\"kind\":\"complex\",\"re\":2,\"im\":0}}",
+        "t.json": "{\"kind\":\"call\",\"fn\":\"phase\",\"args\":[{\"kind\":\"negate\",\"operand\":{\"kind\":\"reference\",\"key\":\"z\"}}]}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate with lists of items and complex values > the phase of a complex value > is +pi for the negation of a positive real, as it is for the input written directly (the original matched part of the output; recorded: trilean cli/run.ts, the whole output)",
+      "id": "cli.trilean-evaluate-with-lists-of-items-and-complex-values-the-phase-of-a-complex-value-is-pi-for-the-negation-of-a-positive-real-as-it-is-for-the-in.1",
+      "kind": "cli"
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--inputs",
+        "in.json"
+      ],
+      "expect": {
+        "exit": 0,
+        "stdoutJson": {
+          "status": "definite",
+          "value": {
+            "kind": "number",
+            "value": 0
+          }
+        }
+      },
+      "files": {
+        "in.json": "{\"z\":{\"kind\":\"complex\",\"re\":0,\"im\":0}}",
+        "t.json": "{\"kind\":\"call\",\"fn\":\"phase\",\"args\":[{\"kind\":\"negate\",\"operand\":{\"kind\":\"reference\",\"key\":\"z\"}}]}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate with lists of items and complex values > the phase of a complex value > is 0 for the negation of zero (the original matched part of the output; recorded: trilean cli/run.ts, the whole output)",
+      "id": "cli.trilean-evaluate-with-lists-of-items-and-complex-values-the-phase-of-a-complex-value-is-0-for-the-negation-of-zero.1",
+      "kind": "cli"
+    }
+  ]
+}

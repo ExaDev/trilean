@@ -113,6 +113,14 @@ Where a case compares a result with an expectation, numbers are equal when they 
 
 `function` is the name of a built-in function and `args` its arguments, as computed values. `expect` is the computed value the function returns, `{ "domainError": true }` for a result that reports an argument outside the function's domain, or `{ "wrongType": true }` for one that reports an argument it cannot accept; either failure may give `messageIncludes`, fragments the failure's message contains in order. A computed value is compared by the rules above, so `-0` is not `0`. A number the canonical form cannot hold is written `{ "$number": "-0" }`, `"Infinity"`, `"-Infinity"` or `"NaN"` wherever a case has a number or a value (arguments, trees, contexts, resolver answers and expectations): a negative zero because the canonical form writes it as `0`, and the others because JSON has no such number. A native implementation, which takes its values from JSON, can be given a negative zero but not the others, so a case that has an infinity or a NaN carries `skip: "rust"`.
 
+`cli`:
+
+```json
+{ "id": "...", "from": "...", "kind": "cli", "args": ["evaluate", "tree.json"], "files": { "tree.json": "{...}" }, "stdin": "...", "expect": { "exit": 0, "stdoutJson": { ... } } }
+```
+
+The command is run with `args` against an in-memory set of files, `files` (name to text, which a parser reads as written, so `1e999` is an infinite number) and `stdin`, which the path `-` reads; a path that is in neither cannot be read. `expect` gives the exit status and, where the original asserted it, `stdout` or `stderr` as exact text, `stdoutJson`, the JSON the command printed, compared by the rules above, `stderrIncludes`, fragments standard error contains in order, and `stderrStartsWith`.
+
 `evaluate`:
 
 ```json
