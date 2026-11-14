@@ -1074,7 +1074,7 @@
         "code": "wrong-type",
         "status": "indeterminate"
       },
-      "from": "composed-rules.integration.test.ts: units-aware rate calculation (multiply/divide across differently unit-tagged numbers, fold, compare) > a parcel whose weight resolves in an incompatible unit makes the whole fold -- and everything derived from it -- indeterminate rather than silently miscalculating",
+      "from": "composed-rules.integration.test.ts: units-aware rate calculation (multiply/divide across differently unit-tagged numbers, fold, compare) > a parcel whose weight resolves in an incompatible unit makes the whole fold: and everything derived from it: indeterminate rather than silently miscalculating",
       "id": "composed-rules.units-aware-rate-calculation-multiply-divide-across-differently-unit-tagged-numbers-fold-compare-a-parcel-whose-weight-resolves-in-an-i.1",
       "kind": "evaluate",
       "resolvers": {
@@ -1903,7 +1903,7 @@
         "status": "definite",
         "value": true
       },
-      "from": "composed-rules.integration.test.ts: fold's max combiner alongside memberOf and a derived connective (implies) > a low winning bid makes the discount clause vacuously true even with no discountFlag at all -- implies absorbs the missing consequent",
+      "from": "composed-rules.integration.test.ts: fold's max combiner alongside memberOf and a derived connective (implies) > a low winning bid makes the discount clause vacuously true even with no discountFlag at all: implies absorbs the missing consequent",
       "id": "composed-rules.fold-s-max-combiner-alongside-memberof-and-a-derived-connective-implies-a-low-winning-bid-makes-the-discount-clause-vacuously-true-even.1",
       "kind": "evaluate",
       "resolvers": {
@@ -2130,7 +2130,7 @@
         "code": "domain-error",
         "status": "indeterminate"
       },
-      "from": "composed-rules.integration.test.ts: fold's max combiner alongside memberOf and a derived connective (implies) > an empty bid list has no first item to seed fold's max from -- domain-error propagates through memberOf and is not rescued by the unrelated implies clause resolving true",
+      "from": "composed-rules.integration.test.ts: fold's max combiner alongside memberOf and a derived connective (implies) > an empty bid list has no first item to seed fold's max from: domain-error propagates through memberOf and is not rescued by the unrelated implies clause resolving true",
       "id": "composed-rules.fold-s-max-combiner-alongside-memberof-and-a-derived-connective-implies-an-empty-bid-list-has-no-first-item-to-seed-fold-s-max-from-dom.1",
       "kind": "evaluate",
       "resolvers": {

@@ -417,7 +417,7 @@
           }
         }
       },
-      "from": "schema-pipeline.integration.test.ts: a __proto__ key inside an opaque JsonValue payload > is dropped in every JsonValue slot, not only a delegate payload -- a reference's opaque key is the same schema",
+      "from": "schema-pipeline.integration.test.ts: a __proto__ key inside an opaque JsonValue payload > is dropped in every JsonValue slot, not only a delegate payload: a reference's opaque key is the same schema",
       "id": "pipeline-validate.a-proto-key-inside-an-opaque-jsonvalue-payload-is-dropped-in-every-jsonvalue-slot-not-only-a-delegate-payload-a-reference-s-opaque-k.1",
       "input": {
         "kind": "exists",
@@ -446,7 +446,7 @@
           "system": "externalPricing"
         }
       },
-      "from": "schema-pipeline.integration.test.ts: a __proto__ key inside an opaque JsonValue payload > leaves a merely suspicious-looking key alone -- an opaque payload is uninterpreted data, and only __proto__ is structurally dangerous",
+      "from": "schema-pipeline.integration.test.ts: a __proto__ key inside an opaque JsonValue payload > leaves a merely suspicious-looking key alone: an opaque payload is uninterpreted data, and only __proto__ is structurally dangerous",
       "id": "pipeline-validate.a-proto-key-inside-an-opaque-jsonvalue-payload-leaves-a-merely-suspicious-looking-key-alone-an-opaque-payload-is-uninterpreted-data.1",
       "input": {
         "kind": "delegate",

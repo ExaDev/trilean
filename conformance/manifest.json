@@ -114,7 +114,7 @@
       "skip": []
     },
     "trilean/evaluate/evaluator.integration.json": {
-      "cases": 21,
+      "cases": 27,
       "skip": []
     },
     "trilean/evaluate/evaluator.membership.json": {

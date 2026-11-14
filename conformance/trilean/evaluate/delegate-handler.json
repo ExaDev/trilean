@@ -120,7 +120,7 @@
         "status": "definite",
         "value": false
       },
-      "from": "delegate-handler.integration.test.ts: delegate result flows through arithmetic and a conditional's fallback branch, into a comparison > a domestic region takes the conditional's own branch instead -- the delegate is never invoked, and the lower fixed rate stays under the threshold",
+      "from": "delegate-handler.integration.test.ts: delegate result flows through arithmetic and a conditional's fallback branch, into a comparison > a domestic region takes the conditional's own branch instead: the delegate is never invoked, and the lower fixed rate stays under the threshold",
       "id": "delegate-handler.delegate-result-flows-through-arithmetic-and-a-conditional-s-fallback-branch-into-a-comparison-a-domestic-region-takes-the-conditiona.1",
       "kind": "evaluate",
       "resolvers": {
@@ -344,7 +344,7 @@
           "value": 1200
         }
       },
-      "from": "delegate-handler.integration.test.ts: delegate result flows through arithmetic and a conditional's fallback branch, into a comparison > the resolved rate is what the total is computed from",
+      "from": "recorded: trilean conformance README resolver rules (the total computed from the rate a delegate answers, where the original asserted only a comparison with a threshold)",
       "id": "delegate-handler.delegate-result-flows-through-arithmetic-and-a-conditional-s-fallback-branch-into-a-comparison-the-resolved-rate-is-what-the-total-is.1",
       "kind": "evaluate",
       "resolvers": {
@@ -453,7 +453,7 @@
           "value": 1150
         }
       },
-      "from": "delegate-handler.integration.test.ts: delegate result flows through arithmetic and a conditional's fallback branch, into a comparison > the resolved rate is what the total is computed from",
+      "from": "recorded: trilean conformance README resolver rules (the total computed from the rate a delegate answers, where the original asserted only a comparison with a threshold)",
       "id": "delegate-handler.delegate-result-flows-through-arithmetic-and-a-conditional-s-fallback-branch-into-a-comparison-the-resolved-rate-is-what-the-total-is.2",
       "kind": "evaluate",
       "resolvers": {
@@ -722,7 +722,7 @@
         "code": "not-found",
         "status": "indeterminate"
       },
-      "from": "delegate-handler.integration.test.ts: delegate result feeds into a fold aggregation, resolved per participating item > one item with a category the delegate cannot rate makes the whole fold indeterminate -- unlike a quantifier, reduce has no absorbing value to rescue it",
+      "from": "delegate-handler.integration.test.ts: delegate result feeds into a fold aggregation, resolved per participating item > one item with a category the delegate cannot rate makes the whole fold indeterminate: unlike a quantifier, reduce has no absorbing value to rescue it",
       "id": "delegate-handler.delegate-result-feeds-into-a-fold-aggregation-resolved-per-participating-item-one-item-with-a-category-the-delegate-cannot-rate-makes.1",
       "kind": "evaluate",
       "resolvers": {

@@ -673,7 +673,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: arithmetic on complex values > divide at extreme magnitudes > does not report a subnormal quotient as equal to zero",
+      "from": "recorded: trilean src/complex-division.ts (a subnormal quotient, where the original asserted only that the real part is not zero)",
       "id": "complex-arithmetic.arithmetic-on-complex-values-divide-at-extreme-magnitudes-does-not-report-a-subnormal-quotient-as-equal-to-zero.1",
       "kind": "evaluate",
       "resolvers": {
@@ -809,7 +809,7 @@
         "code": "domain-error",
         "status": "indeterminate"
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: arithmetic on complex values > modulo is domain-error -- there is no remainder on the complex plane",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: arithmetic on complex values > modulo is domain-error: there is no remainder on the complex plane",
       "id": "complex-arithmetic.arithmetic-on-complex-values-modulo-is-domain-error-there-is-no-remainder-on-the-complex-plane.1",
       "kind": "evaluate",
       "resolvers": {
@@ -858,7 +858,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power -- a real integer exponent only > raises to a positive integer exponent",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power: a real integer exponent only > raises to a positive integer exponent",
       "id": "complex-arithmetic.complex-power-a-real-integer-exponent-only-raises-to-a-positive-integer-exponent.1",
       "kind": "evaluate",
       "resolvers": {
@@ -906,7 +906,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power -- a real integer exponent only > raises to a negative integer exponent as the reciprocal of the positive power",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power: a real integer exponent only > raises to a negative integer exponent as the reciprocal of the positive power",
       "id": "complex-arithmetic.complex-power-a-real-integer-exponent-only-raises-to-a-negative-integer-exponent-as-the-reciprocal-of-the-positive-power.1",
       "kind": "evaluate",
       "resolvers": {
@@ -954,7 +954,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power -- a real integer exponent only > raises to a zero exponent as the complex unit, exactly as a real base does",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power: a real integer exponent only > raises to a zero exponent as the complex unit, exactly as a real base does",
       "id": "complex-arithmetic.complex-power-a-real-integer-exponent-only-raises-to-a-zero-exponent-as-the-complex-unit-exactly-as-a-real-base-does.1",
       "kind": "evaluate",
       "resolvers": {
@@ -997,7 +997,7 @@
         "code": "domain-error",
         "status": "indeterminate"
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power -- a real integer exponent only > is domain-error for a zero base with a negative exponent, the same as a real base",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power: a real integer exponent only > is domain-error for a zero base with a negative exponent, the same as a real base",
       "id": "complex-arithmetic.complex-power-a-real-integer-exponent-only-is-domain-error-for-a-zero-base-with-a-negative-exponent-the-same-as-a-real-base.1",
       "kind": "evaluate",
       "resolvers": {
@@ -1040,7 +1040,7 @@
         "code": "wrong-type",
         "status": "indeterminate"
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power -- a real integer exponent only > is wrong-type for a non-integer exponent -- an answer this design does not define, not one that does not exist",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power: a real integer exponent only > is wrong-type for a non-integer exponent: an answer this design does not define, not one that does not exist",
       "id": "complex-arithmetic.complex-power-a-real-integer-exponent-only-is-wrong-type-for-a-non-integer-exponent-an-answer-this-design-does-not-define-not-one-t.1",
       "kind": "evaluate",
       "resolvers": {
@@ -1083,7 +1083,7 @@
         "code": "wrong-type",
         "status": "indeterminate"
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power -- a real integer exponent only > is wrong-type for a complex exponent, whatever the base",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power: a real integer exponent only > is wrong-type for a complex exponent, whatever the base",
       "id": "complex-arithmetic.complex-power-a-real-integer-exponent-only-is-wrong-type-for-a-complex-exponent-whatever-the-base.1",
       "kind": "evaluate",
       "resolvers": {
@@ -1127,7 +1127,7 @@
         "code": "wrong-type",
         "status": "indeterminate"
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power -- a real integer exponent only > is wrong-type for a complex exponent, whatever the base",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power: a real integer exponent only > is wrong-type for a complex exponent, whatever the base",
       "id": "complex-arithmetic.complex-power-a-real-integer-exponent-only-is-wrong-type-for-a-complex-exponent-whatever-the-base.2",
       "kind": "evaluate",
       "resolvers": {
@@ -1170,7 +1170,7 @@
         "code": "wrong-type",
         "status": "indeterminate"
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power -- a real integer exponent only > requires dimensionless operands, exactly as a real power does",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power: a real integer exponent only > requires dimensionless operands, exactly as a real power does",
       "id": "complex-arithmetic.complex-power-a-real-integer-exponent-only-requires-dimensionless-operands-exactly-as-a-real-power-does.1",
       "kind": "evaluate",
       "resolvers": {

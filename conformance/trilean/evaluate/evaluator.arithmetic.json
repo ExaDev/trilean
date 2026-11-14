@@ -183,7 +183,7 @@
           "value": 7
         }
       },
-      "from": "evaluator.arithmetic.unit.test.ts: arithmetic on numbers -- units > add requires identical unit maps",
+      "from": "evaluator.arithmetic.unit.test.ts: arithmetic on numbers: units > add requires identical unit maps",
       "id": "arithmetic.arithmetic-on-numbers-units-add-requires-identical-unit-maps.1",
       "kind": "evaluate",
       "resolvers": {
@@ -231,7 +231,7 @@
         "code": "wrong-type",
         "status": "indeterminate"
       },
-      "from": "evaluator.arithmetic.unit.test.ts: arithmetic on numbers -- units > subtract is wrong-type on mismatched units",
+      "from": "evaluator.arithmetic.unit.test.ts: arithmetic on numbers: units > subtract is wrong-type on mismatched units",
       "id": "arithmetic.arithmetic-on-numbers-units-subtract-is-wrong-type-on-mismatched-units.1",
       "kind": "evaluate",
       "resolvers": {
@@ -286,7 +286,7 @@
           "value": 12
         }
       },
-      "from": "evaluator.arithmetic.unit.test.ts: arithmetic on numbers -- units > multiply combines units dimensionally",
+      "from": "evaluator.arithmetic.unit.test.ts: arithmetic on numbers: units > multiply combines units dimensionally",
       "id": "arithmetic.arithmetic-on-numbers-units-multiply-combines-units-dimensionally.1",
       "kind": "evaluate",
       "resolvers": {
@@ -341,7 +341,7 @@
           "value": 5
         }
       },
-      "from": "evaluator.arithmetic.unit.test.ts: arithmetic on numbers -- units > divide combines units dimensionally",
+      "from": "evaluator.arithmetic.unit.test.ts: arithmetic on numbers: units > divide combines units dimensionally",
       "id": "arithmetic.arithmetic-on-numbers-units-divide-combines-units-dimensionally.1",
       "kind": "evaluate",
       "resolvers": {
@@ -393,7 +393,7 @@
           "value": 5
         }
       },
-      "from": "evaluator.arithmetic.unit.test.ts: arithmetic on numbers -- units > dividing a unit by itself normalises to dimensionless",
+      "from": "evaluator.arithmetic.unit.test.ts: arithmetic on numbers: units > dividing a unit by itself normalises to dimensionless",
       "id": "arithmetic.arithmetic-on-numbers-units-dividing-a-unit-by-itself-normalises-to-dimensionless.1",
       "kind": "evaluate",
       "resolvers": {
@@ -791,7 +791,7 @@
           "value": -5
         }
       },
-      "from": "evaluator.arithmetic.unit.test.ts: negate > reverses a duration's magnitude, preserving its unit -- not sugar for zero minus the value",
+      "from": "evaluator.arithmetic.unit.test.ts: negate > reverses a duration's magnitude, preserving its unit: not sugar for zero minus the value",
       "id": "arithmetic.negate-reverses-a-duration-s-magnitude-preserving-its-unit-not-sugar-for-zero-minus-the-value.1",
       "kind": "evaluate",
       "resolvers": {
@@ -914,7 +914,7 @@
         "code": "wrong-type",
         "status": "indeterminate"
       },
-      "from": "evaluator.arithmetic.unit.test.ts: negate > is wrong-type on a boolean -- negate has no logical-NOT meaning here",
+      "from": "evaluator.arithmetic.unit.test.ts: negate > is wrong-type on a boolean: negate has no logical-NOT meaning here",
       "id": "arithmetic.negate-is-wrong-type-on-a-boolean-negate-has-no-logical-not-meaning-here.1",
       "kind": "evaluate",
       "resolvers": {

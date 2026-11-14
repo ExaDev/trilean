@@ -607,6 +607,7 @@
         "target": "workspace/reports/summary.txt"
       },
       "expect": {
+        "code": "not-found",
         "status": "indeterminate"
       },
       "from": "pattern-matching.integration.test.ts: pattern builders composed with connectives and quantifiers > propagates an unresolvable operand as indeterminate rather than collapsing the whole rule to false",

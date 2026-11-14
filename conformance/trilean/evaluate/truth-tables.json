@@ -79,6 +79,7 @@
     {
       "as": "predicate",
       "expect": {
+        "code": "not-found",
         "status": "indeterminate"
       },
       "from": "truth-tables.unit.test.ts: AND truth table > T AND U => U",
@@ -246,6 +247,7 @@
     {
       "as": "predicate",
       "expect": {
+        "code": "not-found",
         "status": "indeterminate"
       },
       "from": "truth-tables.unit.test.ts: AND truth table > U AND T => U",
@@ -337,6 +339,7 @@
     {
       "as": "predicate",
       "expect": {
+        "code": "not-found",
         "status": "indeterminate"
       },
       "from": "truth-tables.unit.test.ts: AND truth table > U AND U => U",
@@ -588,6 +591,7 @@
     {
       "as": "predicate",
       "expect": {
+        "code": "not-found",
         "status": "indeterminate"
       },
       "from": "truth-tables.unit.test.ts: OR truth table > F OR U => U",
@@ -679,6 +683,7 @@
     {
       "as": "predicate",
       "expect": {
+        "code": "not-found",
         "status": "indeterminate"
       },
       "from": "truth-tables.unit.test.ts: OR truth table > U OR F => U",
@@ -724,6 +729,7 @@
     {
       "as": "predicate",
       "expect": {
+        "code": "not-found",
         "status": "indeterminate"
       },
       "from": "truth-tables.unit.test.ts: OR truth table > U OR U => U",
@@ -845,6 +851,7 @@
     {
       "as": "predicate",
       "expect": {
+        "code": "not-found",
         "status": "indeterminate"
       },
       "from": "truth-tables.unit.test.ts: NOT truth table > NOT U => U",

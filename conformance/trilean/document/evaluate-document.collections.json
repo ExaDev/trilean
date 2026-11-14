@@ -87,7 +87,7 @@
       }
     },
     {
-      "expectSubset": {
+      "expect": {
         "evaluation": {
           "status": "definite",
           "value": {
@@ -95,9 +95,10 @@
             "value": 0
           }
         },
-        "outcome": "evaluated"
+        "outcome": "evaluated",
+        "treeKind": "expression"
       },
-      "from": "evaluate-document.collections.unit.test.ts: evaluateDocument with lists of items > folds an empty list to the initial value",
+      "from": "evaluate-document.collections.unit.test.ts: evaluateDocument with lists of items > folds an empty list to the initial value (the original asserted only part of the outcome; the case gives the whole)",
       "id": "document-collections.evaluatedocument-with-lists-of-items-folds-an-empty-list-to-the-initial-value.1",
       "inputs": {
         "intervals": []
@@ -159,16 +160,18 @@
       }
     },
     {
-      "expectSubset": {
+      "expect": {
         "evaluation": {
           "reason": {
             "code": "not-found",
             "message": "no value found for reference key \"hours\""
           },
           "status": "indeterminate"
-        }
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
       },
-      "from": "evaluate-document.unit.test.ts: evaluateDocument with lists of items > is indeterminate, naming the key, when an item lacks a value the fold reads (the original asserted that the message contains the key; the case gives the message, which the first case of this file pins in the same form)",
+      "from": "evaluate-document.unit.test.ts: evaluateDocument with lists of items > is indeterminate, naming the key, when an item lacks a value the fold reads (the original asserted only part of the outcome; the case gives the whole)",
       "id": "document-collections.evaluatedocument-with-lists-of-items-is-indeterminate-naming-the-key-when-an-item-lacks-a-value-the-fold-reads.1",
       "inputs": {
         "intervals": [
@@ -238,16 +241,18 @@
       }
     },
     {
-      "expectSubset": {
+      "expect": {
         "evaluation": {
           "reason": {
             "code": "not-found",
             "message": "no value found for reference key \"hours\""
           },
           "status": "indeterminate"
-        }
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
       },
-      "from": "evaluate-document.unit.test.ts: evaluateDocument with lists of items > gives an item no view of the top-level inputs (the original asserted that the message contains the key; the case gives the message, which the first case of this file pins in the same form)",
+      "from": "evaluate-document.unit.test.ts: evaluateDocument with lists of items > gives an item no view of the top-level inputs (the original asserted only part of the outcome; the case gives the whole)",
       "id": "document-collections.evaluatedocument-with-lists-of-items-gives-an-item-no-view-of-the-top-level-inputs.1",
       "inputs": {
         "hours": 24,
@@ -467,16 +472,19 @@
       }
     },
     {
-      "expectSubset": {
+      "expect": {
         "evaluation": {
           "status": "definite",
           "value": {
             "kind": "number",
+            "unit": {},
             "value": 58.8348405414552
           }
-        }
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
       },
-      "from": "evaluate-document.collections.unit.test.ts: evaluateDocument with complex inputs > adds mixed resistive and reactive impedances as complex numbers",
+      "from": "evaluate-document.collections.unit.test.ts: evaluateDocument with complex inputs > adds mixed resistive and reactive impedances as complex numbers (the original asserted only part of the outcome; the case gives the whole)",
       "id": "document-collections.evaluatedocument-with-complex-inputs-adds-mixed-resistive-and-reactive-impedances-as-complex-numbers.1",
       "inputs": {
         "E": 100,
@@ -539,16 +547,19 @@
       }
     },
     {
-      "expectSubset": {
+      "expect": {
         "evaluation": {
           "status": "definite",
           "value": {
             "kind": "number",
+            "unit": {},
             "value": 50
           }
-        }
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
       },
-      "from": "evaluate-document.collections.unit.test.ts: evaluateDocument with complex inputs > agrees with the scalar form when every impedance is reactive",
+      "from": "evaluate-document.collections.unit.test.ts: evaluateDocument with complex inputs > agrees with the scalar form when every impedance is reactive (the original asserted only part of the outcome; the case gives the whole)",
       "id": "document-collections.evaluatedocument-with-complex-inputs-agrees-with-the-scalar-form-when-every-impedance-is-reactive.1",
       "inputs": {
         "E": 100,

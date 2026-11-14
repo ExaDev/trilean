@@ -1852,9 +1852,13 @@
     {
       "as": "expression",
       "expect": {
-        "status": "definite"
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 2856
+        }
       },
-      "from": "evaluator.integration.test.ts: the default limits > a tree that visits exactly the default node limit evaluates, though its folds visit their bodies once per item and its size is a few dozen nodes",
+      "from": "recorded: trilean src/evaluator-budget.ts (the limit the budget has by default)",
       "id": "integration.the-default-limits-a-tree-that-visits-exactly-the-default-node-limit-evaluates-though-its-folds-visit-their-bodies-once-per-item-and-its-s.1",
       "kind": "evaluate",
       "resolvers": {
@@ -2293,7 +2297,7 @@
         "message": "evaluation exceeded the maximum of 10000 nodes visited in a single call (resource exhausted)",
         "status": "indeterminate"
       },
-      "from": "evaluator.integration.test.ts: the default limits > a tree that visits one node more than the default node limit is indeterminate, though its size is a few dozen nodes",
+      "from": "recorded: trilean src/evaluator-budget.ts (the limit the budget has by default)",
       "id": "integration.the-default-limits-a-tree-that-visits-one-node-more-than-the-default-node-limit-is-indeterminate-though-its-size-is-a-few-dozen-nodes.1",
       "kind": "evaluate",
       "resolvers": {
@@ -2731,9 +2735,10 @@
     {
       "as": "predicate",
       "expect": {
-        "status": "definite"
+        "status": "definite",
+        "value": true
       },
-      "from": "evaluator.integration.test.ts: the default limits > a predicate whose longest path has exactly the default nesting depth of nodes evaluates, across stored trees",
+      "from": "recorded: trilean src/evaluator-budget.ts (the limit the budget has by default)",
       "id": "integration.the-default-limits-a-predicate-whose-longest-path-has-exactly-the-default-nesting-depth-of-nodes-evaluates-across-stored-trees.1",
       "kind": "evaluate",
       "resolvers": {
@@ -4595,7 +4600,7 @@
         "message": "evaluation nesting depth exceeds the maximum of 500 (resource exhausted)",
         "status": "indeterminate"
       },
-      "from": "evaluator.integration.test.ts: the default limits > a predicate whose longest path has one node more than the default nesting depth is indeterminate",
+      "from": "recorded: trilean src/evaluator-budget.ts (the limit the budget has by default)",
       "id": "integration.the-default-limits-a-predicate-whose-longest-path-has-one-node-more-than-the-default-nesting-depth-is-indeterminate.1",
       "kind": "evaluate",
       "resolvers": {
@@ -6456,9 +6461,13 @@
     {
       "as": "expression",
       "expect": {
-        "status": "definite"
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 1
+        }
       },
-      "from": "evaluator.integration.test.ts: the default limits > a expression whose longest path has exactly the default nesting depth of nodes evaluates, across stored trees",
+      "from": "recorded: trilean src/evaluator-budget.ts (the limit the budget has by default)",
       "id": "integration.the-default-limits-a-expression-whose-longest-path-has-exactly-the-default-nesting-depth-of-nodes-evaluates-across-stored-trees.1",
       "kind": "evaluate",
       "resolvers": {
@@ -8320,7 +8329,7 @@
         "message": "evaluation nesting depth exceeds the maximum of 500 (resource exhausted)",
         "status": "indeterminate"
       },
-      "from": "evaluator.integration.test.ts: the default limits > a expression whose longest path has one node more than the default nesting depth is indeterminate",
+      "from": "recorded: trilean src/evaluator-budget.ts (the limit the budget has by default)",
       "id": "integration.the-default-limits-a-expression-whose-longest-path-has-one-node-more-than-the-default-nesting-depth-is-indeterminate.1",
       "kind": "evaluate",
       "resolvers": {
@@ -10180,13 +10189,4123 @@
     },
     {
       "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "recorded: trilean src/evaluator.ts (the limit of a chain of referenced trees, at its boundary)",
+      "id": "integration.the-limit-on-a-chain-of-referenced-trees-a-predicate-that-resolves-a-chain-of-exactly-100-stored-trees-evaluates.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "trees": [
+          {
+            "key": "t1",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t2",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t2",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t3",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t3",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t4",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t4",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t5",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t5",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t6",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t6",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t7",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t7",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t8",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t8",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t9",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t9",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t10",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t10",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t11",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t11",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t12",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t12",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t13",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t13",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t14",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t14",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t15",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t15",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t16",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t16",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t17",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t17",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t18",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t18",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t19",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t19",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t20",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t20",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t21",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t21",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t22",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t22",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t23",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t23",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t24",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t24",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t25",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t25",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t26",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t26",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t27",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t27",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t28",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t28",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t29",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t29",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t30",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t30",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t31",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t31",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t32",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t32",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t33",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t33",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t34",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t34",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t35",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t35",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t36",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t36",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t37",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t37",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t38",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t38",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t39",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t39",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t40",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t40",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t41",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t41",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t42",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t42",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t43",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t43",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t44",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t44",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t45",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t45",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t46",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t46",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t47",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t47",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t48",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t48",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t49",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t49",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t50",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t50",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t51",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t51",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t52",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t52",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t53",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t53",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t54",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t54",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t55",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t55",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t56",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t56",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t57",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t57",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t58",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t58",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t59",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t59",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t60",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t60",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t61",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t61",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t62",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t62",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t63",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t63",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t64",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t64",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t65",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t65",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t66",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t66",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t67",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t67",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t68",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t68",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t69",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t69",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t70",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t70",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t71",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t71",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t72",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t72",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t73",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t73",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t74",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t74",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t75",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t75",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t76",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t76",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t77",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t77",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t78",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t78",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t79",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t79",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t80",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t80",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t81",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t81",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t82",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t82",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t83",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t83",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t84",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t84",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t85",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t85",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t86",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t86",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t87",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t87",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t88",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t88",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t89",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t89",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t90",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t90",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t91",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t91",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t92",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t92",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t93",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t93",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t94",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t94",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t95",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t95",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t96",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t96",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t97",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t97",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t98",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t98",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t99",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t99",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t100",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t100",
+            "result": {
+              "found": true,
+              "node": {
+                "kind": "allOf",
+                "operands": []
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "key": "t1",
+        "kind": "treeReference"
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "domain-error",
+        "message": "treeReference chain exceeds the maximum depth of 100",
+        "status": "indeterminate"
+      },
+      "from": "recorded: trilean src/evaluator.ts (the limit of a chain of referenced trees, one past its boundary)",
+      "id": "integration.the-limit-on-a-chain-of-referenced-trees-a-predicate-that-resolves-a-chain-of-101-stored-trees-is-indeterminate.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "trees": [
+          {
+            "key": "t1",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t2",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t2",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t3",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t3",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t4",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t4",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t5",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t5",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t6",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t6",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t7",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t7",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t8",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t8",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t9",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t9",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t10",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t10",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t11",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t11",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t12",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t12",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t13",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t13",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t14",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t14",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t15",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t15",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t16",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t16",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t17",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t17",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t18",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t18",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t19",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t19",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t20",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t20",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t21",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t21",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t22",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t22",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t23",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t23",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t24",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t24",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t25",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t25",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t26",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t26",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t27",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t27",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t28",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t28",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t29",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t29",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t30",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t30",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t31",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t31",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t32",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t32",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t33",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t33",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t34",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t34",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t35",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t35",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t36",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t36",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t37",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t37",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t38",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t38",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t39",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t39",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t40",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t40",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t41",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t41",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t42",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t42",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t43",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t43",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t44",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t44",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t45",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t45",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t46",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t46",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t47",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t47",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t48",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t48",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t49",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t49",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t50",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t50",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t51",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t51",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t52",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t52",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t53",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t53",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t54",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t54",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t55",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t55",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t56",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t56",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t57",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t57",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t58",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t58",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t59",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t59",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t60",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t60",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t61",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t61",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t62",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t62",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t63",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t63",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t64",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t64",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t65",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t65",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t66",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t66",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t67",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t67",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t68",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t68",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t69",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t69",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t70",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t70",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t71",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t71",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t72",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t72",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t73",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t73",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t74",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t74",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t75",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t75",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t76",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t76",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t77",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t77",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t78",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t78",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t79",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t79",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t80",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t80",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t81",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t81",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t82",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t82",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t83",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t83",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t84",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t84",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t85",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t85",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t86",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t86",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t87",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t87",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t88",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t88",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t89",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t89",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t90",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t90",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t91",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t91",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t92",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t92",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t93",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t93",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t94",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t94",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t95",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t95",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t96",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t96",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t97",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t97",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t98",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t98",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t99",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t99",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t100",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t100",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t101",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t101",
+            "result": {
+              "found": true,
+              "node": {
+                "kind": "allOf",
+                "operands": []
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "key": "t1",
+        "kind": "treeReference"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 1
+        }
+      },
+      "from": "recorded: trilean src/evaluator.ts (the limit of a chain of referenced trees, at its boundary)",
+      "id": "integration.the-limit-on-a-chain-of-referenced-trees-a-expression-that-resolves-a-chain-of-exactly-100-stored-trees-evaluates.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "trees": [
+          {
+            "key": "t1",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t2",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t2",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t3",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t3",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t4",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t4",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t5",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t5",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t6",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t6",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t7",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t7",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t8",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t8",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t9",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t9",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t10",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t10",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t11",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t11",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t12",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t12",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t13",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t13",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t14",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t14",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t15",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t15",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t16",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t16",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t17",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t17",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t18",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t18",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t19",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t19",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t20",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t20",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t21",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t21",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t22",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t22",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t23",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t23",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t24",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t24",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t25",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t25",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t26",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t26",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t27",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t27",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t28",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t28",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t29",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t29",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t30",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t30",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t31",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t31",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t32",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t32",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t33",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t33",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t34",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t34",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t35",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t35",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t36",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t36",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t37",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t37",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t38",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t38",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t39",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t39",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t40",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t40",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t41",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t41",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t42",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t42",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t43",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t43",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t44",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t44",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t45",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t45",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t46",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t46",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t47",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t47",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t48",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t48",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t49",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t49",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t50",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t50",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t51",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t51",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t52",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t52",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t53",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t53",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t54",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t54",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t55",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t55",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t56",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t56",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t57",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t57",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t58",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t58",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t59",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t59",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t60",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t60",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t61",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t61",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t62",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t62",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t63",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t63",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t64",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t64",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t65",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t65",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t66",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t66",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t67",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t67",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t68",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t68",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t69",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t69",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t70",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t70",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t71",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t71",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t72",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t72",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t73",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t73",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t74",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t74",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t75",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t75",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t76",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t76",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t77",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t77",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t78",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t78",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t79",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t79",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t80",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t80",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t81",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t81",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t82",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t82",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t83",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t83",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t84",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t84",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t85",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t85",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t86",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t86",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t87",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t87",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t88",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t88",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t89",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t89",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t90",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t90",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t91",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t91",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t92",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t92",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t93",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t93",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t94",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t94",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t95",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t95",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t96",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t96",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t97",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t97",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t98",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t98",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t99",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t99",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t100",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t100",
+            "result": {
+              "found": true,
+              "node": {
+                "kind": "numberLiteral",
+                "value": 1
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "key": "t1",
+        "kind": "treeReference"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "domain-error",
+        "message": "treeReference chain exceeds the maximum depth of 100",
+        "status": "indeterminate"
+      },
+      "from": "recorded: trilean src/evaluator.ts (the limit of a chain of referenced trees, one past its boundary)",
+      "id": "integration.the-limit-on-a-chain-of-referenced-trees-a-expression-that-resolves-a-chain-of-101-stored-trees-is-indeterminate.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "trees": [
+          {
+            "key": "t1",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t2",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t2",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t3",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t3",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t4",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t4",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t5",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t5",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t6",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t6",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t7",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t7",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t8",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t8",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t9",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t9",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t10",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t10",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t11",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t11",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t12",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t12",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t13",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t13",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t14",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t14",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t15",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t15",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t16",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t16",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t17",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t17",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t18",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t18",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t19",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t19",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t20",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t20",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t21",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t21",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t22",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t22",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t23",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t23",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t24",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t24",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t25",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t25",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t26",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t26",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t27",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t27",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t28",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t28",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t29",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t29",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t30",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t30",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t31",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t31",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t32",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t32",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t33",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t33",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t34",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t34",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t35",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t35",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t36",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t36",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t37",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t37",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t38",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t38",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t39",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t39",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t40",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t40",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t41",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t41",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t42",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t42",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t43",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t43",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t44",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t44",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t45",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t45",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t46",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t46",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t47",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t47",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t48",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t48",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t49",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t49",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t50",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t50",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t51",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t51",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t52",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t52",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t53",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t53",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t54",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t54",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t55",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t55",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t56",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t56",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t57",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t57",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t58",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t58",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t59",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t59",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t60",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t60",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t61",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t61",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t62",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t62",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t63",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t63",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t64",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t64",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t65",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t65",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t66",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t66",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t67",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t67",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t68",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t68",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t69",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t69",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t70",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t70",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t71",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t71",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t72",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t72",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t73",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t73",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t74",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t74",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t75",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t75",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t76",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t76",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t77",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t77",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t78",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t78",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t79",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t79",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t80",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t80",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t81",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t81",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t82",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t82",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t83",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t83",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t84",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t84",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t85",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t85",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t86",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t86",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t87",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t87",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t88",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t88",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t89",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t89",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t90",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t90",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t91",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t91",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t92",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t92",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t93",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t93",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t94",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t94",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t95",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t95",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t96",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t96",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t97",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t97",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t98",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t98",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t99",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t99",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t100",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t100",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "t101",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "t101",
+            "result": {
+              "found": true,
+              "node": {
+                "kind": "numberLiteral",
+                "value": 1
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "key": "t1",
+        "kind": "treeReference"
+      }
+    },
+    {
+      "as": "predicate",
       "evaluator": {
         "maxNodes": 51
       },
       "expect": {
-        "status": "definite"
+        "status": "definite",
+        "value": true
       },
-      "from": "evaluator.integration.test.ts: the explicit limits at their boundaries > a tree that visits exactly the node limit evaluates",
+      "from": "recorded: trilean src/evaluator-budget.ts (the limit a case sets, at its boundary)",
       "id": "integration.the-explicit-limits-at-their-boundaries-a-tree-that-visits-exactly-the-node-limit-evaluates.1",
       "kind": "evaluate",
       "resolvers": {
@@ -10400,7 +14519,7 @@
         "message": "evaluation exceeded the maximum of 51 nodes visited in a single call (resource exhausted)",
         "status": "indeterminate"
       },
-      "from": "evaluator.integration.test.ts: the explicit limits at their boundaries > a tree that visits one node more than the node limit is indeterminate",
+      "from": "recorded: trilean src/evaluator-budget.ts (the limit a case sets, at its boundary)",
       "id": "integration.the-explicit-limits-at-their-boundaries-a-tree-that-visits-one-node-more-than-the-node-limit-is-indeterminate.1",
       "kind": "evaluate",
       "resolvers": {
@@ -10614,9 +14733,10 @@
         "maxNestingDepth": 10
       },
       "expect": {
-        "status": "definite"
+        "status": "definite",
+        "value": false
       },
-      "from": "evaluator.integration.test.ts: the explicit limits at their boundaries > a path of exactly the nesting depth limit evaluates",
+      "from": "recorded: trilean src/evaluator-budget.ts (the limit a case sets, at its boundary)",
       "id": "integration.the-explicit-limits-at-their-boundaries-a-path-of-exactly-the-nesting-depth-limit-evaluates.1",
       "kind": "evaluate",
       "resolvers": {
@@ -10681,7 +14801,7 @@
         "message": "evaluation nesting depth exceeds the maximum of 10 (resource exhausted)",
         "status": "indeterminate"
       },
-      "from": "evaluator.integration.test.ts: the explicit limits at their boundaries > a path one node longer than the nesting depth limit is indeterminate",
+      "from": "recorded: trilean src/evaluator-budget.ts (the limit a case sets, at its boundary)",
       "id": "integration.the-explicit-limits-at-their-boundaries-a-path-one-node-longer-than-the-nesting-depth-limit-is-indeterminate.1",
       "kind": "evaluate",
       "resolvers": {
@@ -10740,6 +14860,148 @@
       }
     },
     {
+      "as": "predicate",
+      "evaluator": {
+        "maxNestingDepth": 10
+      },
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "recorded: trilean src/evaluator-budget.ts (the nesting depth limit reached through an expression operand of a predicate, at its boundary)",
+      "id": "integration.the-explicit-limits-at-their-boundaries-an-expression-operand-whose-path-ends-exactly-at-the-nesting-depth-limit-evaluates.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "negate",
+          "operand": {
+            "kind": "negate",
+            "operand": {
+              "kind": "negate",
+              "operand": {
+                "kind": "negate",
+                "operand": {
+                  "kind": "negate",
+                  "operand": {
+                    "kind": "negate",
+                    "operand": {
+                      "kind": "negate",
+                      "operand": {
+                        "kind": "negate",
+                        "operand": {
+                          "kind": "numberLiteral",
+                          "value": 1
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "op": "eq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "evaluator": {
+        "maxNestingDepth": 10
+      },
+      "expect": {
+        "code": "domain-error",
+        "message": "evaluation nesting depth exceeds the maximum of 10 (resource exhausted)",
+        "status": "indeterminate"
+      },
+      "from": "recorded: trilean src/evaluator-budget.ts (the nesting depth limit reached through an expression operand of a predicate, one past its boundary)",
+      "id": "integration.the-explicit-limits-at-their-boundaries-an-expression-operand-whose-path-ends-one-node-past-the-nesting-depth-limit-is-indeterminate.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "negate",
+          "operand": {
+            "kind": "negate",
+            "operand": {
+              "kind": "negate",
+              "operand": {
+                "kind": "negate",
+                "operand": {
+                  "kind": "negate",
+                  "operand": {
+                    "kind": "negate",
+                    "operand": {
+                      "kind": "negate",
+                      "operand": {
+                        "kind": "negate",
+                        "operand": {
+                          "kind": "negate",
+                          "operand": {
+                            "kind": "numberLiteral",
+                            "value": 1
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "op": "eq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
       "as": "expression",
       "evaluator": {
         "maxNodes": 11
@@ -10751,7 +15013,7 @@
           "value": 6
         }
       },
-      "from": "evaluator.integration.test.ts: the explicit limits at their boundaries > a fold is charged for each visit of its combine expression, not once for the tree",
+      "from": "recorded: trilean src/evaluator-budget.ts (the limit a case sets, at its boundary)",
       "id": "integration.the-explicit-limits-at-their-boundaries-a-fold-is-charged-for-each-visit-of-its-combine-expression-not-once-for-the-tree.1",
       "kind": "evaluate",
       "resolvers": {
@@ -10809,7 +15071,7 @@
         "message": "evaluation exceeded the maximum of 10 nodes visited in a single call (resource exhausted)",
         "status": "indeterminate"
       },
-      "from": "evaluator.integration.test.ts: the explicit limits at their boundaries > a fold is charged for each visit of its combine expression, not once for the tree",
+      "from": "recorded: trilean src/evaluator-budget.ts (the limit a case sets, at its boundary)",
       "id": "integration.the-explicit-limits-at-their-boundaries-a-fold-is-charged-for-each-visit-of-its-combine-expression-not-once-for-the-tree.2",
       "kind": "evaluate",
       "resolvers": {
@@ -10867,7 +15129,7 @@
           "value": 1
         }
       },
-      "from": "evaluator.integration.test.ts: a context that is absent and a context that is null > a null context is a context, which a resolver entry can name",
+      "from": "recorded: trilean src/evaluator-budget.ts (a context that is absent against one that is null)",
       "id": "integration.a-context-that-is-absent-and-a-context-that-is-null-a-null-context-is-a-context-which-a-resolver-entry-can-name.1",
       "kind": "evaluate",
       "resolvers": {
@@ -10899,7 +15161,7 @@
         "code": "not-found",
         "status": "indeterminate"
       },
-      "from": "evaluator.integration.test.ts: a context that is absent and a context that is null > an absent context is not a null context",
+      "from": "recorded: trilean src/evaluator-budget.ts (a context that is absent against one that is null)",
       "id": "integration.a-context-that-is-absent-and-a-context-that-is-null-an-absent-context-is-not-a-null-context.1",
       "kind": "evaluate",
       "resolvers": {

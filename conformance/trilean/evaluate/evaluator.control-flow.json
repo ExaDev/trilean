@@ -577,7 +577,7 @@
         "code": "not-found",
         "status": "indeterminate"
       },
-      "from": "evaluator.control-flow.unit.test.ts: conditional > hitPolicy: 'unique' > one match plus one unrelated indeterminate case: the whole node is indeterminate, NOT the match's then -- a single confirmed match does not absorb a remaining unresolved sibling under 'unique'",
+      "from": "evaluator.control-flow.unit.test.ts: conditional > hitPolicy: 'unique' > one match plus one unrelated indeterminate case: the whole node is indeterminate, NOT the match's then: a single confirmed match does not absorb a remaining unresolved sibling under 'unique'",
       "id": "control-flow.conditional-hitpolicy-unique-one-match-plus-one-unrelated-indeterminate-case-the-whole-node-is-indeterminate-not-the-match-s-then-a-singl.1",
       "kind": "evaluate",
       "resolvers": {
@@ -653,7 +653,7 @@
         "code": "domain-error",
         "status": "indeterminate"
       },
-      "from": "evaluator.control-flow.unit.test.ts: conditional > hitPolicy: 'unique' > two matches plus a third indeterminate case: still the domain-error -- 2+ matches absorbs even a genuine indeterminate elsewhere",
+      "from": "evaluator.control-flow.unit.test.ts: conditional > hitPolicy: 'unique' > two matches plus a third indeterminate case: still the domain-error: 2+ matches absorbs even a genuine indeterminate elsewhere",
       "id": "control-flow.conditional-hitpolicy-unique-two-matches-plus-a-third-indeterminate-case-still-the-domain-error-2-matches-absorbs-even-a-genuine-indeterm.1",
       "kind": "evaluate",
       "resolvers": {

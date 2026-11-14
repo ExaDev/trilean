@@ -678,7 +678,7 @@
         "code": "wrong-type",
         "status": "indeterminate"
       },
-      "from": "evaluator.comparison.unit.test.ts: compare > gt is wrong-type for boolean operands -- no natural ordering",
+      "from": "evaluator.comparison.unit.test.ts: compare > gt is wrong-type for boolean operands: no natural ordering",
       "id": "comparison.compare-gt-is-wrong-type-for-boolean-operands-no-natural-ordering.1",
       "kind": "evaluate",
       "resolvers": {
@@ -720,7 +720,7 @@
         "code": "wrong-type",
         "status": "indeterminate"
       },
-      "from": "evaluator.comparison.unit.test.ts: compare > gte is wrong-type for boolean operands -- no natural ordering",
+      "from": "evaluator.comparison.unit.test.ts: compare > gte is wrong-type for boolean operands: no natural ordering",
       "id": "comparison.compare-gte-is-wrong-type-for-boolean-operands-no-natural-ordering.1",
       "kind": "evaluate",
       "resolvers": {
@@ -762,7 +762,7 @@
         "code": "wrong-type",
         "status": "indeterminate"
       },
-      "from": "evaluator.comparison.unit.test.ts: compare > lt is wrong-type for boolean operands -- no natural ordering",
+      "from": "evaluator.comparison.unit.test.ts: compare > lt is wrong-type for boolean operands: no natural ordering",
       "id": "comparison.compare-lt-is-wrong-type-for-boolean-operands-no-natural-ordering.1",
       "kind": "evaluate",
       "resolvers": {
@@ -804,7 +804,7 @@
         "code": "wrong-type",
         "status": "indeterminate"
       },
-      "from": "evaluator.comparison.unit.test.ts: compare > lte is wrong-type for boolean operands -- no natural ordering",
+      "from": "evaluator.comparison.unit.test.ts: compare > lte is wrong-type for boolean operands: no natural ordering",
       "id": "comparison.compare-lte-is-wrong-type-for-boolean-operands-no-natural-ordering.1",
       "kind": "evaluate",
       "resolvers": {
@@ -1152,7 +1152,7 @@
         "code": "wrong-type",
         "status": "indeterminate"
       },
-      "from": "evaluator.comparison.unit.test.ts: compare > gt is wrong-type on complex operands -- the complex plane carries no total order",
+      "from": "evaluator.comparison.unit.test.ts: compare > gt is wrong-type on complex operands: the complex plane carries no total order",
       "id": "comparison.compare-gt-is-wrong-type-on-complex-operands-the-complex-plane-carries-no-total-order.1",
       "kind": "evaluate",
       "resolvers": {
@@ -1196,7 +1196,7 @@
         "code": "wrong-type",
         "status": "indeterminate"
       },
-      "from": "evaluator.comparison.unit.test.ts: compare > gte is wrong-type on complex operands -- the complex plane carries no total order",
+      "from": "evaluator.comparison.unit.test.ts: compare > gte is wrong-type on complex operands: the complex plane carries no total order",
       "id": "comparison.compare-gte-is-wrong-type-on-complex-operands-the-complex-plane-carries-no-total-order.1",
       "kind": "evaluate",
       "resolvers": {
@@ -1240,7 +1240,7 @@
         "code": "wrong-type",
         "status": "indeterminate"
       },
-      "from": "evaluator.comparison.unit.test.ts: compare > lt is wrong-type on complex operands -- the complex plane carries no total order",
+      "from": "evaluator.comparison.unit.test.ts: compare > lt is wrong-type on complex operands: the complex plane carries no total order",
       "id": "comparison.compare-lt-is-wrong-type-on-complex-operands-the-complex-plane-carries-no-total-order.1",
       "kind": "evaluate",
       "resolvers": {
@@ -1284,7 +1284,7 @@
         "code": "wrong-type",
         "status": "indeterminate"
       },
-      "from": "evaluator.comparison.unit.test.ts: compare > lte is wrong-type on complex operands -- the complex plane carries no total order",
+      "from": "evaluator.comparison.unit.test.ts: compare > lte is wrong-type on complex operands: the complex plane carries no total order",
       "id": "comparison.compare-lte-is-wrong-type-on-complex-operands-the-complex-plane-carries-no-total-order.1",
       "kind": "evaluate",
       "resolvers": {
