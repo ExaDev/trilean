@@ -6,7 +6,7 @@ import type {
   SqlDialect,
   SqlParamType,
 } from "./options";
-import { identifierProblem, valueProblem } from "./identifier";
+import { identifierProblem, valueProblem } from "./internal/identifier";
 import { assertImplementedDialect } from "./options";
 import {
   renderPostgresPattern,
@@ -514,16 +514,15 @@ function findUnpushablePredicate(
           };
         }
       }
-      // A pattern is read differently from a value: SQLite's GLOB and LIKE stop at the first NUL.
+      // The pattern of `portableMatches`/`portableNotMatches` becomes a GLOB pattern, which SQLite reads only up to its first NUL.
       if (
         node.right.kind === "textLiteral" &&
-        node.op !== "equals" &&
-        node.op !== "notEquals"
+        (node.op === "portableMatches" || node.op === "portableNotMatches")
       ) {
         const patternProblem = valueProblem(
           node.right.value,
           options?.dialect ?? "postgres",
-          "pattern",
+          "glob-pattern",
         );
         if (patternProblem !== undefined) {
           return {

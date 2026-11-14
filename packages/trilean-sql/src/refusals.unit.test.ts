@@ -56,15 +56,67 @@ const foldOver: PredicateNode = {
   },
 };
 
-const text = (
-  op: "equals" | "matches" | "portableMatches",
-  value: string,
-): PredicateNode => ({
+type TextOperator =
+  | "equals"
+  | "notEquals"
+  | "matches"
+  | "notMatches"
+  | "portableMatches"
+  | "portableNotMatches";
+
+const text = (op: TextOperator, value: string): PredicateNode => ({
   kind: "textCompare",
   op,
   left: { kind: "reference", key: "k" },
   right: { kind: "textLiteral", value },
 });
+
+/** The literal as the subject of a text comparison, on the left. */
+const textOnLeft = (value: string): PredicateNode => ({
+  kind: "textCompare",
+  op: "equals",
+  left: { kind: "textLiteral", value },
+  right: { kind: "reference", key: "k" },
+});
+
+const memberOperand = (value: string): PredicateNode => ({
+  kind: "memberOf",
+  op: "notIn",
+  operand: { kind: "textLiteral", value },
+  candidates: [{ kind: "reference", key: "k" }],
+});
+
+const existsOf = (value: string): PredicateNode => ({
+  kind: "exists",
+  operand: { kind: "textLiteral", value },
+});
+
+const insideConnectives = (value: string): PredicateNode => ({
+  kind: "allOf",
+  operands: [
+    reference,
+    {
+      kind: "anyOf",
+      operands: [{ kind: "not", operand: text("equals", value) }],
+    },
+  ],
+});
+
+const inFilter = (kind: "some" | "fold", value: string): PredicateNode => {
+  const filter = text("equals", value);
+
+  return kind === "some"
+    ? { ...someOver, filter }
+    : {
+        kind: "exists",
+        operand: {
+          kind: "fold",
+          collection: "c",
+          filter,
+          combiner: { mode: "max", item: { kind: "reference", key: "k" } },
+        },
+      };
+};
 
 const member = (value: string): PredicateNode => ({
   kind: "memberOf",
@@ -187,24 +239,61 @@ const rows: readonly Row[] = [
     refusedBy: ["postgres"],
     error: UnsupportedNodeError,
   },
-  {
-    label: "a portable pattern with a NUL",
-    tree: text("portableMatches", `${MARK}${NUL}`),
+  ...(["portableMatches", "portableNotMatches"] as const).map((op): Row => ({
+    label: `a ${op} pattern with a NUL`,
+    tree: text(op, `${MARK}${NUL}`),
     options: (dialect) => optionsFor(dialect, { column: "col" }),
     refusedBy: DIALECTS,
     error: UnsupportedNodeError,
-  },
-  {
-    label: "a pushed-down pattern with a NUL",
-    tree: text("matches", `${MARK}${NUL}`),
+  })),
+  ...(["matches", "notMatches"] as const).map((op): Row => ({
+    label: `a ${op} pattern with a NUL, which REGEXP carries whole`,
+    tree: text(op, `${MARK}${NUL}`),
     options: (dialect) => ({
       ...optionsFor(dialect, { column: "col" }),
       postgresRegexpPushdown: true,
       sqliteRegexpAvailable: true,
     }),
+    refusedBy: ["postgres"],
+    error: UnsupportedNodeError,
+  })),
+  ...(
+    [
+      ["notEquals", text("notEquals", `${MARK}${LONE_SURROGATE}`)],
+      ["a literal on the left", textOnLeft(`${MARK}${LONE_SURROGATE}`)],
+      ["a membership operand", memberOperand(`${MARK}${LONE_SURROGATE}`)],
+      ["an exists operand", existsOf(`${MARK}${LONE_SURROGATE}`)],
+      [
+        "allOf and anyOf and not",
+        insideConnectives(`${MARK}${LONE_SURROGATE}`),
+      ],
+      ["a some filter", inFilter("some", `${MARK}${LONE_SURROGATE}`)],
+      ["a fold filter", inFilter("fold", `${MARK}${LONE_SURROGATE}`)],
+    ] as const
+  ).map(([where, tree]): Row => ({
+    label: `an unpaired surrogate in ${where}`,
+    tree,
+    options: (dialect) => optionsFor(dialect, { column: "col" }),
     refusedBy: DIALECTS,
     error: UnsupportedNodeError,
-  },
+  })),
+  ...(
+    [
+      ["a left literal", textOnLeft(`${MARK}${NUL}`)],
+      ["a membership operand", memberOperand(`${MARK}${NUL}`)],
+      ["an exists operand", existsOf(`${MARK}${NUL}`)],
+      ["allOf and anyOf and not", insideConnectives(`${MARK}${NUL}`)],
+      ["a some filter", inFilter("some", `${MARK}${NUL}`)],
+      ["a fold filter", inFilter("fold", `${MARK}${NUL}`)],
+      ["notEquals", text("notEquals", `${MARK}${NUL}`)],
+    ] as const
+  ).map(([where, tree]): Row => ({
+    label: `a NUL in ${where}`,
+    tree,
+    options: (dialect) => optionsFor(dialect, { column: "col" }),
+    refusedBy: ["postgres"],
+    error: UnsupportedNodeError,
+  })),
 ];
 
 const accepted: readonly (readonly [

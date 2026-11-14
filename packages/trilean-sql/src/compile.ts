@@ -15,7 +15,7 @@ import {
   UnsupportedNodeError,
 } from "./errors";
 import { findUnpushableNodeKind } from "./guard";
-import { identifierProblem } from "./identifier";
+import { identifierProblem } from "./internal/identifier";
 import {
   renderPostgresPattern,
   renderSqliteGlobPattern,
