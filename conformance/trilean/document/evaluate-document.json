@@ -1,0 +1,908 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "evaluation": {
+          "status": "definite",
+          "value": {
+            "kind": "number",
+            "unit": {
+              "m": 1
+            },
+            "value": 5
+          }
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
+      },
+      "from": "evaluate-document.unit.test.ts: evaluateDocument > evaluates an expression with built-in functions and unit-carrying inputs",
+      "id": "document.evaluatedocument-evaluates-an-expression-with-built-in-functions-and-unit-carrying-inputs.1",
+      "inputs": {
+        "a": {
+          "kind": "number",
+          "unit": {
+            "m": 1
+          },
+          "value": 3
+        },
+        "b": {
+          "kind": "number",
+          "unit": {
+            "m": 1
+          },
+          "value": 4
+        }
+      },
+      "kind": "document",
+      "tree": {
+        "args": [
+          {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "arithmetic",
+              "left": {
+                "key": "a",
+                "kind": "reference"
+              },
+              "op": "multiply",
+              "right": {
+                "key": "a",
+                "kind": "reference"
+              }
+            },
+            "op": "add",
+            "right": {
+              "kind": "arithmetic",
+              "left": {
+                "key": "b",
+                "kind": "reference"
+              },
+              "op": "multiply",
+              "right": {
+                "key": "b",
+                "kind": "reference"
+              }
+            }
+          }
+        ],
+        "fn": "squareRoot",
+        "kind": "call"
+      }
+    },
+    {
+      "expect": {
+        "evaluation": {
+          "status": "definite",
+          "value": true
+        },
+        "outcome": "evaluated",
+        "treeKind": "predicate"
+      },
+      "from": "evaluate-document.unit.test.ts: evaluateDocument > evaluates a predicate when the root is a predicate kind",
+      "id": "document.evaluatedocument-evaluates-a-predicate-when-the-root-is-a-predicate-kind.1",
+      "inputs": {
+        "x": 5
+      },
+      "kind": "document",
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "x",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 2
+        }
+      }
+    },
+    {
+      "expect": {
+        "evaluation": {
+          "reason": {
+            "code": "not-found",
+            "message": "no value found for reference key \"a\""
+          },
+          "status": "indeterminate"
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
+      },
+      "from": "evaluate-document.unit.test.ts: evaluateDocument > is indeterminate, not rejected, when an input is missing",
+      "id": "document.evaluatedocument-is-indeterminate-not-rejected-when-an-input-is-missing.1",
+      "kind": "document",
+      "tree": {
+        "args": [
+          {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "arithmetic",
+              "left": {
+                "key": "a",
+                "kind": "reference"
+              },
+              "op": "multiply",
+              "right": {
+                "key": "a",
+                "kind": "reference"
+              }
+            },
+            "op": "add",
+            "right": {
+              "kind": "arithmetic",
+              "left": {
+                "key": "b",
+                "kind": "reference"
+              },
+              "op": "multiply",
+              "right": {
+                "key": "b",
+                "kind": "reference"
+              }
+            }
+          }
+        ],
+        "fn": "squareRoot",
+        "kind": "call"
+      }
+    },
+    {
+      "expect": {
+        "evaluation": {
+          "reason": {
+            "code": "domain-error",
+            "message": "logarithm requires a number above zero"
+          },
+          "status": "indeterminate"
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
+      },
+      "from": "evaluate-document.unit.test.ts: evaluateDocument > reports a built-in's domain error as an indeterminate reason (the original asserted only part of the result; recorded: trilean src/evaluate-document.ts, the whole result)",
+      "id": "document.evaluatedocument-reports-a-built-in-s-domain-error-as-an-indeterminate-reason.1",
+      "kind": "document",
+      "tree": {
+        "args": [
+          {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        ],
+        "fn": "logarithm",
+        "kind": "call"
+      }
+    },
+    {
+      "expect": {
+        "evaluation": {
+          "reason": {
+            "code": "wrong-type",
+            "message": "no function registered under the name 'notARegisteredFunction'"
+          },
+          "status": "indeterminate"
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
+      },
+      "from": "evaluate-document.unit.test.ts: evaluateDocument > reports an unregistered function as wrong-type (the original asserted only part of the result; recorded: trilean src/evaluate-document.ts, the whole result)",
+      "id": "document.evaluatedocument-reports-an-unregistered-function-as-wrong-type.1",
+      "kind": "document",
+      "tree": {
+        "args": [],
+        "fn": "notARegisteredFunction",
+        "kind": "call"
+      }
+    },
+    {
+      "expect": {
+        "issues": [
+          "right.value: Invalid input: expected string, received undefined"
+        ],
+        "outcome": "rejected",
+        "reason": "invalid"
+      },
+      "from": "evaluate-document.unit.test.ts: evaluateDocument > rejects a tree that fails its schema, naming the nested path",
+      "id": "document.evaluatedocument-rejects-a-tree-that-fails-its-schema-naming-the-nested-path.1",
+      "kind": "document",
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 1
+        },
+        "op": "add",
+        "right": {
+          "kind": "textLiteral"
+        }
+      }
+    },
+    {
+      "expect": {
+        "issues": [
+          "kind: Invalid discriminator value. Expected 'numberLiteral' | 'textLiteral' | 'booleanLiteral' | 'instantLiteral' | 'durationLiteral' | 'reference' | 'arithmetic' | 'negate' | 'call' | 'lookup' | 'conditional' | 'fold' | 'accumulator' | 'delegate' | 'treeReference'"
+        ],
+        "outcome": "rejected",
+        "reason": "invalid"
+      },
+      "from": "evaluate-document.unit.test.ts: evaluateDocument > rejects an unknown root kind as an expression problem (the original asserted only part of the result; recorded: trilean src/evaluate-document.ts, the whole result)",
+      "id": "document.evaluatedocument-rejects-an-unknown-root-kind-as-an-expression-problem.1",
+      "kind": "document",
+      "tree": {
+        "kind": "nope"
+      }
+    },
+    {
+      "expect": {
+        "issues": [
+          "(root): Invalid input: expected object, received number"
+        ],
+        "outcome": "rejected",
+        "reason": "invalid"
+      },
+      "from": "evaluate-document.unit.test.ts: evaluateDocument > rejects a tree that is not an object (the original asserted only part of the result; recorded: trilean src/evaluate-document.ts, the whole result)",
+      "id": "document.evaluatedocument-rejects-a-tree-that-is-not-an-object.1",
+      "kind": "document",
+      "tree": 3
+    },
+    {
+      "expect": {
+        "issues": [
+          "(root): a treeReference is valid as a predicate and as an expression; set `as` to \"predicate\" or \"expression\""
+        ],
+        "outcome": "rejected",
+        "reason": "ambiguous-tree-kind"
+      },
+      "from": "evaluate-document.unit.test.ts: evaluateDocument > asks which tree a treeReference is, and honours `as`",
+      "id": "document.evaluatedocument-asks-which-tree-a-treereference-is-and-honours-as.1",
+      "kind": "document",
+      "tree": {
+        "key": "stored",
+        "kind": "treeReference"
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "evaluation": {
+          "reason": {
+            "code": "wrong-type",
+            "message": "no tree resolver registered for treeReference nodes"
+          },
+          "status": "indeterminate"
+        },
+        "outcome": "evaluated",
+        "treeKind": "predicate"
+      },
+      "from": "evaluate-document.unit.test.ts: evaluateDocument > asks which tree a treeReference is, and honours `as` (the original asserted only part of the result; recorded: trilean src/evaluate-document.ts, the whole result)",
+      "id": "document.evaluatedocument-asks-which-tree-a-treereference-is-and-honours-as.2",
+      "kind": "document",
+      "tree": {
+        "key": "stored",
+        "kind": "treeReference"
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "issues": [
+          "kind: Invalid discriminator value. Expected 'not' | 'and' | 'or' | 'allOf' | 'anyOf' | 'compare' | 'textCompare' | 'memberOf' | 'exists' | 'some' | 'every' | 'treeReference'"
+        ],
+        "outcome": "rejected",
+        "reason": "invalid"
+      },
+      "from": "evaluate-document.unit.test.ts: evaluateDocument > lets `as` override the kind read from the root (the original asserted only part of the result; recorded: trilean src/evaluate-document.ts, the whole result)",
+      "id": "document.evaluatedocument-lets-as-override-the-kind-read-from-the-root.1",
+      "kind": "document",
+      "tree": {
+        "kind": "numberLiteral",
+        "value": 1
+      }
+    },
+    {
+      "expect": {
+        "issues": [
+          "inputs.a: expected a finite number, text, boolean or a complete computed value"
+        ],
+        "outcome": "rejected",
+        "reason": "invalid"
+      },
+      "from": "evaluate-document.unit.test.ts: evaluateDocument > rejects malformed inputs before looking at the tree",
+      "id": "document.evaluatedocument-rejects-malformed-inputs-before-looking-at-the-tree.1",
+      "inputs": {
+        "a": null
+      },
+      "kind": "document",
+      "tree": {
+        "args": [
+          {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "arithmetic",
+              "left": {
+                "key": "a",
+                "kind": "reference"
+              },
+              "op": "multiply",
+              "right": {
+                "key": "a",
+                "kind": "reference"
+              }
+            },
+            "op": "add",
+            "right": {
+              "kind": "arithmetic",
+              "left": {
+                "key": "b",
+                "kind": "reference"
+              },
+              "op": "multiply",
+              "right": {
+                "key": "b",
+                "kind": "reference"
+              }
+            }
+          }
+        ],
+        "fn": "squareRoot",
+        "kind": "call"
+      }
+    },
+    {
+      "expect": {
+        "issues": [
+          "inputs.x: expected a finite number, text, boolean or a complete computed value"
+        ],
+        "outcome": "rejected",
+        "reason": "invalid"
+      },
+      "from": "evaluate-document.unit.test.ts: evaluateDocument inputs that do not fit > rejects a plain input number that is not finite",
+      "id": "document.evaluatedocument-inputs-that-do-not-fit-rejects-a-plain-input-number-that-is-not-finite.1",
+      "inputs": {
+        "x": {
+          "$number": "Infinity"
+        }
+      },
+      "kind": "document",
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "skip": "rust",
+      "tree": {
+        "key": "x",
+        "kind": "reference"
+      }
+    },
+    {
+      "expect": {
+        "evaluation": {
+          "reason": {
+            "code": "domain-error",
+            "message": "evaluation exceeded the maximum of 4 nodes visited in a single call (resource exhausted)"
+          },
+          "status": "indeterminate"
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
+      },
+      "from": "evaluate-document.unit.test.ts: evaluateDocument maxNodes > refuses a tree larger than the budget with an indeterminate result (the original asserted only part of the result; recorded: trilean src/evaluate-document.ts, the whole result)",
+      "id": "document.evaluatedocument-maxnodes-refuses-a-tree-larger-than-the-budget-with-an-indeterminate-result.1",
+      "kind": "document",
+      "maxNodes": 4,
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "arithmetic",
+          "left": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "op": "add",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 2
+          }
+        },
+        "op": "add",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 3
+        }
+      }
+    },
+    {
+      "expect": {
+        "evaluation": {
+          "status": "definite",
+          "value": {
+            "kind": "number",
+            "value": 6
+          }
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
+      },
+      "from": "evaluate-document.unit.test.ts: evaluateDocument maxNodes > evaluates the same tree when the budget covers it (the original asserted only part of the result; recorded: trilean src/evaluate-document.ts, the whole result)",
+      "id": "document.evaluatedocument-maxnodes-evaluates-the-same-tree-when-the-budget-covers-it.1",
+      "kind": "document",
+      "maxNodes": 5,
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "arithmetic",
+          "left": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "op": "add",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 2
+          }
+        },
+        "op": "add",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 3
+        }
+      }
+    },
+    {
+      "expect": {
+        "evaluation": {
+          "status": "definite",
+          "value": {
+            "im": 1,
+            "kind": "complex",
+            "re": 2,
+            "unit": {
+              "ohm": 1
+            }
+          }
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
+      },
+      "from": "evaluate-document.unit.test.ts: evaluateDocument with the complex and trigonometric built-ins > takes the principal square root of a complex impedance ratio, halving its unit",
+      "id": "document.evaluatedocument-with-the-complex-and-trigonometric-built-ins-takes-the-principal-square-root-of-a-complex-impedance-ratio-halving-its-unit.1",
+      "inputs": {
+        "Y": {
+          "kind": "number",
+          "unit": {
+            "ohm": -1
+          },
+          "value": 1
+        },
+        "Z": {
+          "im": 4,
+          "kind": "complex",
+          "re": 3,
+          "unit": {
+            "ohm": 1
+          }
+        }
+      },
+      "kind": "document",
+      "tree": {
+        "args": [
+          {
+            "kind": "arithmetic",
+            "left": {
+              "key": "Z",
+              "kind": "reference"
+            },
+            "op": "divide",
+            "right": {
+              "key": "Y",
+              "kind": "reference"
+            }
+          }
+        ],
+        "fn": "squareRoot",
+        "kind": "call"
+      }
+    },
+    {
+      "expect": {
+        "evaluation": {
+          "status": "definite",
+          "value": {
+            "im": 10,
+            "kind": "complex",
+            "re": 6.123233995736766e-16,
+            "unit": {}
+          }
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
+      },
+      "from": "evaluate-document.unit.test.ts: evaluateDocument with the complex and trigonometric built-ins > rotates a phasor by exponential(i theta) (the original compared with a tolerance of a few units in the last place; recorded: trilean src/builtin-functions.ts, the exact result)",
+      "id": "document.evaluatedocument-with-the-complex-and-trigonometric-built-ins-rotates-a-phasor-by-exponential-i-theta.1",
+      "inputs": {
+        "V": 10,
+        "theta": 1.5707963267948966
+      },
+      "kind": "document",
+      "tolerance": {
+        "ulps": 4
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "key": "V",
+          "kind": "reference"
+        },
+        "op": "multiply",
+        "right": {
+          "args": [
+            {
+              "kind": "arithmetic",
+              "left": {
+                "im": 1,
+                "kind": "complexLiteral",
+                "re": 0
+              },
+              "op": "multiply",
+              "right": {
+                "key": "theta",
+                "kind": "reference"
+              }
+            }
+          ],
+          "fn": "exponential",
+          "kind": "call"
+        }
+      }
+    },
+    {
+      "expect": {
+        "evaluation": {
+          "status": "definite",
+          "value": {
+            "im": 3.141592653589793,
+            "kind": "complex",
+            "re": 0
+          }
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
+      },
+      "from": "evaluate-document.unit.test.ts: evaluateDocument with the complex and trigonometric built-ins > takes the principal logarithm of a negated complex value",
+      "id": "document.evaluatedocument-with-the-complex-and-trigonometric-built-ins-takes-the-principal-logarithm-of-a-negated-complex-value.1",
+      "inputs": {
+        "z": {
+          "im": 0,
+          "kind": "complex",
+          "re": 1
+        }
+      },
+      "kind": "document",
+      "tree": {
+        "args": [
+          {
+            "kind": "negate",
+            "operand": {
+              "key": "z",
+              "kind": "reference"
+            }
+          }
+        ],
+        "fn": "logarithm",
+        "kind": "call"
+      }
+    },
+    {
+      "expect": {
+        "evaluation": {
+          "reason": {
+            "code": "domain-error",
+            "message": "logarithm requires a number above zero"
+          },
+          "status": "indeterminate"
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
+      },
+      "from": "evaluate-document.unit.test.ts: evaluateDocument with the complex and trigonometric built-ins > refuses the logarithm of a real zero as before, as a domain-error (the original asserted only part of the result; recorded: trilean src/evaluate-document.ts, the whole result)",
+      "id": "document.evaluatedocument-with-the-complex-and-trigonometric-built-ins-refuses-the-logarithm-of-a-real-zero-as-before-as-a-domain-error.1",
+      "inputs": {
+        "x": 0
+      },
+      "kind": "document",
+      "tree": {
+        "args": [
+          {
+            "key": "x",
+            "kind": "reference"
+          }
+        ],
+        "fn": "logarithm",
+        "kind": "call"
+      }
+    },
+    {
+      "expect": {
+        "evaluation": {
+          "status": "definite",
+          "value": {
+            "kind": "number",
+            "unit": {},
+            "value": 0.9999999999999999
+          }
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
+      },
+      "from": "evaluate-document.unit.test.ts: evaluateDocument with the complex and trigonometric built-ins > evaluates a worked tree through sine (the original compared with a tolerance of a few units in the last place; recorded: trilean src/builtin-functions.ts, the exact result)",
+      "id": "document.evaluatedocument-with-the-complex-and-trigonometric-built-ins-evaluates-a-worked-tree-through-sine.1",
+      "inputs": {
+        "angle": 0.5235987755982988,
+        "length": 2
+      },
+      "kind": "document",
+      "tolerance": {
+        "ulps": 4
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "key": "length",
+          "kind": "reference"
+        },
+        "op": "multiply",
+        "right": {
+          "args": [
+            {
+              "key": "angle",
+              "kind": "reference"
+            }
+          ],
+          "fn": "sine",
+          "kind": "call"
+        }
+      }
+    },
+    {
+      "expect": {
+        "evaluation": {
+          "status": "definite",
+          "value": {
+            "kind": "number",
+            "unit": {},
+            "value": 9.999999999999998
+          }
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
+      },
+      "from": "evaluate-document.unit.test.ts: evaluateDocument with the complex and trigonometric built-ins > evaluates a worked tree through tangent (the original compared with a tolerance of a few units in the last place; recorded: trilean src/builtin-functions.ts, the exact result)",
+      "id": "document.evaluatedocument-with-the-complex-and-trigonometric-built-ins-evaluates-a-worked-tree-through-tangent.1",
+      "inputs": {
+        "angle": 0.7853981633974483,
+        "run": 10
+      },
+      "kind": "document",
+      "tolerance": {
+        "ulps": 4
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "key": "run",
+          "kind": "reference"
+        },
+        "op": "multiply",
+        "right": {
+          "args": [
+            {
+              "key": "angle",
+              "kind": "reference"
+            }
+          ],
+          "fn": "tangent",
+          "kind": "call"
+        }
+      }
+    },
+    {
+      "expect": {
+        "evaluation": {
+          "status": "definite",
+          "value": {
+            "kind": "number",
+            "value": 0.5235987755982989
+          }
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
+      },
+      "from": "evaluate-document.unit.test.ts: evaluateDocument with the complex and trigonometric built-ins > evaluates a worked tree through arcSine (the original compared with a tolerance of a few units in the last place; recorded: trilean src/builtin-functions.ts, the exact result)",
+      "id": "document.evaluatedocument-with-the-complex-and-trigonometric-built-ins-evaluates-a-worked-tree-through-arcsine.1",
+      "inputs": {
+        "hypotenuse": {
+          "kind": "number",
+          "unit": {
+            "m": 1
+          },
+          "value": 2
+        },
+        "opposite": {
+          "kind": "number",
+          "unit": {
+            "m": 1
+          },
+          "value": 1
+        }
+      },
+      "kind": "document",
+      "tolerance": {
+        "ulps": 4
+      },
+      "tree": {
+        "args": [
+          {
+            "kind": "arithmetic",
+            "left": {
+              "key": "opposite",
+              "kind": "reference"
+            },
+            "op": "divide",
+            "right": {
+              "key": "hypotenuse",
+              "kind": "reference"
+            }
+          }
+        ],
+        "fn": "arcSine",
+        "kind": "call"
+      }
+    },
+    {
+      "expect": {
+        "evaluation": {
+          "status": "definite",
+          "value": {
+            "kind": "number",
+            "value": 1.0471975511965979
+          }
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
+      },
+      "from": "evaluate-document.unit.test.ts: evaluateDocument with the complex and trigonometric built-ins > evaluates a worked tree through arcCosine (the original compared with a tolerance of a few units in the last place; recorded: trilean src/builtin-functions.ts, the exact result)",
+      "id": "document.evaluatedocument-with-the-complex-and-trigonometric-built-ins-evaluates-a-worked-tree-through-arccosine.1",
+      "inputs": {
+        "adjacent": {
+          "kind": "number",
+          "unit": {
+            "m": 1
+          },
+          "value": 1
+        },
+        "hypotenuse": {
+          "kind": "number",
+          "unit": {
+            "m": 1
+          },
+          "value": 2
+        }
+      },
+      "kind": "document",
+      "tolerance": {
+        "ulps": 4
+      },
+      "tree": {
+        "args": [
+          {
+            "kind": "arithmetic",
+            "left": {
+              "key": "adjacent",
+              "kind": "reference"
+            },
+            "op": "divide",
+            "right": {
+              "key": "hypotenuse",
+              "kind": "reference"
+            }
+          }
+        ],
+        "fn": "arcCosine",
+        "kind": "call"
+      }
+    },
+    {
+      "expect": {
+        "evaluation": {
+          "status": "definite",
+          "value": {
+            "kind": "number",
+            "value": 0.7853981633974483
+          }
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
+      },
+      "from": "evaluate-document.unit.test.ts: evaluateDocument with the complex and trigonometric built-ins > evaluates a worked tree through arcTangent (the original compared with a tolerance of a few units in the last place; recorded: trilean src/builtin-functions.ts, the exact result)",
+      "id": "document.evaluatedocument-with-the-complex-and-trigonometric-built-ins-evaluates-a-worked-tree-through-arctangent.1",
+      "inputs": {
+        "rise": {
+          "kind": "number",
+          "unit": {
+            "m": 1
+          },
+          "value": 3
+        },
+        "run": {
+          "kind": "number",
+          "unit": {
+            "m": 1
+          },
+          "value": 3
+        }
+      },
+      "kind": "document",
+      "tolerance": {
+        "ulps": 4
+      },
+      "tree": {
+        "args": [
+          {
+            "kind": "arithmetic",
+            "left": {
+              "key": "rise",
+              "kind": "reference"
+            },
+            "op": "divide",
+            "right": {
+              "key": "run",
+              "kind": "reference"
+            }
+          }
+        ],
+        "fn": "arcTangent",
+        "kind": "call"
+      }
+    },
+    {
+      "expect": {
+        "evaluation": {
+          "status": "definite",
+          "value": {
+            "kind": "number",
+            "value": 0.6000000000000001
+          }
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
+      },
+      "from": "evaluate-document.unit.test.ts: evaluateDocument with the complex and trigonometric built-ins > evaluates a worked tree through cosine and arcTangent2 (the original compared with a tolerance of a few units in the last place; recorded: trilean src/builtin-functions.ts, the exact result)",
+      "id": "document.evaluatedocument-with-the-complex-and-trigonometric-built-ins-evaluates-a-worked-tree-through-cosine-and-arctangent2.1",
+      "inputs": {
+        "P": 3,
+        "Q": 4
+      },
+      "kind": "document",
+      "tolerance": {
+        "ulps": 4
+      },
+      "tree": {
+        "args": [
+          {
+            "args": [
+              {
+                "key": "Q",
+                "kind": "reference"
+              },
+              {
+                "key": "P",
+                "kind": "reference"
+              }
+            ],
+            "fn": "arcTangent2",
+            "kind": "call"
+          }
+        ],
+        "fn": "cosine",
+        "kind": "call"
+      }
+    }
+  ]
+}

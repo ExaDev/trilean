@@ -1,0 +1,658 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "evaluation": {
+          "status": "definite",
+          "value": {
+            "kind": "number",
+            "value": 34.5
+          }
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
+      },
+      "from": "evaluate-document.collections.unit.test.ts: evaluateDocument with lists of items > sums the loss of life over a load profile, each interval read from its own item",
+      "id": "document-collections.evaluatedocument-with-lists-of-items-sums-the-loss-of-life-over-a-load-profile-each-interval-read-from-its-own-item.1",
+      "inputs": {
+        "intervals": [
+          {
+            "hours": 24,
+            "theta_h": 98
+          },
+          {
+            "hours": 2,
+            "theta_h": 110
+          },
+          {
+            "hours": 10,
+            "theta_h": 86
+          }
+        ]
+      },
+      "kind": "document",
+      "tree": {
+        "collection": "intervals",
+        "combiner": {
+          "combine": {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "accumulator"
+            },
+            "op": "add",
+            "right": {
+              "kind": "arithmetic",
+              "left": {
+                "kind": "arithmetic",
+                "left": {
+                  "kind": "numberLiteral",
+                  "value": 2
+                },
+                "op": "power",
+                "right": {
+                  "kind": "arithmetic",
+                  "left": {
+                    "kind": "arithmetic",
+                    "left": {
+                      "key": "theta_h",
+                      "kind": "reference"
+                    },
+                    "op": "subtract",
+                    "right": {
+                      "kind": "numberLiteral",
+                      "value": 98
+                    }
+                  },
+                  "op": "divide",
+                  "right": {
+                    "kind": "numberLiteral",
+                    "value": 6
+                  }
+                }
+              },
+              "op": "multiply",
+              "right": {
+                "key": "hours",
+                "kind": "reference"
+              }
+            }
+          },
+          "initial": {
+            "kind": "numberLiteral",
+            "value": 0
+          },
+          "mode": "reduce"
+        },
+        "kind": "fold"
+      }
+    },
+    {
+      "expect": {
+        "evaluation": {
+          "status": "definite",
+          "value": {
+            "kind": "number",
+            "value": 0
+          }
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
+      },
+      "from": "evaluate-document.unit.test.ts: evaluateDocument with lists of items > folds an empty list to the initial value (the original asserted only part of the result; recorded: trilean src/evaluate-document.ts, the whole result)",
+      "id": "document-collections.evaluatedocument-with-lists-of-items-folds-an-empty-list-to-the-initial-value.1",
+      "inputs": {
+        "intervals": []
+      },
+      "kind": "document",
+      "tree": {
+        "collection": "intervals",
+        "combiner": {
+          "combine": {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "accumulator"
+            },
+            "op": "add",
+            "right": {
+              "kind": "arithmetic",
+              "left": {
+                "kind": "arithmetic",
+                "left": {
+                  "kind": "numberLiteral",
+                  "value": 2
+                },
+                "op": "power",
+                "right": {
+                  "kind": "arithmetic",
+                  "left": {
+                    "kind": "arithmetic",
+                    "left": {
+                      "key": "theta_h",
+                      "kind": "reference"
+                    },
+                    "op": "subtract",
+                    "right": {
+                      "kind": "numberLiteral",
+                      "value": 98
+                    }
+                  },
+                  "op": "divide",
+                  "right": {
+                    "kind": "numberLiteral",
+                    "value": 6
+                  }
+                }
+              },
+              "op": "multiply",
+              "right": {
+                "key": "hours",
+                "kind": "reference"
+              }
+            }
+          },
+          "initial": {
+            "kind": "numberLiteral",
+            "value": 0
+          },
+          "mode": "reduce"
+        },
+        "kind": "fold"
+      }
+    },
+    {
+      "expect": {
+        "evaluation": {
+          "reason": {
+            "code": "not-found",
+            "message": "no value found for reference key \"hours\""
+          },
+          "status": "indeterminate"
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
+      },
+      "from": "evaluate-document.unit.test.ts: evaluateDocument with lists of items > is indeterminate, naming the key, when an item lacks a value the fold reads (the original asserted only part of the result; recorded: trilean src/evaluate-document.ts, the whole result)",
+      "id": "document-collections.evaluatedocument-with-lists-of-items-is-indeterminate-naming-the-key-when-an-item-lacks-a-value-the-fold-reads.1",
+      "inputs": {
+        "intervals": [
+          {
+            "hours": 24,
+            "theta_h": 98
+          },
+          {
+            "theta_h": 110
+          }
+        ]
+      },
+      "kind": "document",
+      "tree": {
+        "collection": "intervals",
+        "combiner": {
+          "combine": {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "accumulator"
+            },
+            "op": "add",
+            "right": {
+              "kind": "arithmetic",
+              "left": {
+                "kind": "arithmetic",
+                "left": {
+                  "kind": "numberLiteral",
+                  "value": 2
+                },
+                "op": "power",
+                "right": {
+                  "kind": "arithmetic",
+                  "left": {
+                    "kind": "arithmetic",
+                    "left": {
+                      "key": "theta_h",
+                      "kind": "reference"
+                    },
+                    "op": "subtract",
+                    "right": {
+                      "kind": "numberLiteral",
+                      "value": 98
+                    }
+                  },
+                  "op": "divide",
+                  "right": {
+                    "kind": "numberLiteral",
+                    "value": 6
+                  }
+                }
+              },
+              "op": "multiply",
+              "right": {
+                "key": "hours",
+                "kind": "reference"
+              }
+            }
+          },
+          "initial": {
+            "kind": "numberLiteral",
+            "value": 0
+          },
+          "mode": "reduce"
+        },
+        "kind": "fold"
+      }
+    },
+    {
+      "expect": {
+        "evaluation": {
+          "reason": {
+            "code": "not-found",
+            "message": "no value found for reference key \"hours\""
+          },
+          "status": "indeterminate"
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
+      },
+      "from": "evaluate-document.unit.test.ts: evaluateDocument with lists of items > gives an item no view of the top-level inputs (the original asserted only part of the result; recorded: trilean src/evaluate-document.ts, the whole result)",
+      "id": "document-collections.evaluatedocument-with-lists-of-items-gives-an-item-no-view-of-the-top-level-inputs.1",
+      "inputs": {
+        "hours": 24,
+        "intervals": [
+          {
+            "theta_h": 98
+          }
+        ]
+      },
+      "kind": "document",
+      "tree": {
+        "collection": "intervals",
+        "combiner": {
+          "combine": {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "accumulator"
+            },
+            "op": "add",
+            "right": {
+              "kind": "arithmetic",
+              "left": {
+                "kind": "arithmetic",
+                "left": {
+                  "kind": "numberLiteral",
+                  "value": 2
+                },
+                "op": "power",
+                "right": {
+                  "kind": "arithmetic",
+                  "left": {
+                    "kind": "arithmetic",
+                    "left": {
+                      "key": "theta_h",
+                      "kind": "reference"
+                    },
+                    "op": "subtract",
+                    "right": {
+                      "kind": "numberLiteral",
+                      "value": 98
+                    }
+                  },
+                  "op": "divide",
+                  "right": {
+                    "kind": "numberLiteral",
+                    "value": 6
+                  }
+                }
+              },
+              "op": "multiply",
+              "right": {
+                "key": "hours",
+                "kind": "reference"
+              }
+            }
+          },
+          "initial": {
+            "kind": "numberLiteral",
+            "value": 0
+          },
+          "mode": "reduce"
+        },
+        "kind": "fold"
+      }
+    },
+    {
+      "expect": {
+        "evaluation": {
+          "status": "definite",
+          "value": true
+        },
+        "outcome": "evaluated",
+        "treeKind": "predicate"
+      },
+      "from": "evaluate-document.collections.unit.test.ts: evaluateDocument with lists of items > quantifies over the items of a list",
+      "id": "document-collections.evaluatedocument-with-lists-of-items-quantifies-over-the-items-of-a-list.1",
+      "inputs": {
+        "intervals": [
+          {
+            "theta_h": 98
+          },
+          {
+            "theta_h": 120
+          }
+        ]
+      },
+      "kind": "document",
+      "tree": {
+        "collection": "intervals",
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "theta_h",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 110
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "evaluation": {
+          "status": "definite",
+          "value": false
+        },
+        "outcome": "evaluated",
+        "treeKind": "predicate"
+      },
+      "from": "evaluate-document.collections.unit.test.ts: evaluateDocument with lists of items > quantifies over the items of a list",
+      "id": "document-collections.evaluatedocument-with-lists-of-items-quantifies-over-the-items-of-a-list.2",
+      "inputs": {
+        "intervals": [
+          {
+            "theta_h": 98
+          },
+          {
+            "theta_h": 100
+          }
+        ]
+      },
+      "kind": "document",
+      "tree": {
+        "collection": "intervals",
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "theta_h",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 110
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "issues": [
+          "inputs.intervals[1]: expected an object of named values"
+        ],
+        "outcome": "rejected",
+        "reason": "invalid"
+      },
+      "from": "evaluate-document.collections.unit.test.ts: evaluateDocument with lists of items > rejects an item that is not an object of values, naming its position",
+      "id": "document-collections.evaluatedocument-with-lists-of-items-rejects-an-item-that-is-not-an-object-of-values-naming-its-position.1",
+      "inputs": {
+        "intervals": [
+          {
+            "hours": 24,
+            "theta_h": 98
+          },
+          "not an object"
+        ]
+      },
+      "kind": "document",
+      "tree": {
+        "collection": "intervals",
+        "combiner": {
+          "combine": {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "accumulator"
+            },
+            "op": "add",
+            "right": {
+              "kind": "arithmetic",
+              "left": {
+                "kind": "arithmetic",
+                "left": {
+                  "kind": "numberLiteral",
+                  "value": 2
+                },
+                "op": "power",
+                "right": {
+                  "kind": "arithmetic",
+                  "left": {
+                    "kind": "arithmetic",
+                    "left": {
+                      "key": "theta_h",
+                      "kind": "reference"
+                    },
+                    "op": "subtract",
+                    "right": {
+                      "kind": "numberLiteral",
+                      "value": 98
+                    }
+                  },
+                  "op": "divide",
+                  "right": {
+                    "kind": "numberLiteral",
+                    "value": 6
+                  }
+                }
+              },
+              "op": "multiply",
+              "right": {
+                "key": "hours",
+                "kind": "reference"
+              }
+            }
+          },
+          "initial": {
+            "kind": "numberLiteral",
+            "value": 0
+          },
+          "mode": "reduce"
+        },
+        "kind": "fold"
+      }
+    },
+    {
+      "expect": {
+        "evaluation": {
+          "status": "definite",
+          "value": {
+            "kind": "number",
+            "unit": {},
+            "value": 58.834840541455215
+          }
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
+      },
+      "from": "evaluate-document.unit.test.ts: evaluateDocument with complex inputs > adds mixed resistive and reactive impedances as complex numbers (the original compared with toBeCloseTo to twelve decimal places; recorded: trilean src/builtin-functions.ts, the exact result)",
+      "id": "document-collections.evaluatedocument-with-complex-inputs-adds-mixed-resistive-and-reactive-impedances-as-complex-numbers.1",
+      "inputs": {
+        "E": 100,
+        "Z_neutral": {
+          "im": 1,
+          "kind": "complex",
+          "re": 0
+        },
+        "Z_transformer": {
+          "im": 2,
+          "kind": "complex",
+          "re": 1
+        }
+      },
+      "kind": "document",
+      "tolerance": {
+        "ulps": 4
+      },
+      "tree": {
+        "args": [
+          {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "arithmetic",
+              "left": {
+                "kind": "numberLiteral",
+                "value": 3
+              },
+              "op": "multiply",
+              "right": {
+                "key": "E",
+                "kind": "reference"
+              }
+            },
+            "op": "divide",
+            "right": {
+              "kind": "arithmetic",
+              "left": {
+                "key": "Z_transformer",
+                "kind": "reference"
+              },
+              "op": "add",
+              "right": {
+                "kind": "arithmetic",
+                "left": {
+                  "kind": "numberLiteral",
+                  "value": 3
+                },
+                "op": "multiply",
+                "right": {
+                  "key": "Z_neutral",
+                  "kind": "reference"
+                }
+              }
+            }
+          }
+        ],
+        "fn": "magnitude",
+        "kind": "call"
+      }
+    },
+    {
+      "expect": {
+        "evaluation": {
+          "status": "definite",
+          "value": {
+            "kind": "number",
+            "unit": {},
+            "value": 50
+          }
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
+      },
+      "from": "evaluate-document.unit.test.ts: evaluateDocument with complex inputs > agrees with the scalar form when every impedance is reactive (the original compared with toBeCloseTo to twelve decimal places; recorded: trilean src/builtin-functions.ts, the exact result)",
+      "id": "document-collections.evaluatedocument-with-complex-inputs-agrees-with-the-scalar-form-when-every-impedance-is-reactive.1",
+      "inputs": {
+        "E": 100,
+        "Z_neutral": {
+          "im": 1,
+          "kind": "complex",
+          "re": 0
+        },
+        "Z_transformer": {
+          "im": 3,
+          "kind": "complex",
+          "re": 0
+        }
+      },
+      "kind": "document",
+      "tolerance": {
+        "ulps": 4
+      },
+      "tree": {
+        "args": [
+          {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "arithmetic",
+              "left": {
+                "kind": "numberLiteral",
+                "value": 3
+              },
+              "op": "multiply",
+              "right": {
+                "key": "E",
+                "kind": "reference"
+              }
+            },
+            "op": "divide",
+            "right": {
+              "kind": "arithmetic",
+              "left": {
+                "key": "Z_transformer",
+                "kind": "reference"
+              },
+              "op": "add",
+              "right": {
+                "kind": "arithmetic",
+                "left": {
+                  "kind": "numberLiteral",
+                  "value": 3
+                },
+                "op": "multiply",
+                "right": {
+                  "key": "Z_neutral",
+                  "kind": "reference"
+                }
+              }
+            }
+          }
+        ],
+        "fn": "magnitude",
+        "kind": "call"
+      }
+    },
+    {
+      "expect": {
+        "evaluation": {
+          "status": "definite",
+          "value": {
+            "kind": "number",
+            "value": 1.5707963267948966
+          }
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
+      },
+      "from": "evaluate-document.collections.unit.test.ts: evaluateDocument with complex inputs > reads the phase of a complex input in radians",
+      "id": "document-collections.evaluatedocument-with-complex-inputs-reads-the-phase-of-a-complex-input-in-radians.1",
+      "inputs": {
+        "z": {
+          "im": 1,
+          "kind": "complex",
+          "re": 0
+        }
+      },
+      "kind": "document",
+      "tree": {
+        "args": [
+          {
+            "key": "z",
+            "kind": "reference"
+          }
+        ],
+        "fn": "phase",
+        "kind": "call"
+      }
+    }
+  ]
+}
