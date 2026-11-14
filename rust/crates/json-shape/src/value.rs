@@ -15,9 +15,9 @@ pub const MAX_SAFE_INTEGER: f64 = 9_007_199_254_740_991.0;
 /// Numbers are finite `f64`s, each read as the nearest double to its literal, as `JSON.parse` reads it: an integer above 2^53 is rounded when it is read (which
 /// is why no integer type accepts one), `-0` and `0` are one value, and a number is not distinguishable from the
 /// same number written another way (`1e2` and `100`), so a document does not round-trip digit for digit. `Display`
-/// writes a number as `JSON.stringify` does. `Serialize` writes the same double, a whole number as an integer wherever
-/// `i64` holds it and any other with `serde_json`'s float text, which reads back as the same double but is not always
-/// the text `JSON.stringify` writes (`1e21` is `1000000000000000000000.0`).
+/// writes a number as `JSON.stringify` does, and so does `Serialize`, for every finite double. `Serialize` is written
+/// for `serde_json`'s serializers: a number that is not a whole number below 2^53 goes through
+/// `serde_json::value::RawValue`, which another serializer shows as that type's marker and not as a number.
 ///
 /// An object is a list of pairs in input order, and a duplicate key keeps its first position and its last value, as
 /// `JSON.parse` does. `==` (from `PartialEq`) compares objects in that order and numbers as `f64`s; use
@@ -257,11 +257,15 @@ impl Serialize for Value {
             Value::Null => serializer.serialize_unit(),
             Value::Bool(flag) => serializer.serialize_bool(*flag),
             Value::Number(number) => {
-                // A whole number is written without a fraction, as `JSON.stringify` writes it, wherever `i64` holds it.
-                if number.fract() == 0.0 && number.abs() < 9.0e18 {
+                // A whole number below 2^53 is its own digits. Every other number is written as the text
+                // `JSON.stringify` writes, which `serde_json`'s float writer does not give for every double (it
+                // writes `9e+18` and `1e-6` where `JSON.stringify` writes `9000000000000000000` and `0.000001`).
+                if number.fract() == 0.0 && number.abs() < MAX_SAFE_INTEGER {
                     serializer.serialize_i64(*number as i64)
                 } else {
-                    serializer.serialize_f64(*number)
+                    serde_json::value::RawValue::from_string(number_text(*number))
+                        .map_err(serde::ser::Error::custom)?
+                        .serialize(serializer)
                 }
             }
             Value::String(text) => serializer.serialize_str(text),

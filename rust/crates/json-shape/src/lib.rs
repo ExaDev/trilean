@@ -17,9 +17,7 @@
 //!
 //! - Numbers are `f64`s, and a literal is read as the nearest double, as `JSON.parse` reads it (`serde_json` is built
 //!   with `float_roundtrip` for that). Written back, [`Value`]'s `Display` is the text `JSON.stringify` writes, and
-//!   its `Serialize` writes the same double (a whole number as an integer wherever `i64` holds it, otherwise with
-//!   `serde_json`'s own float text, which reads back as the same double but is not `JSON.stringify`'s text; see
-//!   [`Value`]). Integer types are bounded by
+//!   its `Serialize` writes the same text, for every finite double, through `serde_json` (see [`Value`]). Integer types are bounded by
 //!   [`MAX_SAFE_INTEGER`] in both the validator and the schema.
 //! - Reading goes through `serde_json`, which refuses nesting deeper than 128 levels and an unpaired surrogate
 //!   escape. A JSON Schema validator in JavaScript accepts both, so the schema accepts documents this crate cannot
@@ -136,11 +134,6 @@ pub mod private {
         }
         assert!(written == N, "the length does not match the keys");
         joined
-    }
-
-    /// How many times the pattern with this source has been compiled by `Pattern::new`, for a test.
-    pub fn compilations_of(source: &str) -> usize {
-        crate::pattern::compilations_of(source)
     }
 
     /// Whether `alternative` accepts `value`, remembered in `path`.
