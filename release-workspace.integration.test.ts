@@ -162,7 +162,8 @@ function isNode(value: unknown): value is CargoNode {
         Array.isArray(dependency.dep_kinds) &&
         dependency.dep_kinds.every(
           (kind: unknown) =>
-            isRecord(kind) && (kind.kind === null || typeof kind.kind === "string"),
+            isRecord(kind) &&
+            (kind.kind === null || typeof kind.kind === "string"),
         ),
     )
   );

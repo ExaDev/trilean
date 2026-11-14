@@ -215,16 +215,7 @@ export function prepare(tree) {
           : [`${bd} and ${gd} differ`],
       );
   const loaders = () => {
-    const out = [],
-      want = parse(tree["fixtures/loader-selection/expected.json"]);
-    if (
-      !eq(select(sub(tree, "fixtures/loader-selection/tree/")), {
-        selected: want.selected,
-        problems: want.problems,
-      })
-    )
-      out.push("the selection rule disagrees with loader-selection");
-
+    const out = [];
     const pairing = [
         ["invalid-cases", "repaired-cases", fileProblems],
         ["refused-kinds/invalid", "refused-kinds/repaired", fileProblems],
@@ -251,11 +242,6 @@ export function prepare(tree) {
         .map((l) => l.split(" | "))
         .filter((c) => /^(asserts|does not)/.test(c.at(-1))),
       named = (c) => [...c[0].matchAll(/`([^`]+)`/g)].map((m) => m[1]);
-    for (const [i, r, p] of pairing) out.push(...pairs(i, r, p));
-    for (const [d, p] of valid)
-      for (const n of names(tree, `fixtures/${d}/`))
-        if (p(text(d, n)).length) out.push(`${d}/${n} is rejected`);
-    // The README table says which fixture sets this runner asserts: every fixture is in a row, and the rows that say asserts are the sets checked above.
     const mine = [
       ...pairing.flatMap(([i, r]) => [i, r]),
       ...valid.map(([d]) => d),
@@ -273,6 +259,22 @@ export function prepare(tree) {
       out.push(
         "the fixture table and the runner disagree on what the runner asserts",
       );
+    for (const n of mine)
+      if (!Object.keys(tree).some((p) => p.startsWith(`fixtures/${n}/`)))
+        out.push(`the fixture set ${n} is not there`);
+    if (out.length) return out;
+    const want = parse(tree["fixtures/loader-selection/expected.json"]);
+    if (
+      !eq(select(sub(tree, "fixtures/loader-selection/tree/")), {
+        selected: want.selected,
+        problems: want.problems,
+      })
+    )
+      out.push("the selection rule disagrees with loader-selection");
+    for (const [i, r, p] of pairing) out.push(...pairs(i, r, p));
+    for (const [d, p] of valid)
+      for (const n of names(tree, `fixtures/${d}/`))
+        if (p(text(d, n)).length) out.push(`${d}/${n} is rejected`);
     for (const p of Object.keys(tree))
       if (
         p.startsWith("fixtures/") &&
@@ -295,14 +297,13 @@ export function prepare(tree) {
     for (const name of files) {
       for (const c of parse(tree[name]).cases) {
         registered.push(c.id);
-        // Only a `rust` mark skips here; the native runner alone counts a `workBound`.
         if (c.skip === "rust") {
           skipped.push(c.id);
           continue;
         }
-        started.push(c.id);
         try {
-          run(pkg, c);
+          if (!run(pkg, c)) throw new Error("no comparison was made");
+          started.push(c.id);
         } catch (e) {
           failures.push(`${c.id}: ${e.message}`);
         }
@@ -324,10 +325,11 @@ export function prepare(tree) {
     return { executed: started.length, skipped: skipped.length, failures };
   };
 }
-
 function run(pkg, c) {
+  let k = 0;
   const pattern = units(c.pattern),
     is = (v, w, s) => {
+      k++;
       if (v !== w)
         throw new Error(
           `${s}: ${JSON.stringify(v)}, expected ${JSON.stringify(w)}`,
@@ -351,7 +353,7 @@ function run(pkg, c) {
         is(pkg.testPattern(pattern, text), matches, "testPattern");
     }
 
-    return;
+    return k;
   }
   let node, error;
   try {
@@ -362,24 +364,20 @@ function run(pkg, c) {
   const { ast, astSubset, error: want } = c.expect;
   if (want === undefined) {
     if (error) throw error;
-    if (!(ast ? eq(node, ast) : part(node, astSubset)))
-      throw new Error(`parsed to ${JSON.stringify(node)}`);
+    is(ast ? eq(node, ast) : part(node, astSubset), true, "tree");
 
-    return;
+    return k;
   }
-  if (!(error instanceof pkg.RegexParseError))
-    throw new Error("the pattern parsed, or threw another error");
+  is(error instanceof pkg.RegexParseError, true, "a RegexParseError");
   if (want.index !== undefined) is(error.index, want.index, "index");
   const head = `invalid pattern at index ${error.index}: `,
-    reason = error.message.slice(head.length, error.message.indexOf("\n")),
-    at = (from, f) => reason.indexOf(units(f), from);
+    reason = error.message.slice(head.length, error.message.indexOf("\n"));
   let from = 0;
   for (const f of want.message ?? []) {
-    const i = at(from, f);
-    if (i < 0)
-      throw new Error(
-        `reason ${JSON.stringify(reason)} lacks ${JSON.stringify(units(f))} in order`,
-      );
+    const i = reason.indexOf(units(f), from);
+    is(i < 0, false, `reason ${JSON.stringify(reason)} lacks a fragment`);
     from = i + units(f).length;
   }
+
+  return k;
 }
