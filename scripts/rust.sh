@@ -1,5 +1,5 @@
 #!/bin/sh
-# The one place cargo is run from. Every other file in the repository (workflows, hooks, package scripts, other scripts) calls `sh scripts/rust.sh <check>` and never cargo itself, so there is one list of invocations to review, each against the committed lock file and the toolchain rust/rust-toolchain.toml pins, which applies because every check runs from rust/. scripts/check-cargo-entry.sh fails when anything else runs cargo.
+# The one place cargo is run from. Every other file in the repository (workflows, hooks, package scripts, other scripts) calls `sh scripts/rust.sh <check>` and never cargo itself, so there is one list of invocations to review, each against the committed lock file and the toolchain rust/rust-toolchain.toml pins, which applies because every check runs from rust/. scripts/check-cargo-entry.sh fails when anything else runs cargo directly; indirect forms such as sh -c or xargs are not detected (ExaDev/trilean issue 136).
 #
 # Usage: rust.sh <check> [arguments]. Checks:
 #   fmt                         formatting
