@@ -28,6 +28,13 @@
       ],
       "outputs": [".eslintcache"]
     },
+    // The root's own tests (release-workspace.integration.test.ts) validate the release configuration against the repository's tracked paths and git history, facts no list of input files can express: deleting or renaming a listed crate changes neither the configuration nor the test, and must still turn the check red. So the task is never cached. It is quick, and a stale pass would hide exactly the change it exists to catch. `_test:coverage` runs the same command: the root has no coverage provider, and CI invokes the coverage task name for every package.
+    "//#_test": {
+      "cache": false
+    },
+    "//#_test:coverage": {
+      "cache": false
+    },
     "//#_typecheck": {
       "inputs": [
         "eslint.config.ts",
@@ -67,7 +74,8 @@
         "_test:smoke",
         "_test:workers",
         "//#_lint",
-        "//#_typecheck"
+        "//#_typecheck",
+        "//#_test"
       ],
       "outputs": []
     },

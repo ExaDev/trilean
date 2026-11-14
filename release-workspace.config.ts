@@ -38,10 +38,23 @@ export const commitTypes: readonly CommitType[] = [
  */
 const config: Pick<
   ReleaseWorkspaceOptions,
-  "branches" | "commitStrategy" | "plugins" | "analyzeCommits" | "generateNotes"
+  | "branches"
+  | "commitStrategy"
+  | "plugins"
+  | "packageSources"
+  | "analyzeCommits"
+  | "generateNotes"
 > = {
   branches: ["main"],
   commitStrategy: "single",
+  /**
+   * Extra repository paths whose commits count as a change to a package, by package name, for a package whose published files are built from sources outside its own directory: a package's Rust crate and its binding crate, never `conformance/`. A corpus change alters no published file, and because the packages pin each other exactly and dependents are re-released, listing it would publish patches of every package.
+   *
+   * The orchestrator refuses a path that no commit in this repository's history has ever touched, so an entry cannot precede the crate it names: a package's entries are added in the pull request that adds the crate. release-workspace.integration.test.ts runs this map through the orchestrator's own validation, so a misspelt or retired path fails in CI rather than at release time.
+   *
+   * The single commit strategy writes its own release commit message, which carries the `Workspace-Release-Commit: true` trailer the orchestrator needs to tell its commits from changes to a listed path. `@semantic-release/git`, whose `message` option would replace it, stays out of the plugin list for the reason in the header above.
+   */
+  packageSources: {},
   plugins: [
     "@semantic-release/changelog",
     ["@semantic-release/npm", { npmPublish: true }],
