@@ -1,3 +1,13 @@
+## [1.13.11](https://github.com/ExaDev/trilean/compare/trilean%401.13.10...trilean%401.13.11) (2026-11-14)
+
+### Bug Fixes
+
+* **trilean:** propagate an exhausted limit through exists ([bcf320c](https://github.com/ExaDev/trilean/commit/bcf320cbc2ba1f9f1320fffc02c99654bf4b957c))
+
+### Tests
+
+* **trilean:** pin every shape of exists under a limit and tighten the stated rules ([99235f6](https://github.com/ExaDev/trilean/commit/99235f6ad08c1084bcee6800572d7b8d078be6a0))
+
 ## [1.13.10](https://github.com/ExaDev/trilean/compare/trilean%401.13.9...trilean%401.13.10) (2026-11-14)
 
 ### Tests
