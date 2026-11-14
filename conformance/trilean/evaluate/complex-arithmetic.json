@@ -1,0 +1,471 @@
+{
+  "cases": [
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "im": -2,
+          "kind": "complex",
+          "re": 13,
+          "unit": {}
+        }
+      },
+      "from": "complex-arithmetic.integration.test.ts: complex values compose through a whole tree > carries complex operands and a real one through one expression",
+      "id": "complex-integration.complex-values-compose-through-a-whole-tree-carries-complex-operands-and-a-real-one-through-one-expression.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "firstSample",
+            "result": {
+              "found": true,
+              "value": {
+                "im": 4,
+                "kind": "complex",
+                "re": 3
+              }
+            }
+          },
+          {
+            "key": "secondSample",
+            "result": {
+              "found": true,
+              "value": {
+                "im": -2,
+                "kind": "complex",
+                "re": 1
+              }
+            }
+          },
+          {
+            "key": "offset",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 2
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "arithmetic",
+          "left": {
+            "key": "firstSample",
+            "kind": "reference"
+          },
+          "op": "multiply",
+          "right": {
+            "key": "secondSample",
+            "kind": "reference"
+          }
+        },
+        "op": "add",
+        "right": {
+          "key": "offset",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "evaluator": {
+        "functions": {
+          "builtin": true
+        }
+      },
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "complex-arithmetic.integration.test.ts: complex values compose through a whole tree > reaches an ordering comparison through a registered magnitude function (the original registered its own magnitude function over the exported helper; the case uses the built-in one, which returns the same modulus)",
+      "id": "complex-integration.complex-values-compose-through-a-whole-tree-reaches-an-ordering-comparison-through-a-registered-magnitude-function.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "firstSample",
+            "result": {
+              "found": true,
+              "value": {
+                "im": 4,
+                "kind": "complex",
+                "re": 3
+              }
+            }
+          },
+          {
+            "key": "secondSample",
+            "result": {
+              "found": true,
+              "value": {
+                "im": -2,
+                "kind": "complex",
+                "re": 1
+              }
+            }
+          },
+          {
+            "key": "offset",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 2
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "args": [
+            {
+              "kind": "arithmetic",
+              "left": {
+                "kind": "arithmetic",
+                "left": {
+                  "key": "firstSample",
+                  "kind": "reference"
+                },
+                "op": "multiply",
+                "right": {
+                  "key": "secondSample",
+                  "kind": "reference"
+                }
+              },
+              "op": "add",
+              "right": {
+                "key": "offset",
+                "kind": "reference"
+              }
+            }
+          ],
+          "fn": "magnitude",
+          "kind": "call"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 13
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "evaluator": {
+        "functions": {
+          "builtin": true
+        }
+      },
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "complex-arithmetic.integration.test.ts: complex values compose through a whole tree > reaches an ordering comparison through a registered magnitude function (the original registered its own magnitude function over the exported helper; the case uses the built-in one, which returns the same modulus)",
+      "id": "complex-integration.complex-values-compose-through-a-whole-tree-reaches-an-ordering-comparison-through-a-registered-magnitude-function.2",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "firstSample",
+            "result": {
+              "found": true,
+              "value": {
+                "im": 4,
+                "kind": "complex",
+                "re": 3
+              }
+            }
+          },
+          {
+            "key": "secondSample",
+            "result": {
+              "found": true,
+              "value": {
+                "im": -2,
+                "kind": "complex",
+                "re": 1
+              }
+            }
+          },
+          {
+            "key": "offset",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 2
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "args": [
+            {
+              "kind": "arithmetic",
+              "left": {
+                "kind": "arithmetic",
+                "left": {
+                  "key": "firstSample",
+                  "kind": "reference"
+                },
+                "op": "multiply",
+                "right": {
+                  "key": "secondSample",
+                  "kind": "reference"
+                }
+              },
+              "op": "add",
+              "right": {
+                "key": "offset",
+                "kind": "reference"
+              }
+            }
+          ],
+          "fn": "magnitude",
+          "kind": "call"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 14
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "complex-arithmetic.integration.test.ts: complex values compose through a whole tree > is wrong-type when the same comparison is attempted on the complex value directly",
+      "id": "complex-integration.complex-values-compose-through-a-whole-tree-is-wrong-type-when-the-same-comparison-is-attempted-on-the-complex-value-directly.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "firstSample",
+            "result": {
+              "found": true,
+              "value": {
+                "im": 4,
+                "kind": "complex",
+                "re": 3
+              }
+            }
+          },
+          {
+            "key": "secondSample",
+            "result": {
+              "found": true,
+              "value": {
+                "im": -2,
+                "kind": "complex",
+                "re": 1
+              }
+            }
+          },
+          {
+            "key": "offset",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 2
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "arithmetic",
+          "left": {
+            "kind": "arithmetic",
+            "left": {
+              "key": "firstSample",
+              "kind": "reference"
+            },
+            "op": "multiply",
+            "right": {
+              "key": "secondSample",
+              "kind": "reference"
+            }
+          },
+          "op": "add",
+          "right": {
+            "key": "offset",
+            "kind": "reference"
+          }
+        },
+        "op": "gt",
+        "right": {
+          "im": 0,
+          "kind": "complexLiteral",
+          "re": 13
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "im": -2,
+          "kind": "complex",
+          "re": 2
+        }
+      },
+      "from": "complex-arithmetic.integration.test.ts: a complexLiteral authored in polar form composes through a whole tree exactly like a rectangular one > combines a polar-authored literal with a resolver-supplied complex value via arithmetic",
+      "id": "complex-integration.a-complexliteral-authored-in-polar-form-composes-through-a-whole-tree-exactly-like-a-rectangular-one-combines-a-polar-authored-lit.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "firstSample",
+            "result": {
+              "found": true,
+              "value": {
+                "im": 4,
+                "kind": "complex",
+                "re": 3
+              }
+            }
+          },
+          {
+            "key": "secondSample",
+            "result": {
+              "found": true,
+              "value": {
+                "im": -2,
+                "kind": "complex",
+                "re": 1
+              }
+            }
+          },
+          {
+            "key": "offset",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 2
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "key": "secondSample",
+          "kind": "reference"
+        },
+        "op": "add",
+        "right": {
+          "kind": "complexLiteral",
+          "magnitude": 1,
+          "phase": 0
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "evaluator": {
+        "functions": {
+          "builtin": true
+        }
+      },
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "complex-arithmetic.integration.test.ts: a complexLiteral authored in polar form composes through a whole tree exactly like a rectangular one > reaches the same ordering comparison through a polar-authored operand as through a rectangular one (the original registered its own magnitude function over the exported helper; the case uses the built-in one, which returns the same modulus)",
+      "id": "complex-integration.a-complexliteral-authored-in-polar-form-composes-through-a-whole-tree-exactly-like-a-rectangular-one-reaches-the-same-ordering-com.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "firstSample",
+            "result": {
+              "found": true,
+              "value": {
+                "im": 4,
+                "kind": "complex",
+                "re": 3
+              }
+            }
+          },
+          {
+            "key": "secondSample",
+            "result": {
+              "found": true,
+              "value": {
+                "im": -2,
+                "kind": "complex",
+                "re": 1
+              }
+            }
+          },
+          {
+            "key": "offset",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 2
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "args": [
+            {
+              "kind": "complexLiteral",
+              "magnitude": 5,
+              "phase": 0.9272952180016122
+            }
+          ],
+          "fn": "magnitude",
+          "kind": "call"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 4
+        }
+      }
+    }
+  ]
+}

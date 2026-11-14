@@ -1,0 +1,179 @@
+{
+  "cases": [
+    {
+      "args": [
+        {
+          "key": "instruction",
+          "kind": "reference"
+        },
+        "ls"
+      ],
+      "builder": "prefixPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "instruction",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^ls(?: [\\s\\S]*)?$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree prefixPattern builds)",
+      "id": "pattern-matching-build.prefixpattern-kind-reference-key-instruction-ls.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "instruction",
+          "kind": "reference"
+        },
+        "cat *"
+      ],
+      "builder": "wildcardPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "instruction",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^cat(?: [\\s\\S]*)?$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree wildcardPattern builds)",
+      "id": "pattern-matching-build.wildcardpattern-kind-reference-key-instruction-cat.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "target",
+          "kind": "reference"
+        },
+        "workspace/reports/*"
+      ],
+      "builder": "hierarchicalGlobPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "target",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^workspace\\/reports\\/[^\\/]*$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree hierarchicalGlobPattern builds)",
+      "id": "pattern-matching-build.hierarchicalglobpattern-kind-reference-key-target-workspace-reports.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "target",
+          "kind": "reference"
+        },
+        "workspace/reports/**"
+      ],
+      "builder": "hierarchicalGlobPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "target",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^workspace\\/reports\\/[\\s\\S]*$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree hierarchicalGlobPattern builds)",
+      "id": "pattern-matching-build.hierarchicalglobpattern-kind-reference-key-target-workspace-reports.2",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "target",
+          "kind": "reference"
+        },
+        "workspace/**"
+      ],
+      "builder": "hierarchicalGlobPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "target",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^workspace\\/[\\s\\S]*$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree hierarchicalGlobPattern builds)",
+      "id": "pattern-matching-build.hierarchicalglobpattern-kind-reference-key-target-workspace.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "instruction",
+          "kind": "reference"
+        },
+        "publish"
+      ],
+      "builder": "prefixPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "instruction",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^publish(?: [\\s\\S]*)?$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree prefixPattern builds)",
+      "id": "pattern-matching-build.prefixpattern-kind-reference-key-instruction-publish.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        {
+          "key": "instruction",
+          "kind": "reference"
+        },
+        "delete"
+      ],
+      "builder": "prefixPattern",
+      "expect": {
+        "kind": "textCompare",
+        "left": {
+          "key": "instruction",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^delete(?: [\\s\\S]*)?$"
+        }
+      },
+      "from": "recorded: trilean src/derived-patterns.ts (the tree prefixPattern builds)",
+      "id": "pattern-matching-build.prefixpattern-kind-reference-key-instruction-delete.1",
+      "kind": "build"
+    }
+  ]
+}

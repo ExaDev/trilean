@@ -1,0 +1,430 @@
+{
+  "cases": [
+    {
+      "as": "predicate",
+      "context": {
+        "measured": 102,
+        "nominal": 100,
+        "varianceEstimate": 3
+      },
+      "evaluator": {
+        "functions": {
+          "table": {
+            "absoluteValue": [
+              {
+                "args": [
+                  {
+                    "kind": "number",
+                    "value": 2
+                  }
+                ],
+                "result": {
+                  "kind": "number",
+                  "value": 2
+                }
+              },
+              {
+                "args": [
+                  {
+                    "kind": "number",
+                    "value": 20
+                  }
+                ],
+                "result": {
+                  "kind": "number",
+                  "value": 20
+                }
+              }
+            ],
+            "squareRoot": [
+              {
+                "args": [
+                  {
+                    "kind": "number",
+                    "value": 3
+                  }
+                ],
+                "result": {
+                  "kind": "number",
+                  "value": 1.7320508075688772
+                }
+              }
+            ],
+            "toleranceBand": [
+              {
+                "args": [
+                  {
+                    "kind": "number",
+                    "value": 100
+                  }
+                ],
+                "result": {
+                  "kind": "number",
+                  "value": 5
+                }
+              }
+            ]
+          }
+        }
+      },
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "function-registry.integration.test.ts: a function registry composes across multiple call sites in one evaluation > three registered functions -- two built-in-style, one custom -- all contribute to a single definite result",
+      "id": "function-registry.a-function-registry-composes-across-multiple-call-sites-in-one-evaluation-three-registered-functions-two-built-in-style-one-custom-a.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "kind": "allOf",
+        "operands": [
+          {
+            "kind": "compare",
+            "left": {
+              "args": [
+                {
+                  "kind": "arithmetic",
+                  "left": {
+                    "key": "measured",
+                    "kind": "reference"
+                  },
+                  "op": "subtract",
+                  "right": {
+                    "key": "nominal",
+                    "kind": "reference"
+                  }
+                }
+              ],
+              "fn": "absoluteValue",
+              "kind": "call"
+            },
+            "op": "lte",
+            "right": {
+              "args": [
+                {
+                  "key": "nominal",
+                  "kind": "reference"
+                }
+              ],
+              "fn": "toleranceBand",
+              "kind": "call"
+            }
+          },
+          {
+            "kind": "compare",
+            "left": {
+              "args": [
+                {
+                  "key": "varianceEstimate",
+                  "kind": "reference"
+                }
+              ],
+              "fn": "squareRoot",
+              "kind": "call"
+            },
+            "op": "lt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 2
+            }
+          }
+        ]
+      }
+    },
+    {
+      "as": "predicate",
+      "context": {
+        "measured": 120,
+        "nominal": 100,
+        "varianceEstimate": 3
+      },
+      "evaluator": {
+        "functions": {
+          "table": {
+            "absoluteValue": [
+              {
+                "args": [
+                  {
+                    "kind": "number",
+                    "value": 2
+                  }
+                ],
+                "result": {
+                  "kind": "number",
+                  "value": 2
+                }
+              },
+              {
+                "args": [
+                  {
+                    "kind": "number",
+                    "value": 20
+                  }
+                ],
+                "result": {
+                  "kind": "number",
+                  "value": 20
+                }
+              }
+            ],
+            "squareRoot": [
+              {
+                "args": [
+                  {
+                    "kind": "number",
+                    "value": 3
+                  }
+                ],
+                "result": {
+                  "kind": "number",
+                  "value": 1.7320508075688772
+                }
+              }
+            ],
+            "toleranceBand": [
+              {
+                "args": [
+                  {
+                    "kind": "number",
+                    "value": 100
+                  }
+                ],
+                "result": {
+                  "kind": "number",
+                  "value": 5
+                }
+              }
+            ]
+          }
+        }
+      },
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "function-registry.integration.test.ts: a function registry composes across multiple call sites in one evaluation > a measurement outside its tolerance band is definitely false, even though the variance check alone would pass",
+      "id": "function-registry.a-function-registry-composes-across-multiple-call-sites-in-one-evaluation-a-measurement-outside-its-tolerance-band-is-definitely-fal.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "kind": "allOf",
+        "operands": [
+          {
+            "kind": "compare",
+            "left": {
+              "args": [
+                {
+                  "kind": "arithmetic",
+                  "left": {
+                    "key": "measured",
+                    "kind": "reference"
+                  },
+                  "op": "subtract",
+                  "right": {
+                    "key": "nominal",
+                    "kind": "reference"
+                  }
+                }
+              ],
+              "fn": "absoluteValue",
+              "kind": "call"
+            },
+            "op": "lte",
+            "right": {
+              "args": [
+                {
+                  "key": "nominal",
+                  "kind": "reference"
+                }
+              ],
+              "fn": "toleranceBand",
+              "kind": "call"
+            }
+          },
+          {
+            "kind": "compare",
+            "left": {
+              "args": [
+                {
+                  "key": "varianceEstimate",
+                  "kind": "reference"
+                }
+              ],
+              "fn": "squareRoot",
+              "kind": "call"
+            },
+            "op": "lt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 2
+            }
+          }
+        ]
+      }
+    },
+    {
+      "as": "predicate",
+      "context": {
+        "measured": 102,
+        "nominal": 100,
+        "varianceEstimate": 3
+      },
+      "evaluator": {
+        "functions": {
+          "table": {
+            "absoluteValue": [
+              {
+                "args": [
+                  {
+                    "kind": "number",
+                    "value": 2
+                  }
+                ],
+                "result": {
+                  "kind": "number",
+                  "value": 2
+                }
+              },
+              {
+                "args": [
+                  {
+                    "kind": "number",
+                    "value": 20
+                  }
+                ],
+                "result": {
+                  "kind": "number",
+                  "value": 20
+                }
+              }
+            ],
+            "squareRoot": [
+              {
+                "args": [
+                  {
+                    "kind": "number",
+                    "value": 3
+                  }
+                ],
+                "result": {
+                  "kind": "number",
+                  "value": 1.7320508075688772
+                }
+              }
+            ],
+            "toleranceBand": [
+              {
+                "args": [
+                  {
+                    "kind": "number",
+                    "value": 100
+                  }
+                ],
+                "result": {
+                  "kind": "number",
+                  "value": 5
+                }
+              }
+            ]
+          }
+        }
+      },
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "function-registry.integration.test.ts: a function registry composes across multiple call sites in one evaluation > a call to an unregistered function nested deep inside an otherwise-valid tree surfaces as indeterminate wrong-type, not silently ignored or crashing the whole evaluation",
+      "id": "function-registry.a-function-registry-composes-across-multiple-call-sites-in-one-evaluation-a-call-to-an-unregistered-function-nested-deep-inside-an-o.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "kind": "allOf",
+        "operands": [
+          {
+            "kind": "compare",
+            "left": {
+              "args": [
+                {
+                  "kind": "arithmetic",
+                  "left": {
+                    "key": "measured",
+                    "kind": "reference"
+                  },
+                  "op": "subtract",
+                  "right": {
+                    "key": "nominal",
+                    "kind": "reference"
+                  }
+                }
+              ],
+              "fn": "absoluteValue",
+              "kind": "call"
+            },
+            "op": "lte",
+            "right": {
+              "args": [
+                {
+                  "key": "nominal",
+                  "kind": "reference"
+                }
+              ],
+              "fn": "toleranceBand",
+              "kind": "call"
+            }
+          },
+          {
+            "kind": "compare",
+            "left": {
+              "args": [
+                {
+                  "key": "varianceEstimate",
+                  "kind": "reference"
+                }
+              ],
+              "fn": "squareRoot",
+              "kind": "call"
+            },
+            "op": "lt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 2
+            }
+          },
+          {
+            "kind": "compare",
+            "left": {
+              "args": [
+                {
+                  "key": "nominal",
+                  "kind": "reference"
+                }
+              ],
+              "fn": "notRegisteredAnywhere",
+              "kind": "call"
+            },
+            "op": "eq",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,2225 @@
+{
+  "cases": [
+    {
+      "as": "predicate",
+      "context": {
+        "orders": [
+          {
+            "amount": 40,
+            "status": "approved"
+          },
+          {
+            "amount": 15,
+            "status": "approved"
+          },
+          {
+            "amount": 5,
+            "status": "declined"
+          }
+        ],
+        "region": "north",
+        "score": 85,
+        "status": "active",
+        "tier": "gold"
+      },
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "composed-rules.integration.test.ts: membership eligibility (allOf, anyOf, compare, textCompare, memberOf, some, every, fold, conditional) > a gold-tier member meeting every condition is definitely eligible",
+      "id": "composed-rules.membership-eligibility-allof-anyof-compare-textcompare-memberof-some-every-fold-conditional-a-gold-tier-member-meeting-every-condition.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "orders",
+            "context": {
+              "orders": [
+                {
+                  "amount": 40,
+                  "status": "approved"
+                },
+                {
+                  "amount": 15,
+                  "status": "approved"
+                },
+                {
+                  "amount": 5,
+                  "status": "declined"
+                }
+              ],
+              "region": "north",
+              "score": 85,
+              "status": "active",
+              "tier": "gold"
+            },
+            "items": [
+              {
+                "amount": 40,
+                "status": "approved"
+              },
+              {
+                "amount": 15,
+                "status": "approved"
+              },
+              {
+                "amount": 5,
+                "status": "declined"
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "kind": "allOf",
+        "operands": [
+          {
+            "kind": "compare",
+            "left": {
+              "key": "score",
+              "kind": "reference"
+            },
+            "op": "gte",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 50
+            }
+          },
+          {
+            "kind": "textCompare",
+            "left": {
+              "key": "status",
+              "kind": "reference"
+            },
+            "op": "matches",
+            "right": {
+              "kind": "textLiteral",
+              "value": "^active$"
+            }
+          },
+          {
+            "candidates": [
+              {
+                "kind": "textLiteral",
+                "value": "gold"
+              },
+              {
+                "kind": "textLiteral",
+                "value": "platinum"
+              }
+            ],
+            "kind": "memberOf",
+            "op": "in",
+            "operand": {
+              "key": "tier",
+              "kind": "reference"
+            }
+          },
+          {
+            "collection": "orders",
+            "item": {
+              "kind": "compare",
+              "left": {
+                "key": "amount",
+                "kind": "reference"
+              },
+              "op": "gt",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 30
+              }
+            },
+            "kind": "some"
+          },
+          {
+            "collection": "orders",
+            "filter": {
+              "kind": "textCompare",
+              "left": {
+                "key": "status",
+                "kind": "reference"
+              },
+              "op": "equals",
+              "right": {
+                "kind": "textLiteral",
+                "value": "approved"
+              }
+            },
+            "item": {
+              "kind": "compare",
+              "left": {
+                "key": "amount",
+                "kind": "reference"
+              },
+              "op": "lte",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 1000
+              }
+            },
+            "kind": "every"
+          },
+          {
+            "kind": "anyOf",
+            "operands": [
+              {
+                "kind": "textCompare",
+                "left": {
+                  "key": "region",
+                  "kind": "reference"
+                },
+                "op": "equals",
+                "right": {
+                  "kind": "textLiteral",
+                  "value": "north"
+                }
+              },
+              {
+                "kind": "textCompare",
+                "left": {
+                  "key": "region",
+                  "kind": "reference"
+                },
+                "op": "equals",
+                "right": {
+                  "kind": "textLiteral",
+                  "value": "south"
+                }
+              }
+            ]
+          },
+          {
+            "kind": "compare",
+            "left": {
+              "collection": "orders",
+              "combiner": {
+                "combine": {
+                  "kind": "arithmetic",
+                  "left": {
+                    "kind": "accumulator"
+                  },
+                  "op": "add",
+                  "right": {
+                    "key": "amount",
+                    "kind": "reference"
+                  }
+                },
+                "initial": {
+                  "kind": "numberLiteral",
+                  "value": 0
+                },
+                "mode": "reduce"
+              },
+              "filter": {
+                "kind": "textCompare",
+                "left": {
+                  "key": "status",
+                  "kind": "reference"
+                },
+                "op": "equals",
+                "right": {
+                  "kind": "textLiteral",
+                  "value": "approved"
+                }
+              },
+              "kind": "fold"
+            },
+            "op": "gt",
+            "right": {
+              "cases": [
+                {
+                  "then": {
+                    "kind": "numberLiteral",
+                    "value": 50
+                  },
+                  "when": {
+                    "kind": "textCompare",
+                    "left": {
+                      "key": "tier",
+                      "kind": "reference"
+                    },
+                    "op": "equals",
+                    "right": {
+                      "kind": "textLiteral",
+                      "value": "platinum"
+                    }
+                  }
+                }
+              ],
+              "fallback": {
+                "kind": "numberLiteral",
+                "value": 20
+              },
+              "kind": "conditional"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "as": "predicate",
+      "context": {
+        "orders": [
+          {
+            "amount": 10,
+            "status": "approved"
+          }
+        ],
+        "region": "east",
+        "score": 60,
+        "status": "active",
+        "tier": "platinum"
+      },
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "composed-rules.integration.test.ts: membership eligibility (allOf, anyOf, compare, textCompare, memberOf, some, every, fold, conditional) > a platinum-tier member outside the served regions is definitely ineligible, regardless of the platinum-only spend threshold",
+      "id": "composed-rules.membership-eligibility-allof-anyof-compare-textcompare-memberof-some-every-fold-conditional-a-platinum-tier-member-outside-the-served-r.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "orders",
+            "context": {
+              "orders": [
+                {
+                  "amount": 10,
+                  "status": "approved"
+                }
+              ],
+              "region": "east",
+              "score": 60,
+              "status": "active",
+              "tier": "platinum"
+            },
+            "items": [
+              {
+                "amount": 10,
+                "status": "approved"
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "kind": "allOf",
+        "operands": [
+          {
+            "kind": "compare",
+            "left": {
+              "key": "score",
+              "kind": "reference"
+            },
+            "op": "gte",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 50
+            }
+          },
+          {
+            "kind": "textCompare",
+            "left": {
+              "key": "status",
+              "kind": "reference"
+            },
+            "op": "matches",
+            "right": {
+              "kind": "textLiteral",
+              "value": "^active$"
+            }
+          },
+          {
+            "candidates": [
+              {
+                "kind": "textLiteral",
+                "value": "gold"
+              },
+              {
+                "kind": "textLiteral",
+                "value": "platinum"
+              }
+            ],
+            "kind": "memberOf",
+            "op": "in",
+            "operand": {
+              "key": "tier",
+              "kind": "reference"
+            }
+          },
+          {
+            "collection": "orders",
+            "item": {
+              "kind": "compare",
+              "left": {
+                "key": "amount",
+                "kind": "reference"
+              },
+              "op": "gt",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 30
+              }
+            },
+            "kind": "some"
+          },
+          {
+            "collection": "orders",
+            "filter": {
+              "kind": "textCompare",
+              "left": {
+                "key": "status",
+                "kind": "reference"
+              },
+              "op": "equals",
+              "right": {
+                "kind": "textLiteral",
+                "value": "approved"
+              }
+            },
+            "item": {
+              "kind": "compare",
+              "left": {
+                "key": "amount",
+                "kind": "reference"
+              },
+              "op": "lte",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 1000
+              }
+            },
+            "kind": "every"
+          },
+          {
+            "kind": "anyOf",
+            "operands": [
+              {
+                "kind": "textCompare",
+                "left": {
+                  "key": "region",
+                  "kind": "reference"
+                },
+                "op": "equals",
+                "right": {
+                  "kind": "textLiteral",
+                  "value": "north"
+                }
+              },
+              {
+                "kind": "textCompare",
+                "left": {
+                  "key": "region",
+                  "kind": "reference"
+                },
+                "op": "equals",
+                "right": {
+                  "kind": "textLiteral",
+                  "value": "south"
+                }
+              }
+            ]
+          },
+          {
+            "kind": "compare",
+            "left": {
+              "collection": "orders",
+              "combiner": {
+                "combine": {
+                  "kind": "arithmetic",
+                  "left": {
+                    "kind": "accumulator"
+                  },
+                  "op": "add",
+                  "right": {
+                    "key": "amount",
+                    "kind": "reference"
+                  }
+                },
+                "initial": {
+                  "kind": "numberLiteral",
+                  "value": 0
+                },
+                "mode": "reduce"
+              },
+              "filter": {
+                "kind": "textCompare",
+                "left": {
+                  "key": "status",
+                  "kind": "reference"
+                },
+                "op": "equals",
+                "right": {
+                  "kind": "textLiteral",
+                  "value": "approved"
+                }
+              },
+              "kind": "fold"
+            },
+            "op": "gt",
+            "right": {
+              "cases": [
+                {
+                  "then": {
+                    "kind": "numberLiteral",
+                    "value": 50
+                  },
+                  "when": {
+                    "kind": "textCompare",
+                    "left": {
+                      "key": "tier",
+                      "kind": "reference"
+                    },
+                    "op": "equals",
+                    "right": {
+                      "kind": "textLiteral",
+                      "value": "platinum"
+                    }
+                  }
+                }
+              ],
+              "fallback": {
+                "kind": "numberLiteral",
+                "value": 20
+              },
+              "kind": "conditional"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "as": "predicate",
+      "context": {
+        "orders": [
+          {
+            "amount": 100,
+            "status": "approved"
+          }
+        ],
+        "region": "south",
+        "status": "active",
+        "tier": "gold"
+      },
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "composed-rules.integration.test.ts: membership eligibility (allOf, anyOf, compare, textCompare, memberOf, some, every, fold, conditional) > a member with every other condition satisfied but a missing score is indeterminate, not silently eligible or ineligible",
+      "id": "composed-rules.membership-eligibility-allof-anyof-compare-textcompare-memberof-some-every-fold-conditional-a-member-with-every-other-condition-satisfi.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "orders",
+            "context": {
+              "orders": [
+                {
+                  "amount": 100,
+                  "status": "approved"
+                }
+              ],
+              "region": "south",
+              "status": "active",
+              "tier": "gold"
+            },
+            "items": [
+              {
+                "amount": 100,
+                "status": "approved"
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "kind": "allOf",
+        "operands": [
+          {
+            "kind": "compare",
+            "left": {
+              "key": "score",
+              "kind": "reference"
+            },
+            "op": "gte",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 50
+            }
+          },
+          {
+            "kind": "textCompare",
+            "left": {
+              "key": "status",
+              "kind": "reference"
+            },
+            "op": "matches",
+            "right": {
+              "kind": "textLiteral",
+              "value": "^active$"
+            }
+          },
+          {
+            "candidates": [
+              {
+                "kind": "textLiteral",
+                "value": "gold"
+              },
+              {
+                "kind": "textLiteral",
+                "value": "platinum"
+              }
+            ],
+            "kind": "memberOf",
+            "op": "in",
+            "operand": {
+              "key": "tier",
+              "kind": "reference"
+            }
+          },
+          {
+            "collection": "orders",
+            "item": {
+              "kind": "compare",
+              "left": {
+                "key": "amount",
+                "kind": "reference"
+              },
+              "op": "gt",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 30
+              }
+            },
+            "kind": "some"
+          },
+          {
+            "collection": "orders",
+            "filter": {
+              "kind": "textCompare",
+              "left": {
+                "key": "status",
+                "kind": "reference"
+              },
+              "op": "equals",
+              "right": {
+                "kind": "textLiteral",
+                "value": "approved"
+              }
+            },
+            "item": {
+              "kind": "compare",
+              "left": {
+                "key": "amount",
+                "kind": "reference"
+              },
+              "op": "lte",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 1000
+              }
+            },
+            "kind": "every"
+          },
+          {
+            "kind": "anyOf",
+            "operands": [
+              {
+                "kind": "textCompare",
+                "left": {
+                  "key": "region",
+                  "kind": "reference"
+                },
+                "op": "equals",
+                "right": {
+                  "kind": "textLiteral",
+                  "value": "north"
+                }
+              },
+              {
+                "kind": "textCompare",
+                "left": {
+                  "key": "region",
+                  "kind": "reference"
+                },
+                "op": "equals",
+                "right": {
+                  "kind": "textLiteral",
+                  "value": "south"
+                }
+              }
+            ]
+          },
+          {
+            "kind": "compare",
+            "left": {
+              "collection": "orders",
+              "combiner": {
+                "combine": {
+                  "kind": "arithmetic",
+                  "left": {
+                    "kind": "accumulator"
+                  },
+                  "op": "add",
+                  "right": {
+                    "key": "amount",
+                    "kind": "reference"
+                  }
+                },
+                "initial": {
+                  "kind": "numberLiteral",
+                  "value": 0
+                },
+                "mode": "reduce"
+              },
+              "filter": {
+                "kind": "textCompare",
+                "left": {
+                  "key": "status",
+                  "kind": "reference"
+                },
+                "op": "equals",
+                "right": {
+                  "kind": "textLiteral",
+                  "value": "approved"
+                }
+              },
+              "kind": "fold"
+            },
+            "op": "gt",
+            "right": {
+              "cases": [
+                {
+                  "then": {
+                    "kind": "numberLiteral",
+                    "value": 50
+                  },
+                  "when": {
+                    "kind": "textCompare",
+                    "left": {
+                      "key": "tier",
+                      "kind": "reference"
+                    },
+                    "op": "equals",
+                    "right": {
+                      "kind": "textLiteral",
+                      "value": "platinum"
+                    }
+                  }
+                }
+              ],
+              "fallback": {
+                "kind": "numberLiteral",
+                "value": 20
+              },
+              "kind": "conditional"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "as": "predicate",
+      "context": {
+        "parcels": [
+          {
+            "volumeM3": 0.5,
+            "weightKg": 10
+          },
+          {
+            "volumeM3": 0.25,
+            "weightKg": 6
+          },
+          {
+            "volumeM3": 0.25,
+            "weightKg": 4
+          }
+        ],
+        "pricePerKgUSD": 3
+      },
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "composed-rules.integration.test.ts: units-aware rate calculation (multiply/divide across differently unit-tagged numbers, fold, compare) > density (kg/m^3, via divide) and cost (dimensionless, via multiply) both derive correctly from the same fold-summed weight",
+      "id": "composed-rules.units-aware-rate-calculation-multiply-divide-across-differently-unit-tagged-numbers-fold-compare-density-kg-m-3-via-divide-and-cost-dim.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "parcels",
+            "context": {
+              "parcels": [
+                {
+                  "volumeM3": 0.5,
+                  "weightKg": 10
+                },
+                {
+                  "volumeM3": 0.25,
+                  "weightKg": 6
+                },
+                {
+                  "volumeM3": 0.25,
+                  "weightKg": 4
+                }
+              ],
+              "pricePerKgUSD": 3
+            },
+            "items": [
+              {
+                "volumeM3": 0.5,
+                "weightKg": 10
+              },
+              {
+                "volumeM3": 0.25,
+                "weightKg": 6
+              },
+              {
+                "volumeM3": 0.25,
+                "weightKg": 4
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "context": {
+              "parcels": [
+                {
+                  "volumeM3": 0.5,
+                  "weightKg": 10
+                },
+                {
+                  "volumeM3": 0.25,
+                  "weightKg": 6
+                },
+                {
+                  "volumeM3": 0.25,
+                  "weightKg": 4
+                }
+              ],
+              "pricePerKgUSD": 3
+            },
+            "key": "pricePerKgUSD",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "kg": -1
+                },
+                "value": 3
+              }
+            }
+          },
+          {
+            "context": {
+              "volumeM3": 0.5,
+              "weightKg": 10
+            },
+            "key": "weightKg",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "kg": 1
+                },
+                "value": 10
+              }
+            }
+          },
+          {
+            "context": {
+              "volumeM3": 0.5,
+              "weightKg": 10
+            },
+            "key": "volumeM3",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 3
+                },
+                "value": 0.5
+              }
+            }
+          },
+          {
+            "context": {
+              "volumeM3": 0.25,
+              "weightKg": 6
+            },
+            "key": "weightKg",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "kg": 1
+                },
+                "value": 6
+              }
+            }
+          },
+          {
+            "context": {
+              "volumeM3": 0.25,
+              "weightKg": 6
+            },
+            "key": "volumeM3",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 3
+                },
+                "value": 0.25
+              }
+            }
+          },
+          {
+            "context": {
+              "volumeM3": 0.25,
+              "weightKg": 4
+            },
+            "key": "weightKg",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "kg": 1
+                },
+                "value": 4
+              }
+            }
+          },
+          {
+            "context": {
+              "volumeM3": 0.25,
+              "weightKg": 4
+            },
+            "key": "volumeM3",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 3
+                },
+                "value": 0.25
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "and",
+        "left": {
+          "kind": "compare",
+          "left": {
+            "kind": "arithmetic",
+            "left": {
+              "collection": "parcels",
+              "combiner": {
+                "combine": {
+                  "kind": "arithmetic",
+                  "left": {
+                    "kind": "accumulator"
+                  },
+                  "op": "add",
+                  "right": {
+                    "key": "weightKg",
+                    "kind": "reference",
+                    "unit": {
+                      "kg": 1
+                    }
+                  }
+                },
+                "initial": {
+                  "kind": "numberLiteral",
+                  "unit": {
+                    "kg": 1
+                  },
+                  "value": 0
+                },
+                "mode": "reduce"
+              },
+              "kind": "fold"
+            },
+            "op": "divide",
+            "right": {
+              "collection": "parcels",
+              "combiner": {
+                "combine": {
+                  "kind": "arithmetic",
+                  "left": {
+                    "kind": "accumulator"
+                  },
+                  "op": "add",
+                  "right": {
+                    "key": "volumeM3",
+                    "kind": "reference",
+                    "unit": {
+                      "m": 3
+                    }
+                  }
+                },
+                "initial": {
+                  "kind": "numberLiteral",
+                  "unit": {
+                    "m": 3
+                  },
+                  "value": 0
+                },
+                "mode": "reduce"
+              },
+              "kind": "fold"
+            }
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "unit": {
+              "kg": 1,
+              "m": -3
+            },
+            "value": 15
+          }
+        },
+        "right": {
+          "kind": "compare",
+          "left": {
+            "kind": "arithmetic",
+            "left": {
+              "key": "pricePerKgUSD",
+              "kind": "reference",
+              "unit": {
+                "kg": -1
+              }
+            },
+            "op": "multiply",
+            "right": {
+              "collection": "parcels",
+              "combiner": {
+                "combine": {
+                  "kind": "arithmetic",
+                  "left": {
+                    "kind": "accumulator"
+                  },
+                  "op": "add",
+                  "right": {
+                    "key": "weightKg",
+                    "kind": "reference",
+                    "unit": {
+                      "kg": 1
+                    }
+                  }
+                },
+                "initial": {
+                  "kind": "numberLiteral",
+                  "unit": {
+                    "kg": 1
+                  },
+                  "value": 0
+                },
+                "mode": "reduce"
+              },
+              "kind": "fold"
+            }
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 50
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "context": {
+        "parcels": [
+          {
+            "badUnit": true,
+            "volumeM3": 0.5,
+            "weightKg": 10
+          },
+          {
+            "volumeM3": 0.25,
+            "weightKg": 6
+          }
+        ],
+        "pricePerKgUSD": 3
+      },
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "composed-rules.integration.test.ts: units-aware rate calculation (multiply/divide across differently unit-tagged numbers, fold, compare) > a parcel whose weight resolves in an incompatible unit makes the whole fold -- and everything derived from it -- indeterminate rather than silently miscalculating",
+      "id": "composed-rules.units-aware-rate-calculation-multiply-divide-across-differently-unit-tagged-numbers-fold-compare-a-parcel-whose-weight-resolves-in-an-i.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "parcels",
+            "context": {
+              "parcels": [
+                {
+                  "badUnit": true,
+                  "volumeM3": 0.5,
+                  "weightKg": 10
+                },
+                {
+                  "volumeM3": 0.25,
+                  "weightKg": 6
+                }
+              ],
+              "pricePerKgUSD": 3
+            },
+            "items": [
+              {
+                "badUnit": true,
+                "volumeM3": 0.5,
+                "weightKg": 10
+              },
+              {
+                "volumeM3": 0.25,
+                "weightKg": 6
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "context": {
+              "parcels": [
+                {
+                  "badUnit": true,
+                  "volumeM3": 0.5,
+                  "weightKg": 10
+                },
+                {
+                  "volumeM3": 0.25,
+                  "weightKg": 6
+                }
+              ],
+              "pricePerKgUSD": 3
+            },
+            "key": "pricePerKgUSD",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "kg": -1
+                },
+                "value": 3
+              }
+            }
+          },
+          {
+            "context": {
+              "badUnit": true,
+              "volumeM3": 0.5,
+              "weightKg": 10
+            },
+            "key": "weightKg",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "g": 1
+                },
+                "value": 10
+              }
+            }
+          },
+          {
+            "context": {
+              "badUnit": true,
+              "volumeM3": 0.5,
+              "weightKg": 10
+            },
+            "key": "volumeM3",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 3
+                },
+                "value": 0.5
+              }
+            }
+          },
+          {
+            "context": {
+              "volumeM3": 0.25,
+              "weightKg": 6
+            },
+            "key": "weightKg",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "kg": 1
+                },
+                "value": 6
+              }
+            }
+          },
+          {
+            "context": {
+              "volumeM3": 0.25,
+              "weightKg": 6
+            },
+            "key": "volumeM3",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 3
+                },
+                "value": 0.25
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "and",
+        "left": {
+          "kind": "compare",
+          "left": {
+            "kind": "arithmetic",
+            "left": {
+              "collection": "parcels",
+              "combiner": {
+                "combine": {
+                  "kind": "arithmetic",
+                  "left": {
+                    "kind": "accumulator"
+                  },
+                  "op": "add",
+                  "right": {
+                    "key": "weightKg",
+                    "kind": "reference",
+                    "unit": {
+                      "kg": 1
+                    }
+                  }
+                },
+                "initial": {
+                  "kind": "numberLiteral",
+                  "unit": {
+                    "kg": 1
+                  },
+                  "value": 0
+                },
+                "mode": "reduce"
+              },
+              "kind": "fold"
+            },
+            "op": "divide",
+            "right": {
+              "collection": "parcels",
+              "combiner": {
+                "combine": {
+                  "kind": "arithmetic",
+                  "left": {
+                    "kind": "accumulator"
+                  },
+                  "op": "add",
+                  "right": {
+                    "key": "volumeM3",
+                    "kind": "reference",
+                    "unit": {
+                      "m": 3
+                    }
+                  }
+                },
+                "initial": {
+                  "kind": "numberLiteral",
+                  "unit": {
+                    "m": 3
+                  },
+                  "value": 0
+                },
+                "mode": "reduce"
+              },
+              "kind": "fold"
+            }
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "unit": {
+              "kg": 1,
+              "m": -3
+            },
+            "value": 15
+          }
+        },
+        "right": {
+          "kind": "compare",
+          "left": {
+            "kind": "arithmetic",
+            "left": {
+              "key": "pricePerKgUSD",
+              "kind": "reference",
+              "unit": {
+                "kg": -1
+              }
+            },
+            "op": "multiply",
+            "right": {
+              "collection": "parcels",
+              "combiner": {
+                "combine": {
+                  "kind": "arithmetic",
+                  "left": {
+                    "kind": "accumulator"
+                  },
+                  "op": "add",
+                  "right": {
+                    "key": "weightKg",
+                    "kind": "reference",
+                    "unit": {
+                      "kg": 1
+                    }
+                  }
+                },
+                "initial": {
+                  "kind": "numberLiteral",
+                  "unit": {
+                    "kg": 1
+                  },
+                  "value": 0
+                },
+                "mode": "reduce"
+              },
+              "kind": "fold"
+            }
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 50
+          }
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "context": {
+        "sessions": [
+          {
+            "endedAt": "2026-01-01T00:45:00.000Z",
+            "startedAt": "2026-01-01T00:00:00.000Z"
+          },
+          {
+            "endedAt": "2026-01-01T01:10:00.000Z",
+            "startedAt": "2026-01-01T01:00:00.000Z"
+          }
+        ]
+      },
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "text",
+          "value": "flagged"
+        }
+      },
+      "from": "composed-rules.integration.test.ts: temporal arithmetic with a quantifier and a conditional fallback (instant/duration, some, conditional) > a session that exceeds the duration threshold -> 'flagged', via instant subtraction producing a duration compared against a durationLiteral in a different unit",
+      "id": "composed-rules.temporal-arithmetic-with-a-quantifier-and-a-conditional-fallback-instant-duration-some-conditional-a-session-that-exceeds-the-duration.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "sessions",
+            "context": {
+              "sessions": [
+                {
+                  "endedAt": "2026-01-01T00:45:00.000Z",
+                  "startedAt": "2026-01-01T00:00:00.000Z"
+                },
+                {
+                  "endedAt": "2026-01-01T01:10:00.000Z",
+                  "startedAt": "2026-01-01T01:00:00.000Z"
+                }
+              ]
+            },
+            "items": [
+              {
+                "endedAt": "2026-01-01T00:45:00.000Z",
+                "startedAt": "2026-01-01T00:00:00.000Z"
+              },
+              {
+                "endedAt": "2026-01-01T01:10:00.000Z",
+                "startedAt": "2026-01-01T01:00:00.000Z"
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "context": {
+              "endedAt": "2026-01-01T00:45:00.000Z",
+              "startedAt": "2026-01-01T00:00:00.000Z"
+            },
+            "key": "startedAt",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "instant",
+                "value": "2026-01-01T00:00:00.000Z"
+              }
+            }
+          },
+          {
+            "context": {
+              "endedAt": "2026-01-01T00:45:00.000Z",
+              "startedAt": "2026-01-01T00:00:00.000Z"
+            },
+            "key": "endedAt",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "instant",
+                "value": "2026-01-01T00:45:00.000Z"
+              }
+            }
+          },
+          {
+            "context": {
+              "endedAt": "2026-01-01T01:10:00.000Z",
+              "startedAt": "2026-01-01T01:00:00.000Z"
+            },
+            "key": "startedAt",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "instant",
+                "value": "2026-01-01T01:00:00.000Z"
+              }
+            }
+          },
+          {
+            "context": {
+              "endedAt": "2026-01-01T01:10:00.000Z",
+              "startedAt": "2026-01-01T01:00:00.000Z"
+            },
+            "key": "endedAt",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "instant",
+                "value": "2026-01-01T01:10:00.000Z"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "cases": [
+          {
+            "then": {
+              "kind": "textLiteral",
+              "value": "flagged"
+            },
+            "when": {
+              "collection": "sessions",
+              "item": {
+                "kind": "compare",
+                "left": {
+                  "kind": "arithmetic",
+                  "left": {
+                    "key": "endedAt",
+                    "kind": "reference"
+                  },
+                  "op": "subtract",
+                  "right": {
+                    "key": "startedAt",
+                    "kind": "reference"
+                  }
+                },
+                "op": "gt",
+                "right": {
+                  "kind": "durationLiteral",
+                  "unit": "min",
+                  "value": 30
+                }
+              },
+              "kind": "some"
+            }
+          }
+        ],
+        "fallback": {
+          "kind": "textLiteral",
+          "value": "ok"
+        },
+        "kind": "conditional"
+      }
+    },
+    {
+      "as": "expression",
+      "context": {
+        "sessions": [
+          {
+            "endedAt": "2026-01-01T00:10:00.000Z",
+            "startedAt": "2026-01-01T00:00:00.000Z"
+          }
+        ]
+      },
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "text",
+          "value": "ok"
+        }
+      },
+      "from": "composed-rules.integration.test.ts: temporal arithmetic with a quantifier and a conditional fallback (instant/duration, some, conditional) > no session exceeds the threshold -> the conditional's fallback, 'ok'",
+      "id": "composed-rules.temporal-arithmetic-with-a-quantifier-and-a-conditional-fallback-instant-duration-some-conditional-no-session-exceeds-the-threshold-the.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "sessions",
+            "context": {
+              "sessions": [
+                {
+                  "endedAt": "2026-01-01T00:10:00.000Z",
+                  "startedAt": "2026-01-01T00:00:00.000Z"
+                }
+              ]
+            },
+            "items": [
+              {
+                "endedAt": "2026-01-01T00:10:00.000Z",
+                "startedAt": "2026-01-01T00:00:00.000Z"
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "context": {
+              "endedAt": "2026-01-01T00:10:00.000Z",
+              "startedAt": "2026-01-01T00:00:00.000Z"
+            },
+            "key": "startedAt",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "instant",
+                "value": "2026-01-01T00:00:00.000Z"
+              }
+            }
+          },
+          {
+            "context": {
+              "endedAt": "2026-01-01T00:10:00.000Z",
+              "startedAt": "2026-01-01T00:00:00.000Z"
+            },
+            "key": "endedAt",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "instant",
+                "value": "2026-01-01T00:10:00.000Z"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "cases": [
+          {
+            "then": {
+              "kind": "textLiteral",
+              "value": "flagged"
+            },
+            "when": {
+              "collection": "sessions",
+              "item": {
+                "kind": "compare",
+                "left": {
+                  "kind": "arithmetic",
+                  "left": {
+                    "key": "endedAt",
+                    "kind": "reference"
+                  },
+                  "op": "subtract",
+                  "right": {
+                    "key": "startedAt",
+                    "kind": "reference"
+                  }
+                },
+                "op": "gt",
+                "right": {
+                  "kind": "durationLiteral",
+                  "unit": "min",
+                  "value": 30
+                }
+              },
+              "kind": "some"
+            }
+          }
+        ],
+        "fallback": {
+          "kind": "textLiteral",
+          "value": "ok"
+        },
+        "kind": "conditional"
+      }
+    },
+    {
+      "as": "expression",
+      "context": {
+        "sessions": [
+          {
+            "endedAt": "2026-01-01T00:45:00.000Z",
+            "startedAt": "not-a-timestamp"
+          },
+          {
+            "endedAt": "2026-01-01T01:10:00.000Z",
+            "startedAt": "also-not-a-timestamp"
+          }
+        ]
+      },
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "composed-rules.integration.test.ts: temporal arithmetic with a quantifier and a conditional fallback (instant/duration, some, conditional) > every session's timestamp is unparseable -> the quantifier itself is indeterminate, and the conditional does not skip past its own unresolved guard to reach the fallback",
+      "id": "composed-rules.temporal-arithmetic-with-a-quantifier-and-a-conditional-fallback-instant-duration-some-conditional-every-session-s-timestamp-is-unparse.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "sessions",
+            "context": {
+              "sessions": [
+                {
+                  "endedAt": "2026-01-01T00:45:00.000Z",
+                  "startedAt": "not-a-timestamp"
+                },
+                {
+                  "endedAt": "2026-01-01T01:10:00.000Z",
+                  "startedAt": "also-not-a-timestamp"
+                }
+              ]
+            },
+            "items": [
+              {
+                "endedAt": "2026-01-01T00:45:00.000Z",
+                "startedAt": "not-a-timestamp"
+              },
+              {
+                "endedAt": "2026-01-01T01:10:00.000Z",
+                "startedAt": "also-not-a-timestamp"
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "context": {
+              "endedAt": "2026-01-01T00:45:00.000Z",
+              "startedAt": "not-a-timestamp"
+            },
+            "key": "startedAt",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "instant",
+                "value": "not-a-timestamp"
+              }
+            }
+          },
+          {
+            "context": {
+              "endedAt": "2026-01-01T00:45:00.000Z",
+              "startedAt": "not-a-timestamp"
+            },
+            "key": "endedAt",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "instant",
+                "value": "2026-01-01T00:45:00.000Z"
+              }
+            }
+          },
+          {
+            "context": {
+              "endedAt": "2026-01-01T01:10:00.000Z",
+              "startedAt": "also-not-a-timestamp"
+            },
+            "key": "startedAt",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "instant",
+                "value": "also-not-a-timestamp"
+              }
+            }
+          },
+          {
+            "context": {
+              "endedAt": "2026-01-01T01:10:00.000Z",
+              "startedAt": "also-not-a-timestamp"
+            },
+            "key": "endedAt",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "instant",
+                "value": "2026-01-01T01:10:00.000Z"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "cases": [
+          {
+            "then": {
+              "kind": "textLiteral",
+              "value": "flagged"
+            },
+            "when": {
+              "collection": "sessions",
+              "item": {
+                "kind": "compare",
+                "left": {
+                  "kind": "arithmetic",
+                  "left": {
+                    "key": "endedAt",
+                    "kind": "reference"
+                  },
+                  "op": "subtract",
+                  "right": {
+                    "key": "startedAt",
+                    "kind": "reference"
+                  }
+                },
+                "op": "gt",
+                "right": {
+                  "kind": "durationLiteral",
+                  "unit": "min",
+                  "value": 30
+                }
+              },
+              "kind": "some"
+            }
+          }
+        ],
+        "fallback": {
+          "kind": "textLiteral",
+          "value": "ok"
+        },
+        "kind": "conditional"
+      }
+    },
+    {
+      "as": "predicate",
+      "context": {
+        "bids": [
+          {
+            "amount": 120
+          },
+          {
+            "amount": 95
+          },
+          {
+            "amount": 140
+          }
+        ],
+        "discountFlag": 1
+      },
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "composed-rules.integration.test.ts: fold's max combiner alongside memberOf and a derived connective (implies) > the winning bid is pre-approved and its discount is authorised -> definitely eligible",
+      "id": "composed-rules.fold-s-max-combiner-alongside-memberof-and-a-derived-connective-implies-the-winning-bid-is-pre-approved-and-its-discount-is-authorised.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "bids",
+            "context": {
+              "bids": [
+                {
+                  "amount": 120
+                },
+                {
+                  "amount": 95
+                },
+                {
+                  "amount": 140
+                }
+              ],
+              "discountFlag": 1
+            },
+            "items": [
+              {
+                "amount": 120
+              },
+              {
+                "amount": 95
+              },
+              {
+                "amount": 140
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "kind": "allOf",
+        "operands": [
+          {
+            "candidates": [
+              {
+                "kind": "numberLiteral",
+                "value": 100
+              },
+              {
+                "kind": "numberLiteral",
+                "value": 120
+              },
+              {
+                "kind": "numberLiteral",
+                "value": 140
+              }
+            ],
+            "kind": "memberOf",
+            "op": "in",
+            "operand": {
+              "collection": "bids",
+              "combiner": {
+                "item": {
+                  "key": "amount",
+                  "kind": "reference"
+                },
+                "mode": "max"
+              },
+              "kind": "fold"
+            }
+          },
+          {
+            "kind": "or",
+            "left": {
+              "kind": "not",
+              "operand": {
+                "kind": "compare",
+                "left": {
+                  "collection": "bids",
+                  "combiner": {
+                    "item": {
+                      "key": "amount",
+                      "kind": "reference"
+                    },
+                    "mode": "max"
+                  },
+                  "kind": "fold"
+                },
+                "op": "gt",
+                "right": {
+                  "kind": "numberLiteral",
+                  "value": 130
+                }
+              }
+            },
+            "right": {
+              "kind": "compare",
+              "left": {
+                "key": "discountFlag",
+                "kind": "reference"
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 1
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "as": "predicate",
+      "context": {
+        "bids": [
+          {
+            "amount": 100
+          },
+          {
+            "amount": 90
+          }
+        ]
+      },
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "composed-rules.integration.test.ts: fold's max combiner alongside memberOf and a derived connective (implies) > a low winning bid makes the discount clause vacuously true even with no discountFlag at all -- implies absorbs the missing consequent",
+      "id": "composed-rules.fold-s-max-combiner-alongside-memberof-and-a-derived-connective-implies-a-low-winning-bid-makes-the-discount-clause-vacuously-true-even.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "bids",
+            "context": {
+              "bids": [
+                {
+                  "amount": 100
+                },
+                {
+                  "amount": 90
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 100
+              },
+              {
+                "amount": 90
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "kind": "allOf",
+        "operands": [
+          {
+            "candidates": [
+              {
+                "kind": "numberLiteral",
+                "value": 100
+              },
+              {
+                "kind": "numberLiteral",
+                "value": 120
+              },
+              {
+                "kind": "numberLiteral",
+                "value": 140
+              }
+            ],
+            "kind": "memberOf",
+            "op": "in",
+            "operand": {
+              "collection": "bids",
+              "combiner": {
+                "item": {
+                  "key": "amount",
+                  "kind": "reference"
+                },
+                "mode": "max"
+              },
+              "kind": "fold"
+            }
+          },
+          {
+            "kind": "or",
+            "left": {
+              "kind": "not",
+              "operand": {
+                "kind": "compare",
+                "left": {
+                  "collection": "bids",
+                  "combiner": {
+                    "item": {
+                      "key": "amount",
+                      "kind": "reference"
+                    },
+                    "mode": "max"
+                  },
+                  "kind": "fold"
+                },
+                "op": "gt",
+                "right": {
+                  "kind": "numberLiteral",
+                  "value": 130
+                }
+              }
+            },
+            "right": {
+              "kind": "compare",
+              "left": {
+                "key": "discountFlag",
+                "kind": "reference"
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 1
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "as": "predicate",
+      "context": {
+        "bids": [
+          {
+            "amount": 133
+          }
+        ],
+        "discountFlag": 1
+      },
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "composed-rules.integration.test.ts: fold's max combiner alongside memberOf and a derived connective (implies) > a winning bid outside the pre-approved tiers is definitely ineligible, even though the discount clause itself resolves true",
+      "id": "composed-rules.fold-s-max-combiner-alongside-memberof-and-a-derived-connective-implies-a-winning-bid-outside-the-pre-approved-tiers-is-definitely-inel.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "bids",
+            "context": {
+              "bids": [
+                {
+                  "amount": 133
+                }
+              ],
+              "discountFlag": 1
+            },
+            "items": [
+              {
+                "amount": 133
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "kind": "allOf",
+        "operands": [
+          {
+            "candidates": [
+              {
+                "kind": "numberLiteral",
+                "value": 100
+              },
+              {
+                "kind": "numberLiteral",
+                "value": 120
+              },
+              {
+                "kind": "numberLiteral",
+                "value": 140
+              }
+            ],
+            "kind": "memberOf",
+            "op": "in",
+            "operand": {
+              "collection": "bids",
+              "combiner": {
+                "item": {
+                  "key": "amount",
+                  "kind": "reference"
+                },
+                "mode": "max"
+              },
+              "kind": "fold"
+            }
+          },
+          {
+            "kind": "or",
+            "left": {
+              "kind": "not",
+              "operand": {
+                "kind": "compare",
+                "left": {
+                  "collection": "bids",
+                  "combiner": {
+                    "item": {
+                      "key": "amount",
+                      "kind": "reference"
+                    },
+                    "mode": "max"
+                  },
+                  "kind": "fold"
+                },
+                "op": "gt",
+                "right": {
+                  "kind": "numberLiteral",
+                  "value": 130
+                }
+              }
+            },
+            "right": {
+              "kind": "compare",
+              "left": {
+                "key": "discountFlag",
+                "kind": "reference"
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 1
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "as": "predicate",
+      "context": {
+        "bids": [],
+        "discountFlag": 1
+      },
+      "expect": {
+        "code": "domain-error",
+        "status": "indeterminate"
+      },
+      "from": "composed-rules.integration.test.ts: fold's max combiner alongside memberOf and a derived connective (implies) > an empty bid list has no first item to seed fold's max from -- domain-error propagates through memberOf and is not rescued by the unrelated implies clause resolving true",
+      "id": "composed-rules.fold-s-max-combiner-alongside-memberof-and-a-derived-connective-implies-an-empty-bid-list-has-no-first-item-to-seed-fold-s-max-from-dom.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "bids",
+            "context": {
+              "bids": [],
+              "discountFlag": 1
+            },
+            "items": []
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "kind": "allOf",
+        "operands": [
+          {
+            "candidates": [
+              {
+                "kind": "numberLiteral",
+                "value": 100
+              },
+              {
+                "kind": "numberLiteral",
+                "value": 120
+              },
+              {
+                "kind": "numberLiteral",
+                "value": 140
+              }
+            ],
+            "kind": "memberOf",
+            "op": "in",
+            "operand": {
+              "collection": "bids",
+              "combiner": {
+                "item": {
+                  "key": "amount",
+                  "kind": "reference"
+                },
+                "mode": "max"
+              },
+              "kind": "fold"
+            }
+          },
+          {
+            "kind": "or",
+            "left": {
+              "kind": "not",
+              "operand": {
+                "kind": "compare",
+                "left": {
+                  "collection": "bids",
+                  "combiner": {
+                    "item": {
+                      "key": "amount",
+                      "kind": "reference"
+                    },
+                    "mode": "max"
+                  },
+                  "kind": "fold"
+                },
+                "op": "gt",
+                "right": {
+                  "kind": "numberLiteral",
+                  "value": 130
+                }
+              }
+            },
+            "right": {
+              "kind": "compare",
+              "left": {
+                "key": "discountFlag",
+                "kind": "reference"
+              },
+              "op": "eq",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 1
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

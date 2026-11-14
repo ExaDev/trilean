@@ -1,0 +1,502 @@
+{
+  "cases": [
+    {
+      "as": "predicate",
+      "context": {
+        "status": "active",
+        "totalSpend": 150
+      },
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "tree-reference.integration.test.ts: treeReference composes reusable sub-rules into a larger tree > an active member over the spend threshold is eligible",
+      "id": "tree-reference-integration.treereference-composes-reusable-sub-rules-into-a-larger-tree-an-active-member-over-the-spend-threshold-is-eligible.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "fromContext": true,
+        "trees": [
+          {
+            "key": "isActiveMember",
+            "result": {
+              "found": true,
+              "node": {
+                "kind": "textCompare",
+                "left": {
+                  "key": "status",
+                  "kind": "reference"
+                },
+                "op": "equals",
+                "right": {
+                  "kind": "textLiteral",
+                  "value": "active"
+                }
+              }
+            }
+          },
+          {
+            "key": "loyaltyDiscountRate",
+            "result": {
+              "found": true,
+              "node": {
+                "cases": [
+                  {
+                    "then": {
+                      "kind": "numberLiteral",
+                      "value": 0.2
+                    },
+                    "when": {
+                      "kind": "textCompare",
+                      "left": {
+                        "key": "tier",
+                        "kind": "reference"
+                      },
+                      "op": "equals",
+                      "right": {
+                        "kind": "textLiteral",
+                        "value": "gold"
+                      }
+                    }
+                  }
+                ],
+                "fallback": {
+                  "kind": "numberLiteral",
+                  "value": 0.05
+                },
+                "kind": "conditional"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "allOf",
+        "operands": [
+          {
+            "key": "isActiveMember",
+            "kind": "treeReference"
+          },
+          {
+            "kind": "compare",
+            "left": {
+              "key": "totalSpend",
+              "kind": "reference"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 100
+            }
+          }
+        ]
+      }
+    },
+    {
+      "as": "predicate",
+      "context": {
+        "status": "lapsed",
+        "totalSpend": 150
+      },
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "tree-reference.integration.test.ts: treeReference composes reusable sub-rules into a larger tree > an inactive member is not eligible, even over the spend threshold",
+      "id": "tree-reference-integration.treereference-composes-reusable-sub-rules-into-a-larger-tree-an-inactive-member-is-not-eligible-even-over-the-spend-thresho.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "fromContext": true,
+        "trees": [
+          {
+            "key": "isActiveMember",
+            "result": {
+              "found": true,
+              "node": {
+                "kind": "textCompare",
+                "left": {
+                  "key": "status",
+                  "kind": "reference"
+                },
+                "op": "equals",
+                "right": {
+                  "kind": "textLiteral",
+                  "value": "active"
+                }
+              }
+            }
+          },
+          {
+            "key": "loyaltyDiscountRate",
+            "result": {
+              "found": true,
+              "node": {
+                "cases": [
+                  {
+                    "then": {
+                      "kind": "numberLiteral",
+                      "value": 0.2
+                    },
+                    "when": {
+                      "kind": "textCompare",
+                      "left": {
+                        "key": "tier",
+                        "kind": "reference"
+                      },
+                      "op": "equals",
+                      "right": {
+                        "kind": "textLiteral",
+                        "value": "gold"
+                      }
+                    }
+                  }
+                ],
+                "fallback": {
+                  "kind": "numberLiteral",
+                  "value": 0.05
+                },
+                "kind": "conditional"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "allOf",
+        "operands": [
+          {
+            "key": "isActiveMember",
+            "kind": "treeReference"
+          },
+          {
+            "kind": "compare",
+            "left": {
+              "key": "totalSpend",
+              "kind": "reference"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 100
+            }
+          }
+        ]
+      }
+    },
+    {
+      "as": "expression",
+      "context": {
+        "subtotal": 200,
+        "tier": "gold"
+      },
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "unit": {},
+          "value": 160
+        }
+      },
+      "from": "tree-reference.integration.test.ts: treeReference composes reusable sub-rules into a larger tree > a gold-tier customer's price reflects the referenced discount rate",
+      "id": "tree-reference-integration.treereference-composes-reusable-sub-rules-into-a-larger-tree-a-gold-tier-customer-s-price-reflects-the-referenced-discount.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "fromContext": true,
+        "trees": [
+          {
+            "key": "isActiveMember",
+            "result": {
+              "found": true,
+              "node": {
+                "kind": "textCompare",
+                "left": {
+                  "key": "status",
+                  "kind": "reference"
+                },
+                "op": "equals",
+                "right": {
+                  "kind": "textLiteral",
+                  "value": "active"
+                }
+              }
+            }
+          },
+          {
+            "key": "loyaltyDiscountRate",
+            "result": {
+              "found": true,
+              "node": {
+                "cases": [
+                  {
+                    "then": {
+                      "kind": "numberLiteral",
+                      "value": 0.2
+                    },
+                    "when": {
+                      "kind": "textCompare",
+                      "left": {
+                        "key": "tier",
+                        "kind": "reference"
+                      },
+                      "op": "equals",
+                      "right": {
+                        "kind": "textLiteral",
+                        "value": "gold"
+                      }
+                    }
+                  }
+                ],
+                "fallback": {
+                  "kind": "numberLiteral",
+                  "value": 0.05
+                },
+                "kind": "conditional"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "key": "subtotal",
+          "kind": "reference"
+        },
+        "op": "multiply",
+        "right": {
+          "kind": "arithmetic",
+          "left": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "op": "subtract",
+          "right": {
+            "key": "loyaltyDiscountRate",
+            "kind": "treeReference"
+          }
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "context": {
+        "subtotal": 200,
+        "tier": "silver"
+      },
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "unit": {},
+          "value": 190
+        }
+      },
+      "from": "tree-reference.integration.test.ts: treeReference composes reusable sub-rules into a larger tree > a non-gold tier falls through to the referenced rule's own fallback rate",
+      "id": "tree-reference-integration.treereference-composes-reusable-sub-rules-into-a-larger-tree-a-non-gold-tier-falls-through-to-the-referenced-rule-s-own-fal.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "fromContext": true,
+        "trees": [
+          {
+            "key": "isActiveMember",
+            "result": {
+              "found": true,
+              "node": {
+                "kind": "textCompare",
+                "left": {
+                  "key": "status",
+                  "kind": "reference"
+                },
+                "op": "equals",
+                "right": {
+                  "kind": "textLiteral",
+                  "value": "active"
+                }
+              }
+            }
+          },
+          {
+            "key": "loyaltyDiscountRate",
+            "result": {
+              "found": true,
+              "node": {
+                "cases": [
+                  {
+                    "then": {
+                      "kind": "numberLiteral",
+                      "value": 0.2
+                    },
+                    "when": {
+                      "kind": "textCompare",
+                      "left": {
+                        "key": "tier",
+                        "kind": "reference"
+                      },
+                      "op": "equals",
+                      "right": {
+                        "kind": "textLiteral",
+                        "value": "gold"
+                      }
+                    }
+                  }
+                ],
+                "fallback": {
+                  "kind": "numberLiteral",
+                  "value": 0.05
+                },
+                "kind": "conditional"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "key": "subtotal",
+          "kind": "reference"
+        },
+        "op": "multiply",
+        "right": {
+          "kind": "arithmetic",
+          "left": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "op": "subtract",
+          "right": {
+            "key": "loyaltyDiscountRate",
+            "kind": "treeReference"
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "context": {},
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "tree-reference.integration.test.ts: treeReference composes reusable sub-rules into a larger tree > a reference to an unknown rule key is not-found, not a thrown error",
+      "id": "tree-reference-integration.treereference-composes-reusable-sub-rules-into-a-larger-tree-a-reference-to-an-unknown-rule-key-is-not-found-not-a-thrown-e.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "fromContext": true,
+        "trees": [
+          {
+            "key": "isActiveMember",
+            "result": {
+              "found": true,
+              "node": {
+                "kind": "textCompare",
+                "left": {
+                  "key": "status",
+                  "kind": "reference"
+                },
+                "op": "equals",
+                "right": {
+                  "kind": "textLiteral",
+                  "value": "active"
+                }
+              }
+            }
+          },
+          {
+            "key": "loyaltyDiscountRate",
+            "result": {
+              "found": true,
+              "node": {
+                "cases": [
+                  {
+                    "then": {
+                      "kind": "numberLiteral",
+                      "value": 0.2
+                    },
+                    "when": {
+                      "kind": "textCompare",
+                      "left": {
+                        "key": "tier",
+                        "kind": "reference"
+                      },
+                      "op": "equals",
+                      "right": {
+                        "kind": "textLiteral",
+                        "value": "gold"
+                      }
+                    }
+                  }
+                ],
+                "fallback": {
+                  "kind": "numberLiteral",
+                  "value": 0.05
+                },
+                "kind": "conditional"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "key": "doesNotExist",
+        "kind": "treeReference"
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "domain-error",
+        "message": "circular treeReference detected",
+        "status": "indeterminate"
+      },
+      "from": "tree-reference.integration.test.ts: treeReference detects a cycle across genuinely separate stored rules > evaluating ruleA is a domain-error, not an infinite loop or a stack overflow",
+      "id": "tree-reference-integration.treereference-detects-a-cycle-across-genuinely-separate-stored-rules-evaluating-rulea-is-a-domain-error-not-an-infinite-loo.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "trees": [
+          {
+            "key": "ruleA",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "ruleB",
+                "kind": "treeReference"
+              }
+            }
+          },
+          {
+            "key": "ruleB",
+            "result": {
+              "found": true,
+              "node": {
+                "key": "ruleA",
+                "kind": "treeReference"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "key": "ruleA",
+        "kind": "treeReference"
+      }
+    }
+  ]
+}

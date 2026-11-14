@@ -1,0 +1,601 @@
+{
+  "cases": [
+    {
+      "as": "predicate",
+      "context": {
+        "region": "international",
+        "subtotal": 1000
+      },
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "delegate-handler.integration.test.ts: delegate result flows through arithmetic and a conditional's fallback branch, into a comparison > a non-domestic region falls through the conditional to the delegate, and the resolved rate crosses the threshold",
+      "id": "delegate-handler.delegate-result-flows-through-arithmetic-and-a-conditional-s-fallback-branch-into-a-comparison-a-non-domestic-region-falls-through-th.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "delegates": [
+          {
+            "context": {
+              "region": "international",
+              "subtotal": 1000
+            },
+            "payload": {
+              "ruleset": "standard"
+            },
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 0.2
+              }
+            },
+            "system": "taxEngine"
+          },
+          {
+            "context": {
+              "region": "remote",
+              "subtotal": 1000
+            },
+            "payload": {
+              "ruleset": "standard"
+            },
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 0.15
+              }
+            },
+            "system": "taxEngine"
+          }
+        ],
+        "fromContext": true
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "arithmetic",
+          "left": {
+            "key": "subtotal",
+            "kind": "reference"
+          },
+          "op": "multiply",
+          "right": {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "numberLiteral",
+              "value": 1
+            },
+            "op": "add",
+            "right": {
+              "cases": [
+                {
+                  "then": {
+                    "kind": "numberLiteral",
+                    "value": 0.1
+                  },
+                  "when": {
+                    "kind": "textCompare",
+                    "left": {
+                      "key": "region",
+                      "kind": "reference"
+                    },
+                    "op": "equals",
+                    "right": {
+                      "kind": "textLiteral",
+                      "value": "domestic"
+                    }
+                  }
+                }
+              ],
+              "fallback": {
+                "kind": "delegate",
+                "payload": {
+                  "ruleset": "standard"
+                },
+                "system": "taxEngine"
+              },
+              "kind": "conditional"
+            }
+          }
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1100
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "context": {
+        "region": "domestic",
+        "subtotal": 1000
+      },
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "delegate-handler.integration.test.ts: delegate result flows through arithmetic and a conditional's fallback branch, into a comparison > a domestic region takes the conditional's own branch instead -- the delegate is never invoked, and the lower fixed rate stays under the threshold",
+      "id": "delegate-handler.delegate-result-flows-through-arithmetic-and-a-conditional-s-fallback-branch-into-a-comparison-a-domestic-region-takes-the-conditiona.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "delegates": [
+          {
+            "context": {
+              "region": "international",
+              "subtotal": 1000
+            },
+            "payload": {
+              "ruleset": "standard"
+            },
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 0.2
+              }
+            },
+            "system": "taxEngine"
+          },
+          {
+            "context": {
+              "region": "remote",
+              "subtotal": 1000
+            },
+            "payload": {
+              "ruleset": "standard"
+            },
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 0.15
+              }
+            },
+            "system": "taxEngine"
+          }
+        ],
+        "fromContext": true
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "arithmetic",
+          "left": {
+            "key": "subtotal",
+            "kind": "reference"
+          },
+          "op": "multiply",
+          "right": {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "numberLiteral",
+              "value": 1
+            },
+            "op": "add",
+            "right": {
+              "cases": [
+                {
+                  "then": {
+                    "kind": "numberLiteral",
+                    "value": 0.1
+                  },
+                  "when": {
+                    "kind": "textCompare",
+                    "left": {
+                      "key": "region",
+                      "kind": "reference"
+                    },
+                    "op": "equals",
+                    "right": {
+                      "kind": "textLiteral",
+                      "value": "domestic"
+                    }
+                  }
+                }
+              ],
+              "fallback": {
+                "kind": "delegate",
+                "payload": {
+                  "ruleset": "standard"
+                },
+                "system": "taxEngine"
+              },
+              "kind": "conditional"
+            }
+          }
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1100
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "context": {
+        "region": "unmapped",
+        "subtotal": 1000
+      },
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "delegate-handler.integration.test.ts: delegate result flows through arithmetic and a conditional's fallback branch, into a comparison > a region the delegate handler has no rate for is indeterminate, not silently treated as a zero rate",
+      "id": "delegate-handler.delegate-result-flows-through-arithmetic-and-a-conditional-s-fallback-branch-into-a-comparison-a-region-the-delegate-handler-has-no-r.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "delegates": [
+          {
+            "context": {
+              "region": "international",
+              "subtotal": 1000
+            },
+            "payload": {
+              "ruleset": "standard"
+            },
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 0.2
+              }
+            },
+            "system": "taxEngine"
+          },
+          {
+            "context": {
+              "region": "remote",
+              "subtotal": 1000
+            },
+            "payload": {
+              "ruleset": "standard"
+            },
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 0.15
+              }
+            },
+            "system": "taxEngine"
+          }
+        ],
+        "fromContext": true
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "arithmetic",
+          "left": {
+            "key": "subtotal",
+            "kind": "reference"
+          },
+          "op": "multiply",
+          "right": {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "numberLiteral",
+              "value": 1
+            },
+            "op": "add",
+            "right": {
+              "cases": [
+                {
+                  "then": {
+                    "kind": "numberLiteral",
+                    "value": 0.1
+                  },
+                  "when": {
+                    "kind": "textCompare",
+                    "left": {
+                      "key": "region",
+                      "kind": "reference"
+                    },
+                    "op": "equals",
+                    "right": {
+                      "kind": "textLiteral",
+                      "value": "domestic"
+                    }
+                  }
+                }
+              ],
+              "fallback": {
+                "kind": "delegate",
+                "payload": {
+                  "ruleset": "standard"
+                },
+                "system": "taxEngine"
+              },
+              "kind": "conditional"
+            }
+          }
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1100
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "context": {
+        "lineItems": [
+          {
+            "amount": 100,
+            "category": "standard"
+          },
+          {
+            "amount": 50,
+            "category": "premium"
+          },
+          {
+            "amount": 20,
+            "category": "standard"
+          }
+        ]
+      },
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 183.5
+        }
+      },
+      "from": "delegate-handler.integration.test.ts: delegate result feeds into a fold aggregation, resolved per participating item > every participating item's markup is resolved by delegate and accumulated into one total",
+      "id": "delegate-handler.delegate-result-feeds-into-a-fold-aggregation-resolved-per-participating-item-every-participating-item-s-markup-is-resolved-by-delega.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "lineItems",
+            "context": {
+              "lineItems": [
+                {
+                  "amount": 100,
+                  "category": "standard"
+                },
+                {
+                  "amount": 50,
+                  "category": "premium"
+                },
+                {
+                  "amount": 20,
+                  "category": "standard"
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 100,
+                "category": "standard"
+              },
+              {
+                "amount": 50,
+                "category": "premium"
+              },
+              {
+                "amount": 20,
+                "category": "standard"
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "delegates": [
+          {
+            "context": {
+              "amount": 100,
+              "category": "standard"
+            },
+            "payload": {},
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 0.05
+              }
+            },
+            "system": "categoryMarkup"
+          },
+          {
+            "context": {
+              "amount": 50,
+              "category": "premium"
+            },
+            "payload": {},
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 0.15
+              }
+            },
+            "system": "categoryMarkup"
+          },
+          {
+            "context": {
+              "amount": 20,
+              "category": "standard"
+            },
+            "payload": {},
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 0.05
+              }
+            },
+            "system": "categoryMarkup"
+          }
+        ],
+        "fromContext": true
+      },
+      "tree": {
+        "collection": "lineItems",
+        "combiner": {
+          "combine": {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "accumulator"
+            },
+            "op": "add",
+            "right": {
+              "kind": "arithmetic",
+              "left": {
+                "key": "amount",
+                "kind": "reference"
+              },
+              "op": "multiply",
+              "right": {
+                "kind": "arithmetic",
+                "left": {
+                  "kind": "numberLiteral",
+                  "value": 1
+                },
+                "op": "add",
+                "right": {
+                  "kind": "delegate",
+                  "payload": {},
+                  "system": "categoryMarkup"
+                }
+              }
+            }
+          },
+          "initial": {
+            "kind": "numberLiteral",
+            "value": 0
+          },
+          "mode": "reduce"
+        },
+        "kind": "fold"
+      }
+    },
+    {
+      "as": "expression",
+      "context": {
+        "lineItems": [
+          {
+            "amount": 100,
+            "category": "standard"
+          },
+          {
+            "amount": 10,
+            "category": "unmapped"
+          }
+        ]
+      },
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "delegate-handler.integration.test.ts: delegate result feeds into a fold aggregation, resolved per participating item > one item with a category the delegate cannot rate makes the whole fold indeterminate -- unlike a quantifier, reduce has no absorbing value to rescue it",
+      "id": "delegate-handler.delegate-result-feeds-into-a-fold-aggregation-resolved-per-participating-item-one-item-with-a-category-the-delegate-cannot-rate-makes.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "lineItems",
+            "context": {
+              "lineItems": [
+                {
+                  "amount": 100,
+                  "category": "standard"
+                },
+                {
+                  "amount": 10,
+                  "category": "unmapped"
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 100,
+                "category": "standard"
+              },
+              {
+                "amount": 10,
+                "category": "unmapped"
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "delegates": [
+          {
+            "context": {
+              "amount": 100,
+              "category": "standard"
+            },
+            "payload": {},
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 0.05
+              }
+            },
+            "system": "categoryMarkup"
+          }
+        ],
+        "fromContext": true
+      },
+      "tree": {
+        "collection": "lineItems",
+        "combiner": {
+          "combine": {
+            "kind": "arithmetic",
+            "left": {
+              "kind": "accumulator"
+            },
+            "op": "add",
+            "right": {
+              "kind": "arithmetic",
+              "left": {
+                "key": "amount",
+                "kind": "reference"
+              },
+              "op": "multiply",
+              "right": {
+                "kind": "arithmetic",
+                "left": {
+                  "kind": "numberLiteral",
+                  "value": 1
+                },
+                "op": "add",
+                "right": {
+                  "kind": "delegate",
+                  "payload": {},
+                  "system": "categoryMarkup"
+                }
+              }
+            }
+          },
+          "initial": {
+            "kind": "numberLiteral",
+            "value": 0
+          },
+          "mode": "reduce"
+        },
+        "kind": "fold"
+      }
+    }
+  ]
+}

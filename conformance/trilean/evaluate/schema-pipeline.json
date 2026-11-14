@@ -1,0 +1,601 @@
+{
+  "cases": [
+    {
+      "as": "predicate",
+      "context": {
+        "sensorId": 7,
+        "temperature": 21
+      },
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "schema-pipeline.integration.test.ts: a predicate tree round-trips through untrusted JSON text before evaluation > parses, validates via PredicateNodeSchema, and evaluates to the expected outcome",
+      "id": "pipeline-evaluate.a-predicate-tree-round-trips-through-untrusted-json-text-before-evaluation-parses-validates-via-predicatenodeschema-and-evaluates-to.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "kind": "and",
+        "left": {
+          "kind": "compare",
+          "left": {
+            "key": "temperature",
+            "kind": "reference"
+          },
+          "op": "gte",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 18
+          }
+        },
+        "right": {
+          "kind": "exists",
+          "operand": {
+            "key": "sensorId",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "context": {
+        "sensorId": 7,
+        "temperature": 10
+      },
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "schema-pipeline.integration.test.ts: a predicate tree round-trips through untrusted JSON text before evaluation > the same parsed-and-validated tree is definitely false when the data falls short",
+      "id": "pipeline-evaluate.a-predicate-tree-round-trips-through-untrusted-json-text-before-evaluation-the-same-parsed-and-validated-tree-is-definitely-false-wh.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "kind": "and",
+        "left": {
+          "kind": "compare",
+          "left": {
+            "key": "temperature",
+            "kind": "reference"
+          },
+          "op": "gte",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 18
+          }
+        },
+        "right": {
+          "kind": "exists",
+          "operand": {
+            "key": "sensorId",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "context": {
+        "quantity": 3,
+        "unitPrice": 4
+      },
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "unit": {},
+          "value": 12
+        }
+      },
+      "from": "schema-pipeline.integration.test.ts: an expression tree round-trips through untrusted JSON text before evaluation > parses, validates via ExpressionNodeSchema, and evaluates to the expected computed value",
+      "id": "pipeline-evaluate.an-expression-tree-round-trips-through-untrusted-json-text-before-evaluation-parses-validates-via-expressionnodeschema-and-evaluates.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "key": "unitPrice",
+          "kind": "reference"
+        },
+        "op": "multiply",
+        "right": {
+          "key": "quantity",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "context": {
+        "shipments": [
+          {
+            "status": "cleared",
+            "weight": 40
+          },
+          {
+            "status": "cleared",
+            "weight": 25
+          },
+          {
+            "status": "held",
+            "weight": 8
+          }
+        ]
+      },
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "schema-pipeline.integration.test.ts: a deep, mutually recursive tree crosses the predicate/expression boundary in both directions > evaluates to definite true: a held shipment selects the conditional's fold branch, whose cleared-only total clears the threshold",
+      "id": "pipeline-evaluate.a-deep-mutually-recursive-tree-crosses-the-predicate-expression-boundary-in-both-directions-evaluates-to-definite-true-a-held-shipme.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "shipments",
+            "context": {
+              "shipments": [
+                {
+                  "status": "cleared",
+                  "weight": 40
+                },
+                {
+                  "status": "cleared",
+                  "weight": 25
+                },
+                {
+                  "status": "held",
+                  "weight": 8
+                }
+              ]
+            },
+            "items": [
+              {
+                "status": "cleared",
+                "weight": 40
+              },
+              {
+                "status": "cleared",
+                "weight": 25
+              },
+              {
+                "status": "held",
+                "weight": 8
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "kind": "allOf",
+        "operands": [
+          {
+            "kind": "compare",
+            "left": {
+              "cases": [
+                {
+                  "then": {
+                    "collection": "shipments",
+                    "combiner": {
+                      "combine": {
+                        "kind": "arithmetic",
+                        "left": {
+                          "kind": "accumulator"
+                        },
+                        "op": "add",
+                        "right": {
+                          "key": "weight",
+                          "kind": "reference"
+                        }
+                      },
+                      "initial": {
+                        "kind": "numberLiteral",
+                        "value": 0
+                      },
+                      "mode": "reduce"
+                    },
+                    "filter": {
+                      "kind": "textCompare",
+                      "left": {
+                        "key": "status",
+                        "kind": "reference"
+                      },
+                      "op": "equals",
+                      "right": {
+                        "kind": "textLiteral",
+                        "value": "cleared"
+                      }
+                    },
+                    "kind": "fold"
+                  },
+                  "when": {
+                    "collection": "shipments",
+                    "item": {
+                      "kind": "textCompare",
+                      "left": {
+                        "key": "status",
+                        "kind": "reference"
+                      },
+                      "op": "equals",
+                      "right": {
+                        "kind": "textLiteral",
+                        "value": "held"
+                      }
+                    },
+                    "kind": "some"
+                  }
+                }
+              ],
+              "fallback": {
+                "kind": "numberLiteral",
+                "value": 0
+              },
+              "kind": "conditional"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 60
+            }
+          },
+          {
+            "kind": "not",
+            "operand": {
+              "collection": "shipments",
+              "item": {
+                "kind": "compare",
+                "left": {
+                  "key": "weight",
+                  "kind": "reference"
+                },
+                "op": "gt",
+                "right": {
+                  "kind": "numberLiteral",
+                  "value": 30
+                }
+              },
+              "kind": "every"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "as": "predicate",
+      "context": {
+        "shipments": [
+          {
+            "status": "cleared",
+            "weight": 30
+          },
+          {
+            "status": "cleared",
+            "weight": 20
+          },
+          {
+            "status": "held",
+            "weight": 8
+          }
+        ]
+      },
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "schema-pipeline.integration.test.ts: a deep, mutually recursive tree crosses the predicate/expression boundary in both directions > evaluates to definite false when the same fold branch totals under the threshold",
+      "id": "pipeline-evaluate.a-deep-mutually-recursive-tree-crosses-the-predicate-expression-boundary-in-both-directions-evaluates-to-definite-false-when-the-sam.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "shipments",
+            "context": {
+              "shipments": [
+                {
+                  "status": "cleared",
+                  "weight": 30
+                },
+                {
+                  "status": "cleared",
+                  "weight": 20
+                },
+                {
+                  "status": "held",
+                  "weight": 8
+                }
+              ]
+            },
+            "items": [
+              {
+                "status": "cleared",
+                "weight": 30
+              },
+              {
+                "status": "cleared",
+                "weight": 20
+              },
+              {
+                "status": "held",
+                "weight": 8
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "kind": "allOf",
+        "operands": [
+          {
+            "kind": "compare",
+            "left": {
+              "cases": [
+                {
+                  "then": {
+                    "collection": "shipments",
+                    "combiner": {
+                      "combine": {
+                        "kind": "arithmetic",
+                        "left": {
+                          "kind": "accumulator"
+                        },
+                        "op": "add",
+                        "right": {
+                          "key": "weight",
+                          "kind": "reference"
+                        }
+                      },
+                      "initial": {
+                        "kind": "numberLiteral",
+                        "value": 0
+                      },
+                      "mode": "reduce"
+                    },
+                    "filter": {
+                      "kind": "textCompare",
+                      "left": {
+                        "key": "status",
+                        "kind": "reference"
+                      },
+                      "op": "equals",
+                      "right": {
+                        "kind": "textLiteral",
+                        "value": "cleared"
+                      }
+                    },
+                    "kind": "fold"
+                  },
+                  "when": {
+                    "collection": "shipments",
+                    "item": {
+                      "kind": "textCompare",
+                      "left": {
+                        "key": "status",
+                        "kind": "reference"
+                      },
+                      "op": "equals",
+                      "right": {
+                        "kind": "textLiteral",
+                        "value": "held"
+                      }
+                    },
+                    "kind": "some"
+                  }
+                }
+              ],
+              "fallback": {
+                "kind": "numberLiteral",
+                "value": 0
+              },
+              "kind": "conditional"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 60
+            }
+          },
+          {
+            "kind": "not",
+            "operand": {
+              "collection": "shipments",
+              "item": {
+                "kind": "compare",
+                "left": {
+                  "key": "weight",
+                  "kind": "reference"
+                },
+                "op": "gt",
+                "right": {
+                  "kind": "numberLiteral",
+                  "value": 30
+                }
+              },
+              "kind": "every"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "as": "predicate",
+      "context": {
+        "shipments": [
+          {
+            "status": "cleared",
+            "weight": 40
+          },
+          {
+            "status": "cleared"
+          },
+          {
+            "status": "held",
+            "weight": 8
+          }
+        ]
+      },
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "schema-pipeline.integration.test.ts: a deep, mutually recursive tree crosses the predicate/expression boundary in both directions > propagates indeterminacy up through every level when one participating shipment has no weight",
+      "id": "pipeline-evaluate.a-deep-mutually-recursive-tree-crosses-the-predicate-expression-boundary-in-both-directions-propagates-indeterminacy-up-through-ever.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "shipments",
+            "context": {
+              "shipments": [
+                {
+                  "status": "cleared",
+                  "weight": 40
+                },
+                {
+                  "status": "cleared"
+                },
+                {
+                  "status": "held",
+                  "weight": 8
+                }
+              ]
+            },
+            "items": [
+              {
+                "status": "cleared",
+                "weight": 40
+              },
+              {
+                "status": "cleared"
+              },
+              {
+                "status": "held",
+                "weight": 8
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true
+      },
+      "tree": {
+        "kind": "allOf",
+        "operands": [
+          {
+            "kind": "compare",
+            "left": {
+              "cases": [
+                {
+                  "then": {
+                    "collection": "shipments",
+                    "combiner": {
+                      "combine": {
+                        "kind": "arithmetic",
+                        "left": {
+                          "kind": "accumulator"
+                        },
+                        "op": "add",
+                        "right": {
+                          "key": "weight",
+                          "kind": "reference"
+                        }
+                      },
+                      "initial": {
+                        "kind": "numberLiteral",
+                        "value": 0
+                      },
+                      "mode": "reduce"
+                    },
+                    "filter": {
+                      "kind": "textCompare",
+                      "left": {
+                        "key": "status",
+                        "kind": "reference"
+                      },
+                      "op": "equals",
+                      "right": {
+                        "kind": "textLiteral",
+                        "value": "cleared"
+                      }
+                    },
+                    "kind": "fold"
+                  },
+                  "when": {
+                    "collection": "shipments",
+                    "item": {
+                      "kind": "textCompare",
+                      "left": {
+                        "key": "status",
+                        "kind": "reference"
+                      },
+                      "op": "equals",
+                      "right": {
+                        "kind": "textLiteral",
+                        "value": "held"
+                      }
+                    },
+                    "kind": "some"
+                  }
+                }
+              ],
+              "fallback": {
+                "kind": "numberLiteral",
+                "value": 0
+              },
+              "kind": "conditional"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 60
+            }
+          },
+          {
+            "kind": "not",
+            "operand": {
+              "collection": "shipments",
+              "item": {
+                "kind": "compare",
+                "left": {
+                  "key": "weight",
+                  "kind": "reference"
+                },
+                "op": "gt",
+                "right": {
+                  "kind": "numberLiteral",
+                  "value": 30
+                }
+              },
+              "kind": "every"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
