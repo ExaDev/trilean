@@ -1,3 +1,24 @@
+## [2.3.0](https://github.com/ExaDev/trilean/compare/trilean-sql%402.2.42...trilean-sql%402.3.0) (2026-11-14)
+
+### Features
+
+* **trilean-sql:** document the identifier on an unpushable name ([9d6cd63](https://github.com/ExaDev/trilean/commit/9d6cd631fd4d35671326c1b9517c77be7aa6c5aa))
+
+### Bug Fixes
+
+* **trilean-sql:** apply the NUL refusal of a pattern to GLOB patterns only and cite the name limit ([1dcd17e](https://github.com/ExaDev/trilean/commit/1dcd17e2aab1f3672b0f98b10204a9fbea421416))
+* **trilean-sql:** refuse a text value PostgreSQL cannot carry ([21a1c0a](https://github.com/ExaDev/trilean/commit/21a1c0a22513c9642051c4224f3fef0077efa468))
+* **trilean-sql:** refuse an identifier a quoted identifier cannot carry ([791ec2f](https://github.com/ExaDev/trilean/commit/791ec2fc50c90f6bc9e97a2b1ad6522cd36e02d6))
+* **trilean-sql:** refuse values and names each dialect cannot carry, in the guard and the compiler ([544be7e](https://github.com/ExaDev/trilean/commit/544be7ef743412368ffa53f6842ed2e37c893b00))
+
+### Documentation
+
+* **trilean-sql:** state the cost of the SQLite subject wrapper and the GLOB limit of the NUL rule ([4800453](https://github.com/ExaDev/trilean/commit/48004538168a458ebaa5af75b926af2f0fb5b5a8))
+
+### Tests
+
+* **trilean-sql:** pin an instant on a quoted column and keep the README examples true ([50bc9c8](https://github.com/ExaDev/trilean/commit/50bc9c87340df8e296ae9d25f0de380aa33a5774))
+
 ## [2.2.42](https://github.com/ExaDev/trilean/compare/trilean-sql%402.2.41...trilean-sql%402.2.42) (2026-11-14)
 
 ### Bug Fixes
