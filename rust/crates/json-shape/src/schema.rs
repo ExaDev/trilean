@@ -14,26 +14,36 @@ pub enum Draft {
     Draft2020_12,
 }
 
-/// How a schema is written.
+/// How a standalone schema document is written.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct SchemaOptions<'a> {
     pub draft: Draft,
-    /// The `$id` of a standalone document.
+    /// The `$id` of the document.
     pub id: Option<&'a str>,
-    /// The `title` of a standalone document.
+    /// The `title` of the document.
     pub title: Option<&'a str>,
-    /// Where references point: a JSON Pointer fragment such as `#/definitions/trilean`, under which the definitions
-    /// live in the document that embeds them. Defaults to the draft's own `#/$defs` or `#/definitions`.
-    pub definitions_pointer: Option<&'a str>,
 }
 
-impl SchemaOptions<'_> {
-    fn pointer(&self) -> &str {
-        self.definitions_pointer.unwrap_or(match self.draft {
-            Draft::Draft07 => "#/definitions",
-            Draft::Draft2020_12 => "#/$defs",
-        })
+/// Where references point and how the dependent keys are written.
+#[derive(Clone, Copy)]
+struct Writer<'a> {
+    draft: Draft,
+    pointer: &'a str,
+}
+
+/// A definition name as the last step of a `$ref`: a JSON Pointer token (`~` as `~0`, `/` as `~1`), then written as a
+/// URI fragment, where every byte outside the characters a fragment allows is percent-encoded.
+fn reference_token(name: &str) -> String {
+    let token = name.replace('~', "~0").replace('/', "~1");
+    let mut written = String::new();
+    for byte in token.bytes() {
+        if byte.is_ascii_alphanumeric() || b"-._~!$&'()*+,;=:@".contains(&byte) {
+            written.push(char::from(byte));
+        } else {
+            written.push_str(&format!("%{byte:02X}"));
+        }
     }
+    written
 }
 
 fn number(value: f64) -> Value {
@@ -62,7 +72,7 @@ fn typed(name: &str) -> Vec<(String, Value)> {
 }
 
 /// The schema of one shape, with references written as `options` say.
-pub fn shape_schema(shape: &ShapeDef, options: &SchemaOptions<'_>) -> Value {
+fn shape_schema(shape: &ShapeDef, options: Writer<'_>) -> Value {
     let mut pairs = match &shape.kind {
         Kind::Any => Vec::new(),
         Kind::Null => typed("null"),
@@ -153,7 +163,7 @@ pub fn shape_schema(shape: &ShapeDef, options: &SchemaOptions<'_>) -> Value {
         )],
         Kind::Ref(name) => vec![(
             "$ref".to_owned(),
-            text(&format!("{}/{name}", options.pointer())),
+            text(&format!("{}/{}", options.pointer, reference_token(name))),
         )],
     };
     if let Some(description) = &shape.description {
@@ -173,7 +183,7 @@ fn bounded(name: &str, min: Option<f64>, max: Option<f64>) -> Vec<(String, Value
     pairs
 }
 
-fn object_pairs(definition: &ObjectDef, options: &SchemaOptions<'_>) -> Vec<(String, Value)> {
+fn object_pairs(definition: &ObjectDef, options: Writer<'_>) -> Vec<(String, Value)> {
     let mut pairs = typed("object");
     if !definition.fields.is_empty() {
         push(
@@ -235,15 +245,17 @@ fn definitions_keyword(draft: Draft) -> &'static str {
     }
 }
 
-/// Just the definitions, each as a schema whose references are written against
-/// [`SchemaOptions::definitions_pointer`], for embedding in another document under that pointer.
+/// Just the definitions, each as a schema whose references are written under `pointer`, a JSON Pointer fragment
+/// such as `#/definitions/trilean`, which is where the document that embeds them holds them.
 pub fn schema_definitions(
     definitions: &Definitions,
-    options: &SchemaOptions<'_>,
+    draft: Draft,
+    pointer: &str,
 ) -> Vec<(String, Value)> {
+    let writer = Writer { draft, pointer };
     definitions
         .iter()
-        .map(|(name, shape)| (name.to_owned(), shape_schema(shape, options)))
+        .map(|(name, shape)| (name.to_owned(), shape_schema(shape, writer)))
         .collect()
 }
 
@@ -271,7 +283,15 @@ pub fn json_schema(
     if let Some(title) = options.title {
         push(&mut pairs, "title", text(title));
     }
-    let Value::Object(body) = shape_schema(root, options) else {
+    let pointer = match options.draft {
+        Draft::Draft07 => "#/definitions",
+        Draft::Draft2020_12 => "#/$defs",
+    };
+    let writer = Writer {
+        draft: options.draft,
+        pointer,
+    };
+    let Value::Object(body) = shape_schema(root, writer) else {
         unreachable!("a shape's schema is an object")
     };
     pairs.extend(body);
@@ -284,7 +304,7 @@ pub fn json_schema(
         push(
             &mut pairs,
             definitions_keyword(options.draft),
-            object(schema_definitions(&kept, options)),
+            object(schema_definitions(&kept, options.draft, pointer)),
         );
     }
     object(pairs)

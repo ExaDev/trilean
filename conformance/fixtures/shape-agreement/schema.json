@@ -259,6 +259,20 @@
       ],
       "type": "object"
     },
+    "Overlap": {
+      "oneOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "pattern": "^a",
+          "type": "string"
+        }
+      ]
+    },
     "Patterned": {
       "additionalProperties": false,
       "properties": {
@@ -308,6 +322,63 @@
       ],
       "type": "object"
     },
+    "Renamed": {
+      "additionalProperties": false,
+      "properties": {
+        "firstName": {
+          "type": "string"
+        },
+        "flag": {
+          "type": "boolean"
+        },
+        "other-key": {
+          "maximum": 255,
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "firstName"
+      ],
+      "type": "object"
+    },
+    "Shaped": {
+      "oneOf": [
+        {
+          "minLength": 2,
+          "type": "string"
+        },
+        {
+          "maximum": 3,
+          "minimum": 1,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Sparse": {
+      "minProperties": 2,
+      "properties": {
+        "a": {
+          "maximum": 255,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "b": {
+          "maximum": 255,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "c": {
+          "maximum": 255,
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
     "Together": {
       "additionalProperties": false,
       "dependentRequired": {
@@ -327,6 +398,44 @@
         }
       },
       "type": "object"
+    },
+    "Wrapper": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "Plain"
+            },
+            "name": {
+              "type": "string"
+            },
+            "note": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "name"
+          ],
+          "type": "object"
+        },
+        {
+          "properties": {
+            "kind": {
+              "const": "Other"
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "name"
+          ],
+          "type": "object"
+        }
+      ]
     }
   },
   "$schema": "https://json-schema.org/draft/2020-12/schema"

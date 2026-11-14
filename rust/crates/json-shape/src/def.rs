@@ -1,8 +1,26 @@
 //! The descriptor of a shape: what a type accepts, as data, so one description drives validation, the JSON Schema
 //! and the TypeScript declarations.
 
+use std::any::TypeId;
+
 use crate::pattern::Pattern;
 use crate::shape::Shape;
+
+/// The class of a type's shape, which decides at compile time which `#[shape(...)]` constraints may apply to a field
+/// of that type. A named type (a derived struct or enum) is written as a reference to its definition, so no
+/// constraint applies to the field itself.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Class {
+    Any,
+    Bool,
+    String,
+    Integer,
+    Number,
+    Array,
+    Map,
+    OpenObject,
+    Named,
+}
 
 /// What a value of a shape looks like.
 #[derive(Clone, Debug, PartialEq)]
@@ -182,6 +200,11 @@ pub struct Definitions {
 
 impl Definitions {
     /// The definition of `T` and of every named type it refers to.
+    ///
+    /// # Panics
+    ///
+    /// When two different types reachable from `T` have the same definition name, naming both types. A derived
+    /// type's name is its identifier, or the one `#[shape(name = "...")]` gives.
     pub fn of<T: Shape>() -> Self {
         let mut registry = Registry::default();
         T::register(&mut registry);
@@ -218,29 +241,54 @@ impl Definitions {
 
 /// Collects definitions while a type registers itself and what it refers to.
 #[derive(Debug, Default)]
-pub struct Registry(Definitions);
+pub struct Registry {
+    definitions: Definitions,
+    owners: Vec<(TypeId, &'static str)>,
+}
 
 impl Registry {
     /// The definitions collected so far.
     pub fn into_definitions(self) -> Definitions {
-        self.0
+        self.definitions
     }
 
-    /// Reserves `name`. Returns whether the caller is the first to reach it and so must call [`Registry::define`]
-    /// and register what it refers to; a recursive type is reserved before its fields are visited.
-    pub fn reserve(&mut self, name: &str) -> bool {
-        if self.0.get(name).is_some() {
+    /// Reserves `name` for the type `id`, called `type_name` in messages. Returns whether the caller is the first to
+    /// reach it and so must call [`Registry::define`] and register what it refers to; a recursive type is reserved
+    /// before its fields are visited.
+    ///
+    /// # Panics
+    ///
+    /// When `name` is already reserved by a different type, naming both, because a definition is looked up by name
+    /// and one of the two would otherwise be silently replaced by the other.
+    pub fn reserve(&mut self, name: &str, id: TypeId, type_name: &'static str) -> bool {
+        if let Some(position) = self
+            .definitions
+            .entries
+            .iter()
+            .position(|(entry, _)| entry == name)
+        {
+            let (owner, owner_name) = self.owners[position];
+            assert!(
+                owner == id,
+                "the definition name {name:?} is used by two types, {owner_name} and {type_name}; give one of them #[shape(name = \"...\")]"
+            );
             return false;
         }
-        self.0
+        self.definitions
             .entries
             .push((name.to_owned(), ShapeDef::new(Kind::Any)));
+        self.owners.push((id, type_name));
         true
     }
 
     /// Sets the definition of a reserved name.
     pub fn define(&mut self, name: &str, shape: ShapeDef) {
-        if let Some(entry) = self.0.entries.iter_mut().find(|(entry, _)| entry == name) {
+        if let Some(entry) = self
+            .definitions
+            .entries
+            .iter_mut()
+            .find(|(entry, _)| entry == name)
+        {
             entry.1 = shape;
         }
     }

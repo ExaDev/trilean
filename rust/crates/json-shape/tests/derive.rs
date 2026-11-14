@@ -268,12 +268,11 @@ fn the_schema_is_written_in_both_drafts() {
 
 #[test]
 fn definitions_alone_are_written_against_the_callers_pointer() {
-    let options = SchemaOptions {
-        draft: Draft::Draft07,
-        definitions_pointer: Some("#/definitions/trilean"),
-        ..SchemaOptions::default()
-    };
-    let written = schema_definitions(&Definitions::of::<Node>(), &options);
+    let written = schema_definitions(
+        &Definitions::of::<Node>(),
+        Draft::Draft07,
+        "#/definitions/trilean",
+    );
     let names: Vec<&str> = written.iter().map(|(name, _)| name.as_str()).collect();
     assert_eq!(names, ["Node"]);
     let node = Value::Object(written).to_string();
