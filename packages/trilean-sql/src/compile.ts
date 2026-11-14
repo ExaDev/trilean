@@ -91,6 +91,25 @@ function placeholder(
   return context.dialect.placeholder(context.params.length, castTo);
 }
 
+/** The NUL character: a quoted identifier cannot contain it in either engine. */
+const NUL = "\u0000";
+
+/**
+ * Why a name cannot be carried inside a quoted identifier, or `undefined` when it can.
+ *
+ * Two things cannot: the NUL character, which neither engine accepts in a quoted identifier (PostgreSQL: "Quoted identifiers can contain any character, except the character with code zero", https://www.postgresql.org/docs/current/sql-syntax-lexical.html#SQL-SYNTAX-IDENTIFIERS) and which ends the statement text SQLite is given ("If the nByte argument is negative, then zSql is read up to the first zero terminator", https://www.sqlite.org/c3ref/prepare.html); and an unpaired UTF-16 surrogate, which has no UTF-8 form, the encoding both engines read the statement in, so what the engine receives is not the name that was compiled. Every other character, a quote included, is carried by doubling the quote.
+ */
+function uncarriableReason(name: string): string | undefined {
+  if (name.includes(NUL)) {
+    return "the name contains a NUL character, which a quoted identifier cannot carry";
+  }
+  if (!name.isWellFormed()) {
+    return "the name contains an unpaired surrogate, which has no UTF-8 form";
+  }
+
+  return undefined;
+}
+
 /**
  * Renders a column as a SQL identifier: each dot-separated segment double-quoted, with any embedded double quote doubled. Double-quoting is ANSI-standard and means the same thing in both dialects, so this needs no per-dialect branch.
  *
@@ -100,6 +119,10 @@ function quoteColumn(
   referenceKey: string,
   binding: Readonly<SqlColumnBinding>,
 ): string {
+  const uncarriable = uncarriableReason(binding.column);
+  if (uncarriable !== undefined) {
+    throw new InvalidColumnError(referenceKey, binding.column, uncarriable);
+  }
   const segments = binding.column.split(".");
   if (segments.some((segment) => segment.length === 0)) {
     throw new InvalidColumnError(
@@ -122,6 +145,10 @@ function quoteColumn(
  * Takes the already-resolved table string rather than the whole `SqlCollectionBinding`, since every call site here has already destructured it -- unlike `quoteColumn`, which reads `binding.column` itself because its own call site still has the whole `SqlColumnBinding` in hand.
  */
 function quoteTable(collectionKey: string, table: string): string {
+  const uncarriable = uncarriableReason(table);
+  if (uncarriable !== undefined) {
+    throw new InvalidCollectionTableError(collectionKey, table, uncarriable);
+  }
   const segments = table.split(".");
   if (segments.some((segment) => segment.length === 0)) {
     throw new InvalidCollectionTableError(
@@ -384,7 +411,8 @@ function compilePredicate(
  * Every caller-supplied literal becomes a bind parameter. Nothing but structure, operators, and quoted column identifiers is ever written into the returned `sql`.
  * @throws `UnknownDialectError` if `options.dialect` names a dialect this version does not implement.
  * @throws `UnsupportedNodeError` if any node in the tree is one this compiler will not translate -- see `findUnpushableNodeKind`, which this runs first and which a caller can run itself to choose between pushdown and in-process evaluation without provoking an exception.
- * @throws `InvalidColumnError` if `columnFor` returns a column that cannot be rendered as an identifier.
+ * @throws `InvalidColumnError` if `columnFor` returns a column that cannot be rendered as an identifier: an empty name or segment, or a character a quoted identifier cannot carry.
+ * @throws `InvalidCollectionTableError` if `collectionFor` returns a table that cannot be rendered as an identifier, for the same reasons.
  */
 export function compilePredicateNode(
   node: PredicateNode,

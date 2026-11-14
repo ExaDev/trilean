@@ -97,7 +97,7 @@ Passing `options` widens the check: without them the walk is purely structural; 
 
 ### Errors
 
-`UnsupportedNodeError` (carrying `nodeKind`, `path`, `reason`), `InvalidColumnError` (carrying `referenceKey`, `column`) and `InvalidCollectionTableError` (carrying `collectionKey`, `table`), all extending `TrileanSqlError`.
+`UnsupportedNodeError` (carrying `nodeKind`, `path`, `reason`), `InvalidColumnError` (carrying `referenceKey`, `column`) and `InvalidCollectionTableError` (carrying `collectionKey`, `table`), all extending `TrileanSqlError`. The last two are thrown for a name that cannot be rendered as an identifier: an empty name or dot-separated segment, and a character a quoted identifier cannot carry. Neither engine carries the NUL character inside a quoted identifier ([PostgreSQL](https://www.postgresql.org/docs/current/sql-syntax-lexical.html#SQL-SYNTAX-IDENTIFIERS), [SQLite](https://www.sqlite.org/c3ref/prepare.html)), and an unpaired UTF-16 surrogate has no UTF-8 form, the encoding both read the statement in, so such a name is refused at compile time, in both dialects, in every position the compiler quotes one: a column, a collection's table, and each dot-separated segment of a qualified name.
 
 ## What compiles
 
