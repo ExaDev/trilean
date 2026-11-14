@@ -13,7 +13,9 @@ pub enum EcmaSubsetError {
     Parse(RegexParseError),
     /// The pattern is in the grammar, and `construct` at `index` (in UTF-16 code units) means something else in an unflagged ECMAScript `RegExp`.
     Unsupported {
+        /// The offset of the construct, in UTF-16 code units.
         index: usize,
+        /// The construct as written: `.`, `\s`, `\S`, `{`, `-` or `[`.
         construct: &'static str,
     },
 }

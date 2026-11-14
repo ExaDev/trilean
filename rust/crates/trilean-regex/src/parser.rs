@@ -4,8 +4,10 @@
 
 use crate::ast::{CharClassNode, CharRange, RegexNode};
 use crate::error::RegexParseError;
+use crate::matcher::{MAX_STATES, states_of};
 use crate::shorthand::{
-    ShorthandClassLetter, class_member_ranges, covers_every_code_unit, expand_shorthand_class,
+    ShorthandClassLetter, class_member_ranges, ecmascript_member_ranges, expand_shorthand_class,
+    normalise,
 };
 
 /// How deeply groups may nest. A deeper pattern is a parse error rather than a stack overflow, which would be a trap in the wasm build and an abort natively. The parser, the compiler and the destructor of the tree each recurse once per level.
@@ -65,6 +67,101 @@ impl From<&str> for Reason {
     fn from(text: &str) -> Self {
         Reason::default().text(text)
     }
+}
+
+/// One item of a class in source order, a range written `a-z` counting as the three items `a`, `-` and `z`, which is how ECMAScript reads a class before it decides what is a range.
+struct ClassAtom {
+    index: usize,
+    kind: AtomKind,
+}
+
+enum AtomKind {
+    Literal(u16),
+    Shorthand(ShorthandClassLetter),
+}
+
+impl ClassAtom {
+    fn literal(index: usize, unit: u16) -> Self {
+        Self {
+            index,
+            kind: AtomKind::Literal(unit),
+        }
+    }
+
+    fn is_hyphen(&self) -> bool {
+        matches!(self.kind, AtomKind::Literal(HYPHEN))
+    }
+
+    fn ecmascript_ranges(&self) -> Vec<CharRange> {
+        match self.kind {
+            AtomKind::Literal(unit) => vec![CharRange {
+                from: unit,
+                to: unit,
+            }],
+            AtomKind::Shorthand(letter) => ecmascript_member_ranges(letter),
+        }
+    }
+}
+
+/// The code units an unflagged ECMAScript `RegExp` reads the same class source as, or `None` when it refuses the class. It reads an item, and when a hyphen and a further item follow, a range from one to the other, except that a range with a shorthand class at either end is no range: it is the two ends and the hyphen, each as itself (Annex B of the specification). A range whose end is below its start is a syntax error there.
+fn ecmascript_class_ranges(atoms: &[ClassAtom]) -> Option<Vec<CharRange>> {
+    let mut ranges = Vec::new();
+    let mut at = 0;
+    while at < atoms.len() {
+        let first = &atoms[at];
+        let chained = atoms.get(at + 1).is_some_and(ClassAtom::is_hyphen) && at + 2 < atoms.len();
+        if !chained {
+            ranges.extend(first.ecmascript_ranges());
+            at += 1;
+            continue;
+        }
+        let (hyphen, last) = (&atoms[at + 1], &atoms[at + 2]);
+        match (&first.kind, &last.kind) {
+            (AtomKind::Literal(from), AtomKind::Literal(to)) if from <= to => {
+                ranges.push(CharRange {
+                    from: *from,
+                    to: *to,
+                });
+            }
+            (AtomKind::Literal(_), AtomKind::Literal(_)) => return None,
+            _ => {
+                ranges.extend(first.ecmascript_ranges());
+                ranges.extend(hyphen.ecmascript_ranges());
+                ranges.extend(last.ecmascript_ranges());
+            }
+        }
+        at += 3;
+    }
+    Some(ranges)
+}
+
+/// Whether the class means something else in ECMAScript: the set of code units it holds here differs from the set the same source holds there. The set is compared, not the spelling, so `[\s\S]` is the same in both, and `[\S \t\n\r\f\v]` is not, though neither is judged by which shorthand it contains. The hazard names the construct that causes the difference: a `\s` or `\S`, else a shorthand class chained to a range by a hyphen, else the class.
+fn class_hazard(start: usize, ranges: &[CharRange], atoms: &[ClassAtom]) -> Option<Hazard> {
+    if ecmascript_class_ranges(atoms).is_some_and(|there| normalise(ranges) == normalise(&there)) {
+        return None;
+    }
+    let space = atoms.iter().find_map(|atom| match atom.kind {
+        AtomKind::Shorthand(letter) => space_construct(letter).map(|construct| Hazard {
+            index: atom.index,
+            construct,
+        }),
+        AtomKind::Literal(_) => None,
+    });
+    let chained = || {
+        atoms
+            .windows(3)
+            .find_map(|window| match (&window[0].kind, &window[1]) {
+                (AtomKind::Shorthand(_), hyphen) if hyphen.is_hyphen() => Some(Hazard {
+                    index: hyphen.index,
+                    construct: "-",
+                }),
+                _ => None,
+            })
+    };
+    Some(space.or_else(chained).unwrap_or(Hazard {
+        index: start,
+        construct: "[",
+    }))
 }
 
 enum Quantifier {
@@ -152,6 +249,12 @@ impl<'a> Parser<'a> {
         })
     }
 
+    fn too_many_states() -> Reason {
+        Reason::default().text(&format!(
+            "the pattern needs more than {MAX_STATES} automaton states, a repetition count multiplying what it repeats"
+        ))
+    }
+
     fn at_sequence_end(&self) -> bool {
         self.peek().is_none_or(is_terminator)
     }
@@ -191,6 +294,7 @@ impl<'a> Parser<'a> {
             }
             return Ok(atom);
         }
+        let quantifier_start = self.pos;
         let Some(quantifier) = self.try_parse_quantifier()? else {
             return Ok(atom);
         };
@@ -201,12 +305,17 @@ impl<'a> Parser<'a> {
             );
         }
         let operand = Box::new(atom);
-        Ok(match quantifier {
+        let repeated = match quantifier {
             Quantifier::Star => RegexNode::Star(operand),
             Quantifier::Plus => RegexNode::Plus(operand),
             Quantifier::Optional => RegexNode::Optional(operand),
             Quantifier::Repeat { min, max } => RegexNode::Repeat { operand, min, max },
-        })
+        };
+        // A count multiplies the states of what it repeats, so it is checked here, where the tree is still small, and not when the automaton is built.
+        if states_of(&repeated) >= MAX_STATES as u64 {
+            return self.fail(quantifier_start, Self::too_many_states());
+        }
+        Ok(repeated)
     }
 
     /// A pure lookahead: whether a second quantifier immediately follows the one just applied, which is always a parse error. It leaves the cursor where it was, and a backwards bound is still an error.
@@ -449,7 +558,7 @@ impl<'a> Parser<'a> {
             self.pos += 1;
         }
         let mut ranges: Vec<CharRange> = Vec::new();
-        let mut first_space_shorthand: Option<Hazard> = None;
+        let mut atoms: Vec<ClassAtom> = Vec::new();
         loop {
             if self.at_end() {
                 return self.fail(start, "unterminated character class -- missing closing ']'");
@@ -464,51 +573,55 @@ impl<'a> Parser<'a> {
                 self.pos += 1;
                 break;
             }
-            ranges.extend(self.parse_class_item(&mut first_space_shorthand)?);
+            ranges.extend(self.parse_class_item(&mut atoms)?);
         }
-        // ECMAScript's `\s` and `\S` are wider than this grammar's, so a class holding one means the same in both only when the class as a whole holds every code unit, which no width of `\s` can change.
-        if let Some(hazard) = first_space_shorthand
-            && !covers_every_code_unit(&ranges)
-        {
+        if let Some(hazard) = class_hazard(start, &ranges, &atoms) {
             self.hazards.push(hazard);
         }
         Ok(RegexNode::CharClass(CharClassNode { negated, ranges }))
     }
 
-    fn parse_class_item(
-        &mut self,
-        first_space_shorthand: &mut Option<Hazard>,
-    ) -> ParseResult<Vec<CharRange>> {
+    fn parse_class_item(&mut self, atoms: &mut Vec<ClassAtom>) -> ParseResult<Vec<CharRange>> {
         if self.peek() == Some(BACKSLASH) {
             let (backslash, escaped) = self.read_escape()?;
             if let Some(letter) = ShorthandClassLetter::from_unit(escaped) {
-                if let Some(construct) = space_construct(letter) {
-                    first_space_shorthand.get_or_insert(Hazard {
-                        index: backslash,
-                        construct,
-                    });
-                }
+                atoms.push(ClassAtom {
+                    index: backslash,
+                    kind: AtomKind::Shorthand(letter),
+                });
                 return Ok(class_member_ranges(letter));
             }
             return match simple_escape(escaped) {
-                Some(code_unit) => self.parse_optional_range_from(code_unit),
+                Some(code_unit) => {
+                    atoms.push(ClassAtom::literal(backslash, code_unit));
+                    self.parse_optional_range_from(code_unit, atoms)
+                }
                 None => self.unknown_escape(backslash, escaped),
             };
         }
+        let index = self.pos;
         let unit = self.advance()?;
-        self.parse_optional_range_from(unit)
+        atoms.push(ClassAtom::literal(index, unit));
+        self.parse_optional_range_from(unit, atoms)
     }
 
-    fn parse_optional_range_from(&mut self, from: u16) -> ParseResult<Vec<CharRange>> {
+    fn parse_optional_range_from(
+        &mut self,
+        from: u16,
+        atoms: &mut Vec<ClassAtom>,
+    ) -> ParseResult<Vec<CharRange>> {
         let has_endpoint = self.peek() == Some(HYPHEN)
             && self.peek_at(1).is_some_and(|unit| unit != CLOSE_BRACKET);
         if !has_endpoint {
             return Ok(vec![CharRange { from, to: from }]);
         }
         let hyphen = self.pos;
+        atoms.push(ClassAtom::literal(hyphen, HYPHEN));
         // '-'
         self.pos += 1;
+        let endpoint = self.pos;
         let to = self.parse_class_range_endpoint()?;
+        atoms.push(ClassAtom::literal(endpoint, to));
         if to < from {
             return self.fail(
                 hyphen,
@@ -564,6 +677,9 @@ pub(crate) fn parse_with_hazards(
             parser.pos,
             "unexpected character -- if this was meant literally, escape it with a backslash",
         );
+    }
+    if states_of(&node) >= MAX_STATES as u64 {
+        return parser.fail(0, Parser::too_many_states());
     }
     Ok((node, parser.hazards))
 }
