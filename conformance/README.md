@@ -30,7 +30,7 @@ Every loader applies this one rule, and each runs it over `fixtures/loader-selec
 
 ### The manifest
 
-`manifest.json` records, for every corpus file, its case count and, per implementation, the ids of the cases marked to be skipped by it: `skip` is `{ "ts": [...], "rust": [...] }`, each list in ascending order and without repeats, and an id is in the list of the implementation its case names. Every runner checks the corpus against it and fails on any difference, in either list. A runner also asserts the completeness of its own run against its own list, from what it records while it runs and not from what it parsed: the id of every case at the moment the runner registers it, which of them it registers as skipped, and every case whose body starts. The registered cases are the manifest's total for the runner's files, none is registered twice, the cases it registers as skipped are exactly the manifest's list for its implementation, and every other registered case started once. A runner that skips every case, a registration loop that drops or filters cases and a body that never runs each fail it, and so does a Rust runner that skips a case marked `skip: ts` (its own list says otherwise). A run that selects tests by name leaves the completeness test out, since a case it did not run has not started. A case that skips the other implementation is one it executes. A TypeScript runner belongs to one package and executes that package's directory (`trilean/` or `trilean-regex/`), so it counts against the manifest's entries for that directory; the checks of the corpus as a whole (schema, ids, manifest) cover every file. The TypeScript runner counts the cases it registers when it collects them, so the check holds whatever the run does with the registered tests (a name filter, a bail, a retry, a shuffled order).
+`manifest.json` records, for every corpus file, its case count and, per implementation, the ids of the cases marked to be skipped by it: `skip` is `{ "ts": [...], "rust": [...] }`, each list in ascending order and without repeats, and an id is in the list of the implementation its case names. Every runner checks the corpus against it and fails on any difference, in either list. A runner also asserts the completeness of its own run against its own list, from what it records while it runs and not from what it parsed: the id of every case at the moment the runner registers it, which of them it registers as skipped, and every case whose body starts. The registered cases are the manifest's total for the runner's files, none is registered twice, the cases it registers as skipped are exactly the manifest's list for its implementation, and every other registered case started once. A runner that skips every case, a registration loop that drops or filters cases and a body that never runs each fail it, and so does a Rust runner that skips a case marked `skip: ts` (its own list says otherwise). A run that selects tests by name leaves the completeness test out, since a case it did not run has not started. A case that skips the other implementation is one it executes. A TypeScript runner belongs to one package and executes that package's directories (`trilean/`, `trilean-regex/`, or for `trilean-sql/` the unit runner's `compile`, `guard` and `pattern` and the integration runner's `execute`), so it counts against the manifest's entries for them; the checks of the corpus as a whole (schema, ids, manifest) cover every file. The TypeScript runner counts the cases it registers when it collects them, so the check holds whatever the run does with the registered tests (a name filter, a bail, a retry, a shuffled order).
 
 A manifest entry may carry `generated: true`, which marks a file the generator writes (see "Generated files"); the generator's test fails for a marked file it does not write and for a file it writes that is not marked.
 
@@ -141,6 +141,10 @@ The cases are the specification of the package's behaviour: the reason codes, th
 | `regex-match` | 120 |
 | `regex-parse` | 87 |
 | `serialise` | 38 |
+| `sql-compile` | 86 |
+| `sql-execute` | 95 |
+| `sql-guard` | 85 |
+| `sql-pattern` | 50 |
 | `validate` | 127 |
 
 Reason codes an expectation names: `domain-error`, `not-found`, `not-yet-known`, `wrong-type`.
@@ -254,6 +258,40 @@ An instant is a text in the ECMAScript date-time string format (`YYYY-MM-DD`, op
 ```
 
 `expect` is the text the ECMAScript `Number::toString` operation gives `value`: the shortest decimal text that reads back as the same double, in positional notation for a magnitude from 1e-6 up to but not including 1e21 and in exponent notation (`1e+21`, `1.5e-7`) otherwise, `0` for either zero, and `Infinity`, `-Infinity` and `NaN`. The cases run at the boundaries between the notations.
+
+### trilean-sql
+
+The cases are in `trilean-sql/compile`, `guard`, `pattern` and `execute`, each file named after the test file it was extracted from. A case states the whole result of the operation it pins, whichever part the original test asserted: the whole SQL text and every parameter with its kind, every field and the whole message of an error, the whole reason of a refusal. Where the original asserted less, the case records the rest from the TypeScript implementation, and the wording of those messages and reasons is part of the contract, as it is for `trilean`, except that a text is given as fragments (below) and the spaced double hyphen the implementation writes as a dash is not pinned. A `tree` is a predicate tree, and a number JSON cannot hold is written `{ "$number": ... }`.
+
+#### Options
+
+`options` is the compile options as data. `dialect` is `postgres` or `sqlite`; any other name is a dialect the package does not implement, which a case pins as refused. `columns` maps a reference key to `{ "column": ..., "paramType"?: ... }`, and a key the map does not hold makes the `columnFor` callback throw an error whose message is `no column mapped for reference key '<key>'`, so a case states what the compiler does with an exception from its caller: it reaches the caller unchanged, the same object, and the case names it `CallerError`. `collections` maps a collection key to `{ "table", "join", "columns" }`, where `columns` maps the reference keys inside that collection's `item` and `filter`; a key it lacks makes `collectionFor` throw an error whose message is `no collection mapped for collection key '<key>'`. `collections` present, even empty, means `collectionFor` is supplied, and absent means it is not. `postgresRegexpPushdown` and `sqliteRegexpAvailable` are the options of those names.
+
+#### sql-compile
+
+```json
+{ "id": "...", "from": "...", "kind": "sql-compile", "tree": { ... }, "options": { "dialect": "postgres", "columns": { "age": { "column": "age", "paramType": "number" } } }, "expect": { "sql": "(\"age\" > $1::double precision)", "params": [ { "type": "number", "value": 18 } ] } }
+```
+
+`expect` is `{ "sql", "params" }` or `{ "error": ... }`. Each parameter has the kind the dialect binds it as, `text`, `number`, `boolean` or `timestamp` (an instant literal), with its value. The TypeScript implementation holds a timestamp as the instant's text, exactly as it holds a text, so its runner checks a timestamp's value and that it is a string, and the other three kinds in full; an implementation that tells them apart checks the kind. `expectColumnCalls`, where given, lists the keys the compilation passes to the top-level `columnFor`, in order: a key is asked once however often a tree uses it.
+
+An `error` names the failure by `name`, always with `message`, fragments the whole message contains in order. A case records a message or a reason in full as the fragments between the spaced double hyphens the implementation writes as a dash, so that the dash is not pinned. `UnsupportedNodeError` also gives `nodeKind`, `path` and `reason` (fragments of the refusal's reason), `InvalidColumnError` its `referenceKey` and `column`, `InvalidCollectionTableError` its `collectionKey` and `table`, and `UnknownDialectError` the `dialect` it was given and the `implemented` dialects. The dialect is checked before the tree is read, so an unimplemented dialect is the failure reported for any tree.
+
+#### sql-guard
+
+`expect` is `null` for a tree the compiler translates, `{ "nodeKind", "path", "reason" }` for the first node it does not (the path is rooted at `$`, the reason is fragments), or an `error` as above for a guard that throws, which it does for an unimplemented dialect and for an exception from a callback. A case without `options` calls the guard with none: the dialect is then `postgres` and the reasons describe it.
+
+#### sql-pattern
+
+`pattern` is the source of a trilean-regex pattern and `dialect` the engine whose syntax it is rendered in. `expect` is `{ "text" }`, the rendered pattern, or `{ "error": { "message": [...] } }` for a pattern the dialect cannot express.
+
+#### sql-execute
+
+A case runs a query against a real engine over a fixture, `trilean-sql/execute/fixtures/<fixture>.json`, which is data and not a corpus file. A fixture holds `tables` (each with `columns`, a map of column name to `text`, `number`, `boolean` or `timestamp`, a `primaryKey` and `rows`, an object per row with `null` for an unknown value) and `evaluator`, which says how trilean's evaluator reads the same rows. A runner maps the column types to `TEXT`, `REAL`, `INTEGER` (a boolean is stored as 0 or 1) and `TEXT` in SQLite and to `text`, `double precision`, `boolean` and `timestamptz` in PostgreSQL, creates and fills the tables, and quotes every identifier. The SQLite database is a fresh in-memory one per case, and the PostgreSQL one is shared by the cases of a run, so a case must not change it. SQLite cases need nothing beyond the runner, and PostgreSQL cases need a PostgreSQL server, which the TypeScript runner starts as an ephemeral container and so needs a Docker-compatible daemon.
+
+`run` is one of three forms. `{ "tree", "options" }` compiles the tree for the case's `dialect` (the options never name one), runs `SELECT <id> FROM <table> WHERE <fragment> ORDER BY <id>` with the parameters bound (a boolean as the integer 0 or 1 under SQLite) and requires the ids to equal `expect.rows` and to equal the ids the evaluator selects over the fixture. `{ "tree" }` only evaluates the tree: `expect.rows` are the ids the evaluator selects, and the dialect is not used. `{ "sql", "params" }` runs the text with the parameters, `{ "$number": "NaN" }` among the forms a parameter may take, and `expect.result` is the rows it returns, each an array of its columns. The evaluator's ids are those rows of `evaluator.table` for which an evaluation with no context is definitely true, sorted; a reference key names a column other than the id column and resolves to the cell's value as a computed value of the column's type (an instant for a `timestamp`), or to nothing when the cell is `null`; a reference inside an item resolves against the item alone, a record of the item's columns whose number and text cells are values and whose other cells are nothing; a collection key names an entry of `evaluator.collections`, whose items are the rows of its `table` whose `foreignKey` equals the id, each reduced to its `items` columns, and any other key is an empty collection; a lookup is a failure of the case.
+
+`expect` is `{ "rows": ... }` or `{ "queryError": [...] }`: the query is rejected by the engine and fragments of its message occur in order, compared without regard to the case of the ASCII letters. `expectSql` gives the exact text the compilation produced, and `expectTableCounts` the number of rows each named table holds once the query has run. `connection` with `regexpFunction: false` leaves SQLite without the `regexp` function that is otherwise registered: it answers `NULL` when either argument is not a text, so a NULL operand stays unknown under a negated match, and 1 or 0 for whether the ECMAScript regular expression `pattern` matches `text`.
 
 ## Tests that stay outside the corpus
 
@@ -411,3 +449,48 @@ A test stays in an implementation's own suite when a case cannot state it. Each 
 ## Adding a case
 
 Add it to the file for the test file it belongs to, with a fresh `id`, update `manifest.json`, and run the corpus (`pnpm test` runs the TypeScript runner, `cargo test` in `rust/` loads and checks every file). When a behaviour changes on purpose, change the case in the same commit as the code.
+
+## Tests of trilean-sql that stay outside the corpus
+
+The PostgreSQL integration tests are cases of `trilean-sql/execute`, and the PGlite files repeat each of them on a second engine, PostgreSQL compiled to WebAssembly and run in process. They stay in TypeScript, since a second engine of the same dialect adds no behaviour of the specification, and go with the TypeScript when the SQL suite moves to Rust. Each is listed with its exact title and the code below, and `trilean-sql/src/conformance.unit.test.ts` fails when a test of the package other than the runners' own has no row, when a row has no test, and when a row's code is not defined here.
+
+| Code | Why a case cannot state it | A port must |
+| --- | --- | --- |
+| S1 | it repeats a case of `trilean-sql/execute` on a second engine of the same dialect | run the case on the engine it has, as the `execute` cases are |
+
+| Test file | Test | Code |
+| --- | --- | --- |
+| pglite.edge-cases.integration.test.ts | executes a comparison between two literals, which needs both placeholders typed | S1 |
+| pglite.edge-cases.integration.test.ts | executes an empty allOf and anyOf as their identities | S1 |
+| pglite.edge-cases.integration.test.ts | refuses NaN, and measures the divergence that refusal exists to prevent | S1 |
+| pglite.edge-cases.integration.test.ts | treats an injection attempt as data and leaves the table standing | S1 |
+| pglite.edge-cases.integration.test.ts | neutralises a hostile column name into one identifier the server rejects | S1 |
+| pglite.predicates.integration.test.ts | excludes the row whose age is unknown | S1 |
+| pglite.predicates.integration.test.ts | still excludes it under negation, which two-valued logic could not do | S1 |
+| pglite.predicates.integration.test.ts | keeps a row whose unknown comparison is absorbed by a true disjunct | S1 |
+| pglite.predicates.integration.test.ts | collapses an unknown conjunct absorbed by a false one, observably under negation | S1 |
+| pglite.predicates.integration.test.ts | compares instants across a NULL | S1 |
+| pglite.predicates.integration.test.ts | compares booleans for equality across a NULL | S1 |
+| pglite.predicates.integration.test.ts | partitions the table, because it is the one predicate neither engine leaves unknown | S1 |
+| pglite.predicates.integration.test.ts | matches a pattern with PostgreSQL's own regular-expression operator, once postgresRegexpPushdown opts into it | S1 |
+| pglite.predicates.integration.test.ts | leaves a NULL operand unknown under a negated match, once postgresRegexpPushdown opts into it | S1 |
+| pglite.predicates.integration.test.ts | refuses 'matches' by default, falling back to in-process evaluation | S1 |
+| pglite.predicates.integration.test.ts | matches a start-anchored literal prefix | S1 |
+| pglite.predicates.integration.test.ts | matches a bounded-repetition character class | S1 |
+| pglite.predicates.integration.test.ts | matches an alternation | S1 |
+| pglite.predicates.integration.test.ts | portableNotMatches is the negation, and still leaves an unresolved name unknown | S1 |
+| pglite.predicates.integration.test.ts | PGlite's own bare '.' already matches a newline under '~', exactly like trilean-regex's own '.', so this compiler translates it unchanged | S1 |
+| pglite.predicates.integration.test.ts | matches a candidate list | S1 |
+| pglite.predicates.integration.test.ts | leaves NOT IN unknown for a NULL operand | S1 |
+| pglite.predicates.integration.test.ts | compiles an empty 'in' to something that is false, not unknown, for a known operand | S1 |
+| pglite.predicates.integration.test.ts | compiles an empty 'notIn' to something that is true, not unknown, for a known operand | S1 |
+| pglite.quantifiers.integration.test.ts | some: true the moment one participating tag among several votes true | S1 |
+| pglite.quantifiers.integration.test.ts | every: false the moment one participating tag among several votes false | S1 |
+| pglite.quantifiers.integration.test.ts | filter narrows which tags participate before item is even evaluated | S1 |
+| pglite.quantifiers.integration.test.ts | some/every over an empty collection reduce to each connective's own identity | S1 |
+| pglite.quantifiers.integration.test.ts | some absorbs an indeterminate vote from a NULL-weighted tag alongside a clean true vote | S1 |
+| pglite.quantifiers.integration.test.ts | some/every are indeterminate when the sole participating tag's weight is unknown | S1 |
+| pglite.quantifiers.integration.test.ts | a per-row AND inside 'item' rules out the and-over-range hazard a naive split translation would fall into | S1 |
+| pglite.quantifiers.integration.test.ts | fold('max'/'min') aggregates the projected weight across participating tags | S1 |
+| pglite.quantifiers.integration.test.ts | fold('max') is indeterminate over an empty collection and over one whose sole participant is NULL | S1 |
+| pglite.quantifiers.integration.test.ts | agrees with the evaluator row for row | S1 |

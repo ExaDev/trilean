@@ -1,0 +1,811 @@
+{
+  "cases": [
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "ada",
+          "unknown"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.predicates.integration.test.ts: comparisons against a column that can be NULL > excludes the row whose age is unknown",
+      "id": "sql.execute.sqlite-predicates.comparisons-against-a-column-that-can-be-null-ex",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "age",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 18
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "grace"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.predicates.integration.test.ts: comparisons against a column that can be NULL > still excludes it under negation, which two-valued logic could not do",
+      "id": "sql.execute.sqlite-predicates.comparisons-against-a-column-that-can-be-null-st",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "not",
+          "operand": {
+            "kind": "compare",
+            "left": {
+              "key": "age",
+              "kind": "reference"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 18
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "ada",
+          "lin",
+          "unknown"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.predicates.integration.test.ts: comparisons against a column that can be NULL > keeps a row whose unknown comparison is absorbed by a true disjunct",
+      "id": "sql.execute.sqlite-predicates.comparisons-against-a-column-that-can-be-null-ke",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "anyOf",
+          "operands": [
+            {
+              "kind": "compare",
+              "left": {
+                "key": "age",
+                "kind": "reference"
+              },
+              "op": "gt",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 18
+              }
+            },
+            {
+              "kind": "textCompare",
+              "left": {
+                "key": "name",
+                "kind": "reference"
+              },
+              "op": "equals",
+              "right": {
+                "kind": "textLiteral",
+                "value": "lin"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "ada",
+          "grace",
+          "lin"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.predicates.integration.test.ts: comparisons against a column that can be NULL > collapses an unknown conjunct absorbed by a false one, observably under negation",
+      "id": "sql.execute.sqlite-predicates.comparisons-against-a-column-that-can-be-null-co",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "not",
+          "operand": {
+            "kind": "allOf",
+            "operands": [
+              {
+                "kind": "compare",
+                "left": {
+                  "key": "age",
+                  "kind": "reference"
+                },
+                "op": "gt",
+                "right": {
+                  "kind": "numberLiteral",
+                  "value": 18
+                }
+              },
+              {
+                "kind": "textCompare",
+                "left": {
+                  "key": "name",
+                  "kind": "reference"
+                },
+                "op": "equals",
+                "right": {
+                  "kind": "textLiteral",
+                  "value": "nobody"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "ada",
+          "lin"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.predicates.integration.test.ts: comparisons against a column that can be NULL > compares instants across a NULL, as the ISO-8601 text SQLite stores them as",
+      "id": "sql.execute.sqlite-predicates.comparisons-against-a-column-that-can-be-null-co-2",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "joined",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "instantLiteral",
+            "value": "2022-01-01T00:00:00Z"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "ada",
+          "lin"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.predicates.integration.test.ts: comparisons against a column that can be NULL > compares booleans for equality across a NULL, as the integers SQLite stores them as",
+      "id": "sql.execute.sqlite-predicates.comparisons-against-a-column-that-can-be-null-co-3",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "active",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "booleanLiteral",
+            "value": true
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "ada",
+          "grace"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.predicates.integration.test.ts: exists > partitions the table, because it is the one predicate neither engine leaves unknown",
+      "id": "sql.execute.sqlite-predicates.exists-partitions-the-table-because-it-is-the-on",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "exists",
+          "operand": {
+            "key": "note",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "lin",
+          "unknown"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.predicates.integration.test.ts: exists > partitions the table, because it is the one predicate neither engine leaves unknown",
+      "id": "sql.execute.sqlite-predicates.exists-partitions-the-table-because-it-is-the-on-2",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "not",
+          "operand": {
+            "kind": "exists",
+            "operand": {
+              "key": "note",
+              "kind": "reference"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "ada",
+          "grace"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.predicates.integration.test.ts: textCompare > matches a pattern through the registered REGEXP function",
+      "id": "sql.execute.sqlite-predicates.textcompare-matches-a-pattern-through-the-regist",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "name",
+            "kind": "reference"
+          },
+          "op": "matches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^(a|g)"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "grace",
+          "lin"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.predicates.integration.test.ts: textCompare > leaves a NULL operand unknown under a negated match",
+      "id": "sql.execute.sqlite-predicates.textcompare-leaves-a-null-operand-unknown-under",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "name",
+            "kind": "reference"
+          },
+          "op": "notMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a"
+          }
+        }
+      }
+    },
+    {
+      "connection": {
+        "regexpFunction": false
+      },
+      "dialect": "sqlite",
+      "expect": {
+        "queryError": [
+          "no such function: REGEXP"
+        ]
+      },
+      "expectSql": "(\"name\" REGEXP ?)",
+      "fixture": "subjects",
+      "from": "sqlite.predicates.integration.test.ts: textCompare > fails loudly rather than answering wrongly when REGEXP is not registered",
+      "id": "sql.execute.sqlite-predicates.textcompare-fails-loudly-rather-than-answering-w",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "name",
+            "kind": "reference"
+          },
+          "op": "matches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "grace"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.predicates.integration.test.ts: portableMatches/portableNotMatches (trilean-regex, translated to a GLOB wildcard) > matches a start-anchored literal prefix",
+      "id": "sql.execute.sqlite-predicates.portablematches-portablenotmatches-trilean-regex",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "name",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^gr"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "ada"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.predicates.integration.test.ts: portableMatches/portableNotMatches (trilean-regex, translated to a GLOB wildcard) > matches an end-anchored literal suffix",
+      "id": "sql.execute.sqlite-predicates.portablematches-portablenotmatches-trilean-regex-2",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "name",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "ada"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.predicates.integration.test.ts: portableMatches/portableNotMatches (trilean-regex, translated to a GLOB wildcard) > matches '.' as exactly one wildcard character",
+      "id": "sql.execute.sqlite-predicates.portablematches-portablenotmatches-trilean-regex-3",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "name",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a.a$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "ada",
+          "grace"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.predicates.integration.test.ts: portableMatches/portableNotMatches (trilean-regex, translated to a GLOB wildcard) > matches a safe, non-negated character class",
+      "id": "sql.execute.sqlite-predicates.portablematches-portablenotmatches-trilean-regex-4",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "name",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^[ag]"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "grace",
+          "lin"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.predicates.integration.test.ts: portableMatches/portableNotMatches (trilean-regex, translated to a GLOB wildcard) > portableNotMatches is the negation, and still leaves an unresolved name unknown",
+      "id": "sql.execute.sqlite-predicates.portablematches-portablenotmatches-trilean-regex-5",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "name",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "ada"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.predicates.integration.test.ts: memberOf > matches a candidate list",
+      "id": "sql.execute.sqlite-predicates.memberof-matches-a-candidate-list",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "textLiteral",
+              "value": "ada"
+            },
+            {
+              "kind": "textLiteral",
+              "value": "nobody"
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "name",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "grace",
+          "lin"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.predicates.integration.test.ts: memberOf > leaves NOT IN unknown for a NULL operand",
+      "id": "sql.execute.sqlite-predicates.memberof-leaves-not-in-unknown-for-a-null-operan",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "textLiteral",
+              "value": "ada"
+            }
+          ],
+          "kind": "memberOf",
+          "op": "notIn",
+          "operand": {
+            "key": "name",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": []
+      },
+      "fixture": "subjects",
+      "from": "sqlite.predicates.integration.test.ts: memberOf > compiles an empty 'in' to something that is false, not unknown, for a known operand",
+      "id": "sql.execute.sqlite-predicates.memberof-compiles-an-empty-in-to-something-that",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "name",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "ada",
+          "grace",
+          "lin"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.predicates.integration.test.ts: memberOf > compiles an empty 'in' to something that is false, not unknown, for a known operand",
+      "id": "sql.execute.sqlite-predicates.memberof-compiles-an-empty-in-to-something-that-2",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "not",
+          "operand": {
+            "candidates": [],
+            "kind": "memberOf",
+            "op": "in",
+            "operand": {
+              "key": "name",
+              "kind": "reference"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "ada",
+          "grace",
+          "lin"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.predicates.integration.test.ts: memberOf > compiles an empty 'notIn' to something that is true, not unknown, for a known operand",
+      "id": "sql.execute.sqlite-predicates.memberof-compiles-an-empty-notin-to-something-th",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [],
+          "kind": "memberOf",
+          "op": "notIn",
+          "operand": {
+            "key": "name",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": []
+      },
+      "fixture": "subjects",
+      "from": "sqlite.predicates.integration.test.ts: memberOf > compiles an empty 'notIn' to something that is true, not unknown, for a known operand",
+      "id": "sql.execute.sqlite-predicates.memberof-compiles-an-empty-notin-to-something-th-2",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "not",
+          "operand": {
+            "candidates": [],
+            "kind": "memberOf",
+            "op": "notIn",
+            "operand": {
+              "key": "name",
+              "kind": "reference"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

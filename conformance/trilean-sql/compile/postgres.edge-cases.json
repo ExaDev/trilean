@@ -1,0 +1,41 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "error": {
+          "message": [
+            "cannot compile 'numberLiteral' at $.left: NaN is equal to nothing in trilean, not even itself, whereas PostgreSQL defines NaN as equal to itself and greater than every other double"
+          ],
+          "name": "UnsupportedNodeError",
+          "nodeKind": "numberLiteral",
+          "path": "$.left",
+          "reason": [
+            "NaN is equal to nothing in trilean, not even itself, whereas PostgreSQL defines NaN as equal to itself and greater than every other double"
+          ]
+        }
+      },
+      "from": "postgres.edge-cases.integration.test.ts: degenerate and adversarial fragments > refuses NaN, and measures the divergence that refusal exists to prevent",
+      "id": "sql.compile.postgres-edge-cases.degenerate-and-adversarial-fragments-refuses-nan",
+      "kind": "sql-compile",
+      "options": {
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "numberLiteral",
+          "value": {
+            "$number": "NaN"
+          }
+        },
+        "op": "eq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": {
+            "$number": "NaN"
+          }
+        }
+      }
+    }
+  ]
+}

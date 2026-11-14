@@ -1,0 +1,77 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 18
+          },
+          {
+            "type": "boolean"
+          }
+        ],
+        "sql": "(NOT ((\"age\" > $1::double precision) AND ((\"note\" IS NOT NULL) OR (\"active\" = $2::boolean))))"
+      },
+      "from": "compile.predicates.unit.test.ts: connectives > compiles and/or/not to their SQL counterparts",
+      "id": "sql.compile.compile-predicates.connectives-compiles-and-or-not-to-their-sql-cou",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "not",
+        "operand": {
+          "kind": "and",
+          "left": {
+            "kind": "compare",
+            "left": {
+              "key": "age",
+              "kind": "reference"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 18
+            }
+          },
+          "right": {
+            "kind": "or",
+            "left": {
+              "kind": "exists",
+              "operand": {
+                "key": "note",
+                "kind": "reference"
+              }
+            },
+            "right": {
+              "kind": "compare",
+              "left": {
+                "key": "active",
+                "kind": "reference"
+              },
+              "op": "eq",
+              "right": {
+                "kind": "booleanLiteral",
+                "value": true
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

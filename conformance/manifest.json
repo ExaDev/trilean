@@ -22,6 +22,86 @@
         "ts": []
       }
     },
+    "trilean-sql/compile/compile.dialects.json": {
+      "cases": 26,
+      "skip": []
+    },
+    "trilean-sql/compile/compile.mechanics.json": {
+      "cases": 13,
+      "skip": []
+    },
+    "trilean-sql/compile/compile.predicates.json": {
+      "cases": 32,
+      "skip": []
+    },
+    "trilean-sql/compile/compile.quantifiers.json": {
+      "cases": 7,
+      "skip": []
+    },
+    "trilean-sql/compile/postgres.edge-cases.json": {
+      "cases": 1,
+      "skip": []
+    },
+    "trilean-sql/compile/postgres.predicates.json": {
+      "cases": 1,
+      "skip": []
+    },
+    "trilean-sql/compile/sqlite.edge-cases.json": {
+      "cases": 4,
+      "skip": []
+    },
+    "trilean-sql/compile/sqlite.predicates.json": {
+      "cases": 2,
+      "skip": []
+    },
+    "trilean-sql/execute/postgres.edge-cases.json": {
+      "cases": 7,
+      "skip": []
+    },
+    "trilean-sql/execute/postgres.predicates.json": {
+      "cases": 21,
+      "skip": []
+    },
+    "trilean-sql/execute/postgres.quantifiers.json": {
+      "cases": 16,
+      "skip": []
+    },
+    "trilean-sql/execute/sqlite.edge-cases.json": {
+      "cases": 13,
+      "skip": []
+    },
+    "trilean-sql/execute/sqlite.predicates.json": {
+      "cases": 22,
+      "skip": []
+    },
+    "trilean-sql/execute/sqlite.quantifiers.json": {
+      "cases": 16,
+      "skip": []
+    },
+    "trilean-sql/guard/compile.dialects.json": {
+      "cases": 2,
+      "skip": []
+    },
+    "trilean-sql/guard/guard.dialect.json": {
+      "cases": 31,
+      "skip": []
+    },
+    "trilean-sql/guard/guard.quantification.json": {
+      "cases": 18,
+      "skip": []
+    },
+    "trilean-sql/guard/guard.references.json": {
+      "cases": 19,
+      "skip": []
+    },
+    "trilean-sql/guard/guard.supported.json": {
+      "cases": 15,
+      "skip": []
+    },
+    "trilean-sql/pattern/portable-pattern.json": {
+      "cases": 50,
+      "skip": []
+    },
     "trilean/build/derived-aggregates.json": {
       "cases": 10,
       "skip": {

@@ -1,0 +1,40 @@
+{
+  "cases": [
+    {
+      "connection": "not-the-type",
+      "dialect": "sqlite",
+      "expect": {
+        "queryError": [
+          "no such function: REGEXP"
+        ]
+      },
+      "expectSql": "(\"name\" REGEXP ?)",
+      "fixture": "subjects",
+      "from": "sqlite.predicates.integration.test.ts: textCompare > fails loudly rather than answering wrongly when REGEXP is not registered",
+      "id": "sql.execute.sqlite-predicates.textcompare-fails-loudly-rather-than-answering-w",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "name",
+            "kind": "reference"
+          },
+          "op": "matches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a"
+          }
+        }
+      }
+    }
+  ]
+}

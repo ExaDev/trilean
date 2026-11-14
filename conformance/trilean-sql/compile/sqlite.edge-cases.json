@@ -1,0 +1,164 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "error": {
+          "message": [
+            "cannot compile 'numberLiteral' at $.left: NaN is equal to nothing in trilean, not even itself, whereas SQLite has no NaN at all and a driver binding one substitutes SQL NULL",
+            "so 'NaN = NaN' is indeterminate there rather than definitely false, and its negation matches every row instead of none"
+          ],
+          "name": "UnsupportedNodeError",
+          "nodeKind": "numberLiteral",
+          "path": "$.left",
+          "reason": [
+            "NaN is equal to nothing in trilean, not even itself, whereas SQLite has no NaN at all and a driver binding one substitutes SQL NULL",
+            "so 'NaN = NaN' is indeterminate there rather than definitely false, and its negation matches every row instead of none"
+          ]
+        }
+      },
+      "from": "sqlite.edge-cases.integration.test.ts: the divergences the guard's refusals exist to prevent > refuses NaN, and measures the driver substitution that refusal exists to prevent",
+      "id": "sql.compile.sqlite-edge-cases.the-divergences-the-guard-s-refusals-exist-to-pr",
+      "kind": "sql-compile",
+      "options": {
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "numberLiteral",
+          "value": {
+            "$number": "NaN"
+          }
+        },
+        "op": "eq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": {
+            "$number": "NaN"
+          }
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": [
+            "cannot compile 'compare' at $: 'compare' never compares text in trilean",
+            "it returns wrong-type and directs the caller to 'textCompare'",
+            "but SQLite would answer definitely for the text operand at $.left, comparing it under the text affinity it applies to the other side ('9' > 5 is true there, while '10' > 5 is not)"
+          ],
+          "name": "UnsupportedNodeError",
+          "nodeKind": "compare",
+          "path": "$",
+          "reason": [
+            "'compare' never compares text in trilean",
+            "it returns wrong-type and directs the caller to 'textCompare'",
+            "but SQLite would answer definitely for the text operand at $.left, comparing it under the text affinity it applies to the other side ('9' > 5 is true there, while '10' > 5 is not)"
+          ]
+        }
+      },
+      "from": "sqlite.edge-cases.integration.test.ts: the divergences the guard's refusals exist to prevent > refuses an ordered text operand, and measures the lexicographic answer that refusal exists to prevent",
+      "id": "sql.compile.sqlite-edge-cases.the-divergences-the-guard-s-refusals-exist-to-pr-2",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "textLiteral",
+          "value": "ada"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": [
+            "cannot compile 'compare' at $: booleans have no ordering in trilean, so 'gt' against the boolean operand at $.left is wrong-type there, whereas SQLite stores booleans as the integers 0 and 1 and orders them as integers"
+          ],
+          "name": "UnsupportedNodeError",
+          "nodeKind": "compare",
+          "path": "$",
+          "reason": [
+            "booleans have no ordering in trilean, so 'gt' against the boolean operand at $.left is wrong-type there, whereas SQLite stores booleans as the integers 0 and 1 and orders them as integers"
+          ]
+        }
+      },
+      "from": "sqlite.edge-cases.integration.test.ts: the divergences the guard's refusals exist to prevent > refuses an ordered boolean, and measures the integer ordering that refusal exists to prevent",
+      "id": "sql.compile.sqlite-edge-cases.the-divergences-the-guard-s-refusals-exist-to-pr-3",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "active",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "booleanLiteral",
+          "value": false
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": [
+            "cannot compile 'compare' at $: trilean treats a comparison between a 'text' value ($.left) and a 'number' value ($.right) as wrong-type, whereas SQLite's type affinity may coerce one to the other and answer definitely"
+          ],
+          "name": "UnsupportedNodeError",
+          "nodeKind": "compare",
+          "path": "$",
+          "reason": [
+            "trilean treats a comparison between a 'text' value ($.left) and a 'number' value ($.right) as wrong-type, whereas SQLite's type affinity may coerce one to the other and answer definitely"
+          ]
+        }
+      },
+      "from": "sqlite.edge-cases.integration.test.ts: the divergences the guard's refusals exist to prevent > refuses a cross-kind comparison, and measures the coercion that refusal exists to prevent",
+      "id": "sql.compile.sqlite-edge-cases.the-divergences-the-guard-s-refusals-exist-to-pr-4",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 5
+        }
+      }
+    }
+  ]
+}

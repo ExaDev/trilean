@@ -1,0 +1,34 @@
+{
+  "cases": [
+    {
+      "dialect": "sqlite",
+      "expect": {},
+      "expectSql": "(\"name\"\" = name OR \"\"1\" = ?)",
+      "fixture": "subjects",
+      "from": "sqlite.edge-cases.integration.test.ts: degenerate and adversarial fragments > neutralises a hostile column name into one identifier the engine rejects",
+      "id": "sql.execute.sqlite-edge-cases.degenerate-and-adversarial-fragments-neutralises",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "name": {
+              "column": "name\" = name OR \"1"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "name",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,645 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 1
+          },
+          {
+            "type": "text",
+            "value": "b"
+          },
+          {
+            "type": "text",
+            "value": "c"
+          },
+          {
+            "type": "number",
+            "value": 4
+          }
+        ],
+        "sql": "((\"age\" > $1::double precision) AND (\"name\" IN ($2::text, $3::text)) AND (\"age\" < $4::double precision))"
+      },
+      "from": "compile.mechanics.unit.test.ts: parameters > numbers placeholders in emission order across a nested tree",
+      "id": "sql.compile.compile-mechanics.parameters-numbers-placeholders-in-emission-orde",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "allOf",
+        "operands": [
+          {
+            "kind": "compare",
+            "left": {
+              "key": "age",
+              "kind": "reference"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          },
+          {
+            "candidates": [
+              {
+                "kind": "textLiteral",
+                "value": "b"
+              },
+              {
+                "kind": "textLiteral",
+                "value": "c"
+              }
+            ],
+            "kind": "memberOf",
+            "op": "in",
+            "operand": {
+              "key": "name",
+              "kind": "reference"
+            }
+          },
+          {
+            "kind": "compare",
+            "left": {
+              "key": "age",
+              "kind": "reference"
+            },
+            "op": "lt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 4
+            }
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "'; DROP TABLE subjects; --"
+          }
+        ],
+        "sql": "(\"name\" = $1::text)"
+      },
+      "from": "compile.mechanics.unit.test.ts: parameters > never writes a literal into the SQL text",
+      "id": "sql.compile.compile-mechanics.parameters-never-writes-a-literal-into-the-sql-t",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "'; DROP TABLE subjects; --"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"public\".\"subjects\".\"note\" IS NOT NULL)"
+      },
+      "from": "compile.mechanics.unit.test.ts: column identifiers > quotes each dot-separated segment separately",
+      "id": "sql.compile.compile-mechanics.column-identifiers-quotes-each-dot-separated-seg",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "anything": {
+            "column": "public.subjects.note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "anything",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"note\"\"; DROP TABLE subjects; --\" IS NOT NULL)"
+      },
+      "from": "compile.mechanics.unit.test.ts: column identifiers > neutralises a column name carrying a quote by doubling it",
+      "id": "sql.compile.compile-mechanics.column-identifiers-neutralises-a-column-name-car",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "anything": {
+            "column": "note\"; DROP TABLE subjects; --"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "anything",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "",
+          "message": [
+            "columnFor(\"anything\") returned \"\", which is not a usable column identifier: the name is empty"
+          ],
+          "name": "InvalidColumnError",
+          "referenceKey": "anything"
+        }
+      },
+      "from": "compile.mechanics.unit.test.ts: column identifiers > rejects an empty column name",
+      "id": "sql.compile.compile-mechanics.column-identifiers-rejects-an-empty-column-name",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "anything": {
+            "column": ""
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "anything",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "public..note",
+          "message": [
+            "columnFor(\"anything\") returned \"public..note\", which is not a usable column identifier: a dot-separated segment is empty"
+          ],
+          "name": "InvalidColumnError",
+          "referenceKey": "anything"
+        }
+      },
+      "from": "compile.mechanics.unit.test.ts: column identifiers > rejects an empty dot-separated segment",
+      "id": "sql.compile.compile-mechanics.column-identifiers-rejects-an-empty-dot-separate",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "anything": {
+            "column": "public..note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "anything",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": [
+            "no column mapped for reference key 'unmapped'"
+          ],
+          "name": "CallerError"
+        }
+      },
+      "from": "compile.mechanics.unit.test.ts: column identifiers > propagates an error thrown by columnFor unchanged",
+      "id": "sql.compile.compile-mechanics.column-identifiers-propagates-an-error-thrown-by",
+      "kind": "sql-compile",
+      "options": {
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "unmapped",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 18
+          },
+          {
+            "type": "number",
+            "value": 65
+          }
+        ],
+        "sql": "((\"age\" > $1::double precision) AND (\"age\" < $2::double precision))"
+      },
+      "expectColumnCalls": [
+        "age"
+      ],
+      "from": "compile.mechanics.unit.test.ts: column identifiers > asks columnFor once per distinct reference key",
+      "id": "sql.compile.compile-mechanics.column-identifiers-asks-columnfor-once-per-disti",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "and",
+        "left": {
+          "kind": "compare",
+          "left": {
+            "key": "age",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 18
+          }
+        },
+        "right": {
+          "kind": "compare",
+          "left": {
+            "key": "age",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 65
+          }
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": [
+            "cannot compile 'treeReference' at $.right: a referenced tree is resolved by the caller's resolvers; inline it before compiling"
+          ],
+          "name": "UnsupportedNodeError",
+          "nodeKind": "treeReference",
+          "path": "$.right",
+          "reason": [
+            "a referenced tree is resolved by the caller's resolvers; inline it before compiling"
+          ]
+        }
+      },
+      "from": "compile.mechanics.unit.test.ts: refusal > throws UnsupportedNodeError carrying the offending kind and path",
+      "id": "sql.compile.compile-mechanics.refusal-throws-unsupportednodeerror-carrying-the",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "and",
+        "left": {
+          "kind": "compare",
+          "left": {
+            "key": "age",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 18
+          }
+        },
+        "right": {
+          "key": "other",
+          "kind": "treeReference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": [
+            "cannot compile 'some' at $.operands[1]: no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation"
+          ],
+          "name": "UnsupportedNodeError",
+          "nodeKind": "some",
+          "path": "$.operands[1]",
+          "reason": [
+            "no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation"
+          ]
+        }
+      },
+      "from": "compile.mechanics.unit.test.ts: refusal > emits nothing at all when it refuses",
+      "id": "sql.compile.compile-mechanics.refusal-emits-nothing-at-all-when-it-refuses",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "allOf",
+        "operands": [
+          {
+            "kind": "compare",
+            "left": {
+              "key": "age",
+              "kind": "reference"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 18
+            }
+          },
+          {
+            "collection": "xs",
+            "item": {
+              "kind": "compare",
+              "left": {
+                "key": "age",
+                "kind": "reference"
+              },
+              "op": "gt",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 18
+              }
+            },
+            "kind": "some"
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": [
+            "cannot compile 'some' at $.right.operands[1].operand: no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation"
+          ],
+          "name": "UnsupportedNodeError",
+          "nodeKind": "some",
+          "path": "$.right.operands[1].operand",
+          "reason": [
+            "no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation"
+          ]
+        }
+      },
+      "from": "compile.mechanics.unit.test.ts: refusal > refuses a 'some' buried several levels down rather than dropping that branch",
+      "id": "sql.compile.compile-mechanics.refusal-refuses-a-some-buried-several-levels-dow",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "and",
+        "left": {
+          "kind": "compare",
+          "left": {
+            "key": "age",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 18
+          }
+        },
+        "right": {
+          "kind": "anyOf",
+          "operands": [
+            {
+              "kind": "exists",
+              "operand": {
+                "key": "note",
+                "kind": "reference"
+              }
+            },
+            {
+              "kind": "not",
+              "operand": {
+                "collection": "xs",
+                "item": {
+                  "kind": "compare",
+                  "left": {
+                    "key": "age",
+                    "kind": "reference"
+                  },
+                  "op": "gt",
+                  "right": {
+                    "kind": "numberLiteral",
+                    "value": 18
+                  }
+                },
+                "kind": "some"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": [
+            "cannot compile 'every' at $.right.operands[1].operand: no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation"
+          ],
+          "name": "UnsupportedNodeError",
+          "nodeKind": "every",
+          "path": "$.right.operands[1].operand",
+          "reason": [
+            "no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation"
+          ]
+        }
+      },
+      "from": "compile.mechanics.unit.test.ts: refusal > refuses a 'every' buried several levels down rather than dropping that branch",
+      "id": "sql.compile.compile-mechanics.refusal-refuses-a-every-buried-several-levels-do",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "and",
+        "left": {
+          "kind": "compare",
+          "left": {
+            "key": "age",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 18
+          }
+        },
+        "right": {
+          "kind": "anyOf",
+          "operands": [
+            {
+              "kind": "exists",
+              "operand": {
+                "key": "note",
+                "kind": "reference"
+              }
+            },
+            {
+              "kind": "not",
+              "operand": {
+                "collection": "xs",
+                "item": {
+                  "kind": "compare",
+                  "left": {
+                    "key": "age",
+                    "kind": "reference"
+                  },
+                  "op": "gt",
+                  "right": {
+                    "kind": "numberLiteral",
+                    "value": 18
+                  }
+                },
+                "kind": "every"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": [
+            "cannot compile 'fold' at $.right.operands[1].operand.left: a 'reduce' fold threads an arbitrary combine expression through the collection in a caller-chosen order, which has no general SQL translation"
+          ],
+          "name": "UnsupportedNodeError",
+          "nodeKind": "fold",
+          "path": "$.right.operands[1].operand.left",
+          "reason": [
+            "a 'reduce' fold threads an arbitrary combine expression through the collection in a caller-chosen order, which has no general SQL translation"
+          ]
+        }
+      },
+      "from": "compile.mechanics.unit.test.ts: refusal > refuses a 'fold' buried several levels down rather than dropping that branch",
+      "id": "sql.compile.compile-mechanics.refusal-refuses-a-fold-buried-several-levels-dow",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "and",
+        "left": {
+          "kind": "compare",
+          "left": {
+            "key": "age",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 18
+          }
+        },
+        "right": {
+          "kind": "anyOf",
+          "operands": [
+            {
+              "kind": "exists",
+              "operand": {
+                "key": "note",
+                "kind": "reference"
+              }
+            },
+            {
+              "kind": "not",
+              "operand": {
+                "kind": "compare",
+                "left": {
+                  "collection": "xs",
+                  "combiner": {
+                    "combine": {
+                      "kind": "numberLiteral",
+                      "value": 1
+                    },
+                    "initial": {
+                      "kind": "numberLiteral",
+                      "value": 1
+                    },
+                    "mode": "reduce"
+                  },
+                  "kind": "fold"
+                },
+                "op": "gt",
+                "right": {
+                  "kind": "numberLiteral",
+                  "value": 4
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

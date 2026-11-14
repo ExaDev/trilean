@@ -1,0 +1,32 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "error": {
+          "column": "",
+          "message": "not-the-type",
+          "name": "InvalidColumnError",
+          "referenceKey": "anything"
+        }
+      },
+      "from": "compile.mechanics.unit.test.ts: column identifiers > rejects an empty column name",
+      "id": "sql.compile.compile-mechanics.column-identifiers-rejects-an-empty-column-name",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "anything": {
+            "column": ""
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "anything",
+          "kind": "reference"
+        }
+      }
+    }
+  ]
+}

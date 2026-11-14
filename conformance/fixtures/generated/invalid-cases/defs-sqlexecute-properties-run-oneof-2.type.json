@@ -1,0 +1,19 @@
+{
+  "cases": [
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "result": [
+          [
+            1
+          ]
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.edge-cases.integration.test.ts: the divergences the guard's refusals exist to prevent > refuses a cross-kind comparison, and measures the coercion that refusal exists to prevent",
+      "id": "sql.execute.sqlite-edge-cases.the-divergences-the-guard-s-refusals-exist-to-pr-8",
+      "kind": "sql-execute",
+      "run": "not-the-type"
+    }
+  ]
+}

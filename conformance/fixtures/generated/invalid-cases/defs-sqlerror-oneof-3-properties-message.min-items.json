@@ -1,0 +1,41 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "error": {
+          "dialect": "mysql",
+          "implemented": [
+            "postgres",
+            "sqlite"
+          ],
+          "message": [],
+          "name": "UnknownDialectError"
+        }
+      },
+      "from": "compile.dialects.unit.test.ts: a dialect this version does not implement > carries the offending name and the implemented ones as fields",
+      "id": "sql.compile.compile-dialects.a-dialect-this-version-does-not-implement-carrie",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "mysql"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 18
+        }
+      }
+    }
+  ]
+}

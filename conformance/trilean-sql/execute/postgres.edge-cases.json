@@ -1,0 +1,210 @@
+{
+  "cases": [
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "ada",
+          "grace",
+          "lin",
+          "unknown"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "postgres.edge-cases.integration.test.ts: degenerate and adversarial fragments > executes a comparison between two literals, which needs both placeholders typed",
+      "id": "sql.execute.postgres-edge-cases.degenerate-and-adversarial-fragments-executes-a",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {}
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 2
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "ada",
+          "grace",
+          "lin",
+          "unknown"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "postgres.edge-cases.integration.test.ts: degenerate and adversarial fragments > executes an empty allOf and anyOf as their identities",
+      "id": "sql.execute.postgres-edge-cases.degenerate-and-adversarial-fragments-executes-an",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {}
+        },
+        "tree": {
+          "kind": "allOf",
+          "operands": []
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": []
+      },
+      "fixture": "subjects",
+      "from": "postgres.edge-cases.integration.test.ts: degenerate and adversarial fragments > executes an empty allOf and anyOf as their identities",
+      "id": "sql.execute.postgres-edge-cases.degenerate-and-adversarial-fragments-executes-an-2",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {}
+        },
+        "tree": {
+          "kind": "anyOf",
+          "operands": []
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": []
+      },
+      "fixture": "subjects",
+      "from": "postgres.edge-cases.integration.test.ts: degenerate and adversarial fragments > refuses NaN, and measures the divergence that refusal exists to prevent",
+      "id": "sql.execute.postgres-edge-cases.degenerate-and-adversarial-fragments-refuses-nan",
+      "kind": "sql-execute",
+      "run": {
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "NaN"
+            }
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "NaN"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "result": [
+          [
+            "ada"
+          ],
+          [
+            "grace"
+          ],
+          [
+            "lin"
+          ],
+          [
+            "unknown"
+          ]
+        ]
+      },
+      "fixture": "subjects",
+      "from": "postgres.edge-cases.integration.test.ts: degenerate and adversarial fragments > refuses NaN, and measures the divergence that refusal exists to prevent",
+      "id": "sql.execute.postgres-edge-cases.degenerate-and-adversarial-fragments-refuses-nan-2",
+      "kind": "sql-execute",
+      "run": {
+        "params": [
+          {
+            "$number": "NaN"
+          },
+          {
+            "$number": "NaN"
+          }
+        ],
+        "sql": "SELECT id FROM subjects WHERE ($1::double precision = $2::double precision) ORDER BY id"
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": []
+      },
+      "expectTableCounts": {
+        "subjects": 4
+      },
+      "fixture": "subjects",
+      "from": "postgres.edge-cases.integration.test.ts: degenerate and adversarial fragments > treats an injection attempt as data and leaves the table standing",
+      "id": "sql.execute.postgres-edge-cases.degenerate-and-adversarial-fragments-treats-an-i",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "name",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "ada'; DROP TABLE subjects; --"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "queryError": [
+          "does not exist"
+        ]
+      },
+      "expectSql": "(\"name\"\" = name OR \"\"1\" = $1::text)",
+      "fixture": "subjects",
+      "from": "postgres.edge-cases.integration.test.ts: degenerate and adversarial fragments > neutralises a hostile column name into one identifier the server rejects",
+      "id": "sql.execute.postgres-edge-cases.degenerate-and-adversarial-fragments-neutralises",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "name": {
+              "column": "name\" = name OR \"1"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "name",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        }
+      }
+    }
+  ]
+}

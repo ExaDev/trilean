@@ -598,8 +598,8 @@ describe("the tests that stay outside the corpus", () => {
   });
 });
 
-/** The loader files two packages' runners copy from each other. Both copies are removed with the TypeScript they test, and a change to one is made in the other. */
-describe("the loader files copied between the two runners", () => {
+/** The loader files the three packages' runners copy from each other. All are removed with the TypeScript they test, and a change to one is made in the others. */
+describe("the loader files copied between the runners", () => {
   const copied = [
     "canonical-keys",
     "corpus-files",
@@ -609,22 +609,26 @@ describe("the loader files copied between the two runners", () => {
     "validate",
   ];
   const packages = fileURLToPath(new URL("../../", import.meta.url));
-  /** A file without the line that names the other copy, the one place the two differ. */
+  /** A file without the line that names the other copy, the one place the copies differ. */
   const withoutHeaderLine = (text: string): string =>
     text
       .split("\n")
       .filter((line) => !line.includes("This file is a copy of"))
       .join("\n");
 
-  it.each(copied)(
-    "%s is the same file in both packages, but for the line naming the other",
-    (name) => {
+  it.each(
+    copied.flatMap((name) =>
+      ["trilean-regex", "trilean-sql"].map((other) => [name, other] as const),
+    ),
+  )(
+    "%s is the same file here and in %s, but for the line naming the other",
+    (name, other) => {
       const here = readFileSync(
         join(packages, "trilean", "src", "test-support", `${name}.ts`),
         "utf8",
       );
       const there = readFileSync(
-        join(packages, "trilean-regex", "src", "test-support", `${name}.ts`),
+        join(packages, other, "src", "test-support", `${name}.ts`),
         "utf8",
       );
       expect(here).toContain("This file is a copy of");

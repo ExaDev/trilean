@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "error": {
+          "message": []
+        }
+      },
+      "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > refuses alternation",
+      "id": "sql.pattern.portable-pattern.rendersqliteglobpattern-refuses-alternation",
+      "kind": "sql-pattern",
+      "pattern": "a|b"
+    }
+  ]
+}

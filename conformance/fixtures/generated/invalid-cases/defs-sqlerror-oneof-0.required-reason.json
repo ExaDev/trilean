@@ -1,0 +1,40 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "error": {
+          "message": [
+            "cannot compile 'textCompare' at $.right: GLOB has no alternation operator"
+          ],
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textCompare",
+          "path": "$.right"
+        }
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > refuses a portableMatches pattern outside GLOB's reachable subset",
+      "id": "sql.compile.compile-dialects.the-sqlite-dialect-refuses-a-portablematches-pat",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "portableMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "cat|dog"
+        }
+      }
+    }
+  ]
+}

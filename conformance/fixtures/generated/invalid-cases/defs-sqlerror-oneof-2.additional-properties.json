@@ -1,0 +1,46 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "error": {
+          "collectionKey": "tags",
+          "message": [
+            "collectionFor(\"tags\") returned \"\", which is not a usable table identifier: the name is empty"
+          ],
+          "name": "InvalidCollectionTableError",
+          "table": "",
+          "unexpectedMember": 1
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table that is not an identifier)",
+      "id": "sql.compile.recorded.collection-table-empty-name",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "label": {
+                "column": "label",
+                "paramType": "text"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": ""
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "label",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    }
+  ]
+}

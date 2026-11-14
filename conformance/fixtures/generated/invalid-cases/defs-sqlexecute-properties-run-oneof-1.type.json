@@ -1,0 +1,15 @@
+{
+  "cases": [
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": []
+      },
+      "fixture": "subjects",
+      "from": "postgres.edge-cases.integration.test.ts: degenerate and adversarial fragments > refuses NaN, and measures the divergence that refusal exists to prevent",
+      "id": "sql.execute.postgres-edge-cases.degenerate-and-adversarial-fragments-refuses-nan",
+      "kind": "sql-execute",
+      "run": "not-the-type"
+    }
+  ]
+}

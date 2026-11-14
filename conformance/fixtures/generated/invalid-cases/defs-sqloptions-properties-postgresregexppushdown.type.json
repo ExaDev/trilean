@@ -1,0 +1,32 @@
+{
+  "cases": [
+    {
+      "expect": null,
+      "from": "guard.dialect.unit.test.ts: PostgreSQL regular-expression pushdown > allows 'matches' against PostgreSQL once postgresRegexpPushdown is set true",
+      "id": "sql.guard.guard-dialect.postgresql-regular-expression-pushdown-allows-ma",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "postgres",
+        "postgresRegexpPushdown": "not-the-type"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,556 @@
+{
+  "cases": [
+    {
+      "dialect": "postgres",
+      "expect": {
+        "text": "abc"
+      },
+      "from": "portable-pattern.unit.test.ts: renderPostgresPattern > passes literals through unchanged",
+      "id": "sql.pattern.portable-pattern.renderpostgrespattern-passes-literals-through-un",
+      "kind": "sql-pattern",
+      "pattern": "abc"
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "text": "\\."
+      },
+      "from": "portable-pattern.unit.test.ts: renderPostgresPattern > escapes a literal metacharacter",
+      "id": "sql.pattern.portable-pattern.renderpostgrespattern-escapes-a-literal-metachar",
+      "kind": "sql-pattern",
+      "pattern": "\\."
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "text": "\\*"
+      },
+      "from": "portable-pattern.unit.test.ts: renderPostgresPattern > escapes a literal metacharacter",
+      "id": "sql.pattern.portable-pattern.renderpostgrespattern-escapes-a-literal-metachar-2",
+      "kind": "sql-pattern",
+      "pattern": "\\*"
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "text": "^a$"
+      },
+      "from": "portable-pattern.unit.test.ts: renderPostgresPattern > translates anchors, alternation, and quantifiers structurally",
+      "id": "sql.pattern.portable-pattern.renderpostgrespattern-translates-anchors-alterna",
+      "kind": "sql-pattern",
+      "pattern": "^a$"
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "text": "a|b"
+      },
+      "from": "portable-pattern.unit.test.ts: renderPostgresPattern > translates anchors, alternation, and quantifiers structurally",
+      "id": "sql.pattern.portable-pattern.renderpostgrespattern-translates-anchors-alterna-2",
+      "kind": "sql-pattern",
+      "pattern": "a|b"
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "text": "a*"
+      },
+      "from": "portable-pattern.unit.test.ts: renderPostgresPattern > translates anchors, alternation, and quantifiers structurally",
+      "id": "sql.pattern.portable-pattern.renderpostgrespattern-translates-anchors-alterna-3",
+      "kind": "sql-pattern",
+      "pattern": "a*"
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "text": "a+"
+      },
+      "from": "portable-pattern.unit.test.ts: renderPostgresPattern > translates anchors, alternation, and quantifiers structurally",
+      "id": "sql.pattern.portable-pattern.renderpostgrespattern-translates-anchors-alterna-4",
+      "kind": "sql-pattern",
+      "pattern": "a+"
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "text": "a?"
+      },
+      "from": "portable-pattern.unit.test.ts: renderPostgresPattern > translates anchors, alternation, and quantifiers structurally",
+      "id": "sql.pattern.portable-pattern.renderpostgrespattern-translates-anchors-alterna-5",
+      "kind": "sql-pattern",
+      "pattern": "a?"
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "text": "a{2,5}"
+      },
+      "from": "portable-pattern.unit.test.ts: renderPostgresPattern > translates anchors, alternation, and quantifiers structurally",
+      "id": "sql.pattern.portable-pattern.renderpostgrespattern-translates-anchors-alterna-6",
+      "kind": "sql-pattern",
+      "pattern": "a{2,5}"
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "text": "a{3}"
+      },
+      "from": "portable-pattern.unit.test.ts: renderPostgresPattern > translates anchors, alternation, and quantifiers structurally",
+      "id": "sql.pattern.portable-pattern.renderpostgrespattern-translates-anchors-alterna-7",
+      "kind": "sql-pattern",
+      "pattern": "a{3}"
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "text": "a{2,}"
+      },
+      "from": "portable-pattern.unit.test.ts: renderPostgresPattern > translates anchors, alternation, and quantifiers structurally",
+      "id": "sql.pattern.portable-pattern.renderpostgrespattern-translates-anchors-alterna-8",
+      "kind": "sql-pattern",
+      "pattern": "a{2,}"
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "text": "[a-z]"
+      },
+      "from": "portable-pattern.unit.test.ts: renderPostgresPattern > translates a character class directly, escaping ']'/'^'/'-'/'\\\\' inside it",
+      "id": "sql.pattern.portable-pattern.renderpostgrespattern-translates-a-character-cla",
+      "kind": "sql-pattern",
+      "pattern": "[a-z]"
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "text": "[^abc]"
+      },
+      "from": "portable-pattern.unit.test.ts: renderPostgresPattern > translates a character class directly, escaping ']'/'^'/'-'/'\\\\' inside it",
+      "id": "sql.pattern.portable-pattern.renderpostgrespattern-translates-a-character-cla-2",
+      "kind": "sql-pattern",
+      "pattern": "[^abc]"
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "text": "[\\]]"
+      },
+      "from": "portable-pattern.unit.test.ts: renderPostgresPattern > translates a character class directly, escaping ']'/'^'/'-'/'\\\\' inside it",
+      "id": "sql.pattern.portable-pattern.renderpostgrespattern-translates-a-character-cla-3",
+      "kind": "sql-pattern",
+      "pattern": "[\\]]"
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "text": "[\\-]"
+      },
+      "from": "portable-pattern.unit.test.ts: renderPostgresPattern > translates a character class directly, escaping ']'/'^'/'-'/'\\\\' inside it",
+      "id": "sql.pattern.portable-pattern.renderpostgrespattern-translates-a-character-cla-4",
+      "kind": "sql-pattern",
+      "pattern": "[-]"
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "text": "."
+      },
+      "from": "portable-pattern.unit.test.ts: renderPostgresPattern > translates '.' directly, PostgreSQL's own '.' already matches a newline by default under '~'/'!~' (confirmed against a real server, see test/integration/postgres.test.ts)",
+      "id": "sql.pattern.portable-pattern.renderpostgrespattern-translates-directly-postgr",
+      "kind": "sql-pattern",
+      "pattern": "."
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "text": "(?:ab)*"
+      },
+      "from": "portable-pattern.unit.test.ts: renderPostgresPattern > wraps a grouped concatenation before quantifying it",
+      "id": "sql.pattern.portable-pattern.renderpostgrespattern-wraps-a-grouped-concatenat",
+      "kind": "sql-pattern",
+      "pattern": "(?:ab)*"
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "text": "(?:ab)+"
+      },
+      "from": "portable-pattern.unit.test.ts: renderPostgresPattern > wraps a grouped concatenation before quantifying it",
+      "id": "sql.pattern.portable-pattern.renderpostgrespattern-wraps-a-grouped-concatenat-2",
+      "kind": "sql-pattern",
+      "pattern": "(?:ab)+"
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "text": "(?:a|b)*"
+      },
+      "from": "portable-pattern.unit.test.ts: renderPostgresPattern > wraps a grouped alternation before quantifying it",
+      "id": "sql.pattern.portable-pattern.renderpostgrespattern-wraps-a-grouped-alternatio",
+      "kind": "sql-pattern",
+      "pattern": "(?:a|b)*"
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "text": "(?:ab)c"
+      },
+      "from": "portable-pattern.unit.test.ts: renderPostgresPattern > wraps a nested concat operand defensively, though associativity would make it safe not to",
+      "id": "sql.pattern.portable-pattern.renderpostgrespattern-wraps-a-nested-concat-oper",
+      "kind": "sql-pattern",
+      "pattern": "(?:ab)c"
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "text": "a|b|c"
+      },
+      "from": "portable-pattern.unit.test.ts: renderPostgresPattern > never wraps an alternation branch, flattening nested alternation instead",
+      "id": "sql.pattern.portable-pattern.renderpostgrespattern-never-wraps-an-alternation",
+      "kind": "sql-pattern",
+      "pattern": "(?:a|b)|c"
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "error": {
+          "message": [
+            "PostgreSQL's regular expressions permit a bound of at most 255; {256} exceeds it"
+          ]
+        }
+      },
+      "from": "portable-pattern.unit.test.ts: renderPostgresPattern > refuses a bound exceeding PostgreSQL's 0-255 limit",
+      "id": "sql.pattern.portable-pattern.renderpostgrespattern-refuses-a-bound-exceeding",
+      "kind": "sql-pattern",
+      "pattern": "a{256}"
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "error": {
+          "message": [
+            "PostgreSQL's regular expressions permit a bound of at most 255; {2,256} exceeds it"
+          ]
+        }
+      },
+      "from": "portable-pattern.unit.test.ts: renderPostgresPattern > refuses a bound exceeding PostgreSQL's 0-255 limit",
+      "id": "sql.pattern.portable-pattern.renderpostgrespattern-refuses-a-bound-exceeding-2",
+      "kind": "sql-pattern",
+      "pattern": "a{2,256}"
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "text": "a{255}"
+      },
+      "from": "portable-pattern.unit.test.ts: renderPostgresPattern > accepts a bound exactly at PostgreSQL's limit",
+      "id": "sql.pattern.portable-pattern.renderpostgrespattern-accepts-a-bound-exactly-at",
+      "kind": "sql-pattern",
+      "pattern": "a{255}"
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "text": "a{2,255}"
+      },
+      "from": "portable-pattern.unit.test.ts: renderPostgresPattern > accepts a bound exactly at PostgreSQL's limit",
+      "id": "sql.pattern.portable-pattern.renderpostgrespattern-accepts-a-bound-exactly-at-2",
+      "kind": "sql-pattern",
+      "pattern": "a{2,255}"
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "text": "*abc*"
+      },
+      "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > wraps an unanchored literal pattern in '*' on both sides",
+      "id": "sql.pattern.portable-pattern.rendersqliteglobpattern-wraps-an-unanchored-lite",
+      "kind": "sql-pattern",
+      "pattern": "abc"
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "text": "abc*"
+      },
+      "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > adds no leading '*' when the pattern is start-anchored",
+      "id": "sql.pattern.portable-pattern.rendersqliteglobpattern-adds-no-leading-when-the",
+      "kind": "sql-pattern",
+      "pattern": "^abc"
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "text": "*abc"
+      },
+      "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > adds no trailing '*' when the pattern is end-anchored",
+      "id": "sql.pattern.portable-pattern.rendersqliteglobpattern-adds-no-trailing-when-th",
+      "kind": "sql-pattern",
+      "pattern": "abc$"
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "text": "abc"
+      },
+      "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > adds no wildcard on either side when the pattern is fully anchored",
+      "id": "sql.pattern.portable-pattern.rendersqliteglobpattern-adds-no-wildcard-on-eith",
+      "kind": "sql-pattern",
+      "pattern": "^abc$"
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "text": "a?c"
+      },
+      "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > translates '.' to '?' and a star of '.' to '*'",
+      "id": "sql.pattern.portable-pattern.rendersqliteglobpattern-translates-to-and-a-star",
+      "kind": "sql-pattern",
+      "pattern": "^a.c$"
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "text": "a*c"
+      },
+      "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > translates '.' to '?' and a star of '.' to '*'",
+      "id": "sql.pattern.portable-pattern.rendersqliteglobpattern-translates-to-and-a-star-2",
+      "kind": "sql-pattern",
+      "pattern": "^a.*c$"
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "text": "a[*]c"
+      },
+      "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > escapes a literal wildcard character with a single-member bracket",
+      "id": "sql.pattern.portable-pattern.rendersqliteglobpattern-escapes-a-literal-wildca",
+      "kind": "sql-pattern",
+      "pattern": "^a\\*c$"
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "text": "a[?]c"
+      },
+      "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > escapes a literal wildcard character with a single-member bracket",
+      "id": "sql.pattern.portable-pattern.rendersqliteglobpattern-escapes-a-literal-wildca-2",
+      "kind": "sql-pattern",
+      "pattern": "^a\\?c$"
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "text": "a[[]c"
+      },
+      "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > escapes a literal wildcard character with a single-member bracket",
+      "id": "sql.pattern.portable-pattern.rendersqliteglobpattern-escapes-a-literal-wildca-3",
+      "kind": "sql-pattern",
+      "pattern": "^a\\[c$"
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "text": "a]c"
+      },
+      "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > leaves a literal ']' unescaped, since it is never inside an open bracket",
+      "id": "sql.pattern.portable-pattern.rendersqliteglobpattern-leaves-a-literal-unescap",
+      "kind": "sql-pattern",
+      "pattern": "^a\\]c$"
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "text": "[a-z]"
+      },
+      "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > translates a safe, non-negated character class directly",
+      "id": "sql.pattern.portable-pattern.rendersqliteglobpattern-translates-a-safe-non-ne",
+      "kind": "sql-pattern",
+      "pattern": "^[a-z]$"
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "text": "[0-9a-f]"
+      },
+      "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > translates a safe, non-negated character class directly",
+      "id": "sql.pattern.portable-pattern.rendersqliteglobpattern-translates-a-safe-non-ne-2",
+      "kind": "sql-pattern",
+      "pattern": "^[0-9a-f]$"
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "text": "*abc*"
+      },
+      "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > collapses adjacent '*' from an unanchored pattern that itself starts or ends with a '.*'",
+      "id": "sql.pattern.portable-pattern.rendersqliteglobpattern-collapses-adjacent-from",
+      "kind": "sql-pattern",
+      "pattern": ".*abc"
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "text": "*abc*"
+      },
+      "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > collapses adjacent '*' from an unanchored pattern that itself starts or ends with a '.*'",
+      "id": "sql.pattern.portable-pattern.rendersqliteglobpattern-collapses-adjacent-from-2",
+      "kind": "sql-pattern",
+      "pattern": "abc.*"
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "error": {
+          "message": [
+            "this compiler does not translate a negated character class to GLOB: SQLite's own documentation does not confirm which of the common '[^...]'/'[!...]' conventions (if either) it implements"
+          ]
+        }
+      },
+      "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > refuses a negated character class",
+      "id": "sql.pattern.portable-pattern.rendersqliteglobpattern-refuses-a-negated-charac",
+      "kind": "sql-pattern",
+      "pattern": "^[^a]$"
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "error": {
+          "message": [
+            "this character class includes ']', '^', '-', or '[' as a member, and GLOB's bracket expressions have no confirmed escape mechanism for them"
+          ]
+        }
+      },
+      "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > refuses a character class containing ']'/'^'/'-'/'[' as a member",
+      "id": "sql.pattern.portable-pattern.rendersqliteglobpattern-refuses-a-character-clas",
+      "kind": "sql-pattern",
+      "pattern": "^[\\]]$"
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "error": {
+          "message": [
+            "this character class includes ']', '^', '-', or '[' as a member, and GLOB's bracket expressions have no confirmed escape mechanism for them"
+          ]
+        }
+      },
+      "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > refuses a character class containing ']'/'^'/'-'/'[' as a member",
+      "id": "sql.pattern.portable-pattern.rendersqliteglobpattern-refuses-a-character-clas-2",
+      "kind": "sql-pattern",
+      "pattern": "^[\\^]$"
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "error": {
+          "message": [
+            "this character class includes ']', '^', '-', or '[' as a member, and GLOB's bracket expressions have no confirmed escape mechanism for them"
+          ]
+        }
+      },
+      "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > refuses a character class containing ']'/'^'/'-'/'[' as a member",
+      "id": "sql.pattern.portable-pattern.rendersqliteglobpattern-refuses-a-character-clas-3",
+      "kind": "sql-pattern",
+      "pattern": "^[-]$"
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "error": {
+          "message": [
+            "GLOB has no alternation operator"
+          ]
+        }
+      },
+      "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > refuses alternation",
+      "id": "sql.pattern.portable-pattern.rendersqliteglobpattern-refuses-alternation",
+      "kind": "sql-pattern",
+      "pattern": "a|b"
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "error": {
+          "message": [
+            "GLOB has no bounded-repetition wildcard"
+          ]
+        }
+      },
+      "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > refuses bounded, optional, and one-or-more repetition",
+      "id": "sql.pattern.portable-pattern.rendersqliteglobpattern-refuses-bounded-optional",
+      "kind": "sql-pattern",
+      "pattern": "a{2,3}"
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "error": {
+          "message": [
+            "GLOB has no 'zero or one' wildcard"
+          ]
+        }
+      },
+      "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > refuses bounded, optional, and one-or-more repetition",
+      "id": "sql.pattern.portable-pattern.rendersqliteglobpattern-refuses-bounded-optional-2",
+      "kind": "sql-pattern",
+      "pattern": "a?"
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "error": {
+          "message": [
+            "GLOB has no 'one or more' wildcard distinct from '*'"
+          ]
+        }
+      },
+      "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > refuses bounded, optional, and one-or-more repetition",
+      "id": "sql.pattern.portable-pattern.rendersqliteglobpattern-refuses-bounded-optional-3",
+      "kind": "sql-pattern",
+      "pattern": "a+"
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "error": {
+          "message": [
+            "GLOB's only quantity wildcard is '*' ('zero or more of any character'); a star of anything narrower has no GLOB equivalent"
+          ]
+        }
+      },
+      "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > refuses a star of anything other than '.'",
+      "id": "sql.pattern.portable-pattern.rendersqliteglobpattern-refuses-a-star-of-anythi",
+      "kind": "sql-pattern",
+      "pattern": "a*"
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "error": {
+          "message": [
+            "an anchor is only expressible for GLOB at the very start or end of the whole pattern"
+          ]
+        }
+      },
+      "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > refuses an anchor that is not at the very start or end of the whole pattern",
+      "id": "sql.pattern.portable-pattern.rendersqliteglobpattern-refuses-an-anchor-that-i",
+      "kind": "sql-pattern",
+      "pattern": "a^b"
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "error": {
+          "message": [
+            "an anchor is only expressible for GLOB at the very start or end of the whole pattern"
+          ]
+        }
+      },
+      "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > refuses an anchor that is not at the very start or end of the whole pattern",
+      "id": "sql.pattern.portable-pattern.rendersqliteglobpattern-refuses-an-anchor-that-i-2",
+      "kind": "sql-pattern",
+      "pattern": "a$b"
+    }
+  ]
+}

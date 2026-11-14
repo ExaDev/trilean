@@ -1,0 +1,23 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "nodeKind": 1,
+        "path": "$",
+        "reason": [
+          "a referenced tree is resolved by the caller's resolvers; inline it before compiling"
+        ]
+      },
+      "from": "guard.supported.unit.test.ts: predicate kinds this version does not translate > refuses 'treeReference'",
+      "id": "sql.guard.guard-supported.predicate-kinds-this-version-does-not-translate",
+      "kind": "sql-guard",
+      "options": {
+        "dialect": "postgres"
+      },
+      "tree": {
+        "key": "other",
+        "kind": "treeReference"
+      }
+    }
+  ]
+}

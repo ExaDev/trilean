@@ -13,7 +13,7 @@ import {
 import type { SchemaNode, SchemaWalker, Targets } from "./schema-walk";
 
 /**
- * The kinds whose forms must all be used by a case. The kinds of the SQL package belong to that package's own corpus files, and the regex AST kinds to the regex package's.
+ * The kinds whose forms must all be used by a case: every kind the corpus defines.
  */
 export const COVERED_KINDS: readonly string[] = [
   "validate",
@@ -27,6 +27,10 @@ export const COVERED_KINDS: readonly string[] = [
   "number-format",
   "regex-match",
   "regex-parse",
+  "sql-compile",
+  "sql-guard",
+  "sql-pattern",
+  "sql-execute",
 ];
 
 /** The definitions of the case kinds in the schema, by kind name. */

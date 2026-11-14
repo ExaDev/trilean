@@ -1,0 +1,32 @@
+{
+  "cases": [
+    {
+      "expect": null,
+      "from": "guard.dialect.unit.test.ts: sqliteRegexpAvailable > leaves matches/notMatches pushable when the flag is true",
+      "id": "sql.guard.guard-dialect.sqliteregexpavailable-leaves-matches-notmatches-3",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "sqlite",
+        "sqliteRegexpAvailable": "not-the-type"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    }
+  ]
+}
