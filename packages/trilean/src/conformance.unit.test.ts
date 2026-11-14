@@ -15,6 +15,7 @@ import {
 } from "./test-support/corpus-types";
 import { runBuildCase } from "./test-support/run-build";
 import { runCallCase } from "./test-support/run-call";
+import { runCliCase } from "./test-support/run-cli";
 import { runDocumentCase, runInputsCase } from "./test-support/run-document";
 import {
   runNumberFormatCase,
@@ -258,6 +259,8 @@ for (const { name, file } of corpus) {
             runValidateCase(testCase);
           } else if (testCase.kind === "evaluate") {
             await runEvaluateCase(testCase);
+          } else if (testCase.kind === "cli") {
+            runCliCase(testCase);
           } else if (testCase.kind === "serialise") {
             runSerialiseCase(testCase);
           } else if (testCase.kind === "number-format") {

@@ -51,6 +51,10 @@
         "builtin.sine-cosine-and-tangent-tangent-is-a-domain-error-for-an-angle-that-is-not-finite.1"
       ]
     },
+    "trilean/cli/cli-run.json": {
+      "cases": 45,
+      "skip": []
+    },
     "trilean/document/evaluate-document.collections.json": {
       "cases": 10,
       "skip": []

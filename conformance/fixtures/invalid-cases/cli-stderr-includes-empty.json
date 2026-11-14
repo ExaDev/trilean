@@ -1,0 +1,20 @@
+{
+  "cases": [
+    {
+      "args": [
+        "evaluate",
+        "t.json"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderrIncludes": []
+      },
+      "files": {
+        "t.json": "1"
+      },
+      "from": "x.unit.test.ts: a fixture",
+      "id": "fixture.1",
+      "kind": "cli"
+    }
+  ]
+}

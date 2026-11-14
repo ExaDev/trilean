@@ -181,6 +181,21 @@ export interface NumberFormatCase extends CaseBase {
   readonly expect: string;
 }
 
+export interface CliCase extends CaseBase {
+  readonly kind: "cli";
+  readonly args: readonly string[];
+  readonly files: Readonly<Record<string, string>>;
+  readonly stdin?: string;
+  readonly expect: {
+    readonly exit: number;
+    readonly stdout?: string;
+    readonly stderr?: string;
+    readonly stdoutJson?: Json;
+    readonly stderrIncludes?: readonly string[];
+    readonly stderrStartsWith?: string;
+  };
+}
+
 export interface InputsCase extends CaseBase {
   readonly kind: "inputs";
   readonly raw: Json;
@@ -223,7 +238,7 @@ export interface RegexParseCase extends CaseBase {
 
 /** A case of a kind this package has no executor for: a foreign kind, or one it does not run yet. */
 export interface OtherCase extends CaseBase {
-  readonly kind: Exclude<(typeof FOREIGN_KINDS)[number], "regex-parse"> | "cli";
+  readonly kind: Exclude<(typeof FOREIGN_KINDS)[number], "regex-parse">;
 }
 
 export type CorpusCase =
@@ -232,6 +247,7 @@ export type CorpusCase =
   | CallCase
   | BuildCase
   | InputsCase
+  | CliCase
   | DocumentCase
   | SerialiseCase
   | NumberFormatCase
