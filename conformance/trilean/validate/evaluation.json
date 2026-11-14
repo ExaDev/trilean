@@ -1,0 +1,86 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "code": "not-found",
+          "message": "explanation"
+        }
+      },
+      "from": "evaluation.unit.test.ts: IndeterminateReasonSchema > round-trips the not-found reason",
+      "id": "evaluation.indeterminatereasonschema-round-trips-the-not-found-reason.1",
+      "input": {
+        "code": "not-found",
+        "message": "explanation"
+      },
+      "kind": "validate",
+      "schema": "IndeterminateReasonSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "code": "not-yet-known",
+          "message": "explanation"
+        }
+      },
+      "from": "evaluation.unit.test.ts: IndeterminateReasonSchema > round-trips the not-yet-known reason",
+      "id": "evaluation.indeterminatereasonschema-round-trips-the-not-yet-known-reason.1",
+      "input": {
+        "code": "not-yet-known",
+        "message": "explanation"
+      },
+      "kind": "validate",
+      "schema": "IndeterminateReasonSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "code": "wrong-type",
+          "message": "explanation"
+        }
+      },
+      "from": "evaluation.unit.test.ts: IndeterminateReasonSchema > round-trips the wrong-type reason",
+      "id": "evaluation.indeterminatereasonschema-round-trips-the-wrong-type-reason.1",
+      "input": {
+        "code": "wrong-type",
+        "message": "explanation"
+      },
+      "kind": "validate",
+      "schema": "IndeterminateReasonSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "code": "domain-error",
+          "message": "explanation"
+        }
+      },
+      "from": "evaluation.unit.test.ts: IndeterminateReasonSchema > round-trips the domain-error reason",
+      "id": "evaluation.indeterminatereasonschema-round-trips-the-domain-error-reason.1",
+      "input": {
+        "code": "domain-error",
+        "message": "explanation"
+      },
+      "kind": "validate",
+      "schema": "IndeterminateReasonSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "evaluation.unit.test.ts: IndeterminateReasonSchema > rejects a code that is not one of the reason categories",
+      "id": "evaluation.indeterminatereasonschema-rejects-a-code-that-is-not-one-of-the-reason-categories.1",
+      "input": {
+        "code": "unknown",
+        "message": "x"
+      },
+      "kind": "validate",
+      "schema": "IndeterminateReasonSchema"
+    }
+  ]
+}

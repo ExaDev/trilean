@@ -88,10 +88,15 @@ fn rejects<T>(path: &Path, validate: &impl Fn(&Value) -> Result<T, String>) -> b
 /// A negative fixture must fail for the rule it exists for. Each file in `invalid` has a file of the same name in
 /// `repaired` that differs by that one defect and is valid, so the invalid one cannot stay rejected for another
 /// reason.
+///
+/// `accept_twin` judges the repaired twin. For corpus files it also accepts a file this loader refuses for its kind
+/// alone (see `validate::refused_facts`), since a loader that does not validate a kind cannot tell the twin from the
+/// defective file; the TypeScript loaders, which validate every kind, hold that distinction until this loader does too.
 fn check_pairs<T>(
     invalid: &str,
     repaired: &str,
     validate: impl Fn(&Value) -> Result<T, String>,
+    accept_twin: impl Fn(&Value) -> Result<(), String>,
     failures: &mut Vec<String>,
 ) {
     let names = fixture_names(invalid, failures);
@@ -106,7 +111,7 @@ fn check_pairs<T>(
             failures.push(format!("{invalid}/{name} validated, and must not"));
         }
         if let Err(error) =
-            read_json(&root.join(repaired).join(&name)).and_then(|value| validate(&value))
+            read_json(&root.join(repaired).join(&name)).and_then(|value| accept_twin(&value))
         {
             failures.push(format!("{repaired}/{name} must validate: {error}"));
         }
@@ -180,6 +185,8 @@ struct LoadedFile {
     case_count: usize,
     skip_ids: Vec<String>,
     rust_skip_ids: Vec<String>,
+    /// Whether the file holds only kinds this loader does not validate, so none of its cases is accepted or executed.
+    refused: bool,
 }
 
 /// Loads and checks a whole corpus root by every rule `conformance/README.md` states: the files selected, each file
@@ -199,11 +206,15 @@ fn check_corpus(root: &Path) -> (Vec<LoadedFile>, Vec<String>) {
     let mut files = Vec::new();
     let mut ids = BTreeSet::new();
     for name in found.selected {
-        let facts = read_json(&root.join(&name)).and_then(|value| {
-            validate::validate_file(&value).map_err(|error| format!("{name}: {error}"))
-        });
+        let facts =
+            read_json(&root.join(&name)).and_then(|value| match validate::validate_file(&value) {
+                Ok(facts) => Ok((facts, false)),
+                Err(error) => validate::refused_facts(&value)
+                    .map(|facts| (facts, true))
+                    .ok_or_else(|| format!("{name}: {error}")),
+            });
         match facts {
-            Ok(facts) => {
+            Ok((facts, refused)) => {
                 for id in &facts.ids {
                     if !ids.insert(id.clone()) {
                         problems.push(format!("{name}: case id {id} is used by another file"));
@@ -214,6 +225,7 @@ fn check_corpus(root: &Path) -> (Vec<LoadedFile>, Vec<String>) {
                     case_count: facts.ids.len(),
                     skip_ids: facts.skip_ids,
                     rust_skip_ids: facts.rust_skip_ids,
+                    refused,
                 });
             }
             Err(error) => problems.push(error),
@@ -259,14 +271,14 @@ fn count_problems(
     files: &[LoadedFile],
     manifest: &BTreeMap<String, (usize, Vec<String>)>,
 ) -> Vec<String> {
-    let (executed, skipped_marked, skipped_without_executor) = counts(files);
+    let (executed, skipped_marked, skipped_without_executor, refused) = counts(files);
     let total: usize = manifest.values().map(|(count, _)| count).sum();
     let marked: BTreeSet<&String> = manifest.values().flat_map(|(_, skip)| skip).collect();
     let mut problems = Vec::new();
-    if executed + skipped_marked + skipped_without_executor != total {
+    if executed + skipped_marked + skipped_without_executor + refused != total {
         problems.push(format!(
             "executed {executed} plus skipped {} is not the manifest's {total}",
-            skipped_marked + skipped_without_executor
+            skipped_marked + skipped_without_executor + refused
         ));
     }
     for id in files.iter().flat_map(|file| &file.rust_skip_ids) {
@@ -279,11 +291,18 @@ fn count_problems(
     problems
 }
 
-/// The cases this runner executed, skipped because they are marked `rust`, and skipped for want of an executor.
-fn counts(files: &[LoadedFile]) -> (usize, usize, usize) {
+/// The cases this runner executed, skipped because they are marked `rust`, skipped for want of an executor, and refused
+/// because their kind is not validated here.
+fn counts(files: &[LoadedFile]) -> (usize, usize, usize, usize) {
     let total: usize = files.iter().map(|file| file.case_count).sum();
     let skipped_marked: usize = files.iter().map(|file| file.rust_skip_ids.len()).sum();
-    (0, skipped_marked, total - skipped_marked)
+    let refused: usize = files
+        .iter()
+        .filter(|file| file.refused)
+        .map(|file| file.case_count - file.rust_skip_ids.len())
+        .sum();
+
+    (0, skipped_marked, total - skipped_marked - refused, refused)
 }
 
 fn main() -> ExitCode {
@@ -293,6 +312,11 @@ fn main() -> ExitCode {
         "invalid-cases",
         "repaired-cases",
         validate::validate_file,
+        |value| {
+            validate::validate_file(value)
+                .map(drop)
+                .or_else(|error| validate::refused_facts(value).map(drop).ok_or(error))
+        },
         &mut failures,
     );
     check_accepted("valid-cases", validate::validate_file, &mut failures);
@@ -300,6 +324,7 @@ fn main() -> ExitCode {
         "manifests/invalid",
         "manifests/repaired",
         validate::validate_manifest,
+        |value| validate::validate_manifest(value).map(drop),
         &mut failures,
     );
     check_accepted(
@@ -312,13 +337,18 @@ fn main() -> ExitCode {
     validate::self_check(&mut failures);
     let (files, problems) = check_corpus(&corpus_root());
     failures.extend(problems);
-    let (executed, skipped_marked, skipped_without_executor) = counts(&files);
+    let (executed, skipped_marked, skipped_without_executor, refused) = counts(&files);
     for file in &files {
         println!(
-            "{}: {} cases ({} skipped by one implementation)",
+            "{}: {} cases ({} skipped by one implementation){}",
             file.name,
             file.case_count,
-            file.skip_ids.len()
+            file.skip_ids.len(),
+            if file.refused {
+                ", refused: its kinds are not validated by this loader"
+            } else {
+                ""
+            }
         );
     }
     for failure in &failures {
@@ -326,7 +356,7 @@ fn main() -> ExitCode {
     }
     if failures.is_empty() {
         println!(
-            "checked {} files: {executed} executed, {skipped_marked} skipped because they are marked for rust, {skipped_without_executor} skipped because no native executor exists yet",
+            "checked {} files: {executed} executed, {skipped_marked} skipped because they are marked for rust, {skipped_without_executor} skipped because no native executor exists yet, {refused} refused because their kind is not validated by this loader",
             files.len()
         );
         ExitCode::SUCCESS

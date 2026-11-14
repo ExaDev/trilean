@@ -1,33 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  type IndeterminateReason,
-  IndeterminateReasonSchema,
-  definite,
-  firstIndeterminate,
-  indeterminate,
-} from "./evaluation";
-
-describe("IndeterminateReasonSchema", () => {
-  it.each<IndeterminateReason["code"]>([
-    "not-found",
-    "not-yet-known",
-    "wrong-type",
-    "domain-error",
-  ])("round-trips the %s reason", (code) => {
-    const reason: IndeterminateReason = { code, message: "explanation" };
-    const parsed = IndeterminateReasonSchema.parse(
-      JSON.parse(JSON.stringify(reason)),
-    );
-    expect(parsed).toEqual(reason);
-  });
-
-  it("rejects a code that is not one of the reason categories", () => {
-    expect(
-      IndeterminateReasonSchema.safeParse({ code: "unknown", message: "x" })
-        .success,
-    ).toBe(false);
-  });
-});
+import { definite, firstIndeterminate, indeterminate } from "./evaluation";
 
 describe("firstIndeterminate", () => {
   it("takes the first indeterminate reason in operand order", () => {

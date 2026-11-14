@@ -1,0 +1,659 @@
+{
+  "cases": [
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "unit": {
+            "kg": 1
+          },
+          "value": 42
+        }
+      },
+      "from": "evaluator.values.unit.test.ts: literals > numberLiteral is always definite",
+      "id": "values.literals-numberliteral-is-always-definite.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "numberLiteral",
+        "unit": {
+          "kg": 1
+        },
+        "value": 42
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "text",
+          "value": "active"
+        }
+      },
+      "from": "evaluator.values.unit.test.ts: literals > textLiteral is always definite",
+      "id": "values.literals-textliteral-is-always-definite.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textLiteral",
+        "value": "active"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "boolean",
+          "value": true
+        }
+      },
+      "from": "evaluator.values.unit.test.ts: literals > booleanLiteral is always definite",
+      "id": "values.literals-booleanliteral-is-always-definite.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "booleanLiteral",
+        "value": true
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "instant",
+          "value": "2026-01-01T00:00:00.000Z"
+        }
+      },
+      "from": "evaluator.values.unit.test.ts: literals > instantLiteral is always definite",
+      "id": "values.literals-instantliteral-is-always-definite.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "instantLiteral",
+        "value": "2026-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "duration",
+          "unit": "min",
+          "value": 5
+        }
+      },
+      "from": "evaluator.values.unit.test.ts: literals > durationLiteral is always definite",
+      "id": "values.literals-durationliteral-is-always-definite.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "durationLiteral",
+        "unit": "min",
+        "value": 5
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "im": -4,
+          "kind": "complex",
+          "re": 3,
+          "unit": {
+            "A": -1,
+            "V": 1
+          }
+        }
+      },
+      "from": "evaluator.values.unit.test.ts: complexLiteral > is always definite, preserving both components and the optional unit",
+      "id": "values.complexliteral-is-always-definite-preserving-both-components-and-the-optional-unit.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "im": -4,
+        "kind": "complexLiteral",
+        "re": 3,
+        "unit": {
+          "A": -1,
+          "V": 1
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "im": 1,
+          "kind": "complex",
+          "re": 6.123233995736766e-17,
+          "unit": {
+            "V": 1
+          }
+        }
+      },
+      "from": "evaluator.values.unit.test.ts: complexLiteral > normalises a polar literal to rectangular on evaluation, preserving the optional unit (the original asserted both components only to two decimal places; recorded: trilean src/complex.ts, the exact components)",
+      "id": "values.complexliteral-normalises-a-polar-literal-to-rectangular-on-evaluation-preserving-the-optional-unit.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tolerance": {
+        "ulps": 4
+      },
+      "tree": {
+        "kind": "complexLiteral",
+        "magnitude": 1,
+        "phase": 1.5707963267948966,
+        "unit": {
+          "V": 1
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.values.unit.test.ts: complexLiteral > eq: a rectangular literal and a polar literal representing the same underlying complex number compare as equal",
+      "id": "values.complexliteral-eq-a-rectangular-literal-and-a-polar-literal-representing-the-same-underlying-complex-number-compare-as-equal.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "im": 1.288435374475382,
+          "kind": "complexLiteral",
+          "re": 1.529684374568977
+        },
+        "op": "eq",
+        "right": {
+          "kind": "complexLiteral",
+          "magnitude": 2,
+          "phase": 0.7
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.values.unit.test.ts: complexLiteral > memberOf: a rectangular operand matches a candidate list containing a polar literal representing the same number",
+      "id": "values.complexliteral-memberof-a-rectangular-operand-matches-a-candidate-list-containing-a-polar-literal-representing-the-same-number.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "candidates": [
+          {
+            "im": 1,
+            "kind": "complexLiteral",
+            "re": 0
+          },
+          {
+            "kind": "complexLiteral",
+            "magnitude": 1,
+            "phase": 0.7
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "im": 0.644217687237691,
+          "kind": "complexLiteral",
+          "re": 0.7648421872844885
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "unit": {
+            "m": 1
+          },
+          "value": 10
+        }
+      },
+      "from": "evaluator.values.unit.test.ts: reference > resolves a found value with no expected unit",
+      "id": "values.reference-resolves-a-found-value-with-no-expected-unit.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "key": "present",
+        "kind": "reference"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "unit": {
+            "m": 1
+          },
+          "value": 10
+        }
+      },
+      "from": "evaluator.values.unit.test.ts: reference > resolves a found value whose unit matches the expected unit",
+      "id": "values.reference-resolves-a-found-value-whose-unit-matches-the-expected-unit.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "key": "present",
+        "kind": "reference",
+        "unit": {
+          "m": 1
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.values.unit.test.ts: reference > is not-found for an unresolved key",
+      "id": "values.reference-is-not-found-for-an-unresolved-key.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "key": "missing",
+        "kind": "reference"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.values.unit.test.ts: reference > is wrong-type when the expected unit does not match the resolved unit",
+      "id": "values.reference-is-wrong-type-when-the-expected-unit-does-not-match-the-resolved-unit.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "key": "present",
+        "kind": "reference",
+        "unit": {
+          "s": 1
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "boolean",
+          "value": true
+        }
+      },
+      "from": "evaluator.values.unit.test.ts: reference > resolves a boolean value with no schema change beyond the ComputedValue union itself -- reference carries no kind restriction of its own",
+      "id": "values.reference-resolves-a-boolean-value-with-no-schema-change-beyond-the-computedvalue-union-itself-reference-carries-no-kind-restriction-of-its-own.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "active",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "boolean",
+                "value": true
+              }
+            }
+          },
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "key": "active",
+        "kind": "reference"
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "im": -4,
+          "kind": "complex",
+          "re": 3,
+          "unit": {
+            "A": -1,
+            "V": 1
+          }
+        }
+      },
+      "from": "evaluator.values.unit.test.ts: reference > checks an expected unit against a complex resolution too, since a complex value carries one as well",
+      "id": "values.reference-checks-an-expected-unit-against-a-complex-resolution-too-since-a-complex-value-carries-one-as-well.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "im": -4,
+            "kind": "complex",
+            "re": 3,
+            "unit": {
+              "A": -1,
+              "V": 1
+            }
+          }
+        }
+      },
+      "tree": {
+        "key": "impedance",
+        "kind": "reference",
+        "unit": {
+          "A": -1,
+          "V": 1
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.values.unit.test.ts: reference > checks an expected unit against a complex resolution too, since a complex value carries one as well",
+      "id": "values.reference-checks-an-expected-unit-against-a-complex-resolution-too-since-a-complex-value-carries-one-as-well.2",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "im": -4,
+            "kind": "complex",
+            "re": 3,
+            "unit": {
+              "A": -1,
+              "V": 1
+            }
+          }
+        }
+      },
+      "tree": {
+        "key": "impedance",
+        "kind": "reference",
+        "unit": {
+          "V": 1
+        }
+      }
+    }
+  ]
+}

@@ -7,6 +7,38 @@
     "trilean-regex/parse/parser.json": {
       "cases": 87,
       "skip": []
+    },
+    "trilean/evaluate/evaluator.arithmetic.json": {
+      "cases": 22,
+      "skip": []
+    },
+    "trilean/evaluate/evaluator.comparison.json": {
+      "cases": 57,
+      "skip": []
+    },
+    "trilean/evaluate/evaluator.values.json": {
+      "cases": 16,
+      "skip": []
+    },
+    "trilean/evaluate/golden-examples.json": {
+      "cases": 3,
+      "skip": []
+    },
+    "trilean/evaluate/truth-tables.json": {
+      "cases": 23,
+      "skip": []
+    },
+    "trilean/validate/computed-value.json": {
+      "cases": 4,
+      "skip": []
+    },
+    "trilean/validate/evaluation.json": {
+      "cases": 5,
+      "skip": []
+    },
+    "trilean/validate/tree.json": {
+      "cases": 107,
+      "skip": []
     }
   }
 }

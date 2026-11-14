@@ -1,0 +1,2443 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "not",
+          "operand": {
+            "kind": "compare",
+            "left": {
+              "kind": "numberLiteral",
+              "value": 1
+            },
+            "op": "eq",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          }
+        }
+      },
+      "from": "tree.unit.test.ts: predicate tree > not: parses a minimal node and rejects a missing operand",
+      "id": "tree.predicate-tree-not-parses-a-minimal-node-and-rejects-a-missing-operand.1",
+      "input": {
+        "kind": "not",
+        "operand": {
+          "kind": "compare",
+          "left": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      },
+      "kind": "validate",
+      "schema": "NotNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: predicate tree > not: parses a minimal node and rejects a missing operand",
+      "id": "tree.predicate-tree-not-parses-a-minimal-node-and-rejects-a-missing-operand.2",
+      "input": {
+        "kind": "not"
+      },
+      "kind": "validate",
+      "schema": "NotNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "and",
+          "left": {
+            "kind": "compare",
+            "left": {
+              "kind": "numberLiteral",
+              "value": 1
+            },
+            "op": "eq",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          },
+          "right": {
+            "kind": "compare",
+            "left": {
+              "kind": "numberLiteral",
+              "value": 1
+            },
+            "op": "eq",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          }
+        }
+      },
+      "from": "tree.unit.test.ts: predicate tree > and: parses a minimal node and rejects a wrong-type left",
+      "id": "tree.predicate-tree-and-parses-a-minimal-node-and-rejects-a-wrong-type-left.1",
+      "input": {
+        "kind": "and",
+        "left": {
+          "kind": "compare",
+          "left": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        },
+        "right": {
+          "kind": "compare",
+          "left": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      },
+      "kind": "validate",
+      "schema": "AndNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: predicate tree > and: parses a minimal node and rejects a wrong-type left",
+      "id": "tree.predicate-tree-and-parses-a-minimal-node-and-rejects-a-wrong-type-left.2",
+      "input": {
+        "kind": "and",
+        "left": "not-a-node",
+        "right": {
+          "kind": "compare",
+          "left": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      },
+      "kind": "validate",
+      "schema": "AndNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "or",
+          "left": {
+            "kind": "compare",
+            "left": {
+              "kind": "numberLiteral",
+              "value": 1
+            },
+            "op": "eq",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          },
+          "right": {
+            "kind": "compare",
+            "left": {
+              "kind": "numberLiteral",
+              "value": 1
+            },
+            "op": "eq",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          }
+        }
+      },
+      "from": "tree.unit.test.ts: predicate tree > or: parses a minimal node and rejects a missing discriminant",
+      "id": "tree.predicate-tree-or-parses-a-minimal-node-and-rejects-a-missing-discriminant.1",
+      "input": {
+        "kind": "or",
+        "left": {
+          "kind": "compare",
+          "left": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        },
+        "right": {
+          "kind": "compare",
+          "left": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      },
+      "kind": "validate",
+      "schema": "OrNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: predicate tree > or: parses a minimal node and rejects a missing discriminant",
+      "id": "tree.predicate-tree-or-parses-a-minimal-node-and-rejects-a-missing-discriminant.2",
+      "input": {
+        "left": {
+          "kind": "compare",
+          "left": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        },
+        "right": {
+          "kind": "compare",
+          "left": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      },
+      "kind": "validate",
+      "schema": "OrNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "allOf",
+          "operands": []
+        }
+      },
+      "from": "tree.unit.test.ts: predicate tree > allOf: parses an empty operand list and rejects a non-array operands field",
+      "id": "tree.predicate-tree-allof-parses-an-empty-operand-list-and-rejects-a-non-array-operands-field.1",
+      "input": {
+        "kind": "allOf",
+        "operands": []
+      },
+      "kind": "validate",
+      "schema": "AllOfNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: predicate tree > allOf: parses an empty operand list and rejects a non-array operands field",
+      "id": "tree.predicate-tree-allof-parses-an-empty-operand-list-and-rejects-a-non-array-operands-field.2",
+      "input": {
+        "kind": "allOf",
+        "operands": {}
+      },
+      "kind": "validate",
+      "schema": "AllOfNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "anyOf",
+          "operands": [
+            {
+              "kind": "exists",
+              "operand": {
+                "kind": "numberLiteral",
+                "value": 1
+              }
+            }
+          ]
+        }
+      },
+      "from": "tree.unit.test.ts: predicate tree > anyOf: parses a populated operand list and rejects a wrong literal kind",
+      "id": "tree.predicate-tree-anyof-parses-a-populated-operand-list-and-rejects-a-wrong-literal-kind.1",
+      "input": {
+        "kind": "anyOf",
+        "operands": [
+          {
+            "kind": "exists",
+            "operand": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          }
+        ]
+      },
+      "kind": "validate",
+      "schema": "AnyOfNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: predicate tree > anyOf: parses a populated operand list and rejects a wrong literal kind",
+      "id": "tree.predicate-tree-anyof-parses-a-populated-operand-list-and-rejects-a-wrong-literal-kind.2",
+      "input": {
+        "kind": "anyOf",
+        "operands": [
+          {
+            "kind": "boom"
+          }
+        ]
+      },
+      "kind": "validate",
+      "schema": "AnyOfNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "compare",
+          "left": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      },
+      "from": "tree.unit.test.ts: predicate tree > compare: parses a minimal node and rejects a missing op",
+      "id": "tree.predicate-tree-compare-parses-a-minimal-node-and-rejects-a-missing-op.1",
+      "input": {
+        "kind": "compare",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 1
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      },
+      "kind": "validate",
+      "schema": "CompareNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: predicate tree > compare: parses a minimal node and rejects a missing op",
+      "id": "tree.predicate-tree-compare-parses-a-minimal-node-and-rejects-a-missing-op.2",
+      "input": {
+        "kind": "compare",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 1
+        },
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      },
+      "kind": "validate",
+      "schema": "CompareNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "textCompare",
+          "left": {
+            "kind": "textLiteral",
+            "value": "hello"
+          },
+          "op": "matches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^h"
+          }
+        }
+      },
+      "from": "tree.unit.test.ts: predicate tree > textCompare: parses a minimal node and rejects an unrecognised op literal",
+      "id": "tree.predicate-tree-textcompare-parses-a-minimal-node-and-rejects-an-unrecognised-op-literal.1",
+      "input": {
+        "kind": "textCompare",
+        "left": {
+          "kind": "textLiteral",
+          "value": "hello"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^h"
+        }
+      },
+      "kind": "validate",
+      "schema": "TextCompareNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: predicate tree > textCompare: parses a minimal node and rejects an unrecognised op literal",
+      "id": "tree.predicate-tree-textcompare-parses-a-minimal-node-and-rejects-an-unrecognised-op-literal.2",
+      "input": {
+        "kind": "textCompare",
+        "left": {
+          "kind": "textLiteral",
+          "value": "hello"
+        },
+        "op": "startsWith",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^h"
+        }
+      },
+      "kind": "validate",
+      "schema": "TextCompareNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "candidates": [
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      },
+      "from": "tree.unit.test.ts: predicate tree > memberOf: parses a minimal node and rejects a non-array candidates field",
+      "id": "tree.predicate-tree-memberof-parses-a-minimal-node-and-rejects-a-non-array-candidates-field.1",
+      "input": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      },
+      "kind": "validate",
+      "schema": "MemberOfNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: predicate tree > memberOf: parses a minimal node and rejects a non-array candidates field",
+      "id": "tree.predicate-tree-memberof-parses-a-minimal-node-and-rejects-a-non-array-candidates-field.2",
+      "input": {
+        "candidates": {
+          "kind": "numberLiteral",
+          "value": 1
+        },
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      },
+      "kind": "validate",
+      "schema": "MemberOfNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "exists",
+          "operand": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      },
+      "from": "tree.unit.test.ts: predicate tree > exists: parses a minimal node and rejects a missing operand",
+      "id": "tree.predicate-tree-exists-parses-a-minimal-node-and-rejects-a-missing-operand.1",
+      "input": {
+        "kind": "exists",
+        "operand": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      },
+      "kind": "validate",
+      "schema": "ExistsNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: predicate tree > exists: parses a minimal node and rejects a missing operand",
+      "id": "tree.predicate-tree-exists-parses-a-minimal-node-and-rejects-a-missing-operand.2",
+      "input": {
+        "kind": "exists"
+      },
+      "kind": "validate",
+      "schema": "ExistsNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "collection": "items",
+          "item": {
+            "kind": "exists",
+            "operand": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          },
+          "kind": "some"
+        }
+      },
+      "from": "tree.unit.test.ts: predicate tree > some: parses a node with and without an optional filter, and rejects a missing item",
+      "id": "tree.predicate-tree-some-parses-a-node-with-and-without-an-optional-filter-and-rejects-a-missing-item.1",
+      "input": {
+        "collection": "items",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        },
+        "kind": "some"
+      },
+      "kind": "validate",
+      "schema": "SomeNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "collection": "items",
+          "filter": {
+            "kind": "exists",
+            "operand": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          },
+          "item": {
+            "kind": "exists",
+            "operand": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          },
+          "kind": "some"
+        }
+      },
+      "from": "tree.unit.test.ts: predicate tree > some: parses a node with and without an optional filter, and rejects a missing item",
+      "id": "tree.predicate-tree-some-parses-a-node-with-and-without-an-optional-filter-and-rejects-a-missing-item.2",
+      "input": {
+        "collection": "items",
+        "filter": {
+          "kind": "exists",
+          "operand": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        },
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        },
+        "kind": "some"
+      },
+      "kind": "validate",
+      "schema": "SomeNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: predicate tree > some: parses a node with and without an optional filter, and rejects a missing item",
+      "id": "tree.predicate-tree-some-parses-a-node-with-and-without-an-optional-filter-and-rejects-a-missing-item.3",
+      "input": {
+        "collection": "items",
+        "kind": "some"
+      },
+      "kind": "validate",
+      "schema": "SomeNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "collection": "items",
+          "item": {
+            "kind": "exists",
+            "operand": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          },
+          "kind": "every"
+        }
+      },
+      "from": "tree.unit.test.ts: predicate tree > every: parses a minimal node and rejects a wrong-type item",
+      "id": "tree.predicate-tree-every-parses-a-minimal-node-and-rejects-a-wrong-type-item.1",
+      "input": {
+        "collection": "items",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        },
+        "kind": "every"
+      },
+      "kind": "validate",
+      "schema": "EveryNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: predicate tree > every: parses a minimal node and rejects a wrong-type item",
+      "id": "tree.predicate-tree-every-parses-a-minimal-node-and-rejects-a-wrong-type-item.2",
+      "input": {
+        "collection": "items",
+        "item": "not-a-node",
+        "kind": "every"
+      },
+      "kind": "validate",
+      "schema": "EveryNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "key": "eligibility-rule",
+          "kind": "treeReference"
+        }
+      },
+      "from": "tree.unit.test.ts: predicate tree > treeReference: parses a minimal node and rejects a missing key",
+      "id": "tree.predicate-tree-treereference-parses-a-minimal-node-and-rejects-a-missing-key.1",
+      "input": {
+        "key": "eligibility-rule",
+        "kind": "treeReference"
+      },
+      "kind": "validate",
+      "schema": "PredicateNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: predicate tree > treeReference: parses a minimal node and rejects a missing key",
+      "id": "tree.predicate-tree-treereference-parses-a-minimal-node-and-rejects-a-missing-key.2",
+      "input": {
+        "kind": "treeReference"
+      },
+      "kind": "validate",
+      "schema": "PredicateNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "not",
+          "operand": {
+            "kind": "exists",
+            "operand": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          }
+        }
+      },
+      "from": "tree.unit.test.ts: predicate tree > round-trips every predicate kind through the top-level discriminated union",
+      "id": "tree.predicate-tree-round-trips-every-predicate-kind-through-the-top-level-discriminated-union.1",
+      "input": {
+        "kind": "not",
+        "operand": {
+          "kind": "exists",
+          "operand": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      },
+      "kind": "validate",
+      "schema": "PredicateNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "and",
+          "left": {
+            "kind": "exists",
+            "operand": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          },
+          "right": {
+            "kind": "exists",
+            "operand": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          }
+        }
+      },
+      "from": "tree.unit.test.ts: predicate tree > round-trips every predicate kind through the top-level discriminated union",
+      "id": "tree.predicate-tree-round-trips-every-predicate-kind-through-the-top-level-discriminated-union.2",
+      "input": {
+        "kind": "and",
+        "left": {
+          "kind": "exists",
+          "operand": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        },
+        "right": {
+          "kind": "exists",
+          "operand": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      },
+      "kind": "validate",
+      "schema": "PredicateNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "or",
+          "left": {
+            "kind": "exists",
+            "operand": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          },
+          "right": {
+            "kind": "exists",
+            "operand": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          }
+        }
+      },
+      "from": "tree.unit.test.ts: predicate tree > round-trips every predicate kind through the top-level discriminated union",
+      "id": "tree.predicate-tree-round-trips-every-predicate-kind-through-the-top-level-discriminated-union.3",
+      "input": {
+        "kind": "or",
+        "left": {
+          "kind": "exists",
+          "operand": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        },
+        "right": {
+          "kind": "exists",
+          "operand": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      },
+      "kind": "validate",
+      "schema": "PredicateNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "allOf",
+          "operands": []
+        }
+      },
+      "from": "tree.unit.test.ts: predicate tree > round-trips every predicate kind through the top-level discriminated union",
+      "id": "tree.predicate-tree-round-trips-every-predicate-kind-through-the-top-level-discriminated-union.4",
+      "input": {
+        "kind": "allOf",
+        "operands": []
+      },
+      "kind": "validate",
+      "schema": "PredicateNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "anyOf",
+          "operands": []
+        }
+      },
+      "from": "tree.unit.test.ts: predicate tree > round-trips every predicate kind through the top-level discriminated union",
+      "id": "tree.predicate-tree-round-trips-every-predicate-kind-through-the-top-level-discriminated-union.5",
+      "input": {
+        "kind": "anyOf",
+        "operands": []
+      },
+      "kind": "validate",
+      "schema": "PredicateNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "compare",
+          "left": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      },
+      "from": "tree.unit.test.ts: predicate tree > round-trips every predicate kind through the top-level discriminated union",
+      "id": "tree.predicate-tree-round-trips-every-predicate-kind-through-the-top-level-discriminated-union.6",
+      "input": {
+        "kind": "compare",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 1
+        },
+        "op": "eq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      },
+      "kind": "validate",
+      "schema": "PredicateNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "textCompare",
+          "left": {
+            "kind": "textLiteral",
+            "value": "a"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a"
+          }
+        }
+      },
+      "from": "tree.unit.test.ts: predicate tree > round-trips every predicate kind through the top-level discriminated union",
+      "id": "tree.predicate-tree-round-trips-every-predicate-kind-through-the-top-level-discriminated-union.7",
+      "input": {
+        "kind": "textCompare",
+        "left": {
+          "kind": "textLiteral",
+          "value": "a"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "a"
+        }
+      },
+      "kind": "validate",
+      "schema": "PredicateNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "candidates": [],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      },
+      "from": "tree.unit.test.ts: predicate tree > round-trips every predicate kind through the top-level discriminated union",
+      "id": "tree.predicate-tree-round-trips-every-predicate-kind-through-the-top-level-discriminated-union.8",
+      "input": {
+        "candidates": [],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      },
+      "kind": "validate",
+      "schema": "PredicateNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "exists",
+          "operand": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      },
+      "from": "tree.unit.test.ts: predicate tree > round-trips every predicate kind through the top-level discriminated union",
+      "id": "tree.predicate-tree-round-trips-every-predicate-kind-through-the-top-level-discriminated-union.9",
+      "input": {
+        "kind": "exists",
+        "operand": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      },
+      "kind": "validate",
+      "schema": "PredicateNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "collection": "items",
+          "item": {
+            "kind": "exists",
+            "operand": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          },
+          "kind": "some"
+        }
+      },
+      "from": "tree.unit.test.ts: predicate tree > round-trips every predicate kind through the top-level discriminated union",
+      "id": "tree.predicate-tree-round-trips-every-predicate-kind-through-the-top-level-discriminated-union.10",
+      "input": {
+        "collection": "items",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        },
+        "kind": "some"
+      },
+      "kind": "validate",
+      "schema": "PredicateNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "collection": "items",
+          "item": {
+            "kind": "exists",
+            "operand": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          },
+          "kind": "every"
+        }
+      },
+      "from": "tree.unit.test.ts: predicate tree > round-trips every predicate kind through the top-level discriminated union",
+      "id": "tree.predicate-tree-round-trips-every-predicate-kind-through-the-top-level-discriminated-union.11",
+      "input": {
+        "collection": "items",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        },
+        "kind": "every"
+      },
+      "kind": "validate",
+      "schema": "PredicateNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "key": "eligibility-rule",
+          "kind": "treeReference"
+        }
+      },
+      "from": "tree.unit.test.ts: predicate tree > round-trips every predicate kind through the top-level discriminated union",
+      "id": "tree.predicate-tree-round-trips-every-predicate-kind-through-the-top-level-discriminated-union.12",
+      "input": {
+        "key": "eligibility-rule",
+        "kind": "treeReference"
+      },
+      "kind": "validate",
+      "schema": "PredicateNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: predicate tree > round-trips every predicate kind through the top-level discriminated union",
+      "id": "tree.predicate-tree-round-trips-every-predicate-kind-through-the-top-level-discriminated-union.13",
+      "input": {
+        "kind": "notARealKind"
+      },
+      "kind": "validate",
+      "schema": "PredicateNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "numberLiteral",
+          "value": 42
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > numberLiteral: parses with and without an optional unit, and rejects a non-numeric value",
+      "id": "tree.expression-tree-numberliteral-parses-with-and-without-an-optional-unit-and-rejects-a-non-numeric-value.1",
+      "input": {
+        "kind": "numberLiteral",
+        "value": 42
+      },
+      "kind": "validate",
+      "schema": "NumberLiteralNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "numberLiteral",
+          "unit": {
+            "m": 1,
+            "s": -1
+          },
+          "value": 3
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > numberLiteral: parses with and without an optional unit, and rejects a non-numeric value",
+      "id": "tree.expression-tree-numberliteral-parses-with-and-without-an-optional-unit-and-rejects-a-non-numeric-value.2",
+      "input": {
+        "kind": "numberLiteral",
+        "unit": {
+          "m": 1,
+          "s": -1
+        },
+        "value": 3
+      },
+      "kind": "validate",
+      "schema": "NumberLiteralNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: expression tree > numberLiteral: parses with and without an optional unit, and rejects a non-numeric value",
+      "id": "tree.expression-tree-numberliteral-parses-with-and-without-an-optional-unit-and-rejects-a-non-numeric-value.3",
+      "input": {
+        "kind": "numberLiteral",
+        "value": "42"
+      },
+      "kind": "validate",
+      "schema": "NumberLiteralNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "textLiteral",
+          "value": "hello"
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > textLiteral: parses a minimal node and rejects a missing value",
+      "id": "tree.expression-tree-textliteral-parses-a-minimal-node-and-rejects-a-missing-value.1",
+      "input": {
+        "kind": "textLiteral",
+        "value": "hello"
+      },
+      "kind": "validate",
+      "schema": "TextLiteralNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: expression tree > textLiteral: parses a minimal node and rejects a missing value",
+      "id": "tree.expression-tree-textliteral-parses-a-minimal-node-and-rejects-a-missing-value.2",
+      "input": {
+        "kind": "textLiteral"
+      },
+      "kind": "validate",
+      "schema": "TextLiteralNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "booleanLiteral",
+          "value": true
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > booleanLiteral: parses a minimal node and rejects a non-boolean value",
+      "id": "tree.expression-tree-booleanliteral-parses-a-minimal-node-and-rejects-a-non-boolean-value.1",
+      "input": {
+        "kind": "booleanLiteral",
+        "value": true
+      },
+      "kind": "validate",
+      "schema": "BooleanLiteralNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: expression tree > booleanLiteral: parses a minimal node and rejects a non-boolean value",
+      "id": "tree.expression-tree-booleanliteral-parses-a-minimal-node-and-rejects-a-non-boolean-value.2",
+      "input": {
+        "kind": "booleanLiteral",
+        "value": "true"
+      },
+      "kind": "validate",
+      "schema": "BooleanLiteralNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "instantLiteral",
+          "value": "2026-08-30T00:00:00Z"
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > instantLiteral: parses a minimal node and rejects a non-string value",
+      "id": "tree.expression-tree-instantliteral-parses-a-minimal-node-and-rejects-a-non-string-value.1",
+      "input": {
+        "kind": "instantLiteral",
+        "value": "2026-08-30T00:00:00Z"
+      },
+      "kind": "validate",
+      "schema": "InstantLiteralNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: expression tree > instantLiteral: parses a minimal node and rejects a non-string value",
+      "id": "tree.expression-tree-instantliteral-parses-a-minimal-node-and-rejects-a-non-string-value.2",
+      "input": {
+        "kind": "instantLiteral",
+        "value": 1756512000000
+      },
+      "kind": "validate",
+      "schema": "InstantLiteralNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "durationLiteral",
+          "unit": "min",
+          "value": 5
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > durationLiteral: parses a minimal node and rejects a missing (required) unit",
+      "id": "tree.expression-tree-durationliteral-parses-a-minimal-node-and-rejects-a-missing-required-unit.1",
+      "input": {
+        "kind": "durationLiteral",
+        "unit": "min",
+        "value": 5
+      },
+      "kind": "validate",
+      "schema": "DurationLiteralNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: expression tree > durationLiteral: parses a minimal node and rejects a missing (required) unit",
+      "id": "tree.expression-tree-durationliteral-parses-a-minimal-node-and-rejects-a-missing-required-unit.2",
+      "input": {
+        "kind": "durationLiteral",
+        "value": 5
+      },
+      "kind": "validate",
+      "schema": "DurationLiteralNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "im": 4,
+          "kind": "complexLiteral",
+          "re": 3
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > complexLiteral: parses a rectangular value with and without an optional unit, and rejects a node carrying only one rectangular component",
+      "id": "tree.expression-tree-complexliteral-parses-a-rectangular-value-with-and-without-an-optional-unit-and-rejects-a-node-carrying-only-one-rectangular-comp.1",
+      "input": {
+        "im": 4,
+        "kind": "complexLiteral",
+        "re": 3
+      },
+      "kind": "validate",
+      "schema": "ComplexLiteralNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "im": 4,
+          "kind": "complexLiteral",
+          "re": 3,
+          "unit": {
+            "V": 1
+          }
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > complexLiteral: parses a rectangular value with and without an optional unit, and rejects a node carrying only one rectangular component",
+      "id": "tree.expression-tree-complexliteral-parses-a-rectangular-value-with-and-without-an-optional-unit-and-rejects-a-node-carrying-only-one-rectangular-comp.2",
+      "input": {
+        "im": 4,
+        "kind": "complexLiteral",
+        "re": 3,
+        "unit": {
+          "V": 1
+        }
+      },
+      "kind": "validate",
+      "schema": "ComplexLiteralNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: expression tree > complexLiteral: parses a rectangular value with and without an optional unit, and rejects a node carrying only one rectangular component",
+      "id": "tree.expression-tree-complexliteral-parses-a-rectangular-value-with-and-without-an-optional-unit-and-rejects-a-node-carrying-only-one-rectangular-comp.3",
+      "input": {
+        "kind": "complexLiteral",
+        "re": 3
+      },
+      "kind": "validate",
+      "schema": "ComplexLiteralNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "complexLiteral",
+          "magnitude": 5,
+          "phase": 1.2
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > complexLiteral: also parses a polar value (magnitude/phase) with and without an optional unit, and rejects a node carrying only one polar component",
+      "id": "tree.expression-tree-complexliteral-also-parses-a-polar-value-magnitude-phase-with-and-without-an-optional-unit-and-rejects-a-node-carrying-only-one-p.1",
+      "input": {
+        "kind": "complexLiteral",
+        "magnitude": 5,
+        "phase": 1.2
+      },
+      "kind": "validate",
+      "schema": "ComplexLiteralNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "complexLiteral",
+          "magnitude": 5,
+          "phase": 1.2,
+          "unit": {
+            "V": 1
+          }
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > complexLiteral: also parses a polar value (magnitude/phase) with and without an optional unit, and rejects a node carrying only one polar component",
+      "id": "tree.expression-tree-complexliteral-also-parses-a-polar-value-magnitude-phase-with-and-without-an-optional-unit-and-rejects-a-node-carrying-only-one-p.2",
+      "input": {
+        "kind": "complexLiteral",
+        "magnitude": 5,
+        "phase": 1.2,
+        "unit": {
+          "V": 1
+        }
+      },
+      "kind": "validate",
+      "schema": "ComplexLiteralNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: expression tree > complexLiteral: also parses a polar value (magnitude/phase) with and without an optional unit, and rejects a node carrying only one polar component",
+      "id": "tree.expression-tree-complexliteral-also-parses-a-polar-value-magnitude-phase-with-and-without-an-optional-unit-and-rejects-a-node-carrying-only-one-p.3",
+      "input": {
+        "kind": "complexLiteral",
+        "magnitude": 5
+      },
+      "kind": "validate",
+      "schema": "ComplexLiteralNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: expression tree > complexLiteral: rejects both rectangular and polar fields provided at once",
+      "id": "tree.expression-tree-complexliteral-rejects-both-rectangular-and-polar-fields-provided-at-once.1",
+      "input": {
+        "im": 2,
+        "kind": "complexLiteral",
+        "magnitude": 3,
+        "phase": 4,
+        "re": 1
+      },
+      "kind": "validate",
+      "schema": "ComplexLiteralNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: expression tree > complexLiteral: rejects neither rectangular nor polar fields provided",
+      "id": "tree.expression-tree-complexliteral-rejects-neither-rectangular-nor-polar-fields-provided.1",
+      "input": {
+        "kind": "complexLiteral"
+      },
+      "kind": "validate",
+      "schema": "ComplexLiteralNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: expression tree > complexLiteral: rejects a mixed payload (one rectangular field, one polar field)",
+      "id": "tree.expression-tree-complexliteral-rejects-a-mixed-payload-one-rectangular-field-one-polar-field.1",
+      "input": {
+        "kind": "complexLiteral",
+        "phase": 2,
+        "re": 1
+      },
+      "kind": "validate",
+      "schema": "ComplexLiteralNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "key": "x",
+          "kind": "reference"
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > reference: parses with and without an optional unit, and rejects an unrecognised unit shape",
+      "id": "tree.expression-tree-reference-parses-with-and-without-an-optional-unit-and-rejects-an-unrecognised-unit-shape.1",
+      "input": {
+        "key": "x",
+        "kind": "reference"
+      },
+      "kind": "validate",
+      "schema": "ReferenceNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: expression tree > reference: parses with and without an optional unit, and rejects an unrecognised unit shape",
+      "id": "tree.expression-tree-reference-parses-with-and-without-an-optional-unit-and-rejects-an-unrecognised-unit-shape.2",
+      "input": {
+        "key": "x",
+        "kind": "reference",
+        "unit": "kg"
+      },
+      "kind": "validate",
+      "schema": "ReferenceNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "arithmetic",
+          "left": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "op": "add",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > arithmetic: parses a minimal node and rejects an unrecognised op",
+      "id": "tree.expression-tree-arithmetic-parses-a-minimal-node-and-rejects-an-unrecognised-op.1",
+      "input": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 1
+        },
+        "op": "add",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      },
+      "kind": "validate",
+      "schema": "ArithmeticNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: expression tree > arithmetic: parses a minimal node and rejects an unrecognised op",
+      "id": "tree.expression-tree-arithmetic-parses-a-minimal-node-and-rejects-an-unrecognised-op.2",
+      "input": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 1
+        },
+        "op": "increment",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      },
+      "kind": "validate",
+      "schema": "ArithmeticNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "negate",
+          "operand": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > negate: parses a minimal node and rejects a missing operand",
+      "id": "tree.expression-tree-negate-parses-a-minimal-node-and-rejects-a-missing-operand.1",
+      "input": {
+        "kind": "negate",
+        "operand": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      },
+      "kind": "validate",
+      "schema": "NegateNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: expression tree > negate: parses a minimal node and rejects a missing operand",
+      "id": "tree.expression-tree-negate-parses-a-minimal-node-and-rejects-a-missing-operand.2",
+      "input": {
+        "kind": "negate"
+      },
+      "kind": "validate",
+      "schema": "NegateNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "args": [
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          ],
+          "fn": "squareRoot",
+          "kind": "call"
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > call: parses a minimal node and rejects a non-array args field",
+      "id": "tree.expression-tree-call-parses-a-minimal-node-and-rejects-a-non-array-args-field.1",
+      "input": {
+        "args": [
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "fn": "squareRoot",
+        "kind": "call"
+      },
+      "kind": "validate",
+      "schema": "CallNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: expression tree > call: parses a minimal node and rejects a non-array args field",
+      "id": "tree.expression-tree-call-parses-a-minimal-node-and-rejects-a-non-array-args-field.2",
+      "input": {
+        "args": {
+          "kind": "numberLiteral",
+          "value": 1
+        },
+        "fn": "squareRoot",
+        "kind": "call"
+      },
+      "kind": "validate",
+      "schema": "CallNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "keys": [
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          ],
+          "kind": "lookup",
+          "table": "rates"
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > lookup: parses a minimal node and rejects a non-array keys field",
+      "id": "tree.expression-tree-lookup-parses-a-minimal-node-and-rejects-a-non-array-keys-field.1",
+      "input": {
+        "keys": [
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "lookup",
+        "table": "rates"
+      },
+      "kind": "validate",
+      "schema": "LookupNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: expression tree > lookup: parses a minimal node and rejects a non-array keys field",
+      "id": "tree.expression-tree-lookup-parses-a-minimal-node-and-rejects-a-non-array-keys-field.2",
+      "input": {
+        "keys": {
+          "kind": "numberLiteral",
+          "value": 1
+        },
+        "kind": "lookup",
+        "table": "rates"
+      },
+      "kind": "validate",
+      "schema": "LookupNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "cases": [
+            {
+              "then": {
+                "kind": "numberLiteral",
+                "value": 1
+              },
+              "when": {
+                "kind": "exists",
+                "operand": {
+                  "kind": "numberLiteral",
+                  "value": 1
+                }
+              }
+            }
+          ],
+          "fallback": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "kind": "conditional"
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > conditional: parses a minimal node and rejects a missing fallback",
+      "id": "tree.expression-tree-conditional-parses-a-minimal-node-and-rejects-a-missing-fallback.1",
+      "input": {
+        "cases": [
+          {
+            "then": {
+              "kind": "numberLiteral",
+              "value": 1
+            },
+            "when": {
+              "kind": "exists",
+              "operand": {
+                "kind": "numberLiteral",
+                "value": 1
+              }
+            }
+          }
+        ],
+        "fallback": {
+          "kind": "numberLiteral",
+          "value": 1
+        },
+        "kind": "conditional"
+      },
+      "kind": "validate",
+      "schema": "ConditionalNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: expression tree > conditional: parses a minimal node and rejects a missing fallback",
+      "id": "tree.expression-tree-conditional-parses-a-minimal-node-and-rejects-a-missing-fallback.2",
+      "input": {
+        "cases": [],
+        "kind": "conditional"
+      },
+      "kind": "validate",
+      "schema": "ConditionalNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "cases": [],
+          "fallback": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "kind": "conditional"
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > conditional: hitPolicy is optional and defaults to undefined (not `\"first\"`) when absent, accepts `\"first\"`/`\"unique\"`, and rejects any other string",
+      "id": "tree.expression-tree-conditional-hitpolicy-is-optional-and-defaults-to-undefined-not-first-when-absent-accepts-first-unique-and-rejects-any-other-stri.1",
+      "input": {
+        "cases": [],
+        "fallback": {
+          "kind": "numberLiteral",
+          "value": 1
+        },
+        "kind": "conditional"
+      },
+      "kind": "validate",
+      "schema": "ConditionalNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "cases": [],
+          "fallback": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "hitPolicy": "first",
+          "kind": "conditional"
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > conditional: hitPolicy is optional and defaults to undefined (not `\"first\"`) when absent, accepts `\"first\"`/`\"unique\"`, and rejects any other string",
+      "id": "tree.expression-tree-conditional-hitpolicy-is-optional-and-defaults-to-undefined-not-first-when-absent-accepts-first-unique-and-rejects-any-other-stri.2",
+      "input": {
+        "cases": [],
+        "fallback": {
+          "kind": "numberLiteral",
+          "value": 1
+        },
+        "hitPolicy": "first",
+        "kind": "conditional"
+      },
+      "kind": "validate",
+      "schema": "ConditionalNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "cases": [],
+          "fallback": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "hitPolicy": "unique",
+          "kind": "conditional"
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > conditional: hitPolicy is optional and defaults to undefined (not `\"first\"`) when absent, accepts `\"first\"`/`\"unique\"`, and rejects any other string",
+      "id": "tree.expression-tree-conditional-hitpolicy-is-optional-and-defaults-to-undefined-not-first-when-absent-accepts-first-unique-and-rejects-any-other-stri.3",
+      "input": {
+        "cases": [],
+        "fallback": {
+          "kind": "numberLiteral",
+          "value": 1
+        },
+        "hitPolicy": "unique",
+        "kind": "conditional"
+      },
+      "kind": "validate",
+      "schema": "ConditionalNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: expression tree > conditional: hitPolicy is optional and defaults to undefined (not `\"first\"`) when absent, accepts `\"first\"`/`\"unique\"`, and rejects any other string",
+      "id": "tree.expression-tree-conditional-hitpolicy-is-optional-and-defaults-to-undefined-not-first-when-absent-accepts-first-unique-and-rejects-any-other-stri.4",
+      "input": {
+        "cases": [],
+        "fallback": {
+          "kind": "numberLiteral",
+          "value": 1
+        },
+        "hitPolicy": "priority",
+        "kind": "conditional"
+      },
+      "kind": "validate",
+      "schema": "ConditionalNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": "first"
+      },
+      "from": "tree.unit.test.ts: expression tree > HitPolicySchema: accepts `\"first\"`/`\"unique\"` and rejects any other value",
+      "id": "tree.expression-tree-hitpolicyschema-accepts-first-unique-and-rejects-any-other-value.1",
+      "input": "first",
+      "kind": "validate",
+      "schema": "HitPolicySchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": "unique"
+      },
+      "from": "tree.unit.test.ts: expression tree > HitPolicySchema: accepts `\"first\"`/`\"unique\"` and rejects any other value",
+      "id": "tree.expression-tree-hitpolicyschema-accepts-first-unique-and-rejects-any-other-value.2",
+      "input": "unique",
+      "kind": "validate",
+      "schema": "HitPolicySchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: expression tree > HitPolicySchema: accepts `\"first\"`/`\"unique\"` and rejects any other value",
+      "id": "tree.expression-tree-hitpolicyschema-accepts-first-unique-and-rejects-any-other-value.3",
+      "input": "collect",
+      "kind": "validate",
+      "schema": "HitPolicySchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "key": "pricing-formula",
+          "kind": "treeReference"
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > treeReference: parses a minimal node, rejects a missing key, and is the same schema object valid from a PredicateNode position too",
+      "id": "tree.expression-tree-treereference-parses-a-minimal-node-rejects-a-missing-key-and-is-the-same-schema-object-valid-from-a-predicatenode-position-too.1",
+      "input": {
+        "key": "pricing-formula",
+        "kind": "treeReference"
+      },
+      "kind": "validate",
+      "schema": "TreeReferenceNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: expression tree > treeReference: parses a minimal node, rejects a missing key, and is the same schema object valid from a PredicateNode position too",
+      "id": "tree.expression-tree-treereference-parses-a-minimal-node-rejects-a-missing-key-and-is-the-same-schema-object-valid-from-a-predicatenode-position-too.2",
+      "input": {
+        "kind": "treeReference"
+      },
+      "kind": "validate",
+      "schema": "TreeReferenceNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "key": "pricing-formula",
+          "kind": "treeReference"
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > treeReference: parses a minimal node, rejects a missing key, and is the same schema object valid from a PredicateNode position too",
+      "id": "tree.expression-tree-treereference-parses-a-minimal-node-rejects-a-missing-key-and-is-the-same-schema-object-valid-from-a-predicatenode-position-too.3",
+      "input": {
+        "key": "pricing-formula",
+        "kind": "treeReference"
+      },
+      "kind": "validate",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: expression tree > treeReference: parses a minimal node, rejects a missing key, and is the same schema object valid from a PredicateNode position too",
+      "id": "tree.expression-tree-treereference-parses-a-minimal-node-rejects-a-missing-key-and-is-the-same-schema-object-valid-from-a-predicatenode-position-too.4",
+      "input": {
+        "kind": "treeReference"
+      },
+      "kind": "validate",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "collection": "items",
+          "combiner": {
+            "item": {
+              "kind": "numberLiteral",
+              "value": 1
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > fold: parses each combiner mode, with and without an optional filter, and rejects an unrecognised combiner mode",
+      "id": "tree.expression-tree-fold-parses-each-combiner-mode-with-and-without-an-optional-filter-and-rejects-an-unrecognised-combiner-mode.1",
+      "input": {
+        "collection": "items",
+        "combiner": {
+          "item": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "mode": "max"
+        },
+        "kind": "fold"
+      },
+      "kind": "validate",
+      "schema": "FoldNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "collection": "items",
+          "combiner": {
+            "item": {
+              "kind": "numberLiteral",
+              "value": 1
+            },
+            "mode": "min"
+          },
+          "kind": "fold"
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > fold: parses each combiner mode, with and without an optional filter, and rejects an unrecognised combiner mode",
+      "id": "tree.expression-tree-fold-parses-each-combiner-mode-with-and-without-an-optional-filter-and-rejects-an-unrecognised-combiner-mode.2",
+      "input": {
+        "collection": "items",
+        "combiner": {
+          "item": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "mode": "min"
+        },
+        "kind": "fold"
+      },
+      "kind": "validate",
+      "schema": "FoldNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "collection": "items",
+          "combiner": {
+            "combine": {
+              "kind": "numberLiteral",
+              "value": 1
+            },
+            "initial": {
+              "kind": "numberLiteral",
+              "value": 1
+            },
+            "mode": "reduce"
+          },
+          "filter": {
+            "kind": "exists",
+            "operand": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          },
+          "kind": "fold"
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > fold: parses each combiner mode, with and without an optional filter, and rejects an unrecognised combiner mode",
+      "id": "tree.expression-tree-fold-parses-each-combiner-mode-with-and-without-an-optional-filter-and-rejects-an-unrecognised-combiner-mode.3",
+      "input": {
+        "collection": "items",
+        "combiner": {
+          "combine": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "initial": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "mode": "reduce"
+        },
+        "filter": {
+          "kind": "exists",
+          "operand": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        },
+        "kind": "fold"
+      },
+      "kind": "validate",
+      "schema": "FoldNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: expression tree > fold: parses each combiner mode, with and without an optional filter, and rejects an unrecognised combiner mode",
+      "id": "tree.expression-tree-fold-parses-each-combiner-mode-with-and-without-an-optional-filter-and-rejects-an-unrecognised-combiner-mode.4",
+      "input": {
+        "item": {
+          "kind": "numberLiteral",
+          "value": 1
+        },
+        "mode": "average"
+      },
+      "kind": "validate",
+      "schema": "FoldCombinerSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "accumulator"
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > accumulator: parses the zero-field node and rejects an unrelated kind literal",
+      "id": "tree.expression-tree-accumulator-parses-the-zero-field-node-and-rejects-an-unrelated-kind-literal.1",
+      "input": {
+        "kind": "accumulator"
+      },
+      "kind": "validate",
+      "schema": "AccumulatorNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: expression tree > accumulator: parses the zero-field node and rejects an unrelated kind literal",
+      "id": "tree.expression-tree-accumulator-parses-the-zero-field-node-and-rejects-an-unrelated-kind-literal.2",
+      "input": {
+        "kind": "acc"
+      },
+      "kind": "validate",
+      "schema": "AccumulatorNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "delegate",
+          "payload": {
+            "expression": "x^2"
+          },
+          "system": "symbolic-math"
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > delegate: parses a minimal node and rejects a missing system",
+      "id": "tree.expression-tree-delegate-parses-a-minimal-node-and-rejects-a-missing-system.1",
+      "input": {
+        "kind": "delegate",
+        "payload": {
+          "expression": "x^2"
+        },
+        "system": "symbolic-math"
+      },
+      "kind": "validate",
+      "schema": "DelegateNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: expression tree > delegate: parses a minimal node and rejects a missing system",
+      "id": "tree.expression-tree-delegate-parses-a-minimal-node-and-rejects-a-missing-system.2",
+      "input": {
+        "kind": "delegate",
+        "payload": {}
+      },
+      "kind": "validate",
+      "schema": "DelegateNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > round-trips every expression kind through the top-level discriminated union",
+      "id": "tree.expression-tree-round-trips-every-expression-kind-through-the-top-level-discriminated-union.1",
+      "input": {
+        "kind": "numberLiteral",
+        "value": 1
+      },
+      "kind": "validate",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "textLiteral",
+          "value": "a"
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > round-trips every expression kind through the top-level discriminated union",
+      "id": "tree.expression-tree-round-trips-every-expression-kind-through-the-top-level-discriminated-union.2",
+      "input": {
+        "kind": "textLiteral",
+        "value": "a"
+      },
+      "kind": "validate",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "booleanLiteral",
+          "value": true
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > round-trips every expression kind through the top-level discriminated union",
+      "id": "tree.expression-tree-round-trips-every-expression-kind-through-the-top-level-discriminated-union.3",
+      "input": {
+        "kind": "booleanLiteral",
+        "value": true
+      },
+      "kind": "validate",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "instantLiteral",
+          "value": "2026-08-30T00:00:00Z"
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > round-trips every expression kind through the top-level discriminated union",
+      "id": "tree.expression-tree-round-trips-every-expression-kind-through-the-top-level-discriminated-union.4",
+      "input": {
+        "kind": "instantLiteral",
+        "value": "2026-08-30T00:00:00Z"
+      },
+      "kind": "validate",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "durationLiteral",
+          "unit": "d",
+          "value": 1
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > round-trips every expression kind through the top-level discriminated union",
+      "id": "tree.expression-tree-round-trips-every-expression-kind-through-the-top-level-discriminated-union.5",
+      "input": {
+        "kind": "durationLiteral",
+        "unit": "d",
+        "value": 1
+      },
+      "kind": "validate",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "im": -1,
+          "kind": "complexLiteral",
+          "re": 1
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > round-trips every expression kind through the top-level discriminated union",
+      "id": "tree.expression-tree-round-trips-every-expression-kind-through-the-top-level-discriminated-union.6",
+      "input": {
+        "im": -1,
+        "kind": "complexLiteral",
+        "re": 1
+      },
+      "kind": "validate",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "complexLiteral",
+          "magnitude": 1,
+          "phase": 1.5707963267948966
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > round-trips every expression kind through the top-level discriminated union",
+      "id": "tree.expression-tree-round-trips-every-expression-kind-through-the-top-level-discriminated-union.7",
+      "input": {
+        "kind": "complexLiteral",
+        "magnitude": 1,
+        "phase": 1.5707963267948966
+      },
+      "kind": "validate",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "key": "x",
+          "kind": "reference"
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > round-trips every expression kind through the top-level discriminated union",
+      "id": "tree.expression-tree-round-trips-every-expression-kind-through-the-top-level-discriminated-union.8",
+      "input": {
+        "key": "x",
+        "kind": "reference"
+      },
+      "kind": "validate",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "arithmetic",
+          "left": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "op": "add",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > round-trips every expression kind through the top-level discriminated union",
+      "id": "tree.expression-tree-round-trips-every-expression-kind-through-the-top-level-discriminated-union.9",
+      "input": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 1
+        },
+        "op": "add",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      },
+      "kind": "validate",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "negate",
+          "operand": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > round-trips every expression kind through the top-level discriminated union",
+      "id": "tree.expression-tree-round-trips-every-expression-kind-through-the-top-level-discriminated-union.10",
+      "input": {
+        "kind": "negate",
+        "operand": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      },
+      "kind": "validate",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "args": [
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          ],
+          "fn": "absoluteValue",
+          "kind": "call"
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > round-trips every expression kind through the top-level discriminated union",
+      "id": "tree.expression-tree-round-trips-every-expression-kind-through-the-top-level-discriminated-union.11",
+      "input": {
+        "args": [
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "fn": "absoluteValue",
+        "kind": "call"
+      },
+      "kind": "validate",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "keys": [
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          ],
+          "kind": "lookup",
+          "table": "rates"
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > round-trips every expression kind through the top-level discriminated union",
+      "id": "tree.expression-tree-round-trips-every-expression-kind-through-the-top-level-discriminated-union.12",
+      "input": {
+        "keys": [
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "lookup",
+        "table": "rates"
+      },
+      "kind": "validate",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "cases": [],
+          "fallback": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "kind": "conditional"
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > round-trips every expression kind through the top-level discriminated union",
+      "id": "tree.expression-tree-round-trips-every-expression-kind-through-the-top-level-discriminated-union.13",
+      "input": {
+        "cases": [],
+        "fallback": {
+          "kind": "numberLiteral",
+          "value": 1
+        },
+        "kind": "conditional"
+      },
+      "kind": "validate",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "collection": "items",
+          "combiner": {
+            "item": {
+              "kind": "numberLiteral",
+              "value": 1
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > round-trips every expression kind through the top-level discriminated union",
+      "id": "tree.expression-tree-round-trips-every-expression-kind-through-the-top-level-discriminated-union.14",
+      "input": {
+        "collection": "items",
+        "combiner": {
+          "item": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "mode": "max"
+        },
+        "kind": "fold"
+      },
+      "kind": "validate",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "accumulator"
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > round-trips every expression kind through the top-level discriminated union",
+      "id": "tree.expression-tree-round-trips-every-expression-kind-through-the-top-level-discriminated-union.15",
+      "input": {
+        "kind": "accumulator"
+      },
+      "kind": "validate",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "delegate",
+          "payload": null,
+          "system": "symbolic-math"
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > round-trips every expression kind through the top-level discriminated union",
+      "id": "tree.expression-tree-round-trips-every-expression-kind-through-the-top-level-discriminated-union.16",
+      "input": {
+        "kind": "delegate",
+        "payload": null,
+        "system": "symbolic-math"
+      },
+      "kind": "validate",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "key": "pricing-formula",
+          "kind": "treeReference"
+        }
+      },
+      "from": "tree.unit.test.ts: expression tree > round-trips every expression kind through the top-level discriminated union",
+      "id": "tree.expression-tree-round-trips-every-expression-kind-through-the-top-level-discriminated-union.17",
+      "input": {
+        "key": "pricing-formula",
+        "kind": "treeReference"
+      },
+      "kind": "validate",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": {
+        "issues": [],
+        "ok": false
+      },
+      "from": "tree.unit.test.ts: expression tree > round-trips every expression kind through the top-level discriminated union",
+      "id": "tree.expression-tree-round-trips-every-expression-kind-through-the-top-level-discriminated-union.18",
+      "input": {
+        "kind": "notARealKind"
+      },
+      "kind": "validate",
+      "schema": "ExpressionNodeSchema"
+    }
+  ]
+}

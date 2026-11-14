@@ -1,0 +1,2434 @@
+{
+  "cases": [
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > gt(5, 3) => true",
+      "id": "comparison.compare-gt-5-3-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 5
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 3
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > gt(3, 5) => false",
+      "id": "comparison.compare-gt-3-5-false.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 3
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 5
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > gte(5, 5) => true",
+      "id": "comparison.compare-gte-5-5-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 5
+        },
+        "op": "gte",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 5
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > gte(3, 5) => false",
+      "id": "comparison.compare-gte-3-5-false.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 3
+        },
+        "op": "gte",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 5
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > lt(3, 5) => true",
+      "id": "comparison.compare-lt-3-5-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 3
+        },
+        "op": "lt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 5
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > lt(5, 3) => false",
+      "id": "comparison.compare-lt-5-3-false.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 5
+        },
+        "op": "lt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 3
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > lte(5, 5) => true",
+      "id": "comparison.compare-lte-5-5-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 5
+        },
+        "op": "lte",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 5
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > lte(5, 3) => false",
+      "id": "comparison.compare-lte-5-3-false.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 5
+        },
+        "op": "lte",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 3
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > eq(5, 5) => true",
+      "id": "comparison.compare-eq-5-5-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 5
+        },
+        "op": "eq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 5
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > eq(5, 3) => false",
+      "id": "comparison.compare-eq-5-3-false.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 5
+        },
+        "op": "eq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 3
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > neq(5, 3) => true",
+      "id": "comparison.compare-neq-5-3-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 5
+        },
+        "op": "neq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 3
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > neq(5, 5) => false",
+      "id": "comparison.compare-neq-5-5-false.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 5
+        },
+        "op": "neq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 5
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > boolean eq(true, true) => true",
+      "id": "comparison.compare-boolean-eq-true-true-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "booleanLiteral",
+          "value": true
+        },
+        "op": "eq",
+        "right": {
+          "kind": "booleanLiteral",
+          "value": true
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > boolean eq(true, false) => false",
+      "id": "comparison.compare-boolean-eq-true-false-false.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "booleanLiteral",
+          "value": true
+        },
+        "op": "eq",
+        "right": {
+          "kind": "booleanLiteral",
+          "value": false
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > boolean neq(true, false) => true",
+      "id": "comparison.compare-boolean-neq-true-false-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "booleanLiteral",
+          "value": true
+        },
+        "op": "neq",
+        "right": {
+          "kind": "booleanLiteral",
+          "value": false
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > boolean neq(true, true) => false",
+      "id": "comparison.compare-boolean-neq-true-true-false.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "booleanLiteral",
+          "value": true
+        },
+        "op": "neq",
+        "right": {
+          "kind": "booleanLiteral",
+          "value": true
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > gt is wrong-type for boolean operands -- no natural ordering",
+      "id": "comparison.compare-gt-is-wrong-type-for-boolean-operands-no-natural-ordering.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "booleanLiteral",
+          "value": true
+        },
+        "op": "gt",
+        "right": {
+          "kind": "booleanLiteral",
+          "value": false
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > gte is wrong-type for boolean operands -- no natural ordering",
+      "id": "comparison.compare-gte-is-wrong-type-for-boolean-operands-no-natural-ordering.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "booleanLiteral",
+          "value": true
+        },
+        "op": "gte",
+        "right": {
+          "kind": "booleanLiteral",
+          "value": false
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > lt is wrong-type for boolean operands -- no natural ordering",
+      "id": "comparison.compare-lt-is-wrong-type-for-boolean-operands-no-natural-ordering.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "booleanLiteral",
+          "value": true
+        },
+        "op": "lt",
+        "right": {
+          "kind": "booleanLiteral",
+          "value": false
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > lte is wrong-type for boolean operands -- no natural ordering",
+      "id": "comparison.compare-lte-is-wrong-type-for-boolean-operands-no-natural-ordering.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "booleanLiteral",
+          "value": true
+        },
+        "op": "lte",
+        "right": {
+          "kind": "booleanLiteral",
+          "value": false
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > compares instants by parsed timestamp ordering",
+      "id": "comparison.compare-compares-instants-by-parsed-timestamp-ordering.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "instantLiteral",
+          "value": "2026-01-01T00:00:00.000Z"
+        },
+        "op": "lt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2026-01-02T00:00:00.000Z"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > compares durations by magnitude, normalising different units to the same base",
+      "id": "comparison.compare-compares-durations-by-magnitude-normalising-different-units-to-the-same-base.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "durationLiteral",
+          "unit": "min",
+          "value": 1
+        },
+        "op": "eq",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "s",
+          "value": 60
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > eq against a complex value is exact equality across both components => true",
+      "id": "comparison.compare-eq-against-a-complex-value-is-exact-equality-across-both-components-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "im": -4,
+          "kind": "complexLiteral",
+          "re": 3
+        },
+        "op": "eq",
+        "right": {
+          "im": -4,
+          "kind": "complexLiteral",
+          "re": 3
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > eq against a complex value is exact equality across both components => false",
+      "id": "comparison.compare-eq-against-a-complex-value-is-exact-equality-across-both-components-false.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "im": -4,
+          "kind": "complexLiteral",
+          "re": 3
+        },
+        "op": "eq",
+        "right": {
+          "im": 4,
+          "kind": "complexLiteral",
+          "re": 3
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > eq against a complex value is exact equality across both components => false",
+      "id": "comparison.compare-eq-against-a-complex-value-is-exact-equality-across-both-components-false.2",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "im": -4,
+          "kind": "complexLiteral",
+          "re": 3
+        },
+        "op": "eq",
+        "right": {
+          "im": -4,
+          "kind": "complexLiteral",
+          "re": -3
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > neq against a complex value is exact equality across both components => true",
+      "id": "comparison.compare-neq-against-a-complex-value-is-exact-equality-across-both-components-true.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "im": -4,
+          "kind": "complexLiteral",
+          "re": 3
+        },
+        "op": "neq",
+        "right": {
+          "im": 4,
+          "kind": "complexLiteral",
+          "re": 3
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > neq against a complex value is exact equality across both components => false",
+      "id": "comparison.compare-neq-against-a-complex-value-is-exact-equality-across-both-components-false.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "im": -4,
+          "kind": "complexLiteral",
+          "re": 3
+        },
+        "op": "neq",
+        "right": {
+          "im": -4,
+          "kind": "complexLiteral",
+          "re": 3
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > gt is wrong-type on complex operands -- the complex plane carries no total order",
+      "id": "comparison.compare-gt-is-wrong-type-on-complex-operands-the-complex-plane-carries-no-total-order.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "im": -4,
+          "kind": "complexLiteral",
+          "re": 3
+        },
+        "op": "gt",
+        "right": {
+          "im": 1,
+          "kind": "complexLiteral",
+          "re": 1
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > gte is wrong-type on complex operands -- the complex plane carries no total order",
+      "id": "comparison.compare-gte-is-wrong-type-on-complex-operands-the-complex-plane-carries-no-total-order.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "im": -4,
+          "kind": "complexLiteral",
+          "re": 3
+        },
+        "op": "gte",
+        "right": {
+          "im": 1,
+          "kind": "complexLiteral",
+          "re": 1
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > lt is wrong-type on complex operands -- the complex plane carries no total order",
+      "id": "comparison.compare-lt-is-wrong-type-on-complex-operands-the-complex-plane-carries-no-total-order.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "im": -4,
+          "kind": "complexLiteral",
+          "re": 3
+        },
+        "op": "lt",
+        "right": {
+          "im": 1,
+          "kind": "complexLiteral",
+          "re": 1
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > lte is wrong-type on complex operands -- the complex plane carries no total order",
+      "id": "comparison.compare-lte-is-wrong-type-on-complex-operands-the-complex-plane-carries-no-total-order.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "im": -4,
+          "kind": "complexLiteral",
+          "re": 3
+        },
+        "op": "lte",
+        "right": {
+          "im": 1,
+          "kind": "complexLiteral",
+          "re": 1
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > is wrong-type when two complex values have incompatible units",
+      "id": "comparison.compare-is-wrong-type-when-two-complex-values-have-incompatible-units.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "im": -4,
+          "kind": "complexLiteral",
+          "re": 3,
+          "unit": {
+            "V": 1
+          }
+        },
+        "op": "eq",
+        "right": {
+          "im": -4,
+          "kind": "complexLiteral",
+          "re": 3,
+          "unit": {
+            "A": 1
+          }
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > is wrong-type when comparing a complex value against a real one, unlike arithmetic's promotion",
+      "id": "comparison.compare-is-wrong-type-when-comparing-a-complex-value-against-a-real-one-unlike-arithmetic-s-promotion.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "im": 0,
+          "kind": "complexLiteral",
+          "re": 3
+        },
+        "op": "eq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 3
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > is wrong-type when comparing across different computed-value kinds",
+      "id": "comparison.compare-is-wrong-type-when-comparing-across-different-computed-value-kinds.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 1
+        },
+        "op": "eq",
+        "right": {
+          "kind": "textLiteral",
+          "value": "1"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > is wrong-type when comparing a boolean against a number",
+      "id": "comparison.compare-is-wrong-type-when-comparing-a-boolean-against-a-number.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "booleanLiteral",
+          "value": true
+        },
+        "op": "eq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > is wrong-type when comparing an instant against a duration",
+      "id": "comparison.compare-is-wrong-type-when-comparing-an-instant-against-a-duration.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "instantLiteral",
+          "value": "2026-01-01T00:00:00.000Z"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "min",
+          "value": 1
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > is wrong-type when two numbers have incompatible units",
+      "id": "comparison.compare-is-wrong-type-when-two-numbers-have-incompatible-units.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "numberLiteral",
+          "unit": {
+            "m": 1
+          },
+          "value": 5
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "unit": {
+            "s": 1
+          },
+          "value": 3
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > propagates an indeterminate left operand",
+      "id": "comparison.compare-propagates-an-indeterminate-left-operand.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "missing",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > propagates an indeterminate right operand",
+      "id": "comparison.compare-propagates-an-indeterminate-right-operand.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 1
+        },
+        "op": "eq",
+        "right": {
+          "key": "missing",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.comparison.unit.test.ts: compare > tie-breaks two indeterminate operands to the left's reason, per the declared-operand-order rule",
+      "id": "comparison.compare-tie-breaks-two-indeterminate-operands-to-the-left-s-reason-per-the-declared-operand-order-rule.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "missing",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "key": "also-missing",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.comparison.unit.test.ts: textCompare > equals is exact string equality",
+      "id": "comparison.textcompare-equals-is-exact-string-equality.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "kind": "textLiteral",
+          "value": "active"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "active"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.comparison.unit.test.ts: textCompare > equals is false for differing strings",
+      "id": "comparison.textcompare-equals-is-false-for-differing-strings.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "kind": "textLiteral",
+          "value": "active"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "inactive"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.comparison.unit.test.ts: textCompare > notEquals is the negation of equals",
+      "id": "comparison.textcompare-notequals-is-the-negation-of-equals.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "kind": "textLiteral",
+          "value": "active"
+        },
+        "op": "notEquals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "inactive"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.comparison.unit.test.ts: textCompare > matches tests right's text as a regular expression against left's text",
+      "id": "comparison.textcompare-matches-tests-right-s-text-as-a-regular-expression-against-left-s-text.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "kind": "textLiteral",
+          "value": "active-123"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^active-\\d+$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.comparison.unit.test.ts: textCompare > matches is false when the pattern does not match",
+      "id": "comparison.textcompare-matches-is-false-when-the-pattern-does-not-match.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "kind": "textLiteral",
+          "value": "inactive"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^active$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.comparison.unit.test.ts: textCompare > notMatches is the negation of matches",
+      "id": "comparison.textcompare-notmatches-is-the-negation-of-matches.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "kind": "textLiteral",
+          "value": "inactive"
+        },
+        "op": "notMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^active$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.comparison.unit.test.ts: textCompare > portableMatches tests right's text as a trilean-regex pattern against left's text",
+      "id": "comparison.textcompare-portablematches-tests-right-s-text-as-a-trilean-regex-pattern-against-left-s-text.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "kind": "textLiteral",
+          "value": "active-123"
+        },
+        "op": "portableMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^active-\\d+$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.comparison.unit.test.ts: textCompare > portableMatches is false when the pattern does not match",
+      "id": "comparison.textcompare-portablematches-is-false-when-the-pattern-does-not-match.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "kind": "textLiteral",
+          "value": "inactive"
+        },
+        "op": "portableMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^active$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.comparison.unit.test.ts: textCompare > portableNotMatches is the negation of portableMatches",
+      "id": "comparison.textcompare-portablenotmatches-is-the-negation-of-portablematches.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "kind": "textLiteral",
+          "value": "inactive"
+        },
+        "op": "portableNotMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^active$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.comparison.unit.test.ts: textCompare > an invalid trilean-regex pattern is wrong-type, not a thrown exception",
+      "id": "comparison.textcompare-an-invalid-trilean-regex-pattern-is-wrong-type-not-a-thrown-exception.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "kind": "textLiteral",
+          "value": "anything"
+        },
+        "op": "portableMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "(a)"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "evaluator.comparison.unit.test.ts: textCompare > portableMatches accepts only its own restricted grammar, rejecting an ECMAScript-only construct matches would accept",
+      "id": "comparison.textcompare-portablematches-accepts-only-its-own-restricted-grammar-rejecting-an-ecmascript-only-construct-matches-would-accept.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "kind": "textLiteral",
+          "value": "a"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^(?=a)a$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.comparison.unit.test.ts: textCompare > portableMatches accepts only its own restricted grammar, rejecting an ECMAScript-only construct matches would accept",
+      "id": "comparison.textcompare-portablematches-accepts-only-its-own-restricted-grammar-rejecting-an-ecmascript-only-construct-matches-would-accept.2",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "kind": "textLiteral",
+          "value": "a"
+        },
+        "op": "portableMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^(?=a)a$"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.comparison.unit.test.ts: textCompare > is wrong-type when the left operand is not text",
+      "id": "comparison.textcompare-is-wrong-type-when-the-left-operand-is-not-text.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 1
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "1"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.comparison.unit.test.ts: textCompare > is wrong-type when the right operand is not text",
+      "id": "comparison.textcompare-is-wrong-type-when-the-right-operand-is-not-text.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "kind": "textLiteral",
+          "value": "1"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.comparison.unit.test.ts: textCompare > an invalid regular expression pattern is wrong-type, not a thrown exception",
+      "id": "comparison.textcompare-an-invalid-regular-expression-pattern-is-wrong-type-not-a-thrown-exception.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "kind": "textLiteral",
+          "value": "anything"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "("
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.comparison.unit.test.ts: textCompare > propagates an indeterminate left operand",
+      "id": "comparison.textcompare-propagates-an-indeterminate-left-operand.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "missing",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "active"
+        }
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.comparison.unit.test.ts: textCompare > propagates an indeterminate right operand",
+      "id": "comparison.textcompare-propagates-an-indeterminate-right-operand.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "kind": "textLiteral",
+          "value": "active"
+        },
+        "op": "equals",
+        "right": {
+          "key": "missing",
+          "kind": "reference"
+        }
+      }
+    }
+  ]
+}
