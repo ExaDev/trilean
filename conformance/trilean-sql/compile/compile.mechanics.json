@@ -173,9 +173,7 @@
       "expect": {
         "error": {
           "column": "",
-          "message": [
-            "columnFor(\"anything\") returned \"\", which is not a usable column identifier: the name is empty"
-          ],
+          "message": "columnFor(\"anything\") returned \"\", which is not a usable column identifier: the name is empty",
           "name": "InvalidColumnError",
           "referenceKey": "anything"
         }
@@ -203,9 +201,7 @@
       "expect": {
         "error": {
           "column": "public..note",
-          "message": [
-            "columnFor(\"anything\") returned \"public..note\", which is not a usable column identifier: a dot-separated segment is empty"
-          ],
+          "message": "columnFor(\"anything\") returned \"public..note\", which is not a usable column identifier: a dot-separated segment is empty",
           "name": "InvalidColumnError",
           "referenceKey": "anything"
         }
@@ -232,9 +228,7 @@
     {
       "expect": {
         "error": {
-          "message": [
-            "no column mapped for reference key 'unmapped'"
-          ],
+          "message": "no column mapped for reference key 'unmapped'",
           "name": "CallerError"
         }
       },
@@ -312,15 +306,11 @@
     {
       "expect": {
         "error": {
-          "message": [
-            "cannot compile 'treeReference' at $.right: a referenced tree is resolved by the caller's resolvers; inline it before compiling"
-          ],
+          "message": "cannot compile 'treeReference' at $.right: a referenced tree is resolved by the caller's resolvers; inline it before compiling",
           "name": "UnsupportedNodeError",
           "nodeKind": "treeReference",
           "path": "$.right",
-          "reason": [
-            "a referenced tree is resolved by the caller's resolvers; inline it before compiling"
-          ]
+          "reason": "a referenced tree is resolved by the caller's resolvers; inline it before compiling"
         }
       },
       "from": "compile.mechanics.unit.test.ts: refusal > throws UnsupportedNodeError carrying the offending kind and path",
@@ -358,15 +348,11 @@
     {
       "expect": {
         "error": {
-          "message": [
-            "cannot compile 'some' at $.operands[1]: no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation"
-          ],
+          "message": "cannot compile 'some' at $.operands[1]: no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation",
           "name": "UnsupportedNodeError",
           "nodeKind": "some",
           "path": "$.operands[1]",
-          "reason": [
-            "no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation"
-          ]
+          "reason": "no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation"
         }
       },
       "from": "compile.mechanics.unit.test.ts: refusal > emits nothing at all when it refuses",
@@ -418,15 +404,11 @@
     {
       "expect": {
         "error": {
-          "message": [
-            "cannot compile 'some' at $.right.operands[1].operand: no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation"
-          ],
+          "message": "cannot compile 'some' at $.right.operands[1].operand: no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation",
           "name": "UnsupportedNodeError",
           "nodeKind": "some",
           "path": "$.right.operands[1].operand",
-          "reason": [
-            "no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation"
-          ]
+          "reason": "no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation"
         }
       },
       "from": "compile.mechanics.unit.test.ts: refusal > refuses a 'some' buried several levels down rather than dropping that branch",
@@ -491,15 +473,11 @@
     {
       "expect": {
         "error": {
-          "message": [
-            "cannot compile 'every' at $.right.operands[1].operand: no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation"
-          ],
+          "message": "cannot compile 'every' at $.right.operands[1].operand: no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation",
           "name": "UnsupportedNodeError",
           "nodeKind": "every",
           "path": "$.right.operands[1].operand",
-          "reason": [
-            "no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation"
-          ]
+          "reason": "no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation"
         }
       },
       "from": "compile.mechanics.unit.test.ts: refusal > refuses a 'every' buried several levels down rather than dropping that branch",
@@ -564,15 +542,11 @@
     {
       "expect": {
         "error": {
-          "message": [
-            "cannot compile 'fold' at $.right.operands[1].operand.left: a 'reduce' fold threads an arbitrary combine expression through the collection in a caller-chosen order, which has no general SQL translation"
-          ],
+          "message": "cannot compile 'fold' at $.right.operands[1].operand.left: a 'reduce' fold threads an arbitrary combine expression through the collection in a caller-chosen order, which has no general SQL translation",
           "name": "UnsupportedNodeError",
           "nodeKind": "fold",
           "path": "$.right.operands[1].operand.left",
-          "reason": [
-            "a 'reduce' fold threads an arbitrary combine expression through the collection in a caller-chosen order, which has no general SQL translation"
-          ]
+          "reason": "a 'reduce' fold threads an arbitrary combine expression through the collection in a caller-chosen order, which has no general SQL translation"
         }
       },
       "from": "compile.mechanics.unit.test.ts: refusal > refuses a 'fold' buried several levels down rather than dropping that branch",

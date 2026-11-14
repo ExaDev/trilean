@@ -4,18 +4,14 @@
       "expect": {
         "params": [
           {
-            "type": "number",
-            "value": 18
-          },
-          {
             "type": "boolean",
             "value": true
           }
         ],
-        "sql": "(NOT ((\"age\" > $1::double precision) AND ((\"note\" IS NOT NULL) OR (\"active\" = $2::boolean))))"
+        "sql": "(\"active\" = ?)"
       },
-      "from": "compile.predicates.unit.test.ts: connectives > compiles and/or/not to their SQL counterparts",
-      "id": "sql.compile.compile-predicates.connectives-compiles-and-or-not-to-their-sql-cou",
+      "from": "recorded: trilean-sql src/compile.ts (compare eq boolean under sqlite)",
+      "id": "sql.compile.matrix.sqlite-compare-eq-boolean",
       "kind": "sql-compile",
       "options": {
         "columns": {
@@ -27,50 +23,30 @@
             "column": "age",
             "paramType": "number"
           },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
           "note": {
             "column": "note"
           }
         },
-        "dialect": "postgres"
+        "dialect": "sqlite"
       },
       "tree": {
-        "kind": "not",
-        "operand": {
-          "kind": "and",
-          "left": {
-            "kind": "compare",
-            "left": {
-              "key": "age",
-              "kind": "reference"
-            },
-            "op": "gt",
-            "right": {
-              "kind": "numberLiteral",
-              "value": 18
-            }
-          },
-          "right": {
-            "kind": "or",
-            "left": {
-              "kind": "exists",
-              "operand": {
-                "key": "note",
-                "kind": "reference"
-              }
-            },
-            "right": {
-              "kind": "compare",
-              "left": {
-                "key": "active",
-                "kind": "reference"
-              },
-              "op": "eq",
-              "right": {
-                "kind": "booleanLiteral",
-                "value": true
-              }
-            }
-          }
+        "kind": "compare",
+        "left": {
+          "key": "active",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "booleanLiteral",
+          "value": true
         }
       }
     }

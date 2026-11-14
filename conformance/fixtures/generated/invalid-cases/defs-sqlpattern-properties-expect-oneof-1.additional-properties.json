@@ -4,16 +4,14 @@
       "dialect": "sqlite",
       "expect": {
         "error": {
-          "message": [
-            "GLOB has no alternation operator"
-          ]
+          "message": "GLOB has no 'zero or one' wildcard"
         },
         "unexpectedMember": 1
       },
-      "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > refuses alternation",
-      "id": "sql.pattern.portable-pattern.rendersqliteglobpattern-refuses-alternation",
+      "from": "recorded: trilean-sql src/portable-pattern.ts (construct a? under sqlite)",
+      "id": "sql.pattern.escaping.sqlite-construct-ax3f",
       "kind": "sql-pattern",
-      "pattern": "a|b"
+      "pattern": "a?"
     }
   ]
 }

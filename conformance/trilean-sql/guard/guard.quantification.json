@@ -4,9 +4,7 @@
       "expect": {
         "nodeKind": "some",
         "path": "$",
-        "reason": [
-          "no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation"
-        ]
+        "reason": "no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation"
       },
       "from": "guard.quantification.unit.test.ts: quantification over a collection > refuses 'some' when collectionFor is not set",
       "id": "sql.guard.guard-quantification.quantification-over-a-collection-refuses-some-wh",
@@ -35,9 +33,7 @@
       "expect": {
         "nodeKind": "every",
         "path": "$",
-        "reason": [
-          "no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation"
-        ]
+        "reason": "no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation"
       },
       "from": "guard.quantification.unit.test.ts: quantification over a collection > refuses 'every' when collectionFor is not set",
       "id": "sql.guard.guard-quantification.quantification-over-a-collection-refuses-every-w",
@@ -140,9 +136,7 @@
       "expect": {
         "nodeKind": "fold",
         "path": "$.left",
-        "reason": [
-          "no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation"
-        ]
+        "reason": "no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation"
       },
       "from": "guard.quantification.unit.test.ts: quantification over a collection > refuses fold('max') when collectionFor is not set",
       "id": "sql.guard.guard-quantification.quantification-over-a-collection-refuses-fold-ma",
@@ -174,9 +168,7 @@
       "expect": {
         "nodeKind": "fold",
         "path": "$.left",
-        "reason": [
-          "no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation"
-        ]
+        "reason": "no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation"
       },
       "from": "guard.quantification.unit.test.ts: quantification over a collection > refuses fold('min') when collectionFor is not set",
       "id": "sql.guard.guard-quantification.quantification-over-a-collection-refuses-fold-mi",
@@ -288,9 +280,7 @@
       "expect": {
         "nodeKind": "fold",
         "path": "$.left",
-        "reason": [
-          "a 'reduce' fold threads an arbitrary combine expression through the collection in a caller-chosen order, which has no general SQL translation"
-        ]
+        "reason": "a 'reduce' fold threads an arbitrary combine expression through the collection in a caller-chosen order, which has no general SQL translation"
       },
       "from": "guard.quantification.unit.test.ts: quantification over a collection > refuses fold('reduce') unconditionally, even once collectionFor maps the collection",
       "id": "sql.guard.guard-quantification.quantification-over-a-collection-refuses-fold-re",
@@ -327,9 +317,7 @@
       "expect": {
         "nodeKind": "some",
         "path": "$",
-        "reason": [
-          "only a string collection key can be mapped to a correlated table; this collection is a non-string JSON value"
-        ]
+        "reason": "only a string collection key can be mapped to a correlated table; this collection is a non-string JSON value"
       },
       "from": "guard.quantification.unit.test.ts: quantification over a collection > refuses a non-string collection key, even with collectionFor set",
       "id": "sql.guard.guard-quantification.quantification-over-a-collection-refuses-a-non-s",
@@ -360,9 +348,7 @@
     {
       "expect": {
         "error": {
-          "message": [
-            "no column mapped for reference key 'age'"
-          ],
+          "message": "no column mapped for reference key 'age'",
           "name": "CallerError"
         }
       },
@@ -400,9 +386,7 @@
       "expect": {
         "nodeKind": "treeReference",
         "path": "$.filter",
-        "reason": [
-          "a referenced tree is resolved by the caller's resolvers; inline it before compiling"
-        ]
+        "reason": "a referenced tree is resolved by the caller's resolvers; inline it before compiling"
       },
       "from": "guard.quantification.unit.test.ts: quantification over a collection > refuses an unsupported node kind buried inside filter, not only inside item",
       "id": "sql.guard.guard-quantification.quantification-over-a-collection-refuses-an-unsu",
@@ -500,10 +484,7 @@
       "expect": {
         "nodeKind": "fold",
         "path": "$.left.combiner.item",
-        "reason": [
-          "a 'max' fold orders participating items by comparing them, and trilean never orders text values ('compare' returns wrong-type for text; use 'textCompare')",
-          "but PostgreSQL would order the text operand at $.left.combiner.item collation-wise and answer definitely"
-        ]
+        "reason": "a 'max' fold orders participating items by comparing them, and trilean never orders text values ('compare' returns wrong-type for text; use 'textCompare'); but PostgreSQL would order the text operand at $.left.combiner.item collation-wise and answer definitely"
       },
       "from": "guard.quantification.unit.test.ts: quantification over a collection > refuses a fold('max'|'min') whose projected item is text, which trilean never orders",
       "id": "sql.guard.guard-quantification.quantification-over-a-collection-refuses-a-fold",
@@ -547,10 +528,7 @@
       "expect": {
         "nodeKind": "fold",
         "path": "$.left.combiner.item",
-        "reason": [
-          "a 'min' fold orders participating items by comparing them, and booleans have no ordering in trilean",
-          "whereas PostgreSQL orders false before true"
-        ]
+        "reason": "a 'min' fold orders participating items by comparing them, and booleans have no ordering in trilean; whereas PostgreSQL orders false before true"
       },
       "from": "guard.quantification.unit.test.ts: quantification over a collection > refuses a fold('max'|'min') whose projected item is boolean, which trilean never orders",
       "id": "sql.guard.guard-quantification.quantification-over-a-collection-refuses-a-fold-2",

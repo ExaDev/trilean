@@ -16,12 +16,12 @@ import {
   renderSqliteGlobPattern,
 } from "../portable-pattern";
 import type {
+  ExactText,
   SqlCompileCase,
   SqlErrorData,
   SqlGuardCase,
   SqlParamData,
   SqlPatternCase,
-  Text,
 } from "./corpus-types";
 import { decodeNumbers, replaceNonFinite } from "./numbers";
 import { buildOptions } from "./sql-options";
@@ -47,35 +47,49 @@ function newLog(): CallbackLog {
   return { thrown: [], columnKeys: [] };
 }
 
-/** Whether the fragments occur in the text, each after the end of the one before. */
-function containsInOrder(text: string, fragments: readonly Text[]): boolean {
+/** Whether a text is the one a case states: exactly, or, for a text that relays another package's message, starting and ending as stated with the fragments of that message between, in order. */
+function textProblems(actual: string, expected: ExactText): readonly string[] {
+  if (typeof expected === "string") {
+    return actual === expected
+      ? []
+      : [`${JSON.stringify(actual)} is not ${JSON.stringify(expected)}`];
+  }
+  const { before, relayed, after } = expected;
+  if (
+    !actual.startsWith(before) ||
+    !actual.endsWith(after) ||
+    actual.length < before.length + after.length
+  ) {
+    return [
+      `${JSON.stringify(actual)} does not start with ${JSON.stringify(before)} and end with ${JSON.stringify(after)}`,
+    ];
+  }
+  const middle = actual.slice(before.length, actual.length - after.length);
   let from = 0;
-  for (const fragment of fragments) {
-    const found = text.indexOf(textToString(fragment), from);
+  for (const fragment of relayed.map(textToString)) {
+    const found = middle.indexOf(fragment, from);
     if (found < 0) {
-      return false;
+      return [
+        `${JSON.stringify(middle)} lacks ${JSON.stringify(fragment)} after offset ${String(from)}`,
+      ];
     }
-    from = found + textToString(fragment).length;
+    from = found + fragment.length;
   }
 
-  return true;
+  return [];
 }
 
 function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
 }
 
-/** Checks a thrown value against the error a case expects: its class, its fields and the fragments of its message; a `CallerError` must be an exception one of the options' callbacks threw, the very object. */
+/** Checks a thrown value against the error a case expects: its class, its fields and its message, each exactly; a `CallerError` must be an exception one of the options' callbacks threw, the very object. */
 function expectError(
   thrown: unknown,
   expected: SqlErrorData,
   log: CallbackLog,
 ): void {
-  const message = errorMessage(thrown);
-  expect(
-    containsInOrder(message, expected.message),
-    `the message ${JSON.stringify(message)} lacks ${JSON.stringify(expected.message)}`,
-  ).toBe(true);
+  expect(textProblems(errorMessage(thrown), expected.message)).toEqual([]);
   switch (expected.name) {
     case "CallerError":
       expect(log.thrown, "the error is one a callback threw").toContain(thrown);
@@ -88,12 +102,11 @@ function expectError(
         path: expected.path,
       });
       expect(
-        containsInOrder(
+        textProblems(
           thrown instanceof UnsupportedNodeError ? thrown.reason : "",
           expected.reason,
         ),
-        "the reason lacks the fragments",
-      ).toBe(true);
+      ).toEqual([]);
       break;
     case "InvalidColumnError":
       expect(thrown).toBeInstanceOf(InvalidColumnError);
@@ -133,10 +146,32 @@ function attempt<T>(run: () => T): Outcome<T> {
   }
 }
 
+/** The kind a PostgreSQL placeholder is cast to, by the cast the compiler writes after it. */
+const POSTGRES_CASTS: Readonly<Record<string, SqlParamData["type"]>> = {
+  text: "text",
+  "double precision": "number",
+  boolean: "boolean",
+  timestamptz: "timestamp",
+};
+
+/** The kind of the `index`-th (1-based) PostgreSQL placeholder of a fragment, from its cast. */
+function castKind(sql: string, index: number): string {
+  const found = new RegExp(
+    `\\$${String(index)}::(double precision|text|boolean|timestamptz)(?![a-z])`,
+    "u",
+  ).exec(sql);
+
+  return found?.[1] === undefined
+    ? "none"
+    : (POSTGRES_CASTS[found[1]] ?? found[1]);
+}
+
 /**
- * Whether the compiled parameters are the expected ones, by kind and value. A timestamp is the instant's text and the TypeScript implementation holds it as a string, exactly as it holds a text, so for a timestamp this checks the value and that it is a string; the number, boolean and text kinds are checked in full.
+ * The problems with the compiled parameters against the expected ones, by kind and value. Number, boolean and text values are checked in full, a number by `Object.is` so that -0 and NaN count. Under PostgreSQL the kind of every parameter is read from the cast the compiler wrote on its placeholder, so a timestamp bound as a text is a failure. Under SQLite a placeholder carries no kind and the engine binds a timestamp as the instant's text, so a timestamp there is checked as the string it is, and what the engine does with it is pinned by the execute cases.
  */
 function paramProblems(
+  dialect: string,
+  sql: string,
   actual: readonly unknown[],
   expected: readonly SqlParamData[],
 ): readonly string[] {
@@ -148,18 +183,25 @@ function paramProblems(
 
   return expected.flatMap((param, index) => {
     const value = actual[index];
+    const wanted = decodeNumbers(param.value);
     const matches =
       param.type === "number"
-        ? typeof value === "number" && Object.is(value, param.value)
+        ? typeof value === "number" && Object.is(value, wanted)
         : param.type === "boolean"
-          ? value === param.value
-          : typeof value === "string" && value === param.value;
-
-    return matches
+          ? value === wanted
+          : typeof value === "string" && value === wanted;
+    const problems = matches
       ? []
       : [
           `parameter ${String(index + 1)} is ${JSON.stringify(value)}, expected ${param.type} ${JSON.stringify(param.value)}`,
         ];
+    if (dialect === "postgres" && castKind(sql, index + 1) !== param.type) {
+      problems.push(
+        `parameter ${String(index + 1)} is cast as ${castKind(sql, index + 1)}, expected ${param.type}`,
+      );
+    }
+
+    return problems;
   });
 }
 
@@ -182,7 +224,12 @@ export function runCompileCase(testCase: SqlCompileCase): void {
     );
     if ("returned" in outcome) {
       expect(
-        paramProblems(outcome.returned.params, testCase.expect.params),
+        paramProblems(
+          testCase.options.dialect,
+          outcome.returned.sql,
+          outcome.returned.params,
+          testCase.expect.params,
+        ),
       ).toEqual([]);
     }
   }
@@ -224,10 +271,7 @@ export function runGuardCase(testCase: SqlGuardCase): void {
     nodeKind: expected.nodeKind,
     path: expected.path,
   });
-  expect(
-    containsInOrder(found.reason, expected.reason),
-    `the reason ${JSON.stringify(found.reason)} lacks ${JSON.stringify(expected.reason)}`,
-  ).toBe(true);
+  expect(textProblems(found.reason, expected.reason)).toEqual([]);
 }
 
 export function runPatternCase(testCase: SqlPatternCase): void {
@@ -242,11 +286,11 @@ export function runPatternCase(testCase: SqlPatternCase): void {
     if ("thrown" in outcome) {
       expect(outcome.thrown).toBeInstanceOf(PortablePatternUnsupportedError);
       expect(
-        containsInOrder(
+        textProblems(
           errorMessage(outcome.thrown),
           testCase.expect.error.message,
         ),
-      ).toBe(true);
+      ).toEqual([]);
     }
   } else {
     expect("returned" in outcome ? outcome.returned : outcome.thrown).toBe(

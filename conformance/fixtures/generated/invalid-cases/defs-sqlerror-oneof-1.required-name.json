@@ -4,27 +4,25 @@
       "expect": {
         "error": {
           "column": "",
-          "message": [
-            "columnFor(\"anything\") returned \"\", which is not a usable column identifier: the name is empty"
-          ],
-          "referenceKey": "anything"
+          "message": "columnFor(\"k\") returned \"\", which is not a usable column identifier: the name is empty",
+          "referenceKey": "k"
         }
       },
-      "from": "compile.mechanics.unit.test.ts: column identifiers > rejects an empty column name",
-      "id": "sql.compile.compile-mechanics.column-identifiers-rejects-an-empty-column-name",
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-column-named-x22-x22",
       "kind": "sql-compile",
       "options": {
         "columns": {
-          "anything": {
+          "k": {
             "column": ""
           }
         },
-        "dialect": "postgres"
+        "dialect": "sqlite"
       },
       "tree": {
         "kind": "exists",
         "operand": {
-          "key": "anything",
+          "key": "k",
           "kind": "reference"
         }
       }

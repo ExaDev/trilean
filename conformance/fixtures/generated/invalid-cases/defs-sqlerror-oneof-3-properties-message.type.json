@@ -8,7 +8,7 @@
             "postgres",
             "sqlite"
           ],
-          "message": "not-the-type",
+          "message": 1,
           "name": "UnknownDialectError"
         }
       },

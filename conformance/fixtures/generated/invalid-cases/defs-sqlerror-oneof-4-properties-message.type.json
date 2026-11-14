@@ -3,7 +3,7 @@
     {
       "expect": {
         "error": {
-          "message": "not-the-type",
+          "message": 1,
           "name": "CallerError"
         }
       },

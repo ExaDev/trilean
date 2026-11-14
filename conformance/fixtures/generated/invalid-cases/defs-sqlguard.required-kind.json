@@ -2,18 +2,8 @@
   "cases": [
     {
       "expect": null,
-      "from": "x.unit.test.ts: a fixture",
-      "id": "optional.13",
-      "options": {
-        "columns": {
-          "note": {
-            "column": "note"
-          }
-        },
-        "dialect": "postgres"
-      },
-      "reason": "the implementation cannot run this case",
-      "skip": "ts",
+      "from": "recorded: trilean-sql src/guard.ts (a tree guarded with no options under postgres)",
+      "id": "sql.guard.matrix.postgres-a-tree-guarded-with-no-options",
       "tree": {
         "kind": "exists",
         "operand": {

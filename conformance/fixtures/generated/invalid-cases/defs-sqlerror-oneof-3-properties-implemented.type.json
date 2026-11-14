@@ -5,9 +5,7 @@
         "error": {
           "dialect": "mysql",
           "implemented": "not-the-type",
-          "message": [
-            "unknown dialect \"mysql\": this version compiles \"postgres\", \"sqlite\""
-          ],
+          "message": "unknown dialect \"mysql\": this version compiles \"postgres\", \"sqlite\"",
           "name": "UnknownDialectError"
         }
       },

@@ -38,6 +38,26 @@
       "cases": 7,
       "skip": []
     },
+    "trilean-sql/compile/identifiers.json": {
+      "cases": 172,
+      "skip": []
+    },
+    "trilean-sql/compile/matrix.json": {
+      "cases": 230,
+      "skip": []
+    },
+    "trilean-sql/compile/numbers.json": {
+      "cases": 76,
+      "skip": []
+    },
+    "trilean-sql/compile/parameters.json": {
+      "cases": 98,
+      "skip": []
+    },
+    "trilean-sql/compile/pattern-operators.json": {
+      "cases": 400,
+      "skip": []
+    },
     "trilean-sql/compile/postgres.edge-cases.json": {
       "cases": 1,
       "skip": []
@@ -52,6 +72,18 @@
     },
     "trilean-sql/compile/sqlite.predicates.json": {
       "cases": 2,
+      "skip": []
+    },
+    "trilean-sql/execute/identifiers.json": {
+      "cases": 58,
+      "skip": []
+    },
+    "trilean-sql/execute/matrix.json": {
+      "cases": 52,
+      "skip": []
+    },
+    "trilean-sql/execute/numbers.json": {
+      "cases": 150,
       "skip": []
     },
     "trilean-sql/execute/postgres.edge-cases.json": {
@@ -78,6 +110,10 @@
       "cases": 16,
       "skip": []
     },
+    "trilean-sql/execute/strings.json": {
+      "cases": 160,
+      "skip": []
+    },
     "trilean-sql/guard/compile.dialects.json": {
       "cases": 2,
       "skip": []
@@ -96,6 +132,14 @@
     },
     "trilean-sql/guard/guard.supported.json": {
       "cases": 15,
+      "skip": []
+    },
+    "trilean-sql/guard/matrix.json": {
+      "cases": 141,
+      "skip": []
+    },
+    "trilean-sql/pattern/escaping.json": {
+      "cases": 160,
       "skip": []
     },
     "trilean-sql/pattern/portable-pattern.json": {

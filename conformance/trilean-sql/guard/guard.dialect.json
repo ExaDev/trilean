@@ -114,9 +114,7 @@
       "expect": {
         "nodeKind": "textCompare",
         "path": "$",
-        "reason": [
-          "options.sqliteRegexpAvailable is false: the caller has stated no regexp(pattern, value) function can be registered on this SQLite target, so 'matches' would compile to SQL that fails at query execution time with \"no such function: REGEXP\" instead of at compile time"
-        ]
+        "reason": "options.sqliteRegexpAvailable is false: the caller has stated no regexp(pattern, value) function can be registered on this SQLite target, so 'matches' would compile to SQL that fails at query execution time with \"no such function: REGEXP\" instead of at compile time"
       },
       "from": "guard.dialect.unit.test.ts: sqliteRegexpAvailable > refuses '{ kind: 'textCompare', …(3) }' under sqlite once the flag is false",
       "id": "sql.guard.guard-dialect.sqliteregexpavailable-refuses-kind-textcompare-3",
@@ -142,9 +140,7 @@
       "expect": {
         "nodeKind": "textCompare",
         "path": "$",
-        "reason": [
-          "options.sqliteRegexpAvailable is false: the caller has stated no regexp(pattern, value) function can be registered on this SQLite target, so 'notMatches' would compile to SQL that fails at query execution time with \"no such function: REGEXP\" instead of at compile time"
-        ]
+        "reason": "options.sqliteRegexpAvailable is false: the caller has stated no regexp(pattern, value) function can be registered on this SQLite target, so 'notMatches' would compile to SQL that fails at query execution time with \"no such function: REGEXP\" instead of at compile time"
       },
       "from": "guard.dialect.unit.test.ts: sqliteRegexpAvailable > refuses '{ kind: 'textCompare', …(3) }' under sqlite once the flag is false",
       "id": "sql.guard.guard-dialect.sqliteregexpavailable-refuses-kind-textcompare-3-2",
@@ -227,11 +223,7 @@
       "expect": {
         "nodeKind": "textCompare",
         "path": "$",
-        "reason": [
-          "'matches' matches trilean's own ECMAScript 'RegExp' against the pattern, whereas PostgreSQL's '~'/'!~' would match it under PostgreSQL's own regular-expression dialect (POSIX ARE)",
-          "a different language that can silently answer a different set of rows for the same pattern and data (for example, PostgreSQL's '.' matches a newline by default where ECMAScript's does not, and PostgreSQL's '\\w' follows the database's locale where ECMAScript's is ASCII-only)",
-          "so this is refused unless 'postgresRegexpPushdown' is explicitly set 'true'"
-        ]
+        "reason": "'matches' matches trilean's own ECMAScript 'RegExp' against the pattern, whereas PostgreSQL's '~'/'!~' would match it under PostgreSQL's own regular-expression dialect (POSIX ARE), a different language that can silently answer a different set of rows for the same pattern and data (for example, PostgreSQL's '.' matches a newline by default where ECMAScript's does not, and PostgreSQL's '\\w' follows the database's locale where ECMAScript's is ASCII-only), so this is refused unless 'postgresRegexpPushdown' is explicitly set 'true'"
       },
       "from": "guard.dialect.unit.test.ts: PostgreSQL regular-expression pushdown > refuses 'matches' against PostgreSQL by default",
       "id": "sql.guard.guard-dialect.postgresql-regular-expression-pushdown-refuses-m",
@@ -262,11 +254,7 @@
       "expect": {
         "nodeKind": "textCompare",
         "path": "$",
-        "reason": [
-          "'notMatches' matches trilean's own ECMAScript 'RegExp' against the pattern, whereas PostgreSQL's '~'/'!~' would match it under PostgreSQL's own regular-expression dialect (POSIX ARE)",
-          "a different language that can silently answer a different set of rows for the same pattern and data (for example, PostgreSQL's '.' matches a newline by default where ECMAScript's does not, and PostgreSQL's '\\w' follows the database's locale where ECMAScript's is ASCII-only)",
-          "so this is refused unless 'postgresRegexpPushdown' is explicitly set 'true'"
-        ]
+        "reason": "'notMatches' matches trilean's own ECMAScript 'RegExp' against the pattern, whereas PostgreSQL's '~'/'!~' would match it under PostgreSQL's own regular-expression dialect (POSIX ARE), a different language that can silently answer a different set of rows for the same pattern and data (for example, PostgreSQL's '.' matches a newline by default where ECMAScript's does not, and PostgreSQL's '\\w' follows the database's locale where ECMAScript's is ASCII-only), so this is refused unless 'postgresRegexpPushdown' is explicitly set 'true'"
       },
       "from": "guard.dialect.unit.test.ts: PostgreSQL regular-expression pushdown > refuses 'notMatches' against PostgreSQL by default",
       "id": "sql.guard.guard-dialect.postgresql-regular-expression-pushdown-refuses-n",
@@ -297,11 +285,7 @@
       "expect": {
         "nodeKind": "textCompare",
         "path": "$",
-        "reason": [
-          "'matches' matches trilean's own ECMAScript 'RegExp' against the pattern, whereas PostgreSQL's '~'/'!~' would match it under PostgreSQL's own regular-expression dialect (POSIX ARE)",
-          "a different language that can silently answer a different set of rows for the same pattern and data (for example, PostgreSQL's '.' matches a newline by default where ECMAScript's does not, and PostgreSQL's '\\w' follows the database's locale where ECMAScript's is ASCII-only)",
-          "so this is refused unless 'postgresRegexpPushdown' is explicitly set 'true'"
-        ]
+        "reason": "'matches' matches trilean's own ECMAScript 'RegExp' against the pattern, whereas PostgreSQL's '~'/'!~' would match it under PostgreSQL's own regular-expression dialect (POSIX ARE), a different language that can silently answer a different set of rows for the same pattern and data (for example, PostgreSQL's '.' matches a newline by default where ECMAScript's does not, and PostgreSQL's '\\w' follows the database's locale where ECMAScript's is ASCII-only), so this is refused unless 'postgresRegexpPushdown' is explicitly set 'true'"
       },
       "from": "guard.dialect.unit.test.ts: PostgreSQL regular-expression pushdown > refuses 'matches' against PostgreSQL with no options at all, since the default dialect is PostgreSQL and the default is refusal",
       "id": "sql.guard.guard-dialect.postgresql-regular-expression-pushdown-refuses-m-2",
@@ -405,9 +389,7 @@
       "expect": {
         "nodeKind": "numberLiteral",
         "path": "$.right",
-        "reason": [
-          "NaN is equal to nothing in trilean, not even itself, whereas PostgreSQL defines NaN as equal to itself and greater than every other double"
-        ]
+        "reason": "NaN is equal to nothing in trilean, not even itself, whereas PostgreSQL defines NaN as equal to itself and greater than every other double"
       },
       "from": "guard.dialect.unit.test.ts: refusal reasons are worded for the dialect they describe > refuses the same node at the same path in either dialect",
       "id": "sql.guard.guard-dialect.refusal-reasons-are-worded-for-the-dialect-they",
@@ -434,10 +416,7 @@
       "expect": {
         "nodeKind": "numberLiteral",
         "path": "$.right",
-        "reason": [
-          "NaN is equal to nothing in trilean, not even itself, whereas SQLite has no NaN at all and a driver binding one substitutes SQL NULL",
-          "so 'NaN = NaN' is indeterminate there rather than definitely false, and its negation matches every row instead of none"
-        ]
+        "reason": "NaN is equal to nothing in trilean, not even itself, whereas SQLite has no NaN at all and a driver binding one substitutes SQL NULL, so 'NaN = NaN' is indeterminate there rather than definitely false, and its negation matches every row instead of none"
       },
       "from": "guard.dialect.unit.test.ts: refusal reasons are worded for the dialect they describe > refuses the same node at the same path in either dialect",
       "id": "sql.guard.guard-dialect.refusal-reasons-are-worded-for-the-dialect-they-2",
@@ -464,11 +443,7 @@
       "expect": {
         "nodeKind": "compare",
         "path": "$",
-        "reason": [
-          "'compare' never compares text in trilean",
-          "it returns wrong-type and directs the caller to 'textCompare'",
-          "but PostgreSQL would order the text operand at $.left collation-wise and answer definitely"
-        ]
+        "reason": "'compare' never compares text in trilean: it returns wrong-type and directs the caller to 'textCompare'; but PostgreSQL would order the text operand at $.left collation-wise and answer definitely"
       },
       "from": "guard.dialect.unit.test.ts: refusal reasons are worded for the dialect they describe > refuses the same node at the same path in either dialect",
       "id": "sql.guard.guard-dialect.refusal-reasons-are-worded-for-the-dialect-they-3",
@@ -499,11 +474,7 @@
       "expect": {
         "nodeKind": "compare",
         "path": "$",
-        "reason": [
-          "'compare' never compares text in trilean",
-          "it returns wrong-type and directs the caller to 'textCompare'",
-          "but SQLite would answer definitely for the text operand at $.left, comparing it under the text affinity it applies to the other side ('9' > 5 is true there, while '10' > 5 is not)"
-        ]
+        "reason": "'compare' never compares text in trilean: it returns wrong-type and directs the caller to 'textCompare'; but SQLite would answer definitely for the text operand at $.left, comparing it under the text affinity it applies to the other side ('9' > 5 is true there, while '10' > 5 is not)"
       },
       "from": "guard.dialect.unit.test.ts: refusal reasons are worded for the dialect they describe > refuses the same node at the same path in either dialect",
       "id": "sql.guard.guard-dialect.refusal-reasons-are-worded-for-the-dialect-they-4",
@@ -534,9 +505,7 @@
       "expect": {
         "nodeKind": "compare",
         "path": "$",
-        "reason": [
-          "booleans have no ordering in trilean, so 'gt' against the boolean operand at $.left is wrong-type there, whereas PostgreSQL orders false before true"
-        ]
+        "reason": "booleans have no ordering in trilean, so 'gt' against the boolean operand at $.left is wrong-type there, whereas PostgreSQL orders false before true"
       },
       "from": "guard.dialect.unit.test.ts: refusal reasons are worded for the dialect they describe > refuses the same node at the same path in either dialect",
       "id": "sql.guard.guard-dialect.refusal-reasons-are-worded-for-the-dialect-they-5",
@@ -567,9 +536,7 @@
       "expect": {
         "nodeKind": "compare",
         "path": "$",
-        "reason": [
-          "booleans have no ordering in trilean, so 'gt' against the boolean operand at $.left is wrong-type there, whereas SQLite stores booleans as the integers 0 and 1 and orders them as integers"
-        ]
+        "reason": "booleans have no ordering in trilean, so 'gt' against the boolean operand at $.left is wrong-type there, whereas SQLite stores booleans as the integers 0 and 1 and orders them as integers"
       },
       "from": "guard.dialect.unit.test.ts: refusal reasons are worded for the dialect they describe > refuses the same node at the same path in either dialect",
       "id": "sql.guard.guard-dialect.refusal-reasons-are-worded-for-the-dialect-they-6",
@@ -600,9 +567,7 @@
       "expect": {
         "nodeKind": "compare",
         "path": "$",
-        "reason": [
-          "trilean treats a comparison between a 'number' value ($.left) and a 'instant' value ($.right) as wrong-type, whereas PostgreSQL may coerce one to the other and answer definitely"
-        ]
+        "reason": "trilean treats a comparison between a 'number' value ($.left) and a 'instant' value ($.right) as wrong-type, whereas PostgreSQL may coerce one to the other and answer definitely"
       },
       "from": "guard.dialect.unit.test.ts: refusal reasons are worded for the dialect they describe > refuses the same node at the same path in either dialect",
       "id": "sql.guard.guard-dialect.refusal-reasons-are-worded-for-the-dialect-they-7",
@@ -633,9 +598,7 @@
       "expect": {
         "nodeKind": "compare",
         "path": "$",
-        "reason": [
-          "trilean treats a comparison between a 'number' value ($.left) and a 'instant' value ($.right) as wrong-type, whereas SQLite's type affinity may coerce one to the other and answer definitely"
-        ]
+        "reason": "trilean treats a comparison between a 'number' value ($.left) and a 'instant' value ($.right) as wrong-type, whereas SQLite's type affinity may coerce one to the other and answer definitely"
       },
       "from": "guard.dialect.unit.test.ts: refusal reasons are worded for the dialect they describe > refuses the same node at the same path in either dialect",
       "id": "sql.guard.guard-dialect.refusal-reasons-are-worded-for-the-dialect-they-8",
@@ -666,10 +629,7 @@
       "expect": {
         "nodeKind": "numberLiteral",
         "path": "$.right",
-        "reason": [
-          "NaN is equal to nothing in trilean, not even itself, whereas SQLite has no NaN at all and a driver binding one substitutes SQL NULL",
-          "so 'NaN = NaN' is indeterminate there rather than definitely false, and its negation matches every row instead of none"
-        ]
+        "reason": "NaN is equal to nothing in trilean, not even itself, whereas SQLite has no NaN at all and a driver binding one substitutes SQL NULL, so 'NaN = NaN' is indeterminate there rather than definitely false, and its negation matches every row instead of none"
       },
       "from": "guard.dialect.unit.test.ts: refusal reasons are worded for the dialect they describe > explains a refused NaN by the substitution SQLite's drivers actually make",
       "id": "sql.guard.guard-dialect.refusal-reasons-are-worded-for-the-dialect-they-9",
@@ -696,9 +656,7 @@
       "expect": {
         "nodeKind": "numberLiteral",
         "path": "$.right",
-        "reason": [
-          "NaN is equal to nothing in trilean, not even itself, whereas PostgreSQL defines NaN as equal to itself and greater than every other double"
-        ]
+        "reason": "NaN is equal to nothing in trilean, not even itself, whereas PostgreSQL defines NaN as equal to itself and greater than every other double"
       },
       "from": "guard.dialect.unit.test.ts: refusal reasons are worded for the dialect they describe > explains a refused NaN by PostgreSQL's own definition of it in the other dialect",
       "id": "sql.guard.guard-dialect.refusal-reasons-are-worded-for-the-dialect-they-10",
@@ -725,11 +683,7 @@
       "expect": {
         "nodeKind": "compare",
         "path": "$",
-        "reason": [
-          "'compare' never compares text in trilean",
-          "it returns wrong-type and directs the caller to 'textCompare'",
-          "but SQLite would answer definitely for the text operand at $.left, comparing it under the text affinity it applies to the other side ('9' > 5 is true there, while '10' > 5 is not)"
-        ]
+        "reason": "'compare' never compares text in trilean: it returns wrong-type and directs the caller to 'textCompare'; but SQLite would answer definitely for the text operand at $.left, comparing it under the text affinity it applies to the other side ('9' > 5 is true there, while '10' > 5 is not)"
       },
       "from": "guard.dialect.unit.test.ts: refusal reasons are worded for the dialect they describe > explains an ordered text operand by the coercion each engine performs",
       "id": "sql.guard.guard-dialect.refusal-reasons-are-worded-for-the-dialect-they-11",
@@ -760,11 +714,7 @@
       "expect": {
         "nodeKind": "compare",
         "path": "$",
-        "reason": [
-          "'compare' never compares text in trilean",
-          "it returns wrong-type and directs the caller to 'textCompare'",
-          "but PostgreSQL would order the text operand at $.left collation-wise and answer definitely"
-        ]
+        "reason": "'compare' never compares text in trilean: it returns wrong-type and directs the caller to 'textCompare'; but PostgreSQL would order the text operand at $.left collation-wise and answer definitely"
       },
       "from": "guard.dialect.unit.test.ts: refusal reasons are worded for the dialect they describe > explains an ordered text operand by the coercion each engine performs",
       "id": "sql.guard.guard-dialect.refusal-reasons-are-worded-for-the-dialect-they-12",
@@ -795,9 +745,7 @@
       "expect": {
         "nodeKind": "compare",
         "path": "$",
-        "reason": [
-          "booleans have no ordering in trilean, so 'gt' against the boolean operand at $.left is wrong-type there, whereas SQLite stores booleans as the integers 0 and 1 and orders them as integers"
-        ]
+        "reason": "booleans have no ordering in trilean, so 'gt' against the boolean operand at $.left is wrong-type there, whereas SQLite stores booleans as the integers 0 and 1 and orders them as integers"
       },
       "from": "guard.dialect.unit.test.ts: refusal reasons are worded for the dialect they describe > explains an ordered boolean by how each engine represents one",
       "id": "sql.guard.guard-dialect.refusal-reasons-are-worded-for-the-dialect-they-13",
@@ -828,9 +776,7 @@
       "expect": {
         "nodeKind": "compare",
         "path": "$",
-        "reason": [
-          "booleans have no ordering in trilean, so 'gt' against the boolean operand at $.left is wrong-type there, whereas PostgreSQL orders false before true"
-        ]
+        "reason": "booleans have no ordering in trilean, so 'gt' against the boolean operand at $.left is wrong-type there, whereas PostgreSQL orders false before true"
       },
       "from": "guard.dialect.unit.test.ts: refusal reasons are worded for the dialect they describe > explains an ordered boolean by how each engine represents one",
       "id": "sql.guard.guard-dialect.refusal-reasons-are-worded-for-the-dialect-they-14",
@@ -861,9 +807,7 @@
       "expect": {
         "nodeKind": "compare",
         "path": "$",
-        "reason": [
-          "trilean treats a comparison between a 'number' value ($.left) and a 'instant' value ($.right) as wrong-type, whereas SQLite's type affinity may coerce one to the other and answer definitely"
-        ]
+        "reason": "trilean treats a comparison between a 'number' value ($.left) and a 'instant' value ($.right) as wrong-type, whereas SQLite's type affinity may coerce one to the other and answer definitely"
       },
       "from": "guard.dialect.unit.test.ts: refusal reasons are worded for the dialect they describe > explains a cross-kind comparison by the coercion each engine reaches for",
       "id": "sql.guard.guard-dialect.refusal-reasons-are-worded-for-the-dialect-they-15",
@@ -894,9 +838,7 @@
       "expect": {
         "nodeKind": "compare",
         "path": "$",
-        "reason": [
-          "trilean treats a comparison between a 'number' value ($.left) and a 'instant' value ($.right) as wrong-type, whereas PostgreSQL may coerce one to the other and answer definitely"
-        ]
+        "reason": "trilean treats a comparison between a 'number' value ($.left) and a 'instant' value ($.right) as wrong-type, whereas PostgreSQL may coerce one to the other and answer definitely"
       },
       "from": "guard.dialect.unit.test.ts: refusal reasons are worded for the dialect they describe > explains a cross-kind comparison by the coercion each engine reaches for",
       "id": "sql.guard.guard-dialect.refusal-reasons-are-worded-for-the-dialect-they-16",
@@ -927,9 +869,7 @@
       "expect": {
         "nodeKind": "numberLiteral",
         "path": "$.left",
-        "reason": [
-          "NaN is equal to nothing in trilean, not even itself, whereas PostgreSQL defines NaN as equal to itself and greater than every other double"
-        ]
+        "reason": "NaN is equal to nothing in trilean, not even itself, whereas PostgreSQL defines NaN as equal to itself and greater than every other double"
       },
       "from": "guard.dialect.unit.test.ts: refusal reasons are worded for the dialect they describe > describes PostgreSQL when no options name a dialect at all",
       "id": "sql.guard.guard-dialect.refusal-reasons-are-worded-for-the-dialect-they-17",

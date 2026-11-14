@@ -1,0 +1,154 @@
+{
+  "evaluator": {
+    "collections": {},
+    "idColumn": "id",
+    "table": "words"
+  },
+  "tables": {
+    "words": {
+      "columns": {
+        "id": "text",
+        "word": "text"
+      },
+      "primaryKey": "id",
+      "rows": [
+        {
+          "id": "w00",
+          "word": "ab"
+        },
+        {
+          "id": "w01",
+          "word": "a.b"
+        },
+        {
+          "id": "w02",
+          "word": "a*b"
+        },
+        {
+          "id": "w03",
+          "word": "a+b"
+        },
+        {
+          "id": "w04",
+          "word": "a?b"
+        },
+        {
+          "id": "w05",
+          "word": "a(b"
+        },
+        {
+          "id": "w06",
+          "word": "a)b"
+        },
+        {
+          "id": "w07",
+          "word": "a[b"
+        },
+        {
+          "id": "w08",
+          "word": "a]b"
+        },
+        {
+          "id": "w09",
+          "word": "a{b"
+        },
+        {
+          "id": "w10",
+          "word": "a}b"
+        },
+        {
+          "id": "w11",
+          "word": "a|b"
+        },
+        {
+          "id": "w12",
+          "word": "a^b"
+        },
+        {
+          "id": "w13",
+          "word": "a$b"
+        },
+        {
+          "id": "w14",
+          "word": "a\\b"
+        },
+        {
+          "id": "w15",
+          "word": "a-b"
+        },
+        {
+          "id": "w16",
+          "word": "a%b"
+        },
+        {
+          "id": "w17",
+          "word": "a_b"
+        },
+        {
+          "id": "w18",
+          "word": "a'b"
+        },
+        {
+          "id": "w19",
+          "word": "a\"b"
+        },
+        {
+          "id": "w20",
+          "word": "a$1b"
+        },
+        {
+          "id": "w21",
+          "word": "a::textb"
+        },
+        {
+          "id": "w22",
+          "word": "a\nb"
+        },
+        {
+          "id": "w23",
+          "word": "a𝒜b"
+        },
+        {
+          "id": "w24",
+          "word": "aXb"
+        },
+        {
+          "id": "w25",
+          "word": "acb"
+        },
+        {
+          "id": "w26",
+          "word": "a b"
+        },
+        {
+          "id": "w27",
+          "word": "é"
+        },
+        {
+          "id": "w28",
+          "word": "𝒜"
+        },
+        {
+          "id": "w29",
+          "word": "a;b"
+        },
+        {
+          "id": "w30",
+          "word": "a--b"
+        },
+        {
+          "id": "w31",
+          "word": "$1"
+        },
+        {
+          "id": "w32",
+          "word": "?"
+        },
+        {
+          "id": "w99",
+          "word": null
+        }
+      ]
+    }
+  }
+}

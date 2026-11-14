@@ -3,15 +3,11 @@
     {
       "expect": {
         "error": {
-          "message": [
-            "cannot compile 'textCompare' at $.right: GLOB has no alternation operator"
-          ],
+          "message": "cannot compile 'textCompare' at $.right: GLOB has no alternation operator",
           "name": "UnsupportedNodeError",
           "nodeKind": 1,
           "path": "$.right",
-          "reason": [
-            "GLOB has no alternation operator"
-          ]
+          "reason": "GLOB has no alternation operator"
         }
       },
       "from": "compile.dialects.unit.test.ts: the sqlite dialect > refuses a portableMatches pattern outside GLOB's reachable subset",

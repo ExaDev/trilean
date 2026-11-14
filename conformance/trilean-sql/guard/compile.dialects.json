@@ -4,9 +4,7 @@
       "expect": {
         "nodeKind": "textCompare",
         "path": "$",
-        "reason": [
-          "options.sqliteRegexpAvailable is false: the caller has stated no regexp(pattern, value) function can be registered on this SQLite target, so 'matches' would compile to SQL that fails at query execution time with \"no such function: REGEXP\" instead of at compile time"
-        ]
+        "reason": "options.sqliteRegexpAvailable is false: the caller has stated no regexp(pattern, value) function can be registered on this SQLite target, so 'matches' would compile to SQL that fails at query execution time with \"no such function: REGEXP\" instead of at compile time"
       },
       "from": "compile.dialects.unit.test.ts: sqliteRegexpAvailable > agrees with findUnpushableNodeKind rather than only compilePredicateNode's own check",
       "id": "sql.guard.compile-dialects.sqliteregexpavailable-agrees-with-findunpushable",
@@ -36,9 +34,7 @@
             "postgres",
             "sqlite"
           ],
-          "message": [
-            "unknown dialect \"mysql\": this version compiles \"postgres\", \"sqlite\""
-          ],
+          "message": "unknown dialect \"mysql\": this version compiles \"postgres\", \"sqlite\"",
           "name": "UnknownDialectError"
         }
       },

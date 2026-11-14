@@ -214,9 +214,7 @@
       "dialect": "postgres",
       "expect": {
         "error": {
-          "message": [
-            "PostgreSQL's regular expressions permit a bound of at most 255; {256} exceeds it"
-          ]
+          "message": "PostgreSQL's regular expressions permit a bound of at most 255; {256} exceeds it"
         }
       },
       "from": "portable-pattern.unit.test.ts: renderPostgresPattern > refuses a bound exceeding PostgreSQL's 0-255 limit",
@@ -228,9 +226,7 @@
       "dialect": "postgres",
       "expect": {
         "error": {
-          "message": [
-            "PostgreSQL's regular expressions permit a bound of at most 255; {2,256} exceeds it"
-          ]
+          "message": "PostgreSQL's regular expressions permit a bound of at most 255; {2,256} exceeds it"
         }
       },
       "from": "portable-pattern.unit.test.ts: renderPostgresPattern > refuses a bound exceeding PostgreSQL's 0-255 limit",
@@ -402,9 +398,7 @@
       "dialect": "sqlite",
       "expect": {
         "error": {
-          "message": [
-            "this compiler does not translate a negated character class to GLOB: SQLite's own documentation does not confirm which of the common '[^...]'/'[!...]' conventions (if either) it implements"
-          ]
+          "message": "this compiler does not translate a negated character class to GLOB: SQLite's own documentation does not confirm which of the common '[^...]'/'[!...]' conventions (if either) it implements"
         }
       },
       "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > refuses a negated character class",
@@ -416,9 +410,7 @@
       "dialect": "sqlite",
       "expect": {
         "error": {
-          "message": [
-            "this character class includes ']', '^', '-', or '[' as a member, and GLOB's bracket expressions have no confirmed escape mechanism for them"
-          ]
+          "message": "this character class includes ']', '^', '-', or '[' as a member, and GLOB's bracket expressions have no confirmed escape mechanism for them"
         }
       },
       "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > refuses a character class containing ']'/'^'/'-'/'[' as a member",
@@ -430,9 +422,7 @@
       "dialect": "sqlite",
       "expect": {
         "error": {
-          "message": [
-            "this character class includes ']', '^', '-', or '[' as a member, and GLOB's bracket expressions have no confirmed escape mechanism for them"
-          ]
+          "message": "this character class includes ']', '^', '-', or '[' as a member, and GLOB's bracket expressions have no confirmed escape mechanism for them"
         }
       },
       "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > refuses a character class containing ']'/'^'/'-'/'[' as a member",
@@ -444,9 +434,7 @@
       "dialect": "sqlite",
       "expect": {
         "error": {
-          "message": [
-            "this character class includes ']', '^', '-', or '[' as a member, and GLOB's bracket expressions have no confirmed escape mechanism for them"
-          ]
+          "message": "this character class includes ']', '^', '-', or '[' as a member, and GLOB's bracket expressions have no confirmed escape mechanism for them"
         }
       },
       "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > refuses a character class containing ']'/'^'/'-'/'[' as a member",
@@ -458,9 +446,7 @@
       "dialect": "sqlite",
       "expect": {
         "error": {
-          "message": [
-            "GLOB has no alternation operator"
-          ]
+          "message": "GLOB has no alternation operator"
         }
       },
       "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > refuses alternation",
@@ -472,9 +458,7 @@
       "dialect": "sqlite",
       "expect": {
         "error": {
-          "message": [
-            "GLOB has no bounded-repetition wildcard"
-          ]
+          "message": "GLOB has no bounded-repetition wildcard"
         }
       },
       "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > refuses bounded, optional, and one-or-more repetition",
@@ -486,9 +470,7 @@
       "dialect": "sqlite",
       "expect": {
         "error": {
-          "message": [
-            "GLOB has no 'zero or one' wildcard"
-          ]
+          "message": "GLOB has no 'zero or one' wildcard"
         }
       },
       "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > refuses bounded, optional, and one-or-more repetition",
@@ -500,9 +482,7 @@
       "dialect": "sqlite",
       "expect": {
         "error": {
-          "message": [
-            "GLOB has no 'one or more' wildcard distinct from '*'"
-          ]
+          "message": "GLOB has no 'one or more' wildcard distinct from '*'"
         }
       },
       "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > refuses bounded, optional, and one-or-more repetition",
@@ -514,9 +494,7 @@
       "dialect": "sqlite",
       "expect": {
         "error": {
-          "message": [
-            "GLOB's only quantity wildcard is '*' ('zero or more of any character'); a star of anything narrower has no GLOB equivalent"
-          ]
+          "message": "GLOB's only quantity wildcard is '*' ('zero or more of any character'); a star of anything narrower has no GLOB equivalent"
         }
       },
       "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > refuses a star of anything other than '.'",
@@ -528,9 +506,7 @@
       "dialect": "sqlite",
       "expect": {
         "error": {
-          "message": [
-            "an anchor is only expressible for GLOB at the very start or end of the whole pattern"
-          ]
+          "message": "an anchor is only expressible for GLOB at the very start or end of the whole pattern"
         }
       },
       "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > refuses an anchor that is not at the very start or end of the whole pattern",
@@ -542,9 +518,7 @@
       "dialect": "sqlite",
       "expect": {
         "error": {
-          "message": [
-            "an anchor is only expressible for GLOB at the very start or end of the whole pattern"
-          ]
+          "message": "an anchor is only expressible for GLOB at the very start or end of the whole pattern"
         }
       },
       "from": "portable-pattern.unit.test.ts: renderSqliteGlobPattern > refuses an anchor that is not at the very start or end of the whole pattern",

@@ -1657,12 +1657,37 @@
           "additionalProperties": false,
           "properties": {
             "message": {
-              "description": "Fragments the whole message contains, each after the end of the one before. A case records the message in full, as one fragment.",
-              "items": {
-                "$ref": "#/$defs/nonEmptyText"
-              },
-              "minItems": 1,
-              "type": "array"
+              "description": "The text exactly, character for character; or, where it holds a message another package wrote (the parse error of a pattern, which the corpus of that package pins), what comes before that message, its fragments in order, and what comes after.",
+              "oneOf": [
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "after": {
+                      "type": "string"
+                    },
+                    "before": {
+                      "type": "string"
+                    },
+                    "relayed": {
+                      "items": {
+                        "$ref": "#/$defs/nonEmptyText"
+                      },
+                      "minItems": 1,
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "before",
+                    "relayed",
+                    "after"
+                  ],
+                  "type": "object"
+                }
+              ]
             },
             "name": {
               "const": "UnsupportedNodeError"
@@ -1674,12 +1699,37 @@
               "type": "string"
             },
             "reason": {
-              "description": "Fragments the whole message contains, each after the end of the one before. A case records the message in full, as one fragment.",
-              "items": {
-                "$ref": "#/$defs/nonEmptyText"
-              },
-              "minItems": 1,
-              "type": "array"
+              "description": "The text exactly, character for character; or, where it holds a message another package wrote (the parse error of a pattern, which the corpus of that package pins), what comes before that message, its fragments in order, and what comes after.",
+              "oneOf": [
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "after": {
+                      "type": "string"
+                    },
+                    "before": {
+                      "type": "string"
+                    },
+                    "relayed": {
+                      "items": {
+                        "$ref": "#/$defs/nonEmptyText"
+                      },
+                      "minItems": 1,
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "before",
+                    "relayed",
+                    "after"
+                  ],
+                  "type": "object"
+                }
+              ]
             }
           },
           "required": [
@@ -1698,12 +1748,9 @@
               "type": "string"
             },
             "message": {
-              "description": "Fragments the whole message contains, each after the end of the one before. A case records the message in full, as one fragment.",
-              "items": {
-                "$ref": "#/$defs/nonEmptyText"
-              },
-              "minItems": 1,
-              "type": "array"
+              "description": "The text exactly, character for character.",
+              "minLength": 1,
+              "type": "string"
             },
             "name": {
               "const": "InvalidColumnError"
@@ -1727,12 +1774,9 @@
               "type": "string"
             },
             "message": {
-              "description": "Fragments the whole message contains, each after the end of the one before. A case records the message in full, as one fragment.",
-              "items": {
-                "$ref": "#/$defs/nonEmptyText"
-              },
-              "minItems": 1,
-              "type": "array"
+              "description": "The text exactly, character for character.",
+              "minLength": 1,
+              "type": "string"
             },
             "name": {
               "const": "InvalidCollectionTableError"
@@ -1763,12 +1807,9 @@
               "type": "array"
             },
             "message": {
-              "description": "Fragments the whole message contains, each after the end of the one before. A case records the message in full, as one fragment.",
-              "items": {
-                "$ref": "#/$defs/nonEmptyText"
-              },
-              "minItems": 1,
-              "type": "array"
+              "description": "The text exactly, character for character.",
+              "minLength": 1,
+              "type": "string"
             },
             "name": {
               "const": "UnknownDialectError"
@@ -1786,12 +1827,9 @@
           "additionalProperties": false,
           "properties": {
             "message": {
-              "description": "Fragments the whole message contains, each after the end of the one before. A case records the message in full, as one fragment.",
-              "items": {
-                "$ref": "#/$defs/nonEmptyText"
-              },
-              "minItems": 1,
-              "type": "array"
+              "description": "The text exactly, character for character.",
+              "minLength": 1,
+              "type": "string"
             },
             "name": {
               "const": "CallerError"
@@ -2034,12 +2072,37 @@
                   "type": "string"
                 },
                 "reason": {
-                  "description": "Fragments the whole message contains, each after the end of the one before. A case records the message in full, as one fragment.",
-                  "items": {
-                    "$ref": "#/$defs/nonEmptyText"
-                  },
-                  "minItems": 1,
-                  "type": "array"
+                  "description": "The text exactly, character for character; or, where it holds a message another package wrote (the parse error of a pattern, which the corpus of that package pins), what comes before that message, its fragments in order, and what comes after.",
+                  "oneOf": [
+                    {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "after": {
+                          "type": "string"
+                        },
+                        "before": {
+                          "type": "string"
+                        },
+                        "relayed": {
+                          "items": {
+                            "$ref": "#/$defs/nonEmptyText"
+                          },
+                          "minItems": 1,
+                          "type": "array"
+                        }
+                      },
+                      "required": [
+                        "before",
+                        "relayed",
+                        "after"
+                      ],
+                      "type": "object"
+                    }
+                  ]
                 }
               },
               "required": [
@@ -2178,7 +2241,14 @@
               "const": "number"
             },
             "value": {
-              "type": "number"
+              "oneOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/specialNumber"
+                }
+              ]
             }
           },
           "required": [
@@ -2236,12 +2306,9 @@
                   "additionalProperties": false,
                   "properties": {
                     "message": {
-                      "description": "Fragments the whole message contains, each after the end of the one before. A case records the message in full, as one fragment.",
-                      "items": {
-                        "$ref": "#/$defs/nonEmptyText"
-                      },
-                      "minItems": 1,
-                      "type": "array"
+                      "description": "The text exactly, character for character.",
+                      "minLength": 1,
+                      "type": "string"
                     }
                   },
                   "required": [

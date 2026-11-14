@@ -8,12 +8,8 @@ import type {
   Resolvers,
 } from "trilean";
 import { evaluatePredicate } from "trilean";
-import type {
-  CellValue,
-  ColumnType,
-  FixtureData,
-  TableData,
-} from "./corpus-fixtures";
+import type { CellValue, ColumnType } from "../../src/test-support/fixture";
+import type { FixtureData, TableData } from "./corpus-fixtures";
 
 /**
  * The two engines the `sql-execute` cases run against, and the evaluator bridge that gives trilean's own evaluator exactly the knowledge the engine has about a row. Both are described in `conformance/README.md`.

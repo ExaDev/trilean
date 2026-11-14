@@ -3,9 +3,7 @@
     {
       "expect": {
         "error": {
-          "message": [
-            "no column mapped for reference key 'unmapped'"
-          ]
+          "message": "no column mapped for reference key 'unmapped'"
         }
       },
       "from": "compile.mechanics.unit.test.ts: column identifiers > propagates an error thrown by columnFor unchanged",

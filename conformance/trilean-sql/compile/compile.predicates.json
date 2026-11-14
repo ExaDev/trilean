@@ -738,19 +738,11 @@
     {
       "expect": {
         "error": {
-          "message": [
-            "cannot compile 'textCompare' at $: 'matches' matches trilean's own ECMAScript 'RegExp' against the pattern, whereas PostgreSQL's '~'/'!~' would match it under PostgreSQL's own regular-expression dialect (POSIX ARE)",
-            "a different language that can silently answer a different set of rows for the same pattern and data (for example, PostgreSQL's '.' matches a newline by default where ECMAScript's does not, and PostgreSQL's '\\w' follows the database's locale where ECMAScript's is ASCII-only)",
-            "so this is refused unless 'postgresRegexpPushdown' is explicitly set 'true'"
-          ],
+          "message": "cannot compile 'textCompare' at $: 'matches' matches trilean's own ECMAScript 'RegExp' against the pattern, whereas PostgreSQL's '~'/'!~' would match it under PostgreSQL's own regular-expression dialect (POSIX ARE), a different language that can silently answer a different set of rows for the same pattern and data (for example, PostgreSQL's '.' matches a newline by default where ECMAScript's does not, and PostgreSQL's '\\w' follows the database's locale where ECMAScript's is ASCII-only), so this is refused unless 'postgresRegexpPushdown' is explicitly set 'true'",
           "name": "UnsupportedNodeError",
           "nodeKind": "textCompare",
           "path": "$",
-          "reason": [
-            "'matches' matches trilean's own ECMAScript 'RegExp' against the pattern, whereas PostgreSQL's '~'/'!~' would match it under PostgreSQL's own regular-expression dialect (POSIX ARE)",
-            "a different language that can silently answer a different set of rows for the same pattern and data (for example, PostgreSQL's '.' matches a newline by default where ECMAScript's does not, and PostgreSQL's '\\w' follows the database's locale where ECMAScript's is ASCII-only)",
-            "so this is refused unless 'postgresRegexpPushdown' is explicitly set 'true'"
-          ]
+          "reason": "'matches' matches trilean's own ECMAScript 'RegExp' against the pattern, whereas PostgreSQL's '~'/'!~' would match it under PostgreSQL's own regular-expression dialect (POSIX ARE), a different language that can silently answer a different set of rows for the same pattern and data (for example, PostgreSQL's '.' matches a newline by default where ECMAScript's does not, and PostgreSQL's '\\w' follows the database's locale where ECMAScript's is ASCII-only), so this is refused unless 'postgresRegexpPushdown' is explicitly set 'true'"
         }
       },
       "from": "compile.predicates.unit.test.ts: textCompare > refuses 'matches' against PostgreSQL by default, since PostgreSQL matches it under its own regular-expression dialect rather than trilean's ECMAScript one",
@@ -781,19 +773,11 @@
     {
       "expect": {
         "error": {
-          "message": [
-            "cannot compile 'textCompare' at $: 'notMatches' matches trilean's own ECMAScript 'RegExp' against the pattern, whereas PostgreSQL's '~'/'!~' would match it under PostgreSQL's own regular-expression dialect (POSIX ARE)",
-            "a different language that can silently answer a different set of rows for the same pattern and data (for example, PostgreSQL's '.' matches a newline by default where ECMAScript's does not, and PostgreSQL's '\\w' follows the database's locale where ECMAScript's is ASCII-only)",
-            "so this is refused unless 'postgresRegexpPushdown' is explicitly set 'true'"
-          ],
+          "message": "cannot compile 'textCompare' at $: 'notMatches' matches trilean's own ECMAScript 'RegExp' against the pattern, whereas PostgreSQL's '~'/'!~' would match it under PostgreSQL's own regular-expression dialect (POSIX ARE), a different language that can silently answer a different set of rows for the same pattern and data (for example, PostgreSQL's '.' matches a newline by default where ECMAScript's does not, and PostgreSQL's '\\w' follows the database's locale where ECMAScript's is ASCII-only), so this is refused unless 'postgresRegexpPushdown' is explicitly set 'true'",
           "name": "UnsupportedNodeError",
           "nodeKind": "textCompare",
           "path": "$",
-          "reason": [
-            "'notMatches' matches trilean's own ECMAScript 'RegExp' against the pattern, whereas PostgreSQL's '~'/'!~' would match it under PostgreSQL's own regular-expression dialect (POSIX ARE)",
-            "a different language that can silently answer a different set of rows for the same pattern and data (for example, PostgreSQL's '.' matches a newline by default where ECMAScript's does not, and PostgreSQL's '\\w' follows the database's locale where ECMAScript's is ASCII-only)",
-            "so this is refused unless 'postgresRegexpPushdown' is explicitly set 'true'"
-          ]
+          "reason": "'notMatches' matches trilean's own ECMAScript 'RegExp' against the pattern, whereas PostgreSQL's '~'/'!~' would match it under PostgreSQL's own regular-expression dialect (POSIX ARE), a different language that can silently answer a different set of rows for the same pattern and data (for example, PostgreSQL's '.' matches a newline by default where ECMAScript's does not, and PostgreSQL's '\\w' follows the database's locale where ECMAScript's is ASCII-only), so this is refused unless 'postgresRegexpPushdown' is explicitly set 'true'"
         }
       },
       "from": "compile.predicates.unit.test.ts: textCompare > refuses 'notMatches' against PostgreSQL by default, since PostgreSQL matches it under its own regular-expression dialect rather than trilean's ECMAScript one",
@@ -927,17 +911,11 @@
     {
       "expect": {
         "error": {
-          "message": [
-            "cannot compile 'textCompare' at $: a 'portableMatches'/'portableNotMatches' pattern must be a literal, known at compile time",
-            "translating it into this dialect's own pattern syntax happens once, at compile time, not per row"
-          ],
+          "message": "cannot compile 'textCompare' at $: a 'portableMatches'/'portableNotMatches' pattern must be a literal, known at compile time: translating it into this dialect's own pattern syntax happens once, at compile time, not per row",
           "name": "UnsupportedNodeError",
           "nodeKind": "textCompare",
           "path": "$",
-          "reason": [
-            "a 'portableMatches'/'portableNotMatches' pattern must be a literal, known at compile time",
-            "translating it into this dialect's own pattern syntax happens once, at compile time, not per row"
-          ]
+          "reason": "a 'portableMatches'/'portableNotMatches' pattern must be a literal, known at compile time: translating it into this dialect's own pattern syntax happens once, at compile time, not per row"
         }
       },
       "from": "compile.predicates.unit.test.ts: textCompare > refuses portableMatches whose pattern is not a compile-time literal",
@@ -971,17 +949,25 @@
     {
       "expect": {
         "error": {
-          "message": [
-            "cannot compile 'textCompare' at $.right: invalid pattern at index 0: capturing groups are not supported in this grammar",
-            "there is nothing to capture, since a pattern only ever answers whether it matches. Use '(?:...)' for grouping.\n  (a)\n  ^"
-          ],
+          "message": {
+            "after": "\n  (a)\n  ^",
+            "before": "cannot compile 'textCompare' at $.right: invalid pattern at index 0: ",
+            "relayed": [
+              "capturing groups are not supported in this grammar",
+              "there is nothing to capture, since a pattern only ever answers whether it matches. Use '(?:...)' for grouping."
+            ]
+          },
           "name": "UnsupportedNodeError",
           "nodeKind": "textCompare",
           "path": "$.right",
-          "reason": [
-            "invalid pattern at index 0: capturing groups are not supported in this grammar",
-            "there is nothing to capture, since a pattern only ever answers whether it matches. Use '(?:...)' for grouping.\n  (a)\n  ^"
-          ]
+          "reason": {
+            "after": "\n  (a)\n  ^",
+            "before": "invalid pattern at index 0: ",
+            "relayed": [
+              "capturing groups are not supported in this grammar",
+              "there is nothing to capture, since a pattern only ever answers whether it matches. Use '(?:...)' for grouping."
+            ]
+          }
         }
       },
       "from": "compile.predicates.unit.test.ts: textCompare > refuses portableMatches whose pattern is not valid trilean-regex syntax",
@@ -1012,15 +998,11 @@
     {
       "expect": {
         "error": {
-          "message": [
-            "cannot compile 'textCompare' at $.right: PostgreSQL's regular expressions permit a bound of at most 255; {256} exceeds it"
-          ],
+          "message": "cannot compile 'textCompare' at $.right: PostgreSQL's regular expressions permit a bound of at most 255; {256} exceeds it",
           "name": "UnsupportedNodeError",
           "nodeKind": "textCompare",
           "path": "$.right",
-          "reason": [
-            "PostgreSQL's regular expressions permit a bound of at most 255; {256} exceeds it"
-          ]
+          "reason": "PostgreSQL's regular expressions permit a bound of at most 255; {256} exceeds it"
         }
       },
       "from": "compile.predicates.unit.test.ts: textCompare > refuses portableMatches whose pattern's bound exceeds PostgreSQL's 0-255 limit",

@@ -8,9 +8,7 @@
             "postgres",
             "sqlite"
           ],
-          "message": [
-            "unknown dialect \"mysql\": this version compiles \"postgres\", \"sqlite\""
-          ]
+          "message": "unknown dialect \"mysql\": this version compiles \"postgres\", \"sqlite\""
         }
       },
       "from": "compile.dialects.unit.test.ts: a dialect this version does not implement > carries the offending name and the implemented ones as fields",

@@ -4,9 +4,7 @@
       "expect": {
         "nodeKind": "reference",
         "path": "$.operand",
-        "reason": [
-          "only a string reference key can be mapped to a column; this key is a non-string JSON value"
-        ]
+        "reason": "only a string reference key can be mapped to a column; this key is a non-string JSON value"
       },
       "from": "guard.references.unit.test.ts: references the compiler cannot map > refuses a non-string reference key",
       "id": "sql.guard.guard-references.references-the-compiler-cannot-map-refuses-a-non",
@@ -28,9 +26,7 @@
       "expect": {
         "nodeKind": "reference",
         "path": "$.left",
-        "reason": [
-          "a reference declaring a unit asserts that the resolved value carries that same unit, and a SQL column carries no unit for that assertion to be checked against"
-        ]
+        "reason": "a reference declaring a unit asserts that the resolved value carries that same unit, and a SQL column carries no unit for that assertion to be checked against"
       },
       "from": "guard.references.unit.test.ts: references the compiler cannot map > refuses a reference declaring a unit, which no column can be checked against",
       "id": "sql.guard.guard-references.references-the-compiler-cannot-map-refuses-a-ref",
@@ -58,9 +54,7 @@
       "expect": {
         "nodeKind": "numberLiteral",
         "path": "$.right",
-        "reason": [
-          "a unit-tagged number is only comparable with an operand of the same unit, and SQL has no unit to compare"
-        ]
+        "reason": "a unit-tagged number is only comparable with an operand of the same unit, and SQL has no unit to compare"
       },
       "from": "guard.references.unit.test.ts: references the compiler cannot map > refuses a unit-tagged number literal",
       "id": "sql.guard.guard-references.references-the-compiler-cannot-map-refuses-a-uni",
@@ -88,9 +82,7 @@
       "expect": {
         "nodeKind": "numberLiteral",
         "path": "$.right",
-        "reason": [
-          "NaN is equal to nothing in trilean, not even itself, whereas PostgreSQL defines NaN as equal to itself and greater than every other double"
-        ]
+        "reason": "NaN is equal to nothing in trilean, not even itself, whereas PostgreSQL defines NaN as equal to itself and greater than every other double"
       },
       "from": "guard.references.unit.test.ts: references the compiler cannot map > refuses a NaN number literal, which the two engines compare oppositely",
       "id": "sql.guard.guard-references.references-the-compiler-cannot-map-refuses-a-nan",
@@ -117,9 +109,7 @@
       "expect": {
         "nodeKind": "numberLiteral",
         "path": "$.candidates[1]",
-        "reason": [
-          "NaN is equal to nothing in trilean, not even itself, whereas PostgreSQL defines NaN as equal to itself and greater than every other double"
-        ]
+        "reason": "NaN is equal to nothing in trilean, not even itself, whereas PostgreSQL defines NaN as equal to itself and greater than every other double"
       },
       "from": "guard.references.unit.test.ts: references the compiler cannot map > refuses a NaN candidate inside a memberOf, not only a comparison operand",
       "id": "sql.guard.guard-references.references-the-compiler-cannot-map-refuses-a-nan-2",
@@ -181,9 +171,7 @@
       "expect": {
         "nodeKind": "compare",
         "path": "$",
-        "reason": [
-          "trilean treats a comparison between a 'number' value ($.left) and a 'instant' value ($.right) as wrong-type, whereas PostgreSQL may coerce one to the other and answer definitely"
-        ]
+        "reason": "trilean treats a comparison between a 'number' value ($.left) and a 'instant' value ($.right) as wrong-type, whereas PostgreSQL may coerce one to the other and answer definitely"
       },
       "from": "guard.references.unit.test.ts: operand kinds trilean and PostgreSQL would answer differently > refuses a compare whose operands are of different declared kinds",
       "id": "sql.guard.guard-references.operand-kinds-trilean-and-postgresql-would-answe",
@@ -214,11 +202,7 @@
       "expect": {
         "nodeKind": "compare",
         "path": "$",
-        "reason": [
-          "'compare' never compares text in trilean",
-          "it returns wrong-type and directs the caller to 'textCompare'",
-          "but PostgreSQL would order the text operand at $.left collation-wise and answer definitely"
-        ]
+        "reason": "'compare' never compares text in trilean: it returns wrong-type and directs the caller to 'textCompare'; but PostgreSQL would order the text operand at $.left collation-wise and answer definitely"
       },
       "from": "guard.references.unit.test.ts: operand kinds trilean and PostgreSQL would answer differently > refuses a compare against text, which trilean directs to textCompare",
       "id": "sql.guard.guard-references.operand-kinds-trilean-and-postgresql-would-answe-2",
@@ -249,9 +233,7 @@
       "expect": {
         "nodeKind": "compare",
         "path": "$",
-        "reason": [
-          "booleans have no ordering in trilean, so 'gt' against the boolean operand at $.left is wrong-type there, whereas PostgreSQL orders false before true"
-        ]
+        "reason": "booleans have no ordering in trilean, so 'gt' against the boolean operand at $.left is wrong-type there, whereas PostgreSQL orders false before true"
       },
       "from": "guard.references.unit.test.ts: operand kinds trilean and PostgreSQL would answer differently > refuses an ordering comparison on booleans, which trilean has no order for",
       "id": "sql.guard.guard-references.operand-kinds-trilean-and-postgresql-would-answe-3",
@@ -309,9 +291,7 @@
       "expect": {
         "nodeKind": "textCompare",
         "path": "$",
-        "reason": [
-          "'textCompare' requires text operands in trilean, and the operand at $.left is a 'number' value"
-        ]
+        "reason": "'textCompare' requires text operands in trilean, and the operand at $.left is a 'number' value"
       },
       "from": "guard.references.unit.test.ts: operand kinds trilean and PostgreSQL would answer differently > refuses a textCompare against a non-text operand",
       "id": "sql.guard.guard-references.operand-kinds-trilean-and-postgresql-would-answe-5",
@@ -396,10 +376,7 @@
       "expect": {
         "nodeKind": "textCompare",
         "path": "$",
-        "reason": [
-          "a 'portableMatches'/'portableNotMatches' pattern must be a literal, known at compile time",
-          "translating it into this dialect's own pattern syntax happens once, at compile time, not per row"
-        ]
+        "reason": "a 'portableMatches'/'portableNotMatches' pattern must be a literal, known at compile time: translating it into this dialect's own pattern syntax happens once, at compile time, not per row"
       },
       "from": "guard.references.unit.test.ts: operand kinds trilean and PostgreSQL would answer differently > refuses a portableMatches pattern that is not a compile-time literal",
       "id": "sql.guard.guard-references.operand-kinds-trilean-and-postgresql-would-answe-8",
@@ -433,10 +410,14 @@
       "expect": {
         "nodeKind": "textCompare",
         "path": "$.right",
-        "reason": [
-          "invalid pattern at index 0: capturing groups are not supported in this grammar",
-          "there is nothing to capture, since a pattern only ever answers whether it matches. Use '(?:...)' for grouping.\n  (a)\n  ^"
-        ]
+        "reason": {
+          "after": "\n  (a)\n  ^",
+          "before": "invalid pattern at index 0: ",
+          "relayed": [
+            "capturing groups are not supported in this grammar",
+            "there is nothing to capture, since a pattern only ever answers whether it matches. Use '(?:...)' for grouping."
+          ]
+        }
       },
       "from": "guard.references.unit.test.ts: operand kinds trilean and PostgreSQL would answer differently > refuses a portableMatches pattern that is not valid trilean-regex syntax",
       "id": "sql.guard.guard-references.operand-kinds-trilean-and-postgresql-would-answe-9",
@@ -467,9 +448,7 @@
       "expect": {
         "nodeKind": "textCompare",
         "path": "$.right",
-        "reason": [
-          "GLOB has no alternation operator"
-        ]
+        "reason": "GLOB has no alternation operator"
       },
       "from": "guard.references.unit.test.ts: operand kinds trilean and PostgreSQL would answer differently > refuses a portableMatches pattern outside SQLite's GLOB-reachable subset, but allows the identical pattern for PostgreSQL",
       "id": "sql.guard.guard-references.operand-kinds-trilean-and-postgresql-would-answe-10",
@@ -527,9 +506,7 @@
       "expect": {
         "nodeKind": "memberOf",
         "path": "$",
-        "reason": [
-          "trilean treats a comparison between a 'number' value ($.operand) and a 'text' value ($.candidates[1]) as wrong-type, whereas PostgreSQL may coerce one to the other and answer definitely"
-        ]
+        "reason": "trilean treats a comparison between a 'number' value ($.operand) and a 'text' value ($.candidates[1]) as wrong-type, whereas PostgreSQL may coerce one to the other and answer definitely"
       },
       "from": "guard.references.unit.test.ts: operand kinds trilean and PostgreSQL would answer differently > refuses a memberOf whose candidates are not all of the operand's kind",
       "id": "sql.guard.guard-references.operand-kinds-trilean-and-postgresql-would-answe-12",

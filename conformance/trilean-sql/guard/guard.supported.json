@@ -97,9 +97,7 @@
       "expect": {
         "nodeKind": "treeReference",
         "path": "$",
-        "reason": [
-          "a referenced tree is resolved by the caller's resolvers; inline it before compiling"
-        ]
+        "reason": "a referenced tree is resolved by the caller's resolvers; inline it before compiling"
       },
       "from": "guard.supported.unit.test.ts: predicate kinds this version does not translate > refuses 'treeReference'",
       "id": "sql.guard.guard-supported.predicate-kinds-this-version-does-not-translate",
@@ -116,9 +114,7 @@
       "expect": {
         "nodeKind": "treeReference",
         "path": "$.operands[1].operand",
-        "reason": [
-          "a referenced tree is resolved by the caller's resolvers; inline it before compiling"
-        ]
+        "reason": "a referenced tree is resolved by the caller's resolvers; inline it before compiling"
       },
       "from": "guard.supported.unit.test.ts: predicate kinds this version does not translate > reports the path of a refused node nested inside the tree",
       "id": "sql.guard.guard-supported.predicate-kinds-this-version-does-not-translate-2",
@@ -161,9 +157,7 @@
       "expect": {
         "nodeKind": "durationLiteral",
         "path": "$.right",
-        "reason": [
-          "trilean compares two durations in whichever unit each carries, and a column holds no unit to carry"
-        ]
+        "reason": "trilean compares two durations in whichever unit each carries, and a column holds no unit to carry"
       },
       "from": "guard.supported.unit.test.ts: expression kinds this version does not translate > refuses 'durationLiteral' in a comparison operand",
       "id": "sql.guard.guard-supported.expression-kinds-this-version-does-not-translate",
@@ -189,9 +183,7 @@
       "expect": {
         "nodeKind": "complexLiteral",
         "path": "$.right",
-        "reason": [
-          "PostgreSQL has no complex number type"
-        ]
+        "reason": "PostgreSQL has no complex number type"
       },
       "from": "guard.supported.unit.test.ts: expression kinds this version does not translate > refuses 'complexLiteral' in a comparison operand",
       "id": "sql.guard.guard-supported.expression-kinds-this-version-does-not-translate-2",
@@ -217,9 +209,7 @@
       "expect": {
         "nodeKind": "arithmetic",
         "path": "$.right",
-        "reason": [
-          "arithmetic carries and combines units, and pushing it down would drop that dimensional analysis without saying so"
-        ]
+        "reason": "arithmetic carries and combines units, and pushing it down would drop that dimensional analysis without saying so"
       },
       "from": "guard.supported.unit.test.ts: expression kinds this version does not translate > refuses 'arithmetic' in a comparison operand",
       "id": "sql.guard.guard-supported.expression-kinds-this-version-does-not-translate-3",
@@ -252,9 +242,7 @@
       "expect": {
         "nodeKind": "negate",
         "path": "$.right",
-        "reason": [
-          "arithmetic carries and combines units, and pushing it down would drop that dimensional analysis without saying so"
-        ]
+        "reason": "arithmetic carries and combines units, and pushing it down would drop that dimensional analysis without saying so"
       },
       "from": "guard.supported.unit.test.ts: expression kinds this version does not translate > refuses 'negate' in a comparison operand",
       "id": "sql.guard.guard-supported.expression-kinds-this-version-does-not-translate-4",
@@ -282,9 +270,7 @@
       "expect": {
         "nodeKind": "call",
         "path": "$.right",
-        "reason": [
-          "a function's implementation lives in the caller's FunctionRegistry, not in the database"
-        ]
+        "reason": "a function's implementation lives in the caller's FunctionRegistry, not in the database"
       },
       "from": "guard.supported.unit.test.ts: expression kinds this version does not translate > refuses 'call' in a comparison operand",
       "id": "sql.guard.guard-supported.expression-kinds-this-version-does-not-translate-5",
@@ -310,9 +296,7 @@
       "expect": {
         "nodeKind": "lookup",
         "path": "$.right",
-        "reason": [
-          "a lookup table is resolved by the caller's resolvers"
-        ]
+        "reason": "a lookup table is resolved by the caller's resolvers"
       },
       "from": "guard.supported.unit.test.ts: expression kinds this version does not translate > refuses 'lookup' in a comparison operand",
       "id": "sql.guard.guard-supported.expression-kinds-this-version-does-not-translate-6",
@@ -338,9 +322,7 @@
       "expect": {
         "nodeKind": "conditional",
         "path": "$.right",
-        "reason": [
-          "conditional evaluation is not implemented in this version of the compiler"
-        ]
+        "reason": "conditional evaluation is not implemented in this version of the compiler"
       },
       "from": "guard.supported.unit.test.ts: expression kinds this version does not translate > refuses 'conditional' in a comparison operand",
       "id": "sql.guard.guard-supported.expression-kinds-this-version-does-not-translate-7",
@@ -369,9 +351,7 @@
       "expect": {
         "nodeKind": "fold",
         "path": "$.right",
-        "reason": [
-          "a 'reduce' fold threads an arbitrary combine expression through the collection in a caller-chosen order, which has no general SQL translation"
-        ]
+        "reason": "a 'reduce' fold threads an arbitrary combine expression through the collection in a caller-chosen order, which has no general SQL translation"
       },
       "from": "guard.supported.unit.test.ts: expression kinds this version does not translate > refuses 'fold' in a comparison operand",
       "id": "sql.guard.guard-supported.expression-kinds-this-version-does-not-translate-8",
@@ -407,9 +387,7 @@
       "expect": {
         "nodeKind": "accumulator",
         "path": "$.right",
-        "reason": [
-          "an accumulator is only meaningful inside a reduce fold"
-        ]
+        "reason": "an accumulator is only meaningful inside a reduce fold"
       },
       "from": "guard.supported.unit.test.ts: expression kinds this version does not translate > refuses 'accumulator' in a comparison operand",
       "id": "sql.guard.guard-supported.expression-kinds-this-version-does-not-translate-9",
@@ -433,9 +411,7 @@
       "expect": {
         "nodeKind": "delegate",
         "path": "$.right",
-        "reason": [
-          "a delegated decision is made by an external system"
-        ]
+        "reason": "a delegated decision is made by an external system"
       },
       "from": "guard.supported.unit.test.ts: expression kinds this version does not translate > refuses 'delegate' in a comparison operand",
       "id": "sql.guard.guard-supported.expression-kinds-this-version-does-not-translate-10",
@@ -461,9 +437,7 @@
       "expect": {
         "nodeKind": "treeReference",
         "path": "$.right",
-        "reason": [
-          "a referenced tree is resolved by the caller's resolvers; inline it before compiling"
-        ]
+        "reason": "a referenced tree is resolved by the caller's resolvers; inline it before compiling"
       },
       "from": "guard.supported.unit.test.ts: expression kinds this version does not translate > refuses 'treeReference' in a comparison operand",
       "id": "sql.guard.guard-supported.expression-kinds-this-version-does-not-translate-11",

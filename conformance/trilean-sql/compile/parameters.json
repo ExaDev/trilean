@@ -1,0 +1,5490 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "'"
+          }
+        ],
+        "sql": "(\"name\" = $1::text)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"'\" under postgres)",
+      "id": "sql.compile.parameters.postgres-textcompare-equals-the-text-x22-x27-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "'"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "'"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN ($1::text, $2::text))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"'\" under postgres)",
+      "id": "sql.compile.parameters.postgres-memberof-in-the-text-x22-x27-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "'"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "''"
+          }
+        ],
+        "sql": "(\"name\" = $1::text)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"''\" under postgres)",
+      "id": "sql.compile.parameters.postgres-textcompare-equals-the-text-x22-x27-x27-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "''"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "''"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN ($1::text, $2::text))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"''\" under postgres)",
+      "id": "sql.compile.parameters.postgres-memberof-in-the-text-x22-x27-x27-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "''"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "\""
+          }
+        ],
+        "sql": "(\"name\" = $1::text)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"\\\"\" under postgres)",
+      "id": "sql.compile.parameters.postgres-textcompare-equals-the-text-x22-x5c-x22-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "\""
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "\""
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN ($1::text, $2::text))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"\\\"\" under postgres)",
+      "id": "sql.compile.parameters.postgres-memberof-in-the-text-x22-x5c-x22-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "\""
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "\\"
+          }
+        ],
+        "sql": "(\"name\" = $1::text)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"\\\\\" under postgres)",
+      "id": "sql.compile.parameters.postgres-textcompare-equals-the-text-x22-x5c-x5c-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "\\"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "\\"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN ($1::text, $2::text))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"\\\\\" under postgres)",
+      "id": "sql.compile.parameters.postgres-memberof-in-the-text-x22-x5c-x5c-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "\\"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "\\'"
+          }
+        ],
+        "sql": "(\"name\" = $1::text)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"\\\\'\" under postgres)",
+      "id": "sql.compile.parameters.postgres-textcompare-equals-the-text-x22-x5c-x5c-x27-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "\\'"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "\\'"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN ($1::text, $2::text))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"\\\\'\" under postgres)",
+      "id": "sql.compile.parameters.postgres-memberof-in-the-text-x22-x5c-x5c-x27-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "\\'"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "a\nb"
+          }
+        ],
+        "sql": "(\"name\" = $1::text)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"a\\nb\" under postgres)",
+      "id": "sql.compile.parameters.postgres-textcompare-equals-the-text-x22-ax5c-nbx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "a\nb"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "a\nb"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN ($1::text, $2::text))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"a\\nb\" under postgres)",
+      "id": "sql.compile.parameters.postgres-memberof-in-the-text-x22-ax5c-nbx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "a\nb"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "a\r\nb"
+          }
+        ],
+        "sql": "(\"name\" = $1::text)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"a\\r\\nb\" under postgres)",
+      "id": "sql.compile.parameters.postgres-textcompare-equals-the-text-x22-ax5c-rx5c-nbx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "a\r\nb"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "a\r\nb"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN ($1::text, $2::text))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"a\\r\\nb\" under postgres)",
+      "id": "sql.compile.parameters.postgres-memberof-in-the-text-x22-ax5c-rx5c-nbx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "a\r\nb"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "a\tb"
+          }
+        ],
+        "sql": "(\"name\" = $1::text)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"a\\tb\" under postgres)",
+      "id": "sql.compile.parameters.postgres-textcompare-equals-the-text-x22-ax5c-tbx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "a\tb"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "a\tb"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN ($1::text, $2::text))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"a\\tb\" under postgres)",
+      "id": "sql.compile.parameters.postgres-memberof-in-the-text-x22-ax5c-tbx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "a\tb"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "a\u0000b"
+          }
+        ],
+        "sql": "(\"name\" = $1::text)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"a\\u0000b\" under postgres)",
+      "id": "sql.compile.parameters.postgres-textcompare-equals-the-text-x22-ax5c-u0000bx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "a\u0000b"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "a\u0000b"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN ($1::text, $2::text))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"a\\u0000b\" under postgres)",
+      "id": "sql.compile.parameters.postgres-memberof-in-the-text-x22-ax5c-u0000bx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "a\u0000b"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "?"
+          }
+        ],
+        "sql": "(\"name\" = $1::text)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"?\" under postgres)",
+      "id": "sql.compile.parameters.postgres-textcompare-equals-the-text-x22-x3f-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "?"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "?"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN ($1::text, $2::text))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"?\" under postgres)",
+      "id": "sql.compile.parameters.postgres-memberof-in-the-text-x22-x3f-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "?"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "$1"
+          }
+        ],
+        "sql": "(\"name\" = $1::text)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"$1\" under postgres)",
+      "id": "sql.compile.parameters.postgres-textcompare-equals-the-text-x22-x24-1x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "$1"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "$1"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN ($1::text, $2::text))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"$1\" under postgres)",
+      "id": "sql.compile.parameters.postgres-memberof-in-the-text-x22-x24-1x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "$1"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "$2::text"
+          }
+        ],
+        "sql": "(\"name\" = $1::text)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"$2::text\" under postgres)",
+      "id": "sql.compile.parameters.postgres-textcompare-equals-the-text-x22-x24-2x3a-x3a-textx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "$2::text"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "$2::text"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN ($1::text, $2::text))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"$2::text\" under postgres)",
+      "id": "sql.compile.parameters.postgres-memberof-in-the-text-x22-x24-2x3a-x3a-textx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "$2::text"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "::text"
+          }
+        ],
+        "sql": "(\"name\" = $1::text)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"::text\" under postgres)",
+      "id": "sql.compile.parameters.postgres-textcompare-equals-the-text-x22-x3a-x3a-textx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "::text"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "::text"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN ($1::text, $2::text))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"::text\" under postgres)",
+      "id": "sql.compile.parameters.postgres-memberof-in-the-text-x22-x3a-x3a-textx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "::text"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "%"
+          }
+        ],
+        "sql": "(\"name\" = $1::text)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"%\" under postgres)",
+      "id": "sql.compile.parameters.postgres-textcompare-equals-the-text-x22-x25-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "%"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "%"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN ($1::text, $2::text))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"%\" under postgres)",
+      "id": "sql.compile.parameters.postgres-memberof-in-the-text-x22-x25-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "%"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "_"
+          }
+        ],
+        "sql": "(\"name\" = $1::text)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"_\" under postgres)",
+      "id": "sql.compile.parameters.postgres-textcompare-equals-the-text-x22-x5f-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "_"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "_"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN ($1::text, $2::text))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"_\" under postgres)",
+      "id": "sql.compile.parameters.postgres-memberof-in-the-text-x22-x5f-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "_"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "%_%"
+          }
+        ],
+        "sql": "(\"name\" = $1::text)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"%_%\" under postgres)",
+      "id": "sql.compile.parameters.postgres-textcompare-equals-the-text-x22-x25-x5f-x25-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "%_%"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "%_%"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN ($1::text, $2::text))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"%_%\" under postgres)",
+      "id": "sql.compile.parameters.postgres-memberof-in-the-text-x22-x25-x5f-x25-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "%_%"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "𝒜"
+          }
+        ],
+        "sql": "(\"name\" = $1::text)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"𝒜\" under postgres)",
+      "id": "sql.compile.parameters.postgres-textcompare-equals-the-text-x22-x1d49c-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "𝒜"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "𝒜"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN ($1::text, $2::text))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"𝒜\" under postgres)",
+      "id": "sql.compile.parameters.postgres-memberof-in-the-text-x22-x1d49c-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "𝒜"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "é"
+          }
+        ],
+        "sql": "(\"name\" = $1::text)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"é\" under postgres)",
+      "id": "sql.compile.parameters.postgres-textcompare-equals-the-text-x22-xe9-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "é"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "é"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN ($1::text, $2::text))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"é\" under postgres)",
+      "id": "sql.compile.parameters.postgres-memberof-in-the-text-x22-xe9-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "é"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "a--b"
+          }
+        ],
+        "sql": "(\"name\" = $1::text)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"a--b\" under postgres)",
+      "id": "sql.compile.parameters.postgres-textcompare-equals-the-text-x22-ax2d-x2d-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "a--b"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "a--b"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN ($1::text, $2::text))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"a--b\" under postgres)",
+      "id": "sql.compile.parameters.postgres-memberof-in-the-text-x22-ax2d-x2d-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "a--b"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "a;b"
+          }
+        ],
+        "sql": "(\"name\" = $1::text)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"a;b\" under postgres)",
+      "id": "sql.compile.parameters.postgres-textcompare-equals-the-text-x22-ax3b-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "a;b"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "a;b"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN ($1::text, $2::text))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"a;b\" under postgres)",
+      "id": "sql.compile.parameters.postgres-memberof-in-the-text-x22-ax3b-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "a;b"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "'; DROP TABLE subjects; --"
+          }
+        ],
+        "sql": "(\"name\" = $1::text)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"'; DROP TABLE subjects; --\" under postgres)",
+      "id": "sql.compile.parameters.postgres-textcompare-equals-the-text-x22-x27-x3b-drop-table-subjectsx3",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "'; DROP TABLE subjects; --"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "'; DROP TABLE subjects; --"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN ($1::text, $2::text))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"'; DROP TABLE subjects; --\" under postgres)",
+      "id": "sql.compile.parameters.postgres-memberof-in-the-text-x22-x27-x3b-drop-table-subjectsx3b-x2d-x",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "'; DROP TABLE subjects; --"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": ""
+          }
+        ],
+        "sql": "(\"name\" = $1::text)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"\" under postgres)",
+      "id": "sql.compile.parameters.postgres-textcompare-equals-the-text-x22-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": ""
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": ""
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN ($1::text, $2::text))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"\" under postgres)",
+      "id": "sql.compile.parameters.postgres-memberof-in-the-text-x22-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": ""
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": " "
+          }
+        ],
+        "sql": "(\"name\" = $1::text)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \" \" under postgres)",
+      "id": "sql.compile.parameters.postgres-textcompare-equals-the-text-x22-x22-2",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": " "
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": " "
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN ($1::text, $2::text))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \" \" under postgres)",
+      "id": "sql.compile.parameters.postgres-memberof-in-the-text-x22-x22-2",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": " "
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+          }
+        ],
+        "sql": "(\"name\" = $1::text)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text a text of 300 characters under postgres)",
+      "id": "sql.compile.parameters.postgres-textcompare-equals-the-text-a-text-of-300-characters",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN ($1::text, $2::text))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text a text of 300 characters under postgres)",
+      "id": "sql.compile.parameters.postgres-memberof-in-the-text-a-text-of-300-characters",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "$2"
+          },
+          {
+            "type": "number",
+            "value": 1
+          },
+          {
+            "type": "text",
+            "value": "?"
+          },
+          {
+            "type": "text",
+            "value": "$1"
+          }
+        ],
+        "sql": "((\"name\" = $1::text) AND (\"age\" > $2::double precision) AND (\"note\" = $3::text) AND (\"name\" <> $4::text))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (placeholders numbered across mixed hostile and plain parameters under postgres)",
+      "id": "sql.compile.parameters.postgres-placeholders-numbered-across-mixed-hostile-and-plain-paramete",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "allOf",
+        "operands": [
+          {
+            "kind": "textCompare",
+            "left": {
+              "key": "name",
+              "kind": "reference"
+            },
+            "op": "equals",
+            "right": {
+              "kind": "textLiteral",
+              "value": "$2"
+            }
+          },
+          {
+            "kind": "compare",
+            "left": {
+              "key": "age",
+              "kind": "reference"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          },
+          {
+            "kind": "textCompare",
+            "left": {
+              "key": "note",
+              "kind": "reference"
+            },
+            "op": "equals",
+            "right": {
+              "kind": "textLiteral",
+              "value": "?"
+            }
+          },
+          {
+            "kind": "textCompare",
+            "left": {
+              "key": "name",
+              "kind": "reference"
+            },
+            "op": "notEquals",
+            "right": {
+              "kind": "textLiteral",
+              "value": "$1"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "'"
+          }
+        ],
+        "sql": "(\"name\" = ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"'\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-textcompare-equals-the-text-x22-x27-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "'"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "'"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"'\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-memberof-in-the-text-x22-x27-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "'"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "''"
+          }
+        ],
+        "sql": "(\"name\" = ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"''\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-textcompare-equals-the-text-x22-x27-x27-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "''"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "''"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"''\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-memberof-in-the-text-x22-x27-x27-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "''"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "\""
+          }
+        ],
+        "sql": "(\"name\" = ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"\\\"\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-textcompare-equals-the-text-x22-x5c-x22-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "\""
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "\""
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"\\\"\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-memberof-in-the-text-x22-x5c-x22-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "\""
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "\\"
+          }
+        ],
+        "sql": "(\"name\" = ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"\\\\\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-textcompare-equals-the-text-x22-x5c-x5c-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "\\"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "\\"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"\\\\\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-memberof-in-the-text-x22-x5c-x5c-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "\\"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "\\'"
+          }
+        ],
+        "sql": "(\"name\" = ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"\\\\'\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-textcompare-equals-the-text-x22-x5c-x5c-x27-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "\\'"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "\\'"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"\\\\'\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-memberof-in-the-text-x22-x5c-x5c-x27-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "\\'"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "a\nb"
+          }
+        ],
+        "sql": "(\"name\" = ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"a\\nb\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-textcompare-equals-the-text-x22-ax5c-nbx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "a\nb"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "a\nb"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"a\\nb\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-memberof-in-the-text-x22-ax5c-nbx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "a\nb"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "a\r\nb"
+          }
+        ],
+        "sql": "(\"name\" = ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"a\\r\\nb\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-textcompare-equals-the-text-x22-ax5c-rx5c-nbx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "a\r\nb"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "a\r\nb"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"a\\r\\nb\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-memberof-in-the-text-x22-ax5c-rx5c-nbx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "a\r\nb"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "a\tb"
+          }
+        ],
+        "sql": "(\"name\" = ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"a\\tb\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-textcompare-equals-the-text-x22-ax5c-tbx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "a\tb"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "a\tb"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"a\\tb\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-memberof-in-the-text-x22-ax5c-tbx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "a\tb"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "a\u0000b"
+          }
+        ],
+        "sql": "(\"name\" = ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"a\\u0000b\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-textcompare-equals-the-text-x22-ax5c-u0000bx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "a\u0000b"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "a\u0000b"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"a\\u0000b\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-memberof-in-the-text-x22-ax5c-u0000bx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "a\u0000b"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "?"
+          }
+        ],
+        "sql": "(\"name\" = ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"?\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-textcompare-equals-the-text-x22-x3f-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "?"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "?"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"?\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-memberof-in-the-text-x22-x3f-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "?"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "$1"
+          }
+        ],
+        "sql": "(\"name\" = ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"$1\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-textcompare-equals-the-text-x22-x24-1x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "$1"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "$1"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"$1\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-memberof-in-the-text-x22-x24-1x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "$1"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "$2::text"
+          }
+        ],
+        "sql": "(\"name\" = ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"$2::text\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-textcompare-equals-the-text-x22-x24-2x3a-x3a-textx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "$2::text"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "$2::text"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"$2::text\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-memberof-in-the-text-x22-x24-2x3a-x3a-textx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "$2::text"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "::text"
+          }
+        ],
+        "sql": "(\"name\" = ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"::text\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-textcompare-equals-the-text-x22-x3a-x3a-textx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "::text"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "::text"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"::text\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-memberof-in-the-text-x22-x3a-x3a-textx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "::text"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "%"
+          }
+        ],
+        "sql": "(\"name\" = ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"%\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-textcompare-equals-the-text-x22-x25-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "%"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "%"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"%\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-memberof-in-the-text-x22-x25-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "%"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "_"
+          }
+        ],
+        "sql": "(\"name\" = ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"_\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-textcompare-equals-the-text-x22-x5f-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "_"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "_"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"_\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-memberof-in-the-text-x22-x5f-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "_"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "%_%"
+          }
+        ],
+        "sql": "(\"name\" = ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"%_%\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-textcompare-equals-the-text-x22-x25-x5f-x25-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "%_%"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "%_%"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"%_%\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-memberof-in-the-text-x22-x25-x5f-x25-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "%_%"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "𝒜"
+          }
+        ],
+        "sql": "(\"name\" = ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"𝒜\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-textcompare-equals-the-text-x22-x1d49c-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "𝒜"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "𝒜"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"𝒜\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-memberof-in-the-text-x22-x1d49c-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "𝒜"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "é"
+          }
+        ],
+        "sql": "(\"name\" = ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"é\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-textcompare-equals-the-text-x22-xe9-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "é"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "é"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"é\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-memberof-in-the-text-x22-xe9-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "é"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "a--b"
+          }
+        ],
+        "sql": "(\"name\" = ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"a--b\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-textcompare-equals-the-text-x22-ax2d-x2d-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "a--b"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "a--b"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"a--b\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-memberof-in-the-text-x22-ax2d-x2d-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "a--b"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "a;b"
+          }
+        ],
+        "sql": "(\"name\" = ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"a;b\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-textcompare-equals-the-text-x22-ax3b-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "a;b"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "a;b"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"a;b\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-memberof-in-the-text-x22-ax3b-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "a;b"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "'; DROP TABLE subjects; --"
+          }
+        ],
+        "sql": "(\"name\" = ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"'; DROP TABLE subjects; --\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-textcompare-equals-the-text-x22-x27-x3b-drop-table-subjectsx3b",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "'; DROP TABLE subjects; --"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "'; DROP TABLE subjects; --"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"'; DROP TABLE subjects; --\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-memberof-in-the-text-x22-x27-x3b-drop-table-subjectsx3b-x2d-x2d",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "'; DROP TABLE subjects; --"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": ""
+          }
+        ],
+        "sql": "(\"name\" = ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \"\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-textcompare-equals-the-text-x22-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": ""
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": ""
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \"\" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-memberof-in-the-text-x22-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": ""
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": " "
+          }
+        ],
+        "sql": "(\"name\" = ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text \" \" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-textcompare-equals-the-text-x22-x22-2",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": " "
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": " "
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text \" \" under sqlite)",
+      "id": "sql.compile.parameters.sqlite-memberof-in-the-text-x22-x22-2",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": " "
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+          }
+        ],
+        "sql": "(\"name\" = ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (textCompare equals the text a text of 300 characters under sqlite)",
+      "id": "sql.compile.parameters.sqlite-textcompare-equals-the-text-a-text-of-300-characters",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "(\"name\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the text a text of 300 characters under sqlite)",
+      "id": "sql.compile.parameters.sqlite-memberof-in-the-text-a-text-of-300-characters",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "$2"
+          },
+          {
+            "type": "number",
+            "value": 1
+          },
+          {
+            "type": "text",
+            "value": "?"
+          },
+          {
+            "type": "text",
+            "value": "$1"
+          }
+        ],
+        "sql": "((\"name\" = ?) AND (\"age\" > ?) AND (\"note\" = ?) AND (\"name\" <> ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (placeholders numbered across mixed hostile and plain parameters under sqlite)",
+      "id": "sql.compile.parameters.sqlite-placeholders-numbered-across-mixed-hostile-and-plain-parameters",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "allOf",
+        "operands": [
+          {
+            "kind": "textCompare",
+            "left": {
+              "key": "name",
+              "kind": "reference"
+            },
+            "op": "equals",
+            "right": {
+              "kind": "textLiteral",
+              "value": "$2"
+            }
+          },
+          {
+            "kind": "compare",
+            "left": {
+              "key": "age",
+              "kind": "reference"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          },
+          {
+            "kind": "textCompare",
+            "left": {
+              "key": "note",
+              "kind": "reference"
+            },
+            "op": "equals",
+            "right": {
+              "kind": "textLiteral",
+              "value": "?"
+            }
+          },
+          {
+            "kind": "textCompare",
+            "left": {
+              "key": "name",
+              "kind": "reference"
+            },
+            "op": "notEquals",
+            "right": {
+              "kind": "textLiteral",
+              "value": "$1"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

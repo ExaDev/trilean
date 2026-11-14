@@ -3,9 +3,7 @@
     {
       "expect": {
         "error": {
-          "message": [
-            "cannot compile 'textCompare' at $.right: GLOB has no alternation operator"
-          ],
+          "message": "cannot compile 'textCompare' at $.right: GLOB has no alternation operator",
           "name": "UnsupportedNodeError",
           "nodeKind": "textCompare",
           "path": "$.right"

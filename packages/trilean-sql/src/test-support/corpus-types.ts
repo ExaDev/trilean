@@ -78,19 +78,34 @@ export interface SqlCompileOptionsData extends SqlOptionsData {
 export type SqlParamData =
   | { readonly type: "text" | "timestamp"; readonly value: string }
   | { readonly type: "boolean"; readonly value: boolean }
-  | { readonly type: "number"; readonly value: number };
+  | { readonly type: "number"; readonly value: number | SpecialNumber };
+
+/** A number plain JSON cannot write, as the corpus holds it. */
+export interface SpecialNumber {
+  readonly $number: "-0" | "Infinity" | "-Infinity" | "NaN";
+}
+
+/** A text compared exactly, or one that holds a message another package wrote: what comes before it, its fragments in order, and what comes after. */
+export type ExactText =
+  | string
+  | {
+      readonly before: string;
+      readonly relayed: readonly Text[];
+      readonly after: string;
+    };
 
 interface SqlErrorBase {
-  readonly message: readonly Text[];
+  readonly message: string;
 }
 
 export type SqlErrorData =
-  | (SqlErrorBase & {
+  | {
       readonly name: "UnsupportedNodeError";
+      readonly message: ExactText;
       readonly nodeKind: string;
       readonly path: string;
-      readonly reason: readonly Text[];
-    })
+      readonly reason: ExactText;
+    }
   | (SqlErrorBase & {
       readonly name: "InvalidColumnError";
       readonly referenceKey: string;
@@ -127,7 +142,7 @@ export interface SqlGuardCase extends CaseBase {
     | {
         readonly nodeKind: string;
         readonly path: string;
-        readonly reason: readonly Text[];
+        readonly reason: ExactText;
       }
     | { readonly error: SqlErrorData };
 }
@@ -138,7 +153,7 @@ export interface SqlPatternCase extends CaseBase {
   readonly dialect: "postgres" | "sqlite";
   readonly expect:
     | { readonly text: string }
-    | { readonly error: { readonly message: readonly Text[] } };
+    | { readonly error: { readonly message: string } };
 }
 
 export interface SqlExecuteCase extends CaseBase {

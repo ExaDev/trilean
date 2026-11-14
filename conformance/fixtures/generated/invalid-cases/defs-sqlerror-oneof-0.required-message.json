@@ -6,9 +6,7 @@
           "name": "UnsupportedNodeError",
           "nodeKind": "textCompare",
           "path": "$.right",
-          "reason": [
-            "GLOB has no alternation operator"
-          ]
+          "reason": "GLOB has no alternation operator"
         }
       },
       "from": "compile.dialects.unit.test.ts: the sqlite dialect > refuses a portableMatches pattern outside GLOB's reachable subset",

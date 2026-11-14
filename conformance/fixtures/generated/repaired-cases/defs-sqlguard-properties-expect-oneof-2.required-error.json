@@ -3,9 +3,7 @@
     {
       "expect": {
         "error": {
-          "message": [
-            "no column mapped for reference key 'age'"
-          ],
+          "message": "no column mapped for reference key 'age'",
           "name": "CallerError"
         }
       },

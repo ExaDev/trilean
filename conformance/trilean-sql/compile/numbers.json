@@ -1,0 +1,4240 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 0.5
+          }
+        ],
+        "sql": "(\"age\" > $1::double precision)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number 0.5 under postgres)",
+      "id": "sql.compile.numbers.postgres-compare-gt-against-the-number-0x2e-5",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0.5
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 0.5
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN ($1::double precision, $2::double precision))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number 0.5 under postgres)",
+      "id": "sql.compile.numbers.postgres-memberof-in-the-number-0x2e-5",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 0.5
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": -1.5
+          }
+        ],
+        "sql": "(\"age\" > $1::double precision)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number -1.5 under postgres)",
+      "id": "sql.compile.numbers.postgres-compare-gt-against-the-number-x2d-1x2e-5",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": -1.5
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": -1.5
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN ($1::double precision, $2::double precision))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number -1.5 under postgres)",
+      "id": "sql.compile.numbers.postgres-memberof-in-the-number-x2d-1x2e-5",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": -1.5
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 0.1
+          }
+        ],
+        "sql": "(\"age\" > $1::double precision)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number 0.1 under postgres)",
+      "id": "sql.compile.numbers.postgres-compare-gt-against-the-number-0x2e-1",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0.1
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 0.1
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN ($1::double precision, $2::double precision))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number 0.1 under postgres)",
+      "id": "sql.compile.numbers.postgres-memberof-in-the-number-0x2e-1",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 0.1
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": {
+              "$number": "-0"
+            }
+          }
+        ],
+        "sql": "(\"age\" > $1::double precision)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number negative zero under postgres)",
+      "id": "sql.compile.numbers.postgres-compare-gt-against-the-number-negative-zero",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": {
+            "$number": "-0"
+          }
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": {
+              "$number": "-0"
+            }
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN ($1::double precision, $2::double precision))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number negative zero under postgres)",
+      "id": "sql.compile.numbers.postgres-memberof-in-the-number-negative-zero",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "-0"
+            }
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 0
+          }
+        ],
+        "sql": "(\"age\" > $1::double precision)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number 0 under postgres)",
+      "id": "sql.compile.numbers.postgres-compare-gt-against-the-number-0",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 0
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN ($1::double precision, $2::double precision))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number 0 under postgres)",
+      "id": "sql.compile.numbers.postgres-memberof-in-the-number-0",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 0
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 1e+21
+          }
+        ],
+        "sql": "(\"age\" > $1::double precision)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number 1e+21 under postgres)",
+      "id": "sql.compile.numbers.postgres-compare-gt-against-the-number-1ex2b-21",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1e+21
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 1e+21
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN ($1::double precision, $2::double precision))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number 1e+21 under postgres)",
+      "id": "sql.compile.numbers.postgres-memberof-in-the-number-1ex2b-21",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 1e+21
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": -1e+21
+          }
+        ],
+        "sql": "(\"age\" > $1::double precision)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number -1e+21 under postgres)",
+      "id": "sql.compile.numbers.postgres-compare-gt-against-the-number-x2d-1ex2b-21",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": -1e+21
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": -1e+21
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN ($1::double precision, $2::double precision))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number -1e+21 under postgres)",
+      "id": "sql.compile.numbers.postgres-memberof-in-the-number-x2d-1ex2b-21",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": -1e+21
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 1e-7
+          }
+        ],
+        "sql": "(\"age\" > $1::double precision)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number 1e-7 under postgres)",
+      "id": "sql.compile.numbers.postgres-compare-gt-against-the-number-1ex2d-7",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1e-7
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 1e-7
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN ($1::double precision, $2::double precision))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number 1e-7 under postgres)",
+      "id": "sql.compile.numbers.postgres-memberof-in-the-number-1ex2d-7",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 1e-7
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 5e-324
+          }
+        ],
+        "sql": "(\"age\" > $1::double precision)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number 5e-324 under postgres)",
+      "id": "sql.compile.numbers.postgres-compare-gt-against-the-number-5ex2d-324",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 5e-324
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 5e-324
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN ($1::double precision, $2::double precision))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number 5e-324 under postgres)",
+      "id": "sql.compile.numbers.postgres-memberof-in-the-number-5ex2d-324",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 5e-324
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 9007199254740992
+          }
+        ],
+        "sql": "(\"age\" > $1::double precision)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number 9007199254740992 under postgres)",
+      "id": "sql.compile.numbers.postgres-compare-gt-against-the-number-9007199254740992",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 9007199254740992
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 9007199254740992
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN ($1::double precision, $2::double precision))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number 9007199254740992 under postgres)",
+      "id": "sql.compile.numbers.postgres-memberof-in-the-number-9007199254740992",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 9007199254740992
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 9007199254740994
+          }
+        ],
+        "sql": "(\"age\" > $1::double precision)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number 9007199254740994 under postgres)",
+      "id": "sql.compile.numbers.postgres-compare-gt-against-the-number-9007199254740994",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 9007199254740994
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 9007199254740994
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN ($1::double precision, $2::double precision))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number 9007199254740994 under postgres)",
+      "id": "sql.compile.numbers.postgres-memberof-in-the-number-9007199254740994",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 9007199254740994
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": -9007199254740994
+          }
+        ],
+        "sql": "(\"age\" > $1::double precision)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number -9007199254740994 under postgres)",
+      "id": "sql.compile.numbers.postgres-compare-gt-against-the-number-x2d-9007199254740994",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": -9007199254740994
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": -9007199254740994
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN ($1::double precision, $2::double precision))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number -9007199254740994 under postgres)",
+      "id": "sql.compile.numbers.postgres-memberof-in-the-number-x2d-9007199254740994",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": -9007199254740994
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 9223372036854776000
+          }
+        ],
+        "sql": "(\"age\" > $1::double precision)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number 9223372036854776000 under postgres)",
+      "id": "sql.compile.numbers.postgres-compare-gt-against-the-number-9223372036854776000",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 9223372036854776000
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 9223372036854776000
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN ($1::double precision, $2::double precision))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number 9223372036854776000 under postgres)",
+      "id": "sql.compile.numbers.postgres-memberof-in-the-number-9223372036854776000",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 9223372036854776000
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": -9223372036854776000
+          }
+        ],
+        "sql": "(\"age\" > $1::double precision)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number -9223372036854776000 under postgres)",
+      "id": "sql.compile.numbers.postgres-compare-gt-against-the-number-x2d-9223372036854776000",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": -9223372036854776000
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": -9223372036854776000
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN ($1::double precision, $2::double precision))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number -9223372036854776000 under postgres)",
+      "id": "sql.compile.numbers.postgres-memberof-in-the-number-x2d-9223372036854776000",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": -9223372036854776000
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 1.7976931348623157e+308
+          }
+        ],
+        "sql": "(\"age\" > $1::double precision)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number 1.7976931348623157e+308 under postgres)",
+      "id": "sql.compile.numbers.postgres-compare-gt-against-the-number-1x2e-7976931348623157ex2b-308",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1.7976931348623157e+308
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 1.7976931348623157e+308
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN ($1::double precision, $2::double precision))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number 1.7976931348623157e+308 under postgres)",
+      "id": "sql.compile.numbers.postgres-memberof-in-the-number-1x2e-7976931348623157ex2b-308",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 1.7976931348623157e+308
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 123456789.12345679
+          }
+        ],
+        "sql": "(\"age\" > $1::double precision)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number 123456789.12345679 under postgres)",
+      "id": "sql.compile.numbers.postgres-compare-gt-against-the-number-123456789x2e-12345679",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 123456789.12345679
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 123456789.12345679
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN ($1::double precision, $2::double precision))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number 123456789.12345679 under postgres)",
+      "id": "sql.compile.numbers.postgres-memberof-in-the-number-123456789x2e-12345679",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 123456789.12345679
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": {
+              "$number": "Infinity"
+            }
+          }
+        ],
+        "sql": "(\"age\" > $1::double precision)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number Infinity under postgres)",
+      "id": "sql.compile.numbers.postgres-compare-gt-against-the-number-infinity",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": {
+            "$number": "Infinity"
+          }
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": {
+              "$number": "Infinity"
+            }
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN ($1::double precision, $2::double precision))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number Infinity under postgres)",
+      "id": "sql.compile.numbers.postgres-memberof-in-the-number-infinity",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "Infinity"
+            }
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": {
+              "$number": "-Infinity"
+            }
+          }
+        ],
+        "sql": "(\"age\" > $1::double precision)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number -Infinity under postgres)",
+      "id": "sql.compile.numbers.postgres-compare-gt-against-the-number-x2d-infinity",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": {
+            "$number": "-Infinity"
+          }
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": {
+              "$number": "-Infinity"
+            }
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN ($1::double precision, $2::double precision))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number -Infinity under postgres)",
+      "id": "sql.compile.numbers.postgres-memberof-in-the-number-x2d-infinity",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "-Infinity"
+            }
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": {
+              "$number": "-Infinity"
+            }
+          },
+          {
+            "type": "number",
+            "value": {
+              "$number": "Infinity"
+            }
+          }
+        ],
+        "sql": "($1::double precision < $2::double precision)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare of two infinities under postgres)",
+      "id": "sql.compile.numbers.postgres-compare-of-two-infinities",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "numberLiteral",
+          "value": {
+            "$number": "-Infinity"
+          }
+        },
+        "op": "lt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": {
+            "$number": "Infinity"
+          }
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'numberLiteral' at $.right: NaN is equal to nothing in trilean, not even itself, whereas PostgreSQL defines NaN as equal to itself and greater than every other double",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "numberLiteral",
+          "path": "$.right",
+          "reason": "NaN is equal to nothing in trilean, not even itself, whereas PostgreSQL defines NaN as equal to itself and greater than every other double"
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare against NaN under postgres)",
+      "id": "sql.compile.numbers.postgres-compare-against-nan",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": {
+            "$number": "NaN"
+          }
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 0.5
+          }
+        ],
+        "sql": "(\"age\" > ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number 0.5 under sqlite)",
+      "id": "sql.compile.numbers.sqlite-compare-gt-against-the-number-0x2e-5",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0.5
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 0.5
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number 0.5 under sqlite)",
+      "id": "sql.compile.numbers.sqlite-memberof-in-the-number-0x2e-5",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 0.5
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": -1.5
+          }
+        ],
+        "sql": "(\"age\" > ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number -1.5 under sqlite)",
+      "id": "sql.compile.numbers.sqlite-compare-gt-against-the-number-x2d-1x2e-5",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": -1.5
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": -1.5
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number -1.5 under sqlite)",
+      "id": "sql.compile.numbers.sqlite-memberof-in-the-number-x2d-1x2e-5",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": -1.5
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 0.1
+          }
+        ],
+        "sql": "(\"age\" > ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number 0.1 under sqlite)",
+      "id": "sql.compile.numbers.sqlite-compare-gt-against-the-number-0x2e-1",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0.1
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 0.1
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number 0.1 under sqlite)",
+      "id": "sql.compile.numbers.sqlite-memberof-in-the-number-0x2e-1",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 0.1
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": {
+              "$number": "-0"
+            }
+          }
+        ],
+        "sql": "(\"age\" > ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number negative zero under sqlite)",
+      "id": "sql.compile.numbers.sqlite-compare-gt-against-the-number-negative-zero",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": {
+            "$number": "-0"
+          }
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": {
+              "$number": "-0"
+            }
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number negative zero under sqlite)",
+      "id": "sql.compile.numbers.sqlite-memberof-in-the-number-negative-zero",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "-0"
+            }
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 0
+          }
+        ],
+        "sql": "(\"age\" > ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number 0 under sqlite)",
+      "id": "sql.compile.numbers.sqlite-compare-gt-against-the-number-0",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 0
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number 0 under sqlite)",
+      "id": "sql.compile.numbers.sqlite-memberof-in-the-number-0",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 0
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 1e+21
+          }
+        ],
+        "sql": "(\"age\" > ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number 1e+21 under sqlite)",
+      "id": "sql.compile.numbers.sqlite-compare-gt-against-the-number-1ex2b-21",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1e+21
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 1e+21
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number 1e+21 under sqlite)",
+      "id": "sql.compile.numbers.sqlite-memberof-in-the-number-1ex2b-21",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 1e+21
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": -1e+21
+          }
+        ],
+        "sql": "(\"age\" > ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number -1e+21 under sqlite)",
+      "id": "sql.compile.numbers.sqlite-compare-gt-against-the-number-x2d-1ex2b-21",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": -1e+21
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": -1e+21
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number -1e+21 under sqlite)",
+      "id": "sql.compile.numbers.sqlite-memberof-in-the-number-x2d-1ex2b-21",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": -1e+21
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 1e-7
+          }
+        ],
+        "sql": "(\"age\" > ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number 1e-7 under sqlite)",
+      "id": "sql.compile.numbers.sqlite-compare-gt-against-the-number-1ex2d-7",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1e-7
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 1e-7
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number 1e-7 under sqlite)",
+      "id": "sql.compile.numbers.sqlite-memberof-in-the-number-1ex2d-7",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 1e-7
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 5e-324
+          }
+        ],
+        "sql": "(\"age\" > ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number 5e-324 under sqlite)",
+      "id": "sql.compile.numbers.sqlite-compare-gt-against-the-number-5ex2d-324",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 5e-324
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 5e-324
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number 5e-324 under sqlite)",
+      "id": "sql.compile.numbers.sqlite-memberof-in-the-number-5ex2d-324",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 5e-324
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 9007199254740992
+          }
+        ],
+        "sql": "(\"age\" > ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number 9007199254740992 under sqlite)",
+      "id": "sql.compile.numbers.sqlite-compare-gt-against-the-number-9007199254740992",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 9007199254740992
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 9007199254740992
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number 9007199254740992 under sqlite)",
+      "id": "sql.compile.numbers.sqlite-memberof-in-the-number-9007199254740992",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 9007199254740992
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 9007199254740994
+          }
+        ],
+        "sql": "(\"age\" > ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number 9007199254740994 under sqlite)",
+      "id": "sql.compile.numbers.sqlite-compare-gt-against-the-number-9007199254740994",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 9007199254740994
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 9007199254740994
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number 9007199254740994 under sqlite)",
+      "id": "sql.compile.numbers.sqlite-memberof-in-the-number-9007199254740994",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 9007199254740994
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": -9007199254740994
+          }
+        ],
+        "sql": "(\"age\" > ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number -9007199254740994 under sqlite)",
+      "id": "sql.compile.numbers.sqlite-compare-gt-against-the-number-x2d-9007199254740994",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": -9007199254740994
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": -9007199254740994
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number -9007199254740994 under sqlite)",
+      "id": "sql.compile.numbers.sqlite-memberof-in-the-number-x2d-9007199254740994",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": -9007199254740994
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 9223372036854776000
+          }
+        ],
+        "sql": "(\"age\" > ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number 9223372036854776000 under sqlite)",
+      "id": "sql.compile.numbers.sqlite-compare-gt-against-the-number-9223372036854776000",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 9223372036854776000
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 9223372036854776000
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number 9223372036854776000 under sqlite)",
+      "id": "sql.compile.numbers.sqlite-memberof-in-the-number-9223372036854776000",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 9223372036854776000
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": -9223372036854776000
+          }
+        ],
+        "sql": "(\"age\" > ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number -9223372036854776000 under sqlite)",
+      "id": "sql.compile.numbers.sqlite-compare-gt-against-the-number-x2d-9223372036854776000",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": -9223372036854776000
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": -9223372036854776000
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number -9223372036854776000 under sqlite)",
+      "id": "sql.compile.numbers.sqlite-memberof-in-the-number-x2d-9223372036854776000",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": -9223372036854776000
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 1.7976931348623157e+308
+          }
+        ],
+        "sql": "(\"age\" > ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number 1.7976931348623157e+308 under sqlite)",
+      "id": "sql.compile.numbers.sqlite-compare-gt-against-the-number-1x2e-7976931348623157ex2b-308",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1.7976931348623157e+308
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 1.7976931348623157e+308
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number 1.7976931348623157e+308 under sqlite)",
+      "id": "sql.compile.numbers.sqlite-memberof-in-the-number-1x2e-7976931348623157ex2b-308",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 1.7976931348623157e+308
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 123456789.12345679
+          }
+        ],
+        "sql": "(\"age\" > ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number 123456789.12345679 under sqlite)",
+      "id": "sql.compile.numbers.sqlite-compare-gt-against-the-number-123456789x2e-12345679",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 123456789.12345679
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 123456789.12345679
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number 123456789.12345679 under sqlite)",
+      "id": "sql.compile.numbers.sqlite-memberof-in-the-number-123456789x2e-12345679",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 123456789.12345679
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": {
+              "$number": "Infinity"
+            }
+          }
+        ],
+        "sql": "(\"age\" > ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number Infinity under sqlite)",
+      "id": "sql.compile.numbers.sqlite-compare-gt-against-the-number-infinity",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": {
+            "$number": "Infinity"
+          }
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": {
+              "$number": "Infinity"
+            }
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number Infinity under sqlite)",
+      "id": "sql.compile.numbers.sqlite-memberof-in-the-number-infinity",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "Infinity"
+            }
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": {
+              "$number": "-Infinity"
+            }
+          }
+        ],
+        "sql": "(\"age\" > ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare gt against the number -Infinity under sqlite)",
+      "id": "sql.compile.numbers.sqlite-compare-gt-against-the-number-x2d-infinity",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": {
+            "$number": "-Infinity"
+          }
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": {
+              "$number": "-Infinity"
+            }
+          },
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" IN (?, ?))"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (memberOf in the number -Infinity under sqlite)",
+      "id": "sql.compile.numbers.sqlite-memberof-in-the-number-x2d-infinity",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "-Infinity"
+            }
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": {
+              "$number": "-Infinity"
+            }
+          },
+          {
+            "type": "number",
+            "value": {
+              "$number": "Infinity"
+            }
+          }
+        ],
+        "sql": "(? < ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare of two infinities under sqlite)",
+      "id": "sql.compile.numbers.sqlite-compare-of-two-infinities",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "numberLiteral",
+          "value": {
+            "$number": "-Infinity"
+          }
+        },
+        "op": "lt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": {
+            "$number": "Infinity"
+          }
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'numberLiteral' at $.right: NaN is equal to nothing in trilean, not even itself, whereas SQLite has no NaN at all and a driver binding one substitutes SQL NULL, so 'NaN = NaN' is indeterminate there rather than definitely false, and its negation matches every row instead of none",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "numberLiteral",
+          "path": "$.right",
+          "reason": "NaN is equal to nothing in trilean, not even itself, whereas SQLite has no NaN at all and a driver binding one substitutes SQL NULL, so 'NaN = NaN' is indeterminate there rather than definitely false, and its negation matches every row instead of none"
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare against NaN under sqlite)",
+      "id": "sql.compile.numbers.sqlite-compare-against-nan",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": {
+            "$number": "NaN"
+          }
+        }
+      }
+    }
+  ]
+}

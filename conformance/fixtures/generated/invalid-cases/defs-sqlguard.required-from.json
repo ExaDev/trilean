@@ -2,18 +2,8 @@
   "cases": [
     {
       "expect": null,
-      "id": "optional.13",
+      "id": "sql.guard.matrix.postgres-a-tree-guarded-with-no-options",
       "kind": "sql-guard",
-      "options": {
-        "columns": {
-          "note": {
-            "column": "note"
-          }
-        },
-        "dialect": "postgres"
-      },
-      "reason": "the implementation cannot run this case",
-      "skip": "ts",
       "tree": {
         "kind": "exists",
         "operand": {

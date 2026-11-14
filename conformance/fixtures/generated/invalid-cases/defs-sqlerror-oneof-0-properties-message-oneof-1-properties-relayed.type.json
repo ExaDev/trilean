@@ -1,0 +1,50 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "error": {
+          "message": {
+            "after": "\n  (a)\n  ^",
+            "before": "cannot compile 'textCompare' at $.right: invalid pattern at index 0: ",
+            "relayed": "not-the-type"
+          },
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textCompare",
+          "path": "$.right",
+          "reason": {
+            "after": "\n  (a)\n  ^",
+            "before": "invalid pattern at index 0: ",
+            "relayed": [
+              "capturing groups are not supported in this grammar",
+              "there is nothing to capture, since a pattern only ever answers whether it matches. Use '(?:...)' for grouping."
+            ]
+          }
+        }
+      },
+      "from": "compile.predicates.unit.test.ts: textCompare > refuses portableMatches whose pattern is not valid trilean-regex syntax",
+      "id": "sql.compile.compile-predicates.textcompare-refuses-portablematches-whose-patter-2",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "portableMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "(a)"
+        }
+      }
+    }
+  ]
+}

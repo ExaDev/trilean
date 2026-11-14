@@ -21,6 +21,7 @@ import {
   runPatternCase,
 } from "./test-support/run-sql";
 import { textToCodeUnits, textToString } from "./test-support/text";
+import { validateFixture } from "./test-support/fixture";
 import { validateCorpusFile, validateManifest } from "./test-support/validate";
 
 /**
@@ -74,7 +75,6 @@ function stringList(value: unknown, where: string): readonly string[] {
   });
 }
 
-/** The reason text of a parse error: the part of the message after the index and before the echoed pattern. */
 /** The names of the entries in a fixture directory, which must hold at least one. */
 function fixtureNames(directory: string): readonly string[] {
   const names = readdirSync(join(FIXTURES, directory)).sort();
@@ -159,6 +159,14 @@ describe("corpus loading", () => {
 
   it("rejects every invalid-case fixture, each for its one defect", () => {
     expectPairs("invalid-cases", "repaired-cases", validateCorpusFile);
+  });
+
+  it("rejects every invalid execute fixture, each for its one defect", () => {
+    expectPairs(
+      "execute-fixtures/invalid",
+      "execute-fixtures/repaired",
+      validateFixture,
+    );
   });
 
   it("rejects every invalid manifest fixture, each for its one defect", () => {
@@ -318,6 +326,7 @@ function testTitles(source: string): readonly string[] {
 const RUNNER_TESTS: ReadonlySet<string> = new Set([
   "conformance.unit.test.ts",
   "conformance.integration.test.ts",
+  "conformance.coverage.unit.test.ts",
 ]);
 
 const ROW = /^\| (\S+\.test\.ts) \| (.+) \| (S\d+) \|$/u;

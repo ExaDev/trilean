@@ -3,15 +3,11 @@
     {
       "expect": {
         "error": {
-          "message": [
-            "cannot compile 'textCompare' at $: options.sqliteRegexpAvailable is false: the caller has stated no regexp(pattern, value) function can be registered on this SQLite target, so 'matches' would compile to SQL that fails at query execution time with \"no such function: REGEXP\" instead of at compile time"
-          ],
+          "message": "cannot compile 'textCompare' at $: options.sqliteRegexpAvailable is false: the caller has stated no regexp(pattern, value) function can be registered on this SQLite target, so 'matches' would compile to SQL that fails at query execution time with \"no such function: REGEXP\" instead of at compile time",
           "name": "UnsupportedNodeError",
           "nodeKind": "textCompare",
           "path": "$",
-          "reason": [
-            "options.sqliteRegexpAvailable is false: the caller has stated no regexp(pattern, value) function can be registered on this SQLite target, so 'matches' would compile to SQL that fails at query execution time with \"no such function: REGEXP\" instead of at compile time"
-          ]
+          "reason": "options.sqliteRegexpAvailable is false: the caller has stated no regexp(pattern, value) function can be registered on this SQLite target, so 'matches' would compile to SQL that fails at query execution time with \"no such function: REGEXP\" instead of at compile time"
         }
       },
       "from": "sqlite.predicates.integration.test.ts: textCompare > refuses matches at compile time, before ever reaching a connection, when sqliteRegexpAvailable is false",
@@ -37,15 +33,11 @@
     {
       "expect": {
         "error": {
-          "message": [
-            "cannot compile 'textCompare' at $.right: GLOB has no alternation operator"
-          ],
+          "message": "cannot compile 'textCompare' at $.right: GLOB has no alternation operator",
           "name": "UnsupportedNodeError",
           "nodeKind": "textCompare",
           "path": "$.right",
-          "reason": [
-            "GLOB has no alternation operator"
-          ]
+          "reason": "GLOB has no alternation operator"
         }
       },
       "from": "sqlite.predicates.integration.test.ts: portableMatches/portableNotMatches (trilean-regex, translated to a GLOB wildcard) > fails to compile rather than answering wrongly when the pattern is outside GLOB's reachable subset",

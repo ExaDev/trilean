@@ -273,15 +273,11 @@
     {
       "expect": {
         "error": {
-          "message": [
-            "cannot compile 'fold' at $.left: a 'reduce' fold threads an arbitrary combine expression through the collection in a caller-chosen order, which has no general SQL translation"
-          ],
+          "message": "cannot compile 'fold' at $.left: a 'reduce' fold threads an arbitrary combine expression through the collection in a caller-chosen order, which has no general SQL translation",
           "name": "UnsupportedNodeError",
           "nodeKind": "fold",
           "path": "$.left",
-          "reason": [
-            "a 'reduce' fold threads an arbitrary combine expression through the collection in a caller-chosen order, which has no general SQL translation"
-          ]
+          "reason": "a 'reduce' fold threads an arbitrary combine expression through the collection in a caller-chosen order, which has no general SQL translation"
         }
       },
       "from": "compile.quantifiers.unit.test.ts: fold > refuses 'reduce' unconditionally, even with collectionFor set",
@@ -319,9 +315,7 @@
       "expect": {
         "error": {
           "collectionKey": "tags",
-          "message": [
-            "collectionFor(\"tags\") returned \"\", which is not a usable table identifier: the name is empty"
-          ],
+          "message": "collectionFor(\"tags\") returned \"\", which is not a usable table identifier: the name is empty",
           "name": "InvalidCollectionTableError",
           "table": ""
         }

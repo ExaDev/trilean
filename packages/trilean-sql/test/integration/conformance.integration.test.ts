@@ -26,7 +26,7 @@ import {
   openSqlite,
 } from "./corpus-engines";
 import type { Engine } from "./corpus-engines";
-import { readFixture } from "./corpus-fixtures";
+import { fixtureNames, readFixture } from "./corpus-fixtures";
 
 /**
  * Runs the `execute` directory of this package's share of the language-neutral conformance corpus (`conformance/trilean-sql/execute/`) against real engines: SQLite in memory, and PostgreSQL in an ephemeral container, which needs a Docker-compatible daemon, as the integration suite always has. A case compiles its tree for its dialect, runs the fragment over the fixture's rows and requires the rows to be the ones it states and to be the rows trilean's evaluator selects over the same fixture; the other forms are in `conformance/README.md`.
@@ -228,6 +228,24 @@ for (const { name, file } of corpus) {
     }
   });
 }
+
+describe("the fixtures", () => {
+  it("are each valid, each named by a case, and each case names one that exists", () => {
+    const named = new Set(
+      corpus.flatMap(({ file }) =>
+        file.cases.flatMap((testCase) =>
+          testCase.kind === "sql-execute" ? [testCase.fixture] : [],
+        ),
+      ),
+    );
+    const present = fixtureNames();
+    expect(present.filter((name) => !named.has(name))).toEqual([]);
+    expect([...named].filter((name) => !present.includes(name))).toEqual([]);
+    for (const name of present) {
+      expect(readFixture(name).tables.length).toBeGreaterThan(0);
+    }
+  });
+});
 
 describe("corpus completeness", () => {
   it("registers and skips cases so that they add up to the manifest's share for this runner", () => {

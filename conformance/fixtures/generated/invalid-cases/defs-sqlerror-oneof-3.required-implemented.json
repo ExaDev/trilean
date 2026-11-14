@@ -4,9 +4,7 @@
       "expect": {
         "error": {
           "dialect": "mysql",
-          "message": [
-            "unknown dialect \"mysql\": this version compiles \"postgres\", \"sqlite\""
-          ],
+          "message": "unknown dialect \"mysql\": this version compiles \"postgres\", \"sqlite\"",
           "name": "UnknownDialectError"
         }
       },
