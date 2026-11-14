@@ -1,0 +1,354 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 5
+          }
+        ],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"score\" > $1::double precision) AS \"item_ok\" FROM \"tags\" WHERE \"tags\".\"subjectId\" = \"subjects\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "compile.quantifiers.unit.test.ts: some > compiles without a filter to a correlated subquery over TRUE as the filter column",
+      "id": "sql.compile.compile-quantifiers.some-compiles-without-a-filter-to-a-correlated-s",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "score": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "score",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 5
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "urgent"
+          },
+          {
+            "type": "number",
+            "value": 5
+          }
+        ],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT (\"label\" = $1::text) AS \"filter_ok\", (\"score\" > $2::double precision) AS \"item_ok\" FROM \"tags\" WHERE \"tags\".\"subjectId\" = \"subjects\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "compile.quantifiers.unit.test.ts: some > compiles a filter into its own participating-row column, ahead of the item's own placeholders",
+      "id": "sql.compile.compile-quantifiers.some-compiles-a-filter-into-its-own-participatin",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "label": {
+                "column": "label",
+                "paramType": "text"
+              },
+              "score": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "filter": {
+          "kind": "textCompare",
+          "left": {
+            "key": "label",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "urgent"
+          }
+        },
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "score",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 5
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 2
+          },
+          {
+            "type": "number",
+            "value": 8
+          }
+        ],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" IS NOT NULL AND NOT \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN FALSE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE TRUE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", ((\"score\" >= $1::double precision) AND (\"score\" <= $2::double precision)) AS \"item_ok\" FROM \"tags\" WHERE \"tags\".\"subjectId\" = \"subjects\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "compile.quantifiers.unit.test.ts: every > compiles a conjunctive item as one combined boolean per participating row, not split across separate checks",
+      "id": "sql.compile.compile-quantifiers.every-compiles-a-conjunctive-item-as-one-combine",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "score": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "and",
+          "left": {
+            "kind": "compare",
+            "left": {
+              "key": "score",
+              "kind": "reference"
+            },
+            "op": "gte",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 2
+            }
+          },
+          "right": {
+            "kind": "compare",
+            "left": {
+              "key": "score",
+              "kind": "reference"
+            },
+            "op": "lte",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 8
+            }
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 5
+          }
+        ],
+        "sql": "((SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_value\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE MAX(\"item_value\") END FROM (SELECT \"filter_ok\", \"item_value\" FROM (SELECT TRUE AS \"filter_ok\", \"score\" AS \"item_value\" FROM \"tags\" WHERE \"tags\".\"subjectId\" = \"subjects\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\") = $1::double precision)"
+      },
+      "from": "compile.quantifiers.unit.test.ts: fold > compiles 'max' to a correlated MAX over the projected item, NULL the moment any participant is indeterminate",
+      "id": "sql.compile.compile-quantifiers.fold-compiles-max-to-a-correlated-max-over-the-p",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "score": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "tags",
+          "combiner": {
+            "item": {
+              "key": "score",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 5
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 5
+          }
+        ],
+        "sql": "((SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_value\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE MIN(\"item_value\") END FROM (SELECT \"filter_ok\", \"item_value\" FROM (SELECT TRUE AS \"filter_ok\", \"score\" AS \"item_value\" FROM \"tags\" WHERE \"tags\".\"subjectId\" = \"subjects\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\") = $1::double precision)"
+      },
+      "from": "compile.quantifiers.unit.test.ts: fold > compiles 'min' identically but for the aggregate function",
+      "id": "sql.compile.compile-quantifiers.fold-compiles-min-identically-but-for-the-aggreg",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "score": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "tags",
+          "combiner": {
+            "item": {
+              "key": "score",
+              "kind": "reference"
+            },
+            "mode": "min"
+          },
+          "kind": "fold"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 5
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'fold' at $.left: a 'reduce' fold threads an arbitrary combine expression through the collection in a caller-chosen order, which has no general SQL translation",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "fold",
+          "path": "$.left",
+          "reason": "a 'reduce' fold threads an arbitrary combine expression through the collection in a caller-chosen order, which has no general SQL translation"
+        }
+      },
+      "from": "compile.quantifiers.unit.test.ts: fold > refuses 'reduce' unconditionally, even with collectionFor set",
+      "id": "sql.compile.compile-quantifiers.fold-refuses-reduce-unconditionally-even-with-co",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {},
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "tags",
+          "combiner": {
+            "combine": {
+              "key": "score",
+              "kind": "reference"
+            },
+            "initial": {
+              "kind": "numberLiteral",
+              "value": 0
+            },
+            "mode": "reduce"
+          },
+          "kind": "fold"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 5
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "collectionKey": "tags",
+          "message": "collectionFor(\"tags\") returned \"\", which is not a usable table identifier: the name is empty",
+          "name": "InvalidCollectionTableError",
+          "table": ""
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table that is not an identifier)",
+      "id": "sql.compile.recorded.collection-table-empty-name",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "label": {
+                "column": "label",
+                "paramType": "text"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": ""
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "label",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    }
+  ]
+}

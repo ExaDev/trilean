@@ -1,0 +1,36 @@
+{
+  "cases": [
+    {
+      "expect": "not-the-type",
+      "from": "guard.quantification.unit.test.ts: quantification over a collection > resolves item/filter against the collection's own columnFor, not the outer one",
+      "id": "sql.guard.guard-quantification.quantification-over-a-collection-resolves-item-f",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {},
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "age",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        },
+        "kind": "some"
+      }
+    }
+  ]
+}

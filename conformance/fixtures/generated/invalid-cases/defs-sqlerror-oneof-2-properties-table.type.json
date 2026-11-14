@@ -1,0 +1,42 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "error": {
+          "collectionKey": "tags",
+          "message": "collectionFor(\"tags\") returned \"\", which is not a usable table identifier: the name is empty",
+          "name": "InvalidCollectionTableError",
+          "table": 1
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-table-named-x22-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": ""
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    }
+  ]
+}

@@ -1,0 +1,337 @@
+{
+  "cases": [
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "ada",
+          "grace",
+          "lin",
+          "unknown"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.edge-cases.integration.test.ts: degenerate and adversarial fragments > executes a comparison between two literals, which needs no placeholder typed",
+      "id": "sql.execute.sqlite-edge-cases.degenerate-and-adversarial-fragments-executes-a",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {}
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 2
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "ada",
+          "grace",
+          "lin",
+          "unknown"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.edge-cases.integration.test.ts: degenerate and adversarial fragments > executes an empty allOf and anyOf as their identities",
+      "id": "sql.execute.sqlite-edge-cases.degenerate-and-adversarial-fragments-executes-an",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {}
+        },
+        "tree": {
+          "kind": "allOf",
+          "operands": []
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": []
+      },
+      "fixture": "subjects",
+      "from": "sqlite.edge-cases.integration.test.ts: degenerate and adversarial fragments > executes an empty allOf and anyOf as their identities",
+      "id": "sql.execute.sqlite-edge-cases.degenerate-and-adversarial-fragments-executes-an-2",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {}
+        },
+        "tree": {
+          "kind": "anyOf",
+          "operands": []
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": []
+      },
+      "expectTableCounts": {
+        "subjects": 4
+      },
+      "fixture": "subjects",
+      "from": "sqlite.edge-cases.integration.test.ts: degenerate and adversarial fragments > treats an injection attempt as data and leaves the table standing",
+      "id": "sql.execute.sqlite-edge-cases.degenerate-and-adversarial-fragments-treats-an-i",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "name",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "ada'; DROP TABLE subjects; --"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "queryError": [
+          "no such column"
+        ]
+      },
+      "expectSql": "(\"name\"\" = name OR \"\"1\" = ?)",
+      "fixture": "subjects",
+      "from": "sqlite.edge-cases.integration.test.ts: degenerate and adversarial fragments > neutralises a hostile column name into one identifier the engine rejects",
+      "id": "sql.execute.sqlite-edge-cases.degenerate-and-adversarial-fragments-neutralises",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "name": {
+              "column": "name\" = name OR \"1"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "name",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": []
+      },
+      "fixture": "subjects",
+      "from": "sqlite.edge-cases.integration.test.ts: the divergences the guard's refusals exist to prevent > refuses NaN, and measures the driver substitution that refusal exists to prevent",
+      "id": "sql.execute.sqlite-edge-cases.the-divergences-the-guard-s-refusals-exist-to-pr",
+      "kind": "sql-execute",
+      "run": {
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "NaN"
+            }
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "NaN"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "ada",
+          "grace",
+          "lin",
+          "unknown"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.edge-cases.integration.test.ts: the divergences the guard's refusals exist to prevent > refuses NaN, and measures the driver substitution that refusal exists to prevent",
+      "id": "sql.execute.sqlite-edge-cases.the-divergences-the-guard-s-refusals-exist-to-pr-2",
+      "kind": "sql-execute",
+      "run": {
+        "tree": {
+          "kind": "not",
+          "operand": {
+            "kind": "compare",
+            "left": {
+              "kind": "numberLiteral",
+              "value": {
+                "$number": "NaN"
+              }
+            },
+            "op": "eq",
+            "right": {
+              "kind": "numberLiteral",
+              "value": {
+                "$number": "NaN"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "result": [
+          [
+            "null"
+          ]
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.edge-cases.integration.test.ts: the divergences the guard's refusals exist to prevent > refuses NaN, and measures the driver substitution that refusal exists to prevent",
+      "id": "sql.execute.sqlite-edge-cases.the-divergences-the-guard-s-refusals-exist-to-pr-3",
+      "kind": "sql-execute",
+      "run": {
+        "params": [
+          {
+            "$number": "NaN"
+          }
+        ],
+        "sql": "SELECT typeof(?) AS storedType"
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "result": []
+      },
+      "fixture": "subjects",
+      "from": "sqlite.edge-cases.integration.test.ts: the divergences the guard's refusals exist to prevent > refuses NaN, and measures the driver substitution that refusal exists to prevent",
+      "id": "sql.execute.sqlite-edge-cases.the-divergences-the-guard-s-refusals-exist-to-pr-4",
+      "kind": "sql-execute",
+      "run": {
+        "params": [
+          {
+            "$number": "NaN"
+          },
+          {
+            "$number": "NaN"
+          }
+        ],
+        "sql": "SELECT id FROM subjects WHERE (? = ?) ORDER BY id"
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "result": []
+      },
+      "fixture": "subjects",
+      "from": "sqlite.edge-cases.integration.test.ts: the divergences the guard's refusals exist to prevent > refuses NaN, and measures the driver substitution that refusal exists to prevent",
+      "id": "sql.execute.sqlite-edge-cases.the-divergences-the-guard-s-refusals-exist-to-pr-5",
+      "kind": "sql-execute",
+      "run": {
+        "params": [
+          {
+            "$number": "NaN"
+          },
+          {
+            "$number": "NaN"
+          }
+        ],
+        "sql": "SELECT id FROM subjects WHERE (NOT (? = ?)) ORDER BY id"
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "result": [
+          [
+            "nine"
+          ]
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.edge-cases.integration.test.ts: the divergences the guard's refusals exist to prevent > refuses an ordered text operand, and measures the lexicographic answer that refusal exists to prevent",
+      "id": "sql.execute.sqlite-edge-cases.the-divergences-the-guard-s-refusals-exist-to-pr-6",
+      "kind": "sql-execute",
+      "run": {
+        "params": [
+          5
+        ],
+        "sql": "SELECT label FROM coercion WHERE numeric_text > ? ORDER BY label"
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "result": [
+          [
+            "nine"
+          ]
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.edge-cases.integration.test.ts: the divergences the guard's refusals exist to prevent > refuses an ordered boolean, and measures the integer ordering that refusal exists to prevent",
+      "id": "sql.execute.sqlite-edge-cases.the-divergences-the-guard-s-refusals-exist-to-pr-7",
+      "kind": "sql-execute",
+      "run": {
+        "params": [
+          0
+        ],
+        "sql": "SELECT label FROM coercion WHERE flag > ? ORDER BY label"
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "result": [
+          [
+            1
+          ]
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.edge-cases.integration.test.ts: the divergences the guard's refusals exist to prevent > refuses a cross-kind comparison, and measures the coercion that refusal exists to prevent",
+      "id": "sql.execute.sqlite-edge-cases.the-divergences-the-guard-s-refusals-exist-to-pr-8",
+      "kind": "sql-execute",
+      "run": {
+        "params": [
+          "abc",
+          5
+        ],
+        "sql": "SELECT (? > ?) AS answer"
+      }
+    }
+  ]
+}

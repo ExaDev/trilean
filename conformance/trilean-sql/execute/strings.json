@@ -1,0 +1,7580 @@
+{
+  "cases": [
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w00"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"ab\" under postgres)",
+      "id": "sql.execute.strings.postgres-equals-the-text-x22-abx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "ab"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w01"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a.b\" under postgres)",
+      "id": "sql.execute.strings.postgres-equals-the-text-x22-ax2e-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a.b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w02"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a*b\" under postgres)",
+      "id": "sql.execute.strings.postgres-equals-the-text-x22-ax2a-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a*b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w03"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a+b\" under postgres)",
+      "id": "sql.execute.strings.postgres-equals-the-text-x22-ax2b-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a+b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w04"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a?b\" under postgres)",
+      "id": "sql.execute.strings.postgres-equals-the-text-x22-ax3f-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a?b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w05"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a(b\" under postgres)",
+      "id": "sql.execute.strings.postgres-equals-the-text-x22-ax28-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a(b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w06"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a)b\" under postgres)",
+      "id": "sql.execute.strings.postgres-equals-the-text-x22-ax29-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a)b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w07"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a[b\" under postgres)",
+      "id": "sql.execute.strings.postgres-equals-the-text-x22-ax5b-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a[b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w08"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a]b\" under postgres)",
+      "id": "sql.execute.strings.postgres-equals-the-text-x22-ax5d-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a]b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w09"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a{b\" under postgres)",
+      "id": "sql.execute.strings.postgres-equals-the-text-x22-ax7b-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a{b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w10"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a}b\" under postgres)",
+      "id": "sql.execute.strings.postgres-equals-the-text-x22-ax7d-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a}b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w11"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a|b\" under postgres)",
+      "id": "sql.execute.strings.postgres-equals-the-text-x22-ax7c-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a|b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w12"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a^b\" under postgres)",
+      "id": "sql.execute.strings.postgres-equals-the-text-x22-ax5e-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a^b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w13"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a$b\" under postgres)",
+      "id": "sql.execute.strings.postgres-equals-the-text-x22-ax24-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a$b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w14"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a\\\\b\" under postgres)",
+      "id": "sql.execute.strings.postgres-equals-the-text-x22-ax5c-x5c-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a\\b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w15"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a-b\" under postgres)",
+      "id": "sql.execute.strings.postgres-equals-the-text-x22-ax2d-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a-b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w16"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a%b\" under postgres)",
+      "id": "sql.execute.strings.postgres-equals-the-text-x22-ax25-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a%b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w17"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a_b\" under postgres)",
+      "id": "sql.execute.strings.postgres-equals-the-text-x22-ax5f-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a_b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w18"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a'b\" under postgres)",
+      "id": "sql.execute.strings.postgres-equals-the-text-x22-ax27-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a'b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w19"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a\\\"b\" under postgres)",
+      "id": "sql.execute.strings.postgres-equals-the-text-x22-ax5c-x22-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a\"b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w20"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a$1b\" under postgres)",
+      "id": "sql.execute.strings.postgres-equals-the-text-x22-ax24-1bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a$1b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w21"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a::textb\" under postgres)",
+      "id": "sql.execute.strings.postgres-equals-the-text-x22-ax3a-x3a-textbx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a::textb"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w22"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a\\nb\" under postgres)",
+      "id": "sql.execute.strings.postgres-equals-the-text-x22-ax5c-nbx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a\nb"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w23"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a𝒜b\" under postgres)",
+      "id": "sql.execute.strings.postgres-equals-the-text-x22-ax1d49c-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a𝒜b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w24"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"aXb\" under postgres)",
+      "id": "sql.execute.strings.postgres-equals-the-text-x22-axbx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "aXb"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w25"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"acb\" under postgres)",
+      "id": "sql.execute.strings.postgres-equals-the-text-x22-acbx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "acb"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w26"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a b\" under postgres)",
+      "id": "sql.execute.strings.postgres-equals-the-text-x22-a-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w27"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"é\" under postgres)",
+      "id": "sql.execute.strings.postgres-equals-the-text-x22-xe9-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "é"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w28"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"𝒜\" under postgres)",
+      "id": "sql.execute.strings.postgres-equals-the-text-x22-x1d49c-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "𝒜"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w29"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a;b\" under postgres)",
+      "id": "sql.execute.strings.postgres-equals-the-text-x22-ax3b-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a;b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w30"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a--b\" under postgres)",
+      "id": "sql.execute.strings.postgres-equals-the-text-x22-ax2d-x2d-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a--b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w31"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"$1\" under postgres)",
+      "id": "sql.execute.strings.postgres-equals-the-text-x22-x24-1x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "$1"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"?\" under postgres)",
+      "id": "sql.execute.strings.postgres-equals-the-text-x22-x3f-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "?"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (notEquals a placeholder lookalike under postgres)",
+      "id": "sql.execute.strings.postgres-notequals-a-placeholder-lookalike",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "notEquals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "$1"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w04",
+          "w14",
+          "w18",
+          "w20",
+          "w22"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (in several hostile texts under postgres)",
+      "id": "sql.execute.strings.postgres-in-several-hostile-texts",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "textLiteral",
+              "value": "a'b"
+            },
+            {
+              "kind": "textLiteral",
+              "value": "a\\b"
+            },
+            {
+              "kind": "textLiteral",
+              "value": "a?b"
+            },
+            {
+              "kind": "textLiteral",
+              "value": "a$1b"
+            },
+            {
+              "kind": "textLiteral",
+              "value": "a\nb"
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "word",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w15",
+          "w16",
+          "w17",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (notIn several hostile texts under postgres)",
+      "id": "sql.execute.strings.postgres-notin-several-hostile-texts",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "textLiteral",
+              "value": "a'b"
+            },
+            {
+              "kind": "textLiteral",
+              "value": "a\\b"
+            }
+          ],
+          "kind": "memberOf",
+          "op": "notIn",
+          "operand": {
+            "key": "word",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w01"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the literal \".\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablematches-with-the-literal-x22-x2e-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\.b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w00",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the literal \".\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablenotmatches-with-the-literal-x22-x2e-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\.b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w02"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the literal \"*\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablematches-with-the-literal-x22-x2a-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\*b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the literal \"*\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablenotmatches-with-the-literal-x22-x2a-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\*b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w03"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the literal \"+\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablematches-with-the-literal-x22-x2b-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\+b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the literal \"+\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablenotmatches-with-the-literal-x22-x2b-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\+b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w04"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the literal \"?\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablematches-with-the-literal-x22-x3f-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\?b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the literal \"?\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablenotmatches-with-the-literal-x22-x3f-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\?b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w05"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the literal \"(\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablematches-with-the-literal-x22-x28-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\(b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the literal \"(\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablenotmatches-with-the-literal-x22-x28-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\(b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w06"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the literal \")\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablematches-with-the-literal-x22-x29-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\)b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the literal \")\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablenotmatches-with-the-literal-x22-x29-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\)b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w07"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the literal \"[\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablematches-with-the-literal-x22-x5b-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\[b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the literal \"[\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablenotmatches-with-the-literal-x22-x5b-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\[b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w08"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the literal \"]\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablematches-with-the-literal-x22-x5d-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\]b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the literal \"]\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablenotmatches-with-the-literal-x22-x5d-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\]b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w09"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the literal \"{\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablematches-with-the-literal-x22-x7b-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\{b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the literal \"{\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablenotmatches-with-the-literal-x22-x7b-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\{b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w10"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the literal \"}\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablematches-with-the-literal-x22-x7d-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\}b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the literal \"}\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablenotmatches-with-the-literal-x22-x7d-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\}b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w11"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the literal \"|\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablematches-with-the-literal-x22-x7c-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\|b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the literal \"|\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablenotmatches-with-the-literal-x22-x7c-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\|b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w12"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the literal \"^\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablematches-with-the-literal-x22-x5e-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\^b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the literal \"^\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablenotmatches-with-the-literal-x22-x5e-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\^b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w13"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the literal \"$\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablematches-with-the-literal-x22-x24-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\$b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the literal \"$\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablenotmatches-with-the-literal-x22-x24-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\$b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w14"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the literal \"\\\\\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablematches-with-the-literal-x22-x5c-x5c-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\\\b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the literal \"\\\\\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablenotmatches-with-the-literal-x22-x5c-x5c-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\\\b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w16"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the plain character \"%\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablematches-with-the-plain-character-x22-x25-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a%b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the plain character \"%\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablenotmatches-with-the-plain-character-x22-x25-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a%b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w17"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the plain character \"_\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablematches-with-the-plain-character-x22-x5f-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a_b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the plain character \"_\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablenotmatches-with-the-plain-character-x22-x5f-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a_b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w18"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the plain character \"'\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablematches-with-the-plain-character-x22-x27-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a'b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the plain character \"'\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablenotmatches-with-the-plain-character-x22-x27-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a'b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w23"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the plain character \"𝒜\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablematches-with-the-plain-character-x22-x1d49c-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a𝒜b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the plain character \"𝒜\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablenotmatches-with-the-plain-character-x22-x1d49c-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a𝒜b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w22"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the plain character \"\\n\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablematches-with-the-plain-character-x22-x5c-nx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\nb$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the plain character \"\\n\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablenotmatches-with-the-plain-character-x22-x5c-nx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\nb$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w15"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the plain character \"-\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablematches-with-the-plain-character-x22-x2d-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a-b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the plain character \"-\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablenotmatches-with-the-plain-character-x22-x2d-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a-b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w26"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the plain character \" \" under postgres)",
+      "id": "sql.execute.strings.postgres-portablematches-with-the-plain-character-x22-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the plain character \" \" under postgres)",
+      "id": "sql.execute.strings.postgres-portablenotmatches-with-the-plain-character-x22-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w29"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the plain character \";\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablematches-with-the-plain-character-x22-x3b-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a;b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the plain character \";\" under postgres)",
+      "id": "sql.execute.strings.postgres-portablenotmatches-with-the-plain-character-x22-x3b-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a;b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w00"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"ab\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-equals-the-text-x22-abx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "ab"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w01"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a.b\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-equals-the-text-x22-ax2e-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a.b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w02"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a*b\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-equals-the-text-x22-ax2a-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a*b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w03"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a+b\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-equals-the-text-x22-ax2b-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a+b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w04"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a?b\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-equals-the-text-x22-ax3f-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a?b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w05"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a(b\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-equals-the-text-x22-ax28-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a(b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w06"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a)b\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-equals-the-text-x22-ax29-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a)b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w07"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a[b\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-equals-the-text-x22-ax5b-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a[b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w08"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a]b\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-equals-the-text-x22-ax5d-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a]b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w09"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a{b\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-equals-the-text-x22-ax7b-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a{b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w10"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a}b\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-equals-the-text-x22-ax7d-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a}b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w11"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a|b\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-equals-the-text-x22-ax7c-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a|b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w12"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a^b\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-equals-the-text-x22-ax5e-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a^b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w13"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a$b\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-equals-the-text-x22-ax24-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a$b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w14"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a\\\\b\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-equals-the-text-x22-ax5c-x5c-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a\\b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w15"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a-b\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-equals-the-text-x22-ax2d-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a-b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w16"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a%b\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-equals-the-text-x22-ax25-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a%b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w17"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a_b\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-equals-the-text-x22-ax5f-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a_b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w18"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a'b\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-equals-the-text-x22-ax27-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a'b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w19"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a\\\"b\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-equals-the-text-x22-ax5c-x22-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a\"b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w20"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a$1b\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-equals-the-text-x22-ax24-1bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a$1b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w21"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a::textb\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-equals-the-text-x22-ax3a-x3a-textbx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a::textb"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w22"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a\\nb\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-equals-the-text-x22-ax5c-nbx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a\nb"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w23"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a𝒜b\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-equals-the-text-x22-ax1d49c-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a𝒜b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w24"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"aXb\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-equals-the-text-x22-axbx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "aXb"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w25"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"acb\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-equals-the-text-x22-acbx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "acb"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w26"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a b\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-equals-the-text-x22-a-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w27"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"é\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-equals-the-text-x22-xe9-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "é"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w28"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"𝒜\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-equals-the-text-x22-x1d49c-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "𝒜"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w29"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a;b\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-equals-the-text-x22-ax3b-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a;b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w30"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"a--b\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-equals-the-text-x22-ax2d-x2d-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a--b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w31"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"$1\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-equals-the-text-x22-x24-1x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "$1"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (equals the text \"?\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-equals-the-text-x22-x3f-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "?"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (notEquals a placeholder lookalike under sqlite)",
+      "id": "sql.execute.strings.sqlite-notequals-a-placeholder-lookalike",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "notEquals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "$1"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w04",
+          "w14",
+          "w18",
+          "w20",
+          "w22"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (in several hostile texts under sqlite)",
+      "id": "sql.execute.strings.sqlite-in-several-hostile-texts",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "textLiteral",
+              "value": "a'b"
+            },
+            {
+              "kind": "textLiteral",
+              "value": "a\\b"
+            },
+            {
+              "kind": "textLiteral",
+              "value": "a?b"
+            },
+            {
+              "kind": "textLiteral",
+              "value": "a$1b"
+            },
+            {
+              "kind": "textLiteral",
+              "value": "a\nb"
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "word",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w15",
+          "w16",
+          "w17",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (notIn several hostile texts under sqlite)",
+      "id": "sql.execute.strings.sqlite-notin-several-hostile-texts",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "textLiteral",
+              "value": "a'b"
+            },
+            {
+              "kind": "textLiteral",
+              "value": "a\\b"
+            }
+          ],
+          "kind": "memberOf",
+          "op": "notIn",
+          "operand": {
+            "key": "word",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w01"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the literal \".\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablematches-with-the-literal-x22-x2e-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\.b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w00",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the literal \".\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablenotmatches-with-the-literal-x22-x2e-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\.b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w02"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the literal \"*\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablematches-with-the-literal-x22-x2a-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\*b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the literal \"*\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablenotmatches-with-the-literal-x22-x2a-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\*b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w03"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the literal \"+\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablematches-with-the-literal-x22-x2b-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\+b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the literal \"+\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablenotmatches-with-the-literal-x22-x2b-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\+b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w04"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the literal \"?\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablematches-with-the-literal-x22-x3f-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\?b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the literal \"?\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablenotmatches-with-the-literal-x22-x3f-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\?b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w05"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the literal \"(\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablematches-with-the-literal-x22-x28-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\(b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the literal \"(\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablenotmatches-with-the-literal-x22-x28-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\(b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w06"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the literal \")\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablematches-with-the-literal-x22-x29-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\)b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the literal \")\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablenotmatches-with-the-literal-x22-x29-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\)b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w07"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the literal \"[\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablematches-with-the-literal-x22-x5b-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\[b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the literal \"[\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablenotmatches-with-the-literal-x22-x5b-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\[b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w08"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the literal \"]\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablematches-with-the-literal-x22-x5d-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\]b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the literal \"]\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablenotmatches-with-the-literal-x22-x5d-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\]b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w09"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the literal \"{\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablematches-with-the-literal-x22-x7b-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\{b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the literal \"{\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablenotmatches-with-the-literal-x22-x7b-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\{b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w10"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the literal \"}\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablematches-with-the-literal-x22-x7d-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\}b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the literal \"}\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablenotmatches-with-the-literal-x22-x7d-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\}b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w11"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the literal \"|\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablematches-with-the-literal-x22-x7c-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\|b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the literal \"|\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablenotmatches-with-the-literal-x22-x7c-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\|b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w12"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the literal \"^\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablematches-with-the-literal-x22-x5e-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\^b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the literal \"^\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablenotmatches-with-the-literal-x22-x5e-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\^b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w13"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the literal \"$\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablematches-with-the-literal-x22-x24-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\$b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the literal \"$\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablenotmatches-with-the-literal-x22-x24-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\$b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w14"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the literal \"\\\\\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablematches-with-the-literal-x22-x5c-x5c-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\\\b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the literal \"\\\\\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablenotmatches-with-the-literal-x22-x5c-x5c-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\\\\b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w16"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the plain character \"%\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablematches-with-the-plain-character-x22-x25-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a%b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the plain character \"%\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablenotmatches-with-the-plain-character-x22-x25-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a%b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w17"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the plain character \"_\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablematches-with-the-plain-character-x22-x5f-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a_b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the plain character \"_\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablenotmatches-with-the-plain-character-x22-x5f-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a_b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w18"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the plain character \"'\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablematches-with-the-plain-character-x22-x27-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a'b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the plain character \"'\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablenotmatches-with-the-plain-character-x22-x27-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a'b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w23"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the plain character \"𝒜\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablematches-with-the-plain-character-x22-x1d49c-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a𝒜b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the plain character \"𝒜\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablenotmatches-with-the-plain-character-x22-x1d49c-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a𝒜b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w22"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the plain character \"\\n\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablematches-with-the-plain-character-x22-x5c-nx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\nb$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the plain character \"\\n\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablenotmatches-with-the-plain-character-x22-x5c-nx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a\nb$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w15"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the plain character \"-\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablematches-with-the-plain-character-x22-x2d-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a-b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the plain character \"-\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablenotmatches-with-the-plain-character-x22-x2d-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a-b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w26"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the plain character \" \" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablematches-with-the-plain-character-x22-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the plain character \" \" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablenotmatches-with-the-plain-character-x22-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w29"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableMatches with the plain character \";\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablematches-with-the-plain-character-x22-x3b-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a;b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/compile.ts (portableNotMatches with the plain character \";\" under sqlite)",
+      "id": "sql.execute.strings.sqlite-portablenotmatches-with-the-plain-character-x22-x3b-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a;b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w15"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/portable-pattern.ts (portableMatches with a class member that is a hyphen, executed under postgres)",
+      "id": "sql.execute.strings.portablematches-with-a-class-member-that-is-a-hyphen-executed-under-po",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a[-x]b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/portable-pattern.ts (portableNotMatches with a class member that is a hyphen, executed under postgres)",
+      "id": "sql.execute.strings.portablenotmatches-with-a-class-member-that-is-a-hyphen-executed-under",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a[-x]b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w08"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/portable-pattern.ts (portableMatches with a class member that is a closing bracket, executed under postgres)",
+      "id": "sql.execute.strings.portablematches-with-a-class-member-that-is-a-closing-bracket-executed",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a[\\]x]b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/portable-pattern.ts (portableNotMatches with a class member that is a closing bracket, executed under postgres)",
+      "id": "sql.execute.strings.portablenotmatches-with-a-class-member-that-is-a-closing-bracket-execu",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a[\\]x]b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w12"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/portable-pattern.ts (portableMatches with a class member that is a caret, executed under postgres)",
+      "id": "sql.execute.strings.portablematches-with-a-class-member-that-is-a-caret-executed-under-pos",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a[\\^x]b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/portable-pattern.ts (portableNotMatches with a class member that is a caret, executed under postgres)",
+      "id": "sql.execute.strings.portablenotmatches-with-a-class-member-that-is-a-caret-executed-under",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a[\\^x]b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w14"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/portable-pattern.ts (portableMatches with a class member that is a backslash, executed under postgres)",
+      "id": "sql.execute.strings.portablematches-with-a-class-member-that-is-a-backslash-executed-under",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a[\\\\x]b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w25",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/portable-pattern.ts (portableNotMatches with a class member that is a backslash, executed under postgres)",
+      "id": "sql.execute.strings.portablenotmatches-with-a-class-member-that-is-a-backslash-executed-un",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a[\\\\x]b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w25"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/portable-pattern.ts (portableMatches with a range class, executed under postgres)",
+      "id": "sql.execute.strings.portablematches-with-a-range-class-executed-under-postgres",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a[b-d]b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/portable-pattern.ts (portableNotMatches with a range class, executed under postgres)",
+      "id": "sql.execute.strings.portablenotmatches-with-a-range-class-executed-under-postgres",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a[b-d]b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w25"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/portable-pattern.ts (portableMatches with a range class, executed under sqlite)",
+      "id": "sql.execute.strings.portablematches-with-a-range-class-executed-under-sqlite",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a[b-d]b$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "w00",
+          "w01",
+          "w02",
+          "w03",
+          "w04",
+          "w05",
+          "w06",
+          "w07",
+          "w08",
+          "w09",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15",
+          "w16",
+          "w17",
+          "w18",
+          "w19",
+          "w20",
+          "w21",
+          "w22",
+          "w23",
+          "w24",
+          "w26",
+          "w27",
+          "w28",
+          "w29",
+          "w30",
+          "w31",
+          "w32"
+        ]
+      },
+      "fixture": "strings",
+      "from": "recorded: trilean-sql src/portable-pattern.ts (portableNotMatches with a range class, executed under sqlite)",
+      "id": "sql.execute.strings.portablenotmatches-with-a-range-class-executed-under-sqlite",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "word": {
+              "column": "word",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "word",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a[b-d]b$"
+          }
+        }
+      }
+    }
+  ]
+}

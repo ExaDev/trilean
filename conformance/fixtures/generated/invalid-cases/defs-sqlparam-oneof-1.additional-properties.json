@@ -1,0 +1,40 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "timestamp",
+            "unexpectedMember": 1,
+            "value": "2020-01-01T00:00:00+02:00"
+          }
+        ],
+        "sql": "(\"joined\" >= ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > renders an instant literal as a plain parameter, with no timestamp type to cast to",
+      "id": "sql.compile.compile-dialects.the-sqlite-dialect-renders-an-instant-literal-as",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "joined",
+          "kind": "reference"
+        },
+        "op": "gte",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00+02:00"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "evaluator": {
+    "collections": {
+      "kids": {
+        "foreignKey": "owner",
+        "items": [
+          "label",
+          "rank"
+        ],
+        "table": "we\"ird kids"
+      }
+    },
+    "idColumn": "id",
+    "table": "odd\"table"
+  },
+  "tables": {
+    "odd\"table": {
+      "columns": {
+        "%": "number",
+        "1abc": "number",
+        "_": "number",
+        "a\nb": "number",
+        "a b": "number",
+        "a\"b": "number",
+        "a'b": "number",
+        "a--b": "number",
+        "a;b": "number",
+        "a\\b": "number",
+        "id": "text",
+        "select": "number",
+        "é": "number",
+        "𝒜": "number"
+      },
+      "primaryKey": "id",
+      "rows": [
+        {
+          "%": 12,
+          "1abc": 3,
+          "_": 13,
+          "a\nb": 11,
+          "a b": 4,
+          "a\"b": 1,
+          "a'b": 7,
+          "a--b": 9,
+          "a;b": 10,
+          "a\\b": 8,
+          "id": "r1",
+          "select": 2,
+          "é": 5,
+          "𝒜": 6
+        },
+        {
+          "%": null,
+          "1abc": null,
+          "_": null,
+          "a\nb": null,
+          "a b": null,
+          "a\"b": null,
+          "a'b": null,
+          "a--b": null,
+          "a;b": null,
+          "a\\b": null,
+          "id": "r2",
+          "select": null,
+          "é": null,
+          "𝒜": null
+        }
+      ]
+    },
+    "we\"ird kids": {
+      "columns": {
+        "id": "text",
+        "label": "text",
+        "owner": "text",
+        "rank": "number"
+      },
+      "primaryKey": "id",
+      "rows": [
+        {
+          "id": "k1",
+          "label": "x",
+          "owner": "r1",
+          "rank": 3
+        },
+        {
+          "id": "k2",
+          "label": "y",
+          "owner": "r1",
+          "rank": 9
+        },
+        {
+          "id": "k3",
+          "label": "z",
+          "owner": "r2",
+          "rank": null
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "cases": [
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "one"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (eq against 1 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-eq-against-1",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "not-an-allowed-value"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      }
+    }
+  ]
+}

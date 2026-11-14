@@ -1,0 +1,31 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "error": {
+          "column": "",
+          "message": "columnFor(\"k\") returned \"\", which is not a usable column identifier: the name is empty",
+          "name": "InvalidColumnError"
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-column-named-x22-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": ""
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    }
+  ]
+}

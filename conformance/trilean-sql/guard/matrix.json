@@ -1,0 +1,7021 @@
+{
+  "cases": [
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (not under postgres)",
+      "id": "sql.guard.matrix.postgres-not",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "not",
+        "operand": {
+          "kind": "compare",
+          "left": {
+            "key": "age",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (and under postgres)",
+      "id": "sql.guard.matrix.postgres-and",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "and",
+        "left": {
+          "kind": "exists",
+          "operand": {
+            "key": "note",
+            "kind": "reference"
+          }
+        },
+        "right": {
+          "kind": "compare",
+          "left": {
+            "key": "age",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (or under postgres)",
+      "id": "sql.guard.matrix.postgres-or",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "or",
+        "left": {
+          "kind": "exists",
+          "operand": {
+            "key": "note",
+            "kind": "reference"
+          }
+        },
+        "right": {
+          "kind": "compare",
+          "left": {
+            "key": "age",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (allOf under postgres)",
+      "id": "sql.guard.matrix.postgres-allof",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "allOf",
+        "operands": [
+          {
+            "kind": "exists",
+            "operand": {
+              "key": "note",
+              "kind": "reference"
+            }
+          },
+          {
+            "kind": "compare",
+            "left": {
+              "key": "age",
+              "kind": "reference"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          }
+        ]
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (anyOf under postgres)",
+      "id": "sql.guard.matrix.postgres-anyof",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "anyOf",
+        "operands": [
+          {
+            "kind": "exists",
+            "operand": {
+              "key": "note",
+              "kind": "reference"
+            }
+          },
+          {
+            "kind": "compare",
+            "left": {
+              "key": "age",
+              "kind": "reference"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          }
+        ]
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (compare of numbers under postgres)",
+      "id": "sql.guard.matrix.postgres-compare-of-numbers",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "lte",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (compare of instants under postgres)",
+      "id": "sql.guard.matrix.postgres-compare-of-instants",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "joined",
+          "kind": "reference"
+        },
+        "op": "lt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (compare equality of booleans under postgres)",
+      "id": "sql.guard.matrix.postgres-compare-equality-of-booleans",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "active",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "booleanLiteral",
+          "value": true
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "compare",
+        "path": "$",
+        "reason": "booleans have no ordering in trilean, so 'gt' against the boolean operand at $.left is wrong-type there, whereas PostgreSQL orders false before true"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (compare ordering of booleans under postgres)",
+      "id": "sql.guard.matrix.postgres-compare-ordering-of-booleans",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "active",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "booleanLiteral",
+          "value": false
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "compare",
+        "path": "$",
+        "reason": "'compare' never compares text in trilean: it returns wrong-type and directs the caller to 'textCompare'; but PostgreSQL would order the text operand at $.left collation-wise and answer definitely"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (compare of text under postgres)",
+      "id": "sql.guard.matrix.postgres-compare-of-text",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "textLiteral",
+          "value": "ada"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "compare",
+        "path": "$",
+        "reason": "trilean treats a comparison between a 'number' value ($.left) and a 'instant' value ($.right) as wrong-type, whereas PostgreSQL may coerce one to the other and answer definitely"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (compare of mixed kinds under postgres)",
+      "id": "sql.guard.matrix.postgres-compare-of-mixed-kinds",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "compare",
+        "path": "$",
+        "reason": "trilean treats a comparison between a 'text' value ($.left) and a 'number' value ($.right) as wrong-type, whereas PostgreSQL may coerce one to the other and answer definitely"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (compare of a text literal and a number literal under postgres)",
+      "id": "sql.guard.matrix.postgres-compare-of-a-text-literal-and-a-number-literal",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "textLiteral",
+          "value": "a"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "numberLiteral",
+        "path": "$.right",
+        "reason": "NaN is equal to nothing in trilean, not even itself, whereas PostgreSQL defines NaN as equal to itself and greater than every other double"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (compare against NaN under postgres)",
+      "id": "sql.guard.matrix.postgres-compare-against-nan",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": {
+            "$number": "NaN"
+          }
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (compare against an infinity under postgres)",
+      "id": "sql.guard.matrix.postgres-compare-against-an-infinity",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": {
+            "$number": "Infinity"
+          }
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (textCompare equals under postgres)",
+      "id": "sql.guard.matrix.postgres-textcompare-equals",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "ada"
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (textCompare notEquals under postgres)",
+      "id": "sql.guard.matrix.postgres-textcompare-notequals",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "notEquals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "ada"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "textCompare",
+        "path": "$",
+        "reason": "'matches' matches trilean's own ECMAScript 'RegExp' against the pattern, whereas PostgreSQL's '~'/'!~' would match it under PostgreSQL's own regular-expression dialect (POSIX ARE), a different language that can silently answer a different set of rows for the same pattern and data (for example, PostgreSQL's '.' matches a newline by default where ECMAScript's does not, and PostgreSQL's '\\w' follows the database's locale where ECMAScript's is ASCII-only), so this is refused unless 'postgresRegexpPushdown' is explicitly set 'true'"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (textCompare matches under postgres)",
+      "id": "sql.guard.matrix.postgres-textcompare-matches",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (textCompare matches with pushdown under postgres)",
+      "id": "sql.guard.matrix.postgres-textcompare-matches-with-pushdown",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres",
+        "postgresRegexpPushdown": true
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "textCompare",
+        "path": "$",
+        "reason": "'matches' matches trilean's own ECMAScript 'RegExp' against the pattern, whereas PostgreSQL's '~'/'!~' would match it under PostgreSQL's own regular-expression dialect (POSIX ARE), a different language that can silently answer a different set of rows for the same pattern and data (for example, PostgreSQL's '.' matches a newline by default where ECMAScript's does not, and PostgreSQL's '\\w' follows the database's locale where ECMAScript's is ASCII-only), so this is refused unless 'postgresRegexpPushdown' is explicitly set 'true'"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (textCompare matches with pushdown off under postgres)",
+      "id": "sql.guard.matrix.postgres-textcompare-matches-with-pushdown-off",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres",
+        "postgresRegexpPushdown": false
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "textCompare",
+        "path": "$",
+        "reason": "'notMatches' matches trilean's own ECMAScript 'RegExp' against the pattern, whereas PostgreSQL's '~'/'!~' would match it under PostgreSQL's own regular-expression dialect (POSIX ARE), a different language that can silently answer a different set of rows for the same pattern and data (for example, PostgreSQL's '.' matches a newline by default where ECMAScript's does not, and PostgreSQL's '\\w' follows the database's locale where ECMAScript's is ASCII-only), so this is refused unless 'postgresRegexpPushdown' is explicitly set 'true'"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (textCompare notMatches with regexp available under postgres)",
+      "id": "sql.guard.matrix.postgres-textcompare-notmatches-with-regexp-available",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres",
+        "sqliteRegexpAvailable": true
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "notMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "textCompare",
+        "path": "$",
+        "reason": "'notMatches' matches trilean's own ECMAScript 'RegExp' against the pattern, whereas PostgreSQL's '~'/'!~' would match it under PostgreSQL's own regular-expression dialect (POSIX ARE), a different language that can silently answer a different set of rows for the same pattern and data (for example, PostgreSQL's '.' matches a newline by default where ECMAScript's does not, and PostgreSQL's '\\w' follows the database's locale where ECMAScript's is ASCII-only), so this is refused unless 'postgresRegexpPushdown' is explicitly set 'true'"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (textCompare notMatches with regexp unavailable under postgres)",
+      "id": "sql.guard.matrix.postgres-textcompare-notmatches-with-regexp-unavailable",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres",
+        "sqliteRegexpAvailable": false
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "notMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (textCompare matches with regexp unavailable and pushdown under postgres)",
+      "id": "sql.guard.matrix.postgres-textcompare-matches-with-regexp-unavailable-and-pushdown",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres",
+        "postgresRegexpPushdown": true,
+        "sqliteRegexpAvailable": false
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "textCompare",
+        "path": "$",
+        "reason": "'textCompare' requires text operands in trilean, and the operand at $.left is a 'number' value"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (textCompare with a number operand under postgres)",
+      "id": "sql.guard.matrix.postgres-textcompare-with-a-number-operand",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "1"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "textCompare",
+        "path": "$",
+        "reason": "'textCompare' requires text operands in trilean, and the operand at $.right is a 'boolean' value"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (textCompare with a boolean operand under postgres)",
+      "id": "sql.guard.matrix.postgres-textcompare-with-a-boolean-operand",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "booleanLiteral",
+          "value": true
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (portableMatches with a literal pattern under postgres)",
+      "id": "sql.guard.matrix.postgres-portablematches-with-a-literal-pattern",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "portableMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^ab"
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (portableNotMatches with a literal pattern under postgres)",
+      "id": "sql.guard.matrix.postgres-portablenotmatches-with-a-literal-pattern",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "portableNotMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^ab"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "textCompare",
+        "path": "$",
+        "reason": "a 'portableMatches'/'portableNotMatches' pattern must be a literal, known at compile time: translating it into this dialect's own pattern syntax happens once, at compile time, not per row"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (portableMatches with a column pattern under postgres)",
+      "id": "sql.guard.matrix.postgres-portablematches-with-a-column-pattern",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "portableMatches",
+        "right": {
+          "key": "note",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "textCompare",
+        "path": "$.right",
+        "reason": {
+          "after": "\n  (a)\n  ^",
+          "before": "invalid pattern at index 0: ",
+          "relayed": [
+            "capturing groups are not supported in this grammar",
+            "there is nothing to capture, since a pattern only ever answers whether it matches. Use '(?:...)' for grouping."
+          ],
+          "separator": {
+            "codeUnits": [
+              32,
+              45,
+              45,
+              32
+            ]
+          }
+        }
+      },
+      "from": "recorded: trilean-sql src/guard.ts (portableMatches with a pattern that does not parse under postgres)",
+      "id": "sql.guard.matrix.postgres-portablematches-with-a-pattern-that-does-not-parse",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "portableMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "(a)"
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (portableMatches with an alternation under postgres)",
+      "id": "sql.guard.matrix.postgres-portablematches-with-an-alternation",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "portableMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "a|b"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "textCompare",
+        "path": "$.right",
+        "reason": "PostgreSQL's regular expressions permit a bound of at most 255; {256} exceeds it"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (portableMatches with a bound over 255 under postgres)",
+      "id": "sql.guard.matrix.postgres-portablematches-with-a-bound-over-255",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "portableMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "a{256}"
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (portableMatches with a negated class under postgres)",
+      "id": "sql.guard.matrix.postgres-portablematches-with-a-negated-class",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "portableMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^[^a]$"
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (memberOf in under postgres)",
+      "id": "sql.guard.matrix.postgres-memberof-in",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "a"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (memberOf notIn under postgres)",
+      "id": "sql.guard.matrix.postgres-memberof-notin",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "notIn",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "numberLiteral",
+        "path": "$.candidates[1]",
+        "reason": "NaN is equal to nothing in trilean, not even itself, whereas PostgreSQL defines NaN as equal to itself and greater than every other double"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (memberOf with a NaN candidate under postgres)",
+      "id": "sql.guard.matrix.postgres-memberof-with-a-nan-candidate",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "NaN"
+            }
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "memberOf",
+        "path": "$",
+        "reason": "trilean treats a comparison between a 'text' value ($.operand) and a 'number' value ($.candidates[0]) as wrong-type, whereas PostgreSQL may coerce one to the other and answer definitely"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (memberOf with a text operand and a number candidate under postgres)",
+      "id": "sql.guard.matrix.postgres-memberof-with-a-text-operand-and-a-number-candidate",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (exists under postgres)",
+      "id": "sql.guard.matrix.postgres-exists",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "note",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (some under postgres)",
+      "id": "sql.guard.matrix.postgres-some",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "tag": {
+                "column": "tag",
+                "paramType": "text"
+              },
+              "weight": {
+                "column": "weight",
+                "paramType": "number"
+              }
+            },
+            "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "subject_tags"
+          }
+        },
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "weight",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 5
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "some",
+        "path": "$",
+        "reason": "no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (some without collectionFor under postgres)",
+      "id": "sql.guard.matrix.postgres-some-without-collectionfor",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "weight",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 5
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (every under postgres)",
+      "id": "sql.guard.matrix.postgres-every",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "tag": {
+                "column": "tag",
+                "paramType": "text"
+              },
+              "weight": {
+                "column": "weight",
+                "paramType": "number"
+              }
+            },
+            "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "subject_tags"
+          }
+        },
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "weight",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 5
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "every",
+        "path": "$",
+        "reason": "no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (every without collectionFor under postgres)",
+      "id": "sql.guard.matrix.postgres-every-without-collectionfor",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "weight",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 5
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (some with a filter under postgres)",
+      "id": "sql.guard.matrix.postgres-some-with-a-filter",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "tag": {
+                "column": "tag",
+                "paramType": "text"
+              },
+              "weight": {
+                "column": "weight",
+                "paramType": "number"
+              }
+            },
+            "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "subject_tags"
+          }
+        },
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "filter": {
+          "kind": "textCompare",
+          "left": {
+            "key": "tag",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "x"
+          }
+        },
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "weight",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 5
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "treeReference",
+        "path": "$.filter",
+        "reason": "a referenced tree is resolved by the caller's resolvers; inline it before compiling"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (some with a refused filter under postgres)",
+      "id": "sql.guard.matrix.postgres-some-with-a-refused-filter",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "tag": {
+                "column": "tag",
+                "paramType": "text"
+              },
+              "weight": {
+                "column": "weight",
+                "paramType": "number"
+              }
+            },
+            "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "subject_tags"
+          }
+        },
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "filter": {
+          "key": "k",
+          "kind": "treeReference"
+        },
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "weight",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 5
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "treeReference",
+        "path": "$.item",
+        "reason": "a referenced tree is resolved by the caller's resolvers; inline it before compiling"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (some with a refused item under postgres)",
+      "id": "sql.guard.matrix.postgres-some-with-a-refused-item",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "tag": {
+                "column": "tag",
+                "paramType": "text"
+              },
+              "weight": {
+                "column": "weight",
+                "paramType": "number"
+              }
+            },
+            "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "subject_tags"
+          }
+        },
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "key": "k",
+          "kind": "treeReference"
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "some",
+        "path": "$",
+        "reason": "only a string collection key can be mapped to a correlated table; this collection is a non-string JSON value"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (some over a non-string collection key under postgres)",
+      "id": "sql.guard.matrix.postgres-some-over-a-nonx2d-string-collection-key",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "tag": {
+                "column": "tag",
+                "paramType": "text"
+              },
+              "weight": {
+                "column": "weight",
+                "paramType": "number"
+              }
+            },
+            "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "subject_tags"
+          }
+        },
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": 5,
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "weight",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 5
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (fold max under postgres)",
+      "id": "sql.guard.matrix.postgres-fold-max",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "tag": {
+                "column": "tag",
+                "paramType": "text"
+              },
+              "weight": {
+                "column": "weight",
+                "paramType": "number"
+              }
+            },
+            "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "subject_tags"
+          }
+        },
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "tags",
+          "combiner": {
+            "item": {
+              "key": "weight",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (fold min under postgres)",
+      "id": "sql.guard.matrix.postgres-fold-min",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "tag": {
+                "column": "tag",
+                "paramType": "text"
+              },
+              "weight": {
+                "column": "weight",
+                "paramType": "number"
+              }
+            },
+            "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "subject_tags"
+          }
+        },
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "tags",
+          "combiner": {
+            "item": {
+              "key": "weight",
+              "kind": "reference"
+            },
+            "mode": "min"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "fold",
+        "path": "$.left",
+        "reason": "no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (fold max without collectionFor under postgres)",
+      "id": "sql.guard.matrix.postgres-fold-max-without-collectionfor",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "tags",
+          "combiner": {
+            "item": {
+              "key": "weight",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "fold",
+        "path": "$.left.combiner.item",
+        "reason": "a 'max' fold orders participating items by comparing them, and trilean never orders text values ('compare' returns wrong-type for text; use 'textCompare'); but PostgreSQL would order the text operand at $.left.combiner.item collation-wise and answer definitely"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (fold max over text under postgres)",
+      "id": "sql.guard.matrix.postgres-fold-max-over-text",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "tag": {
+                "column": "tag",
+                "paramType": "text"
+              },
+              "weight": {
+                "column": "weight",
+                "paramType": "number"
+              }
+            },
+            "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "subject_tags"
+          }
+        },
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "tags",
+          "combiner": {
+            "item": {
+              "key": "tag",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "fold",
+        "path": "$.left.combiner.item",
+        "reason": "a 'min' fold orders participating items by comparing them, and booleans have no ordering in trilean; whereas PostgreSQL orders false before true"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (fold min over booleans under postgres)",
+      "id": "sql.guard.matrix.postgres-fold-min-over-booleans",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "tag": {
+                "column": "tag",
+                "paramType": "text"
+              },
+              "weight": {
+                "column": "weight",
+                "paramType": "number"
+              }
+            },
+            "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "subject_tags"
+          }
+        },
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "tags",
+          "combiner": {
+            "item": {
+              "kind": "booleanLiteral",
+              "value": true
+            },
+            "mode": "min"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "fold",
+        "path": "$.left",
+        "reason": "a 'reduce' fold threads an arbitrary combine expression through the collection in a caller-chosen order, which has no general SQL translation"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (fold reduce under postgres)",
+      "id": "sql.guard.matrix.postgres-fold-reduce",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "tag": {
+                "column": "tag",
+                "paramType": "text"
+              },
+              "weight": {
+                "column": "weight",
+                "paramType": "number"
+              }
+            },
+            "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "subject_tags"
+          }
+        },
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "tags",
+          "combiner": {
+            "combine": {
+              "kind": "numberLiteral",
+              "value": 1
+            },
+            "initial": {
+              "kind": "numberLiteral",
+              "value": 0
+            },
+            "mode": "reduce"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "treeReference",
+        "path": "$",
+        "reason": "a referenced tree is resolved by the caller's resolvers; inline it before compiling"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (treeReference under postgres)",
+      "id": "sql.guard.matrix.postgres-treereference",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "key": "k",
+        "kind": "treeReference"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "treeReference",
+        "path": "$.left",
+        "reason": "a referenced tree is resolved by the caller's resolvers; inline it before compiling"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (treeReference as an expression under postgres)",
+      "id": "sql.guard.matrix.postgres-treereference-as-an-expression",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "k",
+          "kind": "treeReference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "reference",
+        "path": "$.operand",
+        "reason": "only a string reference key can be mapped to a column; this key is a non-string JSON value"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (reference with a non-string key under postgres)",
+      "id": "sql.guard.matrix.postgres-reference-with-a-nonx2d-string-key",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": {
+            "nested": "key"
+          },
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "reference",
+        "path": "$.operand",
+        "reason": "only a string reference key can be mapped to a column; this key is a non-string JSON value"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (reference with a numeric key under postgres)",
+      "id": "sql.guard.matrix.postgres-reference-with-a-numeric-key",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": 5,
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "reference",
+        "path": "$.left",
+        "reason": "a reference declaring a unit asserts that the resolved value carries that same unit, and a SQL column carries no unit for that assertion to be checked against"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (reference carrying a unit under postgres)",
+      "id": "sql.guard.matrix.postgres-reference-carrying-a-unit",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference",
+          "unit": {
+            "year": 1
+          }
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "numberLiteral",
+        "path": "$.right",
+        "reason": "a unit-tagged number is only comparable with an operand of the same unit, and SQL has no unit to compare"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (number literal carrying a unit under postgres)",
+      "id": "sql.guard.matrix.postgres-number-literal-carrying-a-unit",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "unit": {
+            "year": 1
+          },
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "durationLiteral",
+        "path": "$.right",
+        "reason": "trilean compares two durations in whichever unit each carries, and a column holds no unit to carry"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (durationLiteral under postgres)",
+      "id": "sql.guard.matrix.postgres-durationliteral",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "d",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "complexLiteral",
+        "path": "$.right",
+        "reason": "PostgreSQL has no complex number type"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (complexLiteral, rectangular under postgres)",
+      "id": "sql.guard.matrix.postgres-complexliteralx2c-rectangular",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "im": 2,
+          "kind": "complexLiteral",
+          "re": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "complexLiteral",
+        "path": "$.right",
+        "reason": "PostgreSQL has no complex number type"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (complexLiteral, polar under postgres)",
+      "id": "sql.guard.matrix.postgres-complexliteralx2c-polar",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "complexLiteral",
+          "magnitude": 1,
+          "phase": 2
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "arithmetic",
+        "path": "$.left",
+        "reason": "arithmetic carries and combines units, and pushing it down would drop that dimensional analysis without saying so"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (arithmetic under postgres)",
+      "id": "sql.guard.matrix.postgres-arithmetic",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "arithmetic",
+          "left": {
+            "key": "age",
+            "kind": "reference"
+          },
+          "op": "add",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "negate",
+        "path": "$.left",
+        "reason": "arithmetic carries and combines units, and pushing it down would drop that dimensional analysis without saying so"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (negate under postgres)",
+      "id": "sql.guard.matrix.postgres-negate",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "negate",
+          "operand": {
+            "key": "age",
+            "kind": "reference"
+          }
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "call",
+        "path": "$.left",
+        "reason": "a function's implementation lives in the caller's FunctionRegistry, not in the database"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (call under postgres)",
+      "id": "sql.guard.matrix.postgres-call",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "args": [
+            {
+              "key": "age",
+              "kind": "reference"
+            }
+          ],
+          "fn": "abs",
+          "kind": "call"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "lookup",
+        "path": "$.left",
+        "reason": "a lookup table is resolved by the caller's resolvers"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (lookup under postgres)",
+      "id": "sql.guard.matrix.postgres-lookup",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "keys": [
+            {
+              "key": "age",
+              "kind": "reference"
+            }
+          ],
+          "kind": "lookup",
+          "table": "t"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "conditional",
+        "path": "$.left",
+        "reason": "conditional evaluation is not implemented in this version of the compiler"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (conditional under postgres)",
+      "id": "sql.guard.matrix.postgres-conditional",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "cases": [
+            {
+              "then": {
+                "kind": "numberLiteral",
+                "value": 1
+              },
+              "when": {
+                "kind": "exists",
+                "operand": {
+                  "key": "note",
+                  "kind": "reference"
+                }
+              }
+            }
+          ],
+          "fallback": {
+            "kind": "numberLiteral",
+            "value": 2
+          },
+          "kind": "conditional"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "accumulator",
+        "path": "$.left",
+        "reason": "an accumulator is only meaningful inside a reduce fold"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (accumulator under postgres)",
+      "id": "sql.guard.matrix.postgres-accumulator",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "accumulator"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "delegate",
+        "path": "$.left",
+        "reason": "a delegated decision is made by an external system"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (delegate under postgres)",
+      "id": "sql.guard.matrix.postgres-delegate",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "delegate",
+          "payload": 1,
+          "system": "s"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (textLiteral under postgres)",
+      "id": "sql.guard.matrix.postgres-textliteral",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "kind": "textLiteral",
+          "value": "a"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "b"
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (booleanLiteral under postgres)",
+      "id": "sql.guard.matrix.postgres-booleanliteral",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "booleanLiteral",
+          "value": true
+        },
+        "op": "eq",
+        "right": {
+          "kind": "booleanLiteral",
+          "value": false
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (instantLiteral under postgres)",
+      "id": "sql.guard.matrix.postgres-instantliteral",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00Z"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2021-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "treeReference",
+        "path": "$.right.operands[1].operand",
+        "reason": "a referenced tree is resolved by the caller's resolvers; inline it before compiling"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (a refusal buried several levels down under postgres)",
+      "id": "sql.guard.matrix.postgres-a-refusal-buried-several-levels-down",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "and",
+        "left": {
+          "kind": "exists",
+          "operand": {
+            "key": "note",
+            "kind": "reference"
+          }
+        },
+        "right": {
+          "kind": "anyOf",
+          "operands": [
+            {
+              "kind": "exists",
+              "operand": {
+                "key": "note",
+                "kind": "reference"
+              }
+            },
+            {
+              "kind": "not",
+              "operand": {
+                "key": "k",
+                "kind": "treeReference"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (a tree guarded with no options under postgres)",
+      "id": "sql.guard.matrix.postgres-a-tree-guarded-with-no-options",
+      "kind": "sql-guard",
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "note",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (not under sqlite)",
+      "id": "sql.guard.matrix.sqlite-not",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "not",
+        "operand": {
+          "kind": "compare",
+          "left": {
+            "key": "age",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (and under sqlite)",
+      "id": "sql.guard.matrix.sqlite-and",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "and",
+        "left": {
+          "kind": "exists",
+          "operand": {
+            "key": "note",
+            "kind": "reference"
+          }
+        },
+        "right": {
+          "kind": "compare",
+          "left": {
+            "key": "age",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (or under sqlite)",
+      "id": "sql.guard.matrix.sqlite-or",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "or",
+        "left": {
+          "kind": "exists",
+          "operand": {
+            "key": "note",
+            "kind": "reference"
+          }
+        },
+        "right": {
+          "kind": "compare",
+          "left": {
+            "key": "age",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (allOf under sqlite)",
+      "id": "sql.guard.matrix.sqlite-allof",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "allOf",
+        "operands": [
+          {
+            "kind": "exists",
+            "operand": {
+              "key": "note",
+              "kind": "reference"
+            }
+          },
+          {
+            "kind": "compare",
+            "left": {
+              "key": "age",
+              "kind": "reference"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          }
+        ]
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (anyOf under sqlite)",
+      "id": "sql.guard.matrix.sqlite-anyof",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "anyOf",
+        "operands": [
+          {
+            "kind": "exists",
+            "operand": {
+              "key": "note",
+              "kind": "reference"
+            }
+          },
+          {
+            "kind": "compare",
+            "left": {
+              "key": "age",
+              "kind": "reference"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          }
+        ]
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (compare of numbers under sqlite)",
+      "id": "sql.guard.matrix.sqlite-compare-of-numbers",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "lte",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (compare of instants under sqlite)",
+      "id": "sql.guard.matrix.sqlite-compare-of-instants",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "joined",
+          "kind": "reference"
+        },
+        "op": "lt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (compare equality of booleans under sqlite)",
+      "id": "sql.guard.matrix.sqlite-compare-equality-of-booleans",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "active",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "booleanLiteral",
+          "value": true
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "compare",
+        "path": "$",
+        "reason": "booleans have no ordering in trilean, so 'gt' against the boolean operand at $.left is wrong-type there, whereas SQLite stores booleans as the integers 0 and 1 and orders them as integers"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (compare ordering of booleans under sqlite)",
+      "id": "sql.guard.matrix.sqlite-compare-ordering-of-booleans",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "active",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "booleanLiteral",
+          "value": false
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "compare",
+        "path": "$",
+        "reason": "'compare' never compares text in trilean: it returns wrong-type and directs the caller to 'textCompare'; but SQLite would answer definitely for the text operand at $.left, comparing it under the text affinity it applies to the other side ('9' > 5 is true there, while '10' > 5 is not)"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (compare of text under sqlite)",
+      "id": "sql.guard.matrix.sqlite-compare-of-text",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "textLiteral",
+          "value": "ada"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "compare",
+        "path": "$",
+        "reason": "trilean treats a comparison between a 'number' value ($.left) and a 'instant' value ($.right) as wrong-type, whereas SQLite's type affinity may coerce one to the other and answer definitely"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (compare of mixed kinds under sqlite)",
+      "id": "sql.guard.matrix.sqlite-compare-of-mixed-kinds",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "compare",
+        "path": "$",
+        "reason": "trilean treats a comparison between a 'text' value ($.left) and a 'number' value ($.right) as wrong-type, whereas SQLite's type affinity may coerce one to the other and answer definitely"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (compare of a text literal and a number literal under sqlite)",
+      "id": "sql.guard.matrix.sqlite-compare-of-a-text-literal-and-a-number-literal",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "textLiteral",
+          "value": "a"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "numberLiteral",
+        "path": "$.right",
+        "reason": "NaN is equal to nothing in trilean, not even itself, whereas SQLite has no NaN at all and a driver binding one substitutes SQL NULL, so 'NaN = NaN' is indeterminate there rather than definitely false, and its negation matches every row instead of none"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (compare against NaN under sqlite)",
+      "id": "sql.guard.matrix.sqlite-compare-against-nan",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": {
+            "$number": "NaN"
+          }
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (compare against an infinity under sqlite)",
+      "id": "sql.guard.matrix.sqlite-compare-against-an-infinity",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": {
+            "$number": "Infinity"
+          }
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (textCompare equals under sqlite)",
+      "id": "sql.guard.matrix.sqlite-textcompare-equals",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "ada"
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (textCompare notEquals under sqlite)",
+      "id": "sql.guard.matrix.sqlite-textcompare-notequals",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "notEquals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "ada"
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (textCompare matches under sqlite)",
+      "id": "sql.guard.matrix.sqlite-textcompare-matches",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (textCompare matches with pushdown under sqlite)",
+      "id": "sql.guard.matrix.sqlite-textcompare-matches-with-pushdown",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite",
+        "postgresRegexpPushdown": true
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (textCompare matches with pushdown off under sqlite)",
+      "id": "sql.guard.matrix.sqlite-textcompare-matches-with-pushdown-off",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite",
+        "postgresRegexpPushdown": false
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (textCompare notMatches with regexp available under sqlite)",
+      "id": "sql.guard.matrix.sqlite-textcompare-notmatches-with-regexp-available",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite",
+        "sqliteRegexpAvailable": true
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "notMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "textCompare",
+        "path": "$",
+        "reason": "options.sqliteRegexpAvailable is false: the caller has stated no regexp(pattern, value) function can be registered on this SQLite target, so 'notMatches' would compile to SQL that fails at query execution time with \"no such function: REGEXP\" instead of at compile time"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (textCompare notMatches with regexp unavailable under sqlite)",
+      "id": "sql.guard.matrix.sqlite-textcompare-notmatches-with-regexp-unavailable",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite",
+        "sqliteRegexpAvailable": false
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "notMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "textCompare",
+        "path": "$",
+        "reason": "options.sqliteRegexpAvailable is false: the caller has stated no regexp(pattern, value) function can be registered on this SQLite target, so 'matches' would compile to SQL that fails at query execution time with \"no such function: REGEXP\" instead of at compile time"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (textCompare matches with regexp unavailable and pushdown under sqlite)",
+      "id": "sql.guard.matrix.sqlite-textcompare-matches-with-regexp-unavailable-and-pushdown",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite",
+        "postgresRegexpPushdown": true,
+        "sqliteRegexpAvailable": false
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "textCompare",
+        "path": "$",
+        "reason": "'textCompare' requires text operands in trilean, and the operand at $.left is a 'number' value"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (textCompare with a number operand under sqlite)",
+      "id": "sql.guard.matrix.sqlite-textcompare-with-a-number-operand",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "1"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "textCompare",
+        "path": "$",
+        "reason": "'textCompare' requires text operands in trilean, and the operand at $.right is a 'boolean' value"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (textCompare with a boolean operand under sqlite)",
+      "id": "sql.guard.matrix.sqlite-textcompare-with-a-boolean-operand",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "booleanLiteral",
+          "value": true
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (portableMatches with a literal pattern under sqlite)",
+      "id": "sql.guard.matrix.sqlite-portablematches-with-a-literal-pattern",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "portableMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^ab"
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (portableNotMatches with a literal pattern under sqlite)",
+      "id": "sql.guard.matrix.sqlite-portablenotmatches-with-a-literal-pattern",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "portableNotMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^ab"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "textCompare",
+        "path": "$",
+        "reason": "a 'portableMatches'/'portableNotMatches' pattern must be a literal, known at compile time: translating it into this dialect's own pattern syntax happens once, at compile time, not per row"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (portableMatches with a column pattern under sqlite)",
+      "id": "sql.guard.matrix.sqlite-portablematches-with-a-column-pattern",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "portableMatches",
+        "right": {
+          "key": "note",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "textCompare",
+        "path": "$.right",
+        "reason": {
+          "after": "\n  (a)\n  ^",
+          "before": "invalid pattern at index 0: ",
+          "relayed": [
+            "capturing groups are not supported in this grammar",
+            "there is nothing to capture, since a pattern only ever answers whether it matches. Use '(?:...)' for grouping."
+          ],
+          "separator": {
+            "codeUnits": [
+              32,
+              45,
+              45,
+              32
+            ]
+          }
+        }
+      },
+      "from": "recorded: trilean-sql src/guard.ts (portableMatches with a pattern that does not parse under sqlite)",
+      "id": "sql.guard.matrix.sqlite-portablematches-with-a-pattern-that-does-not-parse",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "portableMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "(a)"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "textCompare",
+        "path": "$.right",
+        "reason": "GLOB has no alternation operator"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (portableMatches with an alternation under sqlite)",
+      "id": "sql.guard.matrix.sqlite-portablematches-with-an-alternation",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "portableMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "a|b"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "textCompare",
+        "path": "$.right",
+        "reason": "GLOB has no bounded-repetition wildcard"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (portableMatches with a bound over 255 under sqlite)",
+      "id": "sql.guard.matrix.sqlite-portablematches-with-a-bound-over-255",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "portableMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "a{256}"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "textCompare",
+        "path": "$.right",
+        "reason": "this compiler does not translate a negated character class to GLOB: SQLite's own documentation does not confirm which of the common '[^...]'/'[!...]' conventions (if either) it implements"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (portableMatches with a negated class under sqlite)",
+      "id": "sql.guard.matrix.sqlite-portablematches-with-a-negated-class",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "portableMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^[^a]$"
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (memberOf in under sqlite)",
+      "id": "sql.guard.matrix.sqlite-memberof-in",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "a"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (memberOf notIn under sqlite)",
+      "id": "sql.guard.matrix.sqlite-memberof-notin",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "notIn",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "numberLiteral",
+        "path": "$.candidates[1]",
+        "reason": "NaN is equal to nothing in trilean, not even itself, whereas SQLite has no NaN at all and a driver binding one substitutes SQL NULL, so 'NaN = NaN' is indeterminate there rather than definitely false, and its negation matches every row instead of none"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (memberOf with a NaN candidate under sqlite)",
+      "id": "sql.guard.matrix.sqlite-memberof-with-a-nan-candidate",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "NaN"
+            }
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "memberOf",
+        "path": "$",
+        "reason": "trilean treats a comparison between a 'text' value ($.operand) and a 'number' value ($.candidates[0]) as wrong-type, whereas SQLite's type affinity may coerce one to the other and answer definitely"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (memberOf with a text operand and a number candidate under sqlite)",
+      "id": "sql.guard.matrix.sqlite-memberof-with-a-text-operand-and-a-number-candidate",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (exists under sqlite)",
+      "id": "sql.guard.matrix.sqlite-exists",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "note",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (some under sqlite)",
+      "id": "sql.guard.matrix.sqlite-some",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "tag": {
+                "column": "tag",
+                "paramType": "text"
+              },
+              "weight": {
+                "column": "weight",
+                "paramType": "number"
+              }
+            },
+            "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "subject_tags"
+          }
+        },
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "weight",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 5
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "some",
+        "path": "$",
+        "reason": "no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (some without collectionFor under sqlite)",
+      "id": "sql.guard.matrix.sqlite-some-without-collectionfor",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "weight",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 5
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (every under sqlite)",
+      "id": "sql.guard.matrix.sqlite-every",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "tag": {
+                "column": "tag",
+                "paramType": "text"
+              },
+              "weight": {
+                "column": "weight",
+                "paramType": "number"
+              }
+            },
+            "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "subject_tags"
+          }
+        },
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "weight",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 5
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "every",
+        "path": "$",
+        "reason": "no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (every without collectionFor under sqlite)",
+      "id": "sql.guard.matrix.sqlite-every-without-collectionfor",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "weight",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 5
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (some with a filter under sqlite)",
+      "id": "sql.guard.matrix.sqlite-some-with-a-filter",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "tag": {
+                "column": "tag",
+                "paramType": "text"
+              },
+              "weight": {
+                "column": "weight",
+                "paramType": "number"
+              }
+            },
+            "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "subject_tags"
+          }
+        },
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "filter": {
+          "kind": "textCompare",
+          "left": {
+            "key": "tag",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "x"
+          }
+        },
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "weight",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 5
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "treeReference",
+        "path": "$.filter",
+        "reason": "a referenced tree is resolved by the caller's resolvers; inline it before compiling"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (some with a refused filter under sqlite)",
+      "id": "sql.guard.matrix.sqlite-some-with-a-refused-filter",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "tag": {
+                "column": "tag",
+                "paramType": "text"
+              },
+              "weight": {
+                "column": "weight",
+                "paramType": "number"
+              }
+            },
+            "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "subject_tags"
+          }
+        },
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "filter": {
+          "key": "k",
+          "kind": "treeReference"
+        },
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "weight",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 5
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "treeReference",
+        "path": "$.item",
+        "reason": "a referenced tree is resolved by the caller's resolvers; inline it before compiling"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (some with a refused item under sqlite)",
+      "id": "sql.guard.matrix.sqlite-some-with-a-refused-item",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "tag": {
+                "column": "tag",
+                "paramType": "text"
+              },
+              "weight": {
+                "column": "weight",
+                "paramType": "number"
+              }
+            },
+            "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "subject_tags"
+          }
+        },
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "key": "k",
+          "kind": "treeReference"
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "some",
+        "path": "$",
+        "reason": "only a string collection key can be mapped to a correlated table; this collection is a non-string JSON value"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (some over a non-string collection key under sqlite)",
+      "id": "sql.guard.matrix.sqlite-some-over-a-nonx2d-string-collection-key",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "tag": {
+                "column": "tag",
+                "paramType": "text"
+              },
+              "weight": {
+                "column": "weight",
+                "paramType": "number"
+              }
+            },
+            "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "subject_tags"
+          }
+        },
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": 5,
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "weight",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 5
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (fold max under sqlite)",
+      "id": "sql.guard.matrix.sqlite-fold-max",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "tag": {
+                "column": "tag",
+                "paramType": "text"
+              },
+              "weight": {
+                "column": "weight",
+                "paramType": "number"
+              }
+            },
+            "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "subject_tags"
+          }
+        },
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "tags",
+          "combiner": {
+            "item": {
+              "key": "weight",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (fold min under sqlite)",
+      "id": "sql.guard.matrix.sqlite-fold-min",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "tag": {
+                "column": "tag",
+                "paramType": "text"
+              },
+              "weight": {
+                "column": "weight",
+                "paramType": "number"
+              }
+            },
+            "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "subject_tags"
+          }
+        },
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "tags",
+          "combiner": {
+            "item": {
+              "key": "weight",
+              "kind": "reference"
+            },
+            "mode": "min"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "fold",
+        "path": "$.left",
+        "reason": "no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (fold max without collectionFor under sqlite)",
+      "id": "sql.guard.matrix.sqlite-fold-max-without-collectionfor",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "tags",
+          "combiner": {
+            "item": {
+              "key": "weight",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "fold",
+        "path": "$.left.combiner.item",
+        "reason": "a 'max' fold orders participating items by comparing them, and trilean never orders text values ('compare' returns wrong-type for text; use 'textCompare'); but SQLite would answer definitely for the text operand at $.left.combiner.item, comparing it under the text affinity it applies to the other side ('9' > 5 is true there, while '10' > 5 is not)"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (fold max over text under sqlite)",
+      "id": "sql.guard.matrix.sqlite-fold-max-over-text",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "tag": {
+                "column": "tag",
+                "paramType": "text"
+              },
+              "weight": {
+                "column": "weight",
+                "paramType": "number"
+              }
+            },
+            "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "subject_tags"
+          }
+        },
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "tags",
+          "combiner": {
+            "item": {
+              "key": "tag",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "fold",
+        "path": "$.left.combiner.item",
+        "reason": "a 'min' fold orders participating items by comparing them, and booleans have no ordering in trilean; whereas SQLite stores booleans as the integers 0 and 1 and orders them as integers"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (fold min over booleans under sqlite)",
+      "id": "sql.guard.matrix.sqlite-fold-min-over-booleans",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "tag": {
+                "column": "tag",
+                "paramType": "text"
+              },
+              "weight": {
+                "column": "weight",
+                "paramType": "number"
+              }
+            },
+            "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "subject_tags"
+          }
+        },
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "tags",
+          "combiner": {
+            "item": {
+              "kind": "booleanLiteral",
+              "value": true
+            },
+            "mode": "min"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "fold",
+        "path": "$.left",
+        "reason": "a 'reduce' fold threads an arbitrary combine expression through the collection in a caller-chosen order, which has no general SQL translation"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (fold reduce under sqlite)",
+      "id": "sql.guard.matrix.sqlite-fold-reduce",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "tag": {
+                "column": "tag",
+                "paramType": "text"
+              },
+              "weight": {
+                "column": "weight",
+                "paramType": "number"
+              }
+            },
+            "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "subject_tags"
+          }
+        },
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "tags",
+          "combiner": {
+            "combine": {
+              "kind": "numberLiteral",
+              "value": 1
+            },
+            "initial": {
+              "kind": "numberLiteral",
+              "value": 0
+            },
+            "mode": "reduce"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "treeReference",
+        "path": "$",
+        "reason": "a referenced tree is resolved by the caller's resolvers; inline it before compiling"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (treeReference under sqlite)",
+      "id": "sql.guard.matrix.sqlite-treereference",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "key": "k",
+        "kind": "treeReference"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "treeReference",
+        "path": "$.left",
+        "reason": "a referenced tree is resolved by the caller's resolvers; inline it before compiling"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (treeReference as an expression under sqlite)",
+      "id": "sql.guard.matrix.sqlite-treereference-as-an-expression",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "k",
+          "kind": "treeReference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "reference",
+        "path": "$.operand",
+        "reason": "only a string reference key can be mapped to a column; this key is a non-string JSON value"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (reference with a non-string key under sqlite)",
+      "id": "sql.guard.matrix.sqlite-reference-with-a-nonx2d-string-key",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": {
+            "nested": "key"
+          },
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "reference",
+        "path": "$.operand",
+        "reason": "only a string reference key can be mapped to a column; this key is a non-string JSON value"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (reference with a numeric key under sqlite)",
+      "id": "sql.guard.matrix.sqlite-reference-with-a-numeric-key",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": 5,
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "reference",
+        "path": "$.left",
+        "reason": "a reference declaring a unit asserts that the resolved value carries that same unit, and a SQL column carries no unit for that assertion to be checked against"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (reference carrying a unit under sqlite)",
+      "id": "sql.guard.matrix.sqlite-reference-carrying-a-unit",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference",
+          "unit": {
+            "year": 1
+          }
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "numberLiteral",
+        "path": "$.right",
+        "reason": "a unit-tagged number is only comparable with an operand of the same unit, and SQL has no unit to compare"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (number literal carrying a unit under sqlite)",
+      "id": "sql.guard.matrix.sqlite-number-literal-carrying-a-unit",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "unit": {
+            "year": 1
+          },
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "durationLiteral",
+        "path": "$.right",
+        "reason": "trilean compares two durations in whichever unit each carries, and a column holds no unit to carry"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (durationLiteral under sqlite)",
+      "id": "sql.guard.matrix.sqlite-durationliteral",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "d",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "complexLiteral",
+        "path": "$.right",
+        "reason": "SQLite has no complex number type"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (complexLiteral, rectangular under sqlite)",
+      "id": "sql.guard.matrix.sqlite-complexliteralx2c-rectangular",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "im": 2,
+          "kind": "complexLiteral",
+          "re": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "complexLiteral",
+        "path": "$.right",
+        "reason": "SQLite has no complex number type"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (complexLiteral, polar under sqlite)",
+      "id": "sql.guard.matrix.sqlite-complexliteralx2c-polar",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "complexLiteral",
+          "magnitude": 1,
+          "phase": 2
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "arithmetic",
+        "path": "$.left",
+        "reason": "arithmetic carries and combines units, and pushing it down would drop that dimensional analysis without saying so"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (arithmetic under sqlite)",
+      "id": "sql.guard.matrix.sqlite-arithmetic",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "arithmetic",
+          "left": {
+            "key": "age",
+            "kind": "reference"
+          },
+          "op": "add",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "negate",
+        "path": "$.left",
+        "reason": "arithmetic carries and combines units, and pushing it down would drop that dimensional analysis without saying so"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (negate under sqlite)",
+      "id": "sql.guard.matrix.sqlite-negate",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "negate",
+          "operand": {
+            "key": "age",
+            "kind": "reference"
+          }
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "call",
+        "path": "$.left",
+        "reason": "a function's implementation lives in the caller's FunctionRegistry, not in the database"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (call under sqlite)",
+      "id": "sql.guard.matrix.sqlite-call",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "args": [
+            {
+              "key": "age",
+              "kind": "reference"
+            }
+          ],
+          "fn": "abs",
+          "kind": "call"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "lookup",
+        "path": "$.left",
+        "reason": "a lookup table is resolved by the caller's resolvers"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (lookup under sqlite)",
+      "id": "sql.guard.matrix.sqlite-lookup",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "keys": [
+            {
+              "key": "age",
+              "kind": "reference"
+            }
+          ],
+          "kind": "lookup",
+          "table": "t"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "conditional",
+        "path": "$.left",
+        "reason": "conditional evaluation is not implemented in this version of the compiler"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (conditional under sqlite)",
+      "id": "sql.guard.matrix.sqlite-conditional",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "cases": [
+            {
+              "then": {
+                "kind": "numberLiteral",
+                "value": 1
+              },
+              "when": {
+                "kind": "exists",
+                "operand": {
+                  "key": "note",
+                  "kind": "reference"
+                }
+              }
+            }
+          ],
+          "fallback": {
+            "kind": "numberLiteral",
+            "value": 2
+          },
+          "kind": "conditional"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "accumulator",
+        "path": "$.left",
+        "reason": "an accumulator is only meaningful inside a reduce fold"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (accumulator under sqlite)",
+      "id": "sql.guard.matrix.sqlite-accumulator",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "accumulator"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "delegate",
+        "path": "$.left",
+        "reason": "a delegated decision is made by an external system"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (delegate under sqlite)",
+      "id": "sql.guard.matrix.sqlite-delegate",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "delegate",
+          "payload": 1,
+          "system": "s"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (textLiteral under sqlite)",
+      "id": "sql.guard.matrix.sqlite-textliteral",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "kind": "textLiteral",
+          "value": "a"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "b"
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (booleanLiteral under sqlite)",
+      "id": "sql.guard.matrix.sqlite-booleanliteral",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "booleanLiteral",
+          "value": true
+        },
+        "op": "eq",
+        "right": {
+          "kind": "booleanLiteral",
+          "value": false
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (instantLiteral under sqlite)",
+      "id": "sql.guard.matrix.sqlite-instantliteral",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00Z"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2021-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "treeReference",
+        "path": "$.right.operands[1].operand",
+        "reason": "a referenced tree is resolved by the caller's resolvers; inline it before compiling"
+      },
+      "from": "recorded: trilean-sql src/guard.ts (a refusal buried several levels down under sqlite)",
+      "id": "sql.guard.matrix.sqlite-a-refusal-buried-several-levels-down",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "and",
+        "left": {
+          "kind": "exists",
+          "operand": {
+            "key": "note",
+            "kind": "reference"
+          }
+        },
+        "right": {
+          "kind": "anyOf",
+          "operands": [
+            {
+              "kind": "exists",
+              "operand": {
+                "key": "note",
+                "kind": "reference"
+              }
+            },
+            {
+              "kind": "not",
+              "operand": {
+                "key": "k",
+                "kind": "treeReference"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,124 @@
+{
+  "evaluator": {
+    "collections": {
+      "tags": {
+        "foreignKey": "subjectId",
+        "items": [
+          "tag",
+          "weight"
+        ],
+        "table": "subject_tags"
+      }
+    },
+    "idColumn": "id",
+    "table": "subjects"
+  },
+  "tables": {
+    "coercion": {
+      "columns": {
+        "flag": "boolean",
+        "label": "text",
+        "numeric_text": "text"
+      },
+      "primaryKey": "label",
+      "rows": [
+        {
+          "flag": true,
+          "label": "nine",
+          "numeric_text": "9"
+        },
+        {
+          "flag": false,
+          "label": "ten",
+          "numeric_text": "10"
+        }
+      ]
+    },
+    "subject_tags": {
+      "columns": {
+        "id": "text",
+        "subjectId": "text",
+        "tag": "text",
+        "weight": "number"
+      },
+      "primaryKey": "id",
+      "rows": [
+        {
+          "id": "t1",
+          "subjectId": "grace",
+          "tag": "junior",
+          "weight": 3
+        },
+        {
+          "id": "t2",
+          "subjectId": "grace",
+          "tag": "senior",
+          "weight": 9
+        },
+        {
+          "id": "t3",
+          "subjectId": "lin",
+          "tag": "solo",
+          "weight": 9
+        },
+        {
+          "id": "t4",
+          "subjectId": "lin",
+          "tag": "unsure",
+          "weight": null
+        },
+        {
+          "id": "t5",
+          "subjectId": "unknown",
+          "tag": "pending",
+          "weight": null
+        }
+      ]
+    },
+    "subjects": {
+      "columns": {
+        "active": "boolean",
+        "age": "number",
+        "id": "text",
+        "joined": "timestamp",
+        "name": "text",
+        "note": "text"
+      },
+      "primaryKey": "id",
+      "rows": [
+        {
+          "active": true,
+          "age": 30,
+          "id": "ada",
+          "joined": "2020-01-01T00:00:00Z",
+          "name": "ada",
+          "note": "hello"
+        },
+        {
+          "active": false,
+          "age": 12,
+          "id": "grace",
+          "joined": "2024-06-01T12:00:00Z",
+          "name": "grace",
+          "note": "hi"
+        },
+        {
+          "active": true,
+          "age": null,
+          "id": "lin",
+          "joined": "2021-03-03T00:00:00Z",
+          "name": "lin",
+          "note": null
+        },
+        {
+          "active": null,
+          "age": 45,
+          "id": "unknown",
+          "joined": null,
+          "name": null,
+          "note": null
+        }
+      ]
+    }
+  }
+}

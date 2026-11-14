@@ -1,0 +1,69 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textCompare' at $: options.sqliteRegexpAvailable is false: the caller has stated no regexp(pattern, value) function can be registered on this SQLite target, so 'matches' would compile to SQL that fails at query execution time with \"no such function: REGEXP\" instead of at compile time",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textCompare",
+          "path": "$",
+          "reason": "options.sqliteRegexpAvailable is false: the caller has stated no regexp(pattern, value) function can be registered on this SQLite target, so 'matches' would compile to SQL that fails at query execution time with \"no such function: REGEXP\" instead of at compile time"
+        }
+      },
+      "from": "sqlite.predicates.integration.test.ts: textCompare > refuses matches at compile time, before ever reaching a connection, when sqliteRegexpAvailable is false",
+      "id": "sql.compile.sqlite-predicates.textcompare-refuses-matches-at-compile-time-befo",
+      "kind": "sql-compile",
+      "options": {
+        "dialect": "sqlite",
+        "sqliteRegexpAvailable": false
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textCompare' at $.right: GLOB has no alternation operator",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textCompare",
+          "path": "$.right",
+          "reason": "GLOB has no alternation operator"
+        }
+      },
+      "from": "sqlite.predicates.integration.test.ts: portableMatches/portableNotMatches (trilean-regex, translated to a GLOB wildcard) > fails to compile rather than answering wrongly when the pattern is outside GLOB's reachable subset",
+      "id": "sql.compile.sqlite-predicates.portablematches-portablenotmatches-trilean-regex",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "portableMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "ada|grace"
+        }
+      }
+    }
+  ]
+}

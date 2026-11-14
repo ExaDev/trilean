@@ -1,0 +1,4752 @@
+{
+  "cases": [
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a\\\"b\" under postgres)",
+      "id": "sql.execute.identifiers.postgres-a-column-named-x22-ax5c-x22-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "a\"b",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (exists of a column named \"a\\\"b\" under postgres)",
+      "id": "sql.execute.identifiers.postgres-exists-of-a-column-named-x22-ax5c-x22-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "exists",
+          "operand": {
+            "key": "a\"b",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"select\" under postgres)",
+      "id": "sql.execute.identifiers.postgres-a-column-named-x22-selectx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "select",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (exists of a column named \"select\" under postgres)",
+      "id": "sql.execute.identifiers.postgres-exists-of-a-column-named-x22-selectx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "exists",
+          "operand": {
+            "key": "select",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"1abc\" under postgres)",
+      "id": "sql.execute.identifiers.postgres-a-column-named-x22-1abcx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "1abc",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (exists of a column named \"1abc\" under postgres)",
+      "id": "sql.execute.identifiers.postgres-exists-of-a-column-named-x22-1abcx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "exists",
+          "operand": {
+            "key": "1abc",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a b\" under postgres)",
+      "id": "sql.execute.identifiers.postgres-a-column-named-x22-a-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "a b",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (exists of a column named \"a b\" under postgres)",
+      "id": "sql.execute.identifiers.postgres-exists-of-a-column-named-x22-a-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "exists",
+          "operand": {
+            "key": "a b",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"é\" under postgres)",
+      "id": "sql.execute.identifiers.postgres-a-column-named-x22-xe9-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "é",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (exists of a column named \"é\" under postgres)",
+      "id": "sql.execute.identifiers.postgres-exists-of-a-column-named-x22-xe9-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "exists",
+          "operand": {
+            "key": "é",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"𝒜\" under postgres)",
+      "id": "sql.execute.identifiers.postgres-a-column-named-x22-x1d49c-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "𝒜",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (exists of a column named \"𝒜\" under postgres)",
+      "id": "sql.execute.identifiers.postgres-exists-of-a-column-named-x22-x1d49c-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "exists",
+          "operand": {
+            "key": "𝒜",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a'b\" under postgres)",
+      "id": "sql.execute.identifiers.postgres-a-column-named-x22-ax27-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "a'b",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (exists of a column named \"a'b\" under postgres)",
+      "id": "sql.execute.identifiers.postgres-exists-of-a-column-named-x22-ax27-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "exists",
+          "operand": {
+            "key": "a'b",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a\\\\b\" under postgres)",
+      "id": "sql.execute.identifiers.postgres-a-column-named-x22-ax5c-x5c-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "a\\b",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (exists of a column named \"a\\\\b\" under postgres)",
+      "id": "sql.execute.identifiers.postgres-exists-of-a-column-named-x22-ax5c-x5c-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "exists",
+          "operand": {
+            "key": "a\\b",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a--b\" under postgres)",
+      "id": "sql.execute.identifiers.postgres-a-column-named-x22-ax2d-x2d-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "a--b",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (exists of a column named \"a--b\" under postgres)",
+      "id": "sql.execute.identifiers.postgres-exists-of-a-column-named-x22-ax2d-x2d-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "exists",
+          "operand": {
+            "key": "a--b",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a;b\" under postgres)",
+      "id": "sql.execute.identifiers.postgres-a-column-named-x22-ax3b-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "a;b",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (exists of a column named \"a;b\" under postgres)",
+      "id": "sql.execute.identifiers.postgres-exists-of-a-column-named-x22-ax3b-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "exists",
+          "operand": {
+            "key": "a;b",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a\\nb\" under postgres)",
+      "id": "sql.execute.identifiers.postgres-a-column-named-x22-ax5c-nbx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "a\nb",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (exists of a column named \"a\\nb\" under postgres)",
+      "id": "sql.execute.identifiers.postgres-exists-of-a-column-named-x22-ax5c-nbx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "exists",
+          "operand": {
+            "key": "a\nb",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"%\" under postgres)",
+      "id": "sql.execute.identifiers.postgres-a-column-named-x22-x25-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "%",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (exists of a column named \"%\" under postgres)",
+      "id": "sql.execute.identifiers.postgres-exists-of-a-column-named-x22-x25-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "exists",
+          "operand": {
+            "key": "%",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"_\" under postgres)",
+      "id": "sql.execute.identifiers.postgres-a-column-named-x22-x5f-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "_",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (exists of a column named \"_\" under postgres)",
+      "id": "sql.execute.identifiers.postgres-exists-of-a-column-named-x22-x5f-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "exists",
+          "operand": {
+            "key": "_",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (a collection table with a quote in its name under postgres)",
+      "id": "sql.execute.identifiers.postgres-a-collection-table-with-a-quote-in-its-name",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "collections": {
+            "kids": {
+              "columns": {
+                "label": {
+                  "column": "label",
+                  "paramType": "text"
+                },
+                "rank": {
+                  "column": "rank",
+                  "paramType": "number"
+                }
+              },
+              "join": "\"we\"\"ird kids\".\"owner\" = \"odd\"\"table\".\"id\"",
+              "table": "we\"ird kids"
+            }
+          },
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "collection": "kids",
+          "item": {
+            "kind": "compare",
+            "left": {
+              "key": "rank",
+              "kind": "reference"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 5
+            }
+          },
+          "kind": "some"
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": []
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (every over a collection table with a quote in its name under postgres)",
+      "id": "sql.execute.identifiers.postgres-every-over-a-collection-table-with-a-quote-in-its-name",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "collections": {
+            "kids": {
+              "columns": {
+                "label": {
+                  "column": "label",
+                  "paramType": "text"
+                },
+                "rank": {
+                  "column": "rank",
+                  "paramType": "number"
+                }
+              },
+              "join": "\"we\"\"ird kids\".\"owner\" = \"odd\"\"table\".\"id\"",
+              "table": "we\"ird kids"
+            }
+          },
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "collection": "kids",
+          "item": {
+            "kind": "compare",
+            "left": {
+              "key": "rank",
+              "kind": "reference"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 5
+            }
+          },
+          "kind": "every"
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (a fold over a collection table with a quote in its name under postgres)",
+      "id": "sql.execute.identifiers.postgres-a-fold-over-a-collection-table-with-a-quote-in-its-name",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "collections": {
+            "kids": {
+              "columns": {
+                "label": {
+                  "column": "label",
+                  "paramType": "text"
+                },
+                "rank": {
+                  "column": "rank",
+                  "paramType": "number"
+                }
+              },
+              "join": "\"we\"\"ird kids\".\"owner\" = \"odd\"\"table\".\"id\"",
+              "table": "we\"ird kids"
+            }
+          },
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "collection": "kids",
+            "combiner": {
+              "item": {
+                "key": "rank",
+                "kind": "reference"
+              },
+              "mode": "max"
+            },
+            "kind": "fold"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 5
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a\\\"b\" under sqlite)",
+      "id": "sql.execute.identifiers.sqlite-a-column-named-x22-ax5c-x22-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "a\"b",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (exists of a column named \"a\\\"b\" under sqlite)",
+      "id": "sql.execute.identifiers.sqlite-exists-of-a-column-named-x22-ax5c-x22-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "exists",
+          "operand": {
+            "key": "a\"b",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"select\" under sqlite)",
+      "id": "sql.execute.identifiers.sqlite-a-column-named-x22-selectx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "select",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (exists of a column named \"select\" under sqlite)",
+      "id": "sql.execute.identifiers.sqlite-exists-of-a-column-named-x22-selectx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "exists",
+          "operand": {
+            "key": "select",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"1abc\" under sqlite)",
+      "id": "sql.execute.identifiers.sqlite-a-column-named-x22-1abcx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "1abc",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (exists of a column named \"1abc\" under sqlite)",
+      "id": "sql.execute.identifiers.sqlite-exists-of-a-column-named-x22-1abcx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "exists",
+          "operand": {
+            "key": "1abc",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a b\" under sqlite)",
+      "id": "sql.execute.identifiers.sqlite-a-column-named-x22-a-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "a b",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (exists of a column named \"a b\" under sqlite)",
+      "id": "sql.execute.identifiers.sqlite-exists-of-a-column-named-x22-a-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "exists",
+          "operand": {
+            "key": "a b",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"é\" under sqlite)",
+      "id": "sql.execute.identifiers.sqlite-a-column-named-x22-xe9-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "é",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (exists of a column named \"é\" under sqlite)",
+      "id": "sql.execute.identifiers.sqlite-exists-of-a-column-named-x22-xe9-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "exists",
+          "operand": {
+            "key": "é",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"𝒜\" under sqlite)",
+      "id": "sql.execute.identifiers.sqlite-a-column-named-x22-x1d49c-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "𝒜",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (exists of a column named \"𝒜\" under sqlite)",
+      "id": "sql.execute.identifiers.sqlite-exists-of-a-column-named-x22-x1d49c-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "exists",
+          "operand": {
+            "key": "𝒜",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a'b\" under sqlite)",
+      "id": "sql.execute.identifiers.sqlite-a-column-named-x22-ax27-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "a'b",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (exists of a column named \"a'b\" under sqlite)",
+      "id": "sql.execute.identifiers.sqlite-exists-of-a-column-named-x22-ax27-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "exists",
+          "operand": {
+            "key": "a'b",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a\\\\b\" under sqlite)",
+      "id": "sql.execute.identifiers.sqlite-a-column-named-x22-ax5c-x5c-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "a\\b",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (exists of a column named \"a\\\\b\" under sqlite)",
+      "id": "sql.execute.identifiers.sqlite-exists-of-a-column-named-x22-ax5c-x5c-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "exists",
+          "operand": {
+            "key": "a\\b",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a--b\" under sqlite)",
+      "id": "sql.execute.identifiers.sqlite-a-column-named-x22-ax2d-x2d-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "a--b",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (exists of a column named \"a--b\" under sqlite)",
+      "id": "sql.execute.identifiers.sqlite-exists-of-a-column-named-x22-ax2d-x2d-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "exists",
+          "operand": {
+            "key": "a--b",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a;b\" under sqlite)",
+      "id": "sql.execute.identifiers.sqlite-a-column-named-x22-ax3b-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "a;b",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (exists of a column named \"a;b\" under sqlite)",
+      "id": "sql.execute.identifiers.sqlite-exists-of-a-column-named-x22-ax3b-bx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "exists",
+          "operand": {
+            "key": "a;b",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a\\nb\" under sqlite)",
+      "id": "sql.execute.identifiers.sqlite-a-column-named-x22-ax5c-nbx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "a\nb",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (exists of a column named \"a\\nb\" under sqlite)",
+      "id": "sql.execute.identifiers.sqlite-exists-of-a-column-named-x22-ax5c-nbx22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "exists",
+          "operand": {
+            "key": "a\nb",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"%\" under sqlite)",
+      "id": "sql.execute.identifiers.sqlite-a-column-named-x22-x25-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "%",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (exists of a column named \"%\" under sqlite)",
+      "id": "sql.execute.identifiers.sqlite-exists-of-a-column-named-x22-x25-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "exists",
+          "operand": {
+            "key": "%",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"_\" under sqlite)",
+      "id": "sql.execute.identifiers.sqlite-a-column-named-x22-x5f-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "_",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (exists of a column named \"_\" under sqlite)",
+      "id": "sql.execute.identifiers.sqlite-exists-of-a-column-named-x22-x5f-x22",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "exists",
+          "operand": {
+            "key": "_",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (a collection table with a quote in its name under sqlite)",
+      "id": "sql.execute.identifiers.sqlite-a-collection-table-with-a-quote-in-its-name",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "collections": {
+            "kids": {
+              "columns": {
+                "label": {
+                  "column": "label",
+                  "paramType": "text"
+                },
+                "rank": {
+                  "column": "rank",
+                  "paramType": "number"
+                }
+              },
+              "join": "\"we\"\"ird kids\".\"owner\" = \"odd\"\"table\".\"id\"",
+              "table": "we\"ird kids"
+            }
+          },
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "collection": "kids",
+          "item": {
+            "kind": "compare",
+            "left": {
+              "key": "rank",
+              "kind": "reference"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 5
+            }
+          },
+          "kind": "some"
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": []
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (every over a collection table with a quote in its name under sqlite)",
+      "id": "sql.execute.identifiers.sqlite-every-over-a-collection-table-with-a-quote-in-its-name",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "collections": {
+            "kids": {
+              "columns": {
+                "label": {
+                  "column": "label",
+                  "paramType": "text"
+                },
+                "rank": {
+                  "column": "rank",
+                  "paramType": "number"
+                }
+              },
+              "join": "\"we\"\"ird kids\".\"owner\" = \"odd\"\"table\".\"id\"",
+              "table": "we\"ird kids"
+            }
+          },
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "collection": "kids",
+          "item": {
+            "kind": "compare",
+            "left": {
+              "key": "rank",
+              "kind": "reference"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 5
+            }
+          },
+          "kind": "every"
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "r1"
+        ]
+      },
+      "fixture": "identifiers",
+      "from": "recorded: trilean-sql src/compile.ts (a fold over a collection table with a quote in its name under sqlite)",
+      "id": "sql.execute.identifiers.sqlite-a-fold-over-a-collection-table-with-a-quote-in-its-name",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "collections": {
+            "kids": {
+              "columns": {
+                "label": {
+                  "column": "label",
+                  "paramType": "text"
+                },
+                "rank": {
+                  "column": "rank",
+                  "paramType": "number"
+                }
+              },
+              "join": "\"we\"\"ird kids\".\"owner\" = \"odd\"\"table\".\"id\"",
+              "table": "we\"ird kids"
+            }
+          },
+          "columns": {
+            "%": {
+              "column": "%",
+              "paramType": "number"
+            },
+            "1abc": {
+              "column": "1abc",
+              "paramType": "number"
+            },
+            "_": {
+              "column": "_",
+              "paramType": "number"
+            },
+            "a\nb": {
+              "column": "a\nb",
+              "paramType": "number"
+            },
+            "a b": {
+              "column": "a b",
+              "paramType": "number"
+            },
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "number"
+            },
+            "a'b": {
+              "column": "a'b",
+              "paramType": "number"
+            },
+            "a--b": {
+              "column": "a--b",
+              "paramType": "number"
+            },
+            "a;b": {
+              "column": "a;b",
+              "paramType": "number"
+            },
+            "a\\b": {
+              "column": "a\\b",
+              "paramType": "number"
+            },
+            "select": {
+              "column": "select",
+              "paramType": "number"
+            },
+            "é": {
+              "column": "é",
+              "paramType": "number"
+            },
+            "𝒜": {
+              "column": "𝒜",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "collection": "kids",
+            "combiner": {
+              "item": {
+                "key": "rank",
+                "kind": "reference"
+              },
+              "mode": "max"
+            },
+            "kind": "fold"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 5
+          }
+        }
+      }
+    }
+  ]
+}

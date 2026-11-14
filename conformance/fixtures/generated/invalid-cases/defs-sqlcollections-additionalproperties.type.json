@@ -1,0 +1,32 @@
+{
+  "cases": [
+    {
+      "expect": null,
+      "from": "guard.quantification.unit.test.ts: quantification over a collection > is pushable once collectionFor maps the collection",
+      "id": "sql.guard.guard-quantification.quantification-over-a-collection-is-pushable-onc",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "tags": "not-the-type"
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "score",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        },
+        "kind": "some"
+      }
+    }
+  ]
+}

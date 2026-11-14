@@ -1,0 +1,1210 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 18
+          },
+          {
+            "type": "boolean",
+            "value": true
+          }
+        ],
+        "sql": "(NOT ((\"age\" > $1::double precision) AND ((\"note\" IS NOT NULL) OR (\"active\" = $2::boolean))))"
+      },
+      "from": "compile.predicates.unit.test.ts: connectives > compiles and/or/not to their SQL counterparts",
+      "id": "sql.compile.compile-predicates.connectives-compiles-and-or-not-to-their-sql-cou",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "not",
+        "operand": {
+          "kind": "and",
+          "left": {
+            "kind": "compare",
+            "left": {
+              "key": "age",
+              "kind": "reference"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 18
+            }
+          },
+          "right": {
+            "kind": "or",
+            "left": {
+              "kind": "exists",
+              "operand": {
+                "key": "note",
+                "kind": "reference"
+              }
+            },
+            "right": {
+              "kind": "compare",
+              "left": {
+                "key": "active",
+                "kind": "reference"
+              },
+              "op": "eq",
+              "right": {
+                "kind": "booleanLiteral",
+                "value": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 18
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "((\"age\" > $1::double precision) AND (\"note\" IS NOT NULL) AND (\"name\" = $2::text))"
+      },
+      "from": "compile.predicates.unit.test.ts: connectives > compiles allOf and anyOf to n-ary AND and OR",
+      "id": "sql.compile.compile-predicates.connectives-compiles-allof-and-anyof-to-n-ary-an",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "allOf",
+        "operands": [
+          {
+            "kind": "compare",
+            "left": {
+              "key": "age",
+              "kind": "reference"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 18
+            }
+          },
+          {
+            "kind": "exists",
+            "operand": {
+              "key": "note",
+              "kind": "reference"
+            }
+          },
+          {
+            "kind": "textCompare",
+            "left": {
+              "key": "name",
+              "kind": "reference"
+            },
+            "op": "equals",
+            "right": {
+              "kind": "textLiteral",
+              "value": "ada"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 18
+          },
+          {
+            "type": "text",
+            "value": "ada"
+          }
+        ],
+        "sql": "((\"age\" > $1::double precision) OR (\"note\" IS NOT NULL) OR (\"name\" = $2::text))"
+      },
+      "from": "compile.predicates.unit.test.ts: connectives > compiles allOf and anyOf to n-ary AND and OR",
+      "id": "sql.compile.compile-predicates.connectives-compiles-allof-and-anyof-to-n-ary-an-2",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "anyOf",
+        "operands": [
+          {
+            "kind": "compare",
+            "left": {
+              "key": "age",
+              "kind": "reference"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 18
+            }
+          },
+          {
+            "kind": "exists",
+            "operand": {
+              "key": "note",
+              "kind": "reference"
+            }
+          },
+          {
+            "kind": "textCompare",
+            "left": {
+              "key": "name",
+              "kind": "reference"
+            },
+            "op": "equals",
+            "right": {
+              "kind": "textLiteral",
+              "value": "ada"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(TRUE)"
+      },
+      "from": "compile.predicates.unit.test.ts: connectives > compiles an empty allOf and anyOf to each connective's own identity",
+      "id": "sql.compile.compile-predicates.connectives-compiles-an-empty-allof-and-anyof-to",
+      "kind": "sql-compile",
+      "options": {
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "allOf",
+        "operands": []
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(FALSE)"
+      },
+      "from": "compile.predicates.unit.test.ts: connectives > compiles an empty allOf and anyOf to each connective's own identity",
+      "id": "sql.compile.compile-predicates.connectives-compiles-an-empty-allof-and-anyof-to-2",
+      "kind": "sql-compile",
+      "options": {
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "anyOf",
+        "operands": []
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 40
+          }
+        ],
+        "sql": "(\"age\" > $1::double precision)"
+      },
+      "from": "compile.predicates.unit.test.ts: compare > compiles 'gt' to '>'",
+      "id": "sql.compile.compile-predicates.compare-compiles-gt-to",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 40
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 40
+          }
+        ],
+        "sql": "(\"age\" >= $1::double precision)"
+      },
+      "from": "compile.predicates.unit.test.ts: compare > compiles 'gte' to '>='",
+      "id": "sql.compile.compile-predicates.compare-compiles-gte-to",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gte",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 40
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 40
+          }
+        ],
+        "sql": "(\"age\" < $1::double precision)"
+      },
+      "from": "compile.predicates.unit.test.ts: compare > compiles 'lt' to '<'",
+      "id": "sql.compile.compile-predicates.compare-compiles-lt-to",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "lt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 40
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 40
+          }
+        ],
+        "sql": "(\"age\" <= $1::double precision)"
+      },
+      "from": "compile.predicates.unit.test.ts: compare > compiles 'lte' to '<='",
+      "id": "sql.compile.compile-predicates.compare-compiles-lte-to",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "lte",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 40
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 40
+          }
+        ],
+        "sql": "(\"age\" = $1::double precision)"
+      },
+      "from": "compile.predicates.unit.test.ts: compare > compiles 'eq' to '='",
+      "id": "sql.compile.compile-predicates.compare-compiles-eq-to",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 40
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 40
+          }
+        ],
+        "sql": "(\"age\" <> $1::double precision)"
+      },
+      "from": "compile.predicates.unit.test.ts: compare > compiles 'neq' to '<>'",
+      "id": "sql.compile.compile-predicates.compare-compiles-neq-to",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "neq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 40
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "timestamp",
+            "value": "2020-01-01T00:00:00+02:00"
+          }
+        ],
+        "sql": "(\"joined\" >= $1::timestamptz)"
+      },
+      "from": "compile.predicates.unit.test.ts: compare > casts an instant literal to timestamptz so an offset survives the comparison",
+      "id": "sql.compile.compile-predicates.compare-casts-an-instant-literal-to-timestamptz",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "joined",
+          "kind": "reference"
+        },
+        "op": "gte",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00+02:00"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 1
+          },
+          {
+            "type": "number",
+            "value": 2
+          }
+        ],
+        "sql": "($1::double precision < $2::double precision)"
+      },
+      "from": "compile.predicates.unit.test.ts: compare > casts both sides when neither operand is a column",
+      "id": "sql.compile.compile-predicates.compare-casts-both-sides-when-neither-operand-is",
+      "kind": "sql-compile",
+      "options": {
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 1
+        },
+        "op": "lt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 2
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"age\" > $1::double precision)"
+      },
+      "from": "compile.predicates.unit.test.ts: compare > casts by the literal's own kind, whether or not the column declares one",
+      "id": "sql.compile.compile-predicates.compare-casts-by-the-literal-s-own-kind-whether",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 1
+          }
+        ],
+        "sql": "(\"note\" > $1::double precision)"
+      },
+      "from": "compile.predicates.unit.test.ts: compare > casts by the literal's own kind, whether or not the column declares one",
+      "id": "sql.compile.compile-predicates.compare-casts-by-the-literal-s-own-kind-whether-2",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "note",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "^a"
+          }
+        ],
+        "sql": "(\"name\" = $1::text)"
+      },
+      "from": "compile.predicates.unit.test.ts: textCompare > compiles 'equals' to '='",
+      "id": "sql.compile.compile-predicates.textcompare-compiles-equals-to",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "^a"
+          }
+        ],
+        "sql": "(\"name\" <> $1::text)"
+      },
+      "from": "compile.predicates.unit.test.ts: textCompare > compiles 'notEquals' to '<>'",
+      "id": "sql.compile.compile-predicates.textcompare-compiles-notequals-to",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "notEquals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "^a"
+          }
+        ],
+        "sql": "(\"name\" ~ $1::text)"
+      },
+      "from": "compile.predicates.unit.test.ts: textCompare > compiles 'matches' to '~' once postgresRegexpPushdown is set true",
+      "id": "sql.compile.compile-predicates.textcompare-compiles-matches-to-once-postgresreg",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "postgres",
+        "postgresRegexpPushdown": true
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "^a"
+          }
+        ],
+        "sql": "(\"name\" !~ $1::text)"
+      },
+      "from": "compile.predicates.unit.test.ts: textCompare > compiles 'notMatches' to '!~' once postgresRegexpPushdown is set true",
+      "id": "sql.compile.compile-predicates.textcompare-compiles-notmatches-to-once-postgres",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "postgres",
+        "postgresRegexpPushdown": true
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "notMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textCompare' at $: 'matches' matches trilean's own ECMAScript 'RegExp' against the pattern, whereas PostgreSQL's '~'/'!~' would match it under PostgreSQL's own regular-expression dialect (POSIX ARE), a different language that can silently answer a different set of rows for the same pattern and data (for example, PostgreSQL's '.' matches a newline by default where ECMAScript's does not, and PostgreSQL's '\\w' follows the database's locale where ECMAScript's is ASCII-only), so this is refused unless 'postgresRegexpPushdown' is explicitly set 'true'",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textCompare",
+          "path": "$",
+          "reason": "'matches' matches trilean's own ECMAScript 'RegExp' against the pattern, whereas PostgreSQL's '~'/'!~' would match it under PostgreSQL's own regular-expression dialect (POSIX ARE), a different language that can silently answer a different set of rows for the same pattern and data (for example, PostgreSQL's '.' matches a newline by default where ECMAScript's does not, and PostgreSQL's '\\w' follows the database's locale where ECMAScript's is ASCII-only), so this is refused unless 'postgresRegexpPushdown' is explicitly set 'true'"
+        }
+      },
+      "from": "compile.predicates.unit.test.ts: textCompare > refuses 'matches' against PostgreSQL by default, since PostgreSQL matches it under its own regular-expression dialect rather than trilean's ECMAScript one",
+      "id": "sql.compile.compile-predicates.textcompare-refuses-matches-against-postgresql-b",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textCompare' at $: 'notMatches' matches trilean's own ECMAScript 'RegExp' against the pattern, whereas PostgreSQL's '~'/'!~' would match it under PostgreSQL's own regular-expression dialect (POSIX ARE), a different language that can silently answer a different set of rows for the same pattern and data (for example, PostgreSQL's '.' matches a newline by default where ECMAScript's does not, and PostgreSQL's '\\w' follows the database's locale where ECMAScript's is ASCII-only), so this is refused unless 'postgresRegexpPushdown' is explicitly set 'true'",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textCompare",
+          "path": "$",
+          "reason": "'notMatches' matches trilean's own ECMAScript 'RegExp' against the pattern, whereas PostgreSQL's '~'/'!~' would match it under PostgreSQL's own regular-expression dialect (POSIX ARE), a different language that can silently answer a different set of rows for the same pattern and data (for example, PostgreSQL's '.' matches a newline by default where ECMAScript's does not, and PostgreSQL's '\\w' follows the database's locale where ECMAScript's is ASCII-only), so this is refused unless 'postgresRegexpPushdown' is explicitly set 'true'"
+        }
+      },
+      "from": "compile.predicates.unit.test.ts: textCompare > refuses 'notMatches' against PostgreSQL by default, since PostgreSQL matches it under its own regular-expression dialect rather than trilean's ECMAScript one",
+      "id": "sql.compile.compile-predicates.textcompare-refuses-notmatches-against-postgresq",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "notMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"name\" = \"note\")"
+      },
+      "from": "compile.predicates.unit.test.ts: textCompare > compares two columns without producing a parameter",
+      "id": "sql.compile.compile-predicates.textcompare-compares-two-columns-without-produci",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "key": "note",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "^a[0-9]c$"
+          }
+        ],
+        "sql": "(\"name\" ~ $1::text)"
+      },
+      "from": "compile.predicates.unit.test.ts: textCompare > compiles 'portableMatches' to '~' against the pattern translated into PostgreSQL's own syntax",
+      "id": "sql.compile.compile-predicates.textcompare-compiles-portablematches-to-against",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "portableMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a\\dc$"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "^a[0-9]c$"
+          }
+        ],
+        "sql": "(\"name\" !~ $1::text)"
+      },
+      "from": "compile.predicates.unit.test.ts: textCompare > compiles 'portableNotMatches' to '!~' against the pattern translated into PostgreSQL's own syntax",
+      "id": "sql.compile.compile-predicates.textcompare-compiles-portablenotmatches-to-again",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "portableNotMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a\\dc$"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textCompare' at $: a 'portableMatches'/'portableNotMatches' pattern must be a literal, known at compile time: translating it into this dialect's own pattern syntax happens once, at compile time, not per row",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textCompare",
+          "path": "$",
+          "reason": "a 'portableMatches'/'portableNotMatches' pattern must be a literal, known at compile time: translating it into this dialect's own pattern syntax happens once, at compile time, not per row"
+        }
+      },
+      "from": "compile.predicates.unit.test.ts: textCompare > refuses portableMatches whose pattern is not a compile-time literal",
+      "id": "sql.compile.compile-predicates.textcompare-refuses-portablematches-whose-patter",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "portableMatches",
+        "right": {
+          "key": "note",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": {
+            "after": "\n  (a)\n  ^",
+            "before": "cannot compile 'textCompare' at $.right: invalid pattern at index 0: ",
+            "relayed": [
+              "capturing groups are not supported in this grammar",
+              "there is nothing to capture, since a pattern only ever answers whether it matches. Use '(?:...)' for grouping."
+            ],
+            "separator": {
+              "codeUnits": [
+                32,
+                45,
+                45,
+                32
+              ]
+            }
+          },
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textCompare",
+          "path": "$.right",
+          "reason": {
+            "after": "\n  (a)\n  ^",
+            "before": "invalid pattern at index 0: ",
+            "relayed": [
+              "capturing groups are not supported in this grammar",
+              "there is nothing to capture, since a pattern only ever answers whether it matches. Use '(?:...)' for grouping."
+            ],
+            "separator": {
+              "codeUnits": [
+                32,
+                45,
+                45,
+                32
+              ]
+            }
+          }
+        }
+      },
+      "from": "compile.predicates.unit.test.ts: textCompare > refuses portableMatches whose pattern is not valid trilean-regex syntax",
+      "id": "sql.compile.compile-predicates.textcompare-refuses-portablematches-whose-patter-2",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "portableMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "(a)"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textCompare' at $.right: PostgreSQL's regular expressions permit a bound of at most 255; {256} exceeds it",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textCompare",
+          "path": "$.right",
+          "reason": "PostgreSQL's regular expressions permit a bound of at most 255; {256} exceeds it"
+        }
+      },
+      "from": "compile.predicates.unit.test.ts: textCompare > refuses portableMatches whose pattern's bound exceeds PostgreSQL's 0-255 limit",
+      "id": "sql.compile.compile-predicates.textcompare-refuses-portablematches-whose-patter-3",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "portableMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "a{256}"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "ada"
+          },
+          {
+            "type": "text",
+            "value": "grace"
+          }
+        ],
+        "sql": "(\"name\" IN ($1::text, $2::text))"
+      },
+      "from": "compile.predicates.unit.test.ts: memberOf > compiles 'in' to IN with one parameter per candidate",
+      "id": "sql.compile.compile-predicates.memberof-compiles-in-to-in-with-one-parameter-pe",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "ada"
+          },
+          {
+            "kind": "textLiteral",
+            "value": "grace"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 7
+          }
+        ],
+        "sql": "(\"age\" NOT IN ($1::double precision))"
+      },
+      "from": "compile.predicates.unit.test.ts: memberOf > compiles 'notIn' to NOT IN",
+      "id": "sql.compile.compile-predicates.memberof-compiles-notin-to-not-in",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "numberLiteral",
+            "value": 7
+          }
+        ],
+        "kind": "memberOf",
+        "op": "notIn",
+        "operand": {
+          "key": "age",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"name\" IS NULL AND NULL::boolean)"
+      },
+      "from": "compile.predicates.unit.test.ts: memberOf > compiles an empty candidate list to a form that still propagates the operand's NULL",
+      "id": "sql.compile.compile-predicates.memberof-compiles-an-empty-candidate-list-to-a-f",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"name\" IS NOT NULL OR NULL::boolean)"
+      },
+      "from": "compile.predicates.unit.test.ts: memberOf > compiles an empty candidate list to a form that still propagates the operand's NULL",
+      "id": "sql.compile.compile-predicates.memberof-compiles-an-empty-candidate-list-to-a-f-2",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [],
+        "kind": "memberOf",
+        "op": "notIn",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"note\" IS NOT NULL)"
+      },
+      "from": "compile.predicates.unit.test.ts: exists > compiles to IS NOT NULL",
+      "id": "sql.compile.compile-predicates.exists-compiles-to-is-not-null",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "note",
+          "kind": "reference"
+        }
+      }
+    }
+  ]
+}

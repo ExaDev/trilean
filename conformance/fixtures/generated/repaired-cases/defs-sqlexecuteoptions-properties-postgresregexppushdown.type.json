@@ -1,0 +1,40 @@
+{
+  "cases": [
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "grace",
+          "lin"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "postgres.predicates.integration.test.ts: textCompare > leaves a NULL operand unknown under a negated match, once postgresRegexpPushdown opts into it",
+      "id": "sql.execute.postgres-predicates.textcompare-leaves-a-null-operand-unknown-under",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            }
+          },
+          "postgresRegexpPushdown": true
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "name",
+            "kind": "reference"
+          },
+          "op": "notMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a"
+          }
+        }
+      }
+    }
+  ]
+}

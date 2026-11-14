@@ -1,0 +1,895 @@
+{
+  "cases": [
+    {
+      "expect": null,
+      "from": "guard.dialect.unit.test.ts: sqliteRegexpAvailable > leaves matches/notMatches pushable when the flag is unset",
+      "id": "sql.guard.guard-dialect.sqliteregexpavailable-leaves-matches-notmatches",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "guard.dialect.unit.test.ts: sqliteRegexpAvailable > leaves matches/notMatches pushable when the flag is unset",
+      "id": "sql.guard.guard-dialect.sqliteregexpavailable-leaves-matches-notmatches-2",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "notMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "guard.dialect.unit.test.ts: sqliteRegexpAvailable > leaves matches/notMatches pushable when the flag is true",
+      "id": "sql.guard.guard-dialect.sqliteregexpavailable-leaves-matches-notmatches-3",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "sqlite",
+        "sqliteRegexpAvailable": true
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "guard.dialect.unit.test.ts: sqliteRegexpAvailable > leaves matches/notMatches pushable when the flag is true",
+      "id": "sql.guard.guard-dialect.sqliteregexpavailable-leaves-matches-notmatches-4",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "sqlite",
+        "sqliteRegexpAvailable": true
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "notMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "textCompare",
+        "path": "$",
+        "reason": "options.sqliteRegexpAvailable is false: the caller has stated no regexp(pattern, value) function can be registered on this SQLite target, so 'matches' would compile to SQL that fails at query execution time with \"no such function: REGEXP\" instead of at compile time"
+      },
+      "from": "guard.dialect.unit.test.ts: sqliteRegexpAvailable > refuses '{ kind: 'textCompare', …(3) }' under sqlite once the flag is false",
+      "id": "sql.guard.guard-dialect.sqliteregexpavailable-refuses-kind-textcompare-3",
+      "kind": "sql-guard",
+      "options": {
+        "dialect": "sqlite",
+        "sqliteRegexpAvailable": false
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "textCompare",
+        "path": "$",
+        "reason": "options.sqliteRegexpAvailable is false: the caller has stated no regexp(pattern, value) function can be registered on this SQLite target, so 'notMatches' would compile to SQL that fails at query execution time with \"no such function: REGEXP\" instead of at compile time"
+      },
+      "from": "guard.dialect.unit.test.ts: sqliteRegexpAvailable > refuses '{ kind: 'textCompare', …(3) }' under sqlite once the flag is false",
+      "id": "sql.guard.guard-dialect.sqliteregexpavailable-refuses-kind-textcompare-3-2",
+      "kind": "sql-guard",
+      "options": {
+        "dialect": "sqlite",
+        "sqliteRegexpAvailable": false
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "notMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "guard.dialect.unit.test.ts: sqliteRegexpAvailable > has no effect on the postgres dialect, which has its own separate postgresRegexpPushdown gate",
+      "id": "sql.guard.guard-dialect.sqliteregexpavailable-has-no-effect-on-the-postg",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "postgres",
+        "postgresRegexpPushdown": true,
+        "sqliteRegexpAvailable": false
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "guard.dialect.unit.test.ts: sqliteRegexpAvailable > leaves an equals/notEquals textCompare pushable regardless of the flag",
+      "id": "sql.guard.guard-dialect.sqliteregexpavailable-leaves-an-equals-notequals",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "sqlite",
+        "sqliteRegexpAvailable": false
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "ada"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "textCompare",
+        "path": "$",
+        "reason": "'matches' matches trilean's own ECMAScript 'RegExp' against the pattern, whereas PostgreSQL's '~'/'!~' would match it under PostgreSQL's own regular-expression dialect (POSIX ARE), a different language that can silently answer a different set of rows for the same pattern and data (for example, PostgreSQL's '.' matches a newline by default where ECMAScript's does not, and PostgreSQL's '\\w' follows the database's locale where ECMAScript's is ASCII-only), so this is refused unless 'postgresRegexpPushdown' is explicitly set 'true'"
+      },
+      "from": "guard.dialect.unit.test.ts: PostgreSQL regular-expression pushdown > refuses 'matches' against PostgreSQL by default",
+      "id": "sql.guard.guard-dialect.postgresql-regular-expression-pushdown-refuses-m",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "textCompare",
+        "path": "$",
+        "reason": "'notMatches' matches trilean's own ECMAScript 'RegExp' against the pattern, whereas PostgreSQL's '~'/'!~' would match it under PostgreSQL's own regular-expression dialect (POSIX ARE), a different language that can silently answer a different set of rows for the same pattern and data (for example, PostgreSQL's '.' matches a newline by default where ECMAScript's does not, and PostgreSQL's '\\w' follows the database's locale where ECMAScript's is ASCII-only), so this is refused unless 'postgresRegexpPushdown' is explicitly set 'true'"
+      },
+      "from": "guard.dialect.unit.test.ts: PostgreSQL regular-expression pushdown > refuses 'notMatches' against PostgreSQL by default",
+      "id": "sql.guard.guard-dialect.postgresql-regular-expression-pushdown-refuses-n",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "notMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "textCompare",
+        "path": "$",
+        "reason": "'matches' matches trilean's own ECMAScript 'RegExp' against the pattern, whereas PostgreSQL's '~'/'!~' would match it under PostgreSQL's own regular-expression dialect (POSIX ARE), a different language that can silently answer a different set of rows for the same pattern and data (for example, PostgreSQL's '.' matches a newline by default where ECMAScript's does not, and PostgreSQL's '\\w' follows the database's locale where ECMAScript's is ASCII-only), so this is refused unless 'postgresRegexpPushdown' is explicitly set 'true'"
+      },
+      "from": "guard.dialect.unit.test.ts: PostgreSQL regular-expression pushdown > refuses 'matches' against PostgreSQL with no options at all, since the default dialect is PostgreSQL and the default is refusal",
+      "id": "sql.guard.guard-dialect.postgresql-regular-expression-pushdown-refuses-m-2",
+      "kind": "sql-guard",
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "guard.dialect.unit.test.ts: PostgreSQL regular-expression pushdown > allows 'matches' against PostgreSQL once postgresRegexpPushdown is set true",
+      "id": "sql.guard.guard-dialect.postgresql-regular-expression-pushdown-allows-ma",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "postgres",
+        "postgresRegexpPushdown": true
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "guard.dialect.unit.test.ts: PostgreSQL regular-expression pushdown > allows 'matches' against SQLite unconditionally, since this gate is specific to PostgreSQL's own regular-expression dialect",
+      "id": "sql.guard.guard-dialect.postgresql-regular-expression-pushdown-allows-ma-2",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "guard.dialect.unit.test.ts: PostgreSQL regular-expression pushdown > does not refuse 'equals'/'notEquals' textCompare nodes, which carry no pattern",
+      "id": "sql.guard.guard-dialect.postgresql-regular-expression-pushdown-does-not",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "numberLiteral",
+        "path": "$.right",
+        "reason": "NaN is equal to nothing in trilean, not even itself, whereas PostgreSQL defines NaN as equal to itself and greater than every other double"
+      },
+      "from": "guard.dialect.unit.test.ts: refusal reasons are worded for the dialect they describe > refuses the same node at the same path in either dialect",
+      "id": "sql.guard.guard-dialect.refusal-reasons-are-worded-for-the-dialect-they",
+      "kind": "sql-guard",
+      "options": {
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": {
+            "$number": "NaN"
+          }
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "numberLiteral",
+        "path": "$.right",
+        "reason": "NaN is equal to nothing in trilean, not even itself, whereas SQLite has no NaN at all and a driver binding one substitutes SQL NULL, so 'NaN = NaN' is indeterminate there rather than definitely false, and its negation matches every row instead of none"
+      },
+      "from": "guard.dialect.unit.test.ts: refusal reasons are worded for the dialect they describe > refuses the same node at the same path in either dialect",
+      "id": "sql.guard.guard-dialect.refusal-reasons-are-worded-for-the-dialect-they-2",
+      "kind": "sql-guard",
+      "options": {
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": {
+            "$number": "NaN"
+          }
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "compare",
+        "path": "$",
+        "reason": "'compare' never compares text in trilean: it returns wrong-type and directs the caller to 'textCompare'; but PostgreSQL would order the text operand at $.left collation-wise and answer definitely"
+      },
+      "from": "guard.dialect.unit.test.ts: refusal reasons are worded for the dialect they describe > refuses the same node at the same path in either dialect",
+      "id": "sql.guard.guard-dialect.refusal-reasons-are-worded-for-the-dialect-they-3",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "textLiteral",
+          "value": "ada"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "compare",
+        "path": "$",
+        "reason": "'compare' never compares text in trilean: it returns wrong-type and directs the caller to 'textCompare'; but SQLite would answer definitely for the text operand at $.left, comparing it under the text affinity it applies to the other side ('9' > 5 is true there, while '10' > 5 is not)"
+      },
+      "from": "guard.dialect.unit.test.ts: refusal reasons are worded for the dialect they describe > refuses the same node at the same path in either dialect",
+      "id": "sql.guard.guard-dialect.refusal-reasons-are-worded-for-the-dialect-they-4",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "textLiteral",
+          "value": "ada"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "compare",
+        "path": "$",
+        "reason": "booleans have no ordering in trilean, so 'gt' against the boolean operand at $.left is wrong-type there, whereas PostgreSQL orders false before true"
+      },
+      "from": "guard.dialect.unit.test.ts: refusal reasons are worded for the dialect they describe > refuses the same node at the same path in either dialect",
+      "id": "sql.guard.guard-dialect.refusal-reasons-are-worded-for-the-dialect-they-5",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "active",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "booleanLiteral",
+          "value": false
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "compare",
+        "path": "$",
+        "reason": "booleans have no ordering in trilean, so 'gt' against the boolean operand at $.left is wrong-type there, whereas SQLite stores booleans as the integers 0 and 1 and orders them as integers"
+      },
+      "from": "guard.dialect.unit.test.ts: refusal reasons are worded for the dialect they describe > refuses the same node at the same path in either dialect",
+      "id": "sql.guard.guard-dialect.refusal-reasons-are-worded-for-the-dialect-they-6",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "active",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "booleanLiteral",
+          "value": false
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "compare",
+        "path": "$",
+        "reason": "trilean treats a comparison between a 'number' value ($.left) and a 'instant' value ($.right) as wrong-type, whereas PostgreSQL may coerce one to the other and answer definitely"
+      },
+      "from": "guard.dialect.unit.test.ts: refusal reasons are worded for the dialect they describe > refuses the same node at the same path in either dialect",
+      "id": "sql.guard.guard-dialect.refusal-reasons-are-worded-for-the-dialect-they-7",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "compare",
+        "path": "$",
+        "reason": "trilean treats a comparison between a 'number' value ($.left) and a 'instant' value ($.right) as wrong-type, whereas SQLite's type affinity may coerce one to the other and answer definitely"
+      },
+      "from": "guard.dialect.unit.test.ts: refusal reasons are worded for the dialect they describe > refuses the same node at the same path in either dialect",
+      "id": "sql.guard.guard-dialect.refusal-reasons-are-worded-for-the-dialect-they-8",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "numberLiteral",
+        "path": "$.right",
+        "reason": "NaN is equal to nothing in trilean, not even itself, whereas SQLite has no NaN at all and a driver binding one substitutes SQL NULL, so 'NaN = NaN' is indeterminate there rather than definitely false, and its negation matches every row instead of none"
+      },
+      "from": "guard.dialect.unit.test.ts: refusal reasons are worded for the dialect they describe > explains a refused NaN by the substitution SQLite's drivers actually make",
+      "id": "sql.guard.guard-dialect.refusal-reasons-are-worded-for-the-dialect-they-9",
+      "kind": "sql-guard",
+      "options": {
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": {
+            "$number": "NaN"
+          }
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "numberLiteral",
+        "path": "$.right",
+        "reason": "NaN is equal to nothing in trilean, not even itself, whereas PostgreSQL defines NaN as equal to itself and greater than every other double"
+      },
+      "from": "guard.dialect.unit.test.ts: refusal reasons are worded for the dialect they describe > explains a refused NaN by PostgreSQL's own definition of it in the other dialect",
+      "id": "sql.guard.guard-dialect.refusal-reasons-are-worded-for-the-dialect-they-10",
+      "kind": "sql-guard",
+      "options": {
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": {
+            "$number": "NaN"
+          }
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "compare",
+        "path": "$",
+        "reason": "'compare' never compares text in trilean: it returns wrong-type and directs the caller to 'textCompare'; but SQLite would answer definitely for the text operand at $.left, comparing it under the text affinity it applies to the other side ('9' > 5 is true there, while '10' > 5 is not)"
+      },
+      "from": "guard.dialect.unit.test.ts: refusal reasons are worded for the dialect they describe > explains an ordered text operand by the coercion each engine performs",
+      "id": "sql.guard.guard-dialect.refusal-reasons-are-worded-for-the-dialect-they-11",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "textLiteral",
+          "value": "ada"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "compare",
+        "path": "$",
+        "reason": "'compare' never compares text in trilean: it returns wrong-type and directs the caller to 'textCompare'; but PostgreSQL would order the text operand at $.left collation-wise and answer definitely"
+      },
+      "from": "guard.dialect.unit.test.ts: refusal reasons are worded for the dialect they describe > explains an ordered text operand by the coercion each engine performs",
+      "id": "sql.guard.guard-dialect.refusal-reasons-are-worded-for-the-dialect-they-12",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "textLiteral",
+          "value": "ada"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "compare",
+        "path": "$",
+        "reason": "booleans have no ordering in trilean, so 'gt' against the boolean operand at $.left is wrong-type there, whereas SQLite stores booleans as the integers 0 and 1 and orders them as integers"
+      },
+      "from": "guard.dialect.unit.test.ts: refusal reasons are worded for the dialect they describe > explains an ordered boolean by how each engine represents one",
+      "id": "sql.guard.guard-dialect.refusal-reasons-are-worded-for-the-dialect-they-13",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "active",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "booleanLiteral",
+          "value": false
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "compare",
+        "path": "$",
+        "reason": "booleans have no ordering in trilean, so 'gt' against the boolean operand at $.left is wrong-type there, whereas PostgreSQL orders false before true"
+      },
+      "from": "guard.dialect.unit.test.ts: refusal reasons are worded for the dialect they describe > explains an ordered boolean by how each engine represents one",
+      "id": "sql.guard.guard-dialect.refusal-reasons-are-worded-for-the-dialect-they-14",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "active",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "booleanLiteral",
+          "value": false
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "compare",
+        "path": "$",
+        "reason": "trilean treats a comparison between a 'number' value ($.left) and a 'instant' value ($.right) as wrong-type, whereas SQLite's type affinity may coerce one to the other and answer definitely"
+      },
+      "from": "guard.dialect.unit.test.ts: refusal reasons are worded for the dialect they describe > explains a cross-kind comparison by the coercion each engine reaches for",
+      "id": "sql.guard.guard-dialect.refusal-reasons-are-worded-for-the-dialect-they-15",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "compare",
+        "path": "$",
+        "reason": "trilean treats a comparison between a 'number' value ($.left) and a 'instant' value ($.right) as wrong-type, whereas PostgreSQL may coerce one to the other and answer definitely"
+      },
+      "from": "guard.dialect.unit.test.ts: refusal reasons are worded for the dialect they describe > explains a cross-kind comparison by the coercion each engine reaches for",
+      "id": "sql.guard.guard-dialect.refusal-reasons-are-worded-for-the-dialect-they-16",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "numberLiteral",
+        "path": "$.left",
+        "reason": "NaN is equal to nothing in trilean, not even itself, whereas PostgreSQL defines NaN as equal to itself and greater than every other double"
+      },
+      "from": "guard.dialect.unit.test.ts: refusal reasons are worded for the dialect they describe > describes PostgreSQL when no options name a dialect at all",
+      "id": "sql.guard.guard-dialect.refusal-reasons-are-worded-for-the-dialect-they-17",
+      "kind": "sql-guard",
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "numberLiteral",
+          "value": {
+            "$number": "NaN"
+          }
+        },
+        "op": "eq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": {
+            "$number": "NaN"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,5344 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"a\"\"b\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a\\\"b\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-column-named-x22-ax5c-x22-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "a\"b"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"a\"\"b\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"a\\\"b\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-column-named-x22-ax5c-x22-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "a\"b"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"a\"\"b\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"a\\\"b\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-table-named-x22-ax5c-x22-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "a\"b"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"\"\"\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"\\\"\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-column-named-x22-x5c-x22-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "\""
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"\"\"\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"\\\"\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-column-named-x22-x5c-x22-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "\""
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"\"\"\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"\\\"\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-table-named-x22-x5c-x22-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "\""
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"\"\"\"\"\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"\\\"\\\"\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-column-named-x22-x5c-x22-x5c-x22-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "\"\""
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"\"\"\"\"\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"\\\"\\\"\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-column-named-x22-x5c-x22-x5c-x22-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "\"\""
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"\"\"\"\"\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"\\\"\\\"\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-table-named-x22-x5c-x22-x5c-x22-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "\"\""
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"a\\b\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a\\\\b\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-column-named-x22-ax5c-x5c-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "a\\b"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"a\\b\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"a\\\\b\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-column-named-x22-ax5c-x5c-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "a\\b"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"a\\b\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"a\\\\b\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-table-named-x22-ax5c-x5c-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "a\\b"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"a\nb\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a\\nb\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-column-named-x22-ax5c-nbx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "a\nb"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"a\nb\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"a\\nb\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-column-named-x22-ax5c-nbx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "a\nb"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"a\nb\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"a\\nb\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-table-named-x22-ax5c-nbx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "a\nb"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"a\rb\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a\\rb\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-column-named-x22-ax5c-rbx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "a\rb"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"a\rb\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"a\\rb\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-column-named-x22-ax5c-rbx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "a\rb"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"a\rb\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"a\\rb\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-table-named-x22-ax5c-rbx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "a\rb"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"a\tb\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a\\tb\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-column-named-x22-ax5c-tbx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "a\tb"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"a\tb\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"a\\tb\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-column-named-x22-ax5c-tbx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "a\tb"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"a\tb\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"a\\tb\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-table-named-x22-ax5c-tbx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "a\tb"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"1abc\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"1abc\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-column-named-x22-1abcx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "1abc"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"1abc\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"1abc\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-column-named-x22-1abcx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "1abc"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"1abc\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"1abc\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-table-named-x22-1abcx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "1abc"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"select\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"select\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-column-named-x22-selectx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "select"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"select\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"select\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-column-named-x22-selectx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "select"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"select\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"select\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-table-named-x22-selectx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "select"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"SELECT\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"SELECT\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-column-named-x22-selectx22-2",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "SELECT"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"SELECT\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"SELECT\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-column-named-x22-selectx22-2",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "SELECT"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"SELECT\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"SELECT\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-table-named-x22-selectx22-2",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "SELECT"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"a b\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a b\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-column-named-x22-a-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "a b"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"a b\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"a b\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-column-named-x22-a-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "a b"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"a b\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"a b\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-table-named-x22-a-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "a b"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"a--b\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a--b\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-column-named-x22-ax2d-x2d-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "a--b"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"a--b\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"a--b\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-column-named-x22-ax2d-x2d-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "a--b"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"a--b\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"a--b\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-table-named-x22-ax2d-x2d-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "a--b"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"a;b\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a;b\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-column-named-x22-ax3b-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "a;b"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"a;b\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"a;b\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-column-named-x22-ax3b-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "a;b"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"a;b\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"a;b\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-table-named-x22-ax3b-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "a;b"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"a'b\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a'b\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-column-named-x22-ax27-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "a'b"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"a'b\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"a'b\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-column-named-x22-ax27-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "a'b"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"a'b\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"a'b\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-table-named-x22-ax27-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "a'b"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"%\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"%\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-column-named-x22-x25-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "%"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"%\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"%\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-column-named-x22-x25-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "%"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"%\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"%\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-table-named-x22-x25-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "%"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"_\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"_\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-column-named-x22-x5f-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "_"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"_\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"_\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-column-named-x22-x5f-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "_"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"_\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"_\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-table-named-x22-x5f-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "_"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"é\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"é\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-column-named-x22-xe9-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "é"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"é\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"é\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-column-named-x22-xe9-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "é"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"é\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"é\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-table-named-x22-xe9-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "é"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"𝒜\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"𝒜\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-column-named-x22-x1d49c-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "𝒜"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"𝒜\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"𝒜\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-column-named-x22-x1d49c-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "𝒜"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"𝒜\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"𝒜\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-table-named-x22-x1d49c-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "𝒜"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named a name of 300 characters under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-column-named-a-name-of-300-characters",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named a name of 300 characters under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-column-named-a-name-of-300-characters",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named a name of 300 characters under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-table-named-a-name-of-300-characters",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"a\"\"b\".\"c\"\"d\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a\\\"b.c\\\"d\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-column-named-x22-ax5c-x22-bx2e-cx5c-x22-dx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "a\"b.c\"d"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"a\"\"b\".\"c\"\"d\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"a\\\"b.c\\\"d\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-column-named-x22-ax5c-x22-bx2e-cx5c-x22-dx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "a\"b.c\"d"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"a\"\"b\".\"c\"\"d\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"a\\\"b.c\\\"d\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-table-named-x22-ax5c-x22-bx2e-cx5c-x22-dx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "a\"b.c\"d"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"s\".\"t\".\"c\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"s.t.c\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-column-named-x22-sx2e-tx2e-cx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "s.t.c"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"s\".\"t\".\"c\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"s.t.c\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-column-named-x22-sx2e-tx2e-cx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "s.t.c"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"a\".\"b\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a.b\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-column-named-x22-ax2e-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "a.b"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"a\".\"b\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"a.b\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-column-named-x22-ax2e-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "a.b"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"a\".\"b\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"a.b\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-table-named-x22-ax2e-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "a.b"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "a.",
+          "message": "columnFor(\"k\") returned \"a.\", which is not a usable column identifier: a dot-separated segment is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a.\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-column-named-x22-ax2e-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "a."
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "a.",
+          "message": "columnFor(\"w\") returned \"a.\", which is not a usable column identifier: a dot-separated segment is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "w"
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"a.\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-column-named-x22-ax2e-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "a."
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "collectionKey": "tags",
+          "message": "collectionFor(\"tags\") returned \"a.\", which is not a usable table identifier: a dot-separated segment is empty",
+          "name": "InvalidCollectionTableError",
+          "table": "a."
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"a.\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-table-named-x22-ax2e-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "a."
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": ".a",
+          "message": "columnFor(\"k\") returned \".a\", which is not a usable column identifier: a dot-separated segment is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \".a\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-column-named-x22-x2e-ax22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": ".a"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": ".a",
+          "message": "columnFor(\"w\") returned \".a\", which is not a usable column identifier: a dot-separated segment is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "w"
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \".a\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-column-named-x22-x2e-ax22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": ".a"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "collectionKey": "tags",
+          "message": "collectionFor(\"tags\") returned \".a\", which is not a usable table identifier: a dot-separated segment is empty",
+          "name": "InvalidCollectionTableError",
+          "table": ".a"
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \".a\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-table-named-x22-x2e-ax22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": ".a"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "a..b",
+          "message": "columnFor(\"k\") returned \"a..b\", which is not a usable column identifier: a dot-separated segment is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a..b\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-column-named-x22-ax2e-x2e-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "a..b"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "a..b",
+          "message": "columnFor(\"w\") returned \"a..b\", which is not a usable column identifier: a dot-separated segment is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "w"
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"a..b\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-column-named-x22-ax2e-x2e-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "a..b"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "collectionKey": "tags",
+          "message": "collectionFor(\"tags\") returned \"a..b\", which is not a usable table identifier: a dot-separated segment is empty",
+          "name": "InvalidCollectionTableError",
+          "table": "a..b"
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"a..b\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-table-named-x22-ax2e-x2e-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "a..b"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": ".",
+          "message": "columnFor(\"k\") returned \".\", which is not a usable column identifier: a dot-separated segment is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \".\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-column-named-x22-x2e-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "."
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": ".",
+          "message": "columnFor(\"w\") returned \".\", which is not a usable column identifier: a dot-separated segment is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "w"
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \".\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-column-named-x22-x2e-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "."
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "collectionKey": "tags",
+          "message": "collectionFor(\"tags\") returned \".\", which is not a usable table identifier: a dot-separated segment is empty",
+          "name": "InvalidCollectionTableError",
+          "table": "."
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \".\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-table-named-x22-x2e-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "."
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "",
+          "message": "columnFor(\"k\") returned \"\", which is not a usable column identifier: the name is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-column-named-x22-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": ""
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "",
+          "message": "columnFor(\"w\") returned \"\", which is not a usable column identifier: the name is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "w"
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-column-named-x22-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": ""
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "collectionKey": "tags",
+          "message": "collectionFor(\"tags\") returned \"\", which is not a usable table identifier: the name is empty",
+          "name": "InvalidCollectionTableError",
+          "table": ""
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"\" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-table-named-x22-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": ""
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\" \" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \" \" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-column-named-x22-x22-2",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": " "
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\" \" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \" \" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-column-named-x22-x22-2",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": " "
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \" \" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \" \" under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-collection-table-named-x22-x22-2",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": " "
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\" AND 'x' = 'x') AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a join is spliced verbatim as the caller's own SQL under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-join-is-spliced-verbatim-as-the-callerx27-s-own-sql",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\" AND 'x' = 'x'",
+            "table": "t"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"main\".\"t\".\"w\" IS NOT NULL) AS \"item_ok\" FROM \"main\".\"t\" WHERE \"main\".\"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a schema, table and column path under postgres)",
+      "id": "sql.compile.identifiers.postgres-a-schemax2c-table-and-column-path",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "main.t.w"
+              }
+            },
+            "join": "\"main\".\"t\".\"k\" = \"s\".\"id\"",
+            "table": "main.t"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"a\"\"b\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a\\\"b\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-column-named-x22-ax5c-x22-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "a\"b"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"a\"\"b\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"a\\\"b\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-column-named-x22-ax5c-x22-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "a\"b"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"a\"\"b\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"a\\\"b\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-table-named-x22-ax5c-x22-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "a\"b"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"\"\"\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"\\\"\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-column-named-x22-x5c-x22-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "\""
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"\"\"\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"\\\"\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-column-named-x22-x5c-x22-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "\""
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"\"\"\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"\\\"\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-table-named-x22-x5c-x22-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "\""
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"\"\"\"\"\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"\\\"\\\"\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-column-named-x22-x5c-x22-x5c-x22-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "\"\""
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"\"\"\"\"\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"\\\"\\\"\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-column-named-x22-x5c-x22-x5c-x22-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "\"\""
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"\"\"\"\"\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"\\\"\\\"\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-table-named-x22-x5c-x22-x5c-x22-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "\"\""
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"a\\b\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a\\\\b\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-column-named-x22-ax5c-x5c-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "a\\b"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"a\\b\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"a\\\\b\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-column-named-x22-ax5c-x5c-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "a\\b"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"a\\b\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"a\\\\b\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-table-named-x22-ax5c-x5c-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "a\\b"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"a\nb\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a\\nb\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-column-named-x22-ax5c-nbx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "a\nb"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"a\nb\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"a\\nb\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-column-named-x22-ax5c-nbx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "a\nb"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"a\nb\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"a\\nb\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-table-named-x22-ax5c-nbx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "a\nb"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"a\rb\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a\\rb\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-column-named-x22-ax5c-rbx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "a\rb"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"a\rb\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"a\\rb\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-column-named-x22-ax5c-rbx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "a\rb"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"a\rb\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"a\\rb\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-table-named-x22-ax5c-rbx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "a\rb"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"a\tb\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a\\tb\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-column-named-x22-ax5c-tbx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "a\tb"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"a\tb\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"a\\tb\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-column-named-x22-ax5c-tbx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "a\tb"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"a\tb\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"a\\tb\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-table-named-x22-ax5c-tbx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "a\tb"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"1abc\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"1abc\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-column-named-x22-1abcx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "1abc"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"1abc\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"1abc\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-column-named-x22-1abcx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "1abc"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"1abc\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"1abc\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-table-named-x22-1abcx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "1abc"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"select\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"select\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-column-named-x22-selectx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "select"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"select\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"select\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-column-named-x22-selectx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "select"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"select\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"select\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-table-named-x22-selectx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "select"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"SELECT\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"SELECT\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-column-named-x22-selectx22-2",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "SELECT"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"SELECT\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"SELECT\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-column-named-x22-selectx22-2",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "SELECT"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"SELECT\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"SELECT\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-table-named-x22-selectx22-2",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "SELECT"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"a b\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a b\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-column-named-x22-a-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "a b"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"a b\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"a b\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-column-named-x22-a-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "a b"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"a b\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"a b\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-table-named-x22-a-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "a b"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"a--b\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a--b\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-column-named-x22-ax2d-x2d-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "a--b"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"a--b\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"a--b\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-column-named-x22-ax2d-x2d-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "a--b"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"a--b\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"a--b\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-table-named-x22-ax2d-x2d-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "a--b"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"a;b\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a;b\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-column-named-x22-ax3b-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "a;b"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"a;b\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"a;b\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-column-named-x22-ax3b-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "a;b"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"a;b\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"a;b\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-table-named-x22-ax3b-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "a;b"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"a'b\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a'b\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-column-named-x22-ax27-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "a'b"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"a'b\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"a'b\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-column-named-x22-ax27-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "a'b"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"a'b\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"a'b\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-table-named-x22-ax27-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "a'b"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"%\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"%\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-column-named-x22-x25-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "%"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"%\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"%\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-column-named-x22-x25-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "%"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"%\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"%\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-table-named-x22-x25-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "%"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"_\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"_\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-column-named-x22-x5f-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "_"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"_\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"_\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-column-named-x22-x5f-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "_"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"_\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"_\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-table-named-x22-x5f-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "_"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"é\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"é\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-column-named-x22-xe9-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "é"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"é\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"é\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-column-named-x22-xe9-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "é"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"é\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"é\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-table-named-x22-xe9-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "é"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"𝒜\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"𝒜\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-column-named-x22-x1d49c-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "𝒜"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"𝒜\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"𝒜\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-column-named-x22-x1d49c-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "𝒜"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"𝒜\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"𝒜\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-table-named-x22-x1d49c-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "𝒜"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named a name of 300 characters under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-column-named-a-name-of-300-characters",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named a name of 300 characters under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-column-named-a-name-of-300-characters",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named a name of 300 characters under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-table-named-a-name-of-300-characters",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"a\"\"b\".\"c\"\"d\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a\\\"b.c\\\"d\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-column-named-x22-ax5c-x22-bx2e-cx5c-x22-dx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "a\"b.c\"d"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"a\"\"b\".\"c\"\"d\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"a\\\"b.c\\\"d\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-column-named-x22-ax5c-x22-bx2e-cx5c-x22-dx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "a\"b.c\"d"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"a\"\"b\".\"c\"\"d\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"a\\\"b.c\\\"d\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-table-named-x22-ax5c-x22-bx2e-cx5c-x22-dx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "a\"b.c\"d"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"s\".\"t\".\"c\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"s.t.c\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-column-named-x22-sx2e-tx2e-cx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "s.t.c"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"s\".\"t\".\"c\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"s.t.c\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-column-named-x22-sx2e-tx2e-cx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "s.t.c"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"a\".\"b\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a.b\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-column-named-x22-ax2e-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "a.b"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"a\".\"b\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"a.b\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-column-named-x22-ax2e-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "a.b"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"a\".\"b\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"a.b\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-table-named-x22-ax2e-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "a.b"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "a.",
+          "message": "columnFor(\"k\") returned \"a.\", which is not a usable column identifier: a dot-separated segment is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a.\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-column-named-x22-ax2e-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "a."
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "a.",
+          "message": "columnFor(\"w\") returned \"a.\", which is not a usable column identifier: a dot-separated segment is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "w"
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"a.\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-column-named-x22-ax2e-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "a."
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "collectionKey": "tags",
+          "message": "collectionFor(\"tags\") returned \"a.\", which is not a usable table identifier: a dot-separated segment is empty",
+          "name": "InvalidCollectionTableError",
+          "table": "a."
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"a.\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-table-named-x22-ax2e-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "a."
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": ".a",
+          "message": "columnFor(\"k\") returned \".a\", which is not a usable column identifier: a dot-separated segment is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \".a\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-column-named-x22-x2e-ax22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": ".a"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": ".a",
+          "message": "columnFor(\"w\") returned \".a\", which is not a usable column identifier: a dot-separated segment is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "w"
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \".a\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-column-named-x22-x2e-ax22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": ".a"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "collectionKey": "tags",
+          "message": "collectionFor(\"tags\") returned \".a\", which is not a usable table identifier: a dot-separated segment is empty",
+          "name": "InvalidCollectionTableError",
+          "table": ".a"
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \".a\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-table-named-x22-x2e-ax22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": ".a"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "a..b",
+          "message": "columnFor(\"k\") returned \"a..b\", which is not a usable column identifier: a dot-separated segment is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"a..b\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-column-named-x22-ax2e-x2e-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "a..b"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "a..b",
+          "message": "columnFor(\"w\") returned \"a..b\", which is not a usable column identifier: a dot-separated segment is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "w"
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"a..b\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-column-named-x22-ax2e-x2e-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "a..b"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "collectionKey": "tags",
+          "message": "collectionFor(\"tags\") returned \"a..b\", which is not a usable table identifier: a dot-separated segment is empty",
+          "name": "InvalidCollectionTableError",
+          "table": "a..b"
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"a..b\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-table-named-x22-ax2e-x2e-bx22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "a..b"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": ".",
+          "message": "columnFor(\"k\") returned \".\", which is not a usable column identifier: a dot-separated segment is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \".\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-column-named-x22-x2e-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "."
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": ".",
+          "message": "columnFor(\"w\") returned \".\", which is not a usable column identifier: a dot-separated segment is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "w"
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \".\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-column-named-x22-x2e-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "."
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "collectionKey": "tags",
+          "message": "collectionFor(\"tags\") returned \".\", which is not a usable table identifier: a dot-separated segment is empty",
+          "name": "InvalidCollectionTableError",
+          "table": "."
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \".\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-table-named-x22-x2e-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "."
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "",
+          "message": "columnFor(\"k\") returned \"\", which is not a usable column identifier: the name is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \"\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-column-named-x22-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": ""
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "",
+          "message": "columnFor(\"w\") returned \"\", which is not a usable column identifier: the name is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "w"
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \"\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-column-named-x22-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": ""
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "collectionKey": "tags",
+          "message": "collectionFor(\"tags\") returned \"\", which is not a usable table identifier: the name is empty",
+          "name": "InvalidCollectionTableError",
+          "table": ""
+        }
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \"\" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-table-named-x22-x22",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": ""
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\" \" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a column named \" \" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-column-named-x22-x22-2",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": " "
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\" \" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection column named \" \" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-column-named-x22-x22-2",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": " "
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": "t"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \" \" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a collection table named \" \" under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-collection-table-named-x22-x22-2",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\"",
+            "table": " "
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\" AND 'x' = 'x') AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a join is spliced verbatim as the caller's own SQL under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-join-is-spliced-verbatim-as-the-callerx27-s-own-sql",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "w"
+              }
+            },
+            "join": "\"t\".\"k\" = \"s\".\"id\" AND 'x' = 'x'",
+            "table": "t"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"main\".\"t\".\"w\" IS NOT NULL) AS \"item_ok\" FROM \"main\".\"t\" WHERE \"main\".\"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (a schema, table and column path under sqlite)",
+      "id": "sql.compile.identifiers.sqlite-a-schemax2c-table-and-column-path",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "w": {
+                "column": "main.t.w"
+              }
+            },
+            "join": "\"main\".\"t\".\"k\" = \"s\".\"id\"",
+            "table": "main.t"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "w",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    }
+  ]
+}

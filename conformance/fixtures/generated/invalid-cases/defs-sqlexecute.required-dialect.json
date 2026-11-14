@@ -1,0 +1,35 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "rows": [
+          "ada",
+          "grace"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "x.unit.test.ts: a fixture",
+      "id": "optional.15",
+      "kind": "sql-execute",
+      "reason": "the implementation cannot run this case",
+      "run": {
+        "options": {
+          "columns": {
+            "note": {
+              "column": "note"
+            }
+          },
+          "sqliteRegexpAvailable": true
+        },
+        "tree": {
+          "kind": "exists",
+          "operand": {
+            "key": "note",
+            "kind": "reference"
+          }
+        }
+      },
+      "skip": "rust"
+    }
+  ]
+}

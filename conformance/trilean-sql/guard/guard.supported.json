@@ -1,0 +1,462 @@
+{
+  "cases": [
+    {
+      "expect": null,
+      "from": "guard.supported.unit.test.ts: supported trees > passes a tree built only from the kinds the compiler translates",
+      "id": "sql.guard.guard-supported.supported-trees-passes-a-tree-built-only-from-th",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "allOf",
+        "operands": [
+          {
+            "kind": "not",
+            "operand": {
+              "kind": "compare",
+              "left": {
+                "key": "age",
+                "kind": "reference"
+              },
+              "op": "gt",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 18
+              }
+            }
+          },
+          {
+            "kind": "or",
+            "left": {
+              "kind": "exists",
+              "operand": {
+                "key": "note",
+                "kind": "reference"
+              }
+            },
+            "right": {
+              "kind": "textCompare",
+              "left": {
+                "key": "name",
+                "kind": "reference"
+              },
+              "op": "equals",
+              "right": {
+                "kind": "textLiteral",
+                "value": "^a"
+              }
+            }
+          },
+          {
+            "candidates": [
+              {
+                "kind": "numberLiteral",
+                "value": 3
+              }
+            ],
+            "kind": "memberOf",
+            "op": "notIn",
+            "operand": {
+              "key": "age",
+              "kind": "reference"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "expect": null,
+      "from": "guard.supported.unit.test.ts: supported trees > does not consult columnFor when called without options",
+      "id": "sql.guard.guard-supported.supported-trees-does-not-consult-columnfor-when",
+      "kind": "sql-guard",
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 18
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "treeReference",
+        "path": "$",
+        "reason": "a referenced tree is resolved by the caller's resolvers; inline it before compiling"
+      },
+      "from": "guard.supported.unit.test.ts: predicate kinds this version does not translate > refuses 'treeReference'",
+      "id": "sql.guard.guard-supported.predicate-kinds-this-version-does-not-translate",
+      "kind": "sql-guard",
+      "options": {
+        "dialect": "postgres"
+      },
+      "tree": {
+        "key": "other",
+        "kind": "treeReference"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "treeReference",
+        "path": "$.operands[1].operand",
+        "reason": "a referenced tree is resolved by the caller's resolvers; inline it before compiling"
+      },
+      "from": "guard.supported.unit.test.ts: predicate kinds this version does not translate > reports the path of a refused node nested inside the tree",
+      "id": "sql.guard.guard-supported.predicate-kinds-this-version-does-not-translate-2",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "allOf",
+        "operands": [
+          {
+            "kind": "compare",
+            "left": {
+              "key": "age",
+              "kind": "reference"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 18
+            }
+          },
+          {
+            "kind": "not",
+            "operand": {
+              "key": "other",
+              "kind": "treeReference"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "durationLiteral",
+        "path": "$.right",
+        "reason": "trilean compares two durations in whichever unit each carries, and a column holds no unit to carry"
+      },
+      "from": "guard.supported.unit.test.ts: expression kinds this version does not translate > refuses 'durationLiteral' in a comparison operand",
+      "id": "sql.guard.guard-supported.expression-kinds-this-version-does-not-translate",
+      "kind": "sql-guard",
+      "options": {
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "min",
+          "value": 5
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "complexLiteral",
+        "path": "$.right",
+        "reason": "PostgreSQL has no complex number type"
+      },
+      "from": "guard.supported.unit.test.ts: expression kinds this version does not translate > refuses 'complexLiteral' in a comparison operand",
+      "id": "sql.guard.guard-supported.expression-kinds-this-version-does-not-translate-2",
+      "kind": "sql-guard",
+      "options": {
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "im": 2,
+          "kind": "complexLiteral",
+          "re": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "arithmetic",
+        "path": "$.right",
+        "reason": "arithmetic carries and combines units, and pushing it down would drop that dimensional analysis without saying so"
+      },
+      "from": "guard.supported.unit.test.ts: expression kinds this version does not translate > refuses 'arithmetic' in a comparison operand",
+      "id": "sql.guard.guard-supported.expression-kinds-this-version-does-not-translate-3",
+      "kind": "sql-guard",
+      "options": {
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "arithmetic",
+          "left": {
+            "kind": "numberLiteral",
+            "value": 1
+          },
+          "op": "add",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 2
+          }
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "negate",
+        "path": "$.right",
+        "reason": "arithmetic carries and combines units, and pushing it down would drop that dimensional analysis without saying so"
+      },
+      "from": "guard.supported.unit.test.ts: expression kinds this version does not translate > refuses 'negate' in a comparison operand",
+      "id": "sql.guard.guard-supported.expression-kinds-this-version-does-not-translate-4",
+      "kind": "sql-guard",
+      "options": {
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "negate",
+          "operand": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "call",
+        "path": "$.right",
+        "reason": "a function's implementation lives in the caller's FunctionRegistry, not in the database"
+      },
+      "from": "guard.supported.unit.test.ts: expression kinds this version does not translate > refuses 'call' in a comparison operand",
+      "id": "sql.guard.guard-supported.expression-kinds-this-version-does-not-translate-5",
+      "kind": "sql-guard",
+      "options": {
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "args": [],
+          "fn": "round",
+          "kind": "call"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "lookup",
+        "path": "$.right",
+        "reason": "a lookup table is resolved by the caller's resolvers"
+      },
+      "from": "guard.supported.unit.test.ts: expression kinds this version does not translate > refuses 'lookup' in a comparison operand",
+      "id": "sql.guard.guard-supported.expression-kinds-this-version-does-not-translate-6",
+      "kind": "sql-guard",
+      "options": {
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "keys": [],
+          "kind": "lookup",
+          "table": "rates"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "conditional",
+        "path": "$.right",
+        "reason": "conditional evaluation is not implemented in this version of the compiler"
+      },
+      "from": "guard.supported.unit.test.ts: expression kinds this version does not translate > refuses 'conditional' in a comparison operand",
+      "id": "sql.guard.guard-supported.expression-kinds-this-version-does-not-translate-7",
+      "kind": "sql-guard",
+      "options": {
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "cases": [],
+          "fallback": {
+            "kind": "numberLiteral",
+            "value": 0
+          },
+          "kind": "conditional"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "fold",
+        "path": "$.right",
+        "reason": "a 'reduce' fold threads an arbitrary combine expression through the collection in a caller-chosen order, which has no general SQL translation"
+      },
+      "from": "guard.supported.unit.test.ts: expression kinds this version does not translate > refuses 'fold' in a comparison operand",
+      "id": "sql.guard.guard-supported.expression-kinds-this-version-does-not-translate-8",
+      "kind": "sql-guard",
+      "options": {
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "collection": "xs",
+          "combiner": {
+            "combine": {
+              "kind": "numberLiteral",
+              "value": 1
+            },
+            "initial": {
+              "kind": "numberLiteral",
+              "value": 0
+            },
+            "mode": "reduce"
+          },
+          "kind": "fold"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "accumulator",
+        "path": "$.right",
+        "reason": "an accumulator is only meaningful inside a reduce fold"
+      },
+      "from": "guard.supported.unit.test.ts: expression kinds this version does not translate > refuses 'accumulator' in a comparison operand",
+      "id": "sql.guard.guard-supported.expression-kinds-this-version-does-not-translate-9",
+      "kind": "sql-guard",
+      "options": {
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "accumulator"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "delegate",
+        "path": "$.right",
+        "reason": "a delegated decision is made by an external system"
+      },
+      "from": "guard.supported.unit.test.ts: expression kinds this version does not translate > refuses 'delegate' in a comparison operand",
+      "id": "sql.guard.guard-supported.expression-kinds-this-version-does-not-translate-10",
+      "kind": "sql-guard",
+      "options": {
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "delegate",
+          "payload": null,
+          "system": "legacy"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "treeReference",
+        "path": "$.right",
+        "reason": "a referenced tree is resolved by the caller's resolvers; inline it before compiling"
+      },
+      "from": "guard.supported.unit.test.ts: expression kinds this version does not translate > refuses 'treeReference' in a comparison operand",
+      "id": "sql.guard.guard-supported.expression-kinds-this-version-does-not-translate-11",
+      "kind": "sql-guard",
+      "options": {
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "key": "other",
+          "kind": "treeReference"
+        }
+      }
+    }
+  ]
+}

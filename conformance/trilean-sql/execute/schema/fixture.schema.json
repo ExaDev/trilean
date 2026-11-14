@@ -1,0 +1,117 @@
+{
+  "$id": "https://github.com/ExaDev/trilean/tree/main/conformance/trilean-sql/execute/schema/fixture.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "The tables a sql-execute case runs against and how trilean's evaluator reads their rows. The rules a schema cannot express (a cell has the type of its column, a row names only columns of its table, a primary key is a column whose values are present and distinct, the evaluator's table, id column, foreign keys and item columns exist) are in conformance/README.md.",
+  "properties": {
+    "evaluator": {
+      "additionalProperties": false,
+      "properties": {
+        "collections": {
+          "additionalProperties": {
+            "additionalProperties": false,
+            "properties": {
+              "foreignKey": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "items": {
+                "items": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array",
+                "uniqueItems": true
+              },
+              "table": {
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "foreignKey",
+              "items",
+              "table"
+            ],
+            "type": "object"
+          },
+          "type": "object"
+        },
+        "idColumn": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "table": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "collections",
+        "idColumn",
+        "table"
+      ],
+      "type": "object"
+    },
+    "tables": {
+      "additionalProperties": {
+        "additionalProperties": false,
+        "properties": {
+          "columns": {
+            "additionalProperties": {
+              "enum": [
+                "text",
+                "number",
+                "boolean",
+                "timestamp"
+              ]
+            },
+            "minProperties": 1,
+            "type": "object"
+          },
+          "primaryKey": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "rows": {
+            "items": {
+              "additionalProperties": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "columns",
+          "primaryKey",
+          "rows"
+        ],
+        "type": "object"
+      },
+      "minProperties": 1,
+      "type": "object"
+    }
+  },
+  "required": [
+    "evaluator",
+    "tables"
+  ],
+  "title": "trilean-sql execute fixture",
+  "type": "object"
+}

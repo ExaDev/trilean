@@ -1,0 +1,844 @@
+{
+  "cases": [
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "grace",
+          "lin"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.quantifiers.integration.test.ts: some/every/fold over a correlated collection > some: true the moment one participating tag among several votes true",
+      "id": "sql.execute.sqlite-quantifiers.some-every-fold-over-a-correlated-collection-som",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "collections": {
+            "tags": {
+              "columns": {
+                "weight": {
+                  "column": "weight",
+                  "paramType": "number"
+                }
+              },
+              "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+              "table": "subject_tags"
+            }
+          },
+          "columns": {}
+        },
+        "tree": {
+          "collection": "tags",
+          "item": {
+            "kind": "compare",
+            "left": {
+              "key": "weight",
+              "kind": "reference"
+            },
+            "op": "gte",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 5
+            }
+          },
+          "kind": "some"
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "ada"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.quantifiers.integration.test.ts: some/every/fold over a correlated collection > every: false the moment one participating tag among several votes false",
+      "id": "sql.execute.sqlite-quantifiers.some-every-fold-over-a-correlated-collection-eve",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "collections": {
+            "tags": {
+              "columns": {
+                "weight": {
+                  "column": "weight",
+                  "paramType": "number"
+                }
+              },
+              "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+              "table": "subject_tags"
+            }
+          },
+          "columns": {}
+        },
+        "tree": {
+          "collection": "tags",
+          "item": {
+            "kind": "compare",
+            "left": {
+              "key": "weight",
+              "kind": "reference"
+            },
+            "op": "gte",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 5
+            }
+          },
+          "kind": "every"
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "ada",
+          "grace",
+          "lin",
+          "unknown"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.quantifiers.integration.test.ts: some/every/fold over a correlated collection > filter narrows which tags participate before item is even evaluated",
+      "id": "sql.execute.sqlite-quantifiers.some-every-fold-over-a-correlated-collection-fil",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "collections": {
+            "tags": {
+              "columns": {
+                "tag": {
+                  "column": "tag",
+                  "paramType": "text"
+                },
+                "weight": {
+                  "column": "weight",
+                  "paramType": "number"
+                }
+              },
+              "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+              "table": "subject_tags"
+            }
+          },
+          "columns": {}
+        },
+        "tree": {
+          "collection": "tags",
+          "filter": {
+            "kind": "textCompare",
+            "left": {
+              "key": "tag",
+              "kind": "reference"
+            },
+            "op": "equals",
+            "right": {
+              "kind": "textLiteral",
+              "value": "senior"
+            }
+          },
+          "item": {
+            "kind": "compare",
+            "left": {
+              "key": "weight",
+              "kind": "reference"
+            },
+            "op": "gte",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 5
+            }
+          },
+          "kind": "every"
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "grace",
+          "lin"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.quantifiers.integration.test.ts: some/every/fold over a correlated collection > some/every over an empty collection reduce to each connective's own identity",
+      "id": "sql.execute.sqlite-quantifiers.some-every-fold-over-a-correlated-collection-som-2",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "collections": {
+            "tags": {
+              "columns": {
+                "weight": {
+                  "column": "weight",
+                  "paramType": "number"
+                }
+              },
+              "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+              "table": "subject_tags"
+            }
+          },
+          "columns": {}
+        },
+        "tree": {
+          "collection": "tags",
+          "item": {
+            "kind": "compare",
+            "left": {
+              "key": "weight",
+              "kind": "reference"
+            },
+            "op": "gte",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 5
+            }
+          },
+          "kind": "some"
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "ada"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.quantifiers.integration.test.ts: some/every/fold over a correlated collection > some/every over an empty collection reduce to each connective's own identity",
+      "id": "sql.execute.sqlite-quantifiers.some-every-fold-over-a-correlated-collection-som-3",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "collections": {
+            "tags": {
+              "columns": {
+                "weight": {
+                  "column": "weight",
+                  "paramType": "number"
+                }
+              },
+              "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+              "table": "subject_tags"
+            }
+          },
+          "columns": {}
+        },
+        "tree": {
+          "collection": "tags",
+          "item": {
+            "kind": "compare",
+            "left": {
+              "key": "weight",
+              "kind": "reference"
+            },
+            "op": "gte",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 5
+            }
+          },
+          "kind": "every"
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "grace",
+          "lin"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.quantifiers.integration.test.ts: some/every/fold over a correlated collection > some absorbs an indeterminate vote from a NULL-weighted tag alongside a clean true vote",
+      "id": "sql.execute.sqlite-quantifiers.some-every-fold-over-a-correlated-collection-som-4",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "collections": {
+            "tags": {
+              "columns": {
+                "weight": {
+                  "column": "weight",
+                  "paramType": "number"
+                }
+              },
+              "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+              "table": "subject_tags"
+            }
+          },
+          "columns": {}
+        },
+        "tree": {
+          "collection": "tags",
+          "item": {
+            "kind": "compare",
+            "left": {
+              "key": "weight",
+              "kind": "reference"
+            },
+            "op": "gte",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 5
+            }
+          },
+          "kind": "some"
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "grace",
+          "lin"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.quantifiers.integration.test.ts: some/every/fold over a correlated collection > some/every are indeterminate when the sole participating tag's weight is unknown",
+      "id": "sql.execute.sqlite-quantifiers.some-every-fold-over-a-correlated-collection-som-5",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "collections": {
+            "tags": {
+              "columns": {
+                "weight": {
+                  "column": "weight",
+                  "paramType": "number"
+                }
+              },
+              "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+              "table": "subject_tags"
+            }
+          },
+          "columns": {}
+        },
+        "tree": {
+          "collection": "tags",
+          "item": {
+            "kind": "compare",
+            "left": {
+              "key": "weight",
+              "kind": "reference"
+            },
+            "op": "gte",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 5
+            }
+          },
+          "kind": "some"
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "ada"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.quantifiers.integration.test.ts: some/every/fold over a correlated collection > some/every are indeterminate when the sole participating tag's weight is unknown",
+      "id": "sql.execute.sqlite-quantifiers.some-every-fold-over-a-correlated-collection-som-6",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "collections": {
+            "tags": {
+              "columns": {
+                "weight": {
+                  "column": "weight",
+                  "paramType": "number"
+                }
+              },
+              "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+              "table": "subject_tags"
+            }
+          },
+          "columns": {}
+        },
+        "tree": {
+          "kind": "not",
+          "operand": {
+            "collection": "tags",
+            "item": {
+              "kind": "compare",
+              "left": {
+                "key": "weight",
+                "kind": "reference"
+              },
+              "op": "gte",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 5
+              }
+            },
+            "kind": "some"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "ada"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.quantifiers.integration.test.ts: some/every/fold over a correlated collection > some/every are indeterminate when the sole participating tag's weight is unknown",
+      "id": "sql.execute.sqlite-quantifiers.some-every-fold-over-a-correlated-collection-som-7",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "collections": {
+            "tags": {
+              "columns": {
+                "weight": {
+                  "column": "weight",
+                  "paramType": "number"
+                }
+              },
+              "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+              "table": "subject_tags"
+            }
+          },
+          "columns": {}
+        },
+        "tree": {
+          "collection": "tags",
+          "item": {
+            "kind": "compare",
+            "left": {
+              "key": "weight",
+              "kind": "reference"
+            },
+            "op": "gte",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 5
+            }
+          },
+          "kind": "every"
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "grace"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.quantifiers.integration.test.ts: some/every/fold over a correlated collection > some/every are indeterminate when the sole participating tag's weight is unknown",
+      "id": "sql.execute.sqlite-quantifiers.some-every-fold-over-a-correlated-collection-som-8",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "collections": {
+            "tags": {
+              "columns": {
+                "weight": {
+                  "column": "weight",
+                  "paramType": "number"
+                }
+              },
+              "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+              "table": "subject_tags"
+            }
+          },
+          "columns": {}
+        },
+        "tree": {
+          "kind": "not",
+          "operand": {
+            "collection": "tags",
+            "item": {
+              "kind": "compare",
+              "left": {
+                "key": "weight",
+                "kind": "reference"
+              },
+              "op": "gte",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 5
+              }
+            },
+            "kind": "every"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": []
+      },
+      "fixture": "subjects",
+      "from": "sqlite.quantifiers.integration.test.ts: some/every/fold over a correlated collection > a per-row AND inside 'item' rules out the and-over-range hazard a naive split translation would fall into",
+      "id": "sql.execute.sqlite-quantifiers.some-every-fold-over-a-correlated-collection-a-p",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "collections": {
+            "tags": {
+              "columns": {
+                "weight": {
+                  "column": "weight",
+                  "paramType": "number"
+                }
+              },
+              "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+              "table": "subject_tags"
+            }
+          },
+          "columns": {}
+        },
+        "tree": {
+          "collection": "tags",
+          "item": {
+            "kind": "and",
+            "left": {
+              "kind": "compare",
+              "left": {
+                "key": "weight",
+                "kind": "reference"
+              },
+              "op": "gte",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 6
+              }
+            },
+            "right": {
+              "kind": "compare",
+              "left": {
+                "key": "weight",
+                "kind": "reference"
+              },
+              "op": "lte",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 8
+              }
+            }
+          },
+          "kind": "some"
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "grace"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.quantifiers.integration.test.ts: some/every/fold over a correlated collection > fold('max'/'min') aggregates the projected weight across participating tags",
+      "id": "sql.execute.sqlite-quantifiers.some-every-fold-over-a-correlated-collection-fol",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "collections": {
+            "tags": {
+              "columns": {
+                "weight": {
+                  "column": "weight",
+                  "paramType": "number"
+                }
+              },
+              "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+              "table": "subject_tags"
+            }
+          },
+          "columns": {}
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "collection": "tags",
+            "combiner": {
+              "item": {
+                "key": "weight",
+                "kind": "reference"
+              },
+              "mode": "max"
+            },
+            "kind": "fold"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 9
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "grace"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.quantifiers.integration.test.ts: some/every/fold over a correlated collection > fold('max'/'min') aggregates the projected weight across participating tags",
+      "id": "sql.execute.sqlite-quantifiers.some-every-fold-over-a-correlated-collection-fol-2",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "collections": {
+            "tags": {
+              "columns": {
+                "weight": {
+                  "column": "weight",
+                  "paramType": "number"
+                }
+              },
+              "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+              "table": "subject_tags"
+            }
+          },
+          "columns": {}
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "collection": "tags",
+            "combiner": {
+              "item": {
+                "key": "weight",
+                "kind": "reference"
+              },
+              "mode": "min"
+            },
+            "kind": "fold"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 3
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "grace"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.quantifiers.integration.test.ts: some/every/fold over a correlated collection > fold('max') is indeterminate over an empty collection and over one whose sole participant is NULL",
+      "id": "sql.execute.sqlite-quantifiers.some-every-fold-over-a-correlated-collection-fol-3",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "collections": {
+            "tags": {
+              "columns": {
+                "weight": {
+                  "column": "weight",
+                  "paramType": "number"
+                }
+              },
+              "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+              "table": "subject_tags"
+            }
+          },
+          "columns": {}
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "collection": "tags",
+            "combiner": {
+              "item": {
+                "key": "weight",
+                "kind": "reference"
+              },
+              "mode": "max"
+            },
+            "kind": "fold"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 9
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": []
+      },
+      "fixture": "subjects",
+      "from": "sqlite.quantifiers.integration.test.ts: some/every/fold over a correlated collection > fold('max') is indeterminate over an empty collection and over one whose sole participant is NULL",
+      "id": "sql.execute.sqlite-quantifiers.some-every-fold-over-a-correlated-collection-fol-4",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "collections": {
+            "tags": {
+              "columns": {
+                "weight": {
+                  "column": "weight",
+                  "paramType": "number"
+                }
+              },
+              "join": "\"subject_tags\".\"subjectId\" = \"subjects\".\"id\"",
+              "table": "subject_tags"
+            }
+          },
+          "columns": {}
+        },
+        "tree": {
+          "kind": "not",
+          "operand": {
+            "kind": "compare",
+            "left": {
+              "collection": "tags",
+              "combiner": {
+                "item": {
+                  "key": "weight",
+                  "kind": "reference"
+                },
+                "mode": "max"
+              },
+              "kind": "fold"
+            },
+            "op": "eq",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 9
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "ada",
+          "grace"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "sqlite.quantifiers.integration.test.ts: a tree deep enough to mix every supported kind > agrees with the evaluator row for row",
+      "id": "sql.execute.sqlite-quantifiers.a-tree-deep-enough-to-mix-every-supported-kind-a",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "anyOf",
+          "operands": [
+            {
+              "kind": "and",
+              "left": {
+                "kind": "compare",
+                "left": {
+                  "key": "age",
+                  "kind": "reference"
+                },
+                "op": "gte",
+                "right": {
+                  "kind": "numberLiteral",
+                  "value": 18
+                }
+              },
+              "right": {
+                "kind": "not",
+                "operand": {
+                  "candidates": [
+                    {
+                      "kind": "textLiteral",
+                      "value": "grace"
+                    }
+                  ],
+                  "kind": "memberOf",
+                  "op": "in",
+                  "operand": {
+                    "key": "name",
+                    "kind": "reference"
+                  }
+                }
+              }
+            },
+            {
+              "kind": "allOf",
+              "operands": [
+                {
+                  "kind": "exists",
+                  "operand": {
+                    "key": "note",
+                    "kind": "reference"
+                  }
+                },
+                {
+                  "kind": "or",
+                  "left": {
+                    "kind": "textCompare",
+                    "left": {
+                      "key": "note",
+                      "kind": "reference"
+                    },
+                    "op": "matches",
+                    "right": {
+                      "kind": "textLiteral",
+                      "value": "^h"
+                    }
+                  },
+                  "right": {
+                    "kind": "compare",
+                    "left": {
+                      "key": "active",
+                      "kind": "reference"
+                    },
+                    "op": "eq",
+                    "right": {
+                      "kind": "booleanLiteral",
+                      "value": false
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

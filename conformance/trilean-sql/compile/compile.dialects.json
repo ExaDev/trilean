@@ -1,0 +1,952 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 1
+          },
+          {
+            "type": "text",
+            "value": "b"
+          },
+          {
+            "type": "text",
+            "value": "c"
+          }
+        ],
+        "sql": "((\"age\" > ?) AND (\"name\" IN (?, ?)))"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > renders every placeholder as a bare '?', with no number and no cast",
+      "id": "sql.compile.compile-dialects.the-sqlite-dialect-renders-every-placeholder-as",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "allOf",
+        "operands": [
+          {
+            "kind": "compare",
+            "left": {
+              "key": "age",
+              "kind": "reference"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          },
+          {
+            "candidates": [
+              {
+                "kind": "textLiteral",
+                "value": "b"
+              },
+              {
+                "kind": "textLiteral",
+                "value": "c"
+              }
+            ],
+            "kind": "memberOf",
+            "op": "in",
+            "operand": {
+              "key": "name",
+              "kind": "reference"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 1
+          },
+          {
+            "type": "number",
+            "value": 2
+          }
+        ],
+        "sql": "(? < ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > compares two literals without either side needing a type",
+      "id": "sql.compile.compile-dialects.the-sqlite-dialect-compares-two-literals-without",
+      "kind": "sql-compile",
+      "options": {
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 1
+        },
+        "op": "lt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 2
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "timestamp",
+            "value": "2020-01-01T00:00:00+02:00"
+          }
+        ],
+        "sql": "(\"joined\" >= ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > renders an instant literal as a plain parameter, with no timestamp type to cast to",
+      "id": "sql.compile.compile-dialects.the-sqlite-dialect-renders-an-instant-literal-as",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "joined",
+          "kind": "reference"
+        },
+        "op": "gte",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00+02:00"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "^a"
+          }
+        ],
+        "sql": "(\"name\" = ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > compiles textCompare 'equals' to '='",
+      "id": "sql.compile.compile-dialects.the-sqlite-dialect-compiles-textcompare-equals-t",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "^a"
+          }
+        ],
+        "sql": "(\"name\" <> ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > compiles textCompare 'notEquals' to '<>'",
+      "id": "sql.compile.compile-dialects.the-sqlite-dialect-compiles-textcompare-notequal",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "notEquals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "^a"
+          }
+        ],
+        "sql": "(\"name\" REGEXP ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > compiles textCompare 'matches' to 'REGEXP'",
+      "id": "sql.compile.compile-dialects.the-sqlite-dialect-compiles-textcompare-matches",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "^a"
+          }
+        ],
+        "sql": "(\"name\" NOT REGEXP ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > compiles textCompare 'notMatches' to 'NOT REGEXP'",
+      "id": "sql.compile.compile-dialects.the-sqlite-dialect-compiles-textcompare-notmatch",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "notMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "a*c"
+          }
+        ],
+        "sql": "(\"name\" GLOB ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > compiles 'portableMatches' to 'GLOB' against the pattern translated into a GLOB wildcard",
+      "id": "sql.compile.compile-dialects.the-sqlite-dialect-compiles-portablematches-to-g",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "portableMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a.*c$"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "a*c"
+          }
+        ],
+        "sql": "(\"name\" NOT GLOB ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > compiles 'portableNotMatches' to 'NOT GLOB' against the pattern translated into a GLOB wildcard",
+      "id": "sql.compile.compile-dialects.the-sqlite-dialect-compiles-portablenotmatches-t",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "portableNotMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a.*c$"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textCompare' at $.right: GLOB has no alternation operator",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textCompare",
+          "path": "$.right",
+          "reason": "GLOB has no alternation operator"
+        }
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > refuses a portableMatches pattern outside GLOB's reachable subset",
+      "id": "sql.compile.compile-dialects.the-sqlite-dialect-refuses-a-portablematches-pat",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "portableMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "cat|dog"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"name\" IS NULL AND NULL)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > compiles an empty candidate list without a boolean annotation on the NULL",
+      "id": "sql.compile.compile-dialects.the-sqlite-dialect-compiles-an-empty-candidate-l",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"name\" IS NOT NULL OR NULL)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > compiles an empty candidate list without a boolean annotation on the NULL",
+      "id": "sql.compile.compile-dialects.the-sqlite-dialect-compiles-an-empty-candidate-l-2",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [],
+        "kind": "memberOf",
+        "op": "notIn",
+        "operand": {
+          "key": "name",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 18
+          },
+          {
+            "type": "number",
+            "value": 7
+          }
+        ],
+        "sql": "(NOT ((\"age\" > ?) AND ((\"note\" IS NOT NULL) OR (\"age\" NOT IN (?)))))"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > emits the dialect-neutral structure identically to PostgreSQL",
+      "id": "sql.compile.compile-dialects.the-sqlite-dialect-emits-the-dialect-neutral-str",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "not",
+        "operand": {
+          "kind": "and",
+          "left": {
+            "kind": "compare",
+            "left": {
+              "key": "age",
+              "kind": "reference"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 18
+            }
+          },
+          "right": {
+            "kind": "or",
+            "left": {
+              "kind": "exists",
+              "operand": {
+                "key": "note",
+                "kind": "reference"
+              }
+            },
+            "right": {
+              "candidates": [
+                {
+                  "kind": "numberLiteral",
+                  "value": 7
+                }
+              ],
+              "kind": "memberOf",
+              "op": "notIn",
+              "operand": {
+                "key": "age",
+                "kind": "reference"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 18
+          },
+          {
+            "type": "number",
+            "value": 7
+          }
+        ],
+        "sql": "(NOT ((\"age\" > $1::double precision) AND ((\"note\" IS NOT NULL) OR (\"age\" NOT IN ($2::double precision)))))"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > emits the dialect-neutral structure identically to PostgreSQL",
+      "id": "sql.compile.compile-dialects.the-sqlite-dialect-emits-the-dialect-neutral-str-2",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "not",
+        "operand": {
+          "kind": "and",
+          "left": {
+            "kind": "compare",
+            "left": {
+              "key": "age",
+              "kind": "reference"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 18
+            }
+          },
+          "right": {
+            "kind": "or",
+            "left": {
+              "kind": "exists",
+              "operand": {
+                "key": "note",
+                "kind": "reference"
+              }
+            },
+            "right": {
+              "candidates": [
+                {
+                  "kind": "numberLiteral",
+                  "value": 7
+                }
+              ],
+              "kind": "memberOf",
+              "op": "notIn",
+              "operand": {
+                "key": "age",
+                "kind": "reference"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"note\"\"; DROP TABLE subjects; --\" IS NOT NULL)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > quotes and neutralises identifiers exactly as the PostgreSQL dialect does",
+      "id": "sql.compile.compile-dialects.the-sqlite-dialect-quotes-and-neutralises-identi",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "anything": {
+            "column": "note\"; DROP TABLE subjects; --"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "anything",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(TRUE)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > compiles an empty allOf and anyOf to the same identities",
+      "id": "sql.compile.compile-dialects.the-sqlite-dialect-compiles-an-empty-allof-and-a",
+      "kind": "sql-compile",
+      "options": {
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "allOf",
+        "operands": []
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(FALSE)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > compiles an empty allOf and anyOf to the same identities",
+      "id": "sql.compile.compile-dialects.the-sqlite-dialect-compiles-an-empty-allof-and-a-2",
+      "kind": "sql-compile",
+      "options": {
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "anyOf",
+        "operands": []
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "^a"
+          }
+        ],
+        "sql": "(\"name\" REGEXP ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: sqliteRegexpAvailable > still compiles to REGEXP when the flag is unset, preserving existing behaviour",
+      "id": "sql.compile.compile-dialects.sqliteregexpavailable-still-compiles-to-regexp-w",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "^a"
+          }
+        ],
+        "sql": "(\"name\" REGEXP ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: sqliteRegexpAvailable > still compiles to REGEXP when the flag is explicitly true",
+      "id": "sql.compile.compile-dialects.sqliteregexpavailable-still-compiles-to-regexp-w-2",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "sqlite",
+        "sqliteRegexpAvailable": true
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textCompare' at $: options.sqliteRegexpAvailable is false: the caller has stated no regexp(pattern, value) function can be registered on this SQLite target, so 'matches' would compile to SQL that fails at query execution time with \"no such function: REGEXP\" instead of at compile time",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textCompare",
+          "path": "$",
+          "reason": "options.sqliteRegexpAvailable is false: the caller has stated no regexp(pattern, value) function can be registered on this SQLite target, so 'matches' would compile to SQL that fails at query execution time with \"no such function: REGEXP\" instead of at compile time"
+        }
+      },
+      "from": "compile.dialects.unit.test.ts: sqliteRegexpAvailable > refuses matches/notMatches at compile time once the flag is false",
+      "id": "sql.compile.compile-dialects.sqliteregexpavailable-refuses-matches-notmatches",
+      "kind": "sql-compile",
+      "options": {
+        "dialect": "sqlite",
+        "sqliteRegexpAvailable": false
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textCompare' at $: options.sqliteRegexpAvailable is false: the caller has stated no regexp(pattern, value) function can be registered on this SQLite target, so 'notMatches' would compile to SQL that fails at query execution time with \"no such function: REGEXP\" instead of at compile time",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textCompare",
+          "path": "$",
+          "reason": "options.sqliteRegexpAvailable is false: the caller has stated no regexp(pattern, value) function can be registered on this SQLite target, so 'notMatches' would compile to SQL that fails at query execution time with \"no such function: REGEXP\" instead of at compile time"
+        }
+      },
+      "from": "compile.dialects.unit.test.ts: sqliteRegexpAvailable > refuses matches/notMatches at compile time once the flag is false",
+      "id": "sql.compile.compile-dialects.sqliteregexpavailable-refuses-matches-notmatches-2",
+      "kind": "sql-compile",
+      "options": {
+        "dialect": "sqlite",
+        "sqliteRegexpAvailable": false
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "notMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textCompare' at $: options.sqliteRegexpAvailable is false: the caller has stated no regexp(pattern, value) function can be registered on this SQLite target, so 'matches' would compile to SQL that fails at query execution time with \"no such function: REGEXP\" instead of at compile time",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textCompare",
+          "path": "$",
+          "reason": "options.sqliteRegexpAvailable is false: the caller has stated no regexp(pattern, value) function can be registered on this SQLite target, so 'matches' would compile to SQL that fails at query execution time with \"no such function: REGEXP\" instead of at compile time"
+        }
+      },
+      "from": "compile.dialects.unit.test.ts: sqliteRegexpAvailable > agrees with findUnpushableNodeKind rather than only compilePredicateNode's own check",
+      "id": "sql.compile.compile-dialects.sqliteregexpavailable-agrees-with-findunpushable",
+      "kind": "sql-compile",
+      "options": {
+        "dialect": "sqlite",
+        "sqliteRegexpAvailable": false
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "^a"
+          }
+        ],
+        "sql": "(\"name\" ~ $1::text)"
+      },
+      "from": "compile.dialects.unit.test.ts: sqliteRegexpAvailable > has no effect on the postgres dialect, which matches natively with '~'",
+      "id": "sql.compile.compile-dialects.sqliteregexpavailable-has-no-effect-on-the-postg",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "postgres",
+        "postgresRegexpPushdown": true,
+        "sqliteRegexpAvailable": false
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "dialect": "mysql",
+          "implemented": [
+            "postgres",
+            "sqlite"
+          ],
+          "message": "unknown dialect \"mysql\": this version compiles \"postgres\", \"sqlite\"",
+          "name": "UnknownDialectError"
+        }
+      },
+      "from": "compile.dialects.unit.test.ts: a dialect this version does not implement > is refused by name, not as an internal error from an empty table lookup",
+      "id": "sql.compile.compile-dialects.a-dialect-this-version-does-not-implement-is-ref",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "mysql"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 18
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "dialect": "mysql",
+          "implemented": [
+            "postgres",
+            "sqlite"
+          ],
+          "message": "unknown dialect \"mysql\": this version compiles \"postgres\", \"sqlite\"",
+          "name": "UnknownDialectError"
+        }
+      },
+      "from": "compile.dialects.unit.test.ts: a dialect this version does not implement > carries the offending name and the implemented ones as fields",
+      "id": "sql.compile.compile-dialects.a-dialect-this-version-does-not-implement-carrie",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "mysql"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 18
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "dialect": "mysql",
+          "implemented": [
+            "postgres",
+            "sqlite"
+          ],
+          "message": "unknown dialect \"mysql\": this version compiles \"postgres\", \"sqlite\"",
+          "name": "UnknownDialectError"
+        }
+      },
+      "from": "compile.dialects.unit.test.ts: a dialect this version does not implement > is refused before the tree is walked, so the dialect is what gets reported",
+      "id": "sql.compile.compile-dialects.a-dialect-this-version-does-not-implement-is-ref-2",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "mysql"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": {
+            "$number": "NaN"
+          }
+        }
+      }
+    }
+  ]
+}

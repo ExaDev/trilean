@@ -15,16 +15,33 @@ const CORPUS_ROOT = fileURLToPath(
 );
 
 /**
+ * The allowance of the run per generated file, in milliseconds. The work of the run is one derivation of each file the generator produces: its content is built and canonically written, and a fixture is validated once against the case schema, so the work is proportional to the number of files and the allowance is per file. It is a named ceiling and not a measurement: the run fails for a slowdown that grows with the number of files, and the failure message gives the number of files, the budget and the time taken, which are what to compare when the allowance needs to change.
+ */
+const MILLISECONDS_PER_GENERATED_FILE = 25;
+
+// The generator runs once, here and not inside a test, so that its output and the time it took are what the tests below compare: the budget derives from the number of files it produced, never from the committed ones.
+const started = performance.now();
+const generated = new Map([
+  ...generatedCorpus(),
+  ...generatedDerived(CORPUS_ROOT),
+]);
+const generationMilliseconds = performance.now() - started;
+
+/**
  * Everything the generator writes (`pnpm exec tsx scripts/generate-corpus.ts`) is regenerated and compared, byte for byte, with what is committed, so a change to the implementation that alters a recorded answer, a change to the corpus or the schema that the fixtures and the index do not follow, and an edit by hand all fail here until the files are regenerated and the change reviewed.
  */
 describe("the generated files", () => {
+  it("are produced within the budget the number of files sets", () => {
+    const budget = generated.size * MILLISECONDS_PER_GENERATED_FILE;
+    expect(
+      generationMilliseconds,
+      `${String(generated.size)} files generated, a budget of ${String(budget)} ms at ${String(MILLISECONDS_PER_GENERATED_FILE)} ms each, took ${String(Math.round(generationMilliseconds))} ms`,
+    ).toBeLessThanOrEqual(budget);
+  });
+
   it("are exactly what the generator writes", () => {
-    const expected = new Map([
-      ...generatedCorpus(),
-      ...generatedDerived(CORPUS_ROOT),
-    ]);
-    expect(expected.size).toBeGreaterThan(GENERATED_CORPUS_FILES.length);
-    const differing = [...expected]
+    expect(generated.size).toBeGreaterThan(GENERATED_CORPUS_FILES.length);
+    const differing = [...generated]
       .filter(
         ([path, content]) =>
           readFileSync(join(CORPUS_ROOT, path), "utf8") !== content,
@@ -34,7 +51,7 @@ describe("the generated files", () => {
   });
 
   it("include every file under the generated fixture directories, and no other", () => {
-    const expected = [...generatedDerived(CORPUS_ROOT).keys()]
+    const expected = [...generated.keys()]
       .filter((path) => path.startsWith("fixtures/generated/"))
       .sort();
     const present = ["invalid-cases", "repaired-cases"].flatMap((directory) =>

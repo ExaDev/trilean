@@ -1,0 +1,40 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "unexpectedMember": 1,
+            "value": "^a"
+          }
+        ],
+        "sql": "(\"name\" = $1::text)"
+      },
+      "from": "compile.predicates.unit.test.ts: textCompare > compiles 'equals' to '='",
+      "id": "sql.compile.compile-predicates.textcompare-compiles-equals-to",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    }
+  ]
+}
