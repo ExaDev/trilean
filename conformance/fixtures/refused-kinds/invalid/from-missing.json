@@ -1,0 +1,17 @@
+{
+  "cases": [
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite"
+      },
+      "id": "fixture.1",
+      "kind": "evaluate",
+      "resolvers": {},
+      "tree": {
+        "kind": "allOf",
+        "operands": []
+      }
+    }
+  ]
+}

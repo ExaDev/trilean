@@ -1,6 +1,8 @@
-//! Validation of corpus files and the manifest, by hand until the validator is generated from the schema. It
-//! accepts exactly what `conformance/case.schema.json` accepts and rejects every case kind it does not validate
-//! in full, rather than passing it unchecked: a loader that cannot judge a case must not say it is fine.
+//! Validation of corpus files and the manifest by hand. A file of regex cases is validated in full and accepts
+//! exactly what `conformance/case.schema.json` accepts. A file whose cases are all of another kind is read by
+//! `read_refused_file`, which enforces what every case has whatever its kind, and the file's cases are counted and
+//! not executed; the shape of such a case is validated by the loader that validates its kind in full. A file that
+//! mixes the two is refused.
 //!
 //! Strings in the corpus are sequences of UTF-16 code units. A JSON string is read by `serde_json`, which refuses
 //! an unpaired surrogate escape, so the file holding one does not load and is rejected; content that needs one is
@@ -264,8 +266,8 @@ fn check_tolerance(value: &Value, at: &str) -> Check<()> {
         (false, true) => {
             exact_keys(value, at, &["absolute"], &[])?;
             match map["absolute"].as_f64() {
-                Some(absolute) if absolute >= 0.0 => Ok(()),
-                _ => Err(format!("{at}: \"absolute\" must be a non-negative number")),
+                Some(absolute) if absolute > 0.0 => Ok(()),
+                _ => Err(format!("{at}: \"absolute\" must be a number above zero")),
             }
         }
         _ => Err(format!(
@@ -274,9 +276,9 @@ fn check_tolerance(value: &Value, at: &str) -> Check<()> {
     }
 }
 
-/// Checks one case and returns its id. Only the regex kinds are validated in full; any other kind is refused,
-/// even one the schema defines, because a case this loader cannot judge must not read as accepted.
-fn check_case(value: &Value, at: &str) -> Check<String> {
+/// The checks every case has whatever its kind: the members `id`, `from` and `kind` are there, the id and `from`
+/// are well formed, `skip` is `ts` or `rust` and goes with a `reason`, and a tolerance is well formed.
+fn check_common<'a>(value: &'a Value, at: &str) -> Check<(&'a Map<String, Value>, String)> {
     let map = object(value, at)?;
     for key in COMMON_KEYS {
         if !map.contains_key(key) {
@@ -308,6 +310,13 @@ fn check_case(value: &Value, at: &str) -> Check<String> {
     if let Some(tolerance) = map.get("tolerance") {
         check_tolerance(tolerance, at)?;
     }
+    Ok((map, id.to_owned()))
+}
+
+/// Checks one case and returns its id. Only the regex kinds are validated in full here; a file of any other kind is
+/// read by `read_refused_file`.
+fn check_case(value: &Value, at: &str) -> Check<String> {
+    let (map, id) = check_common(value, at)?;
     let kind = string_field(map, "kind", at)?;
     match kind {
         "regex-parse" => {
@@ -343,43 +352,90 @@ fn check_case(value: &Value, at: &str) -> Check<String> {
             ));
         }
     }
-    Ok(id.to_owned())
+    Ok(id)
 }
 
 /// The case kinds this loader validates in full; every other kind is refused.
 const VALIDATED_KINDS: [&str; 2] = ["regex-parse", "regex-match"];
 
-/// What a corpus file of kinds this loader does not validate holds, read without judging the shape of any case: the
-/// ids and which cases carry `skip`. It exists so that the run can report such a file as refused, and still check it
-/// against the manifest, instead of failing on it. A file with any case of a validated kind, or without the ids,
-/// is not read this way and stays the error `validate_file` reports.
-pub fn refused_facts(value: &Value) -> Option<FileFacts> {
-    let cases = value
-        .get("cases")?
-        .as_array()
-        .filter(|cases| !cases.is_empty())?;
+/// Every case kind the schema defines.
+const KNOWN_KINDS: [&str; 15] = [
+    "regex-parse",
+    "regex-match",
+    "validate",
+    "build",
+    "call",
+    "evaluate",
+    "inputs",
+    "document",
+    "cli",
+    "serialise",
+    "number-format",
+    "sql-compile",
+    "sql-guard",
+    "sql-pattern",
+    "sql-execute",
+];
+
+/// Whether a file is read as a refused file: it holds cases, and every one is of a kind this loader does not
+/// validate in full. A file that mixes such a case with a regex case is read by `validate_file`, which refuses it.
+pub fn is_refused_file(value: &Value) -> bool {
+    value
+        .get("cases")
+        .and_then(Value::as_array)
+        .is_some_and(|cases| {
+            !cases.is_empty()
+                && cases.iter().all(|case| {
+                    case.get("kind")
+                        .and_then(Value::as_str)
+                        .is_some_and(|kind| !VALIDATED_KINDS.contains(&kind))
+                })
+        })
+}
+
+/// Reads a file whose cases are all of kinds this loader does not validate in full. It enforces everything that
+/// does not depend on the kind: the file holds a non-empty list of cases and nothing else, and every case has an
+/// `id` that follows the id rule and is not used twice in the file, a `from` of either form, a `kind` the schema
+/// defines, a `skip` that is `ts` or `rust` and goes with a `reason`, and a well formed `tolerance`. What a case of
+/// such a kind holds beyond that is checked by the loaders that validate the kind in full.
+pub fn read_refused_file(value: &Value) -> Check<FileFacts> {
+    let top = exact_keys(value, "file", &["cases"], &[])?;
+    let cases = array(&top["cases"], "file", "\"cases\"")?;
+    if cases.is_empty() {
+        return Err("file: \"cases\" must not be empty".to_owned());
+    }
     let mut facts = FileFacts {
         ids: Vec::new(),
         skip_ids: Vec::new(),
         rust_skip_ids: Vec::new(),
     };
-    for case in cases {
-        if VALIDATED_KINDS.contains(&case.get("kind")?.as_str()?) {
-            return None;
+    let mut seen = BTreeSet::new();
+    for (position, case) in cases.iter().enumerate() {
+        let at = format!("case {position}");
+        let (map, id) = check_common(case, &at)?;
+        let kind = string_field(map, "kind", &at)?;
+        if !KNOWN_KINDS.contains(&kind) {
+            return Err(format!("{at}: the schema defines no case kind {kind}"));
         }
-        let id = case.get("id")?.as_str()?.to_owned();
-        if let Some(skip) = case.get("skip") {
+        if VALIDATED_KINDS.contains(&kind) {
+            return Err(format!(
+                "{at}: the {kind} kind is validated in full, not read as refused"
+            ));
+        }
+        if !seen.insert(id.clone()) {
+            return Err(format!("case id {id} is used twice in the file"));
+        }
+        if map.contains_key("skip") {
             facts.skip_ids.push(id.clone());
-            if skip.as_str() == Some("rust") {
-                facts.rust_skip_ids.push(id.clone());
-            }
+        }
+        if map.get("skip").and_then(Value::as_str) == Some("rust") {
+            facts.rust_skip_ids.push(id.clone());
         }
         facts.ids.push(id);
     }
     facts.skip_ids.sort();
     facts.rust_skip_ids.sort();
-
-    Some(facts)
+    Ok(facts)
 }
 
 /// What a valid corpus file holds, for the checks that compare files with each other and with the manifest.
@@ -437,7 +493,13 @@ pub fn validate_manifest(value: &Value) -> Check<BTreeMap<String, (usize, Vec<St
                 "{at}: a corpus file is named <package>/<area>/<name>.json"
             ));
         }
-        let map = exact_keys(entry, &at, &["cases", "skip"], &[])?;
+        let map = exact_keys(entry, &at, &["cases", "skip"], &["generated"])?;
+        if map
+            .get("generated")
+            .is_some_and(|flag| flag != &Value::Bool(true))
+        {
+            return Err(format!("{at}: \"generated\" is true when it is given"));
+        }
         let count = integer_field(map, "cases", &at)?;
         if count == 0 {
             return Err(format!("{at}: \"cases\" must be at least 1"));
