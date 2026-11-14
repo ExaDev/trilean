@@ -1,0 +1,29 @@
+{
+  "cases": [
+    {
+      "as": "expression",
+      "expect": {
+        "throws": {
+          "message": "the resolver failed"
+        }
+      },
+      "from": "recorded: trilean conformance/README.md (a rule the README states for resolver data)",
+      "id": "resolver-data.a-resolver-that-throws-makes-the-evaluation-throw.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "values": [
+          {
+            "key": "a",
+            "result": {
+              "throws": 1
+            }
+          }
+        ]
+      },
+      "tree": {
+        "key": "a",
+        "kind": "reference"
+      }
+    }
+  ]
+}

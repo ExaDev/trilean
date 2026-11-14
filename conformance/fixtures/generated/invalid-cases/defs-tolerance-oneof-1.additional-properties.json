@@ -1,0 +1,25 @@
+{
+  "cases": [
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "x.unit.test.ts: a fixture",
+      "id": "optional.4",
+      "kind": "evaluate",
+      "reason": "the implementation cannot run this case",
+      "resolvers": {},
+      "skip": "rust",
+      "tolerance": {
+        "absolute": 1e-9,
+        "unexpectedMember": 1
+      },
+      "tree": {
+        "kind": "allOf",
+        "operands": []
+      }
+    }
+  ]
+}

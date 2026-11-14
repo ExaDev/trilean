@@ -1,0 +1,60 @@
+{
+  "cases": [
+    {
+      "as": "predicate",
+      "evaluator": {
+        "maxNestingDepth": 10,
+        "maxNodes": 0
+      },
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "from": "evaluator.integration.test.ts: evaluation resource limits > a tree well within both caps evaluates normally and correctly",
+      "id": "integration.evaluation-resource-limits-a-tree-well-within-both-caps-evaluates-normally-and-correctly.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "not",
+        "operand": {
+          "kind": "not",
+          "operand": {
+            "kind": "not",
+            "operand": {
+              "kind": "not",
+              "operand": {
+                "kind": "not",
+                "operand": {
+                  "kind": "exists",
+                  "operand": {
+                    "kind": "numberLiteral",
+                    "value": 1
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

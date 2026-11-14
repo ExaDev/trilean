@@ -1,0 +1,160 @@
+{
+  "cases": [
+    {
+      "as": "expression",
+      "expect": {
+        "code": "not-yet-known",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.not-yet-known.unit.test.ts: a not-yet-known resolution is its own indeterminate reason > reference: not-yet-known",
+      "id": "not-yet-known.a-not-yet-known-resolution-is-its-own-indeterminate-reason-reference-not-yet-known.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "items",
+            "items": [
+              {
+                "n": 1
+              },
+              {
+                "pending": 1
+              }
+            ]
+          },
+          {
+            "collection": "pendingItems",
+            "items": [
+              {
+                "pending": 1
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "delegates": [
+          {
+            "payload": null,
+            "result": {
+              "found": false,
+              "notYetKnown": true
+            },
+            "system": "pending"
+          },
+          {
+            "payload": null,
+            "result": {
+              "found": false
+            },
+            "system": "gone"
+          }
+        ],
+        "lookups": [
+          {
+            "keys": [
+              {
+                "kind": "number",
+                "value": 1
+              }
+            ],
+            "result": {
+              "found": false,
+              "notYetKnown": true
+            },
+            "table": "pending"
+          },
+          {
+            "keys": [
+              {
+                "kind": "number",
+                "value": 1
+              }
+            ],
+            "result": {
+              "found": false
+            },
+            "table": "gone"
+          }
+        ],
+        "trees": [
+          {
+            "key": "pendingTree",
+            "result": "not-the-type"
+          },
+          {
+            "key": "goneTree",
+            "result": {
+              "found": false
+            }
+          }
+        ],
+        "values": [
+          {
+            "context": {
+              "n": 1
+            },
+            "key": "n",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 7
+              }
+            }
+          },
+          {
+            "context": {
+              "pending": 1
+            },
+            "key": "pending",
+            "result": {
+              "found": false,
+              "notYetKnown": true
+            }
+          },
+          {
+            "context": {
+              "pending": 1
+            },
+            "key": "n",
+            "result": {
+              "found": false
+            }
+          },
+          {
+            "context": {
+              "n": 1
+            },
+            "key": "pending",
+            "result": {
+              "found": false
+            }
+          },
+          {
+            "key": "n",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 7
+              }
+            }
+          },
+          {
+            "key": "pending",
+            "result": {
+              "found": false,
+              "notYetKnown": true
+            }
+          }
+        ]
+      },
+      "tree": {
+        "key": "pending",
+        "kind": "reference"
+      }
+    }
+  ]
+}

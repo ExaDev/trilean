@@ -1,0 +1,19 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "collections": {},
+        "inputs": {},
+        "ok": true
+      },
+      "from": "x.unit.test.ts: a fixture",
+      "kind": "inputs",
+      "raw": {},
+      "reason": "the implementation cannot run this case",
+      "skip": "ts",
+      "tolerance": {
+        "ulps": 1
+      }
+    }
+  ]
+}

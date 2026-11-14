@@ -1,0 +1,198 @@
+{
+  "cases": [
+    {
+      "as": "predicate",
+      "evaluator": {
+        "maxNestingDepth": 10
+      },
+      "expect": {
+        "code": "domain-error",
+        "ignoreCase": "not-the-type",
+        "messageIncludes": [
+          "depth"
+        ],
+        "status": "indeterminate"
+      },
+      "from": "evaluator.integration.test.ts: evaluation resource limits > a nesting-depth cap configured via createEvaluator rejects a narrow-but-deep tree that exceeds it, as indeterminate",
+      "id": "integration.evaluation-resource-limits-a-nesting-depth-cap-configured-via-createevaluator-rejects-a-narrow-but-deep-tree-that-exceeds-it-as-indetermin.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "not",
+        "operand": {
+          "kind": "not",
+          "operand": {
+            "kind": "not",
+            "operand": {
+              "kind": "not",
+              "operand": {
+                "kind": "not",
+                "operand": {
+                  "kind": "not",
+                  "operand": {
+                    "kind": "not",
+                    "operand": {
+                      "kind": "not",
+                      "operand": {
+                        "kind": "not",
+                        "operand": {
+                          "kind": "not",
+                          "operand": {
+                            "kind": "not",
+                            "operand": {
+                              "kind": "not",
+                              "operand": {
+                                "kind": "not",
+                                "operand": {
+                                  "kind": "not",
+                                  "operand": {
+                                    "kind": "not",
+                                    "operand": {
+                                      "kind": "not",
+                                      "operand": {
+                                        "kind": "not",
+                                        "operand": {
+                                          "kind": "not",
+                                          "operand": {
+                                            "kind": "not",
+                                            "operand": {
+                                              "kind": "not",
+                                              "operand": {
+                                                "kind": "not",
+                                                "operand": {
+                                                  "kind": "not",
+                                                  "operand": {
+                                                    "kind": "not",
+                                                    "operand": {
+                                                      "kind": "not",
+                                                      "operand": {
+                                                        "kind": "not",
+                                                        "operand": {
+                                                          "kind": "not",
+                                                          "operand": {
+                                                            "kind": "not",
+                                                            "operand": {
+                                                              "kind": "not",
+                                                              "operand": {
+                                                                "kind": "not",
+                                                                "operand": {
+                                                                  "kind": "not",
+                                                                  "operand": {
+                                                                    "kind": "not",
+                                                                    "operand": {
+                                                                      "kind": "not",
+                                                                      "operand": {
+                                                                        "kind": "not",
+                                                                        "operand": {
+                                                                          "kind": "not",
+                                                                          "operand": {
+                                                                            "kind": "not",
+                                                                            "operand": {
+                                                                              "kind": "not",
+                                                                              "operand": {
+                                                                                "kind": "not",
+                                                                                "operand": {
+                                                                                  "kind": "not",
+                                                                                  "operand": {
+                                                                                    "kind": "not",
+                                                                                    "operand": {
+                                                                                      "kind": "not",
+                                                                                      "operand": {
+                                                                                        "kind": "not",
+                                                                                        "operand": {
+                                                                                          "kind": "not",
+                                                                                          "operand": {
+                                                                                            "kind": "not",
+                                                                                            "operand": {
+                                                                                              "kind": "not",
+                                                                                              "operand": {
+                                                                                                "kind": "not",
+                                                                                                "operand": {
+                                                                                                  "kind": "not",
+                                                                                                  "operand": {
+                                                                                                    "kind": "not",
+                                                                                                    "operand": {
+                                                                                                      "kind": "not",
+                                                                                                      "operand": {
+                                                                                                        "kind": "not",
+                                                                                                        "operand": {
+                                                                                                          "kind": "not",
+                                                                                                          "operand": {
+                                                                                                            "kind": "exists",
+                                                                                                            "operand": {
+                                                                                                              "kind": "numberLiteral",
+                                                                                                              "value": 1
+                                                                                                            }
+                                                                                                          }
+                                                                                                        }
+                                                                                                      }
+                                                                                                    }
+                                                                                                  }
+                                                                                                }
+                                                                                              }
+                                                                                            }
+                                                                                          }
+                                                                                        }
+                                                                                      }
+                                                                                    }
+                                                                                  }
+                                                                                }
+                                                                              }
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

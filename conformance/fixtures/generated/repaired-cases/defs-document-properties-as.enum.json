@@ -1,0 +1,17 @@
+{
+  "cases": [
+    {
+      "as": "predicate",
+      "expectSubset": {
+        "outcome": "rejected"
+      },
+      "from": "evaluate-document.unit.test.ts: evaluateDocument > lets `as` override the kind read from the root",
+      "id": "document.evaluatedocument-lets-as-override-the-kind-read-from-the-root.1",
+      "kind": "document",
+      "tree": {
+        "kind": "numberLiteral",
+        "value": 1
+      }
+    }
+  ]
+}

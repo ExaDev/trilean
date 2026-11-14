@@ -1,0 +1,15 @@
+{
+  "cases": [
+    {
+      "id": "match.groups.groups-for-repetition.1",
+      "inputs": [
+        {
+          "input": "ababab",
+          "matches": true
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "(?:ab)+"
+    }
+  ]
+}

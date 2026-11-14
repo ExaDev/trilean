@@ -1,0 +1,12 @@
+{
+  "cases": [
+    {
+      "expect": "1",
+      "from": "x.unit.test.ts: a fixture",
+      "id": "optional.9",
+      "kind": "number-format",
+      "skip": "ts",
+      "value": 1
+    }
+  ]
+}

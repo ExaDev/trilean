@@ -1,0 +1,19 @@
+{
+  "cases": [
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite"
+      },
+      "from": "x.unit.test.ts: a fixture",
+      "id": "optional.11",
+      "kind": "evaluate",
+      "modes": "not-the-type",
+      "resolvers": {},
+      "tree": {
+        "kind": "allOf",
+        "operands": []
+      }
+    }
+  ]
+}

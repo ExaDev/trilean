@@ -1,0 +1,19 @@
+{
+  "cases": [
+    {
+      "as": "expression",
+      "expect": {
+        "code": "",
+        "status": "indeterminate"
+      },
+      "from": "recorded: trilean conformance/README.md (a rule the README states for resolver data)",
+      "id": "resolver-data.a-key-matching-no-entry-and-no-default-is-not-found.1",
+      "kind": "evaluate",
+      "resolvers": {},
+      "tree": {
+        "key": "a",
+        "kind": "reference"
+      }
+    }
+  ]
+}

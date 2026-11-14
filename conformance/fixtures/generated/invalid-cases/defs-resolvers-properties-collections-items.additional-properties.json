@@ -1,0 +1,52 @@
+{
+  "cases": [
+    {
+      "as": "predicate",
+      "context": {
+        "k": 1
+      },
+      "expect": {
+        "status": "definite",
+        "value": false
+      },
+      "expectCalls": [
+        {
+          "collection": "c",
+          "resolver": "collection"
+        }
+      ],
+      "from": "recorded: trilean conformance/README.md (a rule the README states for resolver data)",
+      "id": "resolver-data.a-collection-entry-names-a-context-by-the-same-rule.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "c",
+            "context": {
+              "k": 2
+            },
+            "items": [
+              {}
+            ],
+            "unexpectedMember": 1
+          },
+          {
+            "collection": "c",
+            "items": []
+          }
+        ]
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        },
+        "kind": "some"
+      }
+    }
+  ]
+}

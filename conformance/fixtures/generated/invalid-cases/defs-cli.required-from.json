@@ -1,0 +1,17 @@
+{
+  "cases": [
+    {
+      "args": [
+        "-h"
+      ],
+      "expect": {
+        "exit": 0,
+        "stderr": "",
+        "stdoutStartsWith": "Usage: trilean evaluate"
+      },
+      "files": {},
+      "id": "cli.short-form-of-help.1",
+      "kind": "cli"
+    }
+  ]
+}

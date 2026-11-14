@@ -4,7 +4,7 @@ import type { ExpressionNode } from "./tree";
 import { resolvers } from "./evaluator-test-helpers";
 
 /**
- * What complex arithmetic evaluates to is in the conformance corpus (`conformance/trilean/evaluate/evaluator.complex-arithmetic.json`). What stays here relates two evaluations to each other, which a case, giving one expectation, cannot.
+ * What complex arithmetic evaluates to is in the conformance corpus (`conformance/trilean/evaluate/evaluator.complex-arithmetic.json`). What stays here relates two evaluations to each other, which a case, giving one expectation, cannot, and asserts the sign of a result in the subnormal range, whose last digits differ between conforming implementations.
  */
 interface Complex {
   re: number;
@@ -32,6 +32,15 @@ async function power({
     resolvers,
   );
 }
+
+describe("complex power of a large base", () => {
+  it("keeps a negative power of a large base finite where its positive power would overflow", async () => {
+    const result = await power({ base: { re: 1e160, im: 0 }, exponent: -2 });
+    const value = result.status === "definite" ? result.value : undefined;
+    if (value?.kind !== "complex") throw new Error("expected a complex result");
+    expect(value.re).toBeGreaterThan(0);
+  });
+});
 
 describe("complex power by repeated squaring", () => {
   const bases: Complex[] = [

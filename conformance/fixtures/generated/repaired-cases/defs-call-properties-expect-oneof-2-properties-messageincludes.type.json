@@ -1,0 +1,17 @@
+{
+  "cases": [
+    {
+      "args": [],
+      "expect": {
+        "messageIncludes": [
+          "exactly one"
+        ],
+        "wrongType": true
+      },
+      "from": "builtin-functions.unit.test.ts: phase > is a wrong-type for a real number, text or a wrong count",
+      "function": "phase",
+      "id": "builtin.phase-is-a-wrong-type-for-a-real-number-text-or-a-wrong-count.3",
+      "kind": "call"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "cases": [
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": -0.4
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 0
+      },
+      "from": "builtin-functions.unit.test.ts: round > never returns a negative zero",
+      "function": "round",
+      "kind": "call"
+    }
+  ]
+}

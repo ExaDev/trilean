@@ -1,0 +1,20 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "ok": false
+      },
+      "from": "x.unit.test.ts: a fixture",
+      "id": "optional.1",
+      "input": {
+        "kind": "not"
+      },
+      "reason": "the implementation cannot run this case",
+      "schema": "NotNodeSchema",
+      "skip": "ts",
+      "tolerance": {
+        "ulps": 1
+      }
+    }
+  ]
+}

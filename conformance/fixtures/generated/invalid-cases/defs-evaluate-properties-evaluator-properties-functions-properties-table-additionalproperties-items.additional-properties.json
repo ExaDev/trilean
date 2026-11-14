@@ -1,0 +1,49 @@
+{
+  "cases": [
+    {
+      "as": "expression",
+      "evaluator": {
+        "functions": {
+          "table": {
+            "f": [
+              {
+                "args": [
+                  {
+                    "kind": "number",
+                    "value": 1
+                  }
+                ],
+                "result": {
+                  "kind": "number",
+                  "value": 2
+                },
+                "unexpectedMember": 1
+              }
+            ]
+          }
+        }
+      },
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 2
+        }
+      },
+      "from": "recorded: trilean conformance/README.md (a rule the README states for resolver data)",
+      "id": "resolver-data.a-registered-function-answers-the-argument-list-it-lists-with-a-value.1",
+      "kind": "evaluate",
+      "resolvers": {},
+      "tree": {
+        "args": [
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "fn": "f",
+        "kind": "call"
+      }
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "cases": [
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 0
+        }
+      },
+      "from": "recorded: trilean conformance/README.md (a rule the README states for resolver data)",
+      "id": "resolver-data.a-lookup-entry-answers-only-the-keys-it-lists-in-order.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 0
+          }
+        },
+        "lookups": [
+          {
+            "keys": [
+              {
+                "kind": "number",
+                "value": 2
+              }
+            ],
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "value": 5
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "keys": [
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "kind": "lookup",
+        "table": "t"
+      }
+    }
+  ]
+}

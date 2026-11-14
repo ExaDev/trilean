@@ -1,0 +1,15 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "ok": true,
+        "value": "first"
+      },
+      "from": "tree.unit.test.ts: expression tree > HitPolicySchema: accepts `\"first\"`/`\"unique\"` and rejects any other value",
+      "id": "tree.expression-tree-hitpolicyschema-accepts-first-unique-and-rejects-any-other-value.1",
+      "input": "first",
+      "kind": "validate",
+      "schema": "HitPolicySchema"
+    }
+  ]
+}

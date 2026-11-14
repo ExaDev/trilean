@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "args": [
+        "-h"
+      ],
+      "files": {},
+      "from": "recorded: trilean cli/run.ts (the short form of --help)",
+      "id": "cli.short-form-of-help.1",
+      "kind": "cli"
+    }
+  ]
+}

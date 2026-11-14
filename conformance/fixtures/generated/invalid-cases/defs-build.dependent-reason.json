@@ -1,0 +1,27 @@
+{
+  "cases": [
+    {
+      "args": [
+        {
+          "kind": "allOf",
+          "operands": []
+        }
+      ],
+      "builder": "not",
+      "expect": {
+        "kind": "not",
+        "operand": {
+          "kind": "allOf",
+          "operands": []
+        }
+      },
+      "from": "x.unit.test.ts: a fixture",
+      "id": "optional.2",
+      "kind": "build",
+      "reason": "x",
+      "tolerance": {
+        "absolute": 0.5
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "cases": [
+    {
+      "args": [
+        "-h"
+      ],
+      "expect": {
+        "exit": 0,
+        "stderr": "",
+        "stdoutStartsWith": "Usage: trilean evaluate"
+      },
+      "files": {},
+      "from": "recorded: trilean cli/run.ts (the short form of --help)",
+      "kind": "cli"
+    }
+  ]
+}

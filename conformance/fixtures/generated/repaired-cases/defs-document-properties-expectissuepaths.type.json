@@ -1,0 +1,27 @@
+{
+  "cases": [
+    {
+      "expectIssuePaths": [
+        "right.value"
+      ],
+      "expectSubset": {
+        "outcome": "rejected",
+        "reason": "invalid"
+      },
+      "from": "evaluate-document.unit.test.ts: evaluateDocument > rejects a tree that fails its schema, naming the nested path (the original asserted the text of the schema library's message as well; the case asserts the path of the issue, which the implementation owns)",
+      "id": "document.evaluatedocument-rejects-a-tree-that-fails-its-schema-naming-the-nested-path.1",
+      "kind": "document",
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "numberLiteral",
+          "value": 1
+        },
+        "op": "add",
+        "right": {
+          "kind": "textLiteral"
+        }
+      }
+    }
+  ]
+}

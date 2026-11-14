@@ -1,0 +1,23 @@
+{
+  "cases": [
+    {
+      "args": [
+        "evaluate",
+        "-"
+      ],
+      "expect": {
+        "exit": 0,
+        "stdoutJsonSubset": {
+          "value": {
+            "value": 7
+          }
+        }
+      },
+      "files": {},
+      "from": "cli-run.integration.test.ts: trilean evaluate > reads the tree from standard input for -",
+      "id": "cli.trilean-evaluate-reads-the-tree-from-standard-input-for.1",
+      "kind": "cli",
+      "stdin": "{\"kind\":\"numberLiteral\",\"value\":7}"
+    }
+  ]
+}

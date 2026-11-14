@@ -1,0 +1,18 @@
+{
+  "cases": [
+    {
+      "from": "x.unit.test.ts: a fixture",
+      "id": "optional.6",
+      "kind": "document",
+      "reason": "the implementation cannot run this case",
+      "skip": "rust",
+      "tolerance": {
+        "ulps": 1
+      },
+      "tree": {
+        "kind": "numberLiteral",
+        "value": 1
+      }
+    }
+  ]
+}

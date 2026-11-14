@@ -1,0 +1,30 @@
+{
+  "cases": [
+    {
+      "from": "x.unit.test.ts: a fixture",
+      "id": "fixture.match-text",
+      "inputs": [
+        {
+          "input": {
+            "codeUnits": [
+              65537
+            ]
+          },
+          "matches": true
+        },
+        {
+          "input": "😀",
+          "matches": false
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": {
+        "codeUnits": [
+          94,
+          46,
+          36
+        ]
+      }
+    }
+  ]
+}

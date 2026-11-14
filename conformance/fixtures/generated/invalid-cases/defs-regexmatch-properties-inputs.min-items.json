@@ -1,0 +1,11 @@
+{
+  "cases": [
+    {
+      "from": "matcher.unit.test.ts: groups > groups for repetition",
+      "id": "match.groups.groups-for-repetition.1",
+      "inputs": [],
+      "kind": "regex-match",
+      "pattern": "(?:ab)+"
+    }
+  ]
+}

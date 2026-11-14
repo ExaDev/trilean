@@ -1,0 +1,42 @@
+{
+  "cases": [
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 4
+        }
+      },
+      "expectCalls": [
+        {
+          "key": "k",
+          "resolver": "tree",
+          "unexpectedMember": 1
+        }
+      ],
+      "from": "recorded: trilean conformance/README.md (a rule the README states for resolver data)",
+      "id": "resolver-data.a-tree-resolver-is-asked-for-the-key-of-the-reference.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "trees": [
+          {
+            "key": "k",
+            "result": {
+              "found": true,
+              "node": {
+                "kind": "numberLiteral",
+                "value": 4
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "key": "k",
+        "kind": "treeReference"
+      }
+    }
+  ]
+}

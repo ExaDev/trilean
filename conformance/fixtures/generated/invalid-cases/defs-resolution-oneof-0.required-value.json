@@ -1,0 +1,34 @@
+{
+  "cases": [
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "truth-tables.unit.test.ts: NOT truth table > NOT F => T",
+      "id": "truth-tables.not-truth-table-not-f-t.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true
+        },
+        "values": [
+          {
+            "key": "missing",
+            "result": {
+              "found": false
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "not",
+        "operand": {
+          "kind": "anyOf",
+          "operands": []
+        }
+      }
+    }
+  ]
+}

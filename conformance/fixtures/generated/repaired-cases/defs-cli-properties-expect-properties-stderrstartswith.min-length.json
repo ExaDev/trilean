@@ -1,0 +1,18 @@
+{
+  "cases": [
+    {
+      "args": [
+        "evaluate",
+        "-"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderrStartsWith": "cannot read standard input: "
+      },
+      "files": {},
+      "from": "cli-run.integration.test.ts: trilean evaluate > names standard input, not a dash, when it cannot be read",
+      "id": "cli.trilean-evaluate-names-standard-input-not-a-dash-when-it-cannot-be-read.1",
+      "kind": "cli"
+    }
+  ]
+}

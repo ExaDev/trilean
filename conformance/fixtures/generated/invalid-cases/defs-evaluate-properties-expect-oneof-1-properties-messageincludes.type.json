@@ -1,0 +1,141 @@
+{
+  "cases": [
+    {
+      "as": "expression",
+      "expect": {
+        "code": "wrong-type",
+        "messageIncludes": "not-the-type",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.indeterminacy-cases.unit.test.ts: delegate: missing-handler message > includes the external system's own name",
+      "id": "indeterminacy-cases.delegate-missing-handler-message-includes-the-external-system-s-own-name.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "collections": [
+          {
+            "collection": "single-notfound",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "single-wrongtype",
+            "items": [
+              {
+                "value": "x"
+              }
+            ]
+          },
+          {
+            "collection": "single-domainerror",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "empty",
+            "items": []
+          },
+          {
+            "collection": "one-item",
+            "items": [
+              {}
+            ]
+          },
+          {
+            "collection": "nested-outer",
+            "items": [
+              {
+                "values": [
+                  {
+                    "amount": 1
+                  },
+                  {
+                    "amount": 2
+                  }
+                ]
+              },
+              {
+                "values": [
+                  {
+                    "amount": 10
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "collection": "values",
+            "context": {
+              "values": [
+                {
+                  "amount": 1
+                },
+                {
+                  "amount": 2
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 1
+              },
+              {
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "collection": "values",
+            "context": {
+              "values": [
+                {
+                  "amount": 10
+                }
+              ]
+            },
+            "items": [
+              {
+                "amount": 10
+              }
+            ]
+          }
+        ],
+        "default": {
+          "found": false
+        },
+        "fromContext": true,
+        "values": [
+          {
+            "key": "present",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "number",
+                "unit": {
+                  "m": 1
+                },
+                "value": 10
+              }
+            }
+          },
+          {
+            "key": "presentText",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "text",
+                "value": "hello"
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "delegate",
+        "payload": null,
+        "system": "external-pricing-engine"
+      }
+    }
+  ]
+}
