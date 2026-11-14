@@ -123,22 +123,125 @@ impl Value {
     }
 }
 
-/// A number as `JSON.stringify` writes it: digits for magnitudes from 1e-6 up to 1e21, an exponent outside that, and
-/// `0` for `-0`.
+/// The shortest decimal digits that read back as `magnitude`, and the decimal exponent of the first digit, as
+/// ECMAScript's Number-to-string chooses them: Rust's shortest digits, except that where two shortest spellings are
+/// exactly as close to the double (it lies midway between them) ECMAScript takes the one whose last digit is even and
+/// Rust the larger.
+fn shortest_digits(magnitude: f64) -> (Vec<u8>, i32) {
+    let text = format!("{magnitude:e}");
+    let (mantissa, exponent) = text.split_once('e').unwrap_or((&text, "0"));
+    let mut digits: Vec<u8> = mantissa.bytes().filter(u8::is_ascii_digit).collect();
+    let mut exponent: i32 = exponent.parse().unwrap_or(0);
+    let length = digits.len();
+    // The exact expansion, to the digit after the shortest ones and well past it: a tie is a 5 there and zeros after.
+    let probe = format!("{magnitude:.*e}", length + 25);
+    let exact: Vec<u8> = probe
+        .split_once('e')
+        .map_or(&probe[..], |(mantissa, _)| mantissa)
+        .bytes()
+        .filter(u8::is_ascii_digit)
+        .collect();
+    let is_tie = |exact: &[u8]| {
+        exact[length] == b'5' && exact[length + 1..].iter().all(|digit| *digit == b'0')
+    };
+    if exact.len() > length + 1 && is_tie(&exact) {
+        // A double has finitely many digits: confirm the zeros run to the end of the exact expansion.
+        let full = format!("{magnitude:.800e}");
+        let full: Vec<u8> = full
+            .split_once('e')
+            .map_or(&full[..], |(mantissa, _)| mantissa)
+            .bytes()
+            .filter(u8::is_ascii_digit)
+            .collect();
+        if is_tie(&full) {
+            let mut lower = full[..length].to_vec();
+            let mut upper = lower.clone();
+            let mut carry = true;
+            for digit in upper.iter_mut().rev() {
+                if *digit == b'9' {
+                    *digit = b'0';
+                } else {
+                    *digit += 1;
+                    carry = false;
+                    break;
+                }
+            }
+            let mut upper_exponent = exponent;
+            if carry {
+                upper.insert(0, b'1');
+                upper.pop();
+                upper_exponent += 1;
+            }
+            let reads_back = |candidate: &[u8], exponent: i32| {
+                let text = format!(
+                    "{}.{}e{exponent}",
+                    char::from(candidate[0]),
+                    String::from_utf8_lossy(&candidate[1..])
+                );
+                text.parse::<f64>() == Ok(magnitude)
+            };
+            let even_lower = lower
+                .last()
+                .is_some_and(|digit| (digit - b'0').is_multiple_of(2));
+            let (chosen, chosen_exponent) = if even_lower {
+                (&mut lower, exponent)
+            } else {
+                (&mut upper, upper_exponent)
+            };
+            // Both spellings are equally close; the even one is the answer when it reads back as the same double,
+            // which it does unless the double sits at the edge between two spacings of the doubles.
+            if reads_back(chosen, chosen_exponent) {
+                digits = std::mem::take(chosen);
+                exponent = chosen_exponent;
+            }
+        }
+    }
+    while digits.len() > 1 && digits.last() == Some(&b'0') {
+        digits.pop();
+    }
+    (digits, exponent)
+}
+
+/// A number as `JSON.stringify` writes it (ECMAScript's Number-to-string): the shortest digits that read back as the
+/// double, written as digits and zeros for magnitudes from 1e-6 up to below 1e21 and with an exponent outside that,
+/// and `0` for `-0`.
 fn number_text(number: f64) -> String {
     if number == 0.0 {
         return "0".to_owned();
     }
-    if (1e-6..1e21).contains(&number.abs()) {
-        return format!("{number}");
-    }
-    let text = format!("{number:e}");
-    match text.split_once('e') {
-        Some((mantissa, exponent)) if !exponent.starts_with('-') => {
-            format!("{mantissa}e+{exponent}")
+    let (digits, exponent) = shortest_digits(number.abs());
+    let digits = String::from_utf8_lossy(&digits).into_owned();
+    let length = i32::try_from(digits.len()).unwrap_or(i32::MAX);
+    // The decimal point sits after `point` digits: the value is 0.DIGITS times 10 to the `point`.
+    let point = exponent + 1;
+    let sign = if number < 0.0 { "-" } else { "" };
+    let body = if length <= point && point <= 21 {
+        format!(
+            "{digits}{}",
+            "0".repeat(usize::try_from(point - length).unwrap_or(0))
+        )
+    } else if 0 < point && point <= 21 {
+        let split = usize::try_from(point).unwrap_or(0);
+        format!("{}.{}", &digits[..split], &digits[split..])
+    } else if -6 < point && point <= 0 {
+        format!(
+            "0.{}{digits}",
+            "0".repeat(usize::try_from(-point).unwrap_or(0))
+        )
+    } else {
+        let sign_of_exponent = if point - 1 < 0 { "-" } else { "+" };
+        let power = (point - 1).abs();
+        if digits.len() == 1 {
+            format!("{digits}e{sign_of_exponent}{power}")
+        } else {
+            format!(
+                "{}.{}e{sign_of_exponent}{power}",
+                &digits[..1],
+                &digits[1..]
+            )
         }
-        _ => text,
-    }
+    };
+    format!("{sign}{body}")
 }
 
 impl fmt::Display for Value {
