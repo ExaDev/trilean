@@ -122,13 +122,18 @@ function checkExpectation(
   if (wanted.code !== undefined) {
     expect(got.code, label).toBe(wanted.code);
   }
+  const fold = (text: string): string =>
+    wanted.ignoreCase === true ? text.toLowerCase() : text;
   if (wanted.message !== undefined) {
-    expect(got.message, label).toBe(wanted.message);
+    expect(fold(String(got.message)), label).toBe(fold(wanted.message));
   }
   if (wanted.messageIncludes !== undefined) {
     const message = String(got.message);
     expect(
-      includesInOrder(message, wanted.messageIncludes),
+      includesInOrder(
+        fold(message),
+        wanted.messageIncludes.map((fragment) => fold(fragment)),
+      ),
       `${label}: reason ${JSON.stringify(message)} lacks, in order, ${JSON.stringify(wanted.messageIncludes)}`,
     ).toBe(true);
   }
@@ -192,7 +197,7 @@ export async function runEvaluateCase(testCase: EvaluateCase): Promise<void> {
     testCase.as === "expression"
       ? ExpressionNodeSchema.parse(decodeNumbers(testCase.tree))
       : undefined;
-  const context = decodeNumbers(testCase.context ?? null);
+  const context = decodeNumbers(testCase.context);
   const runMode = async (mode: Mode): Promise<void> => {
     const label = `${testCase.id} [${mode}]`;
     const resolvers = buildResolvers(testCase.resolvers);

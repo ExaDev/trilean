@@ -33,11 +33,11 @@
       "skip": []
     },
     "trilean/call/builtin-functions.json": {
-      "cases": 178,
+      "cases": 181,
       "skip": []
     },
     "trilean/cli/cli-run.json": {
-      "cases": 45,
+      "cases": 52,
       "skip": []
     },
     "trilean/document/evaluate-document.collections.json": {
@@ -57,7 +57,7 @@
       "skip": []
     },
     "trilean/evaluate/delegate-handler.json": {
-      "cases": 5,
+      "cases": 7,
       "skip": []
     },
     "trilean/evaluate/derived-aggregates.json": {
@@ -89,7 +89,7 @@
       "skip": []
     },
     "trilean/evaluate/evaluator.complex-arithmetic.json": {
-      "cases": 80,
+      "cases": 81,
       "skip": []
     },
     "trilean/evaluate/evaluator.control-flow.json": {
@@ -113,7 +113,7 @@
       "skip": []
     },
     "trilean/evaluate/evaluator.integration.json": {
-      "cases": 7,
+      "cases": 21,
       "skip": []
     },
     "trilean/evaluate/evaluator.membership.json": {

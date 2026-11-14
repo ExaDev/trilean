@@ -4,7 +4,7 @@ import type { ExpressionNode } from "./tree";
 import { resolvers } from "./evaluator-test-helpers";
 
 /**
- * What complex arithmetic evaluates to is in the conformance corpus (`conformance/trilean/evaluate/evaluator.complex-arithmetic.json`). What stays here asserts a property the corpus cannot state without an exact digit of the implementation's: that a quotient is not zero, and that two evaluations agree.
+ * What complex arithmetic evaluates to is in the conformance corpus (`conformance/trilean/evaluate/evaluator.complex-arithmetic.json`). What stays here relates two evaluations to each other, which a case, giving one expectation, cannot.
  */
 interface Complex {
   re: number;
@@ -32,30 +32,6 @@ async function power({
     resolvers,
   );
 }
-
-describe("complex division", () => {
-  it("does not report a subnormal quotient as equal to zero", async () => {
-    const quotient = await evaluateValue(
-      {
-        kind: "arithmetic",
-        op: "divide",
-        left: literal({
-          re: -7.124494562846174e-209,
-          im: -8.343164103148207e-219,
-        }),
-        right: literal({
-          re: 2.50063496577604e114,
-          im: -1.8086225038951245e105,
-        }),
-      },
-      undefined,
-      resolvers,
-    );
-    const value = quotient.status === "definite" ? quotient.value : undefined;
-    if (value?.kind !== "complex") throw new Error("expected a complex result");
-    expect(value.re).not.toBe(0);
-  });
-});
 
 describe("complex power by repeated squaring", () => {
   const bases: Complex[] = [

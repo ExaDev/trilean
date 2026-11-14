@@ -511,6 +511,26 @@
       "args": [
         {
           "kind": "number",
+          "value": 5e-324
+        },
+        {
+          "kind": "number",
+          "value": 324
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 5e-324
+      },
+      "from": "recorded: trilean src/builtin-functions.ts (round keeps the smallest subnormal when asked for as many places as its magnitude has)",
+      "function": "round",
+      "id": "builtin.round-smallest-subnormal-at-324-places.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
           "value": 1.5
         },
         {
@@ -2269,6 +2289,31 @@
     {
       "args": [
         {
+          "im": 100,
+          "kind": "complex",
+          "re": 0
+        },
+        {
+          "kind": "number",
+          "value": 10
+        }
+      ],
+      "expect": {
+        "im": 0.6821881769209206,
+        "kind": "complex",
+        "re": 2
+      },
+      "from": "builtin-functions.unit.test.ts: logarithm of a complex number > divides through by the base's natural logarithm, exact in the real part for a power of ten",
+      "function": "logarithm",
+      "id": "builtin.logarithm-of-a-complex-number-divides-through-by-the-base-s-natural-logarithm-exact-in-the-real-part-for-a-power-of-ten.1",
+      "kind": "call",
+      "tolerance": {
+        "absolute": 2.220446049250313e-16
+      }
+    },
+    {
+      "args": [
+        {
           "im": 0,
           "kind": "complex",
           "re": 0
@@ -2444,6 +2489,25 @@
       "function": "cosine",
       "id": "builtin.sine-cosine-and-tangent-take-an-angle-in-radians.4",
       "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1.5707963267948966
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 16331239353195370
+      },
+      "from": "builtin-functions.unit.test.ts: sine, cosine and tangent > give a large but finite tangent at the double nearest a pole",
+      "function": "tangent",
+      "id": "builtin.sine-cosine-and-tangent-give-a-large-but-finite-tangent-at-the-double-nearest-a-pole.1",
+      "kind": "call",
+      "tolerance": {
+        "ulps": 16
+      }
     },
     {
       "args": [

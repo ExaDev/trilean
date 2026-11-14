@@ -58,6 +58,9 @@ export function runCliCase(testCase: CliCase): void {
   if (wanted.stderrIncludes !== undefined) {
     expect(includesInOrder(err, wanted.stderrIncludes), label).toBe(true);
   }
+  if (wanted.stdoutStartsWith !== undefined) {
+    expect(out.startsWith(wanted.stdoutStartsWith), label).toBe(true);
+  }
   if (wanted.stderrStartsWith !== undefined) {
     expect(err.startsWith(wanted.stderrStartsWith), label).toBe(true);
   }

@@ -260,6 +260,11 @@
               "description": "The JSON the command printed, compared as `expectSubset` is.",
               "minProperties": 1,
               "type": "object"
+            },
+            "stdoutStartsWith": {
+              "description": "The text standard output begins with.",
+              "minLength": 1,
+              "type": "string"
             }
           },
           "required": [
@@ -508,6 +513,10 @@
                 "code": {
                   "minLength": 1,
                   "type": "string"
+                },
+                "ignoreCase": {
+                  "description": "Compare message and messageIncludes without regard to letter case, as an original written as a case-insensitive pattern did.",
+                  "type": "boolean"
                 },
                 "message": {
                   "type": "string"
