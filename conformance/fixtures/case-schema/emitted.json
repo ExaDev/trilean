@@ -1,0 +1,2169 @@
+{
+  "$defs": {
+    "BadSpecialNumber": {
+      "description": "An object that has a $number member and is not exactly one of the four named numbers.",
+      "not": {
+        "$ref": "#/$defs/SpecialNumber"
+      },
+      "properties": {
+        "$number": {}
+      },
+      "required": [
+        "$number"
+      ],
+      "type": "object"
+    },
+    "Builder": {
+      "description": "The functions of the package that build a tree.",
+      "enum": [
+        "average",
+        "coalesce",
+        "count",
+        "hierarchicalGlobPattern",
+        "iff",
+        "implies",
+        "nand",
+        "none",
+        "nor",
+        "not",
+        "prefixPattern",
+        "sum",
+        "wildcardPattern",
+        "xor"
+      ]
+    },
+    "CallExpect": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/ComputedValue"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "domainError": {
+              "const": true
+            },
+            "messageIncludes": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "minItems": 1,
+              "type": "array"
+            }
+          },
+          "required": [
+            "domainError"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "messageIncludes": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            "wrongType": {
+              "const": true
+            }
+          },
+          "required": [
+            "wrongType"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "Case": {
+      "description": "One corpus case, chosen by its kind.",
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "dependentRequired": {
+            "reason": [
+              "skip"
+            ],
+            "skip": [
+              "reason"
+            ]
+          },
+          "properties": {
+            "expect": {
+              "$ref": "#/$defs/RegexParseExpect"
+            },
+            "from": {
+              "description": "The original test title this case came from, as `<test file>: <title>`, or `recorded: <package> <source file> (<what>)` for a behaviour recorded from the implementation because no test covered it. The prefix tells a pinned original from a recorded behaviour.",
+              "pattern": "^(recorded: .+|[a-z0-9._-]+\\.test\\.ts: .+)$",
+              "type": "string"
+            },
+            "id": {
+              "description": "Unique across the whole corpus. Lower-case ASCII letters, digits, dots, hyphens and underscores, so every loader orders ids the same way.",
+              "pattern": "^[a-z0-9][a-z0-9._-]*$",
+              "type": "string"
+            },
+            "kind": {
+              "const": "regex-parse"
+            },
+            "pattern": {
+              "$ref": "#/$defs/Text"
+            },
+            "reason": {
+              "description": "Why one side cannot run the case. Required with skip, and only with skip.",
+              "minLength": 1,
+              "type": "string"
+            },
+            "skip": {
+              "$ref": "#/$defs/Skip"
+            },
+            "tolerance": {
+              "$ref": "#/$defs/Tolerance"
+            }
+          },
+          "required": [
+            "kind",
+            "id",
+            "from",
+            "pattern",
+            "expect"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "dependentRequired": {
+            "reason": [
+              "skip"
+            ],
+            "skip": [
+              "reason"
+            ]
+          },
+          "properties": {
+            "dialect": {
+              "$ref": "#/$defs/Dialect"
+            },
+            "from": {
+              "description": "The original test title this case came from, as `<test file>: <title>`, or `recorded: <package> <source file> (<what>)` for a behaviour recorded from the implementation because no test covered it. The prefix tells a pinned original from a recorded behaviour.",
+              "pattern": "^(recorded: .+|[a-z0-9._-]+\\.test\\.ts: .+)$",
+              "type": "string"
+            },
+            "id": {
+              "description": "Unique across the whole corpus. Lower-case ASCII letters, digits, dots, hyphens and underscores, so every loader orders ids the same way.",
+              "pattern": "^[a-z0-9][a-z0-9._-]*$",
+              "type": "string"
+            },
+            "inputs": {
+              "items": {
+                "$ref": "#/$defs/MatchInput"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            "kind": {
+              "const": "regex-match"
+            },
+            "pattern": {
+              "$ref": "#/$defs/Text"
+            },
+            "reason": {
+              "description": "Why one side cannot run the case. Required with skip, and only with skip.",
+              "minLength": 1,
+              "type": "string"
+            },
+            "skip": {
+              "$ref": "#/$defs/Skip"
+            },
+            "tolerance": {
+              "$ref": "#/$defs/Tolerance"
+            }
+          },
+          "required": [
+            "kind",
+            "id",
+            "from",
+            "pattern",
+            "inputs"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "dependentRequired": {
+            "reason": [
+              "skip"
+            ],
+            "skip": [
+              "reason"
+            ]
+          },
+          "properties": {
+            "expect": {
+              "$ref": "#/$defs/ValidateExpect"
+            },
+            "from": {
+              "description": "The original test title this case came from, as `<test file>: <title>`, or `recorded: <package> <source file> (<what>)` for a behaviour recorded from the implementation because no test covered it. The prefix tells a pinned original from a recorded behaviour.",
+              "pattern": "^(recorded: .+|[a-z0-9._-]+\\.test\\.ts: .+)$",
+              "type": "string"
+            },
+            "id": {
+              "description": "Unique across the whole corpus. Lower-case ASCII letters, digits, dots, hyphens and underscores, so every loader orders ids the same way.",
+              "pattern": "^[a-z0-9][a-z0-9._-]*$",
+              "type": "string"
+            },
+            "input": {
+              "$ref": "#/$defs/Json"
+            },
+            "kind": {
+              "const": "validate"
+            },
+            "reason": {
+              "description": "Why one side cannot run the case. Required with skip, and only with skip.",
+              "minLength": 1,
+              "type": "string"
+            },
+            "schema": {
+              "$ref": "#/$defs/SchemaName"
+            },
+            "skip": {
+              "$ref": "#/$defs/Skip"
+            },
+            "tolerance": {
+              "$ref": "#/$defs/Tolerance"
+            }
+          },
+          "required": [
+            "kind",
+            "id",
+            "from",
+            "schema",
+            "input",
+            "expect"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "dependentRequired": {
+            "reason": [
+              "skip"
+            ],
+            "skip": [
+              "reason"
+            ]
+          },
+          "properties": {
+            "args": {
+              "type": "array"
+            },
+            "builder": {
+              "$ref": "#/$defs/Builder"
+            },
+            "expect": {
+              "$ref": "#/$defs/Json"
+            },
+            "from": {
+              "description": "The original test title this case came from, as `<test file>: <title>`, or `recorded: <package> <source file> (<what>)` for a behaviour recorded from the implementation because no test covered it. The prefix tells a pinned original from a recorded behaviour.",
+              "pattern": "^(recorded: .+|[a-z0-9._-]+\\.test\\.ts: .+)$",
+              "type": "string"
+            },
+            "id": {
+              "description": "Unique across the whole corpus. Lower-case ASCII letters, digits, dots, hyphens and underscores, so every loader orders ids the same way.",
+              "pattern": "^[a-z0-9][a-z0-9._-]*$",
+              "type": "string"
+            },
+            "kind": {
+              "const": "build"
+            },
+            "reason": {
+              "description": "Why one side cannot run the case. Required with skip, and only with skip.",
+              "minLength": 1,
+              "type": "string"
+            },
+            "skip": {
+              "$ref": "#/$defs/Skip"
+            },
+            "tolerance": {
+              "$ref": "#/$defs/Tolerance"
+            }
+          },
+          "required": [
+            "kind",
+            "id",
+            "from",
+            "builder",
+            "args",
+            "expect"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "dependentRequired": {
+            "reason": [
+              "skip"
+            ],
+            "skip": [
+              "reason"
+            ]
+          },
+          "properties": {
+            "args": {
+              "items": {
+                "$ref": "#/$defs/ComputedValue"
+              },
+              "type": "array"
+            },
+            "expect": {
+              "$ref": "#/$defs/CallExpect"
+            },
+            "from": {
+              "description": "The original test title this case came from, as `<test file>: <title>`, or `recorded: <package> <source file> (<what>)` for a behaviour recorded from the implementation because no test covered it. The prefix tells a pinned original from a recorded behaviour.",
+              "pattern": "^(recorded: .+|[a-z0-9._-]+\\.test\\.ts: .+)$",
+              "type": "string"
+            },
+            "function": {
+              "$ref": "#/$defs/Function"
+            },
+            "id": {
+              "description": "Unique across the whole corpus. Lower-case ASCII letters, digits, dots, hyphens and underscores, so every loader orders ids the same way.",
+              "pattern": "^[a-z0-9][a-z0-9._-]*$",
+              "type": "string"
+            },
+            "kind": {
+              "const": "call"
+            },
+            "reason": {
+              "description": "Why one side cannot run the case. Required with skip, and only with skip.",
+              "minLength": 1,
+              "type": "string"
+            },
+            "skip": {
+              "$ref": "#/$defs/Skip"
+            },
+            "tolerance": {
+              "$ref": "#/$defs/Tolerance"
+            }
+          },
+          "required": [
+            "kind",
+            "id",
+            "from",
+            "function",
+            "args",
+            "expect"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "anyOf": [
+            {
+              "properties": {
+                "expect": {}
+              },
+              "required": [
+                "expect"
+              ],
+              "type": "object"
+            },
+            {
+              "properties": {
+                "expectCalls": {}
+              },
+              "required": [
+                "expectCalls"
+              ],
+              "type": "object"
+            }
+          ],
+          "dependentRequired": {
+            "reason": [
+              "skip"
+            ],
+            "skip": [
+              "reason"
+            ]
+          },
+          "properties": {
+            "as": {
+              "$ref": "#/$defs/Subject"
+            },
+            "context": {
+              "$ref": "#/$defs/Json"
+            },
+            "evaluator": {
+              "$ref": "#/$defs/Evaluator"
+            },
+            "expect": {
+              "$ref": "#/$defs/EvaluateExpect"
+            },
+            "expectCalls": {
+              "description": "The resolver calls in the order they were made.",
+              "items": {
+                "$ref": "#/$defs/ExpectedCall"
+              },
+              "type": "array"
+            },
+            "from": {
+              "description": "The original test title this case came from, as `<test file>: <title>`, or `recorded: <package> <source file> (<what>)` for a behaviour recorded from the implementation because no test covered it. The prefix tells a pinned original from a recorded behaviour.",
+              "pattern": "^(recorded: .+|[a-z0-9._-]+\\.test\\.ts: .+)$",
+              "type": "string"
+            },
+            "id": {
+              "description": "Unique across the whole corpus. Lower-case ASCII letters, digits, dots, hyphens and underscores, so every loader orders ids the same way.",
+              "pattern": "^[a-z0-9][a-z0-9._-]*$",
+              "type": "string"
+            },
+            "kind": {
+              "const": "evaluate"
+            },
+            "modes": {
+              "items": {
+                "$ref": "#/$defs/Mode"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "reason": {
+              "description": "Why one side cannot run the case. Required with skip, and only with skip.",
+              "minLength": 1,
+              "type": "string"
+            },
+            "resolvers": {
+              "$ref": "#/$defs/Resolvers"
+            },
+            "skip": {
+              "$ref": "#/$defs/Skip"
+            },
+            "tolerance": {
+              "$ref": "#/$defs/Tolerance"
+            },
+            "tree": {
+              "$ref": "#/$defs/Json"
+            }
+          },
+          "required": [
+            "kind",
+            "id",
+            "from",
+            "as",
+            "resolvers",
+            "tree"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "dependentRequired": {
+            "reason": [
+              "skip"
+            ],
+            "skip": [
+              "reason"
+            ]
+          },
+          "properties": {
+            "expect": {
+              "$ref": "#/$defs/InputsExpect"
+            },
+            "from": {
+              "description": "The original test title this case came from, as `<test file>: <title>`, or `recorded: <package> <source file> (<what>)` for a behaviour recorded from the implementation because no test covered it. The prefix tells a pinned original from a recorded behaviour.",
+              "pattern": "^(recorded: .+|[a-z0-9._-]+\\.test\\.ts: .+)$",
+              "type": "string"
+            },
+            "id": {
+              "description": "Unique across the whole corpus. Lower-case ASCII letters, digits, dots, hyphens and underscores, so every loader orders ids the same way.",
+              "pattern": "^[a-z0-9][a-z0-9._-]*$",
+              "type": "string"
+            },
+            "kind": {
+              "const": "inputs"
+            },
+            "raw": {
+              "$ref": "#/$defs/Json"
+            },
+            "reason": {
+              "description": "Why one side cannot run the case. Required with skip, and only with skip.",
+              "minLength": 1,
+              "type": "string"
+            },
+            "skip": {
+              "$ref": "#/$defs/Skip"
+            },
+            "tolerance": {
+              "$ref": "#/$defs/Tolerance"
+            }
+          },
+          "required": [
+            "kind",
+            "id",
+            "from",
+            "expect",
+            "raw"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "dependentRequired": {
+            "reason": [
+              "skip"
+            ],
+            "skip": [
+              "reason"
+            ]
+          },
+          "oneOf": [
+            {
+              "properties": {
+                "expect": {}
+              },
+              "required": [
+                "expect"
+              ],
+              "type": "object"
+            },
+            {
+              "properties": {
+                "expectSubset": {}
+              },
+              "required": [
+                "expectSubset"
+              ],
+              "type": "object"
+            }
+          ],
+          "properties": {
+            "as": {
+              "$ref": "#/$defs/Subject"
+            },
+            "expect": {
+              "$ref": "#/$defs/Json"
+            },
+            "expectIssuePaths": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            "expectSubset": {
+              "minProperties": 1,
+              "type": "object"
+            },
+            "from": {
+              "description": "The original test title this case came from, as `<test file>: <title>`, or `recorded: <package> <source file> (<what>)` for a behaviour recorded from the implementation because no test covered it. The prefix tells a pinned original from a recorded behaviour.",
+              "pattern": "^(recorded: .+|[a-z0-9._-]+\\.test\\.ts: .+)$",
+              "type": "string"
+            },
+            "id": {
+              "description": "Unique across the whole corpus. Lower-case ASCII letters, digits, dots, hyphens and underscores, so every loader orders ids the same way.",
+              "pattern": "^[a-z0-9][a-z0-9._-]*$",
+              "type": "string"
+            },
+            "inputs": {
+              "$ref": "#/$defs/Json"
+            },
+            "kind": {
+              "const": "document"
+            },
+            "maxNodes": {
+              "maximum": 9007199254740991,
+              "minimum": 1,
+              "type": "integer"
+            },
+            "reason": {
+              "description": "Why one side cannot run the case. Required with skip, and only with skip.",
+              "minLength": 1,
+              "type": "string"
+            },
+            "skip": {
+              "$ref": "#/$defs/Skip"
+            },
+            "tolerance": {
+              "$ref": "#/$defs/Tolerance"
+            },
+            "tree": {
+              "$ref": "#/$defs/Json"
+            }
+          },
+          "required": [
+            "kind",
+            "id",
+            "from",
+            "tree"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "dependentRequired": {
+            "reason": [
+              "skip"
+            ],
+            "skip": [
+              "reason"
+            ]
+          },
+          "properties": {
+            "args": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "expect": {
+              "$ref": "#/$defs/CliExpect"
+            },
+            "files": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            "from": {
+              "description": "The original test title this case came from, as `<test file>: <title>`, or `recorded: <package> <source file> (<what>)` for a behaviour recorded from the implementation because no test covered it. The prefix tells a pinned original from a recorded behaviour.",
+              "pattern": "^(recorded: .+|[a-z0-9._-]+\\.test\\.ts: .+)$",
+              "type": "string"
+            },
+            "id": {
+              "description": "Unique across the whole corpus. Lower-case ASCII letters, digits, dots, hyphens and underscores, so every loader orders ids the same way.",
+              "pattern": "^[a-z0-9][a-z0-9._-]*$",
+              "type": "string"
+            },
+            "kind": {
+              "const": "cli"
+            },
+            "reason": {
+              "description": "Why one side cannot run the case. Required with skip, and only with skip.",
+              "minLength": 1,
+              "type": "string"
+            },
+            "skip": {
+              "$ref": "#/$defs/Skip"
+            },
+            "stdin": {
+              "type": "string"
+            },
+            "tolerance": {
+              "$ref": "#/$defs/Tolerance"
+            }
+          },
+          "required": [
+            "kind",
+            "id",
+            "from",
+            "args",
+            "expect",
+            "files"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "dependentRequired": {
+            "reason": [
+              "skip"
+            ],
+            "skip": [
+              "reason"
+            ]
+          },
+          "properties": {
+            "expect": {
+              "$ref": "#/$defs/SqlCompileExpect"
+            },
+            "from": {
+              "description": "The original test title this case came from, as `<test file>: <title>`, or `recorded: <package> <source file> (<what>)` for a behaviour recorded from the implementation because no test covered it. The prefix tells a pinned original from a recorded behaviour.",
+              "pattern": "^(recorded: .+|[a-z0-9._-]+\\.test\\.ts: .+)$",
+              "type": "string"
+            },
+            "id": {
+              "description": "Unique across the whole corpus. Lower-case ASCII letters, digits, dots, hyphens and underscores, so every loader orders ids the same way.",
+              "pattern": "^[a-z0-9][a-z0-9._-]*$",
+              "type": "string"
+            },
+            "kind": {
+              "const": "sql-compile"
+            },
+            "options": {
+              "$ref": "#/$defs/SqlOptions"
+            },
+            "reason": {
+              "description": "Why one side cannot run the case. Required with skip, and only with skip.",
+              "minLength": 1,
+              "type": "string"
+            },
+            "skip": {
+              "$ref": "#/$defs/Skip"
+            },
+            "tolerance": {
+              "$ref": "#/$defs/Tolerance"
+            },
+            "tree": {
+              "$ref": "#/$defs/Json"
+            }
+          },
+          "required": [
+            "kind",
+            "id",
+            "from",
+            "expect",
+            "options",
+            "tree"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "dependentRequired": {
+            "reason": [
+              "skip"
+            ],
+            "skip": [
+              "reason"
+            ]
+          },
+          "properties": {
+            "expect": {
+              "$ref": "#/$defs/SqlGuardExpect"
+            },
+            "from": {
+              "description": "The original test title this case came from, as `<test file>: <title>`, or `recorded: <package> <source file> (<what>)` for a behaviour recorded from the implementation because no test covered it. The prefix tells a pinned original from a recorded behaviour.",
+              "pattern": "^(recorded: .+|[a-z0-9._-]+\\.test\\.ts: .+)$",
+              "type": "string"
+            },
+            "id": {
+              "description": "Unique across the whole corpus. Lower-case ASCII letters, digits, dots, hyphens and underscores, so every loader orders ids the same way.",
+              "pattern": "^[a-z0-9][a-z0-9._-]*$",
+              "type": "string"
+            },
+            "kind": {
+              "const": "sql-guard"
+            },
+            "options": {
+              "$ref": "#/$defs/SqlOptions"
+            },
+            "reason": {
+              "description": "Why one side cannot run the case. Required with skip, and only with skip.",
+              "minLength": 1,
+              "type": "string"
+            },
+            "skip": {
+              "$ref": "#/$defs/Skip"
+            },
+            "tolerance": {
+              "$ref": "#/$defs/Tolerance"
+            },
+            "tree": {
+              "$ref": "#/$defs/Json"
+            }
+          },
+          "required": [
+            "kind",
+            "id",
+            "from",
+            "expect",
+            "options",
+            "tree"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "dependentRequired": {
+            "reason": [
+              "skip"
+            ],
+            "skip": [
+              "reason"
+            ]
+          },
+          "properties": {
+            "dialect": {
+              "type": "string"
+            },
+            "expect": {
+              "$ref": "#/$defs/SqlPatternExpect"
+            },
+            "from": {
+              "description": "The original test title this case came from, as `<test file>: <title>`, or `recorded: <package> <source file> (<what>)` for a behaviour recorded from the implementation because no test covered it. The prefix tells a pinned original from a recorded behaviour.",
+              "pattern": "^(recorded: .+|[a-z0-9._-]+\\.test\\.ts: .+)$",
+              "type": "string"
+            },
+            "id": {
+              "description": "Unique across the whole corpus. Lower-case ASCII letters, digits, dots, hyphens and underscores, so every loader orders ids the same way.",
+              "pattern": "^[a-z0-9][a-z0-9._-]*$",
+              "type": "string"
+            },
+            "kind": {
+              "const": "sql-pattern"
+            },
+            "pattern": {
+              "$ref": "#/$defs/Text"
+            },
+            "reason": {
+              "description": "Why one side cannot run the case. Required with skip, and only with skip.",
+              "minLength": 1,
+              "type": "string"
+            },
+            "skip": {
+              "$ref": "#/$defs/Skip"
+            },
+            "tolerance": {
+              "$ref": "#/$defs/Tolerance"
+            }
+          },
+          "required": [
+            "kind",
+            "id",
+            "from",
+            "dialect",
+            "expect",
+            "pattern"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "dependentRequired": {
+            "reason": [
+              "skip"
+            ],
+            "skip": [
+              "reason"
+            ]
+          },
+          "properties": {
+            "agreesWithEvaluator": {
+              "type": "boolean"
+            },
+            "dialects": {
+              "items": {
+                "$ref": "#/$defs/SqlDialect"
+              },
+              "minItems": 1,
+              "type": "array",
+              "uniqueItems": true
+            },
+            "expectRows": {
+              "type": "array"
+            },
+            "fixture": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "from": {
+              "description": "The original test title this case came from, as `<test file>: <title>`, or `recorded: <package> <source file> (<what>)` for a behaviour recorded from the implementation because no test covered it. The prefix tells a pinned original from a recorded behaviour.",
+              "pattern": "^(recorded: .+|[a-z0-9._-]+\\.test\\.ts: .+)$",
+              "type": "string"
+            },
+            "id": {
+              "description": "Unique across the whole corpus. Lower-case ASCII letters, digits, dots, hyphens and underscores, so every loader orders ids the same way.",
+              "pattern": "^[a-z0-9][a-z0-9._-]*$",
+              "type": "string"
+            },
+            "kind": {
+              "const": "sql-execute"
+            },
+            "options": {
+              "$ref": "#/$defs/SqlOptions"
+            },
+            "reason": {
+              "description": "Why one side cannot run the case. Required with skip, and only with skip.",
+              "minLength": 1,
+              "type": "string"
+            },
+            "skip": {
+              "$ref": "#/$defs/Skip"
+            },
+            "tolerance": {
+              "$ref": "#/$defs/Tolerance"
+            },
+            "tree": {
+              "$ref": "#/$defs/Json"
+            }
+          },
+          "required": [
+            "kind",
+            "id",
+            "from",
+            "agreesWithEvaluator",
+            "dialects",
+            "expectRows",
+            "fixture",
+            "options",
+            "tree"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "dependentRequired": {
+            "reason": [
+              "skip"
+            ],
+            "skip": [
+              "reason"
+            ]
+          },
+          "properties": {
+            "expect": {
+              "type": "string"
+            },
+            "from": {
+              "description": "The original test title this case came from, as `<test file>: <title>`, or `recorded: <package> <source file> (<what>)` for a behaviour recorded from the implementation because no test covered it. The prefix tells a pinned original from a recorded behaviour.",
+              "pattern": "^(recorded: .+|[a-z0-9._-]+\\.test\\.ts: .+)$",
+              "type": "string"
+            },
+            "id": {
+              "description": "Unique across the whole corpus. Lower-case ASCII letters, digits, dots, hyphens and underscores, so every loader orders ids the same way.",
+              "pattern": "^[a-z0-9][a-z0-9._-]*$",
+              "type": "string"
+            },
+            "input": {
+              "type": "string"
+            },
+            "kind": {
+              "const": "serialise"
+            },
+            "reason": {
+              "description": "Why one side cannot run the case. Required with skip, and only with skip.",
+              "minLength": 1,
+              "type": "string"
+            },
+            "schema": {
+              "$ref": "#/$defs/SerialiseSchema"
+            },
+            "skip": {
+              "$ref": "#/$defs/Skip"
+            }
+          },
+          "required": [
+            "kind",
+            "id",
+            "from",
+            "expect",
+            "input",
+            "schema"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "dependentRequired": {
+            "reason": [
+              "skip"
+            ],
+            "skip": [
+              "reason"
+            ]
+          },
+          "properties": {
+            "expect": {
+              "type": "string"
+            },
+            "from": {
+              "description": "The original test title this case came from, as `<test file>: <title>`, or `recorded: <package> <source file> (<what>)` for a behaviour recorded from the implementation because no test covered it. The prefix tells a pinned original from a recorded behaviour.",
+              "pattern": "^(recorded: .+|[a-z0-9._-]+\\.test\\.ts: .+)$",
+              "type": "string"
+            },
+            "id": {
+              "description": "Unique across the whole corpus. Lower-case ASCII letters, digits, dots, hyphens and underscores, so every loader orders ids the same way.",
+              "pattern": "^[a-z0-9][a-z0-9._-]*$",
+              "type": "string"
+            },
+            "kind": {
+              "const": "number-format"
+            },
+            "reason": {
+              "description": "Why one side cannot run the case. Required with skip, and only with skip.",
+              "minLength": 1,
+              "type": "string"
+            },
+            "skip": {
+              "$ref": "#/$defs/Skip"
+            },
+            "value": {
+              "$ref": "#/$defs/NumberValue"
+            }
+          },
+          "required": [
+            "kind",
+            "id",
+            "from",
+            "expect",
+            "value"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "CharRange": {
+      "additionalProperties": false,
+      "properties": {
+        "from": {
+          "maximum": 65535,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "to": {
+          "maximum": 65535,
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "from",
+        "to"
+      ],
+      "type": "object"
+    },
+    "CliExpect": {
+      "additionalProperties": false,
+      "properties": {
+        "exit": {
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "stderr": {
+          "type": "string"
+        },
+        "stderrIncludes": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "stderrStartsWith": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "stdout": {
+          "type": "string"
+        },
+        "stdoutJson": {
+          "$ref": "#/$defs/Json"
+        },
+        "stdoutStartsWith": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "exit"
+      ],
+      "type": "object"
+    },
+    "CollectionResolver": {
+      "additionalProperties": false,
+      "properties": {
+        "collection": {
+          "$ref": "#/$defs/Json"
+        },
+        "context": {
+          "$ref": "#/$defs/Json",
+          "description": "A context to match, or * for any context."
+        },
+        "items": {
+          "type": "array"
+        }
+      },
+      "required": [
+        "collection",
+        "items"
+      ],
+      "type": "object"
+    },
+    "ComputedValue": {
+      "additionalProperties": {
+        "$ref": "#/$defs/Json"
+      },
+      "description": "A ComputedValue as the trilean package represents it; validated by the runner of the package that owns it.",
+      "properties": {
+        "kind": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "type": "object"
+    },
+    "DelegateResolver": {
+      "additionalProperties": false,
+      "properties": {
+        "context": {
+          "$ref": "#/$defs/Json",
+          "description": "A context to match, or * for any context."
+        },
+        "payload": {
+          "$ref": "#/$defs/Json"
+        },
+        "result": {
+          "$ref": "#/$defs/Resolution"
+        },
+        "system": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "payload",
+        "result",
+        "system"
+      ],
+      "type": "object"
+    },
+    "Dialect": {
+      "enum": [
+        "trilean",
+        "ecmascript"
+      ]
+    },
+    "EvaluateExpect": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "const": "definite"
+            },
+            "value": {
+              "$ref": "#/$defs/Json"
+            }
+          },
+          "required": [
+            "status",
+            "value"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "ignoreCase": {
+              "type": "boolean"
+            },
+            "message": {
+              "type": "string"
+            },
+            "messageIncludes": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            "status": {
+              "const": "indeterminate"
+            }
+          },
+          "required": [
+            "status",
+            "code"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "throws": {
+              "$ref": "#/$defs/Throws"
+            }
+          },
+          "required": [
+            "throws"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "Evaluator": {
+      "additionalProperties": false,
+      "properties": {
+        "functions": {
+          "$ref": "#/$defs/Functions"
+        },
+        "maxNestingDepth": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "maxNodes": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "ExpectedCall": {
+      "additionalProperties": false,
+      "properties": {
+        "collection": {
+          "$ref": "#/$defs/Json"
+        },
+        "key": {
+          "$ref": "#/$defs/Json"
+        },
+        "resolver": {
+          "$ref": "#/$defs/ResolverKind"
+        },
+        "system": {
+          "type": "string"
+        },
+        "table": {
+          "$ref": "#/$defs/Json"
+        }
+      },
+      "required": [
+        "resolver"
+      ],
+      "type": "object"
+    },
+    "Function": {
+      "description": "The built-in functions a `call` case may name.",
+      "enum": [
+        "absoluteValue",
+        "arcCosine",
+        "arcSine",
+        "arcTangent",
+        "arcTangent2",
+        "cosine",
+        "exponential",
+        "logarithm",
+        "magnitude",
+        "maximum",
+        "minimum",
+        "phase",
+        "round",
+        "sine",
+        "squareRoot",
+        "tangent"
+      ]
+    },
+    "FunctionRow": {
+      "additionalProperties": false,
+      "properties": {
+        "args": {
+          "items": {
+            "$ref": "#/$defs/ComputedValue"
+          },
+          "type": "array"
+        },
+        "result": {
+          "$ref": "#/$defs/Json"
+        }
+      },
+      "required": [
+        "args",
+        "result"
+      ],
+      "type": "object"
+    },
+    "Functions": {
+      "additionalProperties": false,
+      "properties": {
+        "builtin": {
+          "type": "boolean"
+        },
+        "table": {
+          "additionalProperties": {
+            "items": {
+              "$ref": "#/$defs/FunctionRow"
+            },
+            "type": "array"
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "InputsExpect": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "collections": {
+              "$ref": "#/$defs/Json"
+            },
+            "inputs": {
+              "$ref": "#/$defs/Json"
+            },
+            "ok": {
+              "const": true
+            }
+          },
+          "required": [
+            "ok",
+            "collections",
+            "inputs"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "issues": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "ok": {
+              "const": false
+            }
+          },
+          "required": [
+            "ok",
+            "issues"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "Json": {
+      "description": "Any JSON value. An object with a $number member is the number it names and has no other member; a $number member holding anything but one of the four names is refused.",
+      "not": {
+        "$ref": "#/$defs/BadSpecialNumber"
+      }
+    },
+    "LookupResolver": {
+      "additionalProperties": false,
+      "properties": {
+        "context": {
+          "$ref": "#/$defs/Json",
+          "description": "A context to match, or * for any context."
+        },
+        "keys": {
+          "items": {
+            "$ref": "#/$defs/ComputedValue"
+          },
+          "type": "array"
+        },
+        "result": {
+          "$ref": "#/$defs/Resolution"
+        },
+        "table": {
+          "$ref": "#/$defs/Json"
+        }
+      },
+      "required": [
+        "keys",
+        "result",
+        "table"
+      ],
+      "type": "object"
+    },
+    "MatchInput": {
+      "additionalProperties": false,
+      "properties": {
+        "input": {
+          "$ref": "#/$defs/Text"
+        },
+        "matches": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "input",
+        "matches"
+      ],
+      "type": "object"
+    },
+    "Mode": {
+      "enum": [
+        "async",
+        "sync",
+        "compiled"
+      ]
+    },
+    "NonEmptyText": {
+      "description": "A text that holds at least one code unit.",
+      "oneOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "codeUnits": {
+              "items": {
+                "maximum": 65535,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "minItems": 1,
+              "type": "array"
+            }
+          },
+          "required": [
+            "codeUnits"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "NumberValue": {
+      "oneOf": [
+        {
+          "type": "number"
+        },
+        {
+          "$ref": "#/$defs/SpecialNumber"
+        }
+      ]
+    },
+    "ParseError": {
+      "additionalProperties": false,
+      "description": "What the refusal is pinned to: its index, fragments of its reason, or both. At least one, since an empty error is satisfied by any refusal for any reason.",
+      "minProperties": 1,
+      "properties": {
+        "index": {
+          "description": "Offset in UTF-16 code units into pattern. Given only where the case pins it.",
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "message": {
+          "description": "Fragments the reason text of the refusal contains, each after the end of the one before.",
+          "items": {
+            "$ref": "#/$defs/NonEmptyText"
+          },
+          "minItems": 1,
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "PostfixKind": {
+      "description": "The postfix operators of a regex node, which take one operand.",
+      "enum": [
+        "star",
+        "plus",
+        "optional"
+      ]
+    },
+    "RegexNode": {
+      "description": "A trilean-regex abstract syntax node, with the field names of the package's ast module. An unbounded repeat omits max.",
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "codeUnit": {
+              "maximum": 65535,
+              "minimum": 0,
+              "type": "integer"
+            },
+            "kind": {
+              "const": "literal"
+            }
+          },
+          "required": [
+            "kind",
+            "codeUnit"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "$ref": "#/$defs/SimpleKind"
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "charClass"
+            },
+            "negated": {
+              "type": "boolean"
+            },
+            "ranges": {
+              "description": "The positive set; never empty, since a class holds at least one item. Each range's from is not above its to, which the schema cannot express and every loader checks.",
+              "items": {
+                "$ref": "#/$defs/CharRange"
+              },
+              "minItems": 1,
+              "type": "array"
+            }
+          },
+          "required": [
+            "kind",
+            "negated",
+            "ranges"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "concat"
+            },
+            "operands": {
+              "items": {
+                "$ref": "#/$defs/RegexNode"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "kind",
+            "operands"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "branches": {
+              "items": {
+                "$ref": "#/$defs/RegexNode"
+              },
+              "type": "array"
+            },
+            "kind": {
+              "const": "alternation"
+            }
+          },
+          "required": [
+            "kind",
+            "branches"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "$ref": "#/$defs/PostfixKind"
+            },
+            "operand": {
+              "$ref": "#/$defs/RegexNode"
+            }
+          },
+          "required": [
+            "kind",
+            "operand"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "max is omitted for an unbounded repeat. min is not above max, which the schema cannot express and every loader checks.",
+          "properties": {
+            "kind": {
+              "const": "repeat"
+            },
+            "max": {
+              "maximum": 9007199254740991,
+              "minimum": 0,
+              "type": "integer"
+            },
+            "min": {
+              "maximum": 9007199254740991,
+              "minimum": 0,
+              "type": "integer"
+            },
+            "operand": {
+              "$ref": "#/$defs/RegexNode"
+            }
+          },
+          "required": [
+            "kind",
+            "operand",
+            "min"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "RegexParseExpect": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "ast": {
+              "$ref": "#/$defs/RegexNode"
+            }
+          },
+          "required": [
+            "ast"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "astSubset": {
+              "description": "A partial regexNode for astSubset: an object that matches when every key it gives matches (an array matches element by element at the same length, any other value when equal). It names at least one key, since an empty subset matches every tree.",
+              "minProperties": 1,
+              "type": "object"
+            }
+          },
+          "required": [
+            "astSubset"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "error": {
+              "$ref": "#/$defs/ParseError"
+            }
+          },
+          "required": [
+            "error"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "Resolution": {
+      "description": "What one resolver call returns.",
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "found": {
+              "const": true
+            },
+            "value": {
+              "$ref": "#/$defs/ComputedValue"
+            }
+          },
+          "required": [
+            "found",
+            "value"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "found": {
+              "const": false
+            },
+            "notYetKnown": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "found"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "throws": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "throws"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "ResolverKind": {
+      "enum": [
+        "value",
+        "lookup",
+        "collection",
+        "delegate",
+        "tree"
+      ]
+    },
+    "Resolvers": {
+      "additionalProperties": false,
+      "properties": {
+        "collections": {
+          "items": {
+            "$ref": "#/$defs/CollectionResolver"
+          },
+          "type": "array"
+        },
+        "default": {
+          "$ref": "#/$defs/Resolution"
+        },
+        "delegates": {
+          "items": {
+            "$ref": "#/$defs/DelegateResolver"
+          },
+          "type": "array"
+        },
+        "fromContext": {
+          "type": "boolean"
+        },
+        "lookups": {
+          "items": {
+            "$ref": "#/$defs/LookupResolver"
+          },
+          "type": "array"
+        },
+        "trees": {
+          "items": {
+            "$ref": "#/$defs/TreeResolver"
+          },
+          "type": "array"
+        },
+        "values": {
+          "items": {
+            "$ref": "#/$defs/ValueResolver"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "SchemaName": {
+      "description": "The export names of the schemas of the package that a `validate` case may name.",
+      "enum": [
+        "AccumulatorNodeSchema",
+        "AllOfNodeSchema",
+        "AndNodeSchema",
+        "AnyOfNodeSchema",
+        "ArithmeticNodeSchema",
+        "BooleanLiteralNodeSchema",
+        "CallNodeSchema",
+        "CompareNodeSchema",
+        "ComplexLiteralNodeSchema",
+        "ComputedValueSchema",
+        "ConditionalNodeSchema",
+        "DelegateNodeSchema",
+        "DurationLiteralNodeSchema",
+        "EveryNodeSchema",
+        "ExistsNodeSchema",
+        "ExpressionNodeSchema",
+        "FoldCombinerSchema",
+        "FoldNodeSchema",
+        "HitPolicySchema",
+        "IndeterminateReasonSchema",
+        "InstantLiteralNodeSchema",
+        "LookupNodeSchema",
+        "MemberOfNodeSchema",
+        "NegateNodeSchema",
+        "NotNodeSchema",
+        "NumberLiteralNodeSchema",
+        "OrNodeSchema",
+        "PredicateNodeSchema",
+        "ReferenceNodeSchema",
+        "SomeNodeSchema",
+        "TextCompareNodeSchema",
+        "TextLiteralNodeSchema",
+        "TreeReferenceNodeSchema"
+      ]
+    },
+    "SerialiseSchema": {
+      "description": "The tree and value schemas a `serialise` case may name.",
+      "enum": [
+        "ComputedValueSchema",
+        "ExpressionNodeSchema",
+        "PredicateNodeSchema"
+      ]
+    },
+    "SimpleKind": {
+      "description": "The regex nodes that hold nothing.",
+      "enum": [
+        "anyChar",
+        "anchorStart",
+        "anchorEnd"
+      ]
+    },
+    "Skip": {
+      "description": "Names the implementation that skips the case, for a case one implementation cannot run: ts for a case the TypeScript implementation skips, rust for a case every build of the Rust implementation skips, wherever it runs (native, or wasm under Node, a browser or Workers). Always with a reason.",
+      "enum": [
+        "ts",
+        "rust"
+      ]
+    },
+    "SpecialName": {
+      "description": "The name of a number the canonical JSON form cannot hold.",
+      "enum": [
+        "-0",
+        "Infinity",
+        "-Infinity",
+        "NaN"
+      ]
+    },
+    "SpecialNumber": {
+      "additionalProperties": false,
+      "description": "A number the canonical JSON form cannot hold, written as an object: a negative zero (a canonical form writes it as 0), an infinity or NaN.",
+      "properties": {
+        "$number": {
+          "$ref": "#/$defs/SpecialName"
+        }
+      },
+      "required": [
+        "$number"
+      ],
+      "type": "object"
+    },
+    "SqlCompileExpect": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "params": {
+              "type": "array"
+            },
+            "sql": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "params",
+            "sql"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "error": {
+              "$ref": "#/$defs/SqlError"
+            }
+          },
+          "required": [
+            "error"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "SqlDialect": {
+      "enum": [
+        "sqlite",
+        "postgres"
+      ]
+    },
+    "SqlError": {
+      "additionalProperties": false,
+      "properties": {
+        "column": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "nodeKind": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "referenceKey": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "object"
+    },
+    "SqlGuardExpect": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "nodeKind": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            },
+            "reason": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "nodeKind",
+            "path"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "SqlOptions": {
+      "additionalProperties": false,
+      "properties": {
+        "collections": {
+          "type": "object"
+        },
+        "columns": {
+          "type": "object"
+        },
+        "dialect": {
+          "type": "string"
+        },
+        "postgresRegexpPushdown": {
+          "type": "boolean"
+        },
+        "sqliteRegexpAvailable": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "dialect"
+      ],
+      "type": "object"
+    },
+    "SqlPatternExpect": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "text": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "text"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "error": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "error"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "Subject": {
+      "description": "What the tree is evaluated as.",
+      "enum": [
+        "predicate",
+        "expression"
+      ]
+    },
+    "Text": {
+      "description": "A string as a sequence of UTF-16 code units, which is what the TypeScript implementation and the patterns' index counts are in. A JSON string, which must be well-formed Unicode so every loader can read it, or an object holding the code units themselves for content a JSON string cannot carry, an unpaired surrogate.",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "codeUnits": {
+              "items": {
+                "maximum": 65535,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "codeUnits"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "Throws": {
+      "additionalProperties": false,
+      "properties": {
+        "message": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "message"
+      ],
+      "type": "object"
+    },
+    "Tolerance": {
+      "description": "How far a number may be from the one a case gives. Numbers compare exactly unless a case gives a tolerance: `ulps`, the number of representable doubles between the two numbers, or `absolute`, a distance the two numbers must be strictly closer than. A tolerance holds for every number in the value that is compared, treats both zeros as one value, and never applies to an expectation that is not finite.",
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "ulps": {
+              "maximum": 9007199254740991,
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "ulps"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "absolute": {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            }
+          },
+          "required": [
+            "absolute"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "TreeResolver": {
+      "additionalProperties": false,
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/Json"
+        },
+        "result": {
+          "$ref": "#/$defs/TreeResult"
+        }
+      },
+      "required": [
+        "key",
+        "result"
+      ],
+      "type": "object"
+    },
+    "TreeResult": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "found": {
+              "const": true
+            },
+            "node": {
+              "$ref": "#/$defs/Json"
+            }
+          },
+          "required": [
+            "found",
+            "node"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "found": {
+              "const": false
+            },
+            "notYetKnown": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "found"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "ValidateExpect": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "ok": {
+              "const": true
+            },
+            "value": {
+              "$ref": "#/$defs/Json"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "ok": {
+              "const": false
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "ValueResolver": {
+      "additionalProperties": false,
+      "properties": {
+        "context": {
+          "$ref": "#/$defs/Json",
+          "description": "A context to match, or * for any context."
+        },
+        "key": {
+          "$ref": "#/$defs/Json"
+        },
+        "result": {
+          "$ref": "#/$defs/Resolution"
+        }
+      },
+      "required": [
+        "key",
+        "result"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://github.com/ExaDev/trilean/tree/main/conformance/case.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "One corpus file: an object holding a non-empty list of cases. Every case names the behaviour it pins with a unique id and a from, and takes a kind-specific shape. See README.md for the rules a schema cannot express.",
+  "properties": {
+    "cases": {
+      "items": {
+        "$ref": "#/$defs/Case"
+      },
+      "minItems": 1,
+      "type": "array"
+    }
+  },
+  "required": [
+    "cases"
+  ],
+  "title": "trilean conformance corpus file",
+  "type": "object"
+}

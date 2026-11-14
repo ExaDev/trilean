@@ -34,7 +34,7 @@ Every loader applies this one rule, and each runs it over `fixtures/loader-selec
 
 A manifest entry may carry `generated: true`, which marks a file the generator writes (see "Generated files"); the generator's test fails for a marked file it does not write and for a file it writes that is not marked.
 
-The Rust loader executes no case, and counts every case in one of three categories. A case marked `skip: rust` is skipped because it is marked. A case in a file of regex kinds, which the loader validates in full, is skipped for want of a native executor. A case in a file of any other kind is counted as refused: the loader enforces what every case has whatever its kind (the id rule, a well formed `from`, a kind the schema defines, `skip` and its `reason` together, a well formed `tolerance`, ids not repeated in the file), reads the ids and which cases carry `skip` so that the manifest still matches, and leaves the rest of the case to the loaders that validate its kind in full, the TypeScript ones. A file that mixes regex cases with cases of another kind is an error. The executed, skipped and refused cases add up to the manifest's total.
+The Rust loader executes no case. It reads every case of every kind through the Rust types in `rust/tests/trilean-conformance`, which carry the shape of every kind the schema defines and enforce what the schema states (the id rule, a well formed `from`, `skip` and `reason` together, a well formed `tolerance`, and every form and constraint of the kind), so it validates every case in full, and enforces the rules below that a schema cannot express. It counts every case in one of two categories: a case marked `skip: rust` is skipped because it is marked, and any other is skipped for want of a native executor. The two categories and the executed cases add up to the manifest's total.
 
 ## Cases
 
@@ -57,7 +57,7 @@ Every pattern, input and message fragment is a sequence of UTF-16 code units, an
 
 A loader reads both into the same code unit sequence; `fixtures/text-forms/pairs.json` lists texts with their code units, and every loader checks they agree. A loader that cannot decode a string into code units, or that reads one in scalar values or bytes, is wrong: `😀` is two literals, and `index` after it counts two.
 
-`case.schema.json` is the format, including the kinds of every package of the repository. A loader accepts no document the schema rejects, and accepts every document the schema accepts for the kinds it validates in full, except one that breaks a rule the Text and Rules sections add beside the schema (an unpaired surrogate in a JSON string, invalid UTF-8); a loader that does not validate a kind in full says so (see the manifest section) and does not accept a case of that kind as checked. A corpus file holds at least one case.
+`case.schema.json` is the format, including the kinds of every package of the repository. A loader accepts no document the schema rejects, and accepts every document the schema accepts, except one that breaks a rule the Text and Rules sections add beside the schema (an unpaired surrogate in a JSON string, invalid UTF-8). The Rust types the Rust loader reads cases through emit a schema that a Rust test compares with `case.schema.json` by meaning (references followed; key order, the names of definitions and the descriptions ignored; `required`, `enum`, `oneOf` and `anyOf` as sets; a `type` that a `const` or an enum of strings decides dropped) and names every difference, and the root test `shape-agreement.integration.test.ts` gives every corpus file and every fixture to Ajv under both schemas and fails on a different verdict, so a change to the format is made in the types and the schema together. A corpus file holds at least one case.
 
 ### Rules the schema cannot express
 
@@ -76,11 +76,13 @@ Every rule above has a negative fixture, and every negative fixture has a repair
 | Directory under `fixtures/` | Holds | Asserted by |
 | --- | --- | --- |
 | `invalid-cases`, `repaired-cases`, `valid-cases` | a rule about one file whose cases are of a regex kind, or a file that every loader must reject or accept | every loader |
-| `refused-kinds/invalid`, `refused-kinds/repaired` | a defect in what every case has (the id, `from`, `kind`, `skip` and `reason`, an id repeated in the file) in a case of a kind that is not a regex kind | every loader: the Rust loader reads them as refused files, the TypeScript loaders validate them in full |
+| `refused-kinds/invalid`, `refused-kinds/repaired` | a defect in what every case has (the id, `from`, `kind`, `skip` and `reason`, an id repeated in the file) in a case of a kind other than the regex kinds | every loader |
 | `manifests/invalid`, `manifests/repaired`, `manifests/valid` | a rule about the manifest | every loader |
 | `corpora/invalid`, `corpora/repaired` | a rule across files, or between the corpus and its manifest, a whole corpus root loaded the way the real corpus is | every loader |
-| `schema-only/invalid-cases`, `schema-only/repaired-cases`, `schema-only/valid-cases` | a defect in the shape of a case of a kind that is not a regex kind, and the valid cases that give every optional form | the TypeScript loaders, which validate every kind in full |
-| `generated/invalid-cases`, `generated/repaired-cases` | for every constraint the schema states, one file that breaks it alone and its twin, written by the generator | the TypeScript loaders |
+| `schema-only/invalid-cases`, `schema-only/repaired-cases`, `schema-only/valid-cases` | a defect in the shape of a case of a kind other than the regex kinds, and the valid cases that give every optional form | every loader |
+| `generated/invalid-cases`, `generated/repaired-cases` | for every constraint the schema states, one file that breaks it alone and its twin, written by the generator | every loader |
+| `case-schema/emitted.json` | the schema the Rust case types emit, written by the Rust loader's test and compared with the types on every run | the Rust loader (rewritten with `UPDATE_CORPUS_FIXTURES=1`), and the root test, which gives every file of the corpus and of the fixtures to Ajv under it and under `case.schema.json` and requires one verdict |
+| `shape-agreement` | the tables of documents and the schemas that keep the Rust validator derived from a type and the schema it emits equal, in both JSON Schema drafts (the `json-shape` crate's own fixtures, not corpus cases) | the `json-shape` tests and the root test |
 | `loader-selection`, `text-forms` | the file selection rule and the two forms of a text | every loader |
 
 A file a loader cannot parse counts as rejected, which is how a loader meets an unpaired surrogate escape. Every real corpus file must be accepted by all of them. A rule added to the format gets a fixture and its twin in the same commit; a constraint added to the schema gets its generated pair when the generator is run, and the generator's test fails until it is.
