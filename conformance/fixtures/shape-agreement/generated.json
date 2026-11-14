@@ -3094,5 +3094,156 @@
     },
     "type": "Exclusive",
     "valid": false
+  },
+  {
+    "case": "minimal",
+    "document": {},
+    "type": "NumberBounds",
+    "valid": true
+  },
+  {
+    "case": "big present",
+    "document": {
+      "big": 0
+    },
+    "type": "NumberBounds",
+    "valid": true
+  },
+  {
+    "case": "big, at the maximum",
+    "document": {
+      "big": 2.2200644002808204e+22
+    },
+    "type": "NumberBounds",
+    "valid": true
+  },
+  {
+    "case": "small present",
+    "document": {
+      "small": 1.0000000000000073
+    },
+    "type": "NumberBounds",
+    "valid": true
+  },
+  {
+    "case": "above present",
+    "document": {
+      "above": 1.1
+    },
+    "type": "NumberBounds",
+    "valid": true
+  },
+  {
+    "case": "above, just above the exclusive minimum",
+    "document": {
+      "above": 0.6
+    },
+    "type": "NumberBounds",
+    "valid": true
+  },
+  {
+    "case": "list present",
+    "document": {
+      "list": []
+    },
+    "type": "NumberBounds",
+    "valid": true
+  },
+  {
+    "case": "not an object",
+    "document": 1,
+    "type": "NumberBounds",
+    "valid": false
+  },
+  {
+    "case": "an array",
+    "document": [],
+    "type": "NumberBounds",
+    "valid": false
+  },
+  {
+    "case": "big, not a number",
+    "document": {
+      "big": "x"
+    },
+    "type": "NumberBounds",
+    "valid": false
+  },
+  {
+    "case": "big, above the maximum",
+    "document": {
+      "big": 2.220064400280821e+22
+    },
+    "type": "NumberBounds",
+    "valid": false
+  },
+  {
+    "case": "small, not a number",
+    "document": {
+      "small": "x"
+    },
+    "type": "NumberBounds",
+    "valid": false
+  },
+  {
+    "case": "small, below the minimum",
+    "document": {
+      "small": 7.327471962526033e-15
+    },
+    "type": "NumberBounds",
+    "valid": false
+  },
+  {
+    "case": "above, not a number",
+    "document": {
+      "above": "x"
+    },
+    "type": "NumberBounds",
+    "valid": false
+  },
+  {
+    "case": "above, at the exclusive minimum",
+    "document": {
+      "above": 0.1
+    },
+    "type": "NumberBounds",
+    "valid": false
+  },
+  {
+    "case": "above, below the exclusive minimum",
+    "document": {
+      "above": -0.9
+    },
+    "type": "NumberBounds",
+    "valid": false
+  },
+  {
+    "case": "list, not an array",
+    "document": {
+      "list": "x"
+    },
+    "type": "NumberBounds",
+    "valid": false
+  },
+  {
+    "case": "list, a repeated item",
+    "document": {
+      "list": [
+        0,
+        0
+      ]
+    },
+    "type": "NumberBounds",
+    "valid": false
+  },
+  {
+    "case": "list, item, not a number",
+    "document": {
+      "list": [
+        "x"
+      ]
+    },
+    "type": "NumberBounds",
+    "valid": false
   }
 ]

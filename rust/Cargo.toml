@@ -20,7 +20,8 @@ json-shape-derive = { path = "crates/json-shape-derive" }
 proc-macro2 = "1"
 quote = "1"
 serde = "1"
-serde_json = "1"
+# `float_roundtrip` makes a number literal read as the nearest double, as `JSON.parse` reads it. serde_json's default parser can be one unit in the last place away, so a validator would disagree with a JavaScript reader (and with a JSON Schema validator in JavaScript) at a numeric bound.
+serde_json = { version = "1", features = ["float_roundtrip"] }
 # The lock holds the newest release old enough for the install policy's release-age rule, and moves up by the same rule.
 syn = { version = "3", default-features = false, features = ["clone-impls", "derive", "parsing", "printing", "proc-macro"] }
 

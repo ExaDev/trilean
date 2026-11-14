@@ -316,6 +316,30 @@
       },
       "type": "object"
     },
+    "NumberBounds": {
+      "properties": {
+        "above": {
+          "exclusiveMinimum": 0.1,
+          "type": "number"
+        },
+        "big": {
+          "maximum": 2.2200644002808204e+22,
+          "type": "number"
+        },
+        "list": {
+          "items": {
+            "type": "number"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "small": {
+          "minimum": 1.0000000000000073,
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
     "OneOfKeys": {
       "oneOf": [
         {
