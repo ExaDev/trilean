@@ -10,6 +10,8 @@ use crate::packages::Package;
 pub struct Written {
     /// The files of `dist` the manifest's `exports` and `imports` point at.
     pub entry_points: BTreeSet<String>,
+    /// The files whose sizes the build reports, with their sizes in bytes: the module and its inlined form.
+    pub sizes: Vec<(String, usize)>,
 }
 
 /// The `#init` module for Node, Bun and Deno. The module's bytes are in the package as a generated base64 string (see `inline_module`), decoded once with `atob`, which Node, Bun and Deno all have, and compiled synchronously, so importing the package reads no file and waits for nothing, and a bundle of it for a server is a single file that needs nothing beside it.
@@ -107,8 +109,8 @@ fn public_names(text: &str, keywords: &[&str]) -> Vec<String> {
         .collect()
 }
 
-/// The package's entry point, which starts the module through `#init` and re-exports the generated API and the error classes.
-fn index_js(package: &Package, glue_js: &str, errors: &[String]) -> String {
+/// The package's entry point, which starts the module through `init` (`#init` in the package, and the Node module beside it in the copy the tests load, since a package's `imports` field names the published files) and re-exports the generated API and the error classes.
+fn index_js(package: &Package, glue_js: &str, errors: &[String], init: &str) -> String {
     let values = public_names(glue_js, &["function", "class"]).join(", ");
     let classes = public_names(glue_js, &["class"]);
     let imported = if classes.is_empty() {
@@ -124,7 +126,7 @@ fn index_js(package: &Package, glue_js: &str, errors: &[String]) -> String {
         ))
         .collect();
     format!(
-        "import \"#init\";\nimport {{ {REGISTER_ERRORS}{imported} }} from \"./{glue}.js\";\nimport {{ {errors} }} from \"./errors.js\";\n\n{REGISTER_ERRORS}({errors});\n{idempotent}\nexport {{ {values} }} from \"./{glue}.js\";\nexport {{ {errors} }} from \"./errors.js\";\n",
+        "import \"{init}\";\nimport {{ {REGISTER_ERRORS}{imported} }} from \"./{glue}.js\";\nimport {{ {errors} }} from \"./errors.js\";\n\n{REGISTER_ERRORS}({errors});\n{idempotent}\nexport {{ {values} }} from \"./{glue}.js\";\nexport {{ {errors} }} from \"./errors.js\";\n",
         glue = package.glue,
         errors = errors.join(", ")
     )
@@ -157,7 +159,11 @@ fn index_declarations(package: &Package, glue_declarations: &str, errors: &[Stri
 }
 
 /// Writes the entry point, the `#init` modules and the error classes beside what `wasm-bindgen` wrote.
-pub fn write_support_files(package: &Package, dist: &Path) -> Result<Written, String> {
+pub fn write_support_files(
+    package: &Package,
+    dist: &Path,
+    test_hooks: bool,
+) -> Result<Written, String> {
     let read = |name: String| {
         fs::read_to_string(dist.join(&name)).map_err(|error| format!("{name}: {error}"))
     };
@@ -177,7 +183,19 @@ pub fn write_support_files(package: &Package, dist: &Path) -> Result<Written, St
         ("init.workerd.js", init_workerd(package)),
         ("init.browser.js", init_browser(package)),
         (glue_declarations_name.as_str(), consumer),
-        ("index.js", index_js(package, &glue_js, &errors)),
+        (
+            "index.js",
+            index_js(
+                package,
+                &glue_js,
+                &errors,
+                if test_hooks {
+                    "./init.node.js"
+                } else {
+                    "#init"
+                },
+            ),
+        ),
         (
             "index.d.ts",
             index_declarations(package, &glue_declarations, &errors),
@@ -196,7 +214,19 @@ pub fn write_support_files(package: &Package, dist: &Path) -> Result<Written, St
         ]
         .map(str::to_owned)
         .into(),
+        sizes: vec![
+            (format!("{}_bg.wasm", package.glue), wasm.len()),
+            (inline_name.clone(), files_len(&files, &inline_name)),
+        ],
     })
+}
+
+/// The length in bytes of the file of that name among the files written.
+fn files_len(files: &[(&str, String)], name: &str) -> usize {
+    files
+        .iter()
+        .find(|(file, _)| *file == name)
+        .map_or(0, |(_, contents)| contents.len())
 }
 
 #[cfg(test)]
@@ -218,7 +248,7 @@ mod tests {
                 "InternalError"
             ]
         );
-        let index = index_js(package, GLUE, &errors);
+        let index = index_js(package, GLUE, &errors, "#init");
         assert!(index.starts_with("import \"#init\";"));
         assert!(
             index.contains("export { parseRegex, CompiledPattern } from \"./trilean_regex.js\";")
@@ -238,6 +268,14 @@ mod tests {
         assert!(declarations.contains("export { parseRegex, CompiledPattern } from"));
         assert!(declarations.contains("export type { LiteralNode, RegexNode } from"));
         assert!(!declarations.contains("Init"));
+    }
+
+    #[test]
+    fn the_copy_the_tests_load_starts_the_module_beside_it_and_not_through_the_package() {
+        let package = Package::named("trilean-regex").expect("package");
+        let index = index_js(package, GLUE, &[], "./init.node.js");
+        assert!(index.starts_with("import \"./init.node.js\";"));
+        assert!(!index.contains("#init"));
     }
 
     #[test]
@@ -264,7 +302,7 @@ mod tests {
     #[test]
     fn a_class_is_freed_once_however_many_times_free_is_called() {
         let package = Package::named("trilean-regex").expect("package");
-        let index = index_js(package, GLUE, &[]);
+        let index = index_js(package, GLUE, &[], "#init");
         assert!(index.contains("import { registerErrorClasses, CompiledPattern } from"));
         assert!(index.contains("CompiledPattern.prototype.free = ((free) => function () {"));
         assert!(index.contains("if (this.__wbg_ptr !== 0) {"));
@@ -272,7 +310,7 @@ mod tests {
             "CompiledPattern.prototype[Symbol.dispose] = CompiledPattern.prototype.free;"
         ));
         assert_eq!(
-            index_js(package, "export function f() {}\n", &[])
+            index_js(package, "export function f() {}\n", &[], "#init")
                 .matches("prototype")
                 .count(),
             0
@@ -302,7 +340,7 @@ mod tests {
     fn the_binding_and_test_only_exports_are_not_part_of_the_api() {
         let package = Package::named("trilean-regex").expect("package");
         let glue = "export function parseRegex() {}\nexport function panicForTesting() {}\nexport function registerErrorClasses() {}\n";
-        let index = index_js(package, glue, &[]);
+        let index = index_js(package, glue, &[], "#init");
         assert!(index.contains("export { parseRegex } from"));
         assert!(!index.contains("panicForTesting"));
     }

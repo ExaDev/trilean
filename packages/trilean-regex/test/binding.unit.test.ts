@@ -1,7 +1,9 @@
+import { execFileSync } from "node:child_process";
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import {
   CompiledPattern,
-  InternalError,
   RegexParseError,
   UnsupportedConstructError,
   charClassMatches,
@@ -13,6 +15,8 @@ import {
   testPattern,
 } from "../dist/index.js";
 import * as generated from "../dist/trilean_regex.js";
+import { InternalError } from "../dist-test/index.js";
+import * as hooked from "../dist-test/trilean_regex.js";
 
 /** What the binding promises beyond the corpus: refusal before allocation, argument types, the memory lifecycle and the panic hook. They run in the Node runtime against the built package. */
 
@@ -180,12 +184,87 @@ describe("the memory a compiled pattern holds", () => {
   });
 });
 
+describe("the published build", () => {
+  it("does not carry the deliberate panic that only the tests of the binding call", () => {
+    for (const file of ["trilean_regex.js", "trilean_regex.d.ts", "index.js"]) {
+      expect(
+        readFileSync(new URL(`../dist/${file}`, import.meta.url), "utf8"),
+      ).not.toContain("panicForTesting");
+    }
+  });
+});
+
+/** How many pages the module's memory grows by while `source` runs, in a process of its own, so nothing an earlier test grew and freed hides it. */
+function growthInFreshProcess(source: string): number {
+  const entry = JSON.stringify(
+    fileURLToPath(new URL("../dist/index.js", import.meta.url)),
+  );
+  const glue = JSON.stringify(
+    fileURLToPath(new URL("../dist/trilean_regex.js", import.meta.url)),
+  );
+  const script = `import * as p from ${entry}; import * as g from ${glue};
+const pages = () => g.initSync({ module: new Uint8Array() }).memory.buffer.byteLength / ${String(WASM_PAGE_BYTES)};
+const before = pages();
+${source}
+console.log(pages() - before);`;
+
+  return Number(
+    execFileSync(process.execPath, ["--input-type=module", "-e", script], {
+      encoding: "utf8",
+    }),
+  );
+}
+
+describe("a pattern longer than the length limit", () => {
+  it.each([400001, 500000, 2000000])(
+    "of %i atoms is a RegexParseError that echoes none of it, and the module's memory does not grow",
+    (atoms) => {
+      const pattern = "a".repeat(atoms);
+      expect(
+        growthInFreshProcess(
+          `for (const compile of [p.compilePattern, p.compileEcmascriptSubset, p.parseRegex]) { try { compile("a".repeat(${String(atoms)})); } catch {} }`,
+        ),
+      ).toBeLessThanOrEqual(1);
+      for (const compile of [
+        compilePattern,
+        compileEcmascriptSubset,
+        parseRegex,
+      ]) {
+        try {
+          compile(pattern);
+        } catch (error) {
+          expect(error).toBeInstanceOf(RegexParseError);
+          expect((error as RegexParseError).message).toContain(
+            "code units long",
+          );
+          expect((error as RegexParseError).message.length).toBeLessThan(400);
+          expect((error as RegexParseError).pattern).toBe(pattern);
+
+          continue;
+        }
+        throw new Error("a pattern over the limit was read");
+      }
+      expect(compilePattern("a+").test("caab")).toBe(true);
+    },
+  );
+
+  it.each([150000, 399999])(
+    "within the limit but over the state limit, %i atoms, is a RegexParseError whose long message is built without overflowing the stack",
+    (atoms) => {
+      const pattern = "a".repeat(atoms);
+      expect(() => compilePattern(pattern)).toThrow(RegexParseError);
+      expect(() => compilePattern(pattern)).toThrow("automaton states");
+      expect(compilePattern("a+").test("caab")).toBe(true);
+    },
+  );
+});
+
 // Last in the file: a panic that throws from the hook never finishes unwinding, so the instance is spent afterwards.
 describe("a panic in Rust", () => {
   it("is an InternalError with the panic's message, not a bare trap", () => {
     let thrown: unknown;
     try {
-      generated.panicForTesting();
+      hooked.panicForTesting();
     } catch (error) {
       thrown = error;
     }

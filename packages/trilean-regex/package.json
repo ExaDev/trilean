@@ -1,6 +1,6 @@
 {
   "name": "trilean-regex",
-  "description": "A portable regular-expression grammar -- a true regular language, with a Thompson-construction reference matcher -- so a pattern means the same thing in process and wherever trilean-sql can push it down to a database's own engine.",
+  "description": "A portable regular-expression grammar (a true regular language) with a Thompson-construction reference matcher, so a pattern means the same thing in process and wherever trilean-sql can push it down to a database's own engine. One wasm build, the same API in Node, Bun, Deno, browsers and Cloudflare Workers.",
   "version": "1.0.24",
   "bugs": {
     "url": "https://github.com/ExaDev/trilean/issues"
@@ -29,6 +29,10 @@
       "default": "./dist/index.js"
     }
   },
+  "files": [
+    "dist"
+  ],
+  "homepage": "https://github.com/ExaDev/trilean/tree/main/packages/trilean-regex",
   "imports": {
     "#init": {
       "workerd": "./dist/init.workerd.js",
@@ -36,10 +40,6 @@
       "default": "./dist/init.browser.js"
     }
   },
-  "files": [
-    "dist"
-  ],
-  "homepage": "https://github.com/ExaDev/trilean/tree/main/packages/trilean-regex",
   "keywords": [
     "finite-automaton",
     "isomorphic",
@@ -64,6 +64,7 @@
   },
   "scripts": {
     "_build": "sh ../../scripts/rust.sh xtask npm trilean-regex",
+    "_build:test": "sh ../../scripts/rust.sh xtask npm trilean-regex --test-hooks",
     "_lint": "eslint . --fix --cache --max-warnings 0",
     "_prepush": "true",
     "_test": "vitest run --project unit",

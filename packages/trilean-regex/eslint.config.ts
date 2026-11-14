@@ -6,7 +6,7 @@ import globals from "globals";
 export default defineConfig(
   ...exadevConfig(),
   {
-    ignores: ["dist", "coverage", "node_modules", ".turbo"],
+    ignores: ["dist", "dist-test", "coverage", "node_modules", ".turbo"],
   },
   {
     languageOptions: {

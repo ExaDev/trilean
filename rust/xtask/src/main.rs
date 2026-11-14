@@ -25,16 +25,21 @@ fn main() -> ExitCode {
 
 fn run(arguments: &[String]) -> Result<(), String> {
     match arguments {
-        [command, name] if command == "npm" => {
+        [command, name, rest @ ..] if command == "npm" && rest.len() <= 1 => {
+            let test_hooks = match rest {
+                [] => false,
+                [flag] if flag == "--test-hooks" => true,
+                _ => return Err("usage: cargo xtask npm <package> [--test-hooks]".to_owned()),
+            };
             let package = Package::named(name).ok_or_else(|| {
                 format!(
                     "no package named {name}; the packages are {}",
                     Package::names().join(", ")
                 )
             })?;
-            build_npm_package(package)
+            build_npm_package(package, test_hooks)
         }
-        _ => Err("usage: cargo xtask npm <package>".to_owned()),
+        _ => Err("usage: cargo xtask npm <package> [--test-hooks]".to_owned()),
     }
 }
 
@@ -83,11 +88,13 @@ fn target_directory(rust: &Path) -> PathBuf {
     std::env::var_os("CARGO_TARGET_DIR").map_or_else(|| rust.join("target"), PathBuf::from)
 }
 
-fn build_npm_package(package: &Package) -> Result<(), String> {
+/// Builds the package's `dist`, or with `test_hooks` its `dist-test`: the same files from a build of the binding crate with its `test-hooks` feature on, which adds what only the tests of the binding call (a deliberate panic), and is never published.
+fn build_npm_package(package: &Package, test_hooks: bool) -> Result<(), String> {
     let rust = rust_directory();
     let root = rust.parent().ok_or("the rust directory has no parent")?;
     let package_directory = root.join("packages").join(package.name);
-    let dist = package_directory.join("dist");
+    let out_name = if test_hooks { "dist-test" } else { "dist" };
+    let dist = package_directory.join(out_name);
 
     let lock = fs::read_to_string(rust.join("Cargo.lock")).map_err(|error| error.to_string())?;
     let wanted =
@@ -107,7 +114,12 @@ fn build_npm_package(package: &Package) -> Result<(), String> {
         Command::new(cargo)
             .current_dir(&rust)
             .args(["build", "--locked", "--package", package.binding])
-            .args(["--target", "wasm32-unknown-unknown", "--release"]),
+            .args(["--target", "wasm32-unknown-unknown", "--release"])
+            .args(if test_hooks {
+                vec!["--features", "test-hooks"]
+            } else {
+                Vec::new()
+            }),
     )?;
 
     if dist.exists() {
@@ -131,10 +143,19 @@ fn build_npm_package(package: &Package) -> Result<(), String> {
         fs::remove_file(raw_declarations).map_err(|error| error.to_string())?;
     }
 
-    let written = generate::write_support_files(package, &dist)?;
-    check_package_manifest(&package_directory.join("package.json"), &written)?;
+    let written = generate::write_support_files(package, &dist, test_hooks)?;
+    if !test_hooks {
+        check_package_manifest(&package_directory.join("package.json"), &written)?;
+    }
+    for (name, bytes) in &written.sizes {
+        println!(
+            "  {name}: {} bytes, {} gzipped at level 9",
+            bytes,
+            gzip_size(&dist.join(name))?
+        );
+    }
     println!(
-        "built packages/{}/dist: {}",
+        "built packages/{}/{out_name}: {}",
         package.name,
         written
             .entry_points
@@ -144,6 +165,19 @@ fn build_npm_package(package: &Package) -> Result<(), String> {
             .join(", ")
     );
     Ok(())
+}
+
+/// The size of a file gzipped at level 9, by the `gzip` command, which the hosts and the CI runners have.
+fn gzip_size(path: &Path) -> Result<usize, String> {
+    let output = Command::new("gzip")
+        .args(["-9", "-c"])
+        .arg(path)
+        .output()
+        .map_err(|error| format!("could not run gzip: {error}"))?;
+    if !output.status.success() {
+        return Err(format!("gzip failed on {}", path.display()));
+    }
+    Ok(output.stdout.len())
 }
 
 /// The `./dist/...` paths a package manifest names, in `exports`, `imports` and everywhere else it can.
@@ -219,6 +253,7 @@ mod tests {
         let manifest = dir.join("package.json");
         let written = generate::Written {
             entry_points: ["index.js", "init.node.js"].map(str::to_owned).into(),
+            sizes: Vec::new(),
         };
         fs::write(
             &manifest,
