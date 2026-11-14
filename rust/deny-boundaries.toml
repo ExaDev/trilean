@@ -1,0 +1,19 @@
+# Which workspace crate may use which third-party crate. cargo-deny cannot hold these `wrappers` rules and the
+# allowlist of deny.toml in one file, so this is a second pass over the same workspace, run as
+# `sh scripts/rust.sh deny-bans <absolute path of rust/Cargo.toml> <absolute path of this file>`. A listed crate is
+# refused unless every crate that depends on it directly is one of its wrappers.
+
+[graph]
+all-features = true
+
+[bans]
+multiple-versions = "allow"
+wildcards = "allow"
+
+deny = [
+    # The derive is the one place a type declaration is parsed and code is written, so no other crate gets a parser
+    # or a code generator in its graph by accident.
+    { crate = "syn", wrappers = ["json-shape-derive"], reason = "Only the derive macro parses Rust syntax." },
+    { crate = "quote", wrappers = ["json-shape-derive", "syn"], reason = "Only the derive macro generates code; syn's printing feature uses it." },
+    { crate = "proc-macro2", wrappers = ["json-shape-derive", "quote", "syn"], reason = "The token types of the derive macro and the two crates it is written with." },
+]

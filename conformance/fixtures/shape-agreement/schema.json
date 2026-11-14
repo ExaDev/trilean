@@ -1,0 +1,329 @@
+{
+  "$defs": {
+    "Bounds": {
+      "additionalProperties": false,
+      "properties": {
+        "ranged": {
+          "maximum": 20,
+          "minimum": 10,
+          "type": "integer"
+        },
+        "ratio": {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        "signed": {
+          "maximum": 9007199254740991,
+          "minimum": -9007199254740991,
+          "type": "integer"
+        },
+        "small": {
+          "maximum": 255,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "wide": {
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "Chain": {
+      "additionalProperties": false,
+      "properties": {
+        "next": {
+          "$ref": "#/$defs/Chain"
+        },
+        "value": {
+          "maximum": 255,
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "value"
+      ],
+      "type": "object"
+    },
+    "Closed": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "object"
+    },
+    "Colour": {
+      "enum": [
+        "red",
+        "green"
+      ]
+    },
+    "Constants": {
+      "additionalProperties": false,
+      "properties": {
+        "label": {
+          "const": "x"
+        },
+        "ok": {
+          "const": true
+        }
+      },
+      "required": [
+        "ok"
+      ],
+      "type": "object"
+    },
+    "Either": {
+      "oneOf": [
+        {
+          "maximum": 255,
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "first": {
+              "type": "string"
+            },
+            "second": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "first",
+            "second"
+          ],
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Figure": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "dot"
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "circle"
+            },
+            "radius": {
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          "required": [
+            "kind",
+            "radius"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "square"
+            },
+            "side": {
+              "maximum": 255,
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "kind",
+            "side"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "group"
+            },
+            "members": {
+              "items": {
+                "$ref": "#/$defs/Figure"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "kind",
+            "members"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "Files": {
+      "additionalProperties": false,
+      "properties": {
+        "files": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "minProperties": 1,
+          "propertyNames": {
+            "pattern": "^[a-z]+\\.json$"
+          },
+          "type": "object"
+        }
+      },
+      "required": [
+        "files"
+      ],
+      "type": "object"
+    },
+    "Flat": {
+      "additionalProperties": false,
+      "properties": {
+        "extra": {
+          "maximum": 255,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object"
+    },
+    "Lengths": {
+      "additionalProperties": false,
+      "properties": {
+        "distinct": {
+          "items": {
+            "maximum": 255,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "items": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 3,
+          "minItems": 1,
+          "type": "array"
+        },
+        "text": {
+          "minLength": 2,
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Open": {
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "object"
+    },
+    "Patterned": {
+      "additionalProperties": false,
+      "properties": {
+        "from": {
+          "pattern": "^(recorded: .+|[a-z0-9._-]+\\.test\\.ts: .+)$",
+          "type": "string"
+        },
+        "id": {
+          "pattern": "^[a-z0-9][a-z0-9._-]*$",
+          "type": "string"
+        },
+        "one_slash": {
+          "pattern": "^[^/]*/[^/]*$",
+          "type": "string"
+        },
+        "unanchored": {
+          "pattern": "[0-9]",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Raw": {
+      "properties": {
+        "any": {},
+        "nested": {
+          "items": {
+            "items": {
+              "$ref": "#/$defs/Closed"
+            },
+            "type": "array"
+          },
+          "type": "array"
+        },
+        "object": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "any",
+        "object",
+        "nested"
+      ],
+      "type": "object"
+    },
+    "Together": {
+      "additionalProperties": false,
+      "dependentRequired": {
+        "only": [
+          "reason"
+        ],
+        "reason": [
+          "only"
+        ]
+      },
+      "properties": {
+        "only": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

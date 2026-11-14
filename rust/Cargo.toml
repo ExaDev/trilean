@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["tests/trilean-conformance"]
+members = ["crates/json-shape", "crates/json-shape-derive", "tests/trilean-conformance"]
 
 [workspace.package]
 version = "0.0.0"
@@ -10,7 +10,12 @@ license = "MIT"
 repository = "https://github.com/ExaDev/trilean"
 
 [workspace.dependencies]
+json-shape-derive = { path = "crates/json-shape-derive" }
+proc-macro2 = "1"
+quote = "1"
+serde = "1"
 serde_json = "1"
+syn = { version = "2", default-features = false, features = ["clone-impls", "derive", "parsing", "printing", "proc-macro"] }
 
 [workspace.lints.rust]
 # Binding crates that need wasm-bindgen's generated FFI relax this in their own manifest, not here.

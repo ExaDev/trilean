@@ -1,0 +1,1166 @@
+[
+  {
+    "case": "required field only",
+    "document": {
+      "name": "a"
+    },
+    "type": "Closed",
+    "valid": true
+  },
+  {
+    "case": "optional field present",
+    "document": {
+      "name": "a",
+      "note": "n"
+    },
+    "type": "Closed",
+    "valid": true
+  },
+  {
+    "case": "required field missing",
+    "document": {
+      "note": "n"
+    },
+    "type": "Closed",
+    "valid": false
+  },
+  {
+    "case": "required field has the wrong type",
+    "document": {
+      "name": 1
+    },
+    "type": "Closed",
+    "valid": false
+  },
+  {
+    "case": "optional field has the wrong type",
+    "document": {
+      "name": "a",
+      "note": 1
+    },
+    "type": "Closed",
+    "valid": false
+  },
+  {
+    "case": "optional field is null",
+    "document": {
+      "name": "a",
+      "note": null
+    },
+    "type": "Closed",
+    "valid": false
+  },
+  {
+    "case": "unknown key in a closed object",
+    "document": {
+      "name": "a",
+      "other": 1
+    },
+    "type": "Closed",
+    "valid": false
+  },
+  {
+    "case": "not an object (array)",
+    "document": [
+      "a"
+    ],
+    "type": "Closed",
+    "valid": false
+  },
+  {
+    "case": "not an object (null)",
+    "document": null,
+    "type": "Closed",
+    "valid": false
+  },
+  {
+    "case": "not an object (string)",
+    "document": "a",
+    "type": "Closed",
+    "valid": false
+  },
+  {
+    "case": "unknown keys allowed in an open object",
+    "document": {
+      "name": "a",
+      "other": [
+        1,
+        {
+          "x": null
+        }
+      ]
+    },
+    "type": "Open",
+    "valid": true
+  },
+  {
+    "case": "required field missing",
+    "document": {
+      "other": 1
+    },
+    "type": "Open",
+    "valid": false
+  },
+  {
+    "case": "not an object",
+    "document": 3,
+    "type": "Open",
+    "valid": false
+  },
+  {
+    "case": "a listed value",
+    "document": "red",
+    "type": "Colour",
+    "valid": true
+  },
+  {
+    "case": "another listed value",
+    "document": "green",
+    "type": "Colour",
+    "valid": true
+  },
+  {
+    "case": "an unlisted value",
+    "document": "blue",
+    "type": "Colour",
+    "valid": false
+  },
+  {
+    "case": "the right text with the wrong case",
+    "document": "Red",
+    "type": "Colour",
+    "valid": false
+  },
+  {
+    "case": "a number",
+    "document": 0,
+    "type": "Colour",
+    "valid": false
+  },
+  {
+    "case": "unit variant",
+    "document": {
+      "kind": "dot"
+    },
+    "type": "Figure",
+    "valid": true
+  },
+  {
+    "case": "unit variant with an extra key",
+    "document": {
+      "kind": "dot",
+      "x": 1
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "struct variant",
+    "document": {
+      "kind": "circle",
+      "radius": 1.5
+    },
+    "type": "Figure",
+    "valid": true
+  },
+  {
+    "case": "struct variant at its numeric bound",
+    "document": {
+      "kind": "circle",
+      "radius": 0
+    },
+    "type": "Figure",
+    "valid": true
+  },
+  {
+    "case": "struct variant below its numeric bound",
+    "document": {
+      "kind": "circle",
+      "radius": -0.5
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "struct variant missing a field",
+    "document": {
+      "kind": "circle"
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "struct variant with the field of another variant",
+    "document": {
+      "kind": "circle",
+      "radius": 1,
+      "side": 2
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "second struct variant",
+    "document": {
+      "kind": "square",
+      "side": 4
+    },
+    "type": "Figure",
+    "valid": true
+  },
+  {
+    "case": "integer field out of range",
+    "document": {
+      "kind": "square",
+      "side": 256
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "unknown kind",
+    "document": {
+      "kind": "triangle"
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "kind of the wrong type",
+    "document": {
+      "kind": 1
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "kind missing",
+    "document": {
+      "side": 1
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "recursion, valid",
+    "document": {
+      "kind": "group",
+      "members": [
+        {
+          "kind": "dot"
+        },
+        {
+          "kind": "group",
+          "members": []
+        },
+        {
+          "kind": "square",
+          "side": 1
+        }
+      ]
+    },
+    "type": "Figure",
+    "valid": true
+  },
+  {
+    "case": "recursion, invalid at depth",
+    "document": {
+      "kind": "group",
+      "members": [
+        {
+          "kind": "group",
+          "members": [
+            {
+              "kind": "circle",
+              "radius": -1
+            }
+          ]
+        }
+      ]
+    },
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "not an object",
+    "document": "dot",
+    "type": "Figure",
+    "valid": false
+  },
+  {
+    "case": "integer alternative",
+    "document": 3,
+    "type": "Either",
+    "valid": true
+  },
+  {
+    "case": "string alternative",
+    "document": "w",
+    "type": "Either",
+    "valid": true
+  },
+  {
+    "case": "object alternative",
+    "document": {
+      "first": "a",
+      "second": "b"
+    },
+    "type": "Either",
+    "valid": true
+  },
+  {
+    "case": "null alternative",
+    "document": null,
+    "type": "Either",
+    "valid": true
+  },
+  {
+    "case": "integer alternative out of range",
+    "document": 300,
+    "type": "Either",
+    "valid": false
+  },
+  {
+    "case": "object alternative with a missing field",
+    "document": {
+      "first": "a"
+    },
+    "type": "Either",
+    "valid": false
+  },
+  {
+    "case": "object alternative with an extra key",
+    "document": {
+      "first": "a",
+      "second": "b",
+      "third": "c"
+    },
+    "type": "Either",
+    "valid": false
+  },
+  {
+    "case": "a boolean matches none",
+    "document": true,
+    "type": "Either",
+    "valid": false
+  },
+  {
+    "case": "an array matches none",
+    "document": [],
+    "type": "Either",
+    "valid": false
+  },
+  {
+    "case": "an empty object",
+    "document": {},
+    "type": "Bounds",
+    "valid": true
+  },
+  {
+    "case": "u8 at its upper bound",
+    "document": {
+      "small": 255
+    },
+    "type": "Bounds",
+    "valid": true
+  },
+  {
+    "case": "u8 above its upper bound",
+    "document": {
+      "small": 256
+    },
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "u8 below its lower bound",
+    "document": {
+      "small": -1
+    },
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "a whole number written with a fraction",
+    "text": "{\"small\":97.0}",
+    "type": "Bounds",
+    "valid": true
+  },
+  {
+    "case": "a fractional number",
+    "document": {
+      "small": 97.5
+    },
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "negative zero",
+    "text": "{\"small\":-0}",
+    "type": "Bounds",
+    "valid": true
+  },
+  {
+    "case": "a string where an integer is expected",
+    "document": {
+      "small": "1"
+    },
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "a boolean where an integer is expected",
+    "document": {
+      "small": true
+    },
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "the largest safe integer",
+    "text": "{\"wide\":9007199254740991}",
+    "type": "Bounds",
+    "valid": true
+  },
+  {
+    "case": "one above the largest safe integer",
+    "text": "{\"wide\":9007199254740992}",
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "two above the largest safe integer",
+    "text": "{\"wide\":9007199254740993}",
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "a large whole number in exponent form",
+    "text": "{\"wide\":1e20}",
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "a number too large to be finite",
+    "text": "{\"wide\":1e999}",
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "a whole number in exponent form within the bound",
+    "text": "{\"wide\":1e3}",
+    "type": "Bounds",
+    "valid": true
+  },
+  {
+    "case": "the negative safe bound",
+    "text": "{\"signed\":-9007199254740991}",
+    "type": "Bounds",
+    "valid": true
+  },
+  {
+    "case": "below the negative safe bound",
+    "text": "{\"signed\":-9007199254740992}",
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "an explicit range, lower end",
+    "document": {
+      "ranged": 10
+    },
+    "type": "Bounds",
+    "valid": true
+  },
+  {
+    "case": "an explicit range, upper end",
+    "document": {
+      "ranged": 20
+    },
+    "type": "Bounds",
+    "valid": true
+  },
+  {
+    "case": "an explicit range, below",
+    "document": {
+      "ranged": 9
+    },
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "an explicit range, above",
+    "document": {
+      "ranged": 21
+    },
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "a number range, inside",
+    "document": {
+      "ratio": 0.5
+    },
+    "type": "Bounds",
+    "valid": true
+  },
+  {
+    "case": "a number range, lower end",
+    "document": {
+      "ratio": 0
+    },
+    "type": "Bounds",
+    "valid": true
+  },
+  {
+    "case": "a number range, upper end",
+    "document": {
+      "ratio": 1
+    },
+    "type": "Bounds",
+    "valid": true
+  },
+  {
+    "case": "a number range, above",
+    "document": {
+      "ratio": 1.0000001
+    },
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "a number range, below",
+    "document": {
+      "ratio": -1e-7
+    },
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "a number where a string is expected",
+    "document": {
+      "ratio": "0.5"
+    },
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "array at its minimum length",
+    "document": {
+      "items": [
+        "a"
+      ]
+    },
+    "type": "Lengths",
+    "valid": true
+  },
+  {
+    "case": "array at its maximum length",
+    "document": {
+      "items": [
+        "a",
+        "b",
+        "c"
+      ]
+    },
+    "type": "Lengths",
+    "valid": true
+  },
+  {
+    "case": "array below its minimum length",
+    "document": {
+      "items": []
+    },
+    "type": "Lengths",
+    "valid": false
+  },
+  {
+    "case": "array above its maximum length",
+    "document": {
+      "items": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ]
+    },
+    "type": "Lengths",
+    "valid": false
+  },
+  {
+    "case": "array item of the wrong type",
+    "document": {
+      "items": [
+        "a",
+        1
+      ]
+    },
+    "type": "Lengths",
+    "valid": false
+  },
+  {
+    "case": "array that is not an array",
+    "document": {
+      "items": "a"
+    },
+    "type": "Lengths",
+    "valid": false
+  },
+  {
+    "case": "distinct items",
+    "document": {
+      "distinct": [
+        1,
+        2,
+        3
+      ]
+    },
+    "type": "Lengths",
+    "valid": true
+  },
+  {
+    "case": "repeated items",
+    "document": {
+      "distinct": [
+        1,
+        2,
+        1
+      ]
+    },
+    "type": "Lengths",
+    "valid": false
+  },
+  {
+    "case": "the same whole number written two ways",
+    "text": "{\"distinct\":[1,1.0]}",
+    "type": "Lengths",
+    "valid": false
+  },
+  {
+    "case": "an empty list of distinct items",
+    "document": {
+      "distinct": []
+    },
+    "type": "Lengths",
+    "valid": true
+  },
+  {
+    "case": "string at its minimum length",
+    "document": {
+      "text": "ab"
+    },
+    "type": "Lengths",
+    "valid": true
+  },
+  {
+    "case": "string below its minimum length",
+    "document": {
+      "text": "a"
+    },
+    "type": "Lengths",
+    "valid": false
+  },
+  {
+    "case": "one astral character is one character",
+    "document": {
+      "text": "😀"
+    },
+    "type": "Lengths",
+    "valid": false
+  },
+  {
+    "case": "two astral characters are two characters",
+    "document": {
+      "text": "😀😀"
+    },
+    "type": "Lengths",
+    "valid": true
+  },
+  {
+    "case": "unknown key",
+    "document": {
+      "other": 1
+    },
+    "type": "Lengths",
+    "valid": false
+  },
+  {
+    "case": "id matching its pattern",
+    "document": {
+      "id": "a.b_c-1"
+    },
+    "type": "Patterned",
+    "valid": true
+  },
+  {
+    "case": "id starting with punctuation",
+    "document": {
+      "id": "-a"
+    },
+    "type": "Patterned",
+    "valid": false
+  },
+  {
+    "case": "id with an upper-case letter",
+    "document": {
+      "id": "aB"
+    },
+    "type": "Patterned",
+    "valid": false
+  },
+  {
+    "case": "empty id",
+    "document": {
+      "id": ""
+    },
+    "type": "Patterned",
+    "valid": false
+  },
+  {
+    "case": "id with a trailing newline, which the anchor does not allow",
+    "text": "{\"id\":\"a\\n\"}",
+    "type": "Patterned",
+    "valid": false
+  },
+  {
+    "case": "id with a non-ASCII letter",
+    "document": {
+      "id": "café"
+    },
+    "type": "Patterned",
+    "valid": false
+  },
+  {
+    "case": "from, the recorded form",
+    "document": {
+      "from": "recorded: trilean-regex src/parser.ts (x)"
+    },
+    "type": "Patterned",
+    "valid": true
+  },
+  {
+    "case": "from, the original test form",
+    "document": {
+      "from": "parser.unit.test.ts: parseRegex > a"
+    },
+    "type": "Patterned",
+    "valid": true
+  },
+  {
+    "case": "from, an empty title",
+    "document": {
+      "from": "parser.unit.test.ts: "
+    },
+    "type": "Patterned",
+    "valid": false
+  },
+  {
+    "case": "from, neither form",
+    "document": {
+      "from": "parser.test.ts"
+    },
+    "type": "Patterned",
+    "valid": false
+  },
+  {
+    "case": "from, a dot does not match a line terminator",
+    "text": "{\"from\":\"recorded: a\\nb\"}",
+    "type": "Patterned",
+    "valid": false
+  },
+  {
+    "case": "from, a dot does not match U+2028",
+    "text": "{\"from\":\"recorded: a\\u2028b\"}",
+    "type": "Patterned",
+    "valid": false
+  },
+  {
+    "case": "from, a dot matches an astral character",
+    "document": {
+      "from": "recorded: 😀"
+    },
+    "type": "Patterned",
+    "valid": true
+  },
+  {
+    "case": "an unanchored pattern matches anywhere",
+    "document": {
+      "unanchored": "ab3cd"
+    },
+    "type": "Patterned",
+    "valid": true
+  },
+  {
+    "case": "an unanchored pattern that does not match",
+    "document": {
+      "unanchored": "abcd"
+    },
+    "type": "Patterned",
+    "valid": false
+  },
+  {
+    "case": "a negated class, one slash",
+    "document": {
+      "one_slash": "a/b"
+    },
+    "type": "Patterned",
+    "valid": true
+  },
+  {
+    "case": "a negated class, no slash",
+    "document": {
+      "one_slash": "ab"
+    },
+    "type": "Patterned",
+    "valid": false
+  },
+  {
+    "case": "a negated class, two slashes",
+    "document": {
+      "one_slash": "a/b/c"
+    },
+    "type": "Patterned",
+    "valid": false
+  },
+  {
+    "case": "a pattern on a value that is not a string",
+    "document": {
+      "id": 1
+    },
+    "type": "Patterned",
+    "valid": false
+  },
+  {
+    "case": "one entry",
+    "document": {
+      "files": {
+        "a.json": "x"
+      }
+    },
+    "type": "Files",
+    "valid": true
+  },
+  {
+    "case": "no entries",
+    "document": {
+      "files": {}
+    },
+    "type": "Files",
+    "valid": false
+  },
+  {
+    "case": "a key outside the pattern",
+    "document": {
+      "files": {
+        "A.json": "x"
+      }
+    },
+    "type": "Files",
+    "valid": false
+  },
+  {
+    "case": "a key without the extension",
+    "document": {
+      "files": {
+        "a": "x"
+      }
+    },
+    "type": "Files",
+    "valid": false
+  },
+  {
+    "case": "a value of the wrong type",
+    "document": {
+      "files": {
+        "a.json": 1
+      }
+    },
+    "type": "Files",
+    "valid": false
+  },
+  {
+    "case": "files missing",
+    "document": {},
+    "type": "Files",
+    "valid": false
+  },
+  {
+    "case": "files not an object",
+    "document": {
+      "files": []
+    },
+    "type": "Files",
+    "valid": false
+  },
+  {
+    "case": "neither",
+    "document": {},
+    "type": "Together",
+    "valid": true
+  },
+  {
+    "case": "both",
+    "document": {
+      "only": "a",
+      "reason": "b"
+    },
+    "type": "Together",
+    "valid": true
+  },
+  {
+    "case": "only without reason",
+    "document": {
+      "only": "a"
+    },
+    "type": "Together",
+    "valid": false
+  },
+  {
+    "case": "reason without only",
+    "document": {
+      "reason": "b"
+    },
+    "type": "Together",
+    "valid": false
+  },
+  {
+    "case": "only of the wrong type",
+    "document": {
+      "only": 1,
+      "reason": "b"
+    },
+    "type": "Together",
+    "valid": false
+  },
+  {
+    "case": "the constant boolean",
+    "document": {
+      "ok": true
+    },
+    "type": "Constants",
+    "valid": true
+  },
+  {
+    "case": "the wrong boolean",
+    "document": {
+      "ok": false
+    },
+    "type": "Constants",
+    "valid": false
+  },
+  {
+    "case": "a non-boolean",
+    "document": {
+      "ok": "true"
+    },
+    "type": "Constants",
+    "valid": false
+  },
+  {
+    "case": "ok missing",
+    "document": {},
+    "type": "Constants",
+    "valid": false
+  },
+  {
+    "case": "the constant string",
+    "document": {
+      "label": "x",
+      "ok": true
+    },
+    "type": "Constants",
+    "valid": true
+  },
+  {
+    "case": "a different string",
+    "document": {
+      "label": "y",
+      "ok": true
+    },
+    "type": "Constants",
+    "valid": false
+  },
+  {
+    "case": "one link",
+    "document": {
+      "value": 1
+    },
+    "type": "Chain",
+    "valid": true
+  },
+  {
+    "case": "three links",
+    "document": {
+      "next": {
+        "next": {
+          "value": 3
+        },
+        "value": 2
+      },
+      "value": 1
+    },
+    "type": "Chain",
+    "valid": true
+  },
+  {
+    "case": "an invalid link at depth",
+    "document": {
+      "next": {
+        "next": {
+          "value": 300
+        },
+        "value": 2
+      },
+      "value": 1
+    },
+    "type": "Chain",
+    "valid": false
+  },
+  {
+    "case": "an extra key at depth",
+    "document": {
+      "next": {
+        "more": 1,
+        "value": 2
+      },
+      "value": 1
+    },
+    "type": "Chain",
+    "valid": false
+  },
+  {
+    "case": "a null link",
+    "document": {
+      "next": null,
+      "value": 1
+    },
+    "type": "Chain",
+    "valid": false
+  },
+  {
+    "case": "the flattened field",
+    "document": {
+      "id": "a"
+    },
+    "type": "Flat",
+    "valid": true
+  },
+  {
+    "case": "the flattened and the own field",
+    "document": {
+      "extra": 1,
+      "id": "a"
+    },
+    "type": "Flat",
+    "valid": true
+  },
+  {
+    "case": "the flattened field missing",
+    "document": {
+      "extra": 1
+    },
+    "type": "Flat",
+    "valid": false
+  },
+  {
+    "case": "an unknown key",
+    "document": {
+      "id": "a",
+      "more": 1
+    },
+    "type": "Flat",
+    "valid": false
+  },
+  {
+    "case": "any value, an object",
+    "document": {
+      "any": {
+        "a": [
+          1,
+          null,
+          "x"
+        ]
+      },
+      "nested": [],
+      "object": {}
+    },
+    "type": "Raw",
+    "valid": true
+  },
+  {
+    "case": "any value, null",
+    "document": {
+      "any": null,
+      "nested": [
+        [
+          {
+            "name": "a"
+          }
+        ],
+        []
+      ],
+      "object": {
+        "k": 1
+      }
+    },
+    "type": "Raw",
+    "valid": true
+  },
+  {
+    "case": "any value missing",
+    "document": {
+      "nested": [],
+      "object": {}
+    },
+    "type": "Raw",
+    "valid": false
+  },
+  {
+    "case": "an open object that is an array",
+    "document": {
+      "any": 1,
+      "nested": [],
+      "object": []
+    },
+    "type": "Raw",
+    "valid": false
+  },
+  {
+    "case": "nested arrays with an invalid element",
+    "document": {
+      "any": 1,
+      "nested": [
+        [
+          {
+            "name": "a"
+          }
+        ],
+        [
+          {
+            "name": 1
+          }
+        ]
+      ],
+      "object": {}
+    },
+    "type": "Raw",
+    "valid": false
+  },
+  {
+    "case": "nested arrays with a closed element given an extra key",
+    "document": {
+      "any": 1,
+      "nested": [
+        [
+          {
+            "name": "a",
+            "x": 1
+          }
+        ]
+      ],
+      "object": {}
+    },
+    "type": "Raw",
+    "valid": false
+  }
+]
