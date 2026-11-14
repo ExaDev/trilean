@@ -96,6 +96,8 @@ struct Patterned {
     unanchored: Option<String>,
     #[shape(pattern = "^[^/]*/[^/]*$")]
     one_slash: Option<String>,
+    #[shape(pattern = "^.$")]
+    single: Option<String>,
 }
 
 #[derive(Shape)]

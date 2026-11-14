@@ -274,6 +274,10 @@
           "pattern": "^[^/]*/[^/]*$",
           "type": "string"
         },
+        "single": {
+          "pattern": "^.$",
+          "type": "string"
+        },
         "unanchored": {
           "pattern": "[0-9]",
           "type": "string"

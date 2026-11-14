@@ -1162,5 +1162,57 @@
     },
     "type": "Raw",
     "valid": false
+  },
+  {
+    "case": "a dot matches one letter",
+    "document": {
+      "single": "a"
+    },
+    "type": "Patterned",
+    "valid": true
+  },
+  {
+    "case": "a dot matches one astral character, as the u flag reads it",
+    "document": {
+      "single": "😀"
+    },
+    "type": "Patterned",
+    "valid": true
+  },
+  {
+    "case": "a dot does not match two characters",
+    "document": {
+      "single": "ab"
+    },
+    "type": "Patterned",
+    "valid": false
+  },
+  {
+    "case": "a dot does not match an empty string",
+    "document": {
+      "single": ""
+    },
+    "type": "Patterned",
+    "valid": false
+  },
+  {
+    "case": "a dot does not match a line feed",
+    "text": "{\"single\":\"\\n\"}",
+    "type": "Patterned",
+    "valid": false
+  },
+  {
+    "case": "a dot does not match a carriage return",
+    "text": "{\"single\":\"\\r\"}",
+    "type": "Patterned",
+    "valid": false
+  },
+  {
+    "case": "a negated class matches one astral character",
+    "document": {
+      "one_slash": "😀/😀"
+    },
+    "type": "Patterned",
+    "valid": true
   }
 ]
