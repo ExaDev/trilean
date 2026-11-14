@@ -1,0 +1,42 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "nodeKind": "textCompare",
+        "path": "$.right",
+        "reason": {
+          "after": "\n  (a)\n  ^",
+          "before": "invalid pattern at index 0: ",
+          "relayed": [
+            "capturing groups are not supported in this grammar",
+            "there is nothing to capture, since a pattern only ever answers whether it matches. Use '(?:...)' for grouping."
+          ]
+        }
+      },
+      "from": "guard.references.unit.test.ts: operand kinds trilean and PostgreSQL would answer differently > refuses a portableMatches pattern that is not valid trilean-regex syntax",
+      "id": "sql.guard.guard-references.operand-kinds-trilean-and-postgresql-would-answe-9",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "portableMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "(a)"
+        }
+      }
+    }
+  ]
+}

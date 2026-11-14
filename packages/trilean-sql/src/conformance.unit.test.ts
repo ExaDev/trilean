@@ -330,6 +330,7 @@ const RUNNER_TESTS: ReadonlySet<string> = new Set([
   "conformance.unit.test.ts",
   "conformance.integration.test.ts",
   "conformance.coverage.unit.test.ts",
+  "compile-accepted.integration.test.ts",
 ]);
 
 const ROW = /^\| (\S+\.test\.ts) \| (.+) \| (S\d+) \|$/u;

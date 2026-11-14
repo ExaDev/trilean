@@ -1657,7 +1657,7 @@
           "additionalProperties": false,
           "properties": {
             "message": {
-              "description": "The text exactly, character for character; or, where it holds a message another package wrote (the parse error of a pattern, which the corpus of that package pins), what comes before that message, its fragments in order, and what comes after.",
+              "description": "The text exactly, character for character; or, where it holds a message another package wrote (the parse error of a pattern, which the corpus of that package pins), what comes before that message, its parts, the separator the implementation writes between them, and what comes after. The text is the concatenation, compared exactly.",
               "oneOf": [
                 {
                   "minLength": 1,
@@ -1678,11 +1678,15 @@
                       },
                       "minItems": 1,
                       "type": "array"
+                    },
+                    "separator": {
+                      "$ref": "#/$defs/nonEmptyText"
                     }
                   },
                   "required": [
                     "before",
                     "relayed",
+                    "separator",
                     "after"
                   ],
                   "type": "object"
@@ -1699,7 +1703,7 @@
               "type": "string"
             },
             "reason": {
-              "description": "The text exactly, character for character; or, where it holds a message another package wrote (the parse error of a pattern, which the corpus of that package pins), what comes before that message, its fragments in order, and what comes after.",
+              "description": "The text exactly, character for character; or, where it holds a message another package wrote (the parse error of a pattern, which the corpus of that package pins), what comes before that message, its parts, the separator the implementation writes between them, and what comes after. The text is the concatenation, compared exactly.",
               "oneOf": [
                 {
                   "minLength": 1,
@@ -1720,11 +1724,15 @@
                       },
                       "minItems": 1,
                       "type": "array"
+                    },
+                    "separator": {
+                      "$ref": "#/$defs/nonEmptyText"
                     }
                   },
                   "required": [
                     "before",
                     "relayed",
+                    "separator",
                     "after"
                   ],
                   "type": "object"
@@ -2071,7 +2079,7 @@
                   "type": "string"
                 },
                 "reason": {
-                  "description": "The text exactly, character for character; or, where it holds a message another package wrote (the parse error of a pattern, which the corpus of that package pins), what comes before that message, its fragments in order, and what comes after.",
+                  "description": "The text exactly, character for character; or, where it holds a message another package wrote (the parse error of a pattern, which the corpus of that package pins), what comes before that message, its parts, the separator the implementation writes between them, and what comes after. The text is the concatenation, compared exactly.",
                   "oneOf": [
                     {
                       "minLength": 1,
@@ -2092,11 +2100,15 @@
                           },
                           "minItems": 1,
                           "type": "array"
+                        },
+                        "separator": {
+                          "$ref": "#/$defs/nonEmptyText"
                         }
                       },
                       "required": [
                         "before",
                         "relayed",
+                        "separator",
                         "after"
                       ],
                       "type": "object"

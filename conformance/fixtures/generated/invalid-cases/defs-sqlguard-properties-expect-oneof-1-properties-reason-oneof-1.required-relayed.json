@@ -6,7 +6,15 @@
         "path": "$.right",
         "reason": {
           "after": "\n  (a)\n  ^",
-          "before": "invalid pattern at index 0: "
+          "before": "invalid pattern at index 0: ",
+          "separator": {
+            "codeUnits": [
+              32,
+              45,
+              45,
+              32
+            ]
+          }
         }
       },
       "from": "guard.references.unit.test.ts: operand kinds trilean and PostgreSQL would answer differently > refuses a portableMatches pattern that is not valid trilean-regex syntax",

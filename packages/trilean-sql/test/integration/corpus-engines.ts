@@ -111,15 +111,17 @@ export function openSqlite(
   }
 
   return {
-    query: async (sql, params) =>
-      Promise.resolve(
-        arrayRows(
-          db
-            .prepare<unknown[], unknown[]>(sql)
-            .raw()
-            .all(...params.map(bindable)),
-        ),
-      ),
+    query: async (sql, params) => {
+      const statement = db.prepare<unknown[], unknown[]>(sql);
+      const bound = params.map(bindable);
+      if (!statement.reader) {
+        statement.run(...bound);
+
+        return Promise.resolve([]);
+      }
+
+      return Promise.resolve(arrayRows(statement.raw().all(...bound)));
+    },
     close: async () => {
       db.close();
 

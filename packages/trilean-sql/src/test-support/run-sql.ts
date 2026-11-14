@@ -47,36 +47,24 @@ function newLog(): CallbackLog {
   return { thrown: [], columnKeys: [] };
 }
 
-/** Whether a text is the one a case states: exactly, or, for a text that relays another package's message, starting and ending as stated with the fragments of that message between, in order. */
-function textProblems(actual: string, expected: ExactText): readonly string[] {
-  if (typeof expected === "string") {
-    return actual === expected
-      ? []
-      : [`${JSON.stringify(actual)} is not ${JSON.stringify(expected)}`];
-  }
-  const { before, relayed, after } = expected;
-  if (
-    !actual.startsWith(before) ||
-    !actual.endsWith(after) ||
-    actual.length < before.length + after.length
-  ) {
-    return [
-      `${JSON.stringify(actual)} does not start with ${JSON.stringify(before)} and end with ${JSON.stringify(after)}`,
-    ];
-  }
-  const middle = actual.slice(before.length, actual.length - after.length);
-  let from = 0;
-  for (const fragment of relayed.map(textToString)) {
-    const found = middle.indexOf(fragment, from);
-    if (found < 0) {
-      return [
-        `${JSON.stringify(middle)} lacks ${JSON.stringify(fragment)} after offset ${String(from)}`,
-      ];
-    }
-    from = found + fragment.length;
-  }
+/** The text a case states: exactly, or, for a text that relays another package's message, the concatenation of what comes before it, its parts with the separator between each two, and what comes after. */
+function expectedText(expected: ExactText): string {
+  return typeof expected === "string"
+    ? expected
+    : expected.before +
+        expected.relayed
+          .map(textToString)
+          .join(textToString(expected.separator)) +
+        expected.after;
+}
 
-  return [];
+/** The problems with a text against the one a case states, which it must equal character for character. */
+function textProblems(actual: string, expected: ExactText): readonly string[] {
+  const wanted = expectedText(expected);
+
+  return actual === wanted
+    ? []
+    : [`${JSON.stringify(actual)} is not ${JSON.stringify(wanted)}`];
 }
 
 function errorMessage(error: unknown): string {

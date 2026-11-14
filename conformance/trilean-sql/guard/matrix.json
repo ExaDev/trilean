@@ -1249,7 +1249,15 @@
           "relayed": [
             "capturing groups are not supported in this grammar",
             "there is nothing to capture, since a pattern only ever answers whether it matches. Use '(?:...)' for grouping."
-          ]
+          ],
+          "separator": {
+            "codeUnits": [
+              32,
+              45,
+              45,
+              32
+            ]
+          }
         }
       },
       "from": "recorded: trilean-sql src/guard.ts (portableMatches with a pattern that does not parse under postgres)",
@@ -4748,7 +4756,15 @@
           "relayed": [
             "capturing groups are not supported in this grammar",
             "there is nothing to capture, since a pattern only ever answers whether it matches. Use '(?:...)' for grouping."
-          ]
+          ],
+          "separator": {
+            "codeUnits": [
+              32,
+              45,
+              45,
+              32
+            ]
+          }
         }
       },
       "from": "recorded: trilean-sql src/guard.ts (portableMatches with a pattern that does not parse under sqlite)",

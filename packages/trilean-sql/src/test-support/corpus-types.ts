@@ -91,6 +91,7 @@ export type ExactText =
   | {
       readonly before: string;
       readonly relayed: readonly Text[];
+      readonly separator: Text;
       readonly after: string;
     };
 

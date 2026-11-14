@@ -51,7 +51,7 @@
       }
     },
     "trilean-sql/compile/identifiers.json": {
-      "cases": 172,
+      "cases": 170,
       "skip": {
         "rust": [],
         "ts": []
@@ -177,7 +177,7 @@
       }
     },
     "trilean-sql/execute/strings.json": {
-      "cases": 160,
+      "cases": 172,
       "skip": {
         "rust": [],
         "ts": []

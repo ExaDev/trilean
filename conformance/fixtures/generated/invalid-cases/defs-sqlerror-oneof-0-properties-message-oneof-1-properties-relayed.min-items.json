@@ -6,7 +6,15 @@
           "message": {
             "after": "\n  (a)\n  ^",
             "before": "cannot compile 'textCompare' at $.right: invalid pattern at index 0: ",
-            "relayed": []
+            "relayed": [],
+            "separator": {
+              "codeUnits": [
+                32,
+                45,
+                45,
+                32
+              ]
+            }
           },
           "name": "UnsupportedNodeError",
           "nodeKind": "textCompare",
@@ -17,7 +25,15 @@
             "relayed": [
               "capturing groups are not supported in this grammar",
               "there is nothing to capture, since a pattern only ever answers whether it matches. Use '(?:...)' for grouping."
-            ]
+            ],
+            "separator": {
+              "codeUnits": [
+                32,
+                45,
+                45,
+                32
+              ]
+            }
           }
         }
       },

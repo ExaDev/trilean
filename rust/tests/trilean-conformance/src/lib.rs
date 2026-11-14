@@ -924,8 +924,8 @@ pub enum SqlParam {
 }
 
 /// The text exactly, character for character; or, where it holds a message another package wrote (the parse error of a
-/// pattern, which the corpus of that package pins), what comes before that message, its fragments in order, and what
-/// comes after.
+/// pattern, which the corpus of that package pins), what comes before that message, its parts, the separator the
+/// implementation writes between them, and what comes after. The text is the concatenation, compared exactly.
 #[derive(Shape, Clone, Debug, PartialEq)]
 #[serde(untagged, deny_unknown_fields)]
 pub enum RelayedText {
@@ -936,6 +936,7 @@ pub enum RelayedText {
         before: String,
         #[shape(min_items = 1)]
         relayed: Vec<NonEmptyText>,
+        separator: NonEmptyText,
     },
 }
 
