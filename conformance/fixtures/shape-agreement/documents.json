@@ -1870,5 +1870,23 @@
     "text": "{\"above\":0.10000000000000002}",
     "type": "NumberBounds",
     "valid": true
+  },
+  {
+    "case": "an integer above 2^64",
+    "text": "{\"wide\":18446744073709551616}",
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "an integer at 2^64 minus one, read as the double JavaScript reads",
+    "text": "{\"wide\":18446744073709551615}",
+    "type": "Bounds",
+    "valid": false
+  },
+  {
+    "case": "a signed integer below -2^63",
+    "text": "{\"signed\":-9223372036854775809}",
+    "type": "Bounds",
+    "valid": false
   }
 ]

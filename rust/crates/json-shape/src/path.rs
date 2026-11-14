@@ -109,3 +109,40 @@ impl fmt::Display for Issues {
 }
 
 impl Error for Issues {}
+
+#[cfg(test)]
+mod tests {
+    use crate::{Path, Shape, Value};
+
+    #[derive(Shape, Debug, PartialEq)]
+    #[serde(untagged)]
+    enum Either {
+        Count(u8),
+        Text(String),
+    }
+
+    /// What one conversion remembers is keyed by where a value sits, so a `Path` that met a second document at the
+    /// same address would answer for the first. Here the second document is the same place holding another value.
+    #[test]
+    fn a_path_kept_across_two_documents_would_answer_for_the_first() {
+        let mut document = Value::Number(1.0);
+        let mut path = Path::new();
+        assert_eq!(Either::build(&document, &mut path), Ok(Either::Count(1)));
+        document = Value::String("a".to_owned());
+        assert!(
+            Either::build(&document, &mut path).is_err(),
+            "the memory of the first document is stale for the second, which is why no caller may keep a Path"
+        );
+        // `from_json`, the only way a caller converts, makes a fresh Path for each document.
+        assert_eq!(
+            Either::from_json(&document),
+            Ok(Either::Text("a".to_owned()))
+        );
+    }
+
+    #[test]
+    fn a_fresh_path_has_no_memory() {
+        let path = Path::new();
+        assert!(path.memo.is_empty());
+    }
+}
