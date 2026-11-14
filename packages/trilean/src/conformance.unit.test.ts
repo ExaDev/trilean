@@ -15,6 +15,7 @@ import {
 } from "./test-support/corpus-types";
 import { runBuildCase } from "./test-support/run-build";
 import { runCallCase } from "./test-support/run-call";
+import { runDocumentCase, runInputsCase } from "./test-support/run-document";
 import { runEvaluateCase } from "./test-support/run-evaluate";
 import { runValidateCase } from "./test-support/run-validate";
 import { readJson } from "./test-support/read-json";
@@ -253,6 +254,10 @@ for (const { name, file } of corpus) {
             runValidateCase(testCase);
           } else if (testCase.kind === "evaluate") {
             await runEvaluateCase(testCase);
+          } else if (testCase.kind === "inputs") {
+            runInputsCase(testCase);
+          } else if (testCase.kind === "document") {
+            runDocumentCase(testCase);
           } else if (testCase.kind === "build") {
             runBuildCase(testCase);
           } else if (testCase.kind === "call") {

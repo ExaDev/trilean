@@ -20,67 +20,6 @@ function parsed(raw: unknown): ReadonlyMap<string, ComputedValue> {
   return parsedAll(raw).inputs;
 }
 
-describe("parseInputs", () => {
-  it("reads plain numbers, text and booleans as unit-less values", () => {
-    expect(parsed({ a: 1, b: "x", c: true })).toEqual(
-      new Map<string, ComputedValue>([
-        ["a", { kind: "number", value: 1 }],
-        ["b", { kind: "text", value: "x" }],
-        ["c", { kind: "boolean", value: true }],
-      ]),
-    );
-  });
-
-  it("keeps a complete computed value as it is, units included", () => {
-    const value: ComputedValue = { kind: "number", value: 2, unit: { m: 1 } };
-    expect(parsed({ length: value }).get("length")).toEqual(value);
-  });
-
-  it("names every entry that is not a value", () => {
-    const result = parseInputs({
-      ok: 1,
-      nothing: null,
-      shape: { kind: "number" },
-    });
-    expect(result).toEqual({
-      ok: false,
-      issues: [
-        "inputs.nothing: expected a finite number, text, boolean or a complete computed value",
-        "inputs.shape: expected a finite number, text, boolean or a complete computed value",
-      ],
-    });
-  });
-
-  it.each([
-    ["a plain number", Number.POSITIVE_INFINITY],
-    ["a plain number", Number.NaN],
-    [
-      "the value of a complete computed value",
-      { kind: "number", value: Number.NEGATIVE_INFINITY },
-    ],
-  ])("refuses %s that is not finite", (_description, input) => {
-    expect(parseInputs({ x: input })).toEqual({
-      ok: false,
-      issues: [
-        "inputs.x: expected a finite number, text, boolean or a complete computed value",
-      ],
-    });
-  });
-
-  it("strips fields a computed value does not define", () => {
-    expect(
-      parsed({ x: { kind: "number", value: 1, comment: "ignored" } }).get("x"),
-    ).toEqual({ kind: "number", value: 1 });
-  });
-
-  it.each([null, [], "x", 1])("rejects %j as the inputs themselves", (raw) => {
-    expect(parseInputs(raw)).toEqual({
-      ok: false,
-      issues: ["inputs must be a JSON object of named values"],
-    });
-  });
-});
-
 describe("createInputResolvers", () => {
   const resolvers = createInputResolvers(parsed({ a: 1 }));
 
@@ -116,48 +55,14 @@ describe("createInputResolvers", () => {
 });
 
 describe("parseInputs lists of items", () => {
-  it("reads an array as a list of items and keeps scalar entries as named values", () => {
+  it("keeps the lists in the order they were written, apart from the named values", () => {
     const { inputs, collections } = parsedAll({
       scale: 2,
-      loads: [
-        { amount: 1, label: "a" },
-        { amount: { kind: "number", value: 3, unit: { A: 1 } } },
-      ],
+      loads: [{ amount: 1 }],
       empty: [],
     });
-
     expect([...inputs.keys()]).toEqual(["scale"]);
     expect([...collections.keys()]).toEqual(["loads", "empty"]);
-    expect(collections.get("loads")).toEqual([
-      new Map<string, ComputedValue>([
-        ["amount", { kind: "number", value: 1 }],
-        ["label", { kind: "text", value: "a" }],
-      ]),
-      new Map<string, ComputedValue>([
-        ["amount", { kind: "number", value: 3, unit: { A: 1 } }],
-      ]),
-    ]);
-    expect(collections.get("empty")).toEqual([]);
-  });
-
-  it("names every element that is not an object and every value in an element that is not a value", () => {
-    expect(
-      parseInputs({
-        loads: [
-          "x",
-          { amount: 2 },
-          { amount: null },
-          { ok: true, bad: [true] },
-        ],
-      }),
-    ).toEqual({
-      ok: false,
-      issues: [
-        "inputs.loads[0]: expected an object of named values",
-        "inputs.loads[2].amount: expected a finite number, text, boolean or a complete computed value",
-        "inputs.loads[3].bad: expected a finite number, text, boolean or a complete computed value",
-      ],
-    });
   });
 });
 

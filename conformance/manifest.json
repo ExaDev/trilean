@@ -47,6 +47,16 @@
         "builtin.sine-cosine-and-tangent-tangent-is-a-domain-error-for-an-angle-that-is-not-finite.1"
       ]
     },
+    "trilean/document/evaluate-document.collections.json": {
+      "cases": 10,
+      "skip": []
+    },
+    "trilean/document/evaluate-document.json": {
+      "cases": 25,
+      "skip": [
+        "document.evaluatedocument-inputs-that-do-not-fit-rejects-a-plain-input-number-that-is-not-finite.1"
+      ]
+    },
     "trilean/evaluate/derived-aggregates.json": {
       "cases": 10,
       "skip": []
@@ -156,6 +166,14 @@
     "trilean/evaluate/truth-tables.json": {
       "cases": 23,
       "skip": []
+    },
+    "trilean/inputs/input-resolvers.json": {
+      "cases": 13,
+      "skip": [
+        "inputs.parseinputs-refuses-a-plain-number-that-is-not-finite.1",
+        "inputs.parseinputs-refuses-a-plain-number-that-is-not-finite.2",
+        "inputs.parseinputs-refuses-the-value-of-a-complete-computed-value-that-is-not-finite.1"
+      ]
     },
     "trilean/validate/computed-value.json": {
       "cases": 4,

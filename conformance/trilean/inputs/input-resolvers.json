@@ -1,0 +1,292 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "collections": {},
+        "inputs": {
+          "a": {
+            "kind": "number",
+            "value": 1
+          },
+          "b": {
+            "kind": "text",
+            "value": "x"
+          },
+          "c": {
+            "kind": "boolean",
+            "value": true
+          }
+        },
+        "ok": true
+      },
+      "from": "input-resolvers.unit.test.ts: parseInputs > reads plain numbers, text and booleans as unit-less values",
+      "id": "inputs.parseinputs-reads-plain-numbers-text-and-booleans-as-unit-less-values.1",
+      "kind": "inputs",
+      "raw": {
+        "a": 1,
+        "b": "x",
+        "c": true
+      }
+    },
+    {
+      "expect": {
+        "collections": {},
+        "inputs": {
+          "length": {
+            "kind": "number",
+            "unit": {
+              "m": 1
+            },
+            "value": 2
+          }
+        },
+        "ok": true
+      },
+      "from": "input-resolvers.unit.test.ts: parseInputs > keeps a complete computed value as it is, units included",
+      "id": "inputs.parseinputs-keeps-a-complete-computed-value-as-it-is-units-included.1",
+      "kind": "inputs",
+      "raw": {
+        "length": {
+          "kind": "number",
+          "unit": {
+            "m": 1
+          },
+          "value": 2
+        }
+      }
+    },
+    {
+      "expect": {
+        "issues": [
+          "inputs.nothing: expected a finite number, text, boolean or a complete computed value",
+          "inputs.shape: expected a finite number, text, boolean or a complete computed value"
+        ],
+        "ok": false
+      },
+      "from": "input-resolvers.unit.test.ts: parseInputs > names every entry that is not a value",
+      "id": "inputs.parseinputs-names-every-entry-that-is-not-a-value.1",
+      "kind": "inputs",
+      "raw": {
+        "nothing": null,
+        "ok": 1,
+        "shape": {
+          "kind": "number"
+        }
+      }
+    },
+    {
+      "expect": {
+        "issues": [
+          "inputs.x: expected a finite number, text, boolean or a complete computed value"
+        ],
+        "ok": false
+      },
+      "from": "input-resolvers.unit.test.ts: parseInputs > refuses a plain number that is not finite",
+      "id": "inputs.parseinputs-refuses-a-plain-number-that-is-not-finite.1",
+      "kind": "inputs",
+      "raw": {
+        "x": {
+          "$number": "Infinity"
+        }
+      },
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "skip": "rust"
+    },
+    {
+      "expect": {
+        "issues": [
+          "inputs.x: expected a finite number, text, boolean or a complete computed value"
+        ],
+        "ok": false
+      },
+      "from": "input-resolvers.unit.test.ts: parseInputs > refuses a plain number that is not finite",
+      "id": "inputs.parseinputs-refuses-a-plain-number-that-is-not-finite.2",
+      "kind": "inputs",
+      "raw": {
+        "x": {
+          "$number": "NaN"
+        }
+      },
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "skip": "rust"
+    },
+    {
+      "expect": {
+        "issues": [
+          "inputs.x: expected a finite number, text, boolean or a complete computed value"
+        ],
+        "ok": false
+      },
+      "from": "input-resolvers.unit.test.ts: parseInputs > refuses the value of a complete computed value that is not finite",
+      "id": "inputs.parseinputs-refuses-the-value-of-a-complete-computed-value-that-is-not-finite.1",
+      "kind": "inputs",
+      "raw": {
+        "x": {
+          "kind": "number",
+          "value": {
+            "$number": "-Infinity"
+          }
+        }
+      },
+      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
+      "skip": "rust"
+    },
+    {
+      "expect": {
+        "collections": {},
+        "inputs": {
+          "x": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "ok": true
+      },
+      "from": "input-resolvers.unit.test.ts: parseInputs > strips fields a computed value does not define",
+      "id": "inputs.parseinputs-strips-fields-a-computed-value-does-not-define.1",
+      "kind": "inputs",
+      "raw": {
+        "x": {
+          "comment": "ignored",
+          "kind": "number",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "issues": [
+          "inputs must be a JSON object of named values"
+        ],
+        "ok": false
+      },
+      "from": "input-resolvers.unit.test.ts: parseInputs > rejects null as the inputs themselves",
+      "id": "inputs.parseinputs-rejects-null-as-the-inputs-themselves.1",
+      "kind": "inputs",
+      "raw": null
+    },
+    {
+      "expect": {
+        "issues": [
+          "inputs must be a JSON object of named values"
+        ],
+        "ok": false
+      },
+      "from": "input-resolvers.unit.test.ts: parseInputs > rejects [] as the inputs themselves",
+      "id": "inputs.parseinputs-rejects-as-the-inputs-themselves.1",
+      "kind": "inputs",
+      "raw": []
+    },
+    {
+      "expect": {
+        "issues": [
+          "inputs must be a JSON object of named values"
+        ],
+        "ok": false
+      },
+      "from": "input-resolvers.unit.test.ts: parseInputs > rejects \"x\" as the inputs themselves",
+      "id": "inputs.parseinputs-rejects-x-as-the-inputs-themselves.1",
+      "kind": "inputs",
+      "raw": "x"
+    },
+    {
+      "expect": {
+        "issues": [
+          "inputs must be a JSON object of named values"
+        ],
+        "ok": false
+      },
+      "from": "input-resolvers.unit.test.ts: parseInputs > rejects 1 as the inputs themselves",
+      "id": "inputs.parseinputs-rejects-1-as-the-inputs-themselves.1",
+      "kind": "inputs",
+      "raw": 1
+    },
+    {
+      "expect": {
+        "collections": {
+          "empty": [],
+          "loads": [
+            {
+              "amount": {
+                "kind": "number",
+                "value": 1
+              },
+              "label": {
+                "kind": "text",
+                "value": "a"
+              }
+            },
+            {
+              "amount": {
+                "kind": "number",
+                "unit": {
+                  "A": 1
+                },
+                "value": 3
+              }
+            }
+          ]
+        },
+        "inputs": {
+          "scale": {
+            "kind": "number",
+            "value": 2
+          }
+        },
+        "ok": true
+      },
+      "from": "input-resolvers.unit.test.ts: parseInputs lists of items > reads an array as a list of items and keeps scalar entries as named values (the order of the names, which a JSON object does not keep, is asserted by the TypeScript test that remains)",
+      "id": "inputs.parseinputs-lists-of-items-reads-an-array-as-a-list-of-items-and-keeps-scalar-entries-as-named-values.1",
+      "kind": "inputs",
+      "raw": {
+        "empty": [],
+        "loads": [
+          {
+            "amount": 1,
+            "label": "a"
+          },
+          {
+            "amount": {
+              "kind": "number",
+              "unit": {
+                "A": 1
+              },
+              "value": 3
+            }
+          }
+        ],
+        "scale": 2
+      }
+    },
+    {
+      "expect": {
+        "issues": [
+          "inputs.loads[0]: expected an object of named values",
+          "inputs.loads[2].amount: expected a finite number, text, boolean or a complete computed value",
+          "inputs.loads[3].bad: expected a finite number, text, boolean or a complete computed value"
+        ],
+        "ok": false
+      },
+      "from": "input-resolvers.unit.test.ts: parseInputs lists of items > names every element that is not an object and every value in an element that is not a value",
+      "id": "inputs.parseinputs-lists-of-items-names-every-element-that-is-not-an-object-and-every-value-in-an-element-that-is-not-a-value.1",
+      "kind": "inputs",
+      "raw": {
+        "loads": [
+          "x",
+          {
+            "amount": 2
+          },
+          {
+            "amount": null
+          },
+          {
+            "bad": [
+              true
+            ],
+            "ok": true
+          }
+        ]
+      }
+    }
+  ]
+}

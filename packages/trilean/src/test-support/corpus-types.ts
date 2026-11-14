@@ -166,6 +166,23 @@ export interface BuildCase extends CaseBase {
   readonly expect: Json;
 }
 
+export interface InputsCase extends CaseBase {
+  readonly kind: "inputs";
+  readonly raw: Json;
+  readonly expect:
+    | { readonly ok: true; readonly inputs: Json; readonly collections: Json }
+    | { readonly ok: false; readonly issues: readonly string[] };
+}
+
+export interface DocumentCase extends CaseBase {
+  readonly kind: "document";
+  readonly tree: Json;
+  readonly as?: "predicate" | "expression";
+  readonly inputs?: Json;
+  readonly maxNodes?: Json;
+  readonly expect: Json;
+}
+
 /** What a built-in function reports instead of a value: the failure and the fragments its message contains. */
 export interface CallFailure {
   readonly domainError?: true;
@@ -191,11 +208,7 @@ export interface RegexParseCase extends CaseBase {
 
 /** A case of a kind this package has no executor for: a foreign kind, or one it does not run yet. */
 export interface OtherCase extends CaseBase {
-  readonly kind:
-    | Exclude<(typeof FOREIGN_KINDS)[number], "regex-parse">
-    | "inputs"
-    | "document"
-    | "cli";
+  readonly kind: Exclude<(typeof FOREIGN_KINDS)[number], "regex-parse"> | "cli";
 }
 
 export type CorpusCase =
@@ -203,6 +216,8 @@ export type CorpusCase =
   | EvaluateCase
   | CallCase
   | BuildCase
+  | InputsCase
+  | DocumentCase
   | RegexParseCase
   | OtherCase;
 
