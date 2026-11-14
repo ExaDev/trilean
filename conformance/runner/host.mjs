@@ -1,6 +1,6 @@
 // Node-side helpers of the three entry points: the corpus as a tree of files, the package unpacked from its tarball, and a bundle of the runner for a runtime that has no module resolution of its own.
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, readFileSync, readdirSync } from "node:fs";
+import { mkdtempSync, readFileSync, readdirSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -23,6 +23,7 @@ export function readTree(root = join(here, "..")) {
 // The package as a consumer installs it: the contents of its tarball under node_modules.
 export function install(tarball) {
   const dir = mkdtempSync(join(tmpdir(), "wasm-conformance-"));
+  process.once("exit", () => rmSync(dir, { recursive: true, force: true }));
   execFileSync("sh", ["-c", `mkdir -p "$1/node_modules/trilean-regex" && tar -xzf "$2" -C "$1/node_modules/trilean-regex" --strip-components=1`, "sh", dir, tarball]);
   return dir;
 }
