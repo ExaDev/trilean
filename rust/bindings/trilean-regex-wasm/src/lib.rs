@@ -6,7 +6,7 @@ use std::cell::RefCell;
 
 use js_sys::{Array, Function, JsString, Object, Reflect};
 use trilean_regex::{
-    CharClassNode, CompiledPattern, EcmaSubsetError, RegexNode, RegexParseError,
+    CharClassNode, CharRange, CompiledPattern, EcmaSubsetError, RegexNode, RegexParseError,
     ShorthandClassLetter, compile_ecmascript_subset_utf16, compile_pattern_utf16,
     expand_shorthand_class, parse_regex_utf16,
 };
@@ -264,42 +264,66 @@ fn property(object: &JsValue, key: &str) -> Result<JsValue, JsValue> {
     Reflect::get(object, &JsValue::from_str(key))
 }
 
-fn number_property(object: &JsValue, key: &str) -> Result<f64, JsValue> {
+/// The code unit a JavaScript number is, if it is one: a whole number from 0 to 65535.
+fn as_code_unit(value: f64) -> Option<u16> {
+    (value.fract() == 0.0 && (0.0..=f64::from(u16::MAX)).contains(&value)).then_some(value as u16)
+}
+
+fn code_unit_property(object: &JsValue, key: &str) -> Result<u16, JsValue> {
     property(object, key)?
         .as_f64()
-        .ok_or_else(|| js_sys::TypeError::new(&format!("\"{key}\" must be a number")).into())
+        .and_then(as_code_unit)
+        .ok_or_else(|| {
+            js_sys::TypeError::new(&format!(
+                "\"{key}\" must be a code unit, a whole number from 0 to 65535"
+            ))
+            .into()
+        })
 }
 
-/// Whether the code unit is in the inclusive range, over JavaScript numbers: a number that is no code unit is in no range a tree holds.
-fn range_holds(range: &JsValue, unit: f64) -> Result<bool, JsValue> {
-    Ok(unit >= number_property(range, "from")? && unit <= number_property(range, "to")?)
+fn range_from_js(range: &JsValue) -> Result<CharRange, JsValue> {
+    Ok(CharRange {
+        from: code_unit_property(range, "from")?,
+        to: code_unit_property(range, "to")?,
+    })
 }
 
-/// Whether `unit` falls inside an inclusive range.
+fn class_from_js(node: &JsValue) -> Result<CharClassNode, JsValue> {
+    let ranges = property(node, "ranges")?;
+    if !Array::is_array(&ranges) {
+        return Err(js_sys::TypeError::new("\"ranges\" must be an array").into());
+    }
+    Ok(CharClassNode {
+        negated: property(node, "negated")?.is_truthy(),
+        ranges: ranges
+            .unchecked_into::<Array>()
+            .iter()
+            .map(|range| range_from_js(&range))
+            .collect::<Result<_, _>>()?,
+    })
+}
+
+/// Whether `unit` falls inside an inclusive range. A number that is no code unit is in no range.
 #[wasm_bindgen(js_name = rangeContains)]
 pub fn range_contains(
     #[wasm_bindgen(unchecked_param_type = "CharRange")] range: &JsValue,
     unit: f64,
 ) -> Result<bool, JsValue> {
-    range_holds(range, unit)
+    let range = range_from_js(range)?;
+    Ok(as_code_unit(unit).is_some_and(|unit| trilean_regex::range_contains(&range, unit)))
 }
 
-/// Whether `unit` is a member of a character class, honouring `negated`.
+/// Whether `unit` is a member of a character class, honouring `negated`. A number that is no code unit is in no range, so a negated class holds it.
 #[wasm_bindgen(js_name = charClassMatches)]
 pub fn char_class_matches(
     #[wasm_bindgen(unchecked_param_type = "CharClassNode")] node: &JsValue,
     unit: f64,
 ) -> Result<bool, JsValue> {
-    let negated = property(node, "negated")?.is_truthy();
-    let ranges = property(node, "ranges")?;
-    if !Array::is_array(&ranges) {
-        return Err(js_sys::TypeError::new("\"ranges\" must be an array").into());
-    }
-    let mut in_ranges = false;
-    for range in ranges.unchecked_into::<Array>().iter() {
-        in_ranges = in_ranges || range_holds(&range, unit)?;
-    }
-    Ok(in_ranges != negated)
+    let class = class_from_js(node)?;
+    Ok(match as_code_unit(unit) {
+        Some(unit) => trilean_regex::char_class_matches(&class, unit),
+        None => class.negated,
+    })
 }
 
 /// Expands a shorthand class letter to the class it stands for.
