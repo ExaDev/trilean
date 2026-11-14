@@ -38,6 +38,14 @@ runs:
           turbo-${{ inputs.task }}-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-
           turbo-${{ inputs.task }}-${{ runner.os }}-
 
+    # A pull request runs only the packages it touches (--affected, from the workflow's TURBO_FLAGS), except when it changes the Rust workspace or the conformance corpus, which belong to no package: scripts/turbo-scope.sh decides, from the diff against the pull request's base commit, and fails when that commit is missing from the checkout. Every job that honours TURBO_FLAGS runs this action, so the decision is made in one place.
+    - name: Choose how much of the workspace to run
+      if: github.event_name == 'pull_request'
+      shell: bash
+      env:
+        BASE_SHA: ${{ github.event.pull_request.base.sha }}
+      run: echo "TURBO_FLAGS=$(sh scripts/turbo-scope.sh "$BASE_SHA")" >> "$GITHUB_ENV"
+
     - name: Run ${{ inputs.task }}
       run: ${{ inputs.command }}
       shell: bash
