@@ -2,11 +2,11 @@
   "files": {
     "pkg/area/a.json": {
       "cases": 1,
-      "only": []
+      "skip": []
     },
     "pkg/area/b.json": {
       "cases": 1,
-      "only": []
+      "skip": []
     }
   }
 }

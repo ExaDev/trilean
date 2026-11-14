@@ -4,7 +4,7 @@ import Ajv2020 from "ajv/dist/2020.js";
 import type { CorpusFile, Manifest } from "./corpus-types";
 
 /**
- * Validates corpus files and the manifest against the schemas in `conformance/`, which is the whole definition of the format. The checks beside the schema are the rules JSON Schema cannot express and `conformance/README.md` lists: a range's `from` is not above its `to`, a repeat's `min` is not above its `max`, a case id is not repeated within a file, a manifest's `only` lists are in ascending order, and no JSON string holds an unpaired surrogate (content that needs one is written as `{ "codeUnits": [...] }`). Nothing else is validated by hand.
+ * Validates corpus files and the manifest against the schemas in `conformance/`, which is the whole definition of the format. The checks beside the schema are the rules JSON Schema cannot express and `conformance/README.md` lists: a range's `from` is not above its `to`, a repeat's `min` is not above its `max`, a case id is not repeated within a file, a manifest's `skip` lists are in ascending order, and no JSON string holds an unpaired surrogate (content that needs one is written as `{ "codeUnits": [...] }`). Nothing else is validated by hand.
  */
 
 export type Validation<T> =
@@ -157,9 +157,9 @@ export function validateManifest(value: unknown): Validation<Manifest> {
     return { ok: false, problems: describeErrors(checkManifest.errors) };
   }
   const problems = Object.entries(value.files).flatMap(([name, entry]) =>
-    isAscending(entry.only)
+    isAscending(entry.skip)
       ? []
-      : [`${name}: "only" must list distinct ids in ascending order`],
+      : [`${name}: "skip" must list distinct ids in ascending order`],
   );
 
   return problems.length === 0 ? { ok: true, value } : { ok: false, problems };

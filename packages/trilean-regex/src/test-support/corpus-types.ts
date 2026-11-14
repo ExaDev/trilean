@@ -22,8 +22,8 @@ export type UnexecutedKind = (typeof UNEXECUTED_KINDS)[number];
 /** The kinds this package executes. */
 export const EXECUTED_KINDS = ["regex-parse", "regex-match"] as const;
 
-/** The values of `only`: the implementation that skips a case, never the host it runs on. */
-export const ONLY_VALUES = ["ts", "rust"] as const;
+/** The values of `skip`: the implementation that skips a case, never the host it runs on. */
+export const SKIP_VALUES = ["ts", "rust"] as const;
 
 /** A string as UTF-16 code units: a JSON string, or the code units themselves for content a JSON string cannot carry. */
 export type Text = string | { readonly codeUnits: readonly number[] };
@@ -31,7 +31,7 @@ export type Text = string | { readonly codeUnits: readonly number[] };
 interface CaseBase {
   readonly id: string;
   readonly from: string;
-  readonly only?: (typeof ONLY_VALUES)[number];
+  readonly skip?: (typeof SKIP_VALUES)[number];
   readonly reason?: string;
   readonly tolerance?: { readonly ulps: number };
 }
@@ -73,6 +73,6 @@ export interface CorpusFile {
 
 export interface Manifest {
   readonly files: Readonly<
-    Record<string, { readonly cases: number; readonly only: readonly string[] }>
+    Record<string, { readonly cases: number; readonly skip: readonly string[] }>
   >;
 }

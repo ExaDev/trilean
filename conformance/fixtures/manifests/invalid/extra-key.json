@@ -3,7 +3,7 @@
     "pkg/area/a.json": {
       "cases": 1,
       "note": "x",
-      "only": []
+      "skip": []
     }
   }
 }
