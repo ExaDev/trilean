@@ -12,12 +12,36 @@ pub struct Written {
     pub entry_points: BTreeSet<String>,
 }
 
-/// The `#init` module for Node, Bun and Deno, which read the module from disk and compile it synchronously, so the exports are usable the moment the package is imported.
+/// The `#init` module for Node, Bun and Deno. The module's bytes are in the package as a generated base64 string (see `inline_module`), decoded once with `atob`, which Node, Bun and Deno all have, and compiled synchronously, so importing the package reads no file and waits for nothing, and a bundle of it for a server is a single file that needs nothing beside it.
 fn init_node(package: &Package) -> String {
     format!(
-        "import {{ readFileSync }} from \"node:fs\";\nimport {{ initSync }} from \"./{glue}.js\";\n\ninitSync({{ module: readFileSync(new URL(\"./{glue}_bg.wasm\", import.meta.url)) }});\n",
+        "import {{ initSync }} from \"./{glue}.js\";\nimport {{ base64 }} from \"./{glue}_inline.js\";\n\ninitSync({{ module: Uint8Array.from(atob(base64), (character) => character.charCodeAt(0)) }});\n",
         glue = package.glue
     )
+}
+
+/// The module's bytes as the base64 text of an ES module, which only `init.node.js` imports.
+fn inline_module(wasm: &[u8]) -> String {
+    format!("export const base64 = \"{}\";\n", base64(wasm))
+}
+
+/// Standard base64 with padding, which `atob` reads.
+fn base64(bytes: &[u8]) -> String {
+    const ALPHABET: &[u8; 64] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    let mut text = String::with_capacity(bytes.len().div_ceil(3) * 4);
+    for chunk in bytes.chunks(3) {
+        let group = chunk.iter().enumerate().fold(0u32, |group, (at, byte)| {
+            group | u32::from(*byte) << (16 - 8 * at)
+        });
+        for at in 0..4 {
+            if at <= chunk.len() {
+                text.push(char::from(ALPHABET[(group >> (18 - 6 * at) & 63) as usize]));
+            } else {
+                text.push('=');
+            }
+        }
+    }
+    text
 }
 
 /// The `#init` module for Cloudflare Workers, which imports a `.wasm` file as an already compiled module.
@@ -141,11 +165,15 @@ pub fn write_support_files(package: &Package, dist: &Path) -> Result<Written, St
     let glue_declarations = read(format!("{}.d.ts", package.glue))?;
     let consumer = consumer_declarations(&glue_declarations);
     let errors = exported(package.errors_js, &["class"]);
+    let wasm = fs::read(dist.join(format!("{}_bg.wasm", package.glue)))
+        .map_err(|error| format!("{}_bg.wasm: {error}", package.glue))?;
+    let inline_name = format!("{}_inline.js", package.glue);
     let glue_declarations_name = format!("{}.d.ts", package.glue);
     let files = [
         ("errors.js", package.errors_js.to_owned()),
         ("errors.d.ts", package.errors_declarations.to_owned()),
         ("init.node.js", init_node(package)),
+        (inline_name.as_str(), inline_module(&wasm)),
         ("init.workerd.js", init_workerd(package)),
         ("init.browser.js", init_browser(package)),
         (glue_declarations_name.as_str(), consumer),
@@ -213,6 +241,27 @@ mod tests {
     }
 
     #[test]
+    fn base64_is_the_standard_padded_encoding() {
+        for (bytes, text) in [
+            (&b""[..], ""),
+            (b"f", "Zg=="),
+            (b"fo", "Zm8="),
+            (b"foo", "Zm9v"),
+            (b"foob", "Zm9vYg=="),
+            (b"fooba", "Zm9vYmE="),
+            (b"foobar", "Zm9vYmFy"),
+            (&[0xFB, 0xFF, 0x00], "+/8A"),
+        ] {
+            assert_eq!(base64(bytes), text);
+        }
+    }
+
+    #[test]
+    fn the_inline_module_holds_only_the_text() {
+        assert_eq!(inline_module(b"foo"), "export const base64 = \"Zm9v\";\n");
+    }
+
+    #[test]
     fn a_class_is_freed_once_however_many_times_free_is_called() {
         let package = Package::named("trilean-regex").expect("package");
         let index = index_js(package, GLUE, &[]);
@@ -261,7 +310,10 @@ mod tests {
     #[test]
     fn each_init_module_loads_the_module_its_runtime_way() {
         let package = Package::named("trilean-regex").expect("package");
-        assert!(init_node(package).contains("readFileSync"));
+        let node = init_node(package);
+        assert!(node.contains("Uint8Array.from(atob(base64)"));
+        assert!(!node.contains("node:"));
+        assert!(!node.contains("readFileSync") && !node.contains("import.meta"));
         assert!(init_workerd(package).contains("import wasm from \"./trilean_regex_bg.wasm\""));
         assert!(init_browser(package).contains("await init("));
     }
