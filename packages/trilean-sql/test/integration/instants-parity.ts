@@ -25,8 +25,18 @@ export interface MomentRow {
   readonly at: string | null;
 }
 
+/** A stored value outside the grammar the compiler reads, for SQLite: whatever it holds, every comparison over it is unknown, so no predicate or its negation selects it. */
+export interface RejectedRow {
+  readonly id: string;
+  readonly at: string | number | Buffer;
+}
+
 /** The stored forms. Several denote the same instant (`utc`, `utc-ms`, `utc-us`, `utc-zero-offset`, `east-two-hours`), and several fall on the other side of a day boundary from the way they read. */
 export const MOMENTS: readonly MomentRow[] = [
+  { id: "utc-space", at: "2020-01-01 00:00:00Z" },
+  { id: "east-fourteen", at: "2020-01-01T14:00:00+14:00" },
+  { id: "leap-day", at: "2000-02-29T12:00:00Z" },
+  { id: "far-future", at: "9998-12-31T23:59:59.999Z" },
   { id: "utc", at: "2020-01-01T00:00:00Z" },
   { id: "utc-ms", at: "2020-01-01T00:00:00.000Z" },
   { id: "utc-us", at: "2020-01-01T00:00:00.000000Z" },
@@ -43,6 +53,9 @@ export const MOMENTS: readonly MomentRow[] = [
 
 /** The parameters, written in every form the stored values use. `2020-01-01T00:00:00Z` is the instant several rows denote. */
 export const PARAMETERS: readonly string[] = [
+  "2020-01-01 00:00:00Z",
+  "2020-01-01T14:00:00+14:00",
+  "2000-02-29T12:00:00Z",
   "2020-01-01T00:00:00Z",
   "2020-01-01T01:00:00+02:00",
   "2020-01-01T00:00:00.000Z",
@@ -121,12 +134,14 @@ export const MARKS: readonly {
 const column = { kind: "reference", key: "at" } as const;
 
 /** Every comparison of the column with every parameter, the column on the left. */
-export function comparisons(): readonly {
+export function comparisons(
+  parameters: readonly string[] = PARAMETERS,
+): readonly {
   readonly label: string;
   readonly tree: PredicateNode;
 }[] {
   return OPERATORS.flatMap((op) =>
-    PARAMETERS.map((value) => ({
+    parameters.map((value) => ({
       label: `at ${op} ${value}`,
       tree: {
         kind: "compare",
@@ -232,9 +247,12 @@ function instantResolution(value: string | null): Resolution {
 }
 
 /** The ids of the moments the evaluator selects, one evaluation per moment. */
-export async function evaluatorRows(tree: PredicateNode): Promise<string[]> {
+export async function evaluatorRows(
+  tree: PredicateNode,
+  moments: readonly MomentRow[] = MOMENTS,
+): Promise<string[]> {
   const evaluations = await Promise.all(
-    MOMENTS.map(async (moment) => {
+    moments.map(async (moment) => {
       const marks = MARKS.filter((mark) => mark.momentId === moment.id);
       const resolvers: Resolvers = {
         resolveValue: async (key: JsonValue, context: unknown) => {
@@ -280,3 +298,71 @@ export async function evaluatorRows(tree: PredicateNode): Promise<string[]> {
     .map(({ id }) => id)
     .sort();
 }
+
+/**
+ * The stored values SQLite's date functions would read as dates, or as other things, and the evaluator rejects or the grammar does not include. Each is unknown for every comparison. `now` reads as the present time, a time of day as a day in the year 2000, a number as a Julian day, and so on.
+ */
+export const REJECTED: readonly RejectedRow[] = [
+  { id: "r-now", at: "now" },
+  { id: "r-now-upper", at: "NOW" },
+  { id: "r-time-only", at: "10:00" },
+  { id: "r-time-seconds", at: "10:00:00" },
+  { id: "r-date-only", at: "2020-01-01" },
+  { id: "r-trailing-space", at: "2020-01-01T00:00:00Z " },
+  { id: "r-space-before-zone", at: "2020-01-01T00:00:00 Z" },
+  { id: "r-leading-space", at: " 2020-01-01T00:00:00Z" },
+  { id: "r-julian-text", at: "2459000.5" },
+  { id: "r-julian-number", at: 2459000.5 },
+  { id: "r-zero-text", at: "0" },
+  { id: "r-unix-seconds", at: 1577836800 },
+  { id: "r-unix-milliseconds", at: 1577836800000 },
+  { id: "r-lower-t", at: "2020-01-01t00:00:00Z" },
+  { id: "r-lower-z", at: "2020-01-01T00:00:00z" },
+  { id: "r-no-offset", at: "2020-01-01T00:00:00" },
+  { id: "r-offset-no-colon", at: "2020-01-01T00:00:00+0200" },
+  { id: "r-utc-string", at: "Wed, 01 Jan 2020 00:00:00 GMT" },
+  { id: "r-expanded-year", at: "+002020-01-01T00:00:00Z" },
+  { id: "r-negative-year", at: "-0001-01-01T00:00:00Z" },
+  { id: "r-month-13", at: "2020-13-01T00:00:00Z" },
+  { id: "r-month-0", at: "2020-00-10T00:00:00Z" },
+  { id: "r-day-0", at: "2020-01-00T00:00:00Z" },
+  { id: "r-feb-30", at: "2020-02-30T00:00:00Z" },
+  { id: "r-apr-31", at: "2020-04-31T00:00:00Z" },
+  { id: "r-feb-29-common-year", at: "1900-02-29T00:00:00Z" },
+  { id: "r-hour-24", at: "2020-01-01T24:00:00Z" },
+  { id: "r-hour-24-minutes", at: "2020-01-01T24:30:00Z" },
+  { id: "r-hour-25", at: "2020-01-01T25:00:00Z" },
+  { id: "r-minute-60", at: "2020-01-01T00:60:00Z" },
+  { id: "r-second-60", at: "2020-01-01T23:59:60Z" },
+  { id: "r-offset-hour-24", at: "2020-01-01T00:00:00+24:00" },
+  { id: "r-offset-minute-60", at: "2020-01-01T00:00:00+02:60" },
+  { id: "r-empty-fraction", at: "2020-01-01T00:00:00.Z" },
+  { id: "r-fraction-letter", at: "2020-01-01T00:00:00.5aZ" },
+  { id: "r-fraction-zone-inside", at: "2020-01-01T00:00:00.5-05:00Z" },
+  { id: "r-fraction-then-offset-text", at: "2020-01-01T00:00:00.5x+02:00" },
+  { id: "r-nul-after", at: "2020-01-01T00:00:00Z\u0000" },
+  { id: "r-blob-of-the-text", at: Buffer.from("2020-01-01T00:00:00Z") },
+  { id: "r-garbage", at: "garbage" },
+  { id: "r-empty", at: "" },
+];
+
+/** The rows of the grammar's edges whose fraction has more than three digits, or whose year PostgreSQL does not read, so only the evaluator and SQLite are compared on them. */
+export const SQLITE_ONLY: readonly MomentRow[] = [
+  { id: "x-year-0", at: "0000-01-01T00:00:00Z" },
+  { id: "x-year-0-leap", at: "0000-02-29T00:00:00Z" },
+  { id: "x-year-9999", at: "9999-12-31T23:59:59.999Z" },
+  { id: "x-offset-max", at: "2020-01-01T00:00:00+23:59" },
+  { id: "x-offset-min", at: "2020-01-01T00:00:00-23:59" },
+  { id: "x-truncated", at: "2019-12-31T23:59:59.9996Z" },
+  { id: "x-truncated-offset", at: "2020-01-01T01:59:59.9996+02:00" },
+  { id: "x-long-fraction", at: "2020-01-01T00:00:00.123456789Z" },
+];
+
+/** Parameters only SQLite and the evaluator read in the same way. */
+export const SQLITE_ONLY_PARAMETERS: readonly string[] = [
+  "2020-01-01T00:00:00+23:59",
+  "0000-01-01T00:00:00Z",
+  "9999-12-31T23:59:59.999Z",
+  "2019-12-31T23:59:59.9996Z",
+  "2020-01-01T00:00:00.123456789Z",
+];

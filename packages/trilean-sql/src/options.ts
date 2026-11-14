@@ -1,4 +1,5 @@
 import { UnknownDialectError } from "./errors";
+import { sqliteInstantColumn, sqliteInstantParameter } from "./sqlite-instant";
 
 /** The declared SQL value kind of a mapped column. `"timestamp"` names trilean's `instant` kind, whose values are ISO-8601 strings. */
 export type SqlParamType = "text" | "number" | "boolean" | "timestamp";
@@ -96,7 +97,7 @@ export interface DialectConfig {
    */
   instantColumn: (columnSql: string) => string;
   /**
-   * The bind value of an `instantLiteral`, for a comparison the dialect makes with {@link DialectConfig.instantColumn}. PostgreSQL parses the text itself and casts it. SQLite compares milliseconds since the epoch, which this reads from the text exactly as the evaluator does (`Date.parse`), so the parameter is the number the evaluator compares; a text the evaluator cannot read as an instant is `null`, which makes the comparison unknown, as the evaluator's `wrong-type` is.
+   * The bind value of an `instantLiteral`, for a comparison the dialect makes with {@link DialectConfig.instantColumn}. PostgreSQL parses the text itself and casts it. SQLite compares milliseconds since the epoch, read from a text in the one grammar of `sqlite-instant.ts`; a text outside the grammar of `sqlite-instant.ts` is `null`, which makes the comparison unknown.
    */
   instantParameter: (iso: string) => unknown;
 }
@@ -127,14 +128,9 @@ export const DIALECT_CONFIG: Readonly<Record<SqlDialect, DialectConfig>> = {
     placeholder: () => "?",
     // SQLite has no boolean type to annotate: `NULL` alone already carries the three-valued behaviour the empty-`memberOf` forms depend on.
     emptyMemberOfNullSuffix: "",
-    // `strftime('%s')` is the whole seconds and `strftime('%f')` is `SS.SSS`, both read from the same millisecond count SQLite parses the text to, with any offset applied; the three characters after the point are the milliseconds. A text SQLite cannot read gives NULL throughout, so the value is unknown, which is what the evaluator answers for a stored value it cannot read.
-    instantColumn: (columnSql) =>
-      `(CAST(strftime('%s', ${columnSql}) AS INTEGER) * 1000 + CAST(substr(strftime('%f', ${columnSql}), 4, 3) AS INTEGER))`,
-    instantParameter: (iso) => {
-      const milliseconds = Date.parse(iso);
-
-      return Number.isNaN(milliseconds) ? null : milliseconds;
-    },
+    // A stored value is read as an instant only if it is text in the one grammar `sqlite-instant.ts` states, and is NULL (unknown) otherwise, so no text SQLite's date functions would read as a date can make the result depend on the clock or on a Julian day. The parameter is read by the same grammar when the tree is compiled.
+    instantColumn: sqliteInstantColumn,
+    instantParameter: sqliteInstantParameter,
   },
 };
 

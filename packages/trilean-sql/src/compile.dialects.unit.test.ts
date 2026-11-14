@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { compilePredicateNode } from "./compile";
 import { UnknownDialectError, UnsupportedNodeError } from "./errors";
 import { findUnpushableNodeKind } from "./guard";
+import { sqliteInstantColumn, sqliteInstantParameter } from "./sqlite-instant";
 import type { SqlCompileOptions, SqlDialect } from "./options";
 import {
   sqliteSubjectOptions,
@@ -62,10 +63,7 @@ describe("the sqlite dialect", () => {
     ).toEqual({ sql: "(? < ?)", params: [1, 2] });
   });
 
-  const INSTANT_AT = (column: string): string =>
-    `(CAST(strftime('%s', ${column}) AS INTEGER) * 1000 + CAST(substr(strftime('%f', ${column}), 4, 3) AS INTEGER))`;
-
-  it("compares an instant as milliseconds since the epoch, the parameter being the number the evaluator reads from the text", () => {
+  it("compares an instant as milliseconds since the epoch, the parameter being the number read from the text", () => {
     expect(
       compileSqlite({
         kind: "compare",
@@ -74,7 +72,7 @@ describe("the sqlite dialect", () => {
         right: { kind: "instantLiteral", value: "2020-01-01T00:00:00+02:00" },
       }),
     ).toEqual({
-      sql: `(${INSTANT_AT('"joined"')} >= ?)`,
+      sql: `(${sqliteInstantColumn('"joined"')} >= ?)`,
       params: [Date.parse("2020-01-01T00:00:00+02:00")],
     });
   });
@@ -85,6 +83,7 @@ describe("the sqlite dialect", () => {
       "2020-01-01T00:00:00.000Z",
       "2020-01-01T02:00:00+02:00",
       "2019-12-31T19:00:00-05:00",
+      "2020-01-01 00:00:00Z",
     ];
     const parameters = forms.map(
       (value) =>
@@ -98,15 +97,41 @@ describe("the sqlite dialect", () => {
     expect(parameters).toEqual(forms.map(() => [Date.parse(forms[0] ?? "")]));
   });
 
-  it("binds a text the evaluator cannot read as an instant as NULL, so the comparison is unknown", () => {
-    expect(
-      compileSqlite({
-        kind: "compare",
-        op: "lt",
-        left: { kind: "reference", key: "joined" },
-        right: { kind: "instantLiteral", value: "not a time" },
-      }).params,
-    ).toEqual([null]);
+  it.each([
+    "not a time",
+    "now",
+    "10:00",
+    "2020-01-01",
+    "2020-01-01T00:00:00",
+    "2020-01-01T00:00:00+0200",
+    "2020-01-01t00:00:00Z",
+    "Wed, 01 Jan 2020 00:00:00 GMT",
+    "2020-02-30T00:00:00Z",
+    "2020-01-01T24:00:00Z",
+    "2020-01-01T23:59:60Z",
+    "2020-01-01T00:00:00+24:00",
+    "2020-01-01T00:00:00Z ",
+  ])(
+    "binds %j, outside the one grammar, as NULL, so the comparison is unknown",
+    (value) => {
+      expect(
+        compileSqlite({
+          kind: "compare",
+          op: "lt",
+          left: { kind: "reference", key: "joined" },
+          right: { kind: "instantLiteral", value },
+        }).params,
+      ).toEqual([null]);
+    },
+  );
+
+  it("truncates a fraction to the millisecond, as the evaluator does", () => {
+    expect(sqliteInstantParameter("2020-01-01T00:00:00.9996Z")).toBe(
+      Date.parse("2020-01-01T00:00:00.999Z"),
+    );
+    expect(sqliteInstantParameter("2020-01-01T00:00:00.5Z")).toBe(
+      Date.parse("2020-01-01T00:00:00.500Z"),
+    );
   });
 
   it("compares as instants when the literal is on the left, and against a column with no declared kind", () => {
@@ -118,7 +143,7 @@ describe("the sqlite dialect", () => {
         right: { kind: "reference", key: "note" },
       }),
     ).toEqual({
-      sql: `(? < ${INSTANT_AT('"note"')})`,
+      sql: `(? < ${sqliteInstantColumn('"note"')})`,
       params: [Date.parse("2020-01-01T00:00:00Z")],
     });
   });
@@ -135,7 +160,7 @@ describe("the sqlite dialect", () => {
         ],
       }),
     ).toEqual({
-      sql: `(${INSTANT_AT('"joined"')} IN (?, ?))`,
+      sql: `(${sqliteInstantColumn('"joined"')} IN (?, ?))`,
       params: [
         Date.parse("2020-01-01T00:00:00Z"),
         Date.parse("2021-01-01T00:00:00+01:00"),
