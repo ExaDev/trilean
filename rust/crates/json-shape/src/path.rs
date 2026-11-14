@@ -14,15 +14,20 @@ pub enum PathSegment {
 /// The steps from the root of a document to a value inside it. It also carries what a conversion of one document
 /// remembers between its nodes (which alternative of a union accepted which value), so that choosing among
 /// alternatives costs each value once.
-#[derive(Clone, Debug, Default, PartialEq, Eq)]
+/// Only this crate makes one (`Shape::from_json` makes a fresh one for each document), so what it remembers cannot
+/// outlive the document it was made on.
+#[derive(Debug)]
 pub struct Path {
     segments: Vec<PathSegment>,
     pub(crate) memo: HashMap<(usize, usize), bool>,
 }
 
 impl Path {
-    pub fn new() -> Self {
-        Self::default()
+    pub(crate) fn new() -> Self {
+        Path {
+            segments: Vec::new(),
+            memo: HashMap::new(),
+        }
     }
 
     pub fn push_key(&mut self, key: &str) {

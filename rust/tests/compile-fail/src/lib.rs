@@ -64,6 +64,14 @@ mod externally_tagged_enum;
 #[path = "../cases/generic_type.rs"]
 mod generic_type;
 
+#[cfg(compile_fail = "path_made_by_a_caller")]
+#[path = "../cases/path_made_by_a_caller.rs"]
+mod path_made_by_a_caller;
+
+#[cfg(compile_fail = "path_defaulted_by_a_caller")]
+#[path = "../cases/path_defaulted_by_a_caller.rs"]
+mod path_defaulted_by_a_caller;
+
 #[cfg(compile_fail = "exclusive_min_on_string")]
 #[path = "../cases/exclusive_min_on_string.rs"]
 mod exclusive_min_on_string;
