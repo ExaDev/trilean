@@ -2,7 +2,7 @@ import { expect } from "vitest";
 import type { CliIo } from "../../cli/run";
 import { run } from "../../cli/run";
 import type { CliCase } from "./corpus-types";
-import { jsonEquals } from "./json-equal";
+import { jsonEquals, subsetMatches } from "./json-equal";
 import { includesInOrder } from "./run-evaluate";
 
 /** Runs the command over the case's in-memory files and standard input and compares the exit status and what it printed. */
@@ -39,9 +39,21 @@ export function runCliCase(testCase: CliCase): void {
   if (wanted.stdoutJson !== undefined) {
     const printed: unknown = JSON.parse(out);
     expect(
-      jsonEquals(printed, wanted.stdoutJson, testCase.tolerance?.ulps ?? 0),
+      jsonEquals(printed, wanted.stdoutJson, testCase.tolerance),
       label,
     ).toBe(true);
+  }
+  if (wanted.stdoutJsonSubset !== undefined) {
+    const printed: unknown = JSON.parse(out);
+    expect(
+      subsetMatches(printed, wanted.stdoutJsonSubset, testCase.tolerance),
+      label,
+    ).toBe(true);
+  }
+  for (const fragment of wanted.stdoutExcludes ?? []) {
+    expect(out.includes(fragment), `${label}: stdout holds ${fragment}`).toBe(
+      false,
+    );
   }
   if (wanted.stderrIncludes !== undefined) {
     expect(includesInOrder(err, wanted.stderrIncludes), label).toBe(true);

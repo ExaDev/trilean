@@ -88,9 +88,7 @@
         "x": {
           "$number": "Infinity"
         }
-      },
-      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
-      "skip": "rust"
+      }
     },
     {
       "expect": {
@@ -106,9 +104,7 @@
         "x": {
           "$number": "NaN"
         }
-      },
-      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
-      "skip": "rust"
+      }
     },
     {
       "expect": {
@@ -127,9 +123,7 @@
             "$number": "-Infinity"
           }
         }
-      },
-      "reason": "A non-finite number cannot be written in JSON, so the case writes it as { \"$number\": ... }, which only the JavaScript runner reads; a native implementation takes its values from JSON and cannot be given one.",
-      "skip": "rust"
+      }
     },
     {
       "expect": {

@@ -3,6 +3,8 @@ import { join } from "node:path";
 
 /**
  * Which files under the corpus root are corpus files, by the one rule `conformance/README.md` states. Every loader of the corpus (this one, the native crates' and the wasm runner's) implements the same rule, and each runs it over the fixture tree in `conformance/fixtures/loader-selection` so the three cannot disagree.
+ *
+ * This file is a copy of `packages/trilean-regex/src/test-support/corpus-files.ts`, kept as a copy because both are deleted with the TypeScript they test; a change here is made in that file too.
  */
 
 /** Directories that hold data cases refer to or the runners themselves, never cases, wherever they appear. */

@@ -53,7 +53,7 @@ export function runValidateCase(testCase: ValidateCase): void {
   if (result.success && wanted.ok) {
     if (wanted.value !== undefined) {
       expect(
-        jsonEquals(result.data, wanted.value, testCase.tolerance?.ulps),
+        jsonEquals(result.data, wanted.value, testCase.tolerance),
         `parsed ${JSON.stringify(result.data)}`,
       ).toBe(true);
     }

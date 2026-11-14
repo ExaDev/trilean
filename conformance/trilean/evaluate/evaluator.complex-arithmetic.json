@@ -520,7 +520,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: arithmetic on complex values > divide at extreme magnitudes > divides whichever component of the divisor is larger (the original compared both components to twelve decimal places; the case gives them as literals within a few units in the last place)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: arithmetic on complex values > divide at extreme magnitudes > divides whichever component of the divisor is larger",
       "id": "complex-arithmetic.arithmetic-on-complex-values-divide-at-extreme-magnitudes-divides-whichever-component-of-the-divisor-is-larger.1",
       "kind": "evaluate",
       "resolvers": {
@@ -544,7 +544,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 16
+        "absolute": 5e-13
       },
       "tree": {
         "kind": "arithmetic",
@@ -621,7 +621,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: arithmetic on complex values > divide at extreme magnitudes > gives a representable quotient there, not a zero that compares equal to zero (the original compared both components to fourteen decimal places; the case gives them as literals within a few units in the last place)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: arithmetic on complex values > divide at extreme magnitudes > gives a representable quotient there, not a zero that compares equal to zero",
       "id": "complex-arithmetic.arithmetic-on-complex-values-divide-at-extreme-magnitudes-gives-a-representable-quotient-there-not-a-zero-that-compares-equal-to-ze.1",
       "kind": "evaluate",
       "resolvers": {
@@ -645,7 +645,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 64
+        "absolute": 5e-15
       },
       "tree": {
         "kind": "arithmetic",
@@ -659,57 +659,6 @@
           "im": 1.7287855058139144e+308,
           "kind": "complexLiteral",
           "re": -4.145533667044553e+307
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": {
-            "$number": "-0"
-          },
-          "kind": "complex",
-          "re": -3e-323,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: arithmetic on complex values > divide at extreme magnitudes > does not report a subnormal quotient as equal to zero (the original asserted only that the real part is not zero; recorded: trilean src/complex-division.ts, the quotient)",
-      "id": "complex-arithmetic.arithmetic-on-complex-values-divide-at-extreme-magnitudes-does-not-report-a-subnormal-quotient-as-equal-to-zero.1",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": -8.343164103148207e-219,
-          "kind": "complexLiteral",
-          "re": -7.124494562846174e-209
-        },
-        "op": "divide",
-        "right": {
-          "im": -1.8086225038951245e+105,
-          "kind": "complexLiteral",
-          "re": 2.50063496577604e+114
         }
       }
     },
@@ -1468,7 +1417,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:1,im:1} to the power 0 (the original compared with a repeated product to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:1,im:1} to the power 0",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-matches-the-repeated-product-for-re-1-im-1-to-the-power-0.1",
       "kind": "evaluate",
       "resolvers": {
@@ -1492,7 +1441,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 5e-10
       },
       "tree": {
         "kind": "arithmetic",
@@ -1513,13 +1462,15 @@
       "expect": {
         "status": "definite",
         "value": {
-          "im": 0,
+          "im": {
+            "$number": "-0"
+          },
           "kind": "complex",
           "re": 1,
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:1,im:1} to the power -0 (the original checked that the product with the positive power is one to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:1,im:1} to the power -0 (the original checked that the product with the positive power is one to nine decimal places; the case gives the reciprocal of that product with the bound scaled by its size)",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-inverts-the-positive-power-for-re-1-im-1-to-the-power-0.1",
       "kind": "evaluate",
       "resolvers": {
@@ -1543,7 +1494,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 5e-10
       },
       "tree": {
         "kind": "arithmetic",
@@ -1572,7 +1523,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:1,im:1} to the power 1 (the original compared with a repeated product to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:1,im:1} to the power 1",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-matches-the-repeated-product-for-re-1-im-1-to-the-power-1.1",
       "kind": "evaluate",
       "resolvers": {
@@ -1596,7 +1547,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 5e-10
       },
       "tree": {
         "kind": "arithmetic",
@@ -1623,7 +1574,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:1,im:1} to the power -1 (the original checked that the product with the positive power is one to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:1,im:1} to the power -1 (the original checked that the product with the positive power is one to nine decimal places; the case gives the reciprocal of that product with the bound scaled by its size)",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-inverts-the-positive-power-for-re-1-im-1-to-the-power-1.1",
       "kind": "evaluate",
       "resolvers": {
@@ -1647,7 +1598,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 3.535533905932738e-10
       },
       "tree": {
         "kind": "arithmetic",
@@ -1660,117 +1611,6 @@
         "right": {
           "kind": "numberLiteral",
           "value": -1
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": -0.5,
-          "kind": "complex",
-          "re": 0.5,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:1,im:1} to the power -1",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.1",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": 1,
-          "kind": "complexLiteral",
-          "re": 1
-        },
-        "op": "power",
-        "right": {
-          "kind": "numberLiteral",
-          "value": -1
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": -0.5,
-          "kind": "complex",
-          "re": 0.5,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:1,im:1} to the power -1",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.2",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": 0,
-          "kind": "complexLiteral",
-          "re": 1
-        },
-        "op": "divide",
-        "right": {
-          "kind": "arithmetic",
-          "left": {
-            "im": 1,
-            "kind": "complexLiteral",
-            "re": 1
-          },
-          "op": "power",
-          "right": {
-            "kind": "numberLiteral",
-            "value": 1
-          }
         }
       }
     },
@@ -1785,7 +1625,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:1,im:1} to the power 2 (the original compared with a repeated product to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:1,im:1} to the power 2",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-matches-the-repeated-product-for-re-1-im-1-to-the-power-2.1",
       "kind": "evaluate",
       "resolvers": {
@@ -1809,7 +1649,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 5e-10
       },
       "tree": {
         "kind": "arithmetic",
@@ -1836,7 +1676,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:1,im:1} to the power -2 (the original checked that the product with the positive power is one to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:1,im:1} to the power -2 (the original checked that the product with the positive power is one to nine decimal places; the case gives the reciprocal of that product with the bound scaled by its size)",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-inverts-the-positive-power-for-re-1-im-1-to-the-power-2.1",
       "kind": "evaluate",
       "resolvers": {
@@ -1860,7 +1700,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 2.5e-10
       },
       "tree": {
         "kind": "arithmetic",
@@ -1873,117 +1713,6 @@
         "right": {
           "kind": "numberLiteral",
           "value": -2
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": -0.5,
-          "kind": "complex",
-          "re": 0,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:1,im:1} to the power -2",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.3",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": 1,
-          "kind": "complexLiteral",
-          "re": 1
-        },
-        "op": "power",
-        "right": {
-          "kind": "numberLiteral",
-          "value": -2
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": -0.5,
-          "kind": "complex",
-          "re": 0,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:1,im:1} to the power -2",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.4",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": 0,
-          "kind": "complexLiteral",
-          "re": 1
-        },
-        "op": "divide",
-        "right": {
-          "kind": "arithmetic",
-          "left": {
-            "im": 1,
-            "kind": "complexLiteral",
-            "re": 1
-          },
-          "op": "power",
-          "right": {
-            "kind": "numberLiteral",
-            "value": 2
-          }
         }
       }
     },
@@ -1998,7 +1727,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:1,im:1} to the power 3 (the original compared with a repeated product to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:1,im:1} to the power 3",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-matches-the-repeated-product-for-re-1-im-1-to-the-power-3.1",
       "kind": "evaluate",
       "resolvers": {
@@ -2022,7 +1751,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 5e-10
       },
       "tree": {
         "kind": "arithmetic",
@@ -2049,7 +1778,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:1,im:1} to the power -3 (the original checked that the product with the positive power is one to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:1,im:1} to the power -3 (the original checked that the product with the positive power is one to nine decimal places; the case gives the reciprocal of that product with the bound scaled by its size)",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-inverts-the-positive-power-for-re-1-im-1-to-the-power-3.1",
       "kind": "evaluate",
       "resolvers": {
@@ -2073,7 +1802,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 1.767766952966369e-10
       },
       "tree": {
         "kind": "arithmetic",
@@ -2086,117 +1815,6 @@
         "right": {
           "kind": "numberLiteral",
           "value": -3
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": -0.25,
-          "kind": "complex",
-          "re": -0.25,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:1,im:1} to the power -3",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.5",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": 1,
-          "kind": "complexLiteral",
-          "re": 1
-        },
-        "op": "power",
-        "right": {
-          "kind": "numberLiteral",
-          "value": -3
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": -0.25,
-          "kind": "complex",
-          "re": -0.25,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:1,im:1} to the power -3",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.6",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": 0,
-          "kind": "complexLiteral",
-          "re": 1
-        },
-        "op": "divide",
-        "right": {
-          "kind": "arithmetic",
-          "left": {
-            "im": 1,
-            "kind": "complexLiteral",
-            "re": 1
-          },
-          "op": "power",
-          "right": {
-            "kind": "numberLiteral",
-            "value": 3
-          }
         }
       }
     },
@@ -2211,7 +1829,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:1,im:1} to the power 5 (the original compared with a repeated product to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:1,im:1} to the power 5",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-matches-the-repeated-product-for-re-1-im-1-to-the-power-5.1",
       "kind": "evaluate",
       "resolvers": {
@@ -2235,7 +1853,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 5e-10
       },
       "tree": {
         "kind": "arithmetic",
@@ -2262,7 +1880,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:1,im:1} to the power -5 (the original checked that the product with the positive power is one to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:1,im:1} to the power -5 (the original checked that the product with the positive power is one to nine decimal places; the case gives the reciprocal of that product with the bound scaled by its size)",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-inverts-the-positive-power-for-re-1-im-1-to-the-power-5.1",
       "kind": "evaluate",
       "resolvers": {
@@ -2286,7 +1904,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 8.838834764831844e-11
       },
       "tree": {
         "kind": "arithmetic",
@@ -2299,117 +1917,6 @@
         "right": {
           "kind": "numberLiteral",
           "value": -5
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": 0.125,
-          "kind": "complex",
-          "re": -0.125,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:1,im:1} to the power -5",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.7",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": 1,
-          "kind": "complexLiteral",
-          "re": 1
-        },
-        "op": "power",
-        "right": {
-          "kind": "numberLiteral",
-          "value": -5
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": 0.125,
-          "kind": "complex",
-          "re": -0.125,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:1,im:1} to the power -5",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.8",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": 0,
-          "kind": "complexLiteral",
-          "re": 1
-        },
-        "op": "divide",
-        "right": {
-          "kind": "arithmetic",
-          "left": {
-            "im": 1,
-            "kind": "complexLiteral",
-            "re": 1
-          },
-          "op": "power",
-          "right": {
-            "kind": "numberLiteral",
-            "value": 5
-          }
         }
       }
     },
@@ -2424,7 +1931,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:1,im:1} to the power 8 (the original compared with a repeated product to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:1,im:1} to the power 8",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-matches-the-repeated-product-for-re-1-im-1-to-the-power-8.1",
       "kind": "evaluate",
       "resolvers": {
@@ -2448,7 +1955,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 5e-10
       },
       "tree": {
         "kind": "arithmetic",
@@ -2469,13 +1976,15 @@
       "expect": {
         "status": "definite",
         "value": {
-          "im": 0,
+          "im": {
+            "$number": "-0"
+          },
           "kind": "complex",
           "re": 0.0625,
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:1,im:1} to the power -8 (the original checked that the product with the positive power is one to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:1,im:1} to the power -8 (the original checked that the product with the positive power is one to nine decimal places; the case gives the reciprocal of that product with the bound scaled by its size)",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-inverts-the-positive-power-for-re-1-im-1-to-the-power-8.1",
       "kind": "evaluate",
       "resolvers": {
@@ -2499,7 +2008,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 3.125e-11
       },
       "tree": {
         "kind": "arithmetic",
@@ -2512,117 +2021,6 @@
         "right": {
           "kind": "numberLiteral",
           "value": -8
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": 0,
-          "kind": "complex",
-          "re": 0.0625,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:1,im:1} to the power -8",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.9",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": 1,
-          "kind": "complexLiteral",
-          "re": 1
-        },
-        "op": "power",
-        "right": {
-          "kind": "numberLiteral",
-          "value": -8
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": 0,
-          "kind": "complex",
-          "re": 0.0625,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:1,im:1} to the power -8",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.10",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": 0,
-          "kind": "complexLiteral",
-          "re": 1
-        },
-        "op": "divide",
-        "right": {
-          "kind": "arithmetic",
-          "left": {
-            "im": 1,
-            "kind": "complexLiteral",
-            "re": 1
-          },
-          "op": "power",
-          "right": {
-            "kind": "numberLiteral",
-            "value": 8
-          }
         }
       }
     },
@@ -2637,7 +2035,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:1,im:1} to the power 13 (the original compared with a repeated product to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:1,im:1} to the power 13",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-matches-the-repeated-product-for-re-1-im-1-to-the-power-13.1",
       "kind": "evaluate",
       "resolvers": {
@@ -2661,7 +2059,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 5e-10
       },
       "tree": {
         "kind": "arithmetic",
@@ -2688,7 +2086,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:1,im:1} to the power -13 (the original checked that the product with the positive power is one to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:1,im:1} to the power -13 (the original checked that the product with the positive power is one to nine decimal places; the case gives the reciprocal of that product with the bound scaled by its size)",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-inverts-the-positive-power-for-re-1-im-1-to-the-power-13.1",
       "kind": "evaluate",
       "resolvers": {
@@ -2712,7 +2110,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 5.524271728019903e-12
       },
       "tree": {
         "kind": "arithmetic",
@@ -2725,117 +2123,6 @@
         "right": {
           "kind": "numberLiteral",
           "value": -13
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": 0.0078125,
-          "kind": "complex",
-          "re": -0.0078125,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:1,im:1} to the power -13",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.11",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": 1,
-          "kind": "complexLiteral",
-          "re": 1
-        },
-        "op": "power",
-        "right": {
-          "kind": "numberLiteral",
-          "value": -13
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": 0.0078125,
-          "kind": "complex",
-          "re": -0.0078125,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:1,im:1} to the power -13",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.12",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": 0,
-          "kind": "complexLiteral",
-          "re": 1
-        },
-        "op": "divide",
-        "right": {
-          "kind": "arithmetic",
-          "left": {
-            "im": 1,
-            "kind": "complexLiteral",
-            "re": 1
-          },
-          "op": "power",
-          "right": {
-            "kind": "numberLiteral",
-            "value": 13
-          }
         }
       }
     },
@@ -2850,7 +2137,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:0.5,im:-1.5} to the power 0 (the original compared with a repeated product to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:0.5,im:-1.5} to the power 0",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-matches-the-repeated-product-for-re-0-5-im-1-5-to-the-power-0.1",
       "kind": "evaluate",
       "resolvers": {
@@ -2874,7 +2161,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 5e-10
       },
       "tree": {
         "kind": "arithmetic",
@@ -2895,13 +2182,15 @@
       "expect": {
         "status": "definite",
         "value": {
-          "im": 0,
+          "im": {
+            "$number": "-0"
+          },
           "kind": "complex",
           "re": 1,
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:0.5,im:-1.5} to the power -0 (the original checked that the product with the positive power is one to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:0.5,im:-1.5} to the power -0 (the original checked that the product with the positive power is one to nine decimal places; the case gives the reciprocal of that product with the bound scaled by its size)",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-inverts-the-positive-power-for-re-0-5-im-1-5-to-the-power-0.1",
       "kind": "evaluate",
       "resolvers": {
@@ -2925,7 +2214,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 5e-10
       },
       "tree": {
         "kind": "arithmetic",
@@ -2954,7 +2243,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:0.5,im:-1.5} to the power 1 (the original compared with a repeated product to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:0.5,im:-1.5} to the power 1",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-matches-the-repeated-product-for-re-0-5-im-1-5-to-the-power-1.1",
       "kind": "evaluate",
       "resolvers": {
@@ -2978,7 +2267,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 5e-10
       },
       "tree": {
         "kind": "arithmetic",
@@ -3005,7 +2294,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:0.5,im:-1.5} to the power -1 (the original checked that the product with the positive power is one to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:0.5,im:-1.5} to the power -1 (the original checked that the product with the positive power is one to nine decimal places; the case gives the reciprocal of that product with the bound scaled by its size)",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-inverts-the-positive-power-for-re-0-5-im-1-5-to-the-power-1.1",
       "kind": "evaluate",
       "resolvers": {
@@ -3029,7 +2318,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 3.1622776601683795e-10
       },
       "tree": {
         "kind": "arithmetic",
@@ -3042,117 +2331,6 @@
         "right": {
           "kind": "numberLiteral",
           "value": -1
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": 0.6,
-          "kind": "complex",
-          "re": 0.2,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:0.5,im:-1.5} to the power -1",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.13",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": -1.5,
-          "kind": "complexLiteral",
-          "re": 0.5
-        },
-        "op": "power",
-        "right": {
-          "kind": "numberLiteral",
-          "value": -1
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": 0.6,
-          "kind": "complex",
-          "re": 0.2,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:0.5,im:-1.5} to the power -1",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.14",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": 0,
-          "kind": "complexLiteral",
-          "re": 1
-        },
-        "op": "divide",
-        "right": {
-          "kind": "arithmetic",
-          "left": {
-            "im": -1.5,
-            "kind": "complexLiteral",
-            "re": 0.5
-          },
-          "op": "power",
-          "right": {
-            "kind": "numberLiteral",
-            "value": 1
-          }
         }
       }
     },
@@ -3167,7 +2345,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:0.5,im:-1.5} to the power 2 (the original compared with a repeated product to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:0.5,im:-1.5} to the power 2",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-matches-the-repeated-product-for-re-0-5-im-1-5-to-the-power-2.1",
       "kind": "evaluate",
       "resolvers": {
@@ -3191,7 +2369,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 5e-10
       },
       "tree": {
         "kind": "arithmetic",
@@ -3218,7 +2396,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:0.5,im:-1.5} to the power -2 (the original checked that the product with the positive power is one to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:0.5,im:-1.5} to the power -2 (the original checked that the product with the positive power is one to nine decimal places; the case gives the reciprocal of that product with the bound scaled by its size)",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-inverts-the-positive-power-for-re-0-5-im-1-5-to-the-power-2.1",
       "kind": "evaluate",
       "resolvers": {
@@ -3242,7 +2420,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 2e-10
       },
       "tree": {
         "kind": "arithmetic",
@@ -3255,117 +2433,6 @@
         "right": {
           "kind": "numberLiteral",
           "value": -2
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": 0.24,
-          "kind": "complex",
-          "re": -0.32,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:0.5,im:-1.5} to the power -2",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.15",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": -1.5,
-          "kind": "complexLiteral",
-          "re": 0.5
-        },
-        "op": "power",
-        "right": {
-          "kind": "numberLiteral",
-          "value": -2
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": 0.24,
-          "kind": "complex",
-          "re": -0.32,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:0.5,im:-1.5} to the power -2",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.16",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": 0,
-          "kind": "complexLiteral",
-          "re": 1
-        },
-        "op": "divide",
-        "right": {
-          "kind": "arithmetic",
-          "left": {
-            "im": -1.5,
-            "kind": "complexLiteral",
-            "re": 0.5
-          },
-          "op": "power",
-          "right": {
-            "kind": "numberLiteral",
-            "value": 2
-          }
         }
       }
     },
@@ -3380,7 +2447,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:0.5,im:-1.5} to the power 3 (the original compared with a repeated product to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:0.5,im:-1.5} to the power 3",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-matches-the-repeated-product-for-re-0-5-im-1-5-to-the-power-3.1",
       "kind": "evaluate",
       "resolvers": {
@@ -3404,7 +2471,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 5e-10
       },
       "tree": {
         "kind": "arithmetic",
@@ -3431,7 +2498,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:0.5,im:-1.5} to the power -3 (the original checked that the product with the positive power is one to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:0.5,im:-1.5} to the power -3 (the original checked that the product with the positive power is one to nine decimal places; the case gives the reciprocal of that product with the bound scaled by its size)",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-inverts-the-positive-power-for-re-0-5-im-1-5-to-the-power-3.1",
       "kind": "evaluate",
       "resolvers": {
@@ -3455,7 +2522,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 1.2649110640673518e-10
       },
       "tree": {
         "kind": "arithmetic",
@@ -3468,117 +2535,6 @@
         "right": {
           "kind": "numberLiteral",
           "value": -3
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": -0.144,
-          "kind": "complex",
-          "re": -0.208,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:0.5,im:-1.5} to the power -3",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.17",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": -1.5,
-          "kind": "complexLiteral",
-          "re": 0.5
-        },
-        "op": "power",
-        "right": {
-          "kind": "numberLiteral",
-          "value": -3
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": -0.144,
-          "kind": "complex",
-          "re": -0.208,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:0.5,im:-1.5} to the power -3",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.18",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": 0,
-          "kind": "complexLiteral",
-          "re": 1
-        },
-        "op": "divide",
-        "right": {
-          "kind": "arithmetic",
-          "left": {
-            "im": -1.5,
-            "kind": "complexLiteral",
-            "re": 0.5
-          },
-          "op": "power",
-          "right": {
-            "kind": "numberLiteral",
-            "value": 3
-          }
         }
       }
     },
@@ -3593,7 +2549,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:0.5,im:-1.5} to the power 5 (the original compared with a repeated product to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:0.5,im:-1.5} to the power 5",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-matches-the-repeated-product-for-re-0-5-im-1-5-to-the-power-5.1",
       "kind": "evaluate",
       "resolvers": {
@@ -3617,7 +2573,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 5e-10
       },
       "tree": {
         "kind": "arithmetic",
@@ -3644,7 +2600,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:0.5,im:-1.5} to the power -5 (the original checked that the product with the positive power is one to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:0.5,im:-1.5} to the power -5 (the original checked that the product with the positive power is one to nine decimal places; the case gives the reciprocal of that product with the bound scaled by its size)",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-inverts-the-positive-power-for-re-0-5-im-1-5-to-the-power-5.1",
       "kind": "evaluate",
       "resolvers": {
@@ -3668,7 +2624,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 5.059644256269407e-11
       },
       "tree": {
         "kind": "arithmetic",
@@ -3681,117 +2637,6 @@
         "right": {
           "kind": "numberLiteral",
           "value": -5
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": -0.00384,
-          "kind": "complex",
-          "re": 0.10112,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:0.5,im:-1.5} to the power -5",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.19",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": -1.5,
-          "kind": "complexLiteral",
-          "re": 0.5
-        },
-        "op": "power",
-        "right": {
-          "kind": "numberLiteral",
-          "value": -5
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": -0.00384,
-          "kind": "complex",
-          "re": 0.10112,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:0.5,im:-1.5} to the power -5",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.20",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": 0,
-          "kind": "complexLiteral",
-          "re": 1
-        },
-        "op": "divide",
-        "right": {
-          "kind": "arithmetic",
-          "left": {
-            "im": -1.5,
-            "kind": "complexLiteral",
-            "re": 0.5
-          },
-          "op": "power",
-          "right": {
-            "kind": "numberLiteral",
-            "value": 5
-          }
         }
       }
     },
@@ -3806,7 +2651,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:0.5,im:-1.5} to the power 8 (the original compared with a repeated product to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:0.5,im:-1.5} to the power 8",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-matches-the-repeated-product-for-re-0-5-im-1-5-to-the-power-8.1",
       "kind": "evaluate",
       "resolvers": {
@@ -3830,7 +2675,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 5e-10
       },
       "tree": {
         "kind": "arithmetic",
@@ -3857,7 +2702,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:0.5,im:-1.5} to the power -8 (the original checked that the product with the positive power is one to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:0.5,im:-1.5} to the power -8 (the original checked that the product with the positive power is one to nine decimal places; the case gives the reciprocal of that product with the bound scaled by its size)",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-inverts-the-positive-power-for-re-0-5-im-1-5-to-the-power-8.1",
       "kind": "evaluate",
       "resolvers": {
@@ -3881,7 +2726,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 1.28e-11
       },
       "tree": {
         "kind": "arithmetic",
@@ -3894,117 +2739,6 @@
         "right": {
           "kind": "numberLiteral",
           "value": -8
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": -0.01376256,
-          "kind": "complex",
-          "re": -0.02158592,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:0.5,im:-1.5} to the power -8",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.21",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": -1.5,
-          "kind": "complexLiteral",
-          "re": 0.5
-        },
-        "op": "power",
-        "right": {
-          "kind": "numberLiteral",
-          "value": -8
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": -0.01376256,
-          "kind": "complex",
-          "re": -0.02158592,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:0.5,im:-1.5} to the power -8",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.22",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": 0,
-          "kind": "complexLiteral",
-          "re": 1
-        },
-        "op": "divide",
-        "right": {
-          "kind": "arithmetic",
-          "left": {
-            "im": -1.5,
-            "kind": "complexLiteral",
-            "re": 0.5
-          },
-          "op": "power",
-          "right": {
-            "kind": "numberLiteral",
-            "value": 8
-          }
         }
       }
     },
@@ -4019,7 +2753,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:0.5,im:-1.5} to the power 13 (the original compared with a repeated product to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:0.5,im:-1.5} to the power 13",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-matches-the-repeated-product-for-re-0-5-im-1-5-to-the-power-13.1",
       "kind": "evaluate",
       "resolvers": {
@@ -4043,7 +2777,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 5e-10
       },
       "tree": {
         "kind": "arithmetic",
@@ -4070,7 +2804,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:0.5,im:-1.5} to the power -13 (the original checked that the product with the positive power is one to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:0.5,im:-1.5} to the power -13 (the original checked that the product with the positive power is one to nine decimal places; the case gives the reciprocal of that product with the bound scaled by its size)",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-inverts-the-positive-power-for-re-0-5-im-1-5-to-the-power-13.1",
       "kind": "evaluate",
       "resolvers": {
@@ -4094,7 +2828,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 1.2952689296049682e-12
       },
       "tree": {
         "kind": "arithmetic",
@@ -4107,117 +2841,6 @@
         "right": {
           "kind": "numberLiteral",
           "value": -13
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": -0.0013087801344,
-          "kind": "complex",
-          "re": -0.0022356164608,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:0.5,im:-1.5} to the power -13",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.23",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": -1.5,
-          "kind": "complexLiteral",
-          "re": 0.5
-        },
-        "op": "power",
-        "right": {
-          "kind": "numberLiteral",
-          "value": -13
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": -0.0013087801344,
-          "kind": "complex",
-          "re": -0.0022356164608,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:0.5,im:-1.5} to the power -13",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.24",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": 0,
-          "kind": "complexLiteral",
-          "re": 1
-        },
-        "op": "divide",
-        "right": {
-          "kind": "arithmetic",
-          "left": {
-            "im": -1.5,
-            "kind": "complexLiteral",
-            "re": 0.5
-          },
-          "op": "power",
-          "right": {
-            "kind": "numberLiteral",
-            "value": 13
-          }
         }
       }
     },
@@ -4232,7 +2855,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:-2,im:0.25} to the power 0 (the original compared with a repeated product to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:-2,im:0.25} to the power 0",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-matches-the-repeated-product-for-re-2-im-0-25-to-the-power-0.1",
       "kind": "evaluate",
       "resolvers": {
@@ -4256,7 +2879,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 5e-10
       },
       "tree": {
         "kind": "arithmetic",
@@ -4277,13 +2900,15 @@
       "expect": {
         "status": "definite",
         "value": {
-          "im": 0,
+          "im": {
+            "$number": "-0"
+          },
           "kind": "complex",
           "re": 1,
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:-2,im:0.25} to the power -0 (the original checked that the product with the positive power is one to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:-2,im:0.25} to the power -0 (the original checked that the product with the positive power is one to nine decimal places; the case gives the reciprocal of that product with the bound scaled by its size)",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-inverts-the-positive-power-for-re-2-im-0-25-to-the-power-0.1",
       "kind": "evaluate",
       "resolvers": {
@@ -4307,7 +2932,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 5e-10
       },
       "tree": {
         "kind": "arithmetic",
@@ -4336,7 +2961,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:-2,im:0.25} to the power 1 (the original compared with a repeated product to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:-2,im:0.25} to the power 1",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-matches-the-repeated-product-for-re-2-im-0-25-to-the-power-1.1",
       "kind": "evaluate",
       "resolvers": {
@@ -4360,7 +2985,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 5e-10
       },
       "tree": {
         "kind": "arithmetic",
@@ -4387,7 +3012,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:-2,im:0.25} to the power -1 (the original checked that the product with the positive power is one to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:-2,im:0.25} to the power -1 (the original checked that the product with the positive power is one to nine decimal places; the case gives the reciprocal of that product with the bound scaled by its size)",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-inverts-the-positive-power-for-re-2-im-0-25-to-the-power-1.1",
       "kind": "evaluate",
       "resolvers": {
@@ -4411,7 +3036,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 2.4806946917841694e-10
       },
       "tree": {
         "kind": "arithmetic",
@@ -4424,117 +3049,6 @@
         "right": {
           "kind": "numberLiteral",
           "value": -1
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": -0.06153846153846154,
-          "kind": "complex",
-          "re": -0.49230769230769234,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:-2,im:0.25} to the power -1",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.25",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": 0.25,
-          "kind": "complexLiteral",
-          "re": -2
-        },
-        "op": "power",
-        "right": {
-          "kind": "numberLiteral",
-          "value": -1
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": -0.06153846153846154,
-          "kind": "complex",
-          "re": -0.49230769230769234,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:-2,im:0.25} to the power -1",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.26",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": 0,
-          "kind": "complexLiteral",
-          "re": 1
-        },
-        "op": "divide",
-        "right": {
-          "kind": "arithmetic",
-          "left": {
-            "im": 0.25,
-            "kind": "complexLiteral",
-            "re": -2
-          },
-          "op": "power",
-          "right": {
-            "kind": "numberLiteral",
-            "value": 1
-          }
         }
       }
     },
@@ -4549,7 +3063,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:-2,im:0.25} to the power 2 (the original compared with a repeated product to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:-2,im:0.25} to the power 2",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-matches-the-repeated-product-for-re-2-im-0-25-to-the-power-2.1",
       "kind": "evaluate",
       "resolvers": {
@@ -4573,7 +3087,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 5e-10
       },
       "tree": {
         "kind": "arithmetic",
@@ -4600,7 +3114,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:-2,im:0.25} to the power -2 (the original checked that the product with the positive power is one to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:-2,im:0.25} to the power -2 (the original checked that the product with the positive power is one to nine decimal places; the case gives the reciprocal of that product with the bound scaled by its size)",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-inverts-the-positive-power-for-re-2-im-0-25-to-the-power-2.1",
       "kind": "evaluate",
       "resolvers": {
@@ -4624,7 +3138,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 1.2307692307692308e-10
       },
       "tree": {
         "kind": "arithmetic",
@@ -4637,117 +3151,6 @@
         "right": {
           "kind": "numberLiteral",
           "value": -2
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": 0.06059171597633136,
-          "kind": "complex",
-          "re": 0.23857988165680474,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:-2,im:0.25} to the power -2",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.27",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": 0.25,
-          "kind": "complexLiteral",
-          "re": -2
-        },
-        "op": "power",
-        "right": {
-          "kind": "numberLiteral",
-          "value": -2
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": 0.06059171597633136,
-          "kind": "complex",
-          "re": 0.23857988165680474,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:-2,im:0.25} to the power -2",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.28",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": 0,
-          "kind": "complexLiteral",
-          "re": 1
-        },
-        "op": "divide",
-        "right": {
-          "kind": "arithmetic",
-          "left": {
-            "im": 0.25,
-            "kind": "complexLiteral",
-            "re": -2
-          },
-          "op": "power",
-          "right": {
-            "kind": "numberLiteral",
-            "value": 2
-          }
         }
       }
     },
@@ -4762,7 +3165,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:-2,im:0.25} to the power 3 (the original compared with a repeated product to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:-2,im:0.25} to the power 3",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-matches-the-repeated-product-for-re-2-im-0-25-to-the-power-3.1",
       "kind": "evaluate",
       "resolvers": {
@@ -4786,7 +3189,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 5e-10
       },
       "tree": {
         "kind": "arithmetic",
@@ -4813,7 +3216,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:-2,im:0.25} to the power -3 (the original checked that the product with the positive power is one to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:-2,im:0.25} to the power -3 (the original checked that the product with the positive power is one to nine decimal places; the case gives the reciprocal of that product with the bound scaled by its size)",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-inverts-the-positive-power-for-re-2-im-0-25-to-the-power-3.1",
       "kind": "evaluate",
       "resolvers": {
@@ -4837,7 +3240,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 6.106325395161032e-11
       },
       "tree": {
         "kind": "arithmetic",
@@ -4850,117 +3253,6 @@
         "right": {
           "kind": "numberLiteral",
           "value": -3
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": -0.044511606736458806,
-          "kind": "complex",
-          "re": -0.11372598998634502,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:-2,im:0.25} to the power -3",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.29",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": 0.25,
-          "kind": "complexLiteral",
-          "re": -2
-        },
-        "op": "power",
-        "right": {
-          "kind": "numberLiteral",
-          "value": -3
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": -0.044511606736458806,
-          "kind": "complex",
-          "re": -0.11372598998634502,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:-2,im:0.25} to the power -3",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.30",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": 0,
-          "kind": "complexLiteral",
-          "re": 1
-        },
-        "op": "divide",
-        "right": {
-          "kind": "arithmetic",
-          "left": {
-            "im": 0.25,
-            "kind": "complexLiteral",
-            "re": -2
-          },
-          "op": "power",
-          "right": {
-            "kind": "numberLiteral",
-            "value": 3
-          }
         }
       }
     },
@@ -4975,7 +3267,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:-2,im:0.25} to the power 5 (the original compared with a repeated product to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:-2,im:0.25} to the power 5",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-matches-the-repeated-product-for-re-2-im-0-25-to-the-power-5.1",
       "kind": "evaluate",
       "resolvers": {
@@ -4999,7 +3291,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 5e-10
       },
       "tree": {
         "kind": "arithmetic",
@@ -5026,7 +3318,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:-2,im:0.25} to the power -5 (the original checked that the product with the positive power is one to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:-2,im:0.25} to the power -5 (the original checked that the product with the positive power is one to nine decimal places; the case gives the reciprocal of that product with the bound scaled by its size)",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-inverts-the-positive-power-for-re-2-im-0-25-to-the-power-5.1",
       "kind": "evaluate",
       "resolvers": {
@@ -5050,7 +3342,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 1.5030954818857925e-11
       },
       "tree": {
         "kind": "arithmetic",
@@ -5063,117 +3355,6 @@
         "right": {
           "kind": "numberLiteral",
           "value": -5
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": -0.017510426751918298,
-          "kind": "complex",
-          "re": -0.024435698599219485,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:-2,im:0.25} to the power -5",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.31",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": 0.25,
-          "kind": "complexLiteral",
-          "re": -2
-        },
-        "op": "power",
-        "right": {
-          "kind": "numberLiteral",
-          "value": -5
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": -0.017510426751918298,
-          "kind": "complex",
-          "re": -0.024435698599219485,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:-2,im:0.25} to the power -5",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.32",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": 0,
-          "kind": "complexLiteral",
-          "re": 1
-        },
-        "op": "divide",
-        "right": {
-          "kind": "arithmetic",
-          "left": {
-            "im": 0.25,
-            "kind": "complexLiteral",
-            "re": -2
-          },
-          "op": "power",
-          "right": {
-            "kind": "numberLiteral",
-            "value": 5
-          }
         }
       }
     },
@@ -5188,7 +3369,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:-2,im:0.25} to the power 8 (the original compared with a repeated product to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:-2,im:0.25} to the power 8",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-matches-the-repeated-product-for-re-2-im-0-25-to-the-power-8.1",
       "kind": "evaluate",
       "resolvers": {
@@ -5212,7 +3393,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 5e-10
       },
       "tree": {
         "kind": "arithmetic",
@@ -5239,7 +3420,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:-2,im:0.25} to the power -8 (the original checked that the product with the positive power is one to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:-2,im:0.25} to the power -8 (the original checked that the product with the positive power is one to nine decimal places; the case gives the reciprocal of that product with the bound scaled by its size)",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-inverts-the-positive-power-for-re-2-im-0-25-to-the-power-8.1",
       "kind": "evaluate",
       "resolvers": {
@@ -5263,7 +3444,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 1.8356780224782048e-12
       },
       "tree": {
         "kind": "arithmetic",
@@ -5276,117 +3457,6 @@
         "right": {
           "kind": "numberLiteral",
           "value": -8
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": 0.0030790628238243833,
-          "kind": "complex",
-          "re": 0.001999556784835225,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:-2,im:0.25} to the power -8",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.33",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": 0.25,
-          "kind": "complexLiteral",
-          "re": -2
-        },
-        "op": "power",
-        "right": {
-          "kind": "numberLiteral",
-          "value": -8
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": 0.0030790628238243833,
-          "kind": "complex",
-          "re": 0.001999556784835225,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:-2,im:0.25} to the power -8",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.34",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": 0,
-          "kind": "complexLiteral",
-          "re": 1
-        },
-        "op": "divide",
-        "right": {
-          "kind": "arithmetic",
-          "left": {
-            "im": 0.25,
-            "kind": "complexLiteral",
-            "re": -2
-          },
-          "op": "power",
-          "right": {
-            "kind": "numberLiteral",
-            "value": 8
-          }
         }
       }
     },
@@ -5401,7 +3471,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:-2,im:0.25} to the power 13 (the original compared with a repeated product to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > matches the repeated product for {re:-2,im:0.25} to the power 13",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-matches-the-repeated-product-for-re-2-im-0-25-to-the-power-13.1",
       "kind": "evaluate",
       "resolvers": {
@@ -5425,7 +3495,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 5e-10
       },
       "tree": {
         "kind": "arithmetic",
@@ -5452,7 +3522,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:-2,im:0.25} to the power -13 (the original checked that the product with the positive power is one to nine decimal places; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent inverts the positive power for {re:-2,im:0.25} to the power -13 (the original checked that the product with the positive power is one to nine decimal places; the case gives the reciprocal of that product with the bound scaled by its size)",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-inverts-the-positive-power-for-re-2-im-0-25-to-the-power-13.1",
       "kind": "evaluate",
       "resolvers": {
@@ -5476,7 +3546,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 5.5183986835680715e-14
       },
       "tree": {
         "kind": "arithmetic",
@@ -5489,117 +3559,6 @@
         "right": {
           "kind": "numberLiteral",
           "value": -13
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": -0.00011025214374819273,
-          "kind": "complex",
-          "re": 0.000005055137114873645,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:-2,im:0.25} to the power -13",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.35",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": 0.25,
-          "kind": "complexLiteral",
-          "re": -2
-        },
-        "op": "power",
-        "right": {
-          "kind": "numberLiteral",
-          "value": -13
-        }
-      }
-    },
-    {
-      "as": "expression",
-      "expect": {
-        "status": "definite",
-        "value": {
-          "im": -0.00011025214374819273,
-          "kind": "complex",
-          "re": 0.000005055137114873645,
-          "unit": {}
-        }
-      },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > a negative exponent is exactly the reciprocal of the positive power when that is representable, for {re:-2,im:0.25} to the power -13",
-      "id": "complex-arithmetic.complex-power-by-repeated-squaring-a-negative-exponent-is-exactly-the-reciprocal-of-the-positive-power-when-that-is-representable-f.36",
-      "kind": "evaluate",
-      "resolvers": {
-        "default": {
-          "found": false
-        },
-        "values": [
-          {
-            "key": "present",
-            "result": {
-              "found": true,
-              "value": {
-                "kind": "number",
-                "unit": {
-                  "m": 1
-                },
-                "value": 10
-              }
-            }
-          }
-        ]
-      },
-      "tolerance": {
-        "ulps": 4
-      },
-      "tree": {
-        "kind": "arithmetic",
-        "left": {
-          "im": 0,
-          "kind": "complexLiteral",
-          "re": 1
-        },
-        "op": "divide",
-        "right": {
-          "kind": "arithmetic",
-          "left": {
-            "im": 0.25,
-            "kind": "complexLiteral",
-            "re": -2
-          },
-          "op": "power",
-          "right": {
-            "kind": "numberLiteral",
-            "value": 13
-          }
         }
       }
     },
@@ -5844,7 +3803,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > inverts a base near the top of the range without losing the result to zero (the original asserted the signs of the components and that their ratio is one; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > inverts a base near the top of the range without losing the result to zero (the original asserted the signs of the components and that their ratio is one to nine decimal places; the case gives the value, which is 5e-309 times one minus i, to a relative one in a billion)",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-inverts-a-base-near-the-top-of-the-range-without-losing-the-result-to-zero.1",
       "kind": "evaluate",
       "resolvers": {
@@ -5868,7 +3827,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "absolute": 5e-318
       },
       "tree": {
         "kind": "arithmetic",
@@ -5943,7 +3902,7 @@
           "unit": {}
         }
       },
-      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > keeps a negative power of a large base finite where its positive power would overflow (the original asserted only that the real part is positive; recorded: trilean src/complex.ts, the exact result)",
+      "from": "evaluator.complex-arithmetic.unit.test.ts: complex power by repeated squaring > keeps a negative power of a large base finite where its positive power would overflow (the original asserted only that the real part is positive; the case gives the value, one over the square, within a few of the smallest steps)",
       "id": "complex-arithmetic.complex-power-by-repeated-squaring-keeps-a-negative-power-of-a-large-base-finite-where-its-positive-power-would-overflow.1",
       "kind": "evaluate",
       "resolvers": {
@@ -5967,7 +3926,7 @@
         ]
       },
       "tolerance": {
-        "ulps": 4
+        "ulps": 8
       },
       "tree": {
         "kind": "arithmetic",

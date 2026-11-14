@@ -8,6 +8,7 @@ import type { FunctionFailure, FunctionRegistry } from "../functions";
 import { ExpressionNodeSchema, PredicateNodeSchema } from "../tree";
 import type { EvaluateCase, Mode } from "./corpus-types";
 import { jsonEquals } from "./json-equal";
+import type { Tolerance } from "./json-equal";
 import { buildResolvers } from "./resolver-data";
 import { decodeNumbers } from "./values";
 import type { RecordedCall } from "./resolver-data";
@@ -95,9 +96,12 @@ export function includesInOrder(
 }
 
 function checkExpectation(
-  wanted: Exclude<EvaluateCase["expect"], { readonly throws: unknown }>,
+  wanted: Exclude<
+    EvaluateCase["expect"],
+    { readonly throws: unknown } | undefined
+  >,
   outcome: Evaluation<unknown> | undefined,
-  ulps: number,
+  tolerance: Tolerance | undefined,
   label: string,
 ): void {
   if (outcome === undefined) {
@@ -106,14 +110,18 @@ function checkExpectation(
   const got = flatten(outcome);
   expect(got.status, `${label}: ${JSON.stringify(got)}`).toBe(wanted.status);
   if (wanted.status === "definite") {
-    expect(
-      jsonEquals(got.value, wanted.value, ulps),
-      `${label}: ${JSON.stringify(got.value)} is not ${JSON.stringify(wanted.value)}`,
-    ).toBe(true);
+    if (wanted.value !== undefined) {
+      expect(
+        jsonEquals(got.value, wanted.value, tolerance),
+        `${label}: ${JSON.stringify(got.value)} is not ${JSON.stringify(wanted.value)}`,
+      ).toBe(true);
+    }
 
     return;
   }
-  expect(got.code, label).toBe(wanted.code);
+  if (wanted.code !== undefined) {
+    expect(got.code, label).toBe(wanted.code);
+  }
   if (wanted.message !== undefined) {
     expect(got.message, label).toBe(wanted.message);
   }
@@ -227,18 +235,17 @@ export async function runEvaluateCase(testCase: EvaluateCase): Promise<void> {
     } catch (error) {
       thrown = { error };
     }
-    if ("throws" in testCase.expect) {
+    if (testCase.expect === undefined) {
+      if (thrown !== undefined) {
+        throw thrown.error;
+      }
+    } else if ("throws" in testCase.expect) {
       checkThrown(testCase.expect.throws, thrown, label);
     } else {
       if (thrown !== undefined) {
         throw thrown.error;
       }
-      checkExpectation(
-        testCase.expect,
-        outcome,
-        testCase.tolerance?.ulps ?? 0,
-        label,
-      );
+      checkExpectation(testCase.expect, outcome, testCase.tolerance, label);
     }
     checkCalls(testCase, resolvers.calls, label);
   };

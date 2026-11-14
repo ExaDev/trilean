@@ -79,10 +79,9 @@
     {
       "as": "predicate",
       "expect": {
-        "code": "not-found",
         "status": "indeterminate"
       },
-      "from": "truth-tables.unit.test.ts: AND truth table > T AND U => U (the original asserted only the status; recorded: trilean src/evaluator.ts, the reason code)",
+      "from": "truth-tables.unit.test.ts: AND truth table > T AND U => U",
       "id": "truth-tables.and-truth-table-t-and-u-u.1",
       "kind": "evaluate",
       "resolvers": {
@@ -247,10 +246,9 @@
     {
       "as": "predicate",
       "expect": {
-        "code": "not-found",
         "status": "indeterminate"
       },
-      "from": "truth-tables.unit.test.ts: AND truth table > U AND T => U (the original asserted only the status; recorded: trilean src/evaluator.ts, the reason code)",
+      "from": "truth-tables.unit.test.ts: AND truth table > U AND T => U",
       "id": "truth-tables.and-truth-table-u-and-t-u.1",
       "kind": "evaluate",
       "resolvers": {
@@ -339,10 +337,9 @@
     {
       "as": "predicate",
       "expect": {
-        "code": "not-found",
         "status": "indeterminate"
       },
-      "from": "truth-tables.unit.test.ts: AND truth table > U AND U => U (the original asserted only the status; recorded: trilean src/evaluator.ts, the reason code)",
+      "from": "truth-tables.unit.test.ts: AND truth table > U AND U => U",
       "id": "truth-tables.and-truth-table-u-and-u-u.1",
       "kind": "evaluate",
       "resolvers": {
@@ -591,10 +588,9 @@
     {
       "as": "predicate",
       "expect": {
-        "code": "not-found",
         "status": "indeterminate"
       },
-      "from": "truth-tables.unit.test.ts: OR truth table > F OR U => U (the original asserted only the status; recorded: trilean src/evaluator.ts, the reason code)",
+      "from": "truth-tables.unit.test.ts: OR truth table > F OR U => U",
       "id": "truth-tables.or-truth-table-f-or-u-u.1",
       "kind": "evaluate",
       "resolvers": {
@@ -683,10 +679,9 @@
     {
       "as": "predicate",
       "expect": {
-        "code": "not-found",
         "status": "indeterminate"
       },
-      "from": "truth-tables.unit.test.ts: OR truth table > U OR F => U (the original asserted only the status; recorded: trilean src/evaluator.ts, the reason code)",
+      "from": "truth-tables.unit.test.ts: OR truth table > U OR F => U",
       "id": "truth-tables.or-truth-table-u-or-f-u.1",
       "kind": "evaluate",
       "resolvers": {
@@ -729,10 +724,9 @@
     {
       "as": "predicate",
       "expect": {
-        "code": "not-found",
         "status": "indeterminate"
       },
-      "from": "truth-tables.unit.test.ts: OR truth table > U OR U => U (the original asserted only the status; recorded: trilean src/evaluator.ts, the reason code)",
+      "from": "truth-tables.unit.test.ts: OR truth table > U OR U => U",
       "id": "truth-tables.or-truth-table-u-or-u-u.1",
       "kind": "evaluate",
       "resolvers": {
@@ -851,10 +845,9 @@
     {
       "as": "predicate",
       "expect": {
-        "code": "not-found",
         "status": "indeterminate"
       },
-      "from": "truth-tables.unit.test.ts: NOT truth table > NOT U => U (the original asserted only the status; recorded: trilean src/evaluator.ts, the reason code)",
+      "from": "truth-tables.unit.test.ts: NOT truth table > NOT U => U",
       "id": "truth-tables.not-truth-table-not-u-u.1",
       "kind": "evaluate",
       "resolvers": {

@@ -244,8 +244,22 @@
             "stdout": {
               "type": "string"
             },
+            "stdoutExcludes": {
+              "description": "Fragments standard output does not contain.",
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
             "stdoutJson": {
               "$ref": "#/$defs/json"
+            },
+            "stdoutJsonSubset": {
+              "description": "The JSON the command printed, compared as `expectSubset` is.",
+              "minProperties": 1,
+              "type": "object"
             }
           },
           "required": [
@@ -318,6 +332,24 @@
           "reason"
         ]
       },
+      "oneOf": [
+        {
+          "properties": {
+            "expect": {}
+          },
+          "required": [
+            "expect"
+          ]
+        },
+        {
+          "properties": {
+            "expectSubset": {}
+          },
+          "required": [
+            "expectSubset"
+          ]
+        }
+      ],
       "properties": {
         "as": {
           "enum": [
@@ -327,6 +359,11 @@
         },
         "expect": {
           "$ref": "#/$defs/json"
+        },
+        "expectSubset": {
+          "description": "For a document whose original asserted only some fields of the outcome: an object that names at least one key. An object matches when every key it gives matches; an array matches element by element and has the same length; any other value must be equal.",
+          "minProperties": 1,
+          "type": "object"
         },
         "from": {
           "$ref": "#/$defs/from"
@@ -360,13 +397,30 @@
         "id",
         "from",
         "kind",
-        "tree",
-        "expect"
+        "tree"
       ],
       "type": "object"
     },
     "evaluate": {
       "additionalProperties": false,
+      "anyOf": [
+        {
+          "properties": {
+            "expect": {}
+          },
+          "required": [
+            "expect"
+          ]
+        },
+        {
+          "properties": {
+            "expectCalls": {}
+          },
+          "required": [
+            "expectCalls"
+          ]
+        }
+      ],
       "dependentRequired": {
         "reason": [
           "skip"
@@ -444,8 +498,7 @@
                 }
               },
               "required": [
-                "status",
-                "value"
+                "status"
               ],
               "type": "object"
             },
@@ -473,8 +526,7 @@
                 }
               },
               "required": [
-                "status",
-                "code"
+                "status"
               ],
               "type": "object"
             },
@@ -584,8 +636,7 @@
         "kind",
         "as",
         "tree",
-        "resolvers",
-        "expect"
+        "resolvers"
       ],
       "type": "object"
     },
@@ -1226,6 +1277,9 @@
           "items": {
             "additionalProperties": false,
             "properties": {
+              "context": {
+                "$ref": "#/$defs/context"
+              },
               "payload": {
                 "$ref": "#/$defs/json"
               },
@@ -1798,19 +1852,36 @@
       ]
     },
     "tolerance": {
-      "additionalProperties": false,
-      "description": "Numbers compare exactly unless a case gives a tolerance in units in the last place.",
-      "properties": {
-        "ulps": {
-          "maximum": 9007199254740991,
-          "minimum": 0,
-          "type": "integer"
+      "description": "How far a number may be from the one a case gives. Numbers compare exactly unless a case gives either `ulps`, units in the last place, or `absolute`, the distance, never both.",
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "ulps": {
+              "maximum": 9007199254740991,
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "ulps"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "absolute": {
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          "required": [
+            "absolute"
+          ],
+          "type": "object"
         }
-      },
-      "required": [
-        "ulps"
-      ],
-      "type": "object"
+      ]
     },
     "validate": {
       "additionalProperties": false,

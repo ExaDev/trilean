@@ -1,7 +1,7 @@
 import { decodeNumbers } from "./values";
 
 /**
- * How a corpus expectation compares with what an implementation returned. Numbers are equal when `Object.is` says so (`-0` is not `0`), or within `ulps` units in the last place when a case gives a tolerance; an object key whose value is `undefined` counts as absent, since JSON has no `undefined`; every other value must match structurally.
+ * How a corpus expectation compares with what an implementation returned. Numbers are equal when `Object.is` says so (`-0` is not `0`), or within the tolerance a case gives (`ulps` units in the last place, or an `absolute` distance); an object key whose value is `undefined` counts as absent, since JSON has no `undefined`; every other value must match structurally.
  */
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -42,29 +42,85 @@ function definedKeys(value: Readonly<Record<string, unknown>>): string[] {
     .sort();
 }
 
+/** How far a number may be from the one a case gives: within `ulps` units in the last place, or at most `absolute` apart. With neither it must be the same double. */
+export interface Tolerance {
+  readonly ulps?: number;
+  readonly absolute?: number;
+}
+
+function withinTolerance(
+  actual: number,
+  expected: number,
+  tolerance: Tolerance,
+): boolean {
+  if (tolerance.absolute !== undefined) {
+    return Math.abs(actual - expected) <= tolerance.absolute;
+  }
+
+  return ulpDistance(actual, expected) <= (tolerance.ulps ?? 0);
+}
+
 /** Whether `actual` equals `expected` under the rules above. */
 export function jsonEquals(
   actual: unknown,
   wanted: unknown,
-  ulps = 0,
+  tolerance: Tolerance = {},
 ): boolean {
-  return equalsDecoded(actual, decodeNumbers(wanted), ulps);
+  return equalsDecoded(actual, decodeNumbers(wanted), tolerance);
+}
+
+/** Whether `actual` matches `expected` where `expected` names only some of the fields: an object matches when every key it gives matches, an array matches element by element at the same length, any other value must be equal (numbers by the tolerance). */
+export function subsetMatches(
+  actual: unknown,
+  wanted: unknown,
+  tolerance: Tolerance = {},
+): boolean {
+  return subsetDecoded(actual, decodeNumbers(wanted), tolerance);
+}
+
+function subsetDecoded(
+  actual: unknown,
+  expected: unknown,
+  tolerance: Tolerance,
+): boolean {
+  if (Array.isArray(expected)) {
+    return (
+      Array.isArray(actual) &&
+      actual.length === expected.length &&
+      expected.every((item: unknown, position) =>
+        subsetDecoded(actual[position], item, tolerance),
+      )
+    );
+  }
+  if (isRecord(expected)) {
+    return (
+      isRecord(actual) &&
+      Object.entries(expected).every(
+        ([key, item]) =>
+          key in actual && subsetDecoded(actual[key], item, tolerance),
+      )
+    );
+  }
+
+  return equalsDecoded(actual, expected, tolerance);
 }
 
 function equalsDecoded(
   actual: unknown,
   expected: unknown,
-  ulps: number,
+  tolerance: Tolerance,
 ): boolean {
   if (typeof expected === "number") {
-    return typeof actual === "number" && ulpDistance(actual, expected) <= ulps;
+    return (
+      typeof actual === "number" && withinTolerance(actual, expected, tolerance)
+    );
   }
   if (Array.isArray(expected)) {
     return (
       Array.isArray(actual) &&
       actual.length === expected.length &&
       expected.every((item: unknown, position) =>
-        equalsDecoded(actual[position], item, ulps),
+        equalsDecoded(actual[position], item, tolerance),
       )
     );
   }
@@ -78,7 +134,7 @@ function equalsDecoded(
       definedKeys(actual).length === entries.length &&
       entries.every(
         ([key, item]) =>
-          key in actual && equalsDecoded(actual[key], item, ulps),
+          key in actual && equalsDecoded(actual[key], item, tolerance),
       )
     );
   }

@@ -33,9 +33,7 @@ export function runCallCase(testCase: CallCase): void {
 
     return;
   }
-  expect(jsonEquals(result, wanted, testCase.tolerance?.ulps ?? 0), label).toBe(
-    true,
-  );
+  expect(jsonEquals(result, wanted, testCase.tolerance), label).toBe(true);
 }
 
 function isFailure(

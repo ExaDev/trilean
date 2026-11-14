@@ -607,10 +607,9 @@
     {
       "as": "predicate",
       "expect": {
-        "status": "definite",
-        "value": false
+        "status": "definite"
       },
-      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > and: false absorbs an indeterminate other operand regardless of its reason (the original asserted only that the result is definite; recorded: trilean src/evaluator.ts, the value)",
+      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > and: false absorbs an indeterminate other operand regardless of its reason",
       "id": "indeterminacy-table.indeterminacy-reference-table-and-false-absorbs-an-indeterminate-other-operand-regardless-of-its-reason.1",
       "kind": "evaluate",
       "resolvers": {
@@ -931,10 +930,9 @@
     {
       "as": "predicate",
       "expect": {
-        "status": "definite",
-        "value": true
+        "status": "definite"
       },
-      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > or: true absorbs an indeterminate other operand regardless of its reason (the original asserted only that the result is definite; recorded: trilean src/evaluator.ts, the value)",
+      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > or: true absorbs an indeterminate other operand regardless of its reason",
       "id": "indeterminacy-table.indeterminacy-reference-table-or-true-absorbs-an-indeterminate-other-operand-regardless-of-its-reason.1",
       "kind": "evaluate",
       "resolvers": {
@@ -1269,10 +1267,9 @@
     {
       "as": "predicate",
       "expect": {
-        "status": "definite",
-        "value": false
+        "status": "definite"
       },
-      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > allOf: a definitely-false operand absorbs an indeterminate sibling (the original asserted only that the result is definite; recorded: trilean src/evaluator.ts, the value)",
+      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > allOf: a definitely-false operand absorbs an indeterminate sibling",
       "id": "indeterminacy-table.indeterminacy-reference-table-allof-a-definitely-false-operand-absorbs-an-indeterminate-sibling.1",
       "kind": "evaluate",
       "resolvers": {
@@ -1601,10 +1598,9 @@
     {
       "as": "predicate",
       "expect": {
-        "status": "definite",
-        "value": true
+        "status": "definite"
       },
-      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > anyOf: a definitely-true operand absorbs an indeterminate sibling (the original asserted only that the result is definite; recorded: trilean src/evaluator.ts, the value)",
+      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > anyOf: a definitely-true operand absorbs an indeterminate sibling",
       "id": "indeterminacy-table.indeterminacy-reference-table-anyof-a-definitely-true-operand-absorbs-an-indeterminate-sibling.1",
       "kind": "evaluate",
       "resolvers": {
@@ -3370,10 +3366,9 @@
     {
       "as": "predicate",
       "expect": {
-        "status": "definite",
-        "value": false
+        "status": "definite"
       },
-      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > exists: never not-found -- converts operand not-found to definitely false (the original asserted only that the result is definite; recorded: trilean src/evaluator.ts, the value)",
+      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > exists: never not-found -- converts operand not-found to definitely false",
       "id": "indeterminacy-table.indeterminacy-reference-table-exists-never-not-found-converts-operand-not-found-to-definitely-false.1",
       "kind": "evaluate",
       "resolvers": {
@@ -3508,10 +3503,9 @@
     {
       "as": "predicate",
       "expect": {
-        "status": "definite",
-        "value": true
+        "status": "definite"
       },
-      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > exists: never wrong-type -- converts operand wrong-type to definitely true (the original asserted only that the result is definite; recorded: trilean src/evaluator.ts, the value)",
+      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > exists: never wrong-type -- converts operand wrong-type to definitely true",
       "id": "indeterminacy-table.indeterminacy-reference-table-exists-never-wrong-type-converts-operand-wrong-type-to-definitely-true.1",
       "kind": "evaluate",
       "resolvers": {
@@ -3654,10 +3648,9 @@
     {
       "as": "predicate",
       "expect": {
-        "status": "definite",
-        "value": true
+        "status": "definite"
       },
-      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > exists: never domain-error -- converts operand domain-error to definitely true (the original asserted only that the result is definite; recorded: trilean src/evaluator.ts, the value)",
+      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > exists: never domain-error -- converts operand domain-error to definitely true",
       "id": "indeterminacy-table.indeterminacy-reference-table-exists-never-domain-error-converts-operand-domain-error-to-definitely-true.1",
       "kind": "evaluate",
       "resolvers": {
@@ -4249,13 +4242,9 @@
     {
       "as": "expression",
       "expect": {
-        "status": "definite",
-        "value": {
-          "kind": "number",
-          "value": 1
-        }
+        "status": "definite"
       },
-      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > numberLiteral: never indeterminate (the original asserted only that the result is definite; recorded: trilean src/evaluator.ts, the value)",
+      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > numberLiteral: never indeterminate",
       "id": "indeterminacy-table.indeterminacy-reference-table-numberliteral-never-indeterminate.1",
       "kind": "evaluate",
       "resolvers": {
@@ -4387,13 +4376,9 @@
     {
       "as": "expression",
       "expect": {
-        "status": "definite",
-        "value": {
-          "kind": "text",
-          "value": "x"
-        }
+        "status": "definite"
       },
-      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > textLiteral: never indeterminate (the original asserted only that the result is definite; recorded: trilean src/evaluator.ts, the value)",
+      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > textLiteral: never indeterminate",
       "id": "indeterminacy-table.indeterminacy-reference-table-textliteral-never-indeterminate.1",
       "kind": "evaluate",
       "resolvers": {
@@ -4525,13 +4510,9 @@
     {
       "as": "expression",
       "expect": {
-        "status": "definite",
-        "value": {
-          "kind": "instant",
-          "value": "2026-01-01T00:00:00.000Z"
-        }
+        "status": "definite"
       },
-      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > instantLiteral: never indeterminate (the original asserted only that the result is definite; recorded: trilean src/evaluator.ts, the value)",
+      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > instantLiteral: never indeterminate",
       "id": "indeterminacy-table.indeterminacy-reference-table-instantliteral-never-indeterminate.1",
       "kind": "evaluate",
       "resolvers": {
@@ -4663,14 +4644,9 @@
     {
       "as": "expression",
       "expect": {
-        "status": "definite",
-        "value": {
-          "kind": "duration",
-          "unit": "min",
-          "value": 1
-        }
+        "status": "definite"
       },
-      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > durationLiteral: never indeterminate (the original asserted only that the result is definite; recorded: trilean src/evaluator.ts, the value)",
+      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > durationLiteral: never indeterminate",
       "id": "indeterminacy-table.indeterminacy-reference-table-durationliteral-never-indeterminate.1",
       "kind": "evaluate",
       "resolvers": {
@@ -4803,14 +4779,9 @@
     {
       "as": "expression",
       "expect": {
-        "status": "definite",
-        "value": {
-          "im": -1,
-          "kind": "complex",
-          "re": 1
-        }
+        "status": "definite"
       },
-      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > complexLiteral: never indeterminate (the original asserted only that the result is definite; recorded: trilean src/evaluator.ts, the value)",
+      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > complexLiteral: never indeterminate",
       "id": "indeterminacy-table.indeterminacy-reference-table-complexliteral-never-indeterminate.1",
       "kind": "evaluate",
       "resolvers": {
@@ -8631,13 +8602,9 @@
     {
       "as": "expression",
       "expect": {
-        "status": "definite",
-        "value": {
-          "kind": "number",
-          "value": 5
-        }
+        "status": "definite"
       },
-      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > accumulator: definite inside a reduce fold's own combine expression (the original asserted only that the result is definite; recorded: trilean src/evaluator.ts, the value)",
+      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > accumulator: definite inside a reduce fold's own combine expression",
       "id": "indeterminacy-table.indeterminacy-reference-table-accumulator-definite-inside-a-reduce-fold-s-own-combine-expression.1",
       "kind": "evaluate",
       "resolvers": {
@@ -9516,13 +9483,9 @@
     {
       "as": "expression",
       "expect": {
-        "status": "definite",
-        "value": {
-          "kind": "number",
-          "value": 1
-        }
+        "status": "definite"
       },
-      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > delegate: definite when the registered handler resolves a value (the original asserted only that the result is definite; recorded: trilean src/evaluator.ts, the value)",
+      "from": "evaluator.indeterminacy-table.unit.test.ts: indeterminacy reference table > delegate: definite when the registered handler resolves a value",
       "id": "indeterminacy-table.indeterminacy-reference-table-delegate-definite-when-the-registered-handler-resolves-a-value.1",
       "kind": "evaluate",
       "resolvers": {
