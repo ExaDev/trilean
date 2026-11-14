@@ -9,7 +9,7 @@
     "@commitlint/config-conventional": "^21.2.3",
     "@eslint/js": "^10.0.1",
     "@exadev/eslint-config": "3.0.0",
-    "@exadev/semantic-release-workspace": "3.2.3",
+    "@exadev/semantic-release-workspace": "3.4.0",
     "@semantic-release/changelog": "^7.0.0",
     "@semantic-release/commit-analyzer": "^13.0.1",
     "@semantic-release/git": "^11.0.1",
@@ -28,7 +28,8 @@
     "semantic-release": "^25.0.9",
     "turbo": "^2.11.7",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.71.1"
+    "typescript-eslint": "^8.71.1",
+    "vitest": "5.1.0"
   },
   "engines": {
     "node": ">=20"
@@ -43,6 +44,8 @@
   },
   "scripts": {
     "_lint": "eslint . --fix --cache --max-warnings 0",
+    "_test": "vitest run",
+    "_test:coverage": "vitest run",
     "_typecheck": "tsc -p tsconfig.json",
     "build": "turbo run _build",
     "lint": "turbo run _lint",
