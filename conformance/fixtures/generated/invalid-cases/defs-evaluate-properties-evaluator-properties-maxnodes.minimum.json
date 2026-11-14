@@ -3,15 +3,14 @@
     {
       "as": "predicate",
       "evaluator": {
-        "maxNestingDepth": 10,
         "maxNodes": 0
       },
       "expect": {
         "status": "definite",
-        "value": false
+        "value": true
       },
-      "from": "evaluator.integration.test.ts: evaluation resource limits > a tree well within both caps evaluates normally and correctly",
-      "id": "integration.evaluation-resource-limits-a-tree-well-within-both-caps-evaluates-normally-and-correctly.1",
+      "from": "recorded: trilean src/evaluator.ts (an exhausted node budget inside an exists operand)",
+      "id": "exists-budget.exists-with-a-budget-an-exists-whose-operand-visits-four-nodes-the-node-limit-at.1",
       "kind": "evaluate",
       "resolvers": {
         "default": {
@@ -34,23 +33,14 @@
         ]
       },
       "tree": {
-        "kind": "not",
+        "kind": "exists",
         "operand": {
-          "kind": "not",
+          "kind": "negate",
           "operand": {
-            "kind": "not",
+            "kind": "negate",
             "operand": {
-              "kind": "not",
-              "operand": {
-                "kind": "not",
-                "operand": {
-                  "kind": "exists",
-                  "operand": {
-                    "kind": "numberLiteral",
-                    "value": 1
-                  }
-                }
-              }
+              "kind": "numberLiteral",
+              "value": 1
             }
           }
         }

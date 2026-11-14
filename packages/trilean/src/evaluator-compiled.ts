@@ -8,6 +8,7 @@ import {
 import {
   type EvaluationBudget,
   createEvaluationBudget,
+  isResourceExhaustion,
 } from "./evaluator-budget";
 import { evaluatePredicateInternal, evaluateValueInternal } from "./evaluator";
 import { runSync, settleSync } from "./evaluator-effect";
@@ -262,7 +263,12 @@ class NodeCompiler {
         return this.charged(depth, (context, resolvers, budget) => {
           const result = operand(context, resolvers, budget);
           if (result.status === "indeterminate") {
-            if (result.reason.code === "not-yet-known") return result;
+            if (
+              result.reason.code === "not-yet-known" ||
+              isResourceExhaustion(result.reason)
+            ) {
+              return result;
+            }
             if (result.reason.code === "not-found") return definite(false);
           }
 
