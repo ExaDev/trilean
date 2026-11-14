@@ -1,0 +1,45 @@
+{
+  "cases": [
+    {
+      "as": "expression",
+      "evaluator": {
+        "functions": {
+          "table": {
+            "f": [
+              {
+                "args": [
+                  {
+                    "kind": "number",
+                    "value": 1
+                  }
+                ],
+                "result": {
+                  "wrongType": "refused"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "expect": {
+        "code": "wrong-type",
+        "message": 1,
+        "status": "indeterminate"
+      },
+      "from": "recorded: trilean conformance/README.md (a rule the README states for resolver data)",
+      "id": "resolver-data.a-registered-function-that-fails-with-a-wrong-type-is-a-wrong-type-with-its-message.1",
+      "kind": "evaluate",
+      "resolvers": {},
+      "tree": {
+        "args": [
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "fn": "f",
+        "kind": "call"
+      }
+    }
+  ]
+}

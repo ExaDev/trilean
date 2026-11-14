@@ -1,0 +1,12 @@
+{
+  "cases": [
+    {
+      "expectSubset": {
+        "outcome": "rejected"
+      },
+      "from": "evaluate-document.unit.test.ts: evaluateDocument > rejects a tree that is not an object",
+      "kind": "document",
+      "tree": 3
+    }
+  ]
+}

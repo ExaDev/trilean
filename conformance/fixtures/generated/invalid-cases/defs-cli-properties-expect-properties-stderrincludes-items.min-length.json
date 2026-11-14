@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "args": [
+        "evaluate",
+        "a.json",
+        "--nope"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderrIncludes": [
+          ""
+        ],
+        "stdout": ""
+      },
+      "files": {},
+      "from": "cli-run.integration.test.ts: trilean evaluate > exits 2 and explains an unknown flag",
+      "id": "cli.trilean-evaluate-exits-2-and-explains-an-unknown-flag.1",
+      "kind": "cli"
+    }
+  ]
+}

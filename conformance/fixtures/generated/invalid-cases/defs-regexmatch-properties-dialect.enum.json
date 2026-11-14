@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "dialect": "not-an-allowed-value",
+      "from": "x.unit.test.ts: a fixture",
+      "id": "optional.10",
+      "inputs": [
+        {
+          "input": "a",
+          "matches": true
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "a",
+      "reason": "the implementation cannot run this case",
+      "skip": "rust",
+      "tolerance": {
+        "ulps": 1
+      }
+    }
+  ]
+}

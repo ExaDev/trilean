@@ -1,0 +1,15 @@
+{
+  "cases": [
+    {
+      "from": "matcher.unit.test.ts: groups > groups for repetition",
+      "inputs": [
+        {
+          "input": "ababab",
+          "matches": true
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "(?:ab)+"
+    }
+  ]
+}

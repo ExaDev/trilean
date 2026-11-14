@@ -1,0 +1,19 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "collections": {},
+        "inputs": {},
+        "ok": true
+      },
+      "from": "x.unit.test.ts: a fixture",
+      "id": "optional.5",
+      "kind": "inputs",
+      "raw": {},
+      "skip": "ts",
+      "tolerance": {
+        "ulps": 1
+      }
+    }
+  ]
+}

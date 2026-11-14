@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "expect": "not-the-type",
+      "from": "x.unit.test.ts: a fixture",
+      "id": "optional.5",
+      "kind": "inputs",
+      "raw": {},
+      "reason": "the implementation cannot run this case",
+      "skip": "ts",
+      "tolerance": {
+        "ulps": 1
+      }
+    }
+  ]
+}

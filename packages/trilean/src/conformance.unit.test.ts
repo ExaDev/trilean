@@ -153,6 +153,21 @@ describe("corpus loading", () => {
 
   it("rejects every invalid-case fixture, each for its one defect", () => {
     expectPairs("invalid-cases", "repaired-cases", validateCorpusFile);
+    expectPairs(
+      "refused-kinds/invalid",
+      "refused-kinds/repaired",
+      validateCorpusFile,
+    );
+    expectPairs(
+      "schema-only/invalid-cases",
+      "schema-only/repaired-cases",
+      validateCorpusFile,
+    );
+    expectPairs(
+      "generated/invalid-cases",
+      "generated/repaired-cases",
+      validateCorpusFile,
+    );
   });
 
   it("rejects every invalid manifest fixture, each for its one defect", () => {
@@ -175,11 +190,16 @@ describe("corpus loading", () => {
   });
 
   it("accepts every valid fixture", () => {
-    for (const name of fixtureNames("valid-cases")) {
-      const result = validateCorpusFile(
-        readJson(join(FIXTURES, "valid-cases", name)),
-      );
-      expect(result.ok ? [] : result.problems, name).toEqual([]);
+    for (const directory of ["valid-cases", "schema-only/valid-cases"]) {
+      for (const name of fixtureNames(directory)) {
+        const result = validateCorpusFile(
+          readJson(join(FIXTURES, directory, name)),
+        );
+        expect(
+          result.ok ? [] : result.problems,
+          `${directory}/${name}`,
+        ).toEqual([]);
+      }
     }
     for (const name of fixtureNames("manifests/valid")) {
       const result = validateManifest(
@@ -388,4 +408,32 @@ describe("the tests that stay outside the corpus", () => {
     );
     expect(stale).toEqual([]);
   });
+});
+
+/** The loader files two packages' runners copy from each other. Both copies are removed with the TypeScript they test, and a change to one is made in the other. */
+describe("the loader files copied between the two runners", () => {
+  const copied = ["corpus-files", "corpus", "text", "read-json", "validate"];
+  const packages = fileURLToPath(new URL("../../", import.meta.url));
+  /** A file without the line that names the other copy, the one place the two differ. */
+  const withoutHeaderLine = (text: string): string =>
+    text
+      .split("\n")
+      .filter((line) => !line.includes("This file is a copy of"))
+      .join("\n");
+
+  it.each(copied)(
+    "%s is the same file in both packages, but for the line naming the other",
+    (name) => {
+      const here = readFileSync(
+        join(packages, "trilean", "src", "test-support", `${name}.ts`),
+        "utf8",
+      );
+      const there = readFileSync(
+        join(packages, "trilean-regex", "src", "test-support", `${name}.ts`),
+        "utf8",
+      );
+      expect(here).toContain("This file is a copy of");
+      expect(withoutHeaderLine(here)).toBe(withoutHeaderLine(there));
+    },
+  );
 });

@@ -1,0 +1,27 @@
+{
+  "cases": [
+    {
+      "args": [
+        {
+          "kind": "allOf",
+          "operands": []
+        }
+      ],
+      "builder": "not",
+      "expect": {
+        "kind": "not",
+        "operand": {
+          "kind": "allOf",
+          "operands": []
+        }
+      },
+      "from": "x.unit.test.ts: a fixture",
+      "id": "optional.2",
+      "reason": "the implementation cannot run this case",
+      "skip": "rust",
+      "tolerance": {
+        "absolute": 0.5
+      }
+    }
+  ]
+}

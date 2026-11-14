@@ -1,0 +1,24 @@
+{
+  "cases": [
+    {
+      "as": "expression",
+      "expect": {
+        "code": "not-found",
+        "status": "indeterminate"
+      },
+      "from": "evaluator.not-yet-known.unit.test.ts: a not-yet-known resolution is its own indeterminate reason > notYetKnown: false is the same as leaving it out",
+      "id": "not-yet-known.a-not-yet-known-resolution-is-its-own-indeterminate-reason-notyetknown-false-is-the-same-as-leaving-it-out.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false,
+          "notYetKnown": "not-the-type"
+        }
+      },
+      "tree": {
+        "key": "x",
+        "kind": "reference"
+      }
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": -1
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          ""
+        ]
+      },
+      "from": "builtin-functions.unit.test.ts: squareRoot > refuses a negative number as a domain-error",
+      "function": "squareRoot",
+      "id": "builtin.squareroot-refuses-a-negative-number-as-a-domain-error.1",
+      "kind": "call"
+    }
+  ]
+}

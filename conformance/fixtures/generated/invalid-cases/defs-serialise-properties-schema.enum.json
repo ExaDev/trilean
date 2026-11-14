@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "expect": "{\"kind\":\"allOf\",\"operands\":[]}",
+      "from": "x.unit.test.ts: a fixture",
+      "id": "optional.8",
+      "input": "{\"kind\":\"allOf\",\"operands\":[]}",
+      "kind": "serialise",
+      "reason": "the implementation cannot run this case",
+      "schema": "not-an-allowed-value",
+      "skip": "rust"
+    }
+  ]
+}

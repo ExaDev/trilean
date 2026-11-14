@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "expect": "0",
+      "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
+      "id": "number-format.1",
+      "kind": "number-format",
+      "value": {
+        "$number": "-0"
+      }
+    }
+  ]
+}

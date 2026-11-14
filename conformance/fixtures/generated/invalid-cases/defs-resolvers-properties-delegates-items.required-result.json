@@ -1,0 +1,41 @@
+{
+  "cases": [
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "value": 0
+        }
+      },
+      "from": "recorded: trilean conformance/README.md (a rule the README states for resolver data)",
+      "id": "resolver-data.a-delegate-entry-answers-only-the-payload-it-lists.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": true,
+          "value": {
+            "kind": "number",
+            "value": 0
+          }
+        },
+        "delegates": [
+          {
+            "payload": {
+              "p": 2
+            },
+            "system": "s"
+          }
+        ]
+      },
+      "tree": {
+        "kind": "delegate",
+        "payload": {
+          "p": 1
+        },
+        "system": "s"
+      }
+    }
+  ]
+}

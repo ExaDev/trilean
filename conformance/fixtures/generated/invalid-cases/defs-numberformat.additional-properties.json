@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "expect": "1",
+      "from": "x.unit.test.ts: a fixture",
+      "id": "optional.9",
+      "kind": "number-format",
+      "reason": "the implementation cannot run this case",
+      "skip": "ts",
+      "unexpectedMember": 1,
+      "value": 1
+    }
+  ]
+}

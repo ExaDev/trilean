@@ -1,0 +1,27 @@
+{
+  "cases": [
+    {
+      "as": "expression",
+      "context": {
+        "a": true
+      },
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "boolean",
+          "value": true
+        }
+      },
+      "from": "recorded: trilean conformance/README.md (a rule the README states for resolver data)",
+      "id": "resolver-data.fromcontext-reads-a-boolean.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "fromContext": true
+      },
+      "tree": {
+        "key": "a",
+        "kind": "reference"
+      }
+    }
+  ]
+}

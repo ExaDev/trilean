@@ -1,0 +1,15 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "issues": [
+          "inputs must be a JSON object of named values"
+        ]
+      },
+      "from": "input-resolvers.unit.test.ts: parseInputs > rejects [] as the inputs themselves",
+      "id": "inputs.parseinputs-rejects-as-the-inputs-themselves.1",
+      "kind": "inputs",
+      "raw": []
+    }
+  ]
+}

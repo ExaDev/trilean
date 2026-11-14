@@ -1,5 +1,8 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
+import { format, isRecord } from "./generated-format";
+import { generatedFixtures } from "./generated-fixtures";
+import { readmeWithIndex } from "./generated-index";
 import { ComputedValueSchema } from "../computed-value";
 import {
   hierarchicalGlobPattern,
@@ -12,36 +15,6 @@ import type { ExpressionNode } from "../tree";
 /**
  * The corpus files that are generated from the TypeScript implementation instead of extracted from a test, written the way the repository's lint writes a corpus file (keys sorted, two-space indent, one element per line) so that regenerating changes no byte of what is committed. `conformance.generated.unit.test.ts` regenerates them into a temporary directory and compares them with the committed files; `scripts/generate-corpus.ts` writes them into `conformance/`. Everything here is deterministic: the inputs are the lists below and the answers are the host's own.
  */
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
-}
-
-/** A negative zero cannot be written as a JSON number in a canonical corpus file, so it is the object the README names. */
-function format(value: unknown, indent: string): string {
-  if (Object.is(value, -0)) {
-    return `{\n${indent}  "$number": "-0"\n${indent}}`;
-  }
-  if (Array.isArray(value)) {
-    if (value.length === 0) {
-      return "[]";
-    }
-    const next = `${indent}  `;
-
-    return `[\n${value.map((item: unknown) => `${next}${format(item, next)}`).join(",\n")}\n${indent}]`;
-  }
-  if (isRecord(value)) {
-    const keys = Object.keys(value).sort();
-    if (keys.length === 0) {
-      return "{}";
-    }
-    const next = `${indent}  `;
-
-    return `{\n${keys.map((key) => `${next}${JSON.stringify(key)}: ${format(value[key], next)}`).join(",\n")}\n${indent}}`;
-  }
-
-  return JSON.stringify(value);
-}
 
 /** An argument as a label: JSON text, with the two line separators a schema's `.` does not match escaped. */
 const HEX_RADIX = 16;
@@ -247,7 +220,13 @@ const NUMBERS = [
 
 function numberFormat(): unknown {
   return {
-    cases: [-0, ...NUMBERS].map((value, index) => ({
+    cases: [
+      -0,
+      Number.POSITIVE_INFINITY,
+      Number.NEGATIVE_INFINITY,
+      Number.NaN,
+      ...NUMBERS,
+    ].map((value, index) => ({
       expect: String(value),
       from: "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
       id: `number-format.${String(index + 1)}`,
@@ -353,6 +332,23 @@ const COMPUTED: readonly unknown[] = [
   { kind: "complex", re: 3, im: 4, unit: { V: 1, A: -1 } },
 ];
 
+/** JSON text for a value, a negative zero written as `-0`, which `JSON.stringify` would write as `0`. */
+function jsonText(value: unknown): string {
+  if (Object.is(value, -0)) {
+    return "-0";
+  }
+  if (Array.isArray(value)) {
+    return `[${value.map((item: unknown) => jsonText(item)).join(",")}]`;
+  }
+  if (isRecord(value)) {
+    return `{${Object.entries(value)
+      .map(([key, item]) => `${JSON.stringify(key)}:${jsonText(item)}`)
+      .join(",")}}`;
+  }
+
+  return JSON.stringify(value);
+}
+
 function serialise(): unknown {
   const parsers: readonly (readonly [
     string,
@@ -378,7 +374,7 @@ function serialise(): unknown {
   const cases: unknown[] = [];
   for (const [schema, parse, trees] of parsers) {
     for (const tree of trees) {
-      const input = JSON.stringify(reversed(tree));
+      const input = jsonText(reversed(tree));
       cases.push({
         expect: JSON.stringify(parse(JSON.parse(input))),
         from: `recorded: trilean src/tree.ts (a ${schema.replace("Schema", "")} written in reverse member order, parsed and serialised again, byte for byte)`,
@@ -393,22 +389,45 @@ function serialise(): unknown {
   return { cases };
 }
 
+/** The generated corpus files, by path relative to the corpus root. */
+export const GENERATED_CORPUS_FILES: readonly string[] = [
+  "trilean-regex/ecmascript/derived-patterns.json",
+  "trilean/number-format/number-format.json",
+  "trilean/serialise/serialise.json",
+];
+
 /** The generated corpus files by path relative to the corpus root, with their exact text. */
 export function generatedCorpus(): ReadonlyMap<string, string> {
+  const documents = new Map<string, unknown>([
+    ["trilean-regex/ecmascript/derived-patterns.json", derivedPatterns()],
+    ["trilean/number-format/number-format.json", numberFormat()],
+    ["trilean/serialise/serialise.json", serialise()],
+  ]);
+
   return new Map(
-    (
-      [
-        ["trilean-regex/ecmascript/derived-patterns.json", derivedPatterns()],
-        ["trilean/number-format/number-format.json", numberFormat()],
-        ["trilean/serialise/serialise.json", serialise()],
-      ] as const
-    ).map(([path, document]) => [path, `${format(document, "")}\n`]),
+    GENERATED_CORPUS_FILES.map((path) => [
+      path,
+      `${format(documents.get(path), "")}\n`,
+    ]),
   );
 }
 
-/** Writes the generated files under `root`. */
+/** What is derived from the corpus as it stands under `root`: the fixtures that cover every constraint of the schema and the README with its generated index. */
+export function generatedDerived(root: string): ReadonlyMap<string, string> {
+  return new Map([
+    ...generatedFixtures(root),
+    ["README.md", readmeWithIndex(root)],
+  ]);
+}
+
+/** Writes the generated corpus files under `root`, then what is derived from them and the rest of the corpus. */
 export function writeGeneratedCorpus(root: string): void {
   for (const [path, content] of generatedCorpus()) {
+    const target = join(root, path);
+    mkdirSync(dirname(target), { recursive: true });
+    writeFileSync(target, content);
+  }
+  for (const [path, content] of generatedDerived(root)) {
     const target = join(root, path);
     mkdirSync(dirname(target), { recursive: true });
     writeFileSync(target, content);

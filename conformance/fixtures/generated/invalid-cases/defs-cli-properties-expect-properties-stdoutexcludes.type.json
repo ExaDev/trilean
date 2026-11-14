@@ -1,0 +1,26 @@
+{
+  "cases": [
+    {
+      "args": [
+        "evaluate",
+        "t.json"
+      ],
+      "expect": {
+        "exit": 1,
+        "stdoutExcludes": "not-the-type",
+        "stdoutJsonSubset": {
+          "reason": {
+            "code": "domain-error",
+            "message": "result is not a finite number"
+          }
+        }
+      },
+      "files": {
+        "t.json": "{\"kind\":\"arithmetic\",\"op\":\"multiply\",\"left\":{\"kind\":\"numberLiteral\",\"value\":1.7976931348623157e+308},\"right\":{\"kind\":\"numberLiteral\",\"value\":1.7976931348623157e+308}}"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate > reports an overflow as a domain-error and never prints null",
+      "id": "cli.trilean-evaluate-reports-an-overflow-as-a-domain-error-and-never-prints-null.1",
+      "kind": "cli"
+    }
+  ]
+}

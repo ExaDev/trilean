@@ -1,0 +1,31 @@
+{
+  "cases": [
+    {
+      "as": "expression",
+      "evaluator": {
+        "functions": {
+          "builtin": false,
+          "unexpectedMember": 1
+        }
+      },
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "recorded: trilean conformance/README.md (a rule the README states for resolver data)",
+      "id": "resolver-data.the-built-in-functions-are-not-registered-when-builtin-is-false.1",
+      "kind": "evaluate",
+      "resolvers": {},
+      "tree": {
+        "args": [
+          {
+            "kind": "numberLiteral",
+            "value": -3
+          }
+        ],
+        "fn": "absoluteValue",
+        "kind": "call"
+      }
+    }
+  ]
+}

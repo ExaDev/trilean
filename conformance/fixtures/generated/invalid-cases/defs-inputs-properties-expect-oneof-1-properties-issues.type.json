@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "issues": "not-the-type",
+        "ok": false
+      },
+      "from": "input-resolvers.unit.test.ts: parseInputs > rejects [] as the inputs themselves",
+      "id": "inputs.parseinputs-rejects-as-the-inputs-themselves.1",
+      "kind": "inputs",
+      "raw": []
+    }
+  ]
+}

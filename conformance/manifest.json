@@ -2,6 +2,7 @@
   "files": {
     "trilean-regex/ecmascript/derived-patterns.json": {
       "cases": 72,
+      "generated": true,
       "skip": []
     },
     "trilean-regex/match/matcher.json": {
@@ -45,7 +46,7 @@
       "skip": []
     },
     "trilean/document/evaluate-document.json": {
-      "cases": 25,
+      "cases": 26,
       "skip": []
     },
     "trilean/evaluate/complex-arithmetic.json": {
@@ -89,7 +90,7 @@
       "skip": []
     },
     "trilean/evaluate/evaluator.complex-arithmetic.json": {
-      "cases": 81,
+      "cases": 80,
       "skip": []
     },
     "trilean/evaluate/evaluator.control-flow.json": {
@@ -144,8 +145,16 @@
       "cases": 3,
       "skip": []
     },
+    "trilean/evaluate/instants.json": {
+      "cases": 16,
+      "skip": []
+    },
     "trilean/evaluate/pattern-matching.json": {
       "cases": 10,
+      "skip": []
+    },
+    "trilean/evaluate/resolver-data.json": {
+      "cases": 37,
       "skip": []
     },
     "trilean/evaluate/schema-pipeline.json": {
@@ -165,11 +174,13 @@
       "skip": []
     },
     "trilean/number-format/number-format.json": {
-      "cases": 37,
+      "cases": 40,
+      "generated": true,
       "skip": []
     },
     "trilean/serialise/serialise.json": {
       "cases": 38,
+      "generated": true,
       "skip": []
     },
     "trilean/validate/computed-value.json": {

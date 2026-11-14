@@ -1,0 +1,25 @@
+{
+  "cases": [
+    {
+      "args": [
+        "evaluate",
+        "a.json",
+        "--as",
+        "other"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderrIncludes": [
+          "--as must be"
+        ],
+        "stdout": ""
+      },
+      "files": {
+        "a.json": "1"
+      },
+      "from": "cli-run.integration.test.ts: trilean evaluate > exits 2 and explains an invalid --as",
+      "id": "cli.trilean-evaluate-exits-2-and-explains-an-invalid-as.1",
+      "kind": "cli"
+    }
+  ]
+}

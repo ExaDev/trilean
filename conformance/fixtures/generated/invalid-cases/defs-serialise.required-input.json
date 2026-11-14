@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "expect": "{\"kind\":\"allOf\",\"operands\":[]}",
+      "from": "x.unit.test.ts: a fixture",
+      "id": "optional.8",
+      "kind": "serialise",
+      "reason": "the implementation cannot run this case",
+      "schema": "PredicateNodeSchema",
+      "skip": "rust"
+    }
+  ]
+}

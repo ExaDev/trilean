@@ -1,0 +1,21 @@
+{
+  "cases": [
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": -0.4
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 0
+      },
+      "from": "builtin-functions.unit.test.ts: round > never returns a negative zero",
+      "function": "round",
+      "id": "builtin.round-never-returns-a-negative-zero.1",
+      "kind": "call",
+      "unexpectedMember": 1
+    }
+  ]
+}
