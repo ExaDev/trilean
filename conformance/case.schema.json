@@ -1,5 +1,18 @@
 {
   "$defs": {
+    "badSpecialNumber": {
+      "description": "An object that has a $number member and is not exactly one of the four named numbers.",
+      "not": {
+        "$ref": "#/$defs/specialNumber"
+      },
+      "properties": {
+        "$number": true
+      },
+      "required": [
+        "$number"
+      ],
+      "type": "object"
+    },
     "build": {
       "additionalProperties": false,
       "dependentRequired": {
@@ -15,7 +28,23 @@
           "type": "array"
         },
         "builder": {
-          "minLength": 1,
+          "description": "The name of a function of the package that builds a tree.",
+          "enum": [
+            "average",
+            "coalesce",
+            "count",
+            "hierarchicalGlobPattern",
+            "iff",
+            "implies",
+            "nand",
+            "none",
+            "nor",
+            "not",
+            "prefixPattern",
+            "sum",
+            "wildcardPattern",
+            "xor"
+          ],
           "type": "string"
         },
         "expect": {
@@ -122,7 +151,25 @@
           "$ref": "#/$defs/from"
         },
         "function": {
-          "minLength": 1,
+          "description": "The name of a built-in function of the package.",
+          "enum": [
+            "absoluteValue",
+            "arcCosine",
+            "arcSine",
+            "arcTangent",
+            "arcTangent2",
+            "cosine",
+            "exponential",
+            "logarithm",
+            "magnitude",
+            "maximum",
+            "minimum",
+            "phase",
+            "round",
+            "sine",
+            "squareRoot",
+            "tangent"
+          ],
           "type": "string"
         },
         "id": {
@@ -344,7 +391,8 @@
           },
           "required": [
             "expect"
-          ]
+          ],
+          "type": "object"
         },
         {
           "properties": {
@@ -352,7 +400,8 @@
           },
           "required": [
             "expectSubset"
-          ]
+          ],
+          "type": "object"
         }
       ],
       "properties": {
@@ -364,6 +413,15 @@
         },
         "expect": {
           "$ref": "#/$defs/json"
+        },
+        "expectIssuePaths": {
+          "description": "Paths each of which at least one issue of a rejected document names: an issue is `<path>: <text>`, and only the path is the implementation's to pin.",
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
         },
         "expectSubset": {
           "description": "For a document whose original asserted only some fields of the outcome: an object that names at least one key. An object matches when every key it gives matches; an array matches element by element and has the same length; any other value must be equal.",
@@ -383,7 +441,9 @@
           "const": "document"
         },
         "maxNodes": {
-          "$ref": "#/$defs/json"
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
         },
         "reason": {
           "$ref": "#/$defs/reason"
@@ -415,7 +475,8 @@
           },
           "required": [
             "expect"
-          ]
+          ],
+          "type": "object"
         },
         {
           "properties": {
@@ -423,7 +484,8 @@
           },
           "required": [
             "expectCalls"
-          ]
+          ],
+          "type": "object"
         }
       ],
       "dependentRequired": {
@@ -482,10 +544,14 @@
               "type": "object"
             },
             "maxNestingDepth": {
-              "$ref": "#/$defs/json"
+              "maximum": 9007199254740991,
+              "minimum": 1,
+              "type": "integer"
             },
             "maxNodes": {
-              "$ref": "#/$defs/json"
+              "maximum": 9007199254740991,
+              "minimum": 1,
+              "type": "integer"
             }
           },
           "type": "object"
@@ -545,19 +611,14 @@
                 "throws": {
                   "additionalProperties": false,
                   "properties": {
-                    "from": {
-                      "enum": [
-                        "resolver",
-                        "function",
-                        "type-error"
-                      ]
-                    },
                     "message": {
+                      "description": "A fragment of the message the evaluation threw.",
+                      "minLength": 1,
                       "type": "string"
                     }
                   },
                   "required": [
-                    "from"
+                    "message"
                   ],
                   "type": "object"
                 }
@@ -745,7 +806,10 @@
       "type": "object"
     },
     "json": {
-      "description": "Any JSON value."
+      "description": "Any JSON value. An object with a $number member is the number it names and has no other member; a $number member holding anything but one of the four names is refused.",
+      "not": {
+        "$ref": "#/$defs/badSpecialNumber"
+      }
     },
     "nonEmptyText": {
       "description": "A text that holds at least one code unit.",
@@ -803,9 +867,6 @@
         },
         "skip": {
           "$ref": "#/$defs/skip"
-        },
-        "tolerance": {
-          "$ref": "#/$defs/tolerance"
         },
         "value": {
           "oneOf": [
@@ -1175,18 +1236,13 @@
       "type": "object"
     },
     "resolution": {
-      "description": "What one resolver call returns. settlesAfter, async only, settles it after that many microtask turns.",
+      "description": "What one resolver call returns: a value, an absence (known, or not yet known), or an exception the resolver throws with that message.",
       "oneOf": [
         {
           "additionalProperties": false,
           "properties": {
             "found": {
               "const": true
-            },
-            "settlesAfter": {
-              "maximum": 9007199254740991,
-              "minimum": 0,
-              "type": "integer"
             },
             "value": {
               "$ref": "#/$defs/computedValue"
@@ -1206,11 +1262,6 @@
             },
             "notYetKnown": {
               "type": "boolean"
-            },
-            "settlesAfter": {
-              "maximum": 9007199254740991,
-              "minimum": 0,
-              "type": "integer"
             }
           },
           "required": [
@@ -1221,34 +1272,12 @@
         {
           "additionalProperties": false,
           "properties": {
-            "settlesAfter": {
-              "maximum": 9007199254740991,
-              "minimum": 0,
-              "type": "integer"
-            },
             "throws": {
               "type": "string"
             }
           },
           "required": [
             "throws"
-          ],
-          "type": "object"
-        },
-        {
-          "additionalProperties": false,
-          "properties": {
-            "raw": {
-              "$ref": "#/$defs/json"
-            },
-            "settlesAfter": {
-              "maximum": 9007199254740991,
-              "minimum": 0,
-              "type": "integer"
-            }
-          },
-          "required": [
-            "raw"
           ],
           "type": "object"
         }
@@ -1448,14 +1477,16 @@
           "$ref": "#/$defs/reason"
         },
         "schema": {
-          "minLength": 1,
+          "description": "The export name of a tree or value schema of the package.",
+          "enum": [
+            "ComputedValueSchema",
+            "ExpressionNodeSchema",
+            "PredicateNodeSchema"
+          ],
           "type": "string"
         },
         "skip": {
           "$ref": "#/$defs/skip"
-        },
-        "tolerance": {
-          "$ref": "#/$defs/tolerance"
         }
       },
       "required": [
@@ -1861,7 +1892,7 @@
       ]
     },
     "tolerance": {
-      "description": "How far a number may be from the one a case gives. Numbers compare exactly unless a case gives either `ulps`, units in the last place, or `absolute`, the distance, never both.",
+      "description": "How far a number may be from the one a case gives. Numbers compare exactly unless a case gives a tolerance: `ulps`, the number of representable doubles between the two numbers, or `absolute`, a distance the two numbers must be strictly closer than. A tolerance holds for every number in the value that is compared, treats both zeros as one value, and never applies to an expectation that is not finite.",
       "oneOf": [
         {
           "additionalProperties": false,
@@ -1881,7 +1912,7 @@
           "additionalProperties": false,
           "properties": {
             "absolute": {
-              "minimum": 0,
+              "exclusiveMinimum": 0,
               "type": "number"
             }
           },
@@ -1923,38 +1954,12 @@
             {
               "additionalProperties": false,
               "properties": {
-                "issues": {
-                  "items": {
-                    "additionalProperties": false,
-                    "properties": {
-                      "message": {
-                        "type": "string"
-                      },
-                      "path": {
-                        "items": {
-                          "maximum": 9007199254740991,
-                          "type": [
-                            "string",
-                            "integer"
-                          ]
-                        },
-                        "type": "array"
-                      }
-                    },
-                    "required": [
-                      "path"
-                    ],
-                    "type": "object"
-                  },
-                  "type": "array"
-                },
                 "ok": {
                   "const": false
                 }
               },
               "required": [
-                "ok",
-                "issues"
+                "ok"
               ],
               "type": "object"
             }
@@ -1976,7 +1981,42 @@
           "$ref": "#/$defs/reason"
         },
         "schema": {
-          "minLength": 1,
+          "description": "The export name of a schema of the package.",
+          "enum": [
+            "AccumulatorNodeSchema",
+            "AllOfNodeSchema",
+            "AndNodeSchema",
+            "AnyOfNodeSchema",
+            "ArithmeticNodeSchema",
+            "BooleanLiteralNodeSchema",
+            "CallNodeSchema",
+            "CompareNodeSchema",
+            "ComplexLiteralNodeSchema",
+            "ComputedValueSchema",
+            "ConditionalNodeSchema",
+            "DelegateNodeSchema",
+            "DurationLiteralNodeSchema",
+            "EveryNodeSchema",
+            "ExistsNodeSchema",
+            "ExpressionNodeSchema",
+            "FoldCombinerSchema",
+            "FoldNodeSchema",
+            "HitPolicySchema",
+            "IndeterminateReasonSchema",
+            "InstantLiteralNodeSchema",
+            "LookupNodeSchema",
+            "MemberOfNodeSchema",
+            "NegateNodeSchema",
+            "NotNodeSchema",
+            "NumberLiteralNodeSchema",
+            "OrNodeSchema",
+            "PredicateNodeSchema",
+            "ReferenceNodeSchema",
+            "SomeNodeSchema",
+            "TextCompareNodeSchema",
+            "TextLiteralNodeSchema",
+            "TreeReferenceNodeSchema"
+          ],
           "type": "string"
         },
         "skip": {

@@ -317,7 +317,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "schema-pipeline.integration.test.ts: adversarial input > a wrong literal type for the 'kind' discriminant is rejected, not coerced",
@@ -339,7 +338,6 @@
     },
     {
       "expect": {
-        "issues": [],
         "ok": false
       },
       "from": "schema-pipeline.integration.test.ts: adversarial input > a 'kind' string that matches no known node kind is rejected",

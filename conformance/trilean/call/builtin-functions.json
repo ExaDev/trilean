@@ -831,10 +831,13 @@
         "kind": "number",
         "value": 2.718281828459045
       },
-      "from": "builtin-functions.unit.test.ts: exponential > is e to the power of a dimensionless number",
+      "from": "builtin-functions.unit.test.ts: exponential > is e to the power of a dimensionless number (the original asserted the engine's exact digits; held to one unit in the last place, as the README states for results of transcendental functions)",
       "function": "exponential",
       "id": "builtin.exponential-is-e-to-the-power-of-a-dimensionless-number.2",
-      "kind": "call"
+      "kind": "call",
+      "tolerance": {
+        "ulps": 1
+      }
     },
     {
       "args": [
@@ -906,10 +909,13 @@
         "kind": "number",
         "value": 3.0000000000000004
       },
-      "from": "builtin-functions.unit.test.ts: logarithm > is natural by default and to a base when given one",
+      "from": "builtin-functions.unit.test.ts: logarithm > is natural by default and to a base when given one (the original asserted the engine's exact digits; held to one unit in the last place, as the README states for results of transcendental functions)",
       "function": "logarithm",
       "id": "builtin.logarithm-is-natural-by-default-and-to-a-base-when-given-one.2",
-      "kind": "call"
+      "kind": "call",
+      "tolerance": {
+        "ulps": 1
+      }
     },
     {
       "args": [
@@ -1366,10 +1372,13 @@
         "kind": "number",
         "value": 1.5707963267948966
       },
-      "from": "builtin-functions.unit.test.ts: phase > is the angle of a complex number in radians, dimensionless whatever its unit",
+      "from": "builtin-functions.unit.test.ts: phase > is the angle of a complex number in radians, dimensionless whatever its unit (the original asserted the engine's exact digits; held to one unit in the last place, as the README states for results of transcendental functions)",
       "function": "phase",
       "id": "builtin.phase-is-the-angle-of-a-complex-number-in-radians-dimensionless-whatever-its-unit.1",
-      "kind": "call"
+      "kind": "call",
+      "tolerance": {
+        "ulps": 1
+      }
     },
     {
       "args": [
@@ -1383,10 +1392,13 @@
         "kind": "number",
         "value": 3.141592653589793
       },
-      "from": "builtin-functions.unit.test.ts: phase > is the angle of a complex number in radians, dimensionless whatever its unit",
+      "from": "builtin-functions.unit.test.ts: phase > is the angle of a complex number in radians, dimensionless whatever its unit (the original asserted the engine's exact digits; held to one unit in the last place, as the README states for results of transcendental functions)",
       "function": "phase",
       "id": "builtin.phase-is-the-angle-of-a-complex-number-in-radians-dimensionless-whatever-its-unit.2",
-      "kind": "call"
+      "kind": "call",
+      "tolerance": {
+        "ulps": 1
+      }
     },
     {
       "args": [
@@ -1400,10 +1412,13 @@
         "kind": "number",
         "value": 3.141592653589793
       },
-      "from": "builtin-functions.unit.test.ts: phase > is +pi for a negative real number whatever the sign of its zero imaginary part",
+      "from": "builtin-functions.unit.test.ts: phase > is +pi for a negative real number whatever the sign of its zero imaginary part (the original asserted the engine's exact digits; held to one unit in the last place, as the README states for results of transcendental functions)",
       "function": "phase",
       "id": "builtin.phase-is-pi-for-a-negative-real-number-whatever-the-sign-of-its-zero-imaginary-part.1",
-      "kind": "call"
+      "kind": "call",
+      "tolerance": {
+        "ulps": 1
+      }
     },
     {
       "args": [
@@ -1419,10 +1434,13 @@
         "kind": "number",
         "value": 3.141592653589793
       },
-      "from": "builtin-functions.unit.test.ts: phase > is +pi for a negative real number whatever the sign of its zero imaginary part",
+      "from": "builtin-functions.unit.test.ts: phase > is +pi for a negative real number whatever the sign of its zero imaginary part (the original asserted the engine's exact digits; held to one unit in the last place, as the README states for results of transcendental functions)",
       "function": "phase",
       "id": "builtin.phase-is-pi-for-a-negative-real-number-whatever-the-sign-of-its-zero-imaginary-part.2",
-      "kind": "call"
+      "kind": "call",
+      "tolerance": {
+        "ulps": 1
+      }
     },
     {
       "args": [
@@ -1436,10 +1454,13 @@
         "kind": "number",
         "value": -3.141592653589793
       },
-      "from": "builtin-functions.unit.test.ts: phase > rounds to exactly -pi for a tiny negative imaginary part, so the range is closed",
+      "from": "builtin-functions.unit.test.ts: phase > rounds to exactly -pi for a tiny negative imaginary part, so the range is closed (the original asserted the engine's exact digits; held to one unit in the last place, as the README states for results of transcendental functions)",
       "function": "phase",
       "id": "builtin.phase-rounds-to-exactly-pi-for-a-tiny-negative-imaginary-part-so-the-range-is-closed.1",
-      "kind": "call"
+      "kind": "call",
+      "tolerance": {
+        "ulps": 1
+      }
     },
     {
       "args": [
@@ -1453,10 +1474,13 @@
         "kind": "number",
         "value": -3.141592653589793
       },
-      "from": "builtin-functions.unit.test.ts: phase > rounds to exactly -pi for a tiny negative imaginary part, so the range is closed",
+      "from": "builtin-functions.unit.test.ts: phase > rounds to exactly -pi for a tiny negative imaginary part, so the range is closed (the original asserted the engine's exact digits; held to one unit in the last place, as the README states for results of transcendental functions)",
       "function": "phase",
       "id": "builtin.phase-rounds-to-exactly-pi-for-a-tiny-negative-imaginary-part-so-the-range-is-closed.2",
-      "kind": "call"
+      "kind": "call",
+      "tolerance": {
+        "ulps": 1
+      }
     },
     {
       "args": [
@@ -2017,10 +2041,13 @@
         "kind": "complex",
         "re": 1.3407807929942596e+154
       },
-      "from": "builtin-functions.unit.test.ts: squareRoot of a complex number > keeps a root whose argument's terms sum past the largest double",
+      "from": "builtin-functions.unit.test.ts: squareRoot of a complex number > keeps a root whose argument's terms sum past the largest double (the original asserted the engine's exact digits; held to one unit in the last place, as the README states for results of transcendental functions)",
       "function": "squareRoot",
       "id": "builtin.squareroot-of-a-complex-number-keeps-a-root-whose-argument-s-terms-sum-past-the-largest-double.1",
-      "kind": "call"
+      "kind": "call",
+      "tolerance": {
+        "ulps": 1
+      }
     },
     {
       "args": [
@@ -2035,10 +2062,13 @@
         "kind": "complex",
         "re": 2.2227587494850775e-162
       },
-      "from": "builtin-functions.unit.test.ts: squareRoot of a complex number > keeps the root of the smallest subnormal, whose half would round to zero",
+      "from": "builtin-functions.unit.test.ts: squareRoot of a complex number > keeps the root of the smallest subnormal, whose half would round to zero (the original asserted the engine's exact digits; held to one unit in the last place, as the README states for results of transcendental functions)",
       "function": "squareRoot",
       "id": "builtin.squareroot-of-a-complex-number-keeps-the-root-of-the-smallest-subnormal-whose-half-would-round-to-zero.1",
-      "kind": "call"
+      "kind": "call",
+      "tolerance": {
+        "ulps": 1
+      }
     },
     {
       "args": [
@@ -2204,10 +2234,13 @@
         "kind": "complex",
         "re": 0
       },
-      "from": "builtin-functions.unit.test.ts: logarithm of a complex number > is the principal value, i pi/2 at i and i pi at -1, whatever the sign of -1's zero",
+      "from": "builtin-functions.unit.test.ts: logarithm of a complex number > is the principal value, i pi/2 at i and i pi at -1, whatever the sign of -1's zero (the original asserted the engine's exact digits; held to one unit in the last place, as the README states for results of transcendental functions)",
       "function": "logarithm",
       "id": "builtin.logarithm-of-a-complex-number-is-the-principal-value-i-pi-2-at-i-and-i-pi-at-1-whatever-the-sign-of-1-s-zero.1",
-      "kind": "call"
+      "kind": "call",
+      "tolerance": {
+        "ulps": 1
+      }
     },
     {
       "args": [
@@ -2222,10 +2255,13 @@
         "kind": "complex",
         "re": 0
       },
-      "from": "builtin-functions.unit.test.ts: logarithm of a complex number > is the principal value, i pi/2 at i and i pi at -1, whatever the sign of -1's zero",
+      "from": "builtin-functions.unit.test.ts: logarithm of a complex number > is the principal value, i pi/2 at i and i pi at -1, whatever the sign of -1's zero (the original asserted the engine's exact digits; held to one unit in the last place, as the README states for results of transcendental functions)",
       "function": "logarithm",
       "id": "builtin.logarithm-of-a-complex-number-is-the-principal-value-i-pi-2-at-i-and-i-pi-at-1-whatever-the-sign-of-1-s-zero.2",
-      "kind": "call"
+      "kind": "call",
+      "tolerance": {
+        "ulps": 1
+      }
     },
     {
       "args": [
@@ -2242,10 +2278,13 @@
         "kind": "complex",
         "re": 0
       },
-      "from": "builtin-functions.unit.test.ts: logarithm of a complex number > is the principal value, i pi/2 at i and i pi at -1, whatever the sign of -1's zero",
+      "from": "builtin-functions.unit.test.ts: logarithm of a complex number > is the principal value, i pi/2 at i and i pi at -1, whatever the sign of -1's zero (the original asserted the engine's exact digits; held to one unit in the last place, as the README states for results of transcendental functions)",
       "function": "logarithm",
       "id": "builtin.logarithm-of-a-complex-number-is-the-principal-value-i-pi-2-at-i-and-i-pi-at-1-whatever-the-sign-of-1-s-zero.3",
-      "kind": "call"
+      "kind": "call",
+      "tolerance": {
+        "ulps": 1
+      }
     },
     {
       "args": [
@@ -2506,7 +2545,7 @@
       "id": "builtin.sine-cosine-and-tangent-give-a-large-but-finite-tangent-at-the-double-nearest-a-pole.1",
       "kind": "call",
       "tolerance": {
-        "ulps": 16
+        "ulps": 1
       }
     },
     {
@@ -2971,10 +3010,13 @@
         "kind": "number",
         "value": 1.5707963267948966
       },
-      "from": "builtin-functions.unit.test.ts: arcSine, arcCosine and arcTangent > return an angle in radians",
+      "from": "builtin-functions.unit.test.ts: arcSine, arcCosine and arcTangent > return an angle in radians (the original asserted the engine's exact digits; held to one unit in the last place, as the README states for results of transcendental functions)",
       "function": "arcSine",
       "id": "builtin.arcsine-arccosine-and-arctangent-return-an-angle-in-radians.1",
-      "kind": "call"
+      "kind": "call",
+      "tolerance": {
+        "ulps": 1
+      }
     },
     {
       "args": [
@@ -2987,10 +3029,13 @@
         "kind": "number",
         "value": -1.5707963267948966
       },
-      "from": "builtin-functions.unit.test.ts: arcSine, arcCosine and arcTangent > return an angle in radians",
+      "from": "builtin-functions.unit.test.ts: arcSine, arcCosine and arcTangent > return an angle in radians (the original asserted the engine's exact digits; held to one unit in the last place, as the README states for results of transcendental functions)",
       "function": "arcSine",
       "id": "builtin.arcsine-arccosine-and-arctangent-return-an-angle-in-radians.2",
-      "kind": "call"
+      "kind": "call",
+      "tolerance": {
+        "ulps": 1
+      }
     },
     {
       "args": [
@@ -3003,10 +3048,13 @@
         "kind": "number",
         "value": 3.141592653589793
       },
-      "from": "builtin-functions.unit.test.ts: arcSine, arcCosine and arcTangent > return an angle in radians",
+      "from": "builtin-functions.unit.test.ts: arcSine, arcCosine and arcTangent > return an angle in radians (the original asserted the engine's exact digits; held to one unit in the last place, as the README states for results of transcendental functions)",
       "function": "arcCosine",
       "id": "builtin.arcsine-arccosine-and-arctangent-return-an-angle-in-radians.3",
-      "kind": "call"
+      "kind": "call",
+      "tolerance": {
+        "ulps": 1
+      }
     },
     {
       "args": [
@@ -3035,10 +3083,13 @@
         "kind": "number",
         "value": 0.7853981633974483
       },
-      "from": "builtin-functions.unit.test.ts: arcSine, arcCosine and arcTangent > return an angle in radians",
+      "from": "builtin-functions.unit.test.ts: arcSine, arcCosine and arcTangent > return an angle in radians (the original asserted the engine's exact digits; held to one unit in the last place, as the README states for results of transcendental functions)",
       "function": "arcTangent",
       "id": "builtin.arcsine-arccosine-and-arctangent-return-an-angle-in-radians.5",
-      "kind": "call"
+      "kind": "call",
+      "tolerance": {
+        "ulps": 1
+      }
     },
     {
       "args": [
@@ -3273,10 +3324,13 @@
         "kind": "number",
         "value": 0.7853981633974483
       },
-      "from": "builtin-functions.unit.test.ts: arcTangent2 > is the angle of the point (x, y), called with y first",
+      "from": "builtin-functions.unit.test.ts: arcTangent2 > is the angle of the point (x, y), called with y first (the original asserted the engine's exact digits; held to one unit in the last place, as the README states for results of transcendental functions)",
       "function": "arcTangent2",
       "id": "builtin.arctangent2-is-the-angle-of-the-point-x-y-called-with-y-first.1",
-      "kind": "call"
+      "kind": "call",
+      "tolerance": {
+        "ulps": 1
+      }
     },
     {
       "args": [
@@ -3293,10 +3347,13 @@
         "kind": "number",
         "value": 2.356194490192345
       },
-      "from": "builtin-functions.unit.test.ts: arcTangent2 > is the angle of the point (x, y), called with y first",
+      "from": "builtin-functions.unit.test.ts: arcTangent2 > is the angle of the point (x, y), called with y first (the original asserted the engine's exact digits; held to one unit in the last place, as the README states for results of transcendental functions)",
       "function": "arcTangent2",
       "id": "builtin.arctangent2-is-the-angle-of-the-point-x-y-called-with-y-first.2",
-      "kind": "call"
+      "kind": "call",
+      "tolerance": {
+        "ulps": 1
+      }
     },
     {
       "args": [
@@ -3313,10 +3370,13 @@
         "kind": "number",
         "value": -1.5707963267948966
       },
-      "from": "builtin-functions.unit.test.ts: arcTangent2 > is the angle of the point (x, y), called with y first",
+      "from": "builtin-functions.unit.test.ts: arcTangent2 > is the angle of the point (x, y), called with y first (the original asserted the engine's exact digits; held to one unit in the last place, as the README states for results of transcendental functions)",
       "function": "arcTangent2",
       "id": "builtin.arctangent2-is-the-angle-of-the-point-x-y-called-with-y-first.3",
-      "kind": "call"
+      "kind": "call",
+      "tolerance": {
+        "ulps": 1
+      }
     },
     {
       "args": [
@@ -3333,10 +3393,13 @@
         "kind": "number",
         "value": 3.141592653589793
       },
-      "from": "builtin-functions.unit.test.ts: arcTangent2 > shares phase's signed-zero handling: +pi on the negative x axis, zero at the origin",
+      "from": "builtin-functions.unit.test.ts: arcTangent2 > shares phase's signed-zero handling: +pi on the negative x axis, zero at the origin (the original asserted the engine's exact digits; held to one unit in the last place, as the README states for results of transcendental functions)",
       "function": "arcTangent2",
       "id": "builtin.arctangent2-shares-phase-s-signed-zero-handling-pi-on-the-negative-x-axis-zero-at-the-origin.1",
-      "kind": "call"
+      "kind": "call",
+      "tolerance": {
+        "ulps": 1
+      }
     },
     {
       "args": [
@@ -3377,10 +3440,13 @@
         "kind": "number",
         "value": 3.141592653589793
       },
-      "from": "builtin-functions.unit.test.ts: arcTangent2 > shares phase's signed-zero handling: +pi on the negative x axis, zero at the origin",
+      "from": "builtin-functions.unit.test.ts: arcTangent2 > shares phase's signed-zero handling: +pi on the negative x axis, zero at the origin (the original asserted the engine's exact digits; held to one unit in the last place, as the README states for results of transcendental functions)",
       "function": "arcTangent2",
       "id": "builtin.arctangent2-shares-phase-s-signed-zero-handling-pi-on-the-negative-x-axis-zero-at-the-origin.3",
-      "kind": "call"
+      "kind": "call",
+      "tolerance": {
+        "ulps": 1
+      }
     },
     {
       "args": [

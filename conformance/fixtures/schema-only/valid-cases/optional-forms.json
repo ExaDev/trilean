@@ -1,0 +1,209 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "ok": false
+      },
+      "from": "x.unit.test.ts: a fixture",
+      "id": "optional.1",
+      "input": {
+        "kind": "not"
+      },
+      "kind": "validate",
+      "reason": "the implementation cannot run this case",
+      "schema": "NotNodeSchema",
+      "skip": "ts",
+      "tolerance": {
+        "ulps": 1
+      }
+    },
+    {
+      "args": [
+        {
+          "kind": "allOf",
+          "operands": []
+        }
+      ],
+      "builder": "not",
+      "expect": {
+        "kind": "not",
+        "operand": {
+          "kind": "allOf",
+          "operands": []
+        }
+      },
+      "from": "x.unit.test.ts: a fixture",
+      "id": "optional.2",
+      "kind": "build",
+      "reason": "the implementation cannot run this case",
+      "skip": "rust",
+      "tolerance": {
+        "absolute": 0.5
+      }
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": -1
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 1
+      },
+      "from": "x.unit.test.ts: a fixture",
+      "function": "absoluteValue",
+      "id": "optional.3",
+      "kind": "call",
+      "reason": "the implementation cannot run this case",
+      "skip": "ts",
+      "tolerance": {
+        "ulps": 2
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite",
+        "value": true
+      },
+      "from": "x.unit.test.ts: a fixture",
+      "id": "optional.4",
+      "kind": "evaluate",
+      "reason": "the implementation cannot run this case",
+      "resolvers": {},
+      "skip": "rust",
+      "tolerance": {
+        "absolute": 1e-9
+      },
+      "tree": {
+        "kind": "allOf",
+        "operands": []
+      }
+    },
+    {
+      "expect": {
+        "collections": {},
+        "inputs": {},
+        "ok": true
+      },
+      "from": "x.unit.test.ts: a fixture",
+      "id": "optional.5",
+      "kind": "inputs",
+      "raw": {},
+      "reason": "the implementation cannot run this case",
+      "skip": "ts",
+      "tolerance": {
+        "ulps": 1
+      }
+    },
+    {
+      "expect": {
+        "evaluation": {
+          "status": "definite",
+          "value": {
+            "kind": "number",
+            "value": 1
+          }
+        },
+        "outcome": "evaluated",
+        "treeKind": "expression"
+      },
+      "from": "x.unit.test.ts: a fixture",
+      "id": "optional.6",
+      "kind": "document",
+      "reason": "the implementation cannot run this case",
+      "skip": "rust",
+      "tolerance": {
+        "ulps": 1
+      },
+      "tree": {
+        "kind": "numberLiteral",
+        "value": 1
+      }
+    },
+    {
+      "args": [
+        "evaluate",
+        "t.json",
+        "--inputs",
+        "in.json"
+      ],
+      "expect": {
+        "exit": 2,
+        "stderrIncludes": [
+          "inputs.x"
+        ]
+      },
+      "files": {
+        "in.json": "{\"x\":1e999}",
+        "t.json": "{\"kind\":\"reference\",\"key\":\"x\"}"
+      },
+      "from": "x.unit.test.ts: a fixture",
+      "id": "optional.7",
+      "kind": "cli",
+      "reason": "the implementation cannot run this case",
+      "skip": "ts",
+      "tolerance": {
+        "ulps": 1
+      }
+    },
+    {
+      "expect": "{\"kind\":\"allOf\",\"operands\":[]}",
+      "from": "x.unit.test.ts: a fixture",
+      "id": "optional.8",
+      "input": "{\"kind\":\"allOf\",\"operands\":[]}",
+      "kind": "serialise",
+      "reason": "the implementation cannot run this case",
+      "schema": "PredicateNodeSchema",
+      "skip": "rust"
+    },
+    {
+      "expect": "1",
+      "from": "x.unit.test.ts: a fixture",
+      "id": "optional.9",
+      "kind": "number-format",
+      "reason": "the implementation cannot run this case",
+      "skip": "ts",
+      "value": 1
+    },
+    {
+      "dialect": "trilean",
+      "from": "x.unit.test.ts: a fixture",
+      "id": "optional.10",
+      "inputs": [
+        {
+          "input": "a",
+          "matches": true
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "a",
+      "reason": "the implementation cannot run this case",
+      "skip": "rust",
+      "tolerance": {
+        "ulps": 1
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "status": "definite"
+      },
+      "from": "x.unit.test.ts: a fixture",
+      "id": "optional.11",
+      "kind": "evaluate",
+      "modes": [
+        "async",
+        "sync",
+        "compiled"
+      ],
+      "resolvers": {},
+      "tree": {
+        "kind": "allOf",
+        "operands": []
+      }
+    }
+  ]
+}

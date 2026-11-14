@@ -1,0 +1,415 @@
+{
+  "cases": [
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "instant",
+          "value": "2026-01-01T00:00:00.000Z"
+        }
+      },
+      "from": "recorded: trilean src/evaluator-operations.ts (an accepted instant form, written back with three fractional digits)",
+      "id": "instants.accepted-form-2026-01-01t00-00-00z.1",
+      "kind": "evaluate",
+      "resolvers": {},
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "instantLiteral",
+          "value": "2026-01-01T00:00:00Z"
+        },
+        "op": "add",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "ms",
+          "value": 0
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "instant",
+          "value": "2026-01-01T00:00:00.500Z"
+        }
+      },
+      "from": "recorded: trilean src/evaluator-operations.ts (an accepted instant form, written back with three fractional digits)",
+      "id": "instants.accepted-form-2026-01-01t00-00-00-5z.1",
+      "kind": "evaluate",
+      "resolvers": {},
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "instantLiteral",
+          "value": "2026-01-01T00:00:00.5Z"
+        },
+        "op": "add",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "ms",
+          "value": 0
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "instant",
+          "value": "2026-01-01T00:00:00.123Z"
+        }
+      },
+      "from": "recorded: trilean src/evaluator-operations.ts (an accepted instant form, written back with three fractional digits)",
+      "id": "instants.accepted-form-2026-01-01t00-00-00-123z.1",
+      "kind": "evaluate",
+      "resolvers": {},
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "instantLiteral",
+          "value": "2026-01-01T00:00:00.123Z"
+        },
+        "op": "add",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "ms",
+          "value": 0
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "instant",
+          "value": "2026-01-01T00:00:00.000Z"
+        }
+      },
+      "from": "recorded: trilean src/evaluator-operations.ts (an accepted instant form, written back with three fractional digits)",
+      "id": "instants.accepted-form-2026-01-01.1",
+      "kind": "evaluate",
+      "resolvers": {},
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "instantLiteral",
+          "value": "2026-01-01"
+        },
+        "op": "add",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "ms",
+          "value": 0
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "instant",
+          "value": "2026-01-01T00:00:00.000Z"
+        }
+      },
+      "from": "recorded: trilean src/evaluator-operations.ts (an accepted instant form, written back with three fractional digits)",
+      "id": "instants.accepted-form-2026-01-01t01-00-00-01-00.1",
+      "kind": "evaluate",
+      "resolvers": {},
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "instantLiteral",
+          "value": "2026-01-01T01:00:00+01:00"
+        },
+        "op": "add",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "ms",
+          "value": 0
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "instant",
+          "value": "2026-01-01T05:30:00.000Z"
+        }
+      },
+      "from": "recorded: trilean src/evaluator-operations.ts (an accepted instant form, written back with three fractional digits)",
+      "id": "instants.accepted-form-2026-01-01t00-00-00-05-30.1",
+      "kind": "evaluate",
+      "resolvers": {},
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "instantLiteral",
+          "value": "2026-01-01T00:00:00-05:30"
+        },
+        "op": "add",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "ms",
+          "value": 0
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "instant",
+          "value": "+275760-09-13T00:00:00.000Z"
+        }
+      },
+      "from": "recorded: trilean src/evaluator-operations.ts (an accepted instant form, written back with three fractional digits)",
+      "id": "instants.accepted-form-275760-09-13t00-00-00-000z.1",
+      "kind": "evaluate",
+      "resolvers": {},
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "instantLiteral",
+          "value": "+275760-09-13T00:00:00.000Z"
+        },
+        "op": "add",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "ms",
+          "value": 0
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "instant",
+          "value": "-271821-04-20T00:00:00.000Z"
+        }
+      },
+      "from": "recorded: trilean src/evaluator-operations.ts (an accepted instant form, written back with three fractional digits)",
+      "id": "instants.accepted-form-271821-04-20t00-00-00-000z.1",
+      "kind": "evaluate",
+      "resolvers": {},
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "instantLiteral",
+          "value": "-271821-04-20T00:00:00.000Z"
+        },
+        "op": "add",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "ms",
+          "value": 0
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "recorded: trilean src/evaluator-operations.ts (an instant form that is not accepted)",
+      "id": "instants.refused-form-not-a-timestamp.1",
+      "kind": "evaluate",
+      "resolvers": {},
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "instantLiteral",
+          "value": "not-a-timestamp"
+        },
+        "op": "add",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "ms",
+          "value": 0
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "recorded: trilean src/evaluator-operations.ts (an instant form that is not accepted)",
+      "id": "instants.refused-form.1",
+      "kind": "evaluate",
+      "resolvers": {},
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "instantLiteral",
+          "value": ""
+        },
+        "op": "add",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "ms",
+          "value": 0
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "recorded: trilean src/evaluator-operations.ts (an instant form that is not accepted)",
+      "id": "instants.refused-form-2026-13-01t00-00-00z.1",
+      "kind": "evaluate",
+      "resolvers": {},
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "instantLiteral",
+          "value": "2026-13-01T00:00:00Z"
+        },
+        "op": "add",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "ms",
+          "value": 0
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "recorded: trilean src/evaluator-operations.ts (an instant form that is not accepted)",
+      "id": "instants.refused-form-2026-01-32.1",
+      "kind": "evaluate",
+      "resolvers": {},
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "instantLiteral",
+          "value": "2026-01-32"
+        },
+        "op": "add",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "ms",
+          "value": 0
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "wrong-type",
+        "status": "indeterminate"
+      },
+      "from": "recorded: trilean src/evaluator-operations.ts (an instant form that is not accepted)",
+      "id": "instants.refused-form-2026-01-01t25-00-00z.1",
+      "kind": "evaluate",
+      "resolvers": {},
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "instantLiteral",
+          "value": "2026-01-01T25:00:00Z"
+        },
+        "op": "add",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "ms",
+          "value": 0
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "domain-error",
+        "status": "indeterminate"
+      },
+      "from": "recorded: trilean src/evaluator-operations.ts (the latest instant plus one millisecond is out of range)",
+      "id": "instants.range-end.1",
+      "kind": "evaluate",
+      "resolvers": {},
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "instantLiteral",
+          "value": "+275760-09-13T00:00:00.000Z"
+        },
+        "op": "add",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "ms",
+          "value": 1
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "code": "domain-error",
+        "status": "indeterminate"
+      },
+      "from": "recorded: trilean src/evaluator-operations.ts (the earliest instant minus one millisecond is out of range)",
+      "id": "instants.range-start.1",
+      "kind": "evaluate",
+      "resolvers": {},
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "instantLiteral",
+          "value": "-271821-04-20T00:00:00.000Z"
+        },
+        "op": "add",
+        "right": {
+          "kind": "durationLiteral",
+          "unit": "ms",
+          "value": -1
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "duration",
+          "unit": "ms",
+          "value": 17280000000000000
+        }
+      },
+      "from": "recorded: trilean src/evaluator-operations.ts (the difference of the earliest and the latest instant is exact)",
+      "id": "instants.range-span.1",
+      "kind": "evaluate",
+      "resolvers": {},
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "instantLiteral",
+          "value": "+275760-09-13T00:00:00.000Z"
+        },
+        "op": "subtract",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "-271821-04-20T00:00:00.000Z"
+        }
+      }
+    }
+  ]
+}

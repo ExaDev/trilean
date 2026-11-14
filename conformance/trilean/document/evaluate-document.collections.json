@@ -622,7 +622,7 @@
         "outcome": "evaluated",
         "treeKind": "expression"
       },
-      "from": "evaluate-document.collections.unit.test.ts: evaluateDocument with complex inputs > reads the phase of a complex input in radians",
+      "from": "evaluate-document.collections.unit.test.ts: evaluateDocument with complex inputs > reads the phase of a complex input in radians (the original asserted the engine's exact digits; held to one unit in the last place, as the README states for results of transcendental functions)",
       "id": "document-collections.evaluatedocument-with-complex-inputs-reads-the-phase-of-a-complex-input-in-radians.1",
       "inputs": {
         "z": {
@@ -632,6 +632,9 @@
         }
       },
       "kind": "document",
+      "tolerance": {
+        "ulps": 1
+      },
       "tree": {
         "args": [
           {

@@ -108,7 +108,7 @@
       "expect": "{\"kind\":\"numberLiteral\",\"value\":0}",
       "from": "recorded: trilean src/tree.ts (a ExpressionNode written in reverse member order, parsed and serialised again, byte for byte)",
       "id": "serialise.expressionnode.14",
-      "input": "{\"value\":0,\"kind\":\"numberLiteral\"}",
+      "input": "{\"value\":-0,\"kind\":\"numberLiteral\"}",
       "kind": "serialise",
       "schema": "ExpressionNodeSchema"
     },

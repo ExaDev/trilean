@@ -10,254 +10,281 @@
       }
     },
     {
-      "expect": "0",
+      "expect": "Infinity",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
       "id": "number-format.2",
+      "kind": "number-format",
+      "value": {
+        "$number": "Infinity"
+      }
+    },
+    {
+      "expect": "-Infinity",
+      "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
+      "id": "number-format.3",
+      "kind": "number-format",
+      "value": {
+        "$number": "-Infinity"
+      }
+    },
+    {
+      "expect": "NaN",
+      "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
+      "id": "number-format.4",
+      "kind": "number-format",
+      "value": {
+        "$number": "NaN"
+      }
+    },
+    {
+      "expect": "0",
+      "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
+      "id": "number-format.5",
       "kind": "number-format",
       "value": 0
     },
     {
       "expect": "1",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
-      "id": "number-format.3",
+      "id": "number-format.6",
       "kind": "number-format",
       "value": 1
     },
     {
       "expect": "-1",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
-      "id": "number-format.4",
+      "id": "number-format.7",
       "kind": "number-format",
       "value": -1
     },
     {
       "expect": "0.1",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
-      "id": "number-format.5",
+      "id": "number-format.8",
       "kind": "number-format",
       "value": 0.1
     },
     {
       "expect": "0.5",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
-      "id": "number-format.6",
+      "id": "number-format.9",
       "kind": "number-format",
       "value": 0.5
     },
     {
       "expect": "1.5",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
-      "id": "number-format.7",
+      "id": "number-format.10",
       "kind": "number-format",
       "value": 1.5
     },
     {
       "expect": "100",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
-      "id": "number-format.8",
+      "id": "number-format.11",
       "kind": "number-format",
       "value": 100
     },
     {
       "expect": "123456789",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
-      "id": "number-format.9",
+      "id": "number-format.12",
       "kind": "number-format",
       "value": 123456789
     },
     {
       "expect": "0.000001",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
-      "id": "number-format.10",
+      "id": "number-format.13",
       "kind": "number-format",
       "value": 0.000001
     },
     {
       "expect": "1e-7",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
-      "id": "number-format.11",
+      "id": "number-format.14",
       "kind": "number-format",
       "value": 1e-7
     },
     {
       "expect": "1.5e-7",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
-      "id": "number-format.12",
+      "id": "number-format.15",
       "kind": "number-format",
       "value": 1.5e-7
     },
     {
       "expect": "1.23e-18",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
-      "id": "number-format.13",
+      "id": "number-format.16",
       "kind": "number-format",
       "value": 1.23e-18
     },
     {
       "expect": "0.000001",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
-      "id": "number-format.14",
+      "id": "number-format.17",
       "kind": "number-format",
       "value": 0.000001
     },
     {
       "expect": "1e-7",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
-      "id": "number-format.15",
+      "id": "number-format.18",
       "kind": "number-format",
       "value": 1e-7
     },
     {
       "expect": "100000000000000000000",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
-      "id": "number-format.16",
+      "id": "number-format.19",
       "kind": "number-format",
       "value": 100000000000000000000
     },
     {
       "expect": "1e+21",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
-      "id": "number-format.17",
+      "id": "number-format.20",
       "kind": "number-format",
       "value": 1e+21
     },
     {
       "expect": "1e+22",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
-      "id": "number-format.18",
+      "id": "number-format.21",
       "kind": "number-format",
       "value": 1e+22
     },
     {
       "expect": "123456789012345680000",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
-      "id": "number-format.19",
+      "id": "number-format.22",
       "kind": "number-format",
       "value": 123456789012345680000
     },
     {
       "expect": "999999999999999900000",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
-      "id": "number-format.20",
+      "id": "number-format.23",
       "kind": "number-format",
       "value": 999999999999999900000
     },
     {
       "expect": "9007199254740992",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
-      "id": "number-format.21",
+      "id": "number-format.24",
       "kind": "number-format",
       "value": 9007199254740992
     },
     {
       "expect": "9007199254740994",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
-      "id": "number-format.22",
+      "id": "number-format.25",
       "kind": "number-format",
       "value": 9007199254740994
     },
     {
       "expect": "-9007199254740992",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
-      "id": "number-format.23",
+      "id": "number-format.26",
       "kind": "number-format",
       "value": -9007199254740992
     },
     {
       "expect": "9007199254740991",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
-      "id": "number-format.24",
+      "id": "number-format.27",
       "kind": "number-format",
       "value": 9007199254740991
     },
     {
       "expect": "1.7976931348623157e+308",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
-      "id": "number-format.25",
+      "id": "number-format.28",
       "kind": "number-format",
       "value": 1.7976931348623157e+308
     },
     {
       "expect": "-1.7976931348623157e+308",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
-      "id": "number-format.26",
+      "id": "number-format.29",
       "kind": "number-format",
       "value": -1.7976931348623157e+308
     },
     {
       "expect": "5e-324",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
-      "id": "number-format.27",
+      "id": "number-format.30",
       "kind": "number-format",
       "value": 5e-324
     },
     {
       "expect": "-5e-324",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
-      "id": "number-format.28",
+      "id": "number-format.31",
       "kind": "number-format",
       "value": -5e-324
     },
     {
       "expect": "2.2250738585072014e-308",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
-      "id": "number-format.29",
+      "id": "number-format.32",
       "kind": "number-format",
       "value": 2.2250738585072014e-308
     },
     {
       "expect": "1e-323",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
-      "id": "number-format.30",
+      "id": "number-format.33",
       "kind": "number-format",
       "value": 1e-323
     },
     {
       "expect": "4.35",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
-      "id": "number-format.31",
+      "id": "number-format.34",
       "kind": "number-format",
       "value": 4.35
     },
     {
       "expect": "0.30000000000000004",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
-      "id": "number-format.32",
+      "id": "number-format.35",
       "kind": "number-format",
       "value": 0.30000000000000004
     },
     {
       "expect": "0.3333333333333333",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
-      "id": "number-format.33",
+      "id": "number-format.36",
       "kind": "number-format",
       "value": 0.3333333333333333
     },
     {
       "expect": "123.456",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
-      "id": "number-format.34",
+      "id": "number-format.37",
       "kind": "number-format",
       "value": 123.456
     },
     {
       "expect": "1e+300",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
-      "id": "number-format.35",
+      "id": "number-format.38",
       "kind": "number-format",
       "value": 1e+300
     },
     {
       "expect": "-1e+21",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
-      "id": "number-format.36",
+      "id": "number-format.39",
       "kind": "number-format",
       "value": -1e+21
     },
     {
       "expect": "-1e-7",
       "from": "recorded: trilean src/evaluator-operations.ts (Number.prototype.toString at the boundaries between its notations)",
-      "id": "number-format.37",
+      "id": "number-format.40",
       "kind": "number-format",
       "value": -1e-7
     }
