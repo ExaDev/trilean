@@ -3,8 +3,11 @@
 //! which files are corpus files, what a valid file is, and that the corpus is what `conformance/manifest.json`
 //! says it is. A file that does not match is a failure, never a skip.
 //!
-//! Executing the cases against the native crates is added with each crate; until then this proves that the Rust
-//! side reads the same files, selected the same way, as the TypeScript runner does.
+//! The loader executes no case: it reads the same files, selected the same way, as the TypeScript runner does, and
+//! counts every case in one of three categories. A case marked `skip: rust` is skipped because it is marked. A case
+//! in a file of regex kinds, which this loader validates in full, is skipped for want of a native executor. A case in
+//! a file of any other kind is counted as refused: the loader enforces what every case has (see
+//! `validate::read_refused_file`), and the loaders that validate the kind in full check the rest.
 
 mod selection;
 mod validate;
@@ -88,15 +91,10 @@ fn rejects<T>(path: &Path, validate: &impl Fn(&Value) -> Result<T, String>) -> b
 /// A negative fixture must fail for the rule it exists for. Each file in `invalid` has a file of the same name in
 /// `repaired` that differs by that one defect and is valid, so the invalid one cannot stay rejected for another
 /// reason.
-///
-/// `accept_twin` judges the repaired twin. For corpus files it also accepts a file this loader refuses for its kind
-/// alone (see `validate::refused_facts`), since a loader that does not validate a kind cannot tell the twin from the
-/// defective file; the TypeScript loaders, which validate every kind, hold that distinction until this loader does too.
 fn check_pairs<T>(
     invalid: &str,
     repaired: &str,
     validate: impl Fn(&Value) -> Result<T, String>,
-    accept_twin: impl Fn(&Value) -> Result<(), String>,
     failures: &mut Vec<String>,
 ) {
     let names = fixture_names(invalid, failures);
@@ -111,7 +109,7 @@ fn check_pairs<T>(
             failures.push(format!("{invalid}/{name} validated, and must not"));
         }
         if let Err(error) =
-            read_json(&root.join(repaired).join(&name)).and_then(|value| accept_twin(&value))
+            read_json(&root.join(repaired).join(&name)).and_then(|value| validate(&value))
         {
             failures.push(format!("{repaired}/{name} must validate: {error}"));
         }
@@ -206,13 +204,14 @@ fn check_corpus(root: &Path) -> (Vec<LoadedFile>, Vec<String>) {
     let mut files = Vec::new();
     let mut ids = BTreeSet::new();
     for name in found.selected {
-        let facts =
-            read_json(&root.join(&name)).and_then(|value| match validate::validate_file(&value) {
-                Ok(facts) => Ok((facts, false)),
-                Err(error) => validate::refused_facts(&value)
-                    .map(|facts| (facts, true))
-                    .ok_or_else(|| format!("{name}: {error}")),
-            });
+        let facts = read_json(&root.join(&name)).and_then(|value| {
+            if validate::is_refused_file(&value) {
+                validate::read_refused_file(&value).map(|facts| (facts, true))
+            } else {
+                validate::validate_file(&value).map(|facts| (facts, false))
+            }
+            .map_err(|error| format!("{name}: {error}"))
+        });
         match facts {
             Ok((facts, refused)) => {
                 for id in &facts.ids {
@@ -265,8 +264,9 @@ fn check_corpus(root: &Path) -> (Vec<LoadedFile>, Vec<String>) {
 
 /// The completeness check for this implementation, the same rule as the TypeScript runner's `completenessProblems`:
 /// what is executed plus what is skipped is the manifest's total, and every case skipped because it is marked for this
-/// implementation (`skip: rust`) is marked in the manifest. No native executor exists yet, so every other case is
-/// skipped for that one stated reason; execution moves cases from skipped to executed and cannot lose one.
+/// implementation (`skip: rust`) is marked in the manifest. A case in a file of regex kinds is
+/// skipped for want of a native executor, and a case in a file of another kind is counted as refused; the three
+/// categories and the executed cases add up to the manifest's total.
 fn count_problems(
     files: &[LoadedFile],
     manifest: &BTreeMap<String, (usize, Vec<String>)>,
@@ -312,11 +312,12 @@ fn main() -> ExitCode {
         "invalid-cases",
         "repaired-cases",
         validate::validate_file,
-        |value| {
-            validate::validate_file(value)
-                .map(drop)
-                .or_else(|error| validate::refused_facts(value).map(drop).ok_or(error))
-        },
+        &mut failures,
+    );
+    check_pairs(
+        "refused-kinds/invalid",
+        "refused-kinds/repaired",
+        validate::read_refused_file,
         &mut failures,
     );
     check_accepted("valid-cases", validate::validate_file, &mut failures);
@@ -324,7 +325,6 @@ fn main() -> ExitCode {
         "manifests/invalid",
         "manifests/repaired",
         validate::validate_manifest,
-        |value| validate::validate_manifest(value).map(drop),
         &mut failures,
     );
     check_accepted(
@@ -345,7 +345,7 @@ fn main() -> ExitCode {
             file.case_count,
             file.skip_ids.len(),
             if file.refused {
-                ", refused: its kinds are not validated by this loader"
+                ", refused (kinds this loader does not validate in full)"
             } else {
                 ""
             }
@@ -356,7 +356,7 @@ fn main() -> ExitCode {
     }
     if failures.is_empty() {
         println!(
-            "checked {} files: {executed} executed, {skipped_marked} skipped because they are marked for rust, {skipped_without_executor} skipped because no native executor exists yet, {refused} refused because their kind is not validated by this loader",
+            "checked {} files: {executed} executed, {skipped_marked} skipped because they are marked for rust, {skipped_without_executor} skipped for want of a native executor, {refused} counted as refused (kinds this loader does not validate in full)",
             files.len()
         );
         ExitCode::SUCCESS
