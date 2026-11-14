@@ -7,8 +7,18 @@
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
+    "@exadev/eslint-config": "3.0.0",
+    "@types/node": "^26.6.5",
+    "eslint": "^10.14.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.6",
+    "globals": "^17.14.0",
+    "prettier": "^3.9.10",
     "publint": "^0.3.25",
-    "turbo": "^2.11.10"
+    "turbo": "^2.11.10",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.71.1",
+    "vitest": "^5.1.0"
   },
   "engines": {
     "node": "^20.19.0 || >=22.12.0"
@@ -54,16 +64,22 @@
   },
   "scripts": {
     "_build": "sh ../../scripts/rust.sh xtask npm trilean-regex",
+    "_lint": "eslint . --fix --cache --max-warnings 0",
     "_prepush": "true",
+    "_test": "vitest run --project unit",
+    "_test:coverage": "vitest run --project unit",
+    "_test:e2e": "vitest run --project e2e",
+    "_typecheck": "tsc -p tsconfig.json",
     "_typecheck:attw": "attw --pack --profile esm-only",
     "build": "turbo run _build",
-    "prepublishOnly": "pnpm run build && publint && attw --pack --profile esm-only",
+    "lint": "turbo run _lint",
+    "prepublishOnly": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run build && publint && attw --pack --profile esm-only",
     "prepush": "turbo run _prepush",
-    "typecheck": "turbo run _typecheck:attw"
+    "test": "turbo run _test",
+    "test:coverage": "turbo run _test:coverage",
+    "test:e2e": "turbo run _test:e2e",
+    "typecheck": "turbo run _typecheck _typecheck:attw"
   },
-  "sideEffects": [
-    "**/init.*.js"
-  ],
   "type": "module",
   "types": "./dist/index.d.ts"
 }

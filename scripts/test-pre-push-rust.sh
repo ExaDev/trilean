@@ -42,6 +42,10 @@ git checkout -q -b corpus-change "$base" && mkdir -p conformance && echo b > con
 corpus=$(git rev-parse HEAD)
 git checkout -q -b scripts-change "$base" && echo b > scripts/rust-checks.sh && git add -A && git commit -qm script
 script=$(git rev-parse HEAD)
+git checkout -q -b action-change "$base" && mkdir -p .github/actions/setup-rust-wasm && echo b > .github/actions/setup-rust-wasm/action.yml && git add -A && git commit -qm action
+action=$(git rev-parse HEAD)
+git checkout -q -b other-action "$base" && mkdir -p .github/actions/setup-workspace && echo b > .github/actions/setup-workspace/action.yml && git add -A && git commit -qm other
+other=$(git rev-parse HEAD)
 zero=0000000000000000000000000000000000000000
 no_cargo=$(mktemp -d); for tool in git grep sh cat dirname mktemp env printf rm; do ln -s "$(command -v "$tool")" "$no_cargo/$tool"; done
 no_python=$(mktemp -d); for tool in git grep sh cat dirname mktemp env printf rm; do ln -s "$(command -v "$tool")" "$no_python/$tool"; done
@@ -54,6 +58,8 @@ check "docs-only push skips" skip "refs/heads/docs-only $docs refs/heads/docs-on
 check "rust push runs" run "refs/heads/rust-change $rust refs/heads/rust-change $base"
 check "corpus push runs" run "refs/heads/corpus-change $corpus refs/heads/corpus-change $base"
 check "rust script push runs" run "refs/heads/scripts-change $script refs/heads/scripts-change $base"
+check "the Rust setup action push runs" run "refs/heads/action-change $action refs/heads/action-change $base"
+check "another action push skips" skip "refs/heads/other-action $other refs/heads/other-action $base"
 check "new docs-only branch skips" skip "refs/heads/docs-only $docs refs/heads/docs-only $zero"
 check "new rust branch runs" run "refs/heads/rust-change $rust refs/heads/rust-change $zero"
 check "deleting a branch skips" skip "(delete) $zero refs/heads/rust-change $rust"

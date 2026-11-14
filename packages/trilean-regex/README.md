@@ -74,9 +74,39 @@ Negated shorthand classes (`\D`, `\W`, `\S`) are accepted inside a bracketed cla
 
 ## Installing and runtime support
 
-The package is one WebAssembly build of the Rust crate, with the same API in Node, Bun, Deno, browsers and Cloudflare Workers. It is ECMAScript modules only (`require()` works through `require(esm)` from Node 20.19 and 22.12). The package's `imports` field selects, by condition, the one module that differs between runtimes, which loads the `.wasm` file: Node, Bun and Deno read it from disk, Workers import it as a module, and browsers and bundlers fetch it, so no extra configuration is needed.
+The package is one WebAssembly build of the Rust crate, with the same API in Node, Bun, Deno, browsers and Cloudflare Workers. It is ECMAScript modules only (`require()` works through `require(esm)` from Node 20.19 and 22.12). The package's `imports` field selects, by condition, the one module that differs between runtimes, which loads the `.wasm` file next to it: Node, Bun and Deno read it from disk when the package is imported, Workers import it as a module, and browsers fetch it. From an installed `node_modules` nothing needs configuring.
 
-A string crosses into the module as the UTF-16 code units it is, so an unpaired surrogate behaves exactly as it does in a JavaScript `RegExp` without the `u` flag. Groups nest to a fixed depth, and a repetition bound is a count that fits in 32 bits; a pattern beyond either is a `RegexParseError`.
+### Bundlers
+
+A browser build needs a bundler, because a page cannot resolve the package's `imports` entry on its own. The browser entry waits for the module with top-level await, so the build target must allow it (ES2022 and an ES module output, which is the default of every current bundler; not `iife` or `cjs` output, and webpack 5.83 or later), and anything that imports the package becomes an asynchronous module. The tarball is built with Rollup (with `@rollup/plugin-node-resolve`) and with webpack in production mode, and each output is run in headless Chromium, by `test/bundlers.e2e.test.ts`. Webpack emits the `.wasm` file with its other assets. Rollup and esbuild leave `new URL("./trilean_regex_bg.wasm", import.meta.url)` as it is, so copy `node_modules/trilean-regex/dist/trilean_regex_bg.wasm` next to the bundle.
+
+A bundle for a server reads the `.wasm` file from beside the bundle, so a single file moved elsewhere fails at import with `ENOENT` for `trilean_regex_bg.wasm`. Copy that file beside the bundle for esbuild (`--platform=node`) and Rollup, and ship the two together (a Lambda zip, a container image). Webpack with `target: "node"` handles it itself, as the same test shows. A package-level entry with the module inlined is not provided.
+
+### Types
+
+The declarations need only the ECMAScript library: no `dom`, no `esnext.disposable`, no Node types, which `test/declarations.test.ts` compiles with. `Symbol.dispose` exists on a `CompiledPattern` at run time and is not declared.
+
+### Arguments
+
+A pattern, a subject and a shorthand letter are strings, and anything else (a number, an object, a `String` object, `null`, `undefined`) is a `TypeError`. `rangeContains` and `charClassMatches` take code units: a number that is not one is in no range, and a range or class whose ends are not code units is a `TypeError`.
+
+### Limits
+
+A string crosses into the module as the UTF-16 code units it is, so an unpaired surrogate behaves exactly as it does in a JavaScript `RegExp` without the `u` flag. A pattern beyond a limit is a `RegexParseError`, before anything is allocated for it:
+
+- groups nest at most 128 deep;
+- a repetition bound is a count that fits in 32 bits;
+- a pattern compiles to at most 100,000 automaton states, the match state included. A count multiplies what it repeats, and counts nest: `a{99999}` is within the limit, `a{100000}` is not, `(?:a{1000}){1000}` is not, and nor are several counts that are each within it and together are not.
+
+The simulation does at most one visit to a state per position of the input, so a test takes at most the pattern's states times the input's length plus one, whatever the pattern is.
+
+### Memory
+
+A `CompiledPattern` owns memory inside the module until it is released. Call `free()` when a pattern is done with, which is safe to call again, or let the finaliser do it, which runs only after the event loop has turned: a synchronous loop that compiles many patterns and drops them holds every one until it yields. The module's memory only grows, and a freed pattern's space is reused by the next. A long-lived process that compiles patterns it is given should `free()` each in a `finally`. `trilean` compiles a `portableMatches` pattern on every evaluation and relies on the finaliser.
+
+### Internal errors
+
+If Rust panics, which no input is known to cause, the call throws an `InternalError` carrying the panic's message and location instead of a bare `RuntimeError: unreachable`. A panic does not finish unwinding, so treat the module as spent after one and report the message.
 
 ```ts
 import { compilePattern, testPattern, parseRegex, RegexParseError } from "trilean-regex";

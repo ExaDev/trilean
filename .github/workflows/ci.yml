@@ -147,7 +147,7 @@ jobs:
           task: test-workers
           command: pnpm test:workers $TURBO_FLAGS
 
-  # The corpus against the packages built from Rust, as a consumer receives them: each package is packed to the tarball npm would publish, installed, and the corpus run in Node, in headless Chromium through Playwright and in workerd through Miniflare, each through the runtime's own way of loading the module. The runners are conformance/runner/*.mjs. Playwright's browser is pinned by the version of playwright in the lock file.
+  # The corpus against the packages built from Rust, as a consumer receives them: each package is packed to the tarball npm would publish, installed, and the corpus run in Node, in headless Chromium through Playwright and in workerd through Miniflare, each through the runtime's own way of loading the module, and then a consumer is built from the package with the bundlers that matter and run. The runners are conformance/runner/*.mjs. Playwright's browser is pinned by the version of playwright in the lock file.
   wasm-conformance:
     name: Wasm conformance
     runs-on: ubuntu-latest
@@ -166,6 +166,8 @@ jobs:
             for runtime in node chromium workerd; do
               node conformance/runner/$runtime.mjs "$RUNNER_TEMP"/pack/trilean-regex-*.tgz
             done
+            # A consumer built from the same package with Rollup and with webpack, in production mode, run in Chromium and in Node.
+            pnpm --filter trilean-regex test:e2e
 
   # The Rust workspace under rust/ is built and tested by cargo, not turbo, so these jobs sit beside the turbo-driven ones and need no pnpm install. The toolchain is whatever rust/rust-toolchain.toml pins, so the file stays the one place that names a version, and every cargo command runs against the committed Cargo.lock. The commands live in scripts/rust-checks.sh so the pre-push hook runs the same ones.
   rust:

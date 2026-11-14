@@ -11,6 +11,22 @@
         "$TURBO_ROOT$/scripts/rust.sh"
       ],
       "outputs": ["dist/**"]
+    },
+    // The tests run against the built package, so they follow its build and are rerun by a change to it.
+    "_test": {
+      "dependsOn": ["^_build", "_build"],
+      "inputs": ["test/**", "vitest.config.ts", "package.json"]
+    },
+    "_test:coverage": {
+      "dependsOn": ["^_build", "_build"],
+      "inputs": ["test/**", "vitest.config.ts", "package.json"]
+    },
+    // Builds a consumer with each bundler from the packed package and runs it in a browser and in Node, which is why it is its own task: it follows the build, needs a browser installed and is never cached.
+    "_test:e2e": {
+      "cache": false,
+      "dependsOn": ["^_build", "_build"],
+      "inputs": ["test/**", "vitest.config.ts", "package.json"],
+      "passThroughEnv": ["PLAYWRIGHT_BROWSERS_PATH"]
     }
   }
 }

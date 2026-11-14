@@ -108,21 +108,58 @@ export type ShorthandClassLetter = "d" | "D" | "w" | "W" | "s" | "S";
 struct ErrorClasses {
     parse_error: Function,
     unsupported_construct: Function,
+    internal_error: Function,
 }
 
 thread_local! {
     static CLASSES: RefCell<Option<ErrorClasses>> = const { RefCell::new(None) };
 }
 
-/// Hands the binding the classes it throws. The package's entry point calls it once, with `RegexParseError` and `UnsupportedConstructError` in that order, before anything else in the package can run; the classes are JavaScript, so the binding is given them rather than importing them.
+/// Hands the binding the classes it throws and installs the panic hook that throws one of them. The package's entry point calls it once, with `RegexParseError`, `UnsupportedConstructError` and `InternalError` in that order, before anything else in the package can run; the classes are JavaScript, so the binding is given them rather than importing them.
+///
+/// A panic in Rust would otherwise reach JavaScript as a bare `RuntimeError: unreachable` with no message. The hook throws an `InternalError` carrying the panic's message and location instead, from inside the panic, so the module is not usable afterwards in the strict sense: the panic never finishes unwinding, and a second panic in the same instance traps as before. A caller that gets an `InternalError` should treat the instance as spent and report the message.
 #[wasm_bindgen(js_name = registerErrorClasses)]
-pub fn register_error_classes(parse_error: Function, unsupported_construct: Function) {
+pub fn register_error_classes(
+    parse_error: Function,
+    unsupported_construct: Function,
+    internal_error: Function,
+) {
     CLASSES.with(|classes| {
         *classes.borrow_mut() = Some(ErrorClasses {
             parse_error,
             unsupported_construct,
+            internal_error,
         });
     });
+    std::panic::set_hook(Box::new(|info| {
+        let message = format!("trilean-regex: internal error: {info}");
+        let error = CLASSES.with(|classes| {
+            classes.try_borrow().ok().and_then(|classes| {
+                classes.as_ref().and_then(|registered| {
+                    Reflect::construct(
+                        &registered.internal_error,
+                        &Array::of1(&JsValue::from_str(&message)),
+                    )
+                    .ok()
+                })
+            })
+        });
+        wasm_bindgen::throw_val(error.unwrap_or_else(|| js_sys::Error::new(&message).into()))
+    }));
+}
+
+/// Panics on purpose, so that a test can see the panic hook turn it into an `InternalError`. The package's entry point does not export it.
+#[wasm_bindgen(js_name = panicForTesting)]
+pub fn panic_for_testing() {
+    panic!("deliberate panic for the test of the panic hook");
+}
+
+/// The argument as a JavaScript string, or a `TypeError` naming it. A value that merely converts to text (a number, an object with `toString`, a `String` object) is not accepted: a pattern or a subject is a string.
+fn string_argument(value: &JsValue, name: &str) -> Result<JsString, JsValue> {
+    value
+        .dyn_ref::<JsString>()
+        .cloned()
+        .ok_or_else(|| js_sys::TypeError::new(&format!("{name} must be a string")).into())
 }
 
 /// An instance of one of the registered classes. Without registration, which only happens to a caller that imports the generated module directly instead of the package, the error says so.
@@ -329,9 +366,9 @@ pub fn char_class_matches(
 /// Expands a shorthand class letter to the class it stands for.
 #[wasm_bindgen(js_name = expandShorthandClass, unchecked_return_type = "CharClassNode")]
 pub fn expand_shorthand(
-    #[wasm_bindgen(unchecked_param_type = "ShorthandClassLetter")] letter: &JsString,
+    #[wasm_bindgen(unchecked_param_type = "ShorthandClassLetter")] letter: &JsValue,
 ) -> Result<JsValue, JsValue> {
-    let units = code_units(letter);
+    let units = code_units(&string_argument(letter, "letter")?);
     match units.as_slice() {
         [unit] => ShorthandClassLetter::from_unit(*unit)
             .map(|letter| class_to_js(&expand_shorthand_class(letter)))
@@ -344,7 +381,10 @@ pub fn expand_shorthand(
 ///
 /// Never returns a partial result: a pattern parses completely or `RegexParseError` is thrown, naming where parsing could not proceed. The index counts UTF-16 code units.
 #[wasm_bindgen(js_name = parseRegex, unchecked_return_type = "RegexNode")]
-pub fn parse_regex(pattern: &JsString) -> Result<JsValue, JsValue> {
+pub fn parse_regex(
+    #[wasm_bindgen(unchecked_param_type = "string")] pattern: &JsValue,
+) -> Result<JsValue, JsValue> {
+    let pattern = &string_argument(pattern, "pattern")?;
     parse_regex_utf16(&code_units(pattern))
         .map(|node| node_to_js(&node))
         .map_err(|error| parse_error(&error, pattern))
@@ -359,8 +399,12 @@ pub struct JsCompiledPattern {
 #[wasm_bindgen(js_class = CompiledPattern)]
 impl JsCompiledPattern {
     /// Whether any substring of `input` matches this pattern. The work is bounded by the pattern's size and the input's length, whatever the pattern is.
-    pub fn test(&self, input: &JsString) -> bool {
-        self.compiled.test_utf16(&code_units(input))
+    pub fn test(
+        &self,
+        #[wasm_bindgen(unchecked_param_type = "string")] input: &JsValue,
+    ) -> Result<bool, JsValue> {
+        let input = string_argument(input, "input")?;
+        Ok(self.compiled.test_utf16(&code_units(&input)))
     }
 }
 
@@ -370,7 +414,10 @@ impl JsCompiledPattern {
 ///
 /// @throws `RegexParseError` if `pattern` is not a valid pattern in this grammar.
 #[wasm_bindgen(js_name = compilePattern)]
-pub fn compile_pattern(pattern: &JsString) -> Result<JsCompiledPattern, JsValue> {
+pub fn compile_pattern(
+    #[wasm_bindgen(unchecked_param_type = "string")] pattern: &JsValue,
+) -> Result<JsCompiledPattern, JsValue> {
+    let pattern = &string_argument(pattern, "pattern")?;
     compile_pattern_utf16(&code_units(pattern))
         .map(|compiled| JsCompiledPattern { compiled })
         .map_err(|error| parse_error(&error, pattern))
@@ -380,9 +427,16 @@ pub fn compile_pattern(pattern: &JsString) -> Result<JsCompiledPattern, JsValue>
 ///
 /// @throws `RegexParseError` if `pattern` is not a valid pattern in this grammar.
 #[wasm_bindgen(js_name = testPattern)]
-pub fn test_pattern(pattern: &JsString, input: &JsString) -> Result<bool, JsValue> {
+pub fn test_pattern(
+    #[wasm_bindgen(unchecked_param_type = "string")] pattern: &JsValue,
+    #[wasm_bindgen(unchecked_param_type = "string")] input: &JsValue,
+) -> Result<bool, JsValue> {
+    let (pattern, input) = (
+        &string_argument(pattern, "pattern")?,
+        string_argument(input, "input")?,
+    );
     compile_pattern_utf16(&code_units(pattern))
-        .map(|compiled| compiled.test_utf16(&code_units(input)))
+        .map(|compiled| compiled.test_utf16(&code_units(&input)))
         .map_err(|error| parse_error(&error, pattern))
 }
 
@@ -392,7 +446,10 @@ pub fn test_pattern(pattern: &JsString, input: &JsString) -> Result<bool, JsValu
 ///
 /// @throws `RegexParseError` if `pattern` is not a valid pattern in this grammar, and `UnsupportedConstructError` if a construct in it means something else in ECMAScript.
 #[wasm_bindgen(js_name = compileEcmascriptSubset)]
-pub fn compile_ecmascript_subset(pattern: &JsString) -> Result<JsCompiledPattern, JsValue> {
+pub fn compile_ecmascript_subset(
+    #[wasm_bindgen(unchecked_param_type = "string")] pattern: &JsValue,
+) -> Result<JsCompiledPattern, JsValue> {
+    let pattern = &string_argument(pattern, "pattern")?;
     compile_ecmascript_subset_utf16(&code_units(pattern))
         .map(|compiled| JsCompiledPattern { compiled })
         .map_err(|error| subset_error(&error, pattern))
