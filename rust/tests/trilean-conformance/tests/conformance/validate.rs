@@ -1,21 +1,19 @@
-//! Validation of corpus files and the manifest by hand. A file of regex cases is validated in full and accepts
-//! exactly what `conformance/case.schema.json` accepts. A file whose cases are all of another kind is read by
-//! `read_refused_file`, which enforces what every case has whatever its kind, and the file's cases are counted and
-//! not executed; the shape of such a case is validated by the loader that validates its kind in full. A file that
-//! mixes the two is refused.
+//! Validation of corpus files and the manifest. A corpus file is read through the types of `trilean_conformance`,
+//! which derive their validation from the same declarations that the schema comparison in `schema.rs` checks
+//! `conformance/case.schema.json` against, so a file is accepted exactly when the schema accepts it, for every case
+//! kind. The checks beside the types are the rules `conformance/README.md` lists as ones a schema cannot express.
 //!
-//! Strings in the corpus are sequences of UTF-16 code units. A JSON string is read by `serde_json`, which refuses
-//! an unpaired surrogate escape, so the file holding one does not load and is rejected; content that needs one is
+//! Strings in the corpus are sequences of UTF-16 code units. A JSON string is read by `serde_json`, which refuses an
+//! unpaired surrogate escape, so the file holding one does not load and is rejected; content that needs one is
 //! written as `{ "codeUnits": [...] }`, which `decode_text` reads into the same `u16` sequence a JSON string gives.
 
 use std::collections::{BTreeMap, BTreeSet};
 
+use json_shape::{Shape, Value as Shaped};
 use serde_json::{Map, Value};
+use trilean_conformance::{Case, CorpusFile, RegexNode, RegexParseExpect, Skip, Text};
 
 type Check<T> = Result<T, String>;
-
-/// The largest value of a UTF-16 code unit, which bounds a literal's `codeUnit` and a range's ends.
-const MAX_CODE_UNIT: u64 = 65535;
 
 /// The largest integer a JSON number holds exactly in the JavaScript runners, and so the largest the format allows.
 const MAX_SAFE_INTEGER: u64 = 9_007_199_254_740_991;
@@ -33,55 +31,102 @@ pub fn is_name(name: &str) -> bool {
         })
 }
 
-/// Whether a case's `from` is an original test title (`<test file>.test.ts: <title>`) or a recorded behaviour
-/// (`recorded: <package> <source file> (<what>)`), so a reader can tell a pinned original from a recorded one.
-fn is_valid_from(from: &str) -> bool {
-    if let Some(rest) = from.strip_prefix("recorded: ") {
-        return !rest.is_empty();
-    }
-    from.split_once(".test.ts: ").is_some_and(|(stem, title)| {
-        !stem.is_empty()
-            && !title.is_empty()
-            && stem.bytes().all(|byte| {
-                byte.is_ascii_lowercase()
-                    || byte.is_ascii_digit()
-                    || matches!(byte, b'.' | b'_' | b'-')
-            })
-    })
+/// The document as the types read it: ordered, with numbers as doubles.
+fn shaped(value: &Value) -> Check<Shaped> {
+    serde_json::from_value(value.clone()).map_err(|error| error.to_string())
 }
 
 /// A string as the UTF-16 code units it denotes: a JSON string, or `{ "codeUnits": [...] }` for content a JSON
 /// string cannot carry. The second form is what lets a case hold an unpaired surrogate.
-pub fn decode_text(value: &Value, at: &str) -> Check<Vec<u16>> {
-    if let Some(text) = value.as_str() {
-        return Ok(text.encode_utf16().collect());
-    }
-    let map = exact_keys(value, at, &["codeUnits"], &[])?;
-    array(&map["codeUnits"], at, "\"codeUnits\"")?
-        .iter()
-        .map(|unit| {
-            as_integer(unit)
-                .and_then(|unit| u16::try_from(unit).ok())
-                .ok_or_else(|| {
-                    format!("{at}: a code unit must be an integer from 0 to {MAX_CODE_UNIT}")
-                })
-        })
-        .collect()
+pub fn decode_text(value: &Value) -> Check<Vec<u16>> {
+    Text::from_json(&shaped(value)?)
+        .map(|text| text.code_units())
+        .map_err(|issues| issues.to_string())
 }
 
-const COMMON_KEYS: [&str; 3] = ["id", "from", "kind"];
-const OPTIONAL_COMMON_KEYS: [&str; 3] = ["skip", "reason", "tolerance"];
+/// The rules a schema cannot express, for one regex node: a class range's `from` is not above its `to`, and a
+/// repeat's `min` is not above its `max`.
+fn node_problems(node: &RegexNode, problems: &mut Vec<String>) {
+    match node {
+        RegexNode::CharClass { ranges, .. } => {
+            if ranges.iter().any(|range| range.from > range.to) {
+                problems.push("a range's from is above its to".to_owned());
+            }
+        }
+        RegexNode::Concat { operands, .. } => {
+            for operand in operands {
+                node_problems(operand, problems);
+            }
+        }
+        RegexNode::Alternation { branches, .. } => {
+            for branch in branches {
+                node_problems(branch, problems);
+            }
+        }
+        RegexNode::Postfix { operand, .. } => node_problems(operand, problems),
+        RegexNode::Repeat {
+            operand, min, max, ..
+        } => {
+            if max.is_some_and(|max| *min > max) {
+                problems.push("a repeat's min is above its max".to_owned());
+            }
+            node_problems(operand, problems);
+        }
+        RegexNode::Literal { .. } | RegexNode::Simple { .. } => {}
+    }
+}
+
+/// What a valid corpus file holds, for the checks that compare files with each other and with the manifest.
+pub struct FileFacts {
+    pub ids: Vec<String>,
+    /// The ids of the cases marked to be skipped by one implementation, sorted.
+    pub skip_ids: Vec<String>,
+    /// The ids of the cases marked `rust`, the ones this implementation skips because they are marked, sorted.
+    pub rust_skip_ids: Vec<String>,
+}
+
+/// Checks a corpus file: the types, which hold for every case kind, then the rules beside them.
+pub fn validate_file(value: &Value) -> Check<FileFacts> {
+    let file = CorpusFile::from_json(&shaped(value)?).map_err(|issues| issues.to_string())?;
+    let mut facts = FileFacts {
+        ids: Vec::new(),
+        skip_ids: Vec::new(),
+        rust_skip_ids: Vec::new(),
+    };
+    let mut seen = BTreeSet::new();
+    for case in &file.cases {
+        let common = case.header();
+        let mut problems = Vec::new();
+        if let Case::RegexParse(parse) = case
+            && let RegexParseExpect::Ast { ast } = &parse.expect
+        {
+            node_problems(ast, &mut problems);
+        }
+        if let Some(problem) = problems.first() {
+            return Err(format!("case {}: {problem}", common.id));
+        }
+        if !seen.insert(common.id.clone()) {
+            return Err(format!("case id {} is used twice in the file", common.id));
+        }
+        match common.skip {
+            Some(Skip::Rust) => {
+                facts.skip_ids.push(common.id.clone());
+                facts.rust_skip_ids.push(common.id.clone());
+            }
+            Some(Skip::Ts) => facts.skip_ids.push(common.id.clone()),
+            None => {}
+        }
+        facts.ids.push(common.id.clone());
+    }
+    facts.skip_ids.sort();
+    facts.rust_skip_ids.sort();
+    Ok(facts)
+}
 
 fn object<'a>(value: &'a Value, at: &str) -> Check<&'a Map<String, Value>> {
     value
         .as_object()
         .ok_or_else(|| format!("{at}: expected an object"))
-}
-
-fn array<'a>(value: &'a Value, at: &str, what: &str) -> Check<&'a Vec<Value>> {
-    value
-        .as_array()
-        .ok_or_else(|| format!("{at}: {what} must be an array"))
 }
 
 /// The object at `at`, holding every key in `required`, and no key outside `required` and `optional`.
@@ -105,20 +150,6 @@ fn exact_keys<'a>(
     Ok(map)
 }
 
-fn string_field<'a>(map: &'a Map<String, Value>, key: &str, at: &str) -> Check<&'a str> {
-    map.get(key)
-        .and_then(Value::as_str)
-        .ok_or_else(|| format!("{at}: \"{key}\" must be a string"))
-}
-
-fn non_empty_string_field<'a>(map: &'a Map<String, Value>, key: &str, at: &str) -> Check<&'a str> {
-    let text = string_field(map, key, at)?;
-    if text.is_empty() {
-        return Err(format!("{at}: \"{key}\" must not be empty"));
-    }
-    Ok(text)
-}
-
 /// A non-negative JSON integer. Like JSON Schema's `integer`, `97.0` is one, and `97.5` is not.
 fn as_integer(value: &Value) -> Option<u64> {
     let integer = if let Some(integer) = value.as_u64() {
@@ -132,349 +163,6 @@ fn as_integer(value: &Value) -> Option<u64> {
         float as u64
     };
     (integer <= MAX_SAFE_INTEGER).then_some(integer)
-}
-
-fn integer_field(map: &Map<String, Value>, key: &str, at: &str) -> Check<u64> {
-    map.get(key)
-        .and_then(as_integer)
-        .ok_or_else(|| format!("{at}: \"{key}\" must be a non-negative integer"))
-}
-
-fn code_unit_field(map: &Map<String, Value>, key: &str, at: &str) -> Check<u64> {
-    let value = integer_field(map, key, at)?;
-    if value > MAX_CODE_UNIT {
-        return Err(format!("{at}: \"{key}\" must be at most {MAX_CODE_UNIT}"));
-    }
-    Ok(value)
-}
-
-fn boolean_field(map: &Map<String, Value>, key: &str, at: &str) -> Check<bool> {
-    map.get(key)
-        .and_then(Value::as_bool)
-        .ok_or_else(|| format!("{at}: \"{key}\" must be a boolean"))
-}
-
-fn check_regex_node(value: &Value, at: &str) -> Check<()> {
-    let map = object(value, at)?;
-    match string_field(map, "kind", at)? {
-        "literal" => {
-            exact_keys(value, at, &["kind", "codeUnit"], &[])?;
-            code_unit_field(map, "codeUnit", at).map(drop)
-        }
-        "anyChar" | "anchorStart" | "anchorEnd" => exact_keys(value, at, &["kind"], &[]).map(drop),
-        "charClass" => {
-            exact_keys(value, at, &["kind", "negated", "ranges"], &[])?;
-            boolean_field(map, "negated", at)?;
-            let ranges = array(&map["ranges"], at, "\"ranges\"")?;
-            if ranges.is_empty() {
-                return Err(format!("{at}: \"ranges\" must not be empty"));
-            }
-            for range in ranges {
-                let range_map = exact_keys(range, at, &["from", "to"], &[])?;
-                let from = code_unit_field(range_map, "from", at)?;
-                let to = code_unit_field(range_map, "to", at)?;
-                if from > to {
-                    return Err(format!("{at}: a range's from is above its to"));
-                }
-            }
-            Ok(())
-        }
-        kind @ ("concat" | "alternation") => {
-            let key = if kind == "concat" {
-                "operands"
-            } else {
-                "branches"
-            };
-            exact_keys(value, at, &["kind", key], &[])?;
-            array(&map[key], at, key)?
-                .iter()
-                .try_for_each(|child| check_regex_node(child, at))
-        }
-        "star" | "plus" | "optional" => {
-            exact_keys(value, at, &["kind", "operand"], &[])?;
-            check_regex_node(&map["operand"], at)
-        }
-        "repeat" => {
-            exact_keys(value, at, &["kind", "operand", "min"], &["max"])?;
-            check_regex_node(&map["operand"], at)?;
-            let min = integer_field(map, "min", at)?;
-            if map.contains_key("max") && min > integer_field(map, "max", at)? {
-                return Err(format!("{at}: a repeat's min is above its max"));
-            }
-            Ok(())
-        }
-        other => Err(format!("{at}: unknown regex node kind \"{other}\"")),
-    }
-}
-
-fn check_regex_parse_expectation(value: &Value, at: &str) -> Check<()> {
-    let map = object(value, at)?;
-    if let Some(ast) = map.get("ast") {
-        exact_keys(value, at, &["ast"], &[])?;
-        check_regex_node(ast, at)
-    } else if let Some(subset) = map.get("astSubset") {
-        exact_keys(value, at, &["astSubset"], &[])?;
-        if object(subset, at)?.is_empty() {
-            return Err(format!("{at}: \"astSubset\" must name at least one key"));
-        }
-        Ok(())
-    } else {
-        let outer = exact_keys(value, at, &["error"], &[])?;
-        let error = exact_keys(&outer["error"], at, &[], &["index", "message"])?;
-        if error.is_empty() {
-            return Err(format!("{at}: \"error\" must name an index or a message"));
-        }
-        if error.contains_key("index") {
-            integer_field(error, "index", at)?;
-        }
-        if let Some(message) = error.get("message") {
-            let fragments = array(message, at, "\"message\"")?;
-            if fragments.is_empty() {
-                return Err(format!("{at}: \"message\" must not be empty"));
-            }
-            for fragment in fragments {
-                if decode_text(fragment, at)?.is_empty() {
-                    return Err(format!("{at}: \"message\" must hold non-empty texts"));
-                }
-            }
-        }
-        Ok(())
-    }
-}
-
-fn check_regex_match_inputs(value: &Value, at: &str) -> Check<()> {
-    let inputs = array(value, at, "\"inputs\"")?;
-    if inputs.is_empty() {
-        return Err(format!("{at}: \"inputs\" must not be empty"));
-    }
-    for item in inputs {
-        let map = exact_keys(item, at, &["input", "matches"], &[])?;
-        decode_text(&map["input"], at)?;
-        boolean_field(map, "matches", at)?;
-    }
-    Ok(())
-}
-
-/// A tolerance gives either `ulps`, an integer, or `absolute`, a non-negative number, and never both.
-fn check_tolerance(value: &Value, at: &str) -> Check<()> {
-    let map = object(value, at)?;
-    match (map.contains_key("ulps"), map.contains_key("absolute")) {
-        (true, false) => {
-            exact_keys(value, at, &["ulps"], &[])?;
-            integer_field(map, "ulps", at).map(drop)
-        }
-        (false, true) => {
-            exact_keys(value, at, &["absolute"], &[])?;
-            match map["absolute"].as_f64() {
-                Some(absolute) if absolute > 0.0 => Ok(()),
-                _ => Err(format!("{at}: \"absolute\" must be a number above zero")),
-            }
-        }
-        _ => Err(format!(
-            "{at}: a tolerance gives exactly one of \"ulps\" and \"absolute\""
-        )),
-    }
-}
-
-/// The checks every case has whatever its kind: the members `id`, `from` and `kind` are there, the id and `from`
-/// are well formed, `skip` is `ts` or `rust` and goes with a `reason`, and a tolerance is well formed.
-fn check_common<'a>(value: &'a Value, at: &str) -> Check<(&'a Map<String, Value>, String)> {
-    let map = object(value, at)?;
-    for key in COMMON_KEYS {
-        if !map.contains_key(key) {
-            return Err(format!("{at}: missing \"{key}\""));
-        }
-    }
-    let id = non_empty_string_field(map, "id", at)?;
-    if !is_name(id) {
-        return Err(format!(
-            "{at}: a case id uses lower-case ASCII letters, digits, dots, hyphens and underscores"
-        ));
-    }
-    if !is_valid_from(non_empty_string_field(map, "from", at)?) {
-        return Err(format!(
-            "{at}: \"from\" must be \"<test file>.test.ts: <title>\" or \"recorded: <what>\""
-        ));
-    }
-    if let Some(skip) = map.get("skip")
-        && !matches!(skip.as_str(), Some("ts" | "rust"))
-    {
-        return Err(format!("{at}: \"skip\" must be \"ts\" or \"rust\""));
-    }
-    if map.contains_key("skip") != map.contains_key("reason") {
-        return Err(format!("{at}: \"skip\" and \"reason\" go together"));
-    }
-    if map.contains_key("reason") {
-        non_empty_string_field(map, "reason", at)?;
-    }
-    if let Some(tolerance) = map.get("tolerance") {
-        check_tolerance(tolerance, at)?;
-    }
-    Ok((map, id.to_owned()))
-}
-
-/// Checks one case and returns its id. Only the regex kinds are validated in full here; a file of any other kind is
-/// read by `read_refused_file`.
-fn check_case(value: &Value, at: &str) -> Check<String> {
-    let (map, id) = check_common(value, at)?;
-    let kind = string_field(map, "kind", at)?;
-    match kind {
-        "regex-parse" => {
-            exact_keys(
-                value,
-                at,
-                &[COMMON_KEYS.as_slice(), &["pattern", "expect"]].concat(),
-                &OPTIONAL_COMMON_KEYS,
-            )?;
-            decode_text(&map["pattern"], at)?;
-            check_regex_parse_expectation(&map["expect"], at)?;
-        }
-        "regex-match" => {
-            exact_keys(
-                value,
-                at,
-                &[COMMON_KEYS.as_slice(), &["pattern", "inputs"]].concat(),
-                &[OPTIONAL_COMMON_KEYS.as_slice(), &["dialect"]].concat(),
-            )?;
-            if let Some(dialect) = map.get("dialect")
-                && !matches!(dialect.as_str(), Some("trilean" | "ecmascript"))
-            {
-                return Err(format!(
-                    "{at}: \"dialect\" must be \"trilean\" or \"ecmascript\""
-                ));
-            }
-            decode_text(&map["pattern"], at)?;
-            check_regex_match_inputs(&map["inputs"], at)?;
-        }
-        other => {
-            return Err(format!(
-                "{at}: the {other} kind is not validated by this loader, and an unchecked case is not accepted"
-            ));
-        }
-    }
-    Ok(id)
-}
-
-/// The case kinds this loader validates in full; every other kind is refused.
-const VALIDATED_KINDS: [&str; 2] = ["regex-parse", "regex-match"];
-
-/// Every case kind the schema defines.
-const KNOWN_KINDS: [&str; 15] = [
-    "regex-parse",
-    "regex-match",
-    "validate",
-    "build",
-    "call",
-    "evaluate",
-    "inputs",
-    "document",
-    "cli",
-    "serialise",
-    "number-format",
-    "sql-compile",
-    "sql-guard",
-    "sql-pattern",
-    "sql-execute",
-];
-
-/// Whether a file is read as a refused file: it holds cases, and every one is of a kind this loader does not
-/// validate in full. A file that mixes such a case with a regex case is read by `validate_file`, which refuses it.
-pub fn is_refused_file(value: &Value) -> bool {
-    value
-        .get("cases")
-        .and_then(Value::as_array)
-        .is_some_and(|cases| {
-            !cases.is_empty()
-                && cases.iter().all(|case| {
-                    case.get("kind")
-                        .and_then(Value::as_str)
-                        .is_some_and(|kind| !VALIDATED_KINDS.contains(&kind))
-                })
-        })
-}
-
-/// Reads a file whose cases are all of kinds this loader does not validate in full. It enforces everything that
-/// does not depend on the kind: the file holds a non-empty list of cases and nothing else, and every case has an
-/// `id` that follows the id rule and is not used twice in the file, a `from` of either form, a `kind` the schema
-/// defines, a `skip` that is `ts` or `rust` and goes with a `reason`, and a well formed `tolerance`. What a case of
-/// such a kind holds beyond that is checked by the loaders that validate the kind in full.
-pub fn read_refused_file(value: &Value) -> Check<FileFacts> {
-    let top = exact_keys(value, "file", &["cases"], &[])?;
-    let cases = array(&top["cases"], "file", "\"cases\"")?;
-    if cases.is_empty() {
-        return Err("file: \"cases\" must not be empty".to_owned());
-    }
-    let mut facts = FileFacts {
-        ids: Vec::new(),
-        skip_ids: Vec::new(),
-        rust_skip_ids: Vec::new(),
-    };
-    let mut seen = BTreeSet::new();
-    for (position, case) in cases.iter().enumerate() {
-        let at = format!("case {position}");
-        let (map, id) = check_common(case, &at)?;
-        let kind = string_field(map, "kind", &at)?;
-        if !KNOWN_KINDS.contains(&kind) {
-            return Err(format!("{at}: the schema defines no case kind {kind}"));
-        }
-        if VALIDATED_KINDS.contains(&kind) {
-            return Err(format!(
-                "{at}: the {kind} kind is validated in full, not read as refused"
-            ));
-        }
-        if !seen.insert(id.clone()) {
-            return Err(format!("case id {id} is used twice in the file"));
-        }
-        if map.contains_key("skip") {
-            facts.skip_ids.push(id.clone());
-        }
-        if map.get("skip").and_then(Value::as_str) == Some("rust") {
-            facts.rust_skip_ids.push(id.clone());
-        }
-        facts.ids.push(id);
-    }
-    facts.skip_ids.sort();
-    facts.rust_skip_ids.sort();
-    Ok(facts)
-}
-
-/// What a valid corpus file holds, for the checks that compare files with each other and with the manifest.
-pub struct FileFacts {
-    pub ids: Vec<String>,
-    /// The ids of the cases marked to be skipped by one implementation, sorted.
-    pub skip_ids: Vec<String>,
-    /// The ids of the cases marked `rust`, the ones this implementation skips because they are marked, sorted.
-    pub rust_skip_ids: Vec<String>,
-}
-
-pub fn validate_file(value: &Value) -> Check<FileFacts> {
-    let top = exact_keys(value, "file", &["cases"], &[])?;
-    let cases = array(&top["cases"], "file", "\"cases\"")?;
-    if cases.is_empty() {
-        return Err("file: \"cases\" must not be empty".to_owned());
-    }
-    let mut facts = FileFacts {
-        ids: Vec::new(),
-        skip_ids: Vec::new(),
-        rust_skip_ids: Vec::new(),
-    };
-    let mut seen = BTreeSet::new();
-    for (position, case) in cases.iter().enumerate() {
-        let id = check_case(case, &format!("case {position}"))?;
-        if !seen.insert(id.clone()) {
-            return Err(format!("case id {id} is used twice in the file"));
-        }
-        if case.get("skip").is_some() {
-            facts.skip_ids.push(id.clone());
-        }
-        if case.get("skip").and_then(Value::as_str) == Some("rust") {
-            facts.rust_skip_ids.push(id.clone());
-        }
-        facts.ids.push(id);
-    }
-    facts.skip_ids.sort();
-    facts.rust_skip_ids.sort();
-    Ok(facts)
 }
 
 /// The manifest as a map from corpus file to its case count and the ids marked to be skipped by one side.
@@ -500,12 +188,18 @@ pub fn validate_manifest(value: &Value) -> Check<BTreeMap<String, (usize, Vec<St
         {
             return Err(format!("{at}: \"generated\" is true when it is given"));
         }
-        let count = integer_field(map, "cases", &at)?;
+        let count = map
+            .get("cases")
+            .and_then(as_integer)
+            .ok_or_else(|| format!("{at}: \"cases\" must be a non-negative integer"))?;
         if count == 0 {
             return Err(format!("{at}: \"cases\" must be at least 1"));
         }
         let mut skip = Vec::new();
-        for id in array(&map["skip"], &at, "\"skip\"")? {
+        let listed = map["skip"]
+            .as_array()
+            .ok_or_else(|| format!("{at}: \"skip\" must be an array"))?;
+        for id in listed {
             skip.push(
                 id.as_str()
                     .filter(|text| is_name(text))
@@ -524,11 +218,11 @@ pub fn validate_manifest(value: &Value) -> Check<BTreeMap<String, (usize, Vec<St
     Ok(manifest)
 }
 
-/// Checks the validator against documents written here rather than read from the corpus, for what a JSON file
-/// cannot hold: the corpus is canonical JSON, which writes `97.0` as `97`.
+/// Checks the validator against documents written here rather than read from the corpus, for what a JSON file cannot
+/// hold: the corpus is canonical JSON, which writes `97.0` as `97`.
 pub fn self_check(failures: &mut Vec<String>) {
     let node = |text: &str| {
-        serde_json::from_str::<Value>(text).map(|value| check_regex_node(&value, "self-check"))
+        serde_json::from_str::<Shaped>(text).map(|value| RegexNode::from_json(&value).map(drop))
     };
     match node(r#"{"kind":"literal","codeUnit":97.0}"#) {
         Ok(Ok(())) => {}
