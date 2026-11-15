@@ -3,6 +3,7 @@ import { exadevConfig } from "@exadev/eslint-config";
 import { defineConfig } from "eslint/config";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 import globals from "globals";
+import tseslint from "typescript-eslint";
 
 const nodeBuiltinBaseModules = [
   ...new Set(
@@ -96,6 +97,25 @@ export default defineConfig(
   {
     files: ["src/derived-aggregates.ts"],
     rules: { "exadev/prefer-options-object-param": "off" },
+  },
+  // The consumer check runs in Node, Bun and Deno, none of which is told to read TypeScript, so it is plain JavaScript that no TypeScript program includes: it is linted without type information, against the globals of the three runtimes.
+  {
+    files: ["test/runtimes/**/*.mjs"],
+    extends: [tseslint.configs.disableTypeChecked],
+    languageOptions: {
+      globals: { ...globals.node, Bun: "readonly", Deno: "readonly" },
+    },
+    rules: Object.fromEntries(
+      [
+        "exadev/no-array-isarray-mutation",
+        "exadev/no-enum-number-widening",
+        "exadev/no-enum-reverse-lookup-widening",
+        "exadev/no-map-instanceof-mutation",
+        "exadev/no-set-instanceof-mutation",
+        "exadev/prefer-numeric-sort-compare",
+        "exadev/prefer-readonly-object-param",
+      ].map((rule) => [rule, "off"]),
+    ),
   },
   // The recursive evaluator passes its state positionally on the hot path, so the call signature stays as it is.
   {
