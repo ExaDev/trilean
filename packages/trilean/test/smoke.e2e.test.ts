@@ -1,8 +1,8 @@
-// Verifies the built package (dist/), not src/ -- the one thing the unit suite can never catch is an `exports` map misconfiguration, since unit tests import src/ directly and never go through package.json's `exports` resolution at all. Runs the same assertions against the entry (dist/index.js) plus one deep-import subpath (dist/tree.js) to prove the "./*" wildcard export resolves to real files. The `import()` bindings below are typed against the built dist/*.d.ts, which is what makes every assertion in this file type-checked rather than `any`. The package is ES modules only, so a separate block loads the entry through Node's own require(), which a consumer on a Node that can require an ES module (20.19, 22.12 and later) uses.
+// Verifies the built package (dist/), not src/: the one thing the unit suite can never catch is an `exports` map misconfiguration, since unit tests import src/ directly and never go through package.json's `exports` resolution at all. Runs the same assertions against the entry (dist/index.js) plus one deep-import subpath (dist/tree.js) to prove the "./*" wildcard export resolves to real files. The `import()` bindings below are typed against the built dist/*.d.ts, which is what makes every assertion in this file type-checked rather than `any`. The package is ES modules only, so a separate block loads the entry through Node's own require(), which a consumer on a Node that can require an ES module (20.19, 22.12 and later) uses.
 //
 // This file is allowed ordinary Node APIs (node:fs, node:module) despite the rest of the package being isomorphic: it is test/ tooling that runs the already-built output, not runtime src/, and isomorphism is only enforced within src/ (see eslint.config.ts's `runtimeSrcExemptions`/`no-restricted-imports` scoping).
 //
-// A member of tsconfig.node.json's program like every other test/**/*.ts file, importing straight from the built dist/*.js paths -- turbo's "_typecheck" and "_lint" tasks both depend on "_build" (see turbo.json), so dist/ genuinely exists by the time either tsc or eslint's typed rules resolve these imports.
+// A member of tsconfig.node.json's program like every other test/**/*.ts file, importing straight from the built dist/*.js paths: turbo's "_typecheck" and "_lint" tasks both depend on "_build" (see turbo.json), so dist/ genuinely exists by the time either tsc or eslint's typed rules resolve these imports.
 
 import { readFileSync, readdirSync } from "node:fs";
 import { createRequire } from "node:module";
@@ -22,7 +22,7 @@ function isUnknownArray(value: unknown): value is unknown[] {
   return Array.isArray(value);
 }
 
-/** Narrows to a plain JSON object or throws -- the built package's dist/ output and the generated schema document are both untyped `unknown` at their boundary, per this repo's `JSON.parse`/dynamic-import narrowing convention, so every access below goes through this rather than an `as` assertion. Throwing a descriptive Error rather than returning a placeholder is what makes a malformed built artefact a test failure instead of a silently-tolerated hole (mirrors test/integration/json-schema-consistency.integration.test.ts's extractKindConst/extractGeneratedKinds). */
+/** Narrows to a plain JSON object or throws: the built package's dist/ output and the generated schema document are both untyped `unknown` at their boundary, per this repo's `JSON.parse`/dynamic-import narrowing convention, so every access below goes through this rather than an `as` assertion. Throwing a descriptive Error rather than returning a placeholder is what makes a malformed built artefact a test failure instead of a silently-tolerated hole (mirrors test/integration/json-schema-consistency.integration.test.ts's extractKindConst/extractGeneratedKinds). */
 function asPlainRecord(
   value: unknown,
   message: string,
@@ -32,7 +32,7 @@ function asPlainRecord(
   return value;
 }
 
-// The full public surface: the evaluator entry points and factory, both node-tree schemas, and every derived connective/aggregate builder -- deliberately not asserting internal node-kind object schemas here, since those are covered by src/tree.unit.test.ts against src/ directly. Declared as a typed tuple array, not a `Record`/`Object.entries()` pair, so each export name is checked against IndexModule's own keys at typecheck time -- a renamed or removed export fails here rather than producing a silently-`undefined` lookup at runtime.
+// The full public surface: the evaluator entry points and factory, both node-tree schemas, and every derived connective/aggregate builder: deliberately not asserting internal node-kind object schemas here, since those are covered by src/tree.unit.test.ts against src/ directly. Declared as a typed tuple array, not a `Record`/`Object.entries()` pair, so each export name is checked against IndexModule's own keys at typecheck time: a renamed or removed export fails here rather than producing a silently-`undefined` lookup at runtime.
 const expectedIndexExports: readonly [
   keyof typeof IndexModule,
   "function" | "object",
@@ -129,7 +129,7 @@ describe("the entries loaded through Node's own require()", () => {
   });
 });
 
-// Beyond "the exports exist and are the right typeof" above, this section actually RUNS a substantial composed-rule scenario -- fold's `max` combiner, `memberOf`, and the derived `implies` connective, composed together (adapted from test/integration/composed-rules.integration.test.ts's own "fold's max combiner alongside memberOf and a derived connective" scenario) -- against the built entry point, proving the compiled output behaves identically to source for a realistic multi-kind tree, not only for the minimal golden example already covered by src/golden-examples.unit.test.ts and test/workers/trilean.e2e.test.ts. The fixture is duplicated inline, rather than imported from test/integration, to keep this file self-contained (matching its existing style) and independent of TypeScript transpilation.
+// Beyond "the exports exist and are the right typeof" above, this section actually RUNS a substantial composed-rule scenario: fold's `max` combiner, `memberOf`, and the derived `implies` connective, composed together (adapted from test/integration/composed-rules.integration.test.ts's own "fold's max combiner alongside memberOf and a derived connective" scenario), against the built entry point, proving the compiled output behaves identically to source for a realistic multi-kind tree, not only for the minimal golden example already covered by src/golden-examples.unit.test.ts and test/workers/trilean.e2e.test.ts. The fixture is duplicated inline, rather than imported from test/integration, to keep this file self-contained (matching its existing style) and independent of TypeScript transpilation.
 
 function makeAuctionResolvers(): IndexModule.Resolvers {
   return {
@@ -232,7 +232,7 @@ describe.each([["ESM (dist/index.js)", esmIndex]])(
   },
 );
 
-/** A runtime `.options` entry that is itself a leaf node schema (a `z.object`/`z.strictObject` with a literal `kind` discriminant), as opposed to a nested union -- returns that leaf's own `kind` literal, or `undefined` if `option` isn't shaped this way. */
+/** A runtime `.options` entry that is itself a leaf node schema (a `z.object`/`z.strictObject` with a literal `kind` discriminant), as opposed to a nested union: returns that leaf's own `kind` literal, or `undefined` if `option` isn't shaped this way. */
 function readKindLiteral(option: unknown): string | undefined {
   if (!isPlainRecord(option)) return undefined;
   const shape = option.shape;
@@ -244,7 +244,7 @@ function readKindLiteral(option: unknown): string | undefined {
   return typeof value === "string" ? value : undefined;
 }
 
-/** A runtime `.options` entry that is itself a union (`ZodDiscriminatedUnion` or `ZodUnion`) rather than a leaf object schema -- recognised structurally by its own `.options` array, the same property every zod union type (discriminated or plain) exposes. */
+/** A runtime `.options` entry that is itself a union (`ZodDiscriminatedUnion` or `ZodUnion`) rather than a leaf object schema: recognised structurally by its own `.options` array, the same property every zod union type (discriminated or plain) exposes. */
 function hasOptionsArray(
   value: unknown,
 ): value is { options: readonly unknown[] } {
@@ -253,7 +253,7 @@ function hasOptionsArray(
   return Array.isArray(value.options);
 }
 
-/** Every `kind` a runtime union schema (`PredicateNodeSchema`/`ExpressionNodeSchema`, as built) actually accepts, read off its own `.options`. Recurses when an option is itself a nested union rather than a flat object -- built `ExpressionNodeSchema` is `z.union([CoreExpressionNodeSchema, ComplexLiteralNodeSchema])` (see `extractKindConst` below), so its own top-level `.options` are two further unions, not flat leaf schemas. Mirrors test/integration/json-schema-consistency.integration.test.ts's own `discriminantKinds`, duplicated here rather than imported to keep this file self-contained (see this file's own top comment). */
+/** Every `kind` a runtime union schema (`PredicateNodeSchema`/`ExpressionNodeSchema`, as built) actually accepts, read off its own `.options`. Recurses when an option is itself a nested union rather than a flat object: built `ExpressionNodeSchema` is `z.union([CoreExpressionNodeSchema, ComplexLiteralNodeSchema])` (see `extractKindConst` below), so its own top-level `.options` are two further unions, not flat leaf schemas. Mirrors test/integration/json-schema-consistency.integration.test.ts's own `discriminantKinds`, duplicated here rather than imported to keep this file self-contained (see this file's own top comment). */
 function runtimeDiscriminantKinds(schema: {
   options: readonly unknown[];
 }): string[] {
@@ -267,7 +267,7 @@ function runtimeDiscriminantKinds(schema: {
   });
 }
 
-/** A discriminated-union branch as generated JSON Schema shape: `{ properties: { kind: { const: "..." } } }` -- or, since built `ExpressionNodeSchema` is a plain union wrapping a nested discriminated union and a further nested union (rect/polar `complexLiteral`, which can't share one discriminant value inside a single discriminatedUnion -- see README.md's "Complex values" section), a branch that is itself another `oneOf`/`anyOf` list, recursed into rather than assumed to be a flat leaf. */
+/** A discriminated-union branch as generated JSON Schema shape: `{ properties: { kind: { const: "..." } } }`, or, since built `ExpressionNodeSchema` is a plain union wrapping a nested discriminated union and a further nested union (rect/polar `complexLiteral`, which can't share one discriminant value inside a single discriminatedUnion; see README.md's "Complex values" section), a branch that is itself another `oneOf`/`anyOf` list, recursed into rather than assumed to be a flat leaf. */
 function extractKindConst(branch: unknown): string[] {
   const branchRecord = asPlainRecord(
     branch,
@@ -320,7 +320,7 @@ function collectRefs(value: unknown, found = new Set<string>()): Set<string> {
   return found;
 }
 
-// Resolves a JSON Pointer fragment ("#/$defs/PredicateNode") against the document, per RFC 6901 -- including its ~1/~0 escapes, so a def name containing a slash or tilde is not silently reported as unresolvable.
+// Resolves a JSON Pointer fragment ("#/$defs/PredicateNode") against the document, per RFC 6901: including its ~1/~0 escapes, so a def name containing a slash or tilde is not silently reported as unresolvable.
 function resolvesWithinDocument(document: unknown, ref: string): boolean {
   if (!ref.startsWith("#/")) return false;
   let current: unknown = document;
@@ -344,7 +344,7 @@ function isUtf16Ascending(keys: readonly string[]): boolean {
   return true;
 }
 
-/** Walks raw JSON text and reports, per object literal, that object's own key names in the order the bytes list them, plus how many whitespace characters sit outside a string literal. Reimplements just enough of a JSON scanner to check RFC 8785's structural rules without deferring to the library that produced the file -- and reads key order off the text rather than Object.keys(), whose hoisting of integer-like keys would misreport the on-disk order. */
+/** Walks raw JSON text and reports, per object literal, that object's own key names in the order the bytes list them, plus how many whitespace characters sit outside a string literal. Reimplements just enough of a JSON scanner to check RFC 8785's structural rules without deferring to the library that produced the file: and reads key order off the text rather than Object.keys(), whose hoisting of integer-like keys would misreport the on-disk order. */
 function scanJsonStructure(json: string): {
   keysPerObject: string[][];
   whitespaceOutsideStrings: number;
@@ -396,9 +396,9 @@ function scanJsonStructure(json: string): {
   return { keysPerObject, whitespaceOutsideStrings };
 }
 
-/* A genuine proof the "./schemas/*.schema.json" export actually works for a non-TypeScript consumer, which nothing else in this suite tests -- the unit project never touches the generated file at all, and the assertions above stop at dist/'s own JS exports.
+/* A genuine proof the "./schemas/*.schema.json" export actually works for a non-TypeScript consumer, which nothing else in this suite tests: the unit project never touches the generated file at all, and the assertions above stop at dist/'s own JS exports.
 
-   This is also the only place the "One schema, mechanically derived artefacts" design principle is checked against the artefact that actually ships, rather than against a re-derivation: the file read here is the real output of scripts/generate-json-schema.ts, regenerated by the `_build` task this tier now depends on. Two independent failure modes are covered. First, ref integrity: the script hand-rolls a `uri` callback plus a "__shared" splice to turn zod's multi-document registry output into one self-contained document, and if either stops matching zod's internals the document silently fills with unresolvable $refs (bare "PredicateNode", or a doubled "#/$defs/__shared#/$defs/schema0") that no consumer's JSON Schema tooling could follow. Second, discriminant parity: the generated document's own "kind" const set is compared against the built package's runtime PredicateNodeSchema/ExpressionNodeSchema options, so a node kind added to the Zod schema but missing from the shipped document -- a stale or wrongly-assembled artefact -- fails here rather than reaching a consumer.
+   This is also the only place the "One schema, mechanically derived artefacts" design principle is checked against the artefact that actually ships, rather than against a re-derivation: the file read here is the real output of scripts/generate-json-schema.ts, regenerated by the `_build` task this tier now depends on. Two independent failure modes are covered. First, ref integrity: the script hand-rolls a `uri` callback plus a "__shared" splice to turn zod's multi-document registry output into one self-contained document, and if either stops matching zod's internals the document silently fills with unresolvable $refs (bare "PredicateNode", or a doubled "#/$defs/__shared#/$defs/schema0") that no consumer's JSON Schema tooling could follow. Second, discriminant parity: the generated document's own "kind" const set is compared against the built package's runtime PredicateNodeSchema/ExpressionNodeSchema options, so a node kind added to the Zod schema but missing from the shipped document (a stale or wrongly-assembled artefact) fails here rather than reaching a consumer.
 
    Two further checks below cover the artefact's identity and byte-level shape, both of which only exist against the real generated file for the same reason as the two failure modes above: $id and canonicalization are stamped and computed inside scripts/generate-json-schema.ts itself, so nothing in src/ or the integration tier ever produces them to compare against. */
 describe("generated schemas/trilean.schema.json", () => {
@@ -439,7 +439,7 @@ describe("generated schemas/trilean.schema.json", () => {
       "expected $defs.ExpressionNode to be a JSON object",
     );
     expect(Array.isArray(predicateNode.oneOf)).toBe(true);
-    // ExpressionNode's own top level is a plain `z.union` (not a `z.discriminatedUnion`), wrapping the core discriminated union alongside the `complexLiteral` rect/polar union -- see README.md's "Complex values" section -- so it converts to `anyOf`, not `oneOf`, unlike PredicateNode above, which is untouched by this and stays a single flat discriminated union.
+    // ExpressionNode's own top level is a plain `z.union` (not a `z.discriminatedUnion`), wrapping the core discriminated union alongside the `complexLiteral` rect/polar union (see README.md's "Complex values" section), so it converts to `anyOf`, not `oneOf`, unlike PredicateNode above, which is untouched by this and stays a single flat discriminated union.
     expect(Array.isArray(expressionNode.anyOf)).toBe(true);
   });
 
@@ -489,7 +489,7 @@ describe("generated schemas/trilean.schema.json", () => {
     );
   });
 
-  // Proves the shipped file is actually RFC 8785 (JCS) canonical, not merely "some JSON was written": re-canonicalizing the parsed document's own content must reproduce the file on disk byte for byte, with no trailing newline to fudge past. A generator that canonicalized only part of the document, or that drifted from the canonicalize package's own output (a hand-rolled sort, say), would still pass every other assertion in this describe block -- JSON.parse doesn't care about key order or whitespace -- so only a byte-for-byte comparison against the real file catches it. This identity is also the property a consumer relies on to re-derive the file's own SHA-256 from its parsed content when checking a download against this package's SBOM and provenance attestations.
+  // Proves the shipped file is actually RFC 8785 (JCS) canonical, not merely "some JSON was written": re-canonicalizing the parsed document's own content must reproduce the file on disk byte for byte, with no trailing newline to fudge past. A generator that canonicalized only part of the document, or that drifted from the canonicalize package's own output (a hand-rolled sort, say), would still pass every other assertion in this describe block: JSON.parse doesn't care about key order or whitespace, so only a byte-for-byte comparison against the real file catches it. This identity is also the property a consumer relies on to re-derive the file's own SHA-256 from its parsed content when checking a download against this package's SBOM and provenance attestations.
   it("is RFC 8785 (JCS) canonical: re-canonicalizing its parsed content reproduces the file on disk byte for byte", () => {
     const recanonicalized = canonicalize(schemaDocument);
     if (recanonicalized === undefined) {
@@ -504,7 +504,7 @@ describe("generated schemas/trilean.schema.json", () => {
   it("satisfies RFC 8785's structural rules read straight off the raw bytes, independently of the canonicalize package", () => {
     const { keysPerObject, whitespaceOutsideStrings } =
       scanJsonStructure(rawSchemaFile);
-    // Anchors the two assertions below against a vacuous pass on a document the scanner failed to walk at all. These are the exact four keys the generator writes, in the order JCS sorts them -- "$defs" before "$id" before "$schema" is correct, not a typo: '$' sorts before every letter, then 'd' < 'i' < 's'.
+    // Anchors the two assertions below against a vacuous pass on a document the scanner failed to walk at all. These are the exact four keys the generator writes, in the order JCS sorts them: "$defs" before "$id" before "$schema" is correct, not a typo: '$' sorts before every letter, then 'd' < 'i' < 's'.
     expect(keysPerObject[0]).toEqual(["$defs", "$id", "$schema", "oneOf"]);
     expect(whitespaceOutsideStrings).toBe(0);
     expect(keysPerObject.filter((keys) => !isUtf16Ascending(keys))).toEqual([]);
