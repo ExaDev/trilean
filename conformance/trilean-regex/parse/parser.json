@@ -699,7 +699,7 @@
         "error": {
           "index": 0,
           "message": [
-            "capturing groups are not supported"
+            "capturing groups are not supported in this grammar: there is nothing to capture, since a pattern only ever answers whether it matches. Use '(?:...)' for grouping."
           ]
         }
       },
@@ -1343,7 +1343,7 @@
         "error": {
           "index": 2,
           "message": [
-            "capturing groups are not supported"
+            "capturing groups are not supported in this grammar: there is nothing to capture, since a pattern only ever answers whether it matches. Use '(?:...)' for grouping."
           ]
         }
       },
