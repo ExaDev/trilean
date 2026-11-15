@@ -36,20 +36,23 @@ export function decodeNumbers(value: unknown): unknown {
   );
 }
 
-/** The value with every number that is not finite replaced by 0, so a tree that holds a NaN or an infinity, which the package's schema refuses, can still be checked for its shape. */
-export function replaceNonFinite(value: unknown): unknown {
+/** The value with every number that is not finite replaced by 0, and every string made well formed, so a tree that holds a NaN, an infinity or an unpaired surrogate, which the package's schema refuses, can still be checked for its shape. */
+export function replaceUnreadable(value: unknown): unknown {
   if (typeof value === "number") {
     return Number.isFinite(value) ? value : 0;
   }
+  if (typeof value === "string") {
+    return value.toWellFormed();
+  }
   if (Array.isArray(value)) {
-    return value.map(replaceNonFinite);
+    return value.map(replaceUnreadable);
   }
   if (!isRecord(value)) {
     return value;
   }
 
   return Object.fromEntries(
-    Object.entries(value).map(([key, item]) => [key, replaceNonFinite(item)]),
+    Object.entries(value).map(([key, item]) => [key, replaceUnreadable(item)]),
   );
 }
 

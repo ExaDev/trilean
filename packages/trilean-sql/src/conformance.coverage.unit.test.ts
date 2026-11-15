@@ -2,11 +2,11 @@ import { caseLimit } from "../../../corpus-time-limit";
 import { fileURLToPath } from "node:url";
 import { parseRegex } from "trilean-regex";
 import {
-  ComparisonOperatorSchema,
-  ExpressionNodeSchema,
-  MembershipOperatorSchema,
-  PredicateNodeSchema,
-  TextComparisonOperatorSchema,
+  comparisonOperators,
+  expressionKinds,
+  membershipOperators,
+  predicateKinds,
+  textComparisonOperators,
 } from "trilean";
 import { describe, expect, it } from "vitest";
 import {
@@ -84,38 +84,12 @@ function dialectOf(testCase: {
   return testCase.options?.dialect ?? "postgres";
 }
 
-/** The kinds a discriminated or plain union of node schemas defines. */
-function kindsOf(schema: unknown): readonly string[] {
-  const found = new Set<string>();
-  const visit = (value: unknown): void => {
-    if (!isRecord(value)) {
-      return;
-    }
-    const { options, shape } = value;
-    if (Array.isArray(options)) {
-      options.forEach(visit);
-    }
-    if (
-      isRecord(shape) &&
-      isRecord(shape.kind) &&
-      typeof shape.kind.value === "string"
-    ) {
-      found.add(shape.kind.value);
-    }
-  };
-  visit(schema);
-
-  return [...found];
-}
-
 describe("the operator by dialect matrix of sql-compile cases", () => {
   const admitted = compileCases.filter((testCase) => "sql" in testCase.expect);
   const rows: readonly (readonly [string, string])[] = [
-    ...ComparisonOperatorSchema.options.map((op) => ["compare", op] as const),
-    ...TextComparisonOperatorSchema.options.map(
-      (op) => ["textCompare", op] as const,
-    ),
-    ...MembershipOperatorSchema.options.map((op) => ["memberOf", op] as const),
+    ...comparisonOperators.map((op) => ["compare", op] as const),
+    ...textComparisonOperators.map((op) => ["textCompare", op] as const),
+    ...membershipOperators.map((op) => ["memberOf", op] as const),
   ];
 
   it.each(
@@ -201,13 +175,7 @@ describe("the guard, on each side of the line, for every node kind", () => {
     "booleanLiteral",
     "instantLiteral",
   ]);
-  const kinds = [
-    ...new Set([
-      ...kindsOf(PredicateNodeSchema),
-      ...kindsOf(ExpressionNodeSchema),
-      "complexLiteral",
-    ]),
-  ].sort();
+  const kinds = [...new Set([...predicateKinds, ...expressionKinds])].sort();
 
   it("classifies every node kind the trilean schemas define, and no other", () => {
     const classified = [...REFUSED, ...BOTH, ...ADMITTED].sort();
