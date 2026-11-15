@@ -70,7 +70,7 @@ fn matching_is_over_code_units_so_one_astral_character_is_two_dots() {
 fn an_unpaired_surrogate_in_the_input_is_one_character() {
     let lone_high = [0xD800u16];
     let any = compile_pattern("^.$").expect("dot");
-    assert!(any.test_utf16(&lone_high));
+    assert!(any.test_utf16(&lone_high).expect("short"));
     let class = compile_pattern_utf16(&[
         u16::from(b'^'),
         u16::from(b'['),
@@ -81,9 +81,9 @@ fn an_unpaired_surrogate_in_the_input_is_one_character() {
         u16::from(b'$'),
     ])
     .expect("surrogate range");
-    assert!(class.test_utf16(&lone_high));
-    assert!(!class.test_utf16(&[0xDC00]));
-    assert!(!class.test("a"));
+    assert!(class.test_utf16(&lone_high).expect("short"));
+    assert!(!class.test_utf16(&[0xDC00]).expect("short"));
+    assert!(!class.test("a").expect("short"));
 }
 
 #[test]
@@ -91,7 +91,7 @@ fn a_pattern_compiled_once_answers_every_input_as_a_fresh_compile_would() {
     let compiled = compile_pattern("^(?:ab|a)+c$").expect("pattern");
     for input in ["", "ac", "abc", "aabc", "abac", "abx", "c"] {
         assert_eq!(
-            compiled.test(input),
+            compiled.test(input).expect("short"),
             matches("^(?:ab|a)+c$", input),
             "{input}"
         );
@@ -103,6 +103,10 @@ fn the_text_and_code_unit_entry_points_agree() {
     let compiled = compile_pattern("b+$").expect("pattern");
     for input in ["", "b", "abb", "bba", "\u{1F600}b"] {
         let units: Vec<u16> = input.encode_utf16().collect();
-        assert_eq!(compiled.test(input), compiled.test_utf16(&units), "{input}");
+        assert_eq!(
+            compiled.test(input).expect("short"),
+            compiled.test_utf16(&units).expect("short"),
+            "{input}"
+        );
     }
 }

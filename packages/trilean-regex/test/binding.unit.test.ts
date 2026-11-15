@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import {
   CompiledPattern,
+  RegexInputError,
   RegexParseError,
   UnsupportedConstructError,
   charClassMatches,
@@ -257,6 +258,52 @@ describe("a pattern longer than the length limit", () => {
       expect(compilePattern("a+").test("caab")).toBe(true);
     },
   );
+});
+
+describe("an input beyond a limit", () => {
+  /** The largest pattern the state limit allows, which a thousand code units are over the work limit for. */
+  const largest = "a{99999}";
+
+  it("is refused at the work limit by the compiled pattern and by testPattern, one unit over and not one under", () => {
+    const compiled = compilePattern(largest);
+    expect(compiled.test("a".repeat(999))).toBe(false);
+    expect(testPattern(largest, "a".repeat(999))).toBe(false);
+    for (const refuse of [
+      () => compiled.test("a".repeat(1000)),
+      () => testPattern(largest, "a".repeat(1000)),
+    ]) {
+      expect(refuse).toThrow(RegexInputError);
+      expect(refuse).toThrow("state visits");
+    }
+    expect(compilePattern("a+").test("caab")).toBe(true);
+  });
+
+  it("is refused at the length limit whatever the pattern, and the refusal echoes none of it", () => {
+    const compiled = compilePattern("^a$");
+    expect(compiled.test("a".repeat(1_000_000))).toBe(false);
+    const input = "secret".repeat(200_000);
+    let thrown: unknown;
+    try {
+      compiled.test(input);
+    } catch (error) {
+      thrown = error;
+    }
+    expect(thrown).toBeInstanceOf(RegexInputError);
+    expect((thrown as RegexInputError).message).toContain("1000000");
+    expect((thrown as RegexInputError).message).not.toContain("secret");
+    expect((thrown as RegexInputError).name).toBe("RegexInputError");
+    expect(compiled.test("a")).toBe(true);
+  });
+
+  it("is refused before it is copied: the module's memory does not grow for a refused input", () => {
+    const pages = memoryPages();
+    for (let round = 0; round < 3; round += 1) {
+      expect(() => compilePattern("a").test("a".repeat(20_000_000))).toThrow(
+        RegexInputError,
+      );
+    }
+    expect(memoryPages() - pages).toBeLessThanOrEqual(REFUSAL_GROWTH_PAGES);
+  });
 });
 
 // Last in the file: a panic that throws from the hook never finishes unwinding, so the instance is spent afterwards.

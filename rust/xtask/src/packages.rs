@@ -45,6 +45,14 @@ export class InternalError extends Error {
     this.name = "InternalError";
   }
 }
+
+/** An input a compiled pattern may not be tested against: it is longer than the limit, or its length allows the pattern's states more work than the limit. `message` names the numbers and echoes no input. */
+export class RegexInputError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "RegexInputError";
+  }
+}
 "#,
     errors_declarations: r#"/** A pattern the parser refuses. `message` names the index, the reason, the pattern and a caret under the position; `index` is the offset in UTF-16 code units into `pattern`. */
 export declare class RegexParseError extends Error {
@@ -62,6 +70,11 @@ export declare class UnsupportedConstructError extends Error {
 
 /** A bug in the package: Rust panicked. `message` carries the panic's message and location. The instance that panicked is spent and the panic is to be reported. */
 export declare class InternalError extends Error {
+  constructor(message: string);
+}
+
+/** An input a compiled pattern may not be tested against: it is longer than the limit, or its length allows the pattern's states more work than the limit. `message` names the numbers and echoes no input. */
+export declare class RegexInputError extends Error {
   constructor(message: string);
 }
 "#,

@@ -9,12 +9,12 @@ import { describe, expect, it } from "vitest";
 const ENTRY = resolve(import.meta.dirname, "../dist/index.js");
 
 const CONSUMER = `
-import { compilePattern, parseRegex, RegexParseError, UnsupportedConstructError, InternalError, type RegexNode } from ${JSON.stringify(ENTRY)};
+import { compilePattern, parseRegex, RegexParseError, UnsupportedConstructError, InternalError, RegexInputError, type RegexNode } from ${JSON.stringify(ENTRY)};
 const compiled = compilePattern("a+");
 const matched: boolean = compiled.test("aa");
 compiled.free();
 const tree: RegexNode = parseRegex("a");
-export const results: unknown[] = [matched, tree.kind, RegexParseError, UnsupportedConstructError, InternalError];
+export const results: unknown[] = [matched, tree.kind, RegexParseError, UnsupportedConstructError, InternalError, RegexInputError];
 `;
 
 describe("the package's declarations", () => {

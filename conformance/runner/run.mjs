@@ -341,16 +341,22 @@ function run(pkg, c) {
           ? pkg.compileEcmascriptSubset
           : pkg.compilePattern,
       once = compile(pattern);
-    for (const { input, matches } of c.inputs) {
-      const text = units(input);
-      is(
-        once.test(text),
-        matches,
-        `compiled once, input ${JSON.stringify(text)}`,
-      );
-      is(compile(pattern).test(text), matches, "compiled per call");
+    for (const { input, matches, refused } of c.inputs) {
+      const text = units(input),
+        want = refused ? "refused" : matches,
+        go = (f, s) => {
+          let v;
+          try {
+            v = f();
+          } catch (e) {
+            v = e instanceof pkg.RegexInputError ? "refused" : e;
+          }
+          is(v, want, s);
+        };
+      go(() => once.test(text), "once");
+      go(() => compile(pattern).test(text), "per call");
       if (c.dialect !== "ecmascript")
-        is(pkg.testPattern(pattern, text), matches, "testPattern");
+        go(() => pkg.testPattern(pattern, text), "testPattern");
     }
 
     return k;

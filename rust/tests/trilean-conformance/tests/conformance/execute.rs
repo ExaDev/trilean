@@ -2,8 +2,8 @@
 
 use serde_json::{Map, Value, json};
 use trilean_regex::{
-    CharClassNode, RegexNode, compile_ecmascript_subset_utf16, compile_pattern_utf16,
-    parse_regex_utf16, test_pattern,
+    CharClassNode, RegexInputError, RegexNode, TestPatternError, compile_ecmascript_subset_utf16,
+    compile_pattern_utf16, parse_regex_utf16, test_pattern,
 };
 
 use crate::validate::decode_text;
@@ -211,18 +211,23 @@ fn run_match_case(case: &Value) -> Check<()> {
     let pattern_text = String::from_utf16(&pattern).ok();
     for item in case["inputs"].as_array().map_or(&[][..], Vec::as_slice) {
         let input = decode_text(&item["input"])?;
-        let expected = item["matches"].as_bool().unwrap_or(false);
+        // A refused input has no answer: every way of testing it is refused, with an error that names a limit.
+        let expected = item["matches"].as_bool();
         let label = units_text(&input);
-        let check = |entry: &str, actual: bool| {
+        let check = |entry: &str, actual: Result<bool, RegexInputError>| {
+            let actual = actual.ok();
             if actual == expected {
                 Ok(())
             } else {
                 Err(format!(
-                    "{entry}: input code units {label} gave {actual}, expected {expected}"
+                    "{entry}: input code units {label} gave {actual:?}, expected {expected:?}"
                 ))
             }
         };
-        let (counted, visits) = compiled.test_utf16_counted(&input);
+        let (counted, visits) = match compiled.test_utf16_counted(&input) {
+            Ok((matched, visits)) => (Ok(matched), visits),
+            Err(error) => (Err(error), 0),
+        };
         check("compiled once", counted)?;
         check("compiled per call", compile(&pattern)?.test_utf16(&input))?;
         if let Ok(text) = String::from_utf16(&input) {
@@ -230,7 +235,11 @@ fn run_match_case(case: &Value) -> Check<()> {
             if !ecmascript && let Some(source) = &pattern_text {
                 check(
                     "test_pattern",
-                    test_pattern(source, &text).map_err(|error| error.to_string())?,
+                    match test_pattern(source, &text) {
+                        Ok(matched) => Ok(matched),
+                        Err(TestPatternError::Input(error)) => Err(error),
+                        Err(error) => return Err(error.to_string()),
+                    },
                 )?;
             }
         }

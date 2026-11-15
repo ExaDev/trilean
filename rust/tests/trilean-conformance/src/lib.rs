@@ -360,9 +360,14 @@ pub struct RegexParse {
 
 #[derive(Shape, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
+#[shape(one_of(matches, refused))]
 pub struct MatchInput {
     pub input: Text,
-    pub matches: bool,
+    /// Whether the pattern matches the input. Absent when `refused` is given instead.
+    pub matches: Option<bool>,
+    /// That the matcher refuses the input, as one over a limit on its length or on the work its length allows the pattern (`MAX_INPUT_UNITS`, `MAX_WORK`), so there is no answer to give. A refusal is the same in every runtime: a `RegexInputError`.
+    #[shape(constant = true)]
+    pub refused: Option<bool>,
     /// A bound on the work the matcher does for this input. Only a runner that counts NFA state visits checks it.
     #[serde(rename = "workBound")]
     pub work_bound: Option<WorkBound>,

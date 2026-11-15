@@ -6,8 +6,8 @@ use std::cell::RefCell;
 
 use js_sys::{Array, Function, JsString, Object, Reflect};
 use trilean_regex::{
-    CharClassNode, CharRange, CompiledPattern, EcmaSubsetError, RegexNode, RegexParseError,
-    ShorthandClassLetter, check_pattern_length, compile_ecmascript_subset_utf16,
+    CharClassNode, CharRange, CompiledPattern, EcmaSubsetError, RegexInputError, RegexNode,
+    RegexParseError, ShorthandClassLetter, check_pattern_length, compile_ecmascript_subset_utf16,
     compile_pattern_utf16, expand_shorthand_class, parse_regex_utf16,
 };
 use wasm_bindgen::prelude::*;
@@ -109,13 +109,14 @@ struct ErrorClasses {
     parse_error: Function,
     unsupported_construct: Function,
     internal_error: Function,
+    input_error: Function,
 }
 
 thread_local! {
     static CLASSES: RefCell<Option<ErrorClasses>> = const { RefCell::new(None) };
 }
 
-/// Hands the binding the classes it throws and installs the panic hook that throws one of them. The package's entry point calls it once, with `RegexParseError`, `UnsupportedConstructError` and `InternalError` in that order, before anything else in the package can run; the classes are JavaScript, so the binding is given them rather than importing them.
+/// Hands the binding the classes it throws and installs the panic hook that throws one of them. The package's entry point calls it once, with `RegexParseError`, `UnsupportedConstructError`, `InternalError` and `RegexInputError` in that order, before anything else in the package can run; the classes are JavaScript, so the binding is given them rather than importing them.
 ///
 /// A panic in Rust would otherwise reach JavaScript as a bare `RuntimeError: unreachable` with no message. The hook throws an `InternalError` carrying the panic's message and location instead, from inside the panic, so the module is not usable afterwards in the strict sense: the panic never finishes unwinding, and a second panic in the same instance traps as before. A caller that gets an `InternalError` should treat the instance as spent and report the message.
 #[wasm_bindgen(js_name = registerErrorClasses)]
@@ -123,12 +124,14 @@ pub fn register_error_classes(
     parse_error: Function,
     unsupported_construct: Function,
     internal_error: Function,
+    input_error: Function,
 ) {
     CLASSES.with(|classes| {
         *classes.borrow_mut() = Some(ErrorClasses {
             parse_error,
             unsupported_construct,
             internal_error,
+            input_error,
         });
     });
     std::panic::set_hook(Box::new(|info| {
@@ -211,6 +214,13 @@ fn parse_error(error: &RegexParseError, pattern: &JsString) -> JsValue {
             pattern.into(),
             index_to_js(error.index()).into(),
         ],
+    )
+}
+
+fn input_error(error: &RegexInputError) -> JsValue {
+    construct(
+        |classes| &classes.input_error,
+        &[JsString::from(error.to_string().as_str()).into()],
     )
 }
 
@@ -413,13 +423,20 @@ pub struct JsCompiledPattern {
 
 #[wasm_bindgen(js_class = CompiledPattern)]
 impl JsCompiledPattern {
-    /// Whether any substring of `input` matches this pattern. The work is bounded by the pattern's size and the input's length, whatever the pattern is.
+    /// Whether any substring of `input` matches this pattern. The work is bounded by the pattern's size and the input's length, whatever the pattern is, and the product of the two is limited: an input too long, or too long for this pattern's states, is refused before it is copied.
+    ///
+    /// @throws `RegexInputError` if the input may not be tested against this pattern.
     pub fn test(
         &self,
         #[wasm_bindgen(unchecked_param_type = "string")] input: &JsValue,
     ) -> Result<bool, JsValue> {
         let input = string_argument(input, "input")?;
-        Ok(self.compiled.test_utf16(&code_units(&input)))
+        self.compiled
+            .check_input(input.length() as usize)
+            .map_err(|error| input_error(&error))?;
+        self.compiled
+            .test_utf16(&code_units(&input))
+            .map_err(|error| input_error(&error))
     }
 }
 
@@ -440,7 +457,7 @@ pub fn compile_pattern(
 
 /// Parses `pattern` and tests it against `input` in one call.
 ///
-/// @throws `RegexParseError` if `pattern` is not a valid pattern in this grammar.
+/// @throws `RegexParseError` if `pattern` is not a valid pattern in this grammar, and `RegexInputError` if `input` may not be tested against it.
 #[wasm_bindgen(js_name = testPattern)]
 pub fn test_pattern(
     #[wasm_bindgen(unchecked_param_type = "string")] pattern: &JsValue,
@@ -450,9 +467,14 @@ pub fn test_pattern(
         &string_argument(pattern, "pattern")?,
         string_argument(input, "input")?,
     );
-    compile_pattern_utf16(&checked_units(pattern)?)
-        .map(|compiled| compiled.test_utf16(&code_units(&input)))
-        .map_err(|error| parse_error(&error, pattern))
+    let compiled = compile_pattern_utf16(&checked_units(pattern)?)
+        .map_err(|error| parse_error(&error, pattern))?;
+    compiled
+        .check_input(input.length() as usize)
+        .map_err(|error| input_error(&error))?;
+    compiled
+        .test_utf16(&code_units(&input))
+        .map_err(|error| input_error(&error))
 }
 
 /// Compiles `pattern` only when every construct in it means the same as in an unflagged ECMAScript `RegExp`.
