@@ -47,7 +47,10 @@ export default defineConfig({
         // Builds a consumer with each bundler from the packed tarballs of this package and of `trilean-regex`, and runs it in headless Chromium, in Node and in workerd, so it needs a browser installed and is run by its own job.
         test: {
           name: "e2e",
-          include: ["test/bundlers.e2e.test.ts"],
+          include: [
+            "test/bundlers.e2e.test.ts",
+            "test/depth-limit.e2e.test.ts",
+          ],
           testTimeout: BUNDLER_TIMEOUT_MS,
           hookTimeout: BUNDLER_TIMEOUT_MS,
         },

@@ -29,6 +29,7 @@ export default defineConfig(
       ".turbo",
       "schemas",
       "generated",
+      "measure",
     ],
   },
   {
