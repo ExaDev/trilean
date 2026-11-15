@@ -1,0 +1,62 @@
+{
+  "evaluator": {
+    "collections": {},
+    "idColumn": "id",
+    "table": "readings"
+  },
+  "tables": {
+    "readings": {
+      "columns": {
+        "id": "text",
+        "value": "number"
+      },
+      "primaryKey": "id",
+      "rows": [
+        {
+          "id": "half",
+          "value": 0.5
+        },
+        {
+          "id": "minus-one-and-a-half",
+          "value": -1.5
+        },
+        {
+          "id": "tenth",
+          "value": 0.1
+        },
+        {
+          "id": "zero",
+          "value": 0
+        },
+        {
+          "id": "two-to-53-plus-2",
+          "value": 9007199254740994
+        },
+        {
+          "id": "minus-two-to-53-minus-2",
+          "value": -9007199254740994
+        },
+        {
+          "id": "sextillion",
+          "value": 1e+21
+        },
+        {
+          "id": "minus-sextillion",
+          "value": -1e+21
+        },
+        {
+          "id": "tiny",
+          "value": 1e-7
+        },
+        {
+          "id": "unknown",
+          "value": null
+        },
+        {
+          "id": "one",
+          "value": 1
+        }
+      ]
+    }
+  }
+}

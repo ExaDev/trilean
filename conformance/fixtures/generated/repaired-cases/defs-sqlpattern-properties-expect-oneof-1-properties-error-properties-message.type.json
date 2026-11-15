@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "error": {
+          "message": "GLOB has no 'zero or one' wildcard"
+        }
+      },
+      "from": "recorded: trilean-sql src/portable-pattern.ts (construct a? under sqlite)",
+      "id": "sql.pattern.escaping.sqlite-construct-ax3f",
+      "kind": "sql-pattern",
+      "pattern": "a?"
+    }
+  ]
+}

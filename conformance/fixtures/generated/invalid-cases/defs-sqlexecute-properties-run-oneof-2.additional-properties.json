@@ -1,0 +1,23 @@
+{
+  "cases": [
+    {
+      "dialect": "postgres",
+      "expect": {
+        "queryError": [
+          "invalid byte sequence"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "postgres.identifiers.integration.test.ts: a text value holding a NUL > is refused at compile time, so the engine never sees it",
+      "id": "sql.execute.identifiers-nul.postgres-the-engine-rejects-a-nul",
+      "kind": "sql-execute",
+      "run": {
+        "params": [
+          "x\u0000y"
+        ],
+        "sql": "SELECT $1::text",
+        "unexpectedMember": 1
+      }
+    }
+  ]
+}

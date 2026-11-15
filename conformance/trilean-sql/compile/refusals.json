@@ -1,0 +1,6313 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "error": {
+          "column": "MarkerThatMustNotAppear\u0000",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: the name contains a NUL character, which a quoted identifier cannot carry",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a column with a NUL",
+      "id": "sql.compile.refusals.postgres-a-column-with-a-nul",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "MarkerThatMustNotAppear\u0000"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "MarkerThatMustNotAppear\u0000",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: the name contains a NUL character, which a quoted identifier cannot carry",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a collection item's column with a NUL",
+      "id": "sql.compile.refusals.postgres-a-collection-itemx27-s-column-with-a-nul",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "MarkerThatMustNotAppear\u0000"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "MarkerThatMustNotAppear\u0000",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: the name contains a NUL character, which a quoted identifier cannot carry",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a fold item's column with a NUL",
+      "id": "sql.compile.refusals.postgres-a-fold-itemx27-s-column-with-a-nul",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "MarkerThatMustNotAppear\u0000"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": {
+            "codeUnits": [
+              77,
+              97,
+              114,
+              107,
+              101,
+              114,
+              84,
+              104,
+              97,
+              116,
+              77,
+              117,
+              115,
+              116,
+              78,
+              111,
+              116,
+              65,
+              112,
+              112,
+              101,
+              97,
+              114,
+              55296
+            ]
+          },
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: the name contains an unpaired surrogate, which has no UTF-8 form",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a column with an unpaired surrogate",
+      "id": "sql.compile.refusals.postgres-a-column-with-an-unpaired-surrogate",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": {
+              "codeUnits": [
+                77,
+                97,
+                114,
+                107,
+                101,
+                114,
+                84,
+                104,
+                97,
+                116,
+                77,
+                117,
+                115,
+                116,
+                78,
+                111,
+                116,
+                65,
+                112,
+                112,
+                101,
+                97,
+                114,
+                55296
+              ]
+            }
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": {
+            "codeUnits": [
+              77,
+              97,
+              114,
+              107,
+              101,
+              114,
+              84,
+              104,
+              97,
+              116,
+              77,
+              117,
+              115,
+              116,
+              78,
+              111,
+              116,
+              65,
+              112,
+              112,
+              101,
+              97,
+              114,
+              55296
+            ]
+          },
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: the name contains an unpaired surrogate, which has no UTF-8 form",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a collection item's column with an unpaired surrogate",
+      "id": "sql.compile.refusals.postgres-a-collection-itemx27-s-column-with-an-unpaired-surrogate",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": {
+                  "codeUnits": [
+                    77,
+                    97,
+                    114,
+                    107,
+                    101,
+                    114,
+                    84,
+                    104,
+                    97,
+                    116,
+                    77,
+                    117,
+                    115,
+                    116,
+                    78,
+                    111,
+                    116,
+                    65,
+                    112,
+                    112,
+                    101,
+                    97,
+                    114,
+                    55296
+                  ]
+                }
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": {
+            "codeUnits": [
+              77,
+              97,
+              114,
+              107,
+              101,
+              114,
+              84,
+              104,
+              97,
+              116,
+              77,
+              117,
+              115,
+              116,
+              78,
+              111,
+              116,
+              65,
+              112,
+              112,
+              101,
+              97,
+              114,
+              55296
+            ]
+          },
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: the name contains an unpaired surrogate, which has no UTF-8 form",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a fold item's column with an unpaired surrogate",
+      "id": "sql.compile.refusals.postgres-a-fold-itemx27-s-column-with-an-unpaired-surrogate",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": {
+                  "codeUnits": [
+                    77,
+                    97,
+                    114,
+                    107,
+                    101,
+                    114,
+                    84,
+                    104,
+                    97,
+                    116,
+                    77,
+                    117,
+                    115,
+                    116,
+                    78,
+                    111,
+                    116,
+                    65,
+                    112,
+                    112,
+                    101,
+                    97,
+                    114,
+                    55296
+                  ]
+                }
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: the name is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a column with an empty name",
+      "id": "sql.compile.refusals.postgres-a-column-with-an-empty-name",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": ""
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: the name is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a collection item's column with an empty name",
+      "id": "sql.compile.refusals.postgres-a-collection-itemx27-s-column-with-an-empty-name",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": ""
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: the name is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a fold item's column with an empty name",
+      "id": "sql.compile.refusals.postgres-a-fold-itemx27-s-column-with-an-empty-name",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": ""
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "MarkerThatMustNotAppear..col",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: a dot-separated segment is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a column with an empty segment",
+      "id": "sql.compile.refusals.postgres-a-column-with-an-empty-segment",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "MarkerThatMustNotAppear..col"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "MarkerThatMustNotAppear..col",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: a dot-separated segment is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a collection item's column with an empty segment",
+      "id": "sql.compile.refusals.postgres-a-collection-itemx27-s-column-with-an-empty-segment",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "MarkerThatMustNotAppear..col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "MarkerThatMustNotAppear..col",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: a dot-separated segment is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a fold item's column with an empty segment",
+      "id": "sql.compile.refusals.postgres-a-fold-itemx27-s-column-with-an-empty-segment",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "MarkerThatMustNotAppear..col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "MarkerThatMustNotAppear.a.b.c",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: the name has 4 dot-separated segments and at most 3 are accepted for a column: PostgreSQL takes a leading database name only when it is the database the connection is on, which the compiler cannot know",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a column with four segments",
+      "id": "sql.compile.refusals.postgres-a-column-with-four-segments",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "MarkerThatMustNotAppear.a.b.c"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "MarkerThatMustNotAppear.a.b.c",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: the name has 4 dot-separated segments and at most 3 are accepted for a column: PostgreSQL takes a leading database name only when it is the database the connection is on, which the compiler cannot know",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a collection item's column with four segments",
+      "id": "sql.compile.refusals.postgres-a-collection-itemx27-s-column-with-four-segments",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "MarkerThatMustNotAppear.a.b.c"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "MarkerThatMustNotAppear.a.b.c",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: the name has 4 dot-separated segments and at most 3 are accepted for a column: PostgreSQL takes a leading database name only when it is the database the connection is on, which the compiler cannot know",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a fold item's column with four segments",
+      "id": "sql.compile.refusals.postgres-a-fold-itemx27-s-column-with-four-segments",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "MarkerThatMustNotAppear.a.b.c"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "MarkerThatMustNotAppear\u0000",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: the name contains a NUL character, which a quoted identifier cannot carry",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a timestamp column with a NUL, compared with an instant",
+      "id": "sql.compile.refusals.postgres-a-timestamp-column-with-a-nulx2c-compared-with-an-instant",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "MarkerThatMustNotAppear\u0000",
+            "paramType": "timestamp"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": {
+            "codeUnits": [
+              77,
+              97,
+              114,
+              107,
+              101,
+              114,
+              84,
+              104,
+              97,
+              116,
+              77,
+              117,
+              115,
+              116,
+              78,
+              111,
+              116,
+              65,
+              112,
+              112,
+              101,
+              97,
+              114,
+              55296
+            ]
+          },
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: the name contains an unpaired surrogate, which has no UTF-8 form",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a timestamp column with an unpaired surrogate, compared with an instant",
+      "id": "sql.compile.refusals.postgres-a-timestamp-column-with-an-unpaired-surrogatex2c-compared-with-an-i",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": {
+              "codeUnits": [
+                77,
+                97,
+                114,
+                107,
+                101,
+                114,
+                84,
+                104,
+                97,
+                116,
+                77,
+                117,
+                115,
+                116,
+                78,
+                111,
+                116,
+                65,
+                112,
+                112,
+                101,
+                97,
+                114,
+                55296
+              ]
+            },
+            "paramType": "timestamp"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: the name is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a timestamp column with an empty name, compared with an instant",
+      "id": "sql.compile.refusals.postgres-a-timestamp-column-with-an-empty-namex2c-compared-with-an-instant",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "",
+            "paramType": "timestamp"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "MarkerThatMustNotAppear..col",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: a dot-separated segment is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a timestamp column with an empty segment, compared with an instant",
+      "id": "sql.compile.refusals.postgres-a-timestamp-column-with-an-empty-segmentx2c-compared-with-an-instan",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "MarkerThatMustNotAppear..col",
+            "paramType": "timestamp"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "MarkerThatMustNotAppear.a.b.c",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: the name has 4 dot-separated segments and at most 3 are accepted for a column: PostgreSQL takes a leading database name only when it is the database the connection is on, which the compiler cannot know",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a timestamp column with four segments, compared with an instant",
+      "id": "sql.compile.refusals.postgres-a-timestamp-column-with-four-segmentsx2c-compared-with-an-instant",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "MarkerThatMustNotAppear.a.b.c",
+            "paramType": "timestamp"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "collectionKey": "c",
+          "message": "collectionFor(\"c\") returned a name that is not a usable table identifier: the name contains a NUL character, which a quoted identifier cannot carry",
+          "name": "InvalidCollectionTableError",
+          "table": "MarkerThatMustNotAppear\u0000"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a collection table with a NUL",
+      "id": "sql.compile.refusals.postgres-a-collection-table-with-a-nul",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "MarkerThatMustNotAppear\u0000"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "collectionKey": "c",
+          "message": "collectionFor(\"c\") returned a name that is not a usable table identifier: the name contains an unpaired surrogate, which has no UTF-8 form",
+          "name": "InvalidCollectionTableError",
+          "table": {
+            "codeUnits": [
+              77,
+              97,
+              114,
+              107,
+              101,
+              114,
+              84,
+              104,
+              97,
+              116,
+              77,
+              117,
+              115,
+              116,
+              78,
+              111,
+              116,
+              65,
+              112,
+              112,
+              101,
+              97,
+              114,
+              55296
+            ]
+          }
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a collection table with an unpaired surrogate",
+      "id": "sql.compile.refusals.postgres-a-collection-table-with-an-unpaired-surrogate",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": {
+              "codeUnits": [
+                77,
+                97,
+                114,
+                107,
+                101,
+                114,
+                84,
+                104,
+                97,
+                116,
+                77,
+                117,
+                115,
+                116,
+                78,
+                111,
+                116,
+                65,
+                112,
+                112,
+                101,
+                97,
+                114,
+                55296
+              ]
+            }
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "collectionKey": "c",
+          "message": "collectionFor(\"c\") returned a name that is not a usable table identifier: the name is empty",
+          "name": "InvalidCollectionTableError",
+          "table": ""
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a collection table with an empty name",
+      "id": "sql.compile.refusals.postgres-a-collection-table-with-an-empty-name",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": ""
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "collectionKey": "c",
+          "message": "collectionFor(\"c\") returned a name that is not a usable table identifier: a dot-separated segment is empty",
+          "name": "InvalidCollectionTableError",
+          "table": "MarkerThatMustNotAppear..tbl"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a collection table with an empty segment",
+      "id": "sql.compile.refusals.postgres-a-collection-table-with-an-empty-segment",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "MarkerThatMustNotAppear..tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "collectionKey": "c",
+          "message": "collectionFor(\"c\") returned a name that is not a usable table identifier: the name has 3 dot-separated segments and at most 2 are accepted for a table: PostgreSQL takes a leading database name only when it is the database the connection is on, which the compiler cannot know",
+          "name": "InvalidCollectionTableError",
+          "table": "MarkerThatMustNotAppear.s.t"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a collection table with three segments",
+      "id": "sql.compile.refusals.postgres-a-collection-table-with-three-segments",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "MarkerThatMustNotAppear.s.t"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textLiteral' at $.right: the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textLiteral",
+          "path": "$.right",
+          "reason": "the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a text value with an unpaired surrogate",
+      "id": "sql.compile.refusals.postgres-a-text-value-with-an-unpaired-surrogate",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": {
+            "codeUnits": [
+              77,
+              97,
+              114,
+              107,
+              101,
+              114,
+              84,
+              104,
+              97,
+              116,
+              77,
+              117,
+              115,
+              116,
+              78,
+              111,
+              116,
+              65,
+              112,
+              112,
+              101,
+              97,
+              114,
+              55296
+            ]
+          }
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textLiteral' at $.candidates[0]: the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textLiteral",
+          "path": "$.candidates[0]",
+          "reason": "the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a membership candidate with an unpaired surrogate",
+      "id": "sql.compile.refusals.postgres-a-membership-candidate-with-an-unpaired-surrogate",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": {
+              "codeUnits": [
+                77,
+                97,
+                114,
+                107,
+                101,
+                114,
+                84,
+                104,
+                97,
+                116,
+                77,
+                117,
+                115,
+                116,
+                78,
+                111,
+                116,
+                65,
+                112,
+                112,
+                101,
+                97,
+                114,
+                55296
+              ]
+            }
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'instantLiteral' at $.right: the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "instantLiteral",
+          "path": "$.right",
+          "reason": "the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > an instant with an unpaired surrogate",
+      "id": "sql.compile.refusals.postgres-an-instant-with-an-unpaired-surrogate",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": {
+            "codeUnits": [
+              77,
+              97,
+              114,
+              107,
+              101,
+              114,
+              84,
+              104,
+              97,
+              116,
+              77,
+              117,
+              115,
+              116,
+              78,
+              111,
+              116,
+              65,
+              112,
+              112,
+              101,
+              97,
+              114,
+              55296
+            ]
+          }
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textLiteral' at $.right: the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textLiteral",
+          "path": "$.right",
+          "reason": "the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a portable pattern with an unpaired surrogate",
+      "id": "sql.compile.refusals.postgres-a-portable-pattern-with-an-unpaired-surrogate",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "portableMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": {
+            "codeUnits": [
+              77,
+              97,
+              114,
+              107,
+              101,
+              114,
+              84,
+              104,
+              97,
+              116,
+              77,
+              117,
+              115,
+              116,
+              78,
+              111,
+              116,
+              65,
+              112,
+              112,
+              101,
+              97,
+              114,
+              55296
+            ]
+          }
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textLiteral' at $.right: PostgreSQL cannot carry the NUL character in a text value and rejects the statement with an invalid byte sequence error",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textLiteral",
+          "path": "$.right",
+          "reason": "PostgreSQL cannot carry the NUL character in a text value and rejects the statement with an invalid byte sequence error"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a text value with a NUL",
+      "id": "sql.compile.refusals.postgres-a-text-value-with-a-nul",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "MarkerThatMustNotAppear\u0000"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textLiteral' at $.candidates[0]: PostgreSQL cannot carry the NUL character in a text value and rejects the statement with an invalid byte sequence error",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textLiteral",
+          "path": "$.candidates[0]",
+          "reason": "PostgreSQL cannot carry the NUL character in a text value and rejects the statement with an invalid byte sequence error"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a membership candidate with a NUL",
+      "id": "sql.compile.refusals.postgres-a-membership-candidate-with-a-nul",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "MarkerThatMustNotAppear\u0000"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'instantLiteral' at $.right: PostgreSQL cannot carry the NUL character in a text value and rejects the statement with an invalid byte sequence error",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "instantLiteral",
+          "path": "$.right",
+          "reason": "PostgreSQL cannot carry the NUL character in a text value and rejects the statement with an invalid byte sequence error"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > an instant with a NUL",
+      "id": "sql.compile.refusals.postgres-an-instant-with-a-nul",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "MarkerThatMustNotAppear\u0000"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textLiteral' at $.right: PostgreSQL cannot carry the NUL character in a text value and rejects the statement with an invalid byte sequence error",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textLiteral",
+          "path": "$.right",
+          "reason": "PostgreSQL cannot carry the NUL character in a text value and rejects the statement with an invalid byte sequence error"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a portableMatches pattern with a NUL",
+      "id": "sql.compile.refusals.postgres-a-portablematches-pattern-with-a-nul",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "portableMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "MarkerThatMustNotAppear\u0000"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textLiteral' at $.right: PostgreSQL cannot carry the NUL character in a text value and rejects the statement with an invalid byte sequence error",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textLiteral",
+          "path": "$.right",
+          "reason": "PostgreSQL cannot carry the NUL character in a text value and rejects the statement with an invalid byte sequence error"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a portableNotMatches pattern with a NUL",
+      "id": "sql.compile.refusals.postgres-a-portablenotmatches-pattern-with-a-nul",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "portableNotMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "MarkerThatMustNotAppear\u0000"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textLiteral' at $.right: PostgreSQL cannot carry the NUL character in a text value and rejects the statement with an invalid byte sequence error",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textLiteral",
+          "path": "$.right",
+          "reason": "PostgreSQL cannot carry the NUL character in a text value and rejects the statement with an invalid byte sequence error"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a matches pattern with a NUL, which REGEXP carries whole",
+      "id": "sql.compile.refusals.postgres-a-matches-pattern-with-a-nulx2c-which-regexp-carries-whole",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "postgres",
+        "postgresRegexpPushdown": true,
+        "sqliteRegexpAvailable": true
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "MarkerThatMustNotAppear\u0000"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textLiteral' at $.right: PostgreSQL cannot carry the NUL character in a text value and rejects the statement with an invalid byte sequence error",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textLiteral",
+          "path": "$.right",
+          "reason": "PostgreSQL cannot carry the NUL character in a text value and rejects the statement with an invalid byte sequence error"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a notMatches pattern with a NUL, which REGEXP carries whole",
+      "id": "sql.compile.refusals.postgres-a-notmatches-pattern-with-a-nulx2c-which-regexp-carries-whole",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "postgres",
+        "postgresRegexpPushdown": true,
+        "sqliteRegexpAvailable": true
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "notMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "MarkerThatMustNotAppear\u0000"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textLiteral' at $.right: the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textLiteral",
+          "path": "$.right",
+          "reason": "the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > an unpaired surrogate in notEquals",
+      "id": "sql.compile.refusals.postgres-an-unpaired-surrogate-in-notequals",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "notEquals",
+        "right": {
+          "kind": "textLiteral",
+          "value": {
+            "codeUnits": [
+              77,
+              97,
+              114,
+              107,
+              101,
+              114,
+              84,
+              104,
+              97,
+              116,
+              77,
+              117,
+              115,
+              116,
+              78,
+              111,
+              116,
+              65,
+              112,
+              112,
+              101,
+              97,
+              114,
+              55296
+            ]
+          }
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textLiteral' at $.left: the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textLiteral",
+          "path": "$.left",
+          "reason": "the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > an unpaired surrogate in a literal on the left",
+      "id": "sql.compile.refusals.postgres-an-unpaired-surrogate-in-a-literal-on-the-left",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "kind": "textLiteral",
+          "value": {
+            "codeUnits": [
+              77,
+              97,
+              114,
+              107,
+              101,
+              114,
+              84,
+              104,
+              97,
+              116,
+              77,
+              117,
+              115,
+              116,
+              78,
+              111,
+              116,
+              65,
+              112,
+              112,
+              101,
+              97,
+              114,
+              55296
+            ]
+          }
+        },
+        "op": "equals",
+        "right": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textLiteral' at $.operand: the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textLiteral",
+          "path": "$.operand",
+          "reason": "the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > an unpaired surrogate in a membership operand",
+      "id": "sql.compile.refusals.postgres-an-unpaired-surrogate-in-a-membership-operand",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "key": "k",
+            "kind": "reference"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "notIn",
+        "operand": {
+          "kind": "textLiteral",
+          "value": {
+            "codeUnits": [
+              77,
+              97,
+              114,
+              107,
+              101,
+              114,
+              84,
+              104,
+              97,
+              116,
+              77,
+              117,
+              115,
+              116,
+              78,
+              111,
+              116,
+              65,
+              112,
+              112,
+              101,
+              97,
+              114,
+              55296
+            ]
+          }
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textLiteral' at $.operand: the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textLiteral",
+          "path": "$.operand",
+          "reason": "the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > an unpaired surrogate in an exists operand",
+      "id": "sql.compile.refusals.postgres-an-unpaired-surrogate-in-an-exists-operand",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "kind": "textLiteral",
+          "value": {
+            "codeUnits": [
+              77,
+              97,
+              114,
+              107,
+              101,
+              114,
+              84,
+              104,
+              97,
+              116,
+              77,
+              117,
+              115,
+              116,
+              78,
+              111,
+              116,
+              65,
+              112,
+              112,
+              101,
+              97,
+              114,
+              55296
+            ]
+          }
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textLiteral' at $.operands[1].operands[0].operand.right: the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textLiteral",
+          "path": "$.operands[1].operands[0].operand.right",
+          "reason": "the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > an unpaired surrogate in allOf and anyOf and not",
+      "id": "sql.compile.refusals.postgres-an-unpaired-surrogate-in-allof-and-anyof-and-not",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "allOf",
+        "operands": [
+          {
+            "kind": "exists",
+            "operand": {
+              "key": "k",
+              "kind": "reference"
+            }
+          },
+          {
+            "kind": "anyOf",
+            "operands": [
+              {
+                "kind": "not",
+                "operand": {
+                  "kind": "textCompare",
+                  "left": {
+                    "key": "k",
+                    "kind": "reference"
+                  },
+                  "op": "equals",
+                  "right": {
+                    "kind": "textLiteral",
+                    "value": {
+                      "codeUnits": [
+                        77,
+                        97,
+                        114,
+                        107,
+                        101,
+                        114,
+                        84,
+                        104,
+                        97,
+                        116,
+                        77,
+                        117,
+                        115,
+                        116,
+                        78,
+                        111,
+                        116,
+                        65,
+                        112,
+                        112,
+                        101,
+                        97,
+                        114,
+                        55296
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textLiteral' at $.filter.right: the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textLiteral",
+          "path": "$.filter.right",
+          "reason": "the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > an unpaired surrogate in a some filter",
+      "id": "sql.compile.refusals.postgres-an-unpaired-surrogate-in-a-some-filter",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "filter": {
+          "kind": "textCompare",
+          "left": {
+            "key": "k",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": {
+              "codeUnits": [
+                77,
+                97,
+                114,
+                107,
+                101,
+                114,
+                84,
+                104,
+                97,
+                116,
+                77,
+                117,
+                115,
+                116,
+                78,
+                111,
+                116,
+                65,
+                112,
+                112,
+                101,
+                97,
+                114,
+                55296
+              ]
+            }
+          }
+        },
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textLiteral' at $.operand.filter.right: the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textLiteral",
+          "path": "$.operand.filter.right",
+          "reason": "the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > an unpaired surrogate in a fold filter",
+      "id": "sql.compile.refusals.postgres-an-unpaired-surrogate-in-a-fold-filter",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "filter": {
+            "kind": "textCompare",
+            "left": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "op": "equals",
+            "right": {
+              "kind": "textLiteral",
+              "value": {
+                "codeUnits": [
+                  77,
+                  97,
+                  114,
+                  107,
+                  101,
+                  114,
+                  84,
+                  104,
+                  97,
+                  116,
+                  77,
+                  117,
+                  115,
+                  116,
+                  78,
+                  111,
+                  116,
+                  65,
+                  112,
+                  112,
+                  101,
+                  97,
+                  114,
+                  55296
+                ]
+              }
+            }
+          },
+          "kind": "fold"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textLiteral' at $.left: PostgreSQL cannot carry the NUL character in a text value and rejects the statement with an invalid byte sequence error",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textLiteral",
+          "path": "$.left",
+          "reason": "PostgreSQL cannot carry the NUL character in a text value and rejects the statement with an invalid byte sequence error"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a NUL in a left literal",
+      "id": "sql.compile.refusals.postgres-a-nul-in-a-left-literal",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "kind": "textLiteral",
+          "value": "MarkerThatMustNotAppear\u0000"
+        },
+        "op": "equals",
+        "right": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textLiteral' at $.operand: PostgreSQL cannot carry the NUL character in a text value and rejects the statement with an invalid byte sequence error",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textLiteral",
+          "path": "$.operand",
+          "reason": "PostgreSQL cannot carry the NUL character in a text value and rejects the statement with an invalid byte sequence error"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a NUL in a membership operand",
+      "id": "sql.compile.refusals.postgres-a-nul-in-a-membership-operand",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "key": "k",
+            "kind": "reference"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "notIn",
+        "operand": {
+          "kind": "textLiteral",
+          "value": "MarkerThatMustNotAppear\u0000"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textLiteral' at $.operand: PostgreSQL cannot carry the NUL character in a text value and rejects the statement with an invalid byte sequence error",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textLiteral",
+          "path": "$.operand",
+          "reason": "PostgreSQL cannot carry the NUL character in a text value and rejects the statement with an invalid byte sequence error"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a NUL in an exists operand",
+      "id": "sql.compile.refusals.postgres-a-nul-in-an-exists-operand",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "kind": "textLiteral",
+          "value": "MarkerThatMustNotAppear\u0000"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textLiteral' at $.operands[1].operands[0].operand.right: PostgreSQL cannot carry the NUL character in a text value and rejects the statement with an invalid byte sequence error",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textLiteral",
+          "path": "$.operands[1].operands[0].operand.right",
+          "reason": "PostgreSQL cannot carry the NUL character in a text value and rejects the statement with an invalid byte sequence error"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a NUL in allOf and anyOf and not",
+      "id": "sql.compile.refusals.postgres-a-nul-in-allof-and-anyof-and-not",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "allOf",
+        "operands": [
+          {
+            "kind": "exists",
+            "operand": {
+              "key": "k",
+              "kind": "reference"
+            }
+          },
+          {
+            "kind": "anyOf",
+            "operands": [
+              {
+                "kind": "not",
+                "operand": {
+                  "kind": "textCompare",
+                  "left": {
+                    "key": "k",
+                    "kind": "reference"
+                  },
+                  "op": "equals",
+                  "right": {
+                    "kind": "textLiteral",
+                    "value": "MarkerThatMustNotAppear\u0000"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textLiteral' at $.filter.right: PostgreSQL cannot carry the NUL character in a text value and rejects the statement with an invalid byte sequence error",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textLiteral",
+          "path": "$.filter.right",
+          "reason": "PostgreSQL cannot carry the NUL character in a text value and rejects the statement with an invalid byte sequence error"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a NUL in a some filter",
+      "id": "sql.compile.refusals.postgres-a-nul-in-a-some-filter",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "filter": {
+          "kind": "textCompare",
+          "left": {
+            "key": "k",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "MarkerThatMustNotAppear\u0000"
+          }
+        },
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textLiteral' at $.operand.filter.right: PostgreSQL cannot carry the NUL character in a text value and rejects the statement with an invalid byte sequence error",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textLiteral",
+          "path": "$.operand.filter.right",
+          "reason": "PostgreSQL cannot carry the NUL character in a text value and rejects the statement with an invalid byte sequence error"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a NUL in a fold filter",
+      "id": "sql.compile.refusals.postgres-a-nul-in-a-fold-filter",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "filter": {
+            "kind": "textCompare",
+            "left": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "op": "equals",
+            "right": {
+              "kind": "textLiteral",
+              "value": "MarkerThatMustNotAppear\u0000"
+            }
+          },
+          "kind": "fold"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textLiteral' at $.right: PostgreSQL cannot carry the NUL character in a text value and rejects the statement with an invalid byte sequence error",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textLiteral",
+          "path": "$.right",
+          "reason": "PostgreSQL cannot carry the NUL character in a text value and rejects the statement with an invalid byte sequence error"
+        }
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > a NUL in notEquals",
+      "id": "sql.compile.refusals.postgres-a-nul-in-notequals",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "notEquals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "MarkerThatMustNotAppear\u0000"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"MarkerThatMustNotAppear \"\"q\"\" 😀\" IS NOT NULL)"
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > accepts a column with a quote, a space and a pair",
+      "id": "sql.compile.refusals.postgres-accepts-a-column-with-a-quotex2c-a-space-and-a-pair",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "MarkerThatMustNotAppear \"q\" 😀"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"s\".\"t\".\"c\" IS NOT NULL)"
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > accepts a column of three segments",
+      "id": "sql.compile.refusals.postgres-accepts-a-column-of-three-segments",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "s.t.c"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"col\" IS NOT NULL) AS \"item_ok\" FROM \"s\".\"t\" WHERE TRUE) AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > accepts a table of two segments",
+      "id": "sql.compile.refusals.postgres-accepts-a-table-of-two-segments",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "s.t"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "a\u0001\u001f\n"
+          }
+        ],
+        "sql": "(\"col\" = $1::text)"
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > accepts a text value with other control characters",
+      "id": "sql.compile.refusals.postgres-accepts-a-text-value-with-other-control-characters",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "a\u0001\u001f\n"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "😀"
+          }
+        ],
+        "sql": "(\"col\" = $1::text)"
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: guard and compiler agree on every refusal > accepts a text value with a pair",
+      "id": "sql.compile.refusals.postgres-accepts-a-text-value-with-a-pair",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "😀"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "timestamp",
+            "value": "2020-01-01T00:00:00Z"
+          }
+        ],
+        "sql": "(\"a\"\"bMarkerThatMustNotAppear\" > $1::timestamptz)"
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: a timestamp column whose name holds a quote > quotes the name once and repeats the quoted text, never the raw name",
+      "id": "sql.compile.refusals.postgres-quotes-the-name-once-and-repeats-the-quoted-textx2c-never-the-raw-n",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "a\"bMarkerThatMustNotAppear",
+            "paramType": "timestamp"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "timestamp",
+            "value": "2020-01-01T00:00:00Z"
+          }
+        ],
+        "sql": "(\"a\"\"bMarkerThatMustNotAppear\" > $1::timestamptz)"
+      },
+      "from": "refusals.unit.test.ts: the postgres dialect: a timestamp column whose name holds a quote > is the SQL the dialect compiles an instant comparison to",
+      "id": "sql.compile.refusals.postgres-is-the-sql-the-dialect-compiles-an-instant-comparison-to",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "a\"bMarkerThatMustNotAppear",
+            "paramType": "timestamp"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "MarkerThatMustNotAppear\u0000",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: the name contains a NUL character, which a quoted identifier cannot carry",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a column with a NUL",
+      "id": "sql.compile.refusals.sqlite-a-column-with-a-nul",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "MarkerThatMustNotAppear\u0000"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "MarkerThatMustNotAppear\u0000",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: the name contains a NUL character, which a quoted identifier cannot carry",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a collection item's column with a NUL",
+      "id": "sql.compile.refusals.sqlite-a-collection-itemx27-s-column-with-a-nul",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "MarkerThatMustNotAppear\u0000"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "MarkerThatMustNotAppear\u0000",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: the name contains a NUL character, which a quoted identifier cannot carry",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a fold item's column with a NUL",
+      "id": "sql.compile.refusals.sqlite-a-fold-itemx27-s-column-with-a-nul",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "MarkerThatMustNotAppear\u0000"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": {
+            "codeUnits": [
+              77,
+              97,
+              114,
+              107,
+              101,
+              114,
+              84,
+              104,
+              97,
+              116,
+              77,
+              117,
+              115,
+              116,
+              78,
+              111,
+              116,
+              65,
+              112,
+              112,
+              101,
+              97,
+              114,
+              55296
+            ]
+          },
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: the name contains an unpaired surrogate, which has no UTF-8 form",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a column with an unpaired surrogate",
+      "id": "sql.compile.refusals.sqlite-a-column-with-an-unpaired-surrogate",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": {
+              "codeUnits": [
+                77,
+                97,
+                114,
+                107,
+                101,
+                114,
+                84,
+                104,
+                97,
+                116,
+                77,
+                117,
+                115,
+                116,
+                78,
+                111,
+                116,
+                65,
+                112,
+                112,
+                101,
+                97,
+                114,
+                55296
+              ]
+            }
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": {
+            "codeUnits": [
+              77,
+              97,
+              114,
+              107,
+              101,
+              114,
+              84,
+              104,
+              97,
+              116,
+              77,
+              117,
+              115,
+              116,
+              78,
+              111,
+              116,
+              65,
+              112,
+              112,
+              101,
+              97,
+              114,
+              55296
+            ]
+          },
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: the name contains an unpaired surrogate, which has no UTF-8 form",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a collection item's column with an unpaired surrogate",
+      "id": "sql.compile.refusals.sqlite-a-collection-itemx27-s-column-with-an-unpaired-surrogate",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": {
+                  "codeUnits": [
+                    77,
+                    97,
+                    114,
+                    107,
+                    101,
+                    114,
+                    84,
+                    104,
+                    97,
+                    116,
+                    77,
+                    117,
+                    115,
+                    116,
+                    78,
+                    111,
+                    116,
+                    65,
+                    112,
+                    112,
+                    101,
+                    97,
+                    114,
+                    55296
+                  ]
+                }
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": {
+            "codeUnits": [
+              77,
+              97,
+              114,
+              107,
+              101,
+              114,
+              84,
+              104,
+              97,
+              116,
+              77,
+              117,
+              115,
+              116,
+              78,
+              111,
+              116,
+              65,
+              112,
+              112,
+              101,
+              97,
+              114,
+              55296
+            ]
+          },
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: the name contains an unpaired surrogate, which has no UTF-8 form",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a fold item's column with an unpaired surrogate",
+      "id": "sql.compile.refusals.sqlite-a-fold-itemx27-s-column-with-an-unpaired-surrogate",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": {
+                  "codeUnits": [
+                    77,
+                    97,
+                    114,
+                    107,
+                    101,
+                    114,
+                    84,
+                    104,
+                    97,
+                    116,
+                    77,
+                    117,
+                    115,
+                    116,
+                    78,
+                    111,
+                    116,
+                    65,
+                    112,
+                    112,
+                    101,
+                    97,
+                    114,
+                    55296
+                  ]
+                }
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: the name is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a column with an empty name",
+      "id": "sql.compile.refusals.sqlite-a-column-with-an-empty-name",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": ""
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: the name is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a collection item's column with an empty name",
+      "id": "sql.compile.refusals.sqlite-a-collection-itemx27-s-column-with-an-empty-name",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": ""
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: the name is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a fold item's column with an empty name",
+      "id": "sql.compile.refusals.sqlite-a-fold-itemx27-s-column-with-an-empty-name",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": ""
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "MarkerThatMustNotAppear..col",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: a dot-separated segment is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a column with an empty segment",
+      "id": "sql.compile.refusals.sqlite-a-column-with-an-empty-segment",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "MarkerThatMustNotAppear..col"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "MarkerThatMustNotAppear..col",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: a dot-separated segment is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a collection item's column with an empty segment",
+      "id": "sql.compile.refusals.sqlite-a-collection-itemx27-s-column-with-an-empty-segment",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "MarkerThatMustNotAppear..col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "MarkerThatMustNotAppear..col",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: a dot-separated segment is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a fold item's column with an empty segment",
+      "id": "sql.compile.refusals.sqlite-a-fold-itemx27-s-column-with-an-empty-segment",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "MarkerThatMustNotAppear..col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "MarkerThatMustNotAppear.a.b.c",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: the name has 4 dot-separated segments and SQLite accepts at most 3 for a column",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a column with four segments",
+      "id": "sql.compile.refusals.sqlite-a-column-with-four-segments",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "MarkerThatMustNotAppear.a.b.c"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "MarkerThatMustNotAppear.a.b.c",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: the name has 4 dot-separated segments and SQLite accepts at most 3 for a column",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a collection item's column with four segments",
+      "id": "sql.compile.refusals.sqlite-a-collection-itemx27-s-column-with-four-segments",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "MarkerThatMustNotAppear.a.b.c"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "MarkerThatMustNotAppear.a.b.c",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: the name has 4 dot-separated segments and SQLite accepts at most 3 for a column",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a fold item's column with four segments",
+      "id": "sql.compile.refusals.sqlite-a-fold-itemx27-s-column-with-four-segments",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "MarkerThatMustNotAppear.a.b.c"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "MarkerThatMustNotAppear\u0000",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: the name contains a NUL character, which a quoted identifier cannot carry",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a timestamp column with a NUL, compared with an instant",
+      "id": "sql.compile.refusals.sqlite-a-timestamp-column-with-a-nulx2c-compared-with-an-instant",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "MarkerThatMustNotAppear\u0000",
+            "paramType": "timestamp"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": {
+            "codeUnits": [
+              77,
+              97,
+              114,
+              107,
+              101,
+              114,
+              84,
+              104,
+              97,
+              116,
+              77,
+              117,
+              115,
+              116,
+              78,
+              111,
+              116,
+              65,
+              112,
+              112,
+              101,
+              97,
+              114,
+              55296
+            ]
+          },
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: the name contains an unpaired surrogate, which has no UTF-8 form",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a timestamp column with an unpaired surrogate, compared with an instant",
+      "id": "sql.compile.refusals.sqlite-a-timestamp-column-with-an-unpaired-surrogatex2c-compared-with-an-ins",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": {
+              "codeUnits": [
+                77,
+                97,
+                114,
+                107,
+                101,
+                114,
+                84,
+                104,
+                97,
+                116,
+                77,
+                117,
+                115,
+                116,
+                78,
+                111,
+                116,
+                65,
+                112,
+                112,
+                101,
+                97,
+                114,
+                55296
+              ]
+            },
+            "paramType": "timestamp"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: the name is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a timestamp column with an empty name, compared with an instant",
+      "id": "sql.compile.refusals.sqlite-a-timestamp-column-with-an-empty-namex2c-compared-with-an-instant",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "",
+            "paramType": "timestamp"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "MarkerThatMustNotAppear..col",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: a dot-separated segment is empty",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a timestamp column with an empty segment, compared with an instant",
+      "id": "sql.compile.refusals.sqlite-a-timestamp-column-with-an-empty-segmentx2c-compared-with-an-instant",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "MarkerThatMustNotAppear..col",
+            "paramType": "timestamp"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "MarkerThatMustNotAppear.a.b.c",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: the name has 4 dot-separated segments and SQLite accepts at most 3 for a column",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a timestamp column with four segments, compared with an instant",
+      "id": "sql.compile.refusals.sqlite-a-timestamp-column-with-four-segmentsx2c-compared-with-an-instant",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "MarkerThatMustNotAppear.a.b.c",
+            "paramType": "timestamp"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "collectionKey": "c",
+          "message": "collectionFor(\"c\") returned a name that is not a usable table identifier: the name contains a NUL character, which a quoted identifier cannot carry",
+          "name": "InvalidCollectionTableError",
+          "table": "MarkerThatMustNotAppear\u0000"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a collection table with a NUL",
+      "id": "sql.compile.refusals.sqlite-a-collection-table-with-a-nul",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "MarkerThatMustNotAppear\u0000"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "collectionKey": "c",
+          "message": "collectionFor(\"c\") returned a name that is not a usable table identifier: the name contains an unpaired surrogate, which has no UTF-8 form",
+          "name": "InvalidCollectionTableError",
+          "table": {
+            "codeUnits": [
+              77,
+              97,
+              114,
+              107,
+              101,
+              114,
+              84,
+              104,
+              97,
+              116,
+              77,
+              117,
+              115,
+              116,
+              78,
+              111,
+              116,
+              65,
+              112,
+              112,
+              101,
+              97,
+              114,
+              55296
+            ]
+          }
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a collection table with an unpaired surrogate",
+      "id": "sql.compile.refusals.sqlite-a-collection-table-with-an-unpaired-surrogate",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": {
+              "codeUnits": [
+                77,
+                97,
+                114,
+                107,
+                101,
+                114,
+                84,
+                104,
+                97,
+                116,
+                77,
+                117,
+                115,
+                116,
+                78,
+                111,
+                116,
+                65,
+                112,
+                112,
+                101,
+                97,
+                114,
+                55296
+              ]
+            }
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "collectionKey": "c",
+          "message": "collectionFor(\"c\") returned a name that is not a usable table identifier: the name is empty",
+          "name": "InvalidCollectionTableError",
+          "table": ""
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a collection table with an empty name",
+      "id": "sql.compile.refusals.sqlite-a-collection-table-with-an-empty-name",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": ""
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "collectionKey": "c",
+          "message": "collectionFor(\"c\") returned a name that is not a usable table identifier: a dot-separated segment is empty",
+          "name": "InvalidCollectionTableError",
+          "table": "MarkerThatMustNotAppear..tbl"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a collection table with an empty segment",
+      "id": "sql.compile.refusals.sqlite-a-collection-table-with-an-empty-segment",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "MarkerThatMustNotAppear..tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "collectionKey": "c",
+          "message": "collectionFor(\"c\") returned a name that is not a usable table identifier: the name has 3 dot-separated segments and SQLite accepts at most 2 for a table",
+          "name": "InvalidCollectionTableError",
+          "table": "MarkerThatMustNotAppear.s.t"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a collection table with three segments",
+      "id": "sql.compile.refusals.sqlite-a-collection-table-with-three-segments",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "MarkerThatMustNotAppear.s.t"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textLiteral' at $.right: the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textLiteral",
+          "path": "$.right",
+          "reason": "the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a text value with an unpaired surrogate",
+      "id": "sql.compile.refusals.sqlite-a-text-value-with-an-unpaired-surrogate",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": {
+            "codeUnits": [
+              77,
+              97,
+              114,
+              107,
+              101,
+              114,
+              84,
+              104,
+              97,
+              116,
+              77,
+              117,
+              115,
+              116,
+              78,
+              111,
+              116,
+              65,
+              112,
+              112,
+              101,
+              97,
+              114,
+              55296
+            ]
+          }
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textLiteral' at $.candidates[0]: the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textLiteral",
+          "path": "$.candidates[0]",
+          "reason": "the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a membership candidate with an unpaired surrogate",
+      "id": "sql.compile.refusals.sqlite-a-membership-candidate-with-an-unpaired-surrogate",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": {
+              "codeUnits": [
+                77,
+                97,
+                114,
+                107,
+                101,
+                114,
+                84,
+                104,
+                97,
+                116,
+                77,
+                117,
+                115,
+                116,
+                78,
+                111,
+                116,
+                65,
+                112,
+                112,
+                101,
+                97,
+                114,
+                55296
+              ]
+            }
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'instantLiteral' at $.right: the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "instantLiteral",
+          "path": "$.right",
+          "reason": "the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > an instant with an unpaired surrogate",
+      "id": "sql.compile.refusals.sqlite-an-instant-with-an-unpaired-surrogate",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": {
+            "codeUnits": [
+              77,
+              97,
+              114,
+              107,
+              101,
+              114,
+              84,
+              104,
+              97,
+              116,
+              77,
+              117,
+              115,
+              116,
+              78,
+              111,
+              116,
+              65,
+              112,
+              112,
+              101,
+              97,
+              114,
+              55296
+            ]
+          }
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textLiteral' at $.right: the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textLiteral",
+          "path": "$.right",
+          "reason": "the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a portable pattern with an unpaired surrogate",
+      "id": "sql.compile.refusals.sqlite-a-portable-pattern-with-an-unpaired-surrogate",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "portableMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": {
+            "codeUnits": [
+              77,
+              97,
+              114,
+              107,
+              101,
+              114,
+              84,
+              104,
+              97,
+              116,
+              77,
+              117,
+              115,
+              116,
+              78,
+              111,
+              116,
+              65,
+              112,
+              112,
+              101,
+              97,
+              114,
+              55296
+            ]
+          }
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "MarkerThatMustNotAppear\u0000"
+          }
+        ],
+        "sql": "(\"col\" = ?)"
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a text value with a NUL",
+      "id": "sql.compile.refusals.sqlite-a-text-value-with-a-nul",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "MarkerThatMustNotAppear\u0000"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "MarkerThatMustNotAppear\u0000"
+          }
+        ],
+        "sql": "(\"col\" IN (?))"
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a membership candidate with a NUL",
+      "id": "sql.compile.refusals.sqlite-a-membership-candidate-with-a-nul",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "textLiteral",
+            "value": "MarkerThatMustNotAppear\u0000"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "null"
+          }
+        ],
+        "sql": "((CASE WHEN instr(CAST(\"col\" AS BLOB), x'00') = 0 AND \"col\" GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]*' AND (substr(\"col\", 20) = 'Z' OR substr(\"col\", 20) GLOB '[+-][0-9][0-9]:[0-9][0-9]' OR (substr(\"col\", 20, 1) = '.' AND (length(\"col\") - 20 - CASE WHEN \"col\" GLOB '*Z' THEN 1 ELSE 6 END) > 0 AND substr(\"col\", 21, (length(\"col\") - 20 - CASE WHEN \"col\" GLOB '*Z' THEN 1 ELSE 6 END)) NOT GLOB '*[^0-9]*' AND (\"col\" GLOB '*Z' OR \"col\" GLOB '*[+-][0-9][0-9]:[0-9][0-9]'))) AND strftime('%Y-%m-%d', substr(\"col\", 1, 19)) = substr(\"col\", 1, 10) AND strftime('%s', substr(\"col\", 1, 19)) IS NOT NULL AND substr(\"col\", 12, 2) < '24' AND (\"col\" GLOB '*Z' OR (substr(\"col\", CASE WHEN \"col\" GLOB '*Z' THEN length(\"col\") ELSE length(\"col\") - 5 END + 1, 2) <= '23' AND substr(\"col\", CASE WHEN \"col\" GLOB '*Z' THEN length(\"col\") ELSE length(\"col\") - 5 END + 4, 2) <= '59')) THEN CAST(strftime('%s', substr(\"col\", 1, 19)) AS INTEGER) * 1000 + CASE WHEN substr(\"col\", 20, 1) = '.' THEN CAST(substr(substr(\"col\", 21, (length(\"col\") - 20 - CASE WHEN \"col\" GLOB '*Z' THEN 1 ELSE 6 END)) || '00', 1, 3) AS INTEGER) ELSE 0 END - (CASE WHEN \"col\" GLOB '*Z' THEN 0 ELSE (CASE substr(\"col\", CASE WHEN \"col\" GLOB '*Z' THEN length(\"col\") ELSE length(\"col\") - 5 END, 1) WHEN '-' THEN -1 ELSE 1 END) * (CAST(substr(\"col\", CASE WHEN \"col\" GLOB '*Z' THEN length(\"col\") ELSE length(\"col\") - 5 END + 1, 2) AS INTEGER) * 60 + CAST(substr(\"col\", CASE WHEN \"col\" GLOB '*Z' THEN length(\"col\") ELSE length(\"col\") - 5 END + 4, 2) AS INTEGER)) END) * 60000 END) > ?)"
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > an instant with a NUL",
+      "id": "sql.compile.refusals.sqlite-an-instant-with-a-nul",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "MarkerThatMustNotAppear\u0000"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textCompare' at $.right: SQLite's GLOB reads a pattern only up to its first NUL character, so the pattern would match as a shorter one",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textCompare",
+          "path": "$.right",
+          "reason": "SQLite's GLOB reads a pattern only up to its first NUL character, so the pattern would match as a shorter one"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a portableMatches pattern with a NUL",
+      "id": "sql.compile.refusals.sqlite-a-portablematches-pattern-with-a-nul",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "portableMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "MarkerThatMustNotAppear\u0000"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textCompare' at $.right: SQLite's GLOB reads a pattern only up to its first NUL character, so the pattern would match as a shorter one",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textCompare",
+          "path": "$.right",
+          "reason": "SQLite's GLOB reads a pattern only up to its first NUL character, so the pattern would match as a shorter one"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a portableNotMatches pattern with a NUL",
+      "id": "sql.compile.refusals.sqlite-a-portablenotmatches-pattern-with-a-nul",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "portableNotMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "MarkerThatMustNotAppear\u0000"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "MarkerThatMustNotAppear\u0000"
+          }
+        ],
+        "sql": "(\"col\" REGEXP ?)"
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a matches pattern with a NUL, which REGEXP carries whole",
+      "id": "sql.compile.refusals.sqlite-a-matches-pattern-with-a-nulx2c-which-regexp-carries-whole",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "sqlite",
+        "postgresRegexpPushdown": true,
+        "sqliteRegexpAvailable": true
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "MarkerThatMustNotAppear\u0000"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "MarkerThatMustNotAppear\u0000"
+          }
+        ],
+        "sql": "(\"col\" NOT REGEXP ?)"
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a notMatches pattern with a NUL, which REGEXP carries whole",
+      "id": "sql.compile.refusals.sqlite-a-notmatches-pattern-with-a-nulx2c-which-regexp-carries-whole",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "sqlite",
+        "postgresRegexpPushdown": true,
+        "sqliteRegexpAvailable": true
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "notMatches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "MarkerThatMustNotAppear\u0000"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textLiteral' at $.right: the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textLiteral",
+          "path": "$.right",
+          "reason": "the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > an unpaired surrogate in notEquals",
+      "id": "sql.compile.refusals.sqlite-an-unpaired-surrogate-in-notequals",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "notEquals",
+        "right": {
+          "kind": "textLiteral",
+          "value": {
+            "codeUnits": [
+              77,
+              97,
+              114,
+              107,
+              101,
+              114,
+              84,
+              104,
+              97,
+              116,
+              77,
+              117,
+              115,
+              116,
+              78,
+              111,
+              116,
+              65,
+              112,
+              112,
+              101,
+              97,
+              114,
+              55296
+            ]
+          }
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textLiteral' at $.left: the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textLiteral",
+          "path": "$.left",
+          "reason": "the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > an unpaired surrogate in a literal on the left",
+      "id": "sql.compile.refusals.sqlite-an-unpaired-surrogate-in-a-literal-on-the-left",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "kind": "textLiteral",
+          "value": {
+            "codeUnits": [
+              77,
+              97,
+              114,
+              107,
+              101,
+              114,
+              84,
+              104,
+              97,
+              116,
+              77,
+              117,
+              115,
+              116,
+              78,
+              111,
+              116,
+              65,
+              112,
+              112,
+              101,
+              97,
+              114,
+              55296
+            ]
+          }
+        },
+        "op": "equals",
+        "right": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textLiteral' at $.operand: the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textLiteral",
+          "path": "$.operand",
+          "reason": "the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > an unpaired surrogate in a membership operand",
+      "id": "sql.compile.refusals.sqlite-an-unpaired-surrogate-in-a-membership-operand",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "key": "k",
+            "kind": "reference"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "notIn",
+        "operand": {
+          "kind": "textLiteral",
+          "value": {
+            "codeUnits": [
+              77,
+              97,
+              114,
+              107,
+              101,
+              114,
+              84,
+              104,
+              97,
+              116,
+              77,
+              117,
+              115,
+              116,
+              78,
+              111,
+              116,
+              65,
+              112,
+              112,
+              101,
+              97,
+              114,
+              55296
+            ]
+          }
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textLiteral' at $.operand: the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textLiteral",
+          "path": "$.operand",
+          "reason": "the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > an unpaired surrogate in an exists operand",
+      "id": "sql.compile.refusals.sqlite-an-unpaired-surrogate-in-an-exists-operand",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "kind": "textLiteral",
+          "value": {
+            "codeUnits": [
+              77,
+              97,
+              114,
+              107,
+              101,
+              114,
+              84,
+              104,
+              97,
+              116,
+              77,
+              117,
+              115,
+              116,
+              78,
+              111,
+              116,
+              65,
+              112,
+              112,
+              101,
+              97,
+              114,
+              55296
+            ]
+          }
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textLiteral' at $.operands[1].operands[0].operand.right: the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textLiteral",
+          "path": "$.operands[1].operands[0].operand.right",
+          "reason": "the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > an unpaired surrogate in allOf and anyOf and not",
+      "id": "sql.compile.refusals.sqlite-an-unpaired-surrogate-in-allof-and-anyof-and-not",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "allOf",
+        "operands": [
+          {
+            "kind": "exists",
+            "operand": {
+              "key": "k",
+              "kind": "reference"
+            }
+          },
+          {
+            "kind": "anyOf",
+            "operands": [
+              {
+                "kind": "not",
+                "operand": {
+                  "kind": "textCompare",
+                  "left": {
+                    "key": "k",
+                    "kind": "reference"
+                  },
+                  "op": "equals",
+                  "right": {
+                    "kind": "textLiteral",
+                    "value": {
+                      "codeUnits": [
+                        77,
+                        97,
+                        114,
+                        107,
+                        101,
+                        114,
+                        84,
+                        104,
+                        97,
+                        116,
+                        77,
+                        117,
+                        115,
+                        116,
+                        78,
+                        111,
+                        116,
+                        65,
+                        112,
+                        112,
+                        101,
+                        97,
+                        114,
+                        55296
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textLiteral' at $.filter.right: the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textLiteral",
+          "path": "$.filter.right",
+          "reason": "the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > an unpaired surrogate in a some filter",
+      "id": "sql.compile.refusals.sqlite-an-unpaired-surrogate-in-a-some-filter",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "filter": {
+          "kind": "textCompare",
+          "left": {
+            "key": "k",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": {
+              "codeUnits": [
+                77,
+                97,
+                114,
+                107,
+                101,
+                114,
+                84,
+                104,
+                97,
+                116,
+                77,
+                117,
+                115,
+                116,
+                78,
+                111,
+                116,
+                65,
+                112,
+                112,
+                101,
+                97,
+                114,
+                55296
+              ]
+            }
+          }
+        },
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'textLiteral' at $.operand.filter.right: the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "textLiteral",
+          "path": "$.operand.filter.right",
+          "reason": "the value contains an unpaired surrogate, which has no UTF-8 form and would be replaced before the engine compared it"
+        }
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > an unpaired surrogate in a fold filter",
+      "id": "sql.compile.refusals.sqlite-an-unpaired-surrogate-in-a-fold-filter",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "filter": {
+            "kind": "textCompare",
+            "left": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "op": "equals",
+            "right": {
+              "kind": "textLiteral",
+              "value": {
+                "codeUnits": [
+                  77,
+                  97,
+                  114,
+                  107,
+                  101,
+                  114,
+                  84,
+                  104,
+                  97,
+                  116,
+                  77,
+                  117,
+                  115,
+                  116,
+                  78,
+                  111,
+                  116,
+                  65,
+                  112,
+                  112,
+                  101,
+                  97,
+                  114,
+                  55296
+                ]
+              }
+            }
+          },
+          "kind": "fold"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "MarkerThatMustNotAppear\u0000"
+          }
+        ],
+        "sql": "(? = \"col\")"
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a NUL in a left literal",
+      "id": "sql.compile.refusals.sqlite-a-nul-in-a-left-literal",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "kind": "textLiteral",
+          "value": "MarkerThatMustNotAppear\u0000"
+        },
+        "op": "equals",
+        "right": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "MarkerThatMustNotAppear\u0000"
+          }
+        ],
+        "sql": "(? NOT IN (\"col\"))"
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a NUL in a membership operand",
+      "id": "sql.compile.refusals.sqlite-a-nul-in-a-membership-operand",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "key": "k",
+            "kind": "reference"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "notIn",
+        "operand": {
+          "kind": "textLiteral",
+          "value": "MarkerThatMustNotAppear\u0000"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "MarkerThatMustNotAppear\u0000"
+          }
+        ],
+        "sql": "(? IS NOT NULL)"
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a NUL in an exists operand",
+      "id": "sql.compile.refusals.sqlite-a-nul-in-an-exists-operand",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "kind": "textLiteral",
+          "value": "MarkerThatMustNotAppear\u0000"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "MarkerThatMustNotAppear\u0000"
+          }
+        ],
+        "sql": "((\"col\" IS NOT NULL) AND ((NOT (\"col\" = ?))))"
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a NUL in allOf and anyOf and not",
+      "id": "sql.compile.refusals.sqlite-a-nul-in-allof-and-anyof-and-not",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "allOf",
+        "operands": [
+          {
+            "kind": "exists",
+            "operand": {
+              "key": "k",
+              "kind": "reference"
+            }
+          },
+          {
+            "kind": "anyOf",
+            "operands": [
+              {
+                "kind": "not",
+                "operand": {
+                  "kind": "textCompare",
+                  "left": {
+                    "key": "k",
+                    "kind": "reference"
+                  },
+                  "op": "equals",
+                  "right": {
+                    "kind": "textLiteral",
+                    "value": "MarkerThatMustNotAppear\u0000"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "MarkerThatMustNotAppear\u0000"
+          }
+        ],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT (\"col\" = ?) AS \"filter_ok\", (\"col\" IS NOT NULL) AS \"item_ok\" FROM \"tbl\" WHERE TRUE) AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a NUL in a some filter",
+      "id": "sql.compile.refusals.sqlite-a-nul-in-a-some-filter",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "filter": {
+          "kind": "textCompare",
+          "left": {
+            "key": "k",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "MarkerThatMustNotAppear\u0000"
+          }
+        },
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "MarkerThatMustNotAppear\u0000"
+          }
+        ],
+        "sql": "((SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_value\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE MAX(\"item_value\") END FROM (SELECT \"filter_ok\", \"item_value\" FROM (SELECT (\"col\" = ?) AS \"filter_ok\", \"col\" AS \"item_value\" FROM \"tbl\" WHERE TRUE) AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\") IS NOT NULL)"
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a NUL in a fold filter",
+      "id": "sql.compile.refusals.sqlite-a-nul-in-a-fold-filter",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "filter": {
+            "kind": "textCompare",
+            "left": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "op": "equals",
+            "right": {
+              "kind": "textLiteral",
+              "value": "MarkerThatMustNotAppear\u0000"
+            }
+          },
+          "kind": "fold"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "MarkerThatMustNotAppear\u0000"
+          }
+        ],
+        "sql": "(\"col\" <> ?)"
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a NUL in notEquals",
+      "id": "sql.compile.refusals.sqlite-a-nul-in-notequals",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "notEquals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "MarkerThatMustNotAppear\u0000"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"MarkerThatMustNotAppear \"\"q\"\" 😀\" IS NOT NULL)"
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > accepts a column with a quote, a space and a pair",
+      "id": "sql.compile.refusals.sqlite-accepts-a-column-with-a-quotex2c-a-space-and-a-pair",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "MarkerThatMustNotAppear \"q\" 😀"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"s\".\"t\".\"c\" IS NOT NULL)"
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > accepts a column of three segments",
+      "id": "sql.compile.refusals.sqlite-accepts-a-column-of-three-segments",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "s.t.c"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"col\" IS NOT NULL) AS \"item_ok\" FROM \"s\".\"t\" WHERE TRUE) AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > accepts a table of two segments",
+      "id": "sql.compile.refusals.sqlite-accepts-a-table-of-two-segments",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "s.t"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "a\u0001\u001f\n"
+          }
+        ],
+        "sql": "(\"col\" = ?)"
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > accepts a text value with other control characters",
+      "id": "sql.compile.refusals.sqlite-accepts-a-text-value-with-other-control-characters",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "a\u0001\u001f\n"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "text",
+            "value": "😀"
+          }
+        ],
+        "sql": "(\"col\" = ?)"
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > accepts a text value with a pair",
+      "id": "sql.compile.refusals.sqlite-accepts-a-text-value-with-a-pair",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "equals",
+        "right": {
+          "kind": "textLiteral",
+          "value": "😀"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 1577836800000
+          }
+        ],
+        "sql": "((CASE WHEN instr(CAST(\"a\"\"bMarkerThatMustNotAppear\" AS BLOB), x'00') = 0 AND \"a\"\"bMarkerThatMustNotAppear\" GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]*' AND (substr(\"a\"\"bMarkerThatMustNotAppear\", 20) = 'Z' OR substr(\"a\"\"bMarkerThatMustNotAppear\", 20) GLOB '[+-][0-9][0-9]:[0-9][0-9]' OR (substr(\"a\"\"bMarkerThatMustNotAppear\", 20, 1) = '.' AND (length(\"a\"\"bMarkerThatMustNotAppear\") - 20 - CASE WHEN \"a\"\"bMarkerThatMustNotAppear\" GLOB '*Z' THEN 1 ELSE 6 END) > 0 AND substr(\"a\"\"bMarkerThatMustNotAppear\", 21, (length(\"a\"\"bMarkerThatMustNotAppear\") - 20 - CASE WHEN \"a\"\"bMarkerThatMustNotAppear\" GLOB '*Z' THEN 1 ELSE 6 END)) NOT GLOB '*[^0-9]*' AND (\"a\"\"bMarkerThatMustNotAppear\" GLOB '*Z' OR \"a\"\"bMarkerThatMustNotAppear\" GLOB '*[+-][0-9][0-9]:[0-9][0-9]'))) AND strftime('%Y-%m-%d', substr(\"a\"\"bMarkerThatMustNotAppear\", 1, 19)) = substr(\"a\"\"bMarkerThatMustNotAppear\", 1, 10) AND strftime('%s', substr(\"a\"\"bMarkerThatMustNotAppear\", 1, 19)) IS NOT NULL AND substr(\"a\"\"bMarkerThatMustNotAppear\", 12, 2) < '24' AND (\"a\"\"bMarkerThatMustNotAppear\" GLOB '*Z' OR (substr(\"a\"\"bMarkerThatMustNotAppear\", CASE WHEN \"a\"\"bMarkerThatMustNotAppear\" GLOB '*Z' THEN length(\"a\"\"bMarkerThatMustNotAppear\") ELSE length(\"a\"\"bMarkerThatMustNotAppear\") - 5 END + 1, 2) <= '23' AND substr(\"a\"\"bMarkerThatMustNotAppear\", CASE WHEN \"a\"\"bMarkerThatMustNotAppear\" GLOB '*Z' THEN length(\"a\"\"bMarkerThatMustNotAppear\") ELSE length(\"a\"\"bMarkerThatMustNotAppear\") - 5 END + 4, 2) <= '59')) THEN CAST(strftime('%s', substr(\"a\"\"bMarkerThatMustNotAppear\", 1, 19)) AS INTEGER) * 1000 + CASE WHEN substr(\"a\"\"bMarkerThatMustNotAppear\", 20, 1) = '.' THEN CAST(substr(substr(\"a\"\"bMarkerThatMustNotAppear\", 21, (length(\"a\"\"bMarkerThatMustNotAppear\") - 20 - CASE WHEN \"a\"\"bMarkerThatMustNotAppear\" GLOB '*Z' THEN 1 ELSE 6 END)) || '00', 1, 3) AS INTEGER) ELSE 0 END - (CASE WHEN \"a\"\"bMarkerThatMustNotAppear\" GLOB '*Z' THEN 0 ELSE (CASE substr(\"a\"\"bMarkerThatMustNotAppear\", CASE WHEN \"a\"\"bMarkerThatMustNotAppear\" GLOB '*Z' THEN length(\"a\"\"bMarkerThatMustNotAppear\") ELSE length(\"a\"\"bMarkerThatMustNotAppear\") - 5 END, 1) WHEN '-' THEN -1 ELSE 1 END) * (CAST(substr(\"a\"\"bMarkerThatMustNotAppear\", CASE WHEN \"a\"\"bMarkerThatMustNotAppear\" GLOB '*Z' THEN length(\"a\"\"bMarkerThatMustNotAppear\") ELSE length(\"a\"\"bMarkerThatMustNotAppear\") - 5 END + 1, 2) AS INTEGER) * 60 + CAST(substr(\"a\"\"bMarkerThatMustNotAppear\", CASE WHEN \"a\"\"bMarkerThatMustNotAppear\" GLOB '*Z' THEN length(\"a\"\"bMarkerThatMustNotAppear\") ELSE length(\"a\"\"bMarkerThatMustNotAppear\") - 5 END + 4, 2) AS INTEGER)) END) * 60000 END) > ?)"
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: a timestamp column whose name holds a quote > quotes the name once and repeats the quoted text, never the raw name",
+      "id": "sql.compile.refusals.sqlite-quotes-the-name-once-and-repeats-the-quoted-textx2c-never-the-raw-nam",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "a\"bMarkerThatMustNotAppear",
+            "paramType": "timestamp"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 1577836800000
+          }
+        ],
+        "sql": "((CASE WHEN instr(CAST(\"a\"\"bMarkerThatMustNotAppear\" AS BLOB), x'00') = 0 AND \"a\"\"bMarkerThatMustNotAppear\" GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]*' AND (substr(\"a\"\"bMarkerThatMustNotAppear\", 20) = 'Z' OR substr(\"a\"\"bMarkerThatMustNotAppear\", 20) GLOB '[+-][0-9][0-9]:[0-9][0-9]' OR (substr(\"a\"\"bMarkerThatMustNotAppear\", 20, 1) = '.' AND (length(\"a\"\"bMarkerThatMustNotAppear\") - 20 - CASE WHEN \"a\"\"bMarkerThatMustNotAppear\" GLOB '*Z' THEN 1 ELSE 6 END) > 0 AND substr(\"a\"\"bMarkerThatMustNotAppear\", 21, (length(\"a\"\"bMarkerThatMustNotAppear\") - 20 - CASE WHEN \"a\"\"bMarkerThatMustNotAppear\" GLOB '*Z' THEN 1 ELSE 6 END)) NOT GLOB '*[^0-9]*' AND (\"a\"\"bMarkerThatMustNotAppear\" GLOB '*Z' OR \"a\"\"bMarkerThatMustNotAppear\" GLOB '*[+-][0-9][0-9]:[0-9][0-9]'))) AND strftime('%Y-%m-%d', substr(\"a\"\"bMarkerThatMustNotAppear\", 1, 19)) = substr(\"a\"\"bMarkerThatMustNotAppear\", 1, 10) AND strftime('%s', substr(\"a\"\"bMarkerThatMustNotAppear\", 1, 19)) IS NOT NULL AND substr(\"a\"\"bMarkerThatMustNotAppear\", 12, 2) < '24' AND (\"a\"\"bMarkerThatMustNotAppear\" GLOB '*Z' OR (substr(\"a\"\"bMarkerThatMustNotAppear\", CASE WHEN \"a\"\"bMarkerThatMustNotAppear\" GLOB '*Z' THEN length(\"a\"\"bMarkerThatMustNotAppear\") ELSE length(\"a\"\"bMarkerThatMustNotAppear\") - 5 END + 1, 2) <= '23' AND substr(\"a\"\"bMarkerThatMustNotAppear\", CASE WHEN \"a\"\"bMarkerThatMustNotAppear\" GLOB '*Z' THEN length(\"a\"\"bMarkerThatMustNotAppear\") ELSE length(\"a\"\"bMarkerThatMustNotAppear\") - 5 END + 4, 2) <= '59')) THEN CAST(strftime('%s', substr(\"a\"\"bMarkerThatMustNotAppear\", 1, 19)) AS INTEGER) * 1000 + CASE WHEN substr(\"a\"\"bMarkerThatMustNotAppear\", 20, 1) = '.' THEN CAST(substr(substr(\"a\"\"bMarkerThatMustNotAppear\", 21, (length(\"a\"\"bMarkerThatMustNotAppear\") - 20 - CASE WHEN \"a\"\"bMarkerThatMustNotAppear\" GLOB '*Z' THEN 1 ELSE 6 END)) || '00', 1, 3) AS INTEGER) ELSE 0 END - (CASE WHEN \"a\"\"bMarkerThatMustNotAppear\" GLOB '*Z' THEN 0 ELSE (CASE substr(\"a\"\"bMarkerThatMustNotAppear\", CASE WHEN \"a\"\"bMarkerThatMustNotAppear\" GLOB '*Z' THEN length(\"a\"\"bMarkerThatMustNotAppear\") ELSE length(\"a\"\"bMarkerThatMustNotAppear\") - 5 END, 1) WHEN '-' THEN -1 ELSE 1 END) * (CAST(substr(\"a\"\"bMarkerThatMustNotAppear\", CASE WHEN \"a\"\"bMarkerThatMustNotAppear\" GLOB '*Z' THEN length(\"a\"\"bMarkerThatMustNotAppear\") ELSE length(\"a\"\"bMarkerThatMustNotAppear\") - 5 END + 1, 2) AS INTEGER) * 60 + CAST(substr(\"a\"\"bMarkerThatMustNotAppear\", CASE WHEN \"a\"\"bMarkerThatMustNotAppear\" GLOB '*Z' THEN length(\"a\"\"bMarkerThatMustNotAppear\") ELSE length(\"a\"\"bMarkerThatMustNotAppear\") - 5 END + 4, 2) AS INTEGER)) END) * 60000 END) > ?)"
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: a timestamp column whose name holds a quote > is the SQL the dialect compiles an instant comparison to",
+      "id": "sql.compile.refusals.sqlite-is-the-sql-the-dialect-compiles-an-instant-comparison-to",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "a\"bMarkerThatMustNotAppear",
+            "paramType": "timestamp"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00Z"
+        }
+      }
+    }
+  ]
+}

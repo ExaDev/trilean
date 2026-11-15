@@ -1,0 +1,655 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "nodeKind": "some",
+        "path": "$",
+        "reason": "no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation"
+      },
+      "from": "guard.quantification.unit.test.ts: quantification over a collection > refuses 'some' when collectionFor is not set",
+      "id": "sql.guard.guard-quantification.quantification-over-a-collection-refuses-some-wh",
+      "kind": "sql-guard",
+      "options": {
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "score",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "every",
+        "path": "$",
+        "reason": "no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation"
+      },
+      "from": "guard.quantification.unit.test.ts: quantification over a collection > refuses 'every' when collectionFor is not set",
+      "id": "sql.guard.guard-quantification.quantification-over-a-collection-refuses-every-w",
+      "kind": "sql-guard",
+      "options": {
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "score",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": null,
+      "from": "guard.quantification.unit.test.ts: quantification over a collection > is pushable once collectionFor maps the collection",
+      "id": "sql.guard.guard-quantification.quantification-over-a-collection-is-pushable-onc",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "score": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "score",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": null,
+      "from": "guard.quantification.unit.test.ts: quantification over a collection > is pushable once collectionFor maps the collection",
+      "id": "sql.guard.guard-quantification.quantification-over-a-collection-is-pushable-onc-2",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "score": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "score",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "fold",
+        "path": "$.left",
+        "reason": "no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation"
+      },
+      "from": "guard.quantification.unit.test.ts: quantification over a collection > refuses fold('max') when collectionFor is not set",
+      "id": "sql.guard.guard-quantification.quantification-over-a-collection-refuses-fold-ma",
+      "kind": "sql-guard",
+      "options": {
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "tags",
+          "combiner": {
+            "item": {
+              "key": "score",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "fold",
+        "path": "$.left",
+        "reason": "no 'collectionFor' option is set: describe how this collection maps onto a correlated table ({ table, join, columnFor }) to compile this node, or it falls back to in-process evaluation"
+      },
+      "from": "guard.quantification.unit.test.ts: quantification over a collection > refuses fold('min') when collectionFor is not set",
+      "id": "sql.guard.guard-quantification.quantification-over-a-collection-refuses-fold-mi",
+      "kind": "sql-guard",
+      "options": {
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "tags",
+          "combiner": {
+            "item": {
+              "key": "score",
+              "kind": "reference"
+            },
+            "mode": "min"
+          },
+          "kind": "fold"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "guard.quantification.unit.test.ts: quantification over a collection > is pushable once collectionFor maps the collection, for fold('max')",
+      "id": "sql.guard.guard-quantification.quantification-over-a-collection-is-pushable-onc-3",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "score": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "tags",
+          "combiner": {
+            "item": {
+              "key": "score",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "guard.quantification.unit.test.ts: quantification over a collection > is pushable once collectionFor maps the collection, for fold('min')",
+      "id": "sql.guard.guard-quantification.quantification-over-a-collection-is-pushable-onc-4",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "score": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "tags",
+          "combiner": {
+            "item": {
+              "key": "score",
+              "kind": "reference"
+            },
+            "mode": "min"
+          },
+          "kind": "fold"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "fold",
+        "path": "$.left",
+        "reason": "a 'reduce' fold threads an arbitrary combine expression through the collection in a caller-chosen order, which has no general SQL translation"
+      },
+      "from": "guard.quantification.unit.test.ts: quantification over a collection > refuses fold('reduce') unconditionally, even once collectionFor maps the collection",
+      "id": "sql.guard.guard-quantification.quantification-over-a-collection-refuses-fold-re",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {},
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "tags",
+          "combiner": {
+            "combine": {
+              "key": "score",
+              "kind": "reference"
+            },
+            "initial": {
+              "kind": "numberLiteral",
+              "value": 0
+            },
+            "mode": "reduce"
+          },
+          "kind": "fold"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "some",
+        "path": "$",
+        "reason": "only a string collection key can be mapped to a correlated table; this collection is a non-string JSON value"
+      },
+      "from": "guard.quantification.unit.test.ts: quantification over a collection > refuses a non-string collection key, even with collectionFor set",
+      "id": "sql.guard.guard-quantification.quantification-over-a-collection-refuses-a-non-s",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {},
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": {
+          "nested": "key"
+        },
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "score",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "no column mapped for reference key 'age'",
+          "name": "CallerError"
+        }
+      },
+      "from": "guard.quantification.unit.test.ts: quantification over a collection > resolves item/filter against the collection's own columnFor, not the outer one",
+      "id": "sql.guard.guard-quantification.quantification-over-a-collection-resolves-item-f",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {},
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "age",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "treeReference",
+        "path": "$.filter",
+        "reason": "a referenced tree is resolved by the caller's resolvers; inline it before compiling"
+      },
+      "from": "guard.quantification.unit.test.ts: quantification over a collection > refuses an unsupported node kind buried inside filter, not only inside item",
+      "id": "sql.guard.guard-quantification.quantification-over-a-collection-refuses-an-unsu",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "score": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "filter": {
+          "key": "other",
+          "kind": "treeReference"
+        },
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "score",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": null,
+      "from": "guard.quantification.unit.test.ts: quantification over a collection > is pushable with both a filter and an item, once collectionFor is set",
+      "id": "sql.guard.guard-quantification.quantification-over-a-collection-is-pushable-wit",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "label": {
+                "column": "label",
+                "paramType": "text"
+              },
+              "score": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "tags",
+        "filter": {
+          "kind": "textCompare",
+          "left": {
+            "key": "label",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "urgent"
+          }
+        },
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "score",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "fold",
+        "path": "$.left.combiner.item",
+        "reason": "a 'max' fold orders participating items by comparing them, and trilean never orders text values ('compare' returns wrong-type for text; use 'textCompare'); but PostgreSQL would order the text operand at $.left.combiner.item collation-wise and answer definitely"
+      },
+      "from": "guard.quantification.unit.test.ts: quantification over a collection > refuses a fold('max'|'min') whose projected item is text, which trilean never orders",
+      "id": "sql.guard.guard-quantification.quantification-over-a-collection-refuses-a-fold",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "label": {
+                "column": "label",
+                "paramType": "text"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "tags",
+          "combiner": {
+            "item": {
+              "key": "label",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "textLiteral",
+          "value": "z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "fold",
+        "path": "$.left.combiner.item",
+        "reason": "a 'min' fold orders participating items by comparing them, and booleans have no ordering in trilean; whereas PostgreSQL orders false before true"
+      },
+      "from": "guard.quantification.unit.test.ts: quantification over a collection > refuses a fold('max'|'min') whose projected item is boolean, which trilean never orders",
+      "id": "sql.guard.guard-quantification.quantification-over-a-collection-refuses-a-fold-2",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "flagged": {
+                "column": "flagged",
+                "paramType": "boolean"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "tags",
+          "combiner": {
+            "item": {
+              "key": "flagged",
+              "kind": "reference"
+            },
+            "mode": "min"
+          },
+          "kind": "fold"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "booleanLiteral",
+          "value": true
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "guard.quantification.unit.test.ts: quantification over a collection > cannot detect a fold('max'|'min') text/boolean ordering mismatch against an item with no declared paramType",
+      "id": "sql.guard.guard-quantification.quantification-over-a-collection-cannot-detect-a",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "tags": {
+            "columns": {
+              "note": {
+                "column": "note"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "tags",
+          "combiner": {
+            "item": {
+              "key": "note",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 1
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "guard.quantification.unit.test.ts: quantification over a collection > 'some' is treated as structurally pushable when called without options at all, matching the 'assume it passes' convention every other options-dependent check in this file already follows",
+      "id": "sql.guard.guard-quantification.quantification-over-a-collection-some-is-treated",
+      "kind": "sql-guard",
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "age",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 18
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": null,
+      "from": "guard.quantification.unit.test.ts: quantification over a collection > 'every' is treated as structurally pushable when called without options at all, matching the 'assume it passes' convention every other options-dependent check in this file already follows",
+      "id": "sql.guard.guard-quantification.quantification-over-a-collection-every-is-treate",
+      "kind": "sql-guard",
+      "tree": {
+        "collection": "tags",
+        "item": {
+          "kind": "compare",
+          "left": {
+            "key": "age",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 18
+          }
+        },
+        "kind": "every"
+      }
+    }
+  ]
+}

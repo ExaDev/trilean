@@ -1,0 +1,330 @@
+{
+  "cases": [
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "a",
+          "glob-nul",
+          "glob-nul-tail",
+          "glob-plain",
+          "nul"
+        ]
+      },
+      "fixture": "nul-subjects",
+      "from": "sqlite.identifiers.integration.test.ts: an identifier SQLite cannot carry > does not stop a name that can be carried from running",
+      "id": "sql.execute.identifiers-nul.sqlite-a-name-that-can-be-carried",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "exists",
+          "operand": {
+            "key": "note",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "nul"
+        ]
+      },
+      "fixture": "nul-subjects",
+      "from": "sqlite.identifiers.integration.test.ts: a text value holding a NUL > is bound and compared as text by SQLite, which carries it",
+      "id": "sql.execute.identifiers-nul.sqlite-a-text-value-holding-a-nul",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "note",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "x\u0000y"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "glob-plain"
+        ]
+      },
+      "expectEvaluator": [
+        "glob-nul",
+        "glob-plain"
+      ],
+      "fixture": "nul-subjects",
+      "from": "sqlite.identifiers.integration.test.ts: a pattern or a subject with a NUL, which GLOB reads only up to > matches a stored value without a NUL as the evaluator does, and never selects one with a NUL",
+      "id": "sql.execute.identifiers-nul.sqlite-matches-a-stored-value-without-a-nul-as-the-evaluator-doesx2c-a",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "note",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a.*c$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "a"
+        ]
+      },
+      "expectEvaluator": [
+        "a",
+        "glob-nul-tail",
+        "nul"
+      ],
+      "fixture": "nul-subjects",
+      "from": "sqlite.identifiers.integration.test.ts: a pattern or a subject with a NUL, which GLOB reads only up to > matches a stored value without a NUL as the evaluator does, and never selects one with a NUL",
+      "id": "sql.execute.identifiers-nul.sqlite-matches-a-stored-value-without-a-nul-as-the-evaluator-doesx2c-a-2",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "not",
+          "operand": {
+            "kind": "textCompare",
+            "left": {
+              "key": "note",
+              "kind": "reference"
+            },
+            "op": "portableMatches",
+            "right": {
+              "kind": "textLiteral",
+              "value": "^a.*c$"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "re-nul"
+        ]
+      },
+      "fixture": "nul-regexp",
+      "from": "sqlite.identifiers.integration.test.ts: a pattern or a subject with a NUL, which GLOB reads only up to > carries a NUL in the pattern of matches and notMatches whole, since REGEXP is a function the caller registered",
+      "id": "sql.execute.identifiers-nul.sqlite-matches-with-a-nul",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "note": {
+              "column": "note"
+            }
+          },
+          "sqliteRegexpAvailable": true
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "note",
+            "kind": "reference"
+          },
+          "op": "matches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a\u0000b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "re-plain"
+        ]
+      },
+      "fixture": "nul-regexp",
+      "from": "sqlite.identifiers.integration.test.ts: a pattern or a subject with a NUL, which GLOB reads only up to > carries a NUL in the pattern of matches and notMatches whole, since REGEXP is a function the caller registered",
+      "id": "sql.execute.identifiers-nul.sqlite-notmatches-with-a-nul",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "note": {
+              "column": "note"
+            }
+          },
+          "sqliteRegexpAvailable": true
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "note",
+            "kind": "reference"
+          },
+          "op": "notMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "a\u0000b"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "later"
+        ]
+      },
+      "fixture": "stamped-sqlite",
+      "from": "sqlite.identifiers.integration.test.ts: a timestamp column whose name holds a quote > is quoted once and the instant comparison runs and selects the later row",
+      "id": "sql.execute.identifiers-nul.sqlite-a-timestamp-column-with-a-quote",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "timestamp"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "a\"b",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "instantLiteral",
+            "value": "2020-01-01T00:00:00Z"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "later"
+        ]
+      },
+      "fixture": "stamped",
+      "from": "postgres.identifiers.integration.test.ts: a timestamp column whose name holds a quote > is quoted once and the instant comparison runs and selects the later row",
+      "id": "sql.execute.identifiers-nul.postgres-a-timestamp-column-with-a-quote",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "a\"b": {
+              "column": "a\"b",
+              "paramType": "timestamp"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "a\"b",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "instantLiteral",
+            "value": "2020-01-01T00:00:00Z"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "ada",
+          "grace"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "postgres.identifiers.integration.test.ts: an identifier PostgreSQL cannot carry > does not stop a name that can be carried from running",
+      "id": "sql.execute.identifiers-nul.postgres-a-name-that-can-be-carried",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "exists",
+          "operand": {
+            "key": "note",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "queryError": [
+          "invalid byte sequence"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "postgres.identifiers.integration.test.ts: a text value holding a NUL > is refused at compile time, so the engine never sees it",
+      "id": "sql.execute.identifiers-nul.postgres-the-engine-rejects-a-nul",
+      "kind": "sql-execute",
+      "run": {
+        "params": [
+          "x\u0000y"
+        ],
+        "sql": "SELECT $1::text"
+      }
+    }
+  ]
+}

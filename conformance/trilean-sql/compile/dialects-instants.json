@@ -1,0 +1,1593 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 1577836800000
+          }
+        ],
+        "sql": "((CASE WHEN instr(CAST(\"joined\" AS BLOB), x'00') = 0 AND \"joined\" GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]*' AND (substr(\"joined\", 20) = 'Z' OR substr(\"joined\", 20) GLOB '[+-][0-9][0-9]:[0-9][0-9]' OR (substr(\"joined\", 20, 1) = '.' AND (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END) > 0 AND substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) NOT GLOB '*[^0-9]*' AND (\"joined\" GLOB '*Z' OR \"joined\" GLOB '*[+-][0-9][0-9]:[0-9][0-9]'))) AND strftime('%Y-%m-%d', substr(\"joined\", 1, 19)) = substr(\"joined\", 1, 10) AND strftime('%s', substr(\"joined\", 1, 19)) IS NOT NULL AND substr(\"joined\", 12, 2) < '24' AND (\"joined\" GLOB '*Z' OR (substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) <= '23' AND substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) <= '59')) THEN CAST(strftime('%s', substr(\"joined\", 1, 19)) AS INTEGER) * 1000 + CASE WHEN substr(\"joined\", 20, 1) = '.' THEN CAST(substr(substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) || '00', 1, 3) AS INTEGER) ELSE 0 END - (CASE WHEN \"joined\" GLOB '*Z' THEN 0 ELSE (CASE substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END, 1) WHEN '-' THEN -1 ELSE 1 END) * (CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) AS INTEGER) * 60 + CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) AS INTEGER)) END) * 60000 END) = ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > reads the same parameter whichever way an instant is written",
+      "id": "sql.compile.dialects-instants.sqlite-form-1-2020x2d-01x2d-01t00x3a-00x3a-00z",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "joined",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 1577836800000
+          }
+        ],
+        "sql": "((CASE WHEN instr(CAST(\"joined\" AS BLOB), x'00') = 0 AND \"joined\" GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]*' AND (substr(\"joined\", 20) = 'Z' OR substr(\"joined\", 20) GLOB '[+-][0-9][0-9]:[0-9][0-9]' OR (substr(\"joined\", 20, 1) = '.' AND (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END) > 0 AND substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) NOT GLOB '*[^0-9]*' AND (\"joined\" GLOB '*Z' OR \"joined\" GLOB '*[+-][0-9][0-9]:[0-9][0-9]'))) AND strftime('%Y-%m-%d', substr(\"joined\", 1, 19)) = substr(\"joined\", 1, 10) AND strftime('%s', substr(\"joined\", 1, 19)) IS NOT NULL AND substr(\"joined\", 12, 2) < '24' AND (\"joined\" GLOB '*Z' OR (substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) <= '23' AND substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) <= '59')) THEN CAST(strftime('%s', substr(\"joined\", 1, 19)) AS INTEGER) * 1000 + CASE WHEN substr(\"joined\", 20, 1) = '.' THEN CAST(substr(substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) || '00', 1, 3) AS INTEGER) ELSE 0 END - (CASE WHEN \"joined\" GLOB '*Z' THEN 0 ELSE (CASE substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END, 1) WHEN '-' THEN -1 ELSE 1 END) * (CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) AS INTEGER) * 60 + CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) AS INTEGER)) END) * 60000 END) = ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > reads the same parameter whichever way an instant is written",
+      "id": "sql.compile.dialects-instants.sqlite-form-2-2020x2d-01x2d-01t00x3a-00x3a-00x2e-000z",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "joined",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00.000Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 1577836800000
+          }
+        ],
+        "sql": "((CASE WHEN instr(CAST(\"joined\" AS BLOB), x'00') = 0 AND \"joined\" GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]*' AND (substr(\"joined\", 20) = 'Z' OR substr(\"joined\", 20) GLOB '[+-][0-9][0-9]:[0-9][0-9]' OR (substr(\"joined\", 20, 1) = '.' AND (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END) > 0 AND substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) NOT GLOB '*[^0-9]*' AND (\"joined\" GLOB '*Z' OR \"joined\" GLOB '*[+-][0-9][0-9]:[0-9][0-9]'))) AND strftime('%Y-%m-%d', substr(\"joined\", 1, 19)) = substr(\"joined\", 1, 10) AND strftime('%s', substr(\"joined\", 1, 19)) IS NOT NULL AND substr(\"joined\", 12, 2) < '24' AND (\"joined\" GLOB '*Z' OR (substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) <= '23' AND substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) <= '59')) THEN CAST(strftime('%s', substr(\"joined\", 1, 19)) AS INTEGER) * 1000 + CASE WHEN substr(\"joined\", 20, 1) = '.' THEN CAST(substr(substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) || '00', 1, 3) AS INTEGER) ELSE 0 END - (CASE WHEN \"joined\" GLOB '*Z' THEN 0 ELSE (CASE substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END, 1) WHEN '-' THEN -1 ELSE 1 END) * (CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) AS INTEGER) * 60 + CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) AS INTEGER)) END) * 60000 END) = ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > reads the same parameter whichever way an instant is written",
+      "id": "sql.compile.dialects-instants.sqlite-form-3-2020x2d-01x2d-01t02x3a-00x3a-00x2b-02x3a-00",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "joined",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T02:00:00+02:00"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 1577836800000
+          }
+        ],
+        "sql": "((CASE WHEN instr(CAST(\"joined\" AS BLOB), x'00') = 0 AND \"joined\" GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]*' AND (substr(\"joined\", 20) = 'Z' OR substr(\"joined\", 20) GLOB '[+-][0-9][0-9]:[0-9][0-9]' OR (substr(\"joined\", 20, 1) = '.' AND (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END) > 0 AND substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) NOT GLOB '*[^0-9]*' AND (\"joined\" GLOB '*Z' OR \"joined\" GLOB '*[+-][0-9][0-9]:[0-9][0-9]'))) AND strftime('%Y-%m-%d', substr(\"joined\", 1, 19)) = substr(\"joined\", 1, 10) AND strftime('%s', substr(\"joined\", 1, 19)) IS NOT NULL AND substr(\"joined\", 12, 2) < '24' AND (\"joined\" GLOB '*Z' OR (substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) <= '23' AND substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) <= '59')) THEN CAST(strftime('%s', substr(\"joined\", 1, 19)) AS INTEGER) * 1000 + CASE WHEN substr(\"joined\", 20, 1) = '.' THEN CAST(substr(substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) || '00', 1, 3) AS INTEGER) ELSE 0 END - (CASE WHEN \"joined\" GLOB '*Z' THEN 0 ELSE (CASE substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END, 1) WHEN '-' THEN -1 ELSE 1 END) * (CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) AS INTEGER) * 60 + CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) AS INTEGER)) END) * 60000 END) = ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > reads the same parameter whichever way an instant is written",
+      "id": "sql.compile.dialects-instants.sqlite-form-4-2019x2d-12x2d-31t19x3a-00x3a-00x2d-05x3a-00",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "joined",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2019-12-31T19:00:00-05:00"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 1577836800000
+          }
+        ],
+        "sql": "((CASE WHEN instr(CAST(\"joined\" AS BLOB), x'00') = 0 AND \"joined\" GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]*' AND (substr(\"joined\", 20) = 'Z' OR substr(\"joined\", 20) GLOB '[+-][0-9][0-9]:[0-9][0-9]' OR (substr(\"joined\", 20, 1) = '.' AND (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END) > 0 AND substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) NOT GLOB '*[^0-9]*' AND (\"joined\" GLOB '*Z' OR \"joined\" GLOB '*[+-][0-9][0-9]:[0-9][0-9]'))) AND strftime('%Y-%m-%d', substr(\"joined\", 1, 19)) = substr(\"joined\", 1, 10) AND strftime('%s', substr(\"joined\", 1, 19)) IS NOT NULL AND substr(\"joined\", 12, 2) < '24' AND (\"joined\" GLOB '*Z' OR (substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) <= '23' AND substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) <= '59')) THEN CAST(strftime('%s', substr(\"joined\", 1, 19)) AS INTEGER) * 1000 + CASE WHEN substr(\"joined\", 20, 1) = '.' THEN CAST(substr(substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) || '00', 1, 3) AS INTEGER) ELSE 0 END - (CASE WHEN \"joined\" GLOB '*Z' THEN 0 ELSE (CASE substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END, 1) WHEN '-' THEN -1 ELSE 1 END) * (CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) AS INTEGER) * 60 + CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) AS INTEGER)) END) * 60000 END) = ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > reads the same parameter whichever way an instant is written",
+      "id": "sql.compile.dialects-instants.sqlite-form-5-2020x2d-01x2d-01-00x3a-00x3a-00z",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "joined",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01 00:00:00Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "null"
+          }
+        ],
+        "sql": "((CASE WHEN instr(CAST(\"joined\" AS BLOB), x'00') = 0 AND \"joined\" GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]*' AND (substr(\"joined\", 20) = 'Z' OR substr(\"joined\", 20) GLOB '[+-][0-9][0-9]:[0-9][0-9]' OR (substr(\"joined\", 20, 1) = '.' AND (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END) > 0 AND substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) NOT GLOB '*[^0-9]*' AND (\"joined\" GLOB '*Z' OR \"joined\" GLOB '*[+-][0-9][0-9]:[0-9][0-9]'))) AND strftime('%Y-%m-%d', substr(\"joined\", 1, 19)) = substr(\"joined\", 1, 10) AND strftime('%s', substr(\"joined\", 1, 19)) IS NOT NULL AND substr(\"joined\", 12, 2) < '24' AND (\"joined\" GLOB '*Z' OR (substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) <= '23' AND substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) <= '59')) THEN CAST(strftime('%s', substr(\"joined\", 1, 19)) AS INTEGER) * 1000 + CASE WHEN substr(\"joined\", 20, 1) = '.' THEN CAST(substr(substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) || '00', 1, 3) AS INTEGER) ELSE 0 END - (CASE WHEN \"joined\" GLOB '*Z' THEN 0 ELSE (CASE substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END, 1) WHEN '-' THEN -1 ELSE 1 END) * (CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) AS INTEGER) * 60 + CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) AS INTEGER)) END) * 60000 END) < ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > binds %j, outside the one grammar, as NULL, so the comparison is unknown",
+      "id": "sql.compile.dialects-instants.sqlite-outside-the-grammar-x22-not-a-timex22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "joined",
+          "kind": "reference"
+        },
+        "op": "lt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "not a time"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "null"
+          }
+        ],
+        "sql": "((CASE WHEN instr(CAST(\"joined\" AS BLOB), x'00') = 0 AND \"joined\" GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]*' AND (substr(\"joined\", 20) = 'Z' OR substr(\"joined\", 20) GLOB '[+-][0-9][0-9]:[0-9][0-9]' OR (substr(\"joined\", 20, 1) = '.' AND (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END) > 0 AND substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) NOT GLOB '*[^0-9]*' AND (\"joined\" GLOB '*Z' OR \"joined\" GLOB '*[+-][0-9][0-9]:[0-9][0-9]'))) AND strftime('%Y-%m-%d', substr(\"joined\", 1, 19)) = substr(\"joined\", 1, 10) AND strftime('%s', substr(\"joined\", 1, 19)) IS NOT NULL AND substr(\"joined\", 12, 2) < '24' AND (\"joined\" GLOB '*Z' OR (substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) <= '23' AND substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) <= '59')) THEN CAST(strftime('%s', substr(\"joined\", 1, 19)) AS INTEGER) * 1000 + CASE WHEN substr(\"joined\", 20, 1) = '.' THEN CAST(substr(substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) || '00', 1, 3) AS INTEGER) ELSE 0 END - (CASE WHEN \"joined\" GLOB '*Z' THEN 0 ELSE (CASE substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END, 1) WHEN '-' THEN -1 ELSE 1 END) * (CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) AS INTEGER) * 60 + CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) AS INTEGER)) END) * 60000 END) < ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > binds %j, outside the one grammar, as NULL, so the comparison is unknown",
+      "id": "sql.compile.dialects-instants.sqlite-outside-the-grammar-x22-nowx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "joined",
+          "kind": "reference"
+        },
+        "op": "lt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "now"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "null"
+          }
+        ],
+        "sql": "((CASE WHEN instr(CAST(\"joined\" AS BLOB), x'00') = 0 AND \"joined\" GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]*' AND (substr(\"joined\", 20) = 'Z' OR substr(\"joined\", 20) GLOB '[+-][0-9][0-9]:[0-9][0-9]' OR (substr(\"joined\", 20, 1) = '.' AND (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END) > 0 AND substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) NOT GLOB '*[^0-9]*' AND (\"joined\" GLOB '*Z' OR \"joined\" GLOB '*[+-][0-9][0-9]:[0-9][0-9]'))) AND strftime('%Y-%m-%d', substr(\"joined\", 1, 19)) = substr(\"joined\", 1, 10) AND strftime('%s', substr(\"joined\", 1, 19)) IS NOT NULL AND substr(\"joined\", 12, 2) < '24' AND (\"joined\" GLOB '*Z' OR (substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) <= '23' AND substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) <= '59')) THEN CAST(strftime('%s', substr(\"joined\", 1, 19)) AS INTEGER) * 1000 + CASE WHEN substr(\"joined\", 20, 1) = '.' THEN CAST(substr(substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) || '00', 1, 3) AS INTEGER) ELSE 0 END - (CASE WHEN \"joined\" GLOB '*Z' THEN 0 ELSE (CASE substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END, 1) WHEN '-' THEN -1 ELSE 1 END) * (CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) AS INTEGER) * 60 + CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) AS INTEGER)) END) * 60000 END) < ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > binds %j, outside the one grammar, as NULL, so the comparison is unknown",
+      "id": "sql.compile.dialects-instants.sqlite-outside-the-grammar-x22-10x3a-00x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "joined",
+          "kind": "reference"
+        },
+        "op": "lt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "10:00"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "null"
+          }
+        ],
+        "sql": "((CASE WHEN instr(CAST(\"joined\" AS BLOB), x'00') = 0 AND \"joined\" GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]*' AND (substr(\"joined\", 20) = 'Z' OR substr(\"joined\", 20) GLOB '[+-][0-9][0-9]:[0-9][0-9]' OR (substr(\"joined\", 20, 1) = '.' AND (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END) > 0 AND substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) NOT GLOB '*[^0-9]*' AND (\"joined\" GLOB '*Z' OR \"joined\" GLOB '*[+-][0-9][0-9]:[0-9][0-9]'))) AND strftime('%Y-%m-%d', substr(\"joined\", 1, 19)) = substr(\"joined\", 1, 10) AND strftime('%s', substr(\"joined\", 1, 19)) IS NOT NULL AND substr(\"joined\", 12, 2) < '24' AND (\"joined\" GLOB '*Z' OR (substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) <= '23' AND substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) <= '59')) THEN CAST(strftime('%s', substr(\"joined\", 1, 19)) AS INTEGER) * 1000 + CASE WHEN substr(\"joined\", 20, 1) = '.' THEN CAST(substr(substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) || '00', 1, 3) AS INTEGER) ELSE 0 END - (CASE WHEN \"joined\" GLOB '*Z' THEN 0 ELSE (CASE substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END, 1) WHEN '-' THEN -1 ELSE 1 END) * (CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) AS INTEGER) * 60 + CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) AS INTEGER)) END) * 60000 END) < ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > binds %j, outside the one grammar, as NULL, so the comparison is unknown",
+      "id": "sql.compile.dialects-instants.sqlite-outside-the-grammar-x22-2020x2d-01x2d-01x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "joined",
+          "kind": "reference"
+        },
+        "op": "lt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "null"
+          }
+        ],
+        "sql": "((CASE WHEN instr(CAST(\"joined\" AS BLOB), x'00') = 0 AND \"joined\" GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]*' AND (substr(\"joined\", 20) = 'Z' OR substr(\"joined\", 20) GLOB '[+-][0-9][0-9]:[0-9][0-9]' OR (substr(\"joined\", 20, 1) = '.' AND (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END) > 0 AND substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) NOT GLOB '*[^0-9]*' AND (\"joined\" GLOB '*Z' OR \"joined\" GLOB '*[+-][0-9][0-9]:[0-9][0-9]'))) AND strftime('%Y-%m-%d', substr(\"joined\", 1, 19)) = substr(\"joined\", 1, 10) AND strftime('%s', substr(\"joined\", 1, 19)) IS NOT NULL AND substr(\"joined\", 12, 2) < '24' AND (\"joined\" GLOB '*Z' OR (substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) <= '23' AND substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) <= '59')) THEN CAST(strftime('%s', substr(\"joined\", 1, 19)) AS INTEGER) * 1000 + CASE WHEN substr(\"joined\", 20, 1) = '.' THEN CAST(substr(substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) || '00', 1, 3) AS INTEGER) ELSE 0 END - (CASE WHEN \"joined\" GLOB '*Z' THEN 0 ELSE (CASE substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END, 1) WHEN '-' THEN -1 ELSE 1 END) * (CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) AS INTEGER) * 60 + CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) AS INTEGER)) END) * 60000 END) < ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > binds %j, outside the one grammar, as NULL, so the comparison is unknown",
+      "id": "sql.compile.dialects-instants.sqlite-outside-the-grammar-x22-2020x2d-01x2d-01t00x3a-00x3a-00x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "joined",
+          "kind": "reference"
+        },
+        "op": "lt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "null"
+          }
+        ],
+        "sql": "((CASE WHEN instr(CAST(\"joined\" AS BLOB), x'00') = 0 AND \"joined\" GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]*' AND (substr(\"joined\", 20) = 'Z' OR substr(\"joined\", 20) GLOB '[+-][0-9][0-9]:[0-9][0-9]' OR (substr(\"joined\", 20, 1) = '.' AND (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END) > 0 AND substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) NOT GLOB '*[^0-9]*' AND (\"joined\" GLOB '*Z' OR \"joined\" GLOB '*[+-][0-9][0-9]:[0-9][0-9]'))) AND strftime('%Y-%m-%d', substr(\"joined\", 1, 19)) = substr(\"joined\", 1, 10) AND strftime('%s', substr(\"joined\", 1, 19)) IS NOT NULL AND substr(\"joined\", 12, 2) < '24' AND (\"joined\" GLOB '*Z' OR (substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) <= '23' AND substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) <= '59')) THEN CAST(strftime('%s', substr(\"joined\", 1, 19)) AS INTEGER) * 1000 + CASE WHEN substr(\"joined\", 20, 1) = '.' THEN CAST(substr(substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) || '00', 1, 3) AS INTEGER) ELSE 0 END - (CASE WHEN \"joined\" GLOB '*Z' THEN 0 ELSE (CASE substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END, 1) WHEN '-' THEN -1 ELSE 1 END) * (CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) AS INTEGER) * 60 + CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) AS INTEGER)) END) * 60000 END) < ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > binds %j, outside the one grammar, as NULL, so the comparison is unknown",
+      "id": "sql.compile.dialects-instants.sqlite-outside-the-grammar-x22-2020x2d-01x2d-01t00x3a-00x3a-00x2b-0200x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "joined",
+          "kind": "reference"
+        },
+        "op": "lt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00+0200"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "null"
+          }
+        ],
+        "sql": "((CASE WHEN instr(CAST(\"joined\" AS BLOB), x'00') = 0 AND \"joined\" GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]*' AND (substr(\"joined\", 20) = 'Z' OR substr(\"joined\", 20) GLOB '[+-][0-9][0-9]:[0-9][0-9]' OR (substr(\"joined\", 20, 1) = '.' AND (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END) > 0 AND substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) NOT GLOB '*[^0-9]*' AND (\"joined\" GLOB '*Z' OR \"joined\" GLOB '*[+-][0-9][0-9]:[0-9][0-9]'))) AND strftime('%Y-%m-%d', substr(\"joined\", 1, 19)) = substr(\"joined\", 1, 10) AND strftime('%s', substr(\"joined\", 1, 19)) IS NOT NULL AND substr(\"joined\", 12, 2) < '24' AND (\"joined\" GLOB '*Z' OR (substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) <= '23' AND substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) <= '59')) THEN CAST(strftime('%s', substr(\"joined\", 1, 19)) AS INTEGER) * 1000 + CASE WHEN substr(\"joined\", 20, 1) = '.' THEN CAST(substr(substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) || '00', 1, 3) AS INTEGER) ELSE 0 END - (CASE WHEN \"joined\" GLOB '*Z' THEN 0 ELSE (CASE substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END, 1) WHEN '-' THEN -1 ELSE 1 END) * (CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) AS INTEGER) * 60 + CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) AS INTEGER)) END) * 60000 END) < ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > binds %j, outside the one grammar, as NULL, so the comparison is unknown",
+      "id": "sql.compile.dialects-instants.sqlite-outside-the-grammar-x22-2020x2d-01x2d-01t00x3a-00x3a-00zx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "joined",
+          "kind": "reference"
+        },
+        "op": "lt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01t00:00:00Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "null"
+          }
+        ],
+        "sql": "((CASE WHEN instr(CAST(\"joined\" AS BLOB), x'00') = 0 AND \"joined\" GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]*' AND (substr(\"joined\", 20) = 'Z' OR substr(\"joined\", 20) GLOB '[+-][0-9][0-9]:[0-9][0-9]' OR (substr(\"joined\", 20, 1) = '.' AND (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END) > 0 AND substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) NOT GLOB '*[^0-9]*' AND (\"joined\" GLOB '*Z' OR \"joined\" GLOB '*[+-][0-9][0-9]:[0-9][0-9]'))) AND strftime('%Y-%m-%d', substr(\"joined\", 1, 19)) = substr(\"joined\", 1, 10) AND strftime('%s', substr(\"joined\", 1, 19)) IS NOT NULL AND substr(\"joined\", 12, 2) < '24' AND (\"joined\" GLOB '*Z' OR (substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) <= '23' AND substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) <= '59')) THEN CAST(strftime('%s', substr(\"joined\", 1, 19)) AS INTEGER) * 1000 + CASE WHEN substr(\"joined\", 20, 1) = '.' THEN CAST(substr(substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) || '00', 1, 3) AS INTEGER) ELSE 0 END - (CASE WHEN \"joined\" GLOB '*Z' THEN 0 ELSE (CASE substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END, 1) WHEN '-' THEN -1 ELSE 1 END) * (CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) AS INTEGER) * 60 + CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) AS INTEGER)) END) * 60000 END) < ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > binds %j, outside the one grammar, as NULL, so the comparison is unknown",
+      "id": "sql.compile.dialects-instants.sqlite-outside-the-grammar-x22-wedx2c-01-jan-2020-00x3a-00x3a-00-gmtx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "joined",
+          "kind": "reference"
+        },
+        "op": "lt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "Wed, 01 Jan 2020 00:00:00 GMT"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "null"
+          }
+        ],
+        "sql": "((CASE WHEN instr(CAST(\"joined\" AS BLOB), x'00') = 0 AND \"joined\" GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]*' AND (substr(\"joined\", 20) = 'Z' OR substr(\"joined\", 20) GLOB '[+-][0-9][0-9]:[0-9][0-9]' OR (substr(\"joined\", 20, 1) = '.' AND (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END) > 0 AND substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) NOT GLOB '*[^0-9]*' AND (\"joined\" GLOB '*Z' OR \"joined\" GLOB '*[+-][0-9][0-9]:[0-9][0-9]'))) AND strftime('%Y-%m-%d', substr(\"joined\", 1, 19)) = substr(\"joined\", 1, 10) AND strftime('%s', substr(\"joined\", 1, 19)) IS NOT NULL AND substr(\"joined\", 12, 2) < '24' AND (\"joined\" GLOB '*Z' OR (substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) <= '23' AND substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) <= '59')) THEN CAST(strftime('%s', substr(\"joined\", 1, 19)) AS INTEGER) * 1000 + CASE WHEN substr(\"joined\", 20, 1) = '.' THEN CAST(substr(substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) || '00', 1, 3) AS INTEGER) ELSE 0 END - (CASE WHEN \"joined\" GLOB '*Z' THEN 0 ELSE (CASE substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END, 1) WHEN '-' THEN -1 ELSE 1 END) * (CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) AS INTEGER) * 60 + CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) AS INTEGER)) END) * 60000 END) < ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > binds %j, outside the one grammar, as NULL, so the comparison is unknown",
+      "id": "sql.compile.dialects-instants.sqlite-outside-the-grammar-x22-2020x2d-02x2d-30t00x3a-00x3a-00zx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "joined",
+          "kind": "reference"
+        },
+        "op": "lt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-02-30T00:00:00Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "null"
+          }
+        ],
+        "sql": "((CASE WHEN instr(CAST(\"joined\" AS BLOB), x'00') = 0 AND \"joined\" GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]*' AND (substr(\"joined\", 20) = 'Z' OR substr(\"joined\", 20) GLOB '[+-][0-9][0-9]:[0-9][0-9]' OR (substr(\"joined\", 20, 1) = '.' AND (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END) > 0 AND substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) NOT GLOB '*[^0-9]*' AND (\"joined\" GLOB '*Z' OR \"joined\" GLOB '*[+-][0-9][0-9]:[0-9][0-9]'))) AND strftime('%Y-%m-%d', substr(\"joined\", 1, 19)) = substr(\"joined\", 1, 10) AND strftime('%s', substr(\"joined\", 1, 19)) IS NOT NULL AND substr(\"joined\", 12, 2) < '24' AND (\"joined\" GLOB '*Z' OR (substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) <= '23' AND substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) <= '59')) THEN CAST(strftime('%s', substr(\"joined\", 1, 19)) AS INTEGER) * 1000 + CASE WHEN substr(\"joined\", 20, 1) = '.' THEN CAST(substr(substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) || '00', 1, 3) AS INTEGER) ELSE 0 END - (CASE WHEN \"joined\" GLOB '*Z' THEN 0 ELSE (CASE substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END, 1) WHEN '-' THEN -1 ELSE 1 END) * (CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) AS INTEGER) * 60 + CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) AS INTEGER)) END) * 60000 END) < ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > binds %j, outside the one grammar, as NULL, so the comparison is unknown",
+      "id": "sql.compile.dialects-instants.sqlite-outside-the-grammar-x22-2020x2d-01x2d-01t24x3a-00x3a-00zx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "joined",
+          "kind": "reference"
+        },
+        "op": "lt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T24:00:00Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "null"
+          }
+        ],
+        "sql": "((CASE WHEN instr(CAST(\"joined\" AS BLOB), x'00') = 0 AND \"joined\" GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]*' AND (substr(\"joined\", 20) = 'Z' OR substr(\"joined\", 20) GLOB '[+-][0-9][0-9]:[0-9][0-9]' OR (substr(\"joined\", 20, 1) = '.' AND (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END) > 0 AND substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) NOT GLOB '*[^0-9]*' AND (\"joined\" GLOB '*Z' OR \"joined\" GLOB '*[+-][0-9][0-9]:[0-9][0-9]'))) AND strftime('%Y-%m-%d', substr(\"joined\", 1, 19)) = substr(\"joined\", 1, 10) AND strftime('%s', substr(\"joined\", 1, 19)) IS NOT NULL AND substr(\"joined\", 12, 2) < '24' AND (\"joined\" GLOB '*Z' OR (substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) <= '23' AND substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) <= '59')) THEN CAST(strftime('%s', substr(\"joined\", 1, 19)) AS INTEGER) * 1000 + CASE WHEN substr(\"joined\", 20, 1) = '.' THEN CAST(substr(substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) || '00', 1, 3) AS INTEGER) ELSE 0 END - (CASE WHEN \"joined\" GLOB '*Z' THEN 0 ELSE (CASE substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END, 1) WHEN '-' THEN -1 ELSE 1 END) * (CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) AS INTEGER) * 60 + CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) AS INTEGER)) END) * 60000 END) < ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > binds %j, outside the one grammar, as NULL, so the comparison is unknown",
+      "id": "sql.compile.dialects-instants.sqlite-outside-the-grammar-x22-2020x2d-01x2d-01t23x3a-59x3a-60zx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "joined",
+          "kind": "reference"
+        },
+        "op": "lt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T23:59:60Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "null"
+          }
+        ],
+        "sql": "((CASE WHEN instr(CAST(\"joined\" AS BLOB), x'00') = 0 AND \"joined\" GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]*' AND (substr(\"joined\", 20) = 'Z' OR substr(\"joined\", 20) GLOB '[+-][0-9][0-9]:[0-9][0-9]' OR (substr(\"joined\", 20, 1) = '.' AND (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END) > 0 AND substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) NOT GLOB '*[^0-9]*' AND (\"joined\" GLOB '*Z' OR \"joined\" GLOB '*[+-][0-9][0-9]:[0-9][0-9]'))) AND strftime('%Y-%m-%d', substr(\"joined\", 1, 19)) = substr(\"joined\", 1, 10) AND strftime('%s', substr(\"joined\", 1, 19)) IS NOT NULL AND substr(\"joined\", 12, 2) < '24' AND (\"joined\" GLOB '*Z' OR (substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) <= '23' AND substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) <= '59')) THEN CAST(strftime('%s', substr(\"joined\", 1, 19)) AS INTEGER) * 1000 + CASE WHEN substr(\"joined\", 20, 1) = '.' THEN CAST(substr(substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) || '00', 1, 3) AS INTEGER) ELSE 0 END - (CASE WHEN \"joined\" GLOB '*Z' THEN 0 ELSE (CASE substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END, 1) WHEN '-' THEN -1 ELSE 1 END) * (CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) AS INTEGER) * 60 + CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) AS INTEGER)) END) * 60000 END) < ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > binds %j, outside the one grammar, as NULL, so the comparison is unknown",
+      "id": "sql.compile.dialects-instants.sqlite-outside-the-grammar-x22-2020x2d-01x2d-01t00x3a-00x3a-00x2b-24x3a-00x2",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "joined",
+          "kind": "reference"
+        },
+        "op": "lt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00+24:00"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "null"
+          }
+        ],
+        "sql": "((CASE WHEN instr(CAST(\"joined\" AS BLOB), x'00') = 0 AND \"joined\" GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]*' AND (substr(\"joined\", 20) = 'Z' OR substr(\"joined\", 20) GLOB '[+-][0-9][0-9]:[0-9][0-9]' OR (substr(\"joined\", 20, 1) = '.' AND (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END) > 0 AND substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) NOT GLOB '*[^0-9]*' AND (\"joined\" GLOB '*Z' OR \"joined\" GLOB '*[+-][0-9][0-9]:[0-9][0-9]'))) AND strftime('%Y-%m-%d', substr(\"joined\", 1, 19)) = substr(\"joined\", 1, 10) AND strftime('%s', substr(\"joined\", 1, 19)) IS NOT NULL AND substr(\"joined\", 12, 2) < '24' AND (\"joined\" GLOB '*Z' OR (substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) <= '23' AND substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) <= '59')) THEN CAST(strftime('%s', substr(\"joined\", 1, 19)) AS INTEGER) * 1000 + CASE WHEN substr(\"joined\", 20, 1) = '.' THEN CAST(substr(substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) || '00', 1, 3) AS INTEGER) ELSE 0 END - (CASE WHEN \"joined\" GLOB '*Z' THEN 0 ELSE (CASE substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END, 1) WHEN '-' THEN -1 ELSE 1 END) * (CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) AS INTEGER) * 60 + CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) AS INTEGER)) END) * 60000 END) < ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > binds %j, outside the one grammar, as NULL, so the comparison is unknown",
+      "id": "sql.compile.dialects-instants.sqlite-outside-the-grammar-x22-2020x2d-01x2d-01t00x3a-00x3a-00x2b-02x3a-60x2",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "joined",
+          "kind": "reference"
+        },
+        "op": "lt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00+02:60"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "null"
+          }
+        ],
+        "sql": "((CASE WHEN instr(CAST(\"joined\" AS BLOB), x'00') = 0 AND \"joined\" GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]*' AND (substr(\"joined\", 20) = 'Z' OR substr(\"joined\", 20) GLOB '[+-][0-9][0-9]:[0-9][0-9]' OR (substr(\"joined\", 20, 1) = '.' AND (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END) > 0 AND substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) NOT GLOB '*[^0-9]*' AND (\"joined\" GLOB '*Z' OR \"joined\" GLOB '*[+-][0-9][0-9]:[0-9][0-9]'))) AND strftime('%Y-%m-%d', substr(\"joined\", 1, 19)) = substr(\"joined\", 1, 10) AND strftime('%s', substr(\"joined\", 1, 19)) IS NOT NULL AND substr(\"joined\", 12, 2) < '24' AND (\"joined\" GLOB '*Z' OR (substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) <= '23' AND substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) <= '59')) THEN CAST(strftime('%s', substr(\"joined\", 1, 19)) AS INTEGER) * 1000 + CASE WHEN substr(\"joined\", 20, 1) = '.' THEN CAST(substr(substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) || '00', 1, 3) AS INTEGER) ELSE 0 END - (CASE WHEN \"joined\" GLOB '*Z' THEN 0 ELSE (CASE substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END, 1) WHEN '-' THEN -1 ELSE 1 END) * (CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) AS INTEGER) * 60 + CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) AS INTEGER)) END) * 60000 END) < ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > binds %j, outside the one grammar, as NULL, so the comparison is unknown",
+      "id": "sql.compile.dialects-instants.sqlite-outside-the-grammar-x22-2020x2d-01x2d-01t00x3a-00x3a-00x2d-23x3a-60x2",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "joined",
+          "kind": "reference"
+        },
+        "op": "lt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00-23:60"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "null"
+          }
+        ],
+        "sql": "((CASE WHEN instr(CAST(\"joined\" AS BLOB), x'00') = 0 AND \"joined\" GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]*' AND (substr(\"joined\", 20) = 'Z' OR substr(\"joined\", 20) GLOB '[+-][0-9][0-9]:[0-9][0-9]' OR (substr(\"joined\", 20, 1) = '.' AND (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END) > 0 AND substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) NOT GLOB '*[^0-9]*' AND (\"joined\" GLOB '*Z' OR \"joined\" GLOB '*[+-][0-9][0-9]:[0-9][0-9]'))) AND strftime('%Y-%m-%d', substr(\"joined\", 1, 19)) = substr(\"joined\", 1, 10) AND strftime('%s', substr(\"joined\", 1, 19)) IS NOT NULL AND substr(\"joined\", 12, 2) < '24' AND (\"joined\" GLOB '*Z' OR (substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) <= '23' AND substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) <= '59')) THEN CAST(strftime('%s', substr(\"joined\", 1, 19)) AS INTEGER) * 1000 + CASE WHEN substr(\"joined\", 20, 1) = '.' THEN CAST(substr(substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) || '00', 1, 3) AS INTEGER) ELSE 0 END - (CASE WHEN \"joined\" GLOB '*Z' THEN 0 ELSE (CASE substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END, 1) WHEN '-' THEN -1 ELSE 1 END) * (CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) AS INTEGER) * 60 + CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) AS INTEGER)) END) * 60000 END) < ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > binds %j, outside the one grammar, as NULL, so the comparison is unknown",
+      "id": "sql.compile.dialects-instants.sqlite-outside-the-grammar-x22-2020x2d-01x2d-01t00x3a-60x3a-00zx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "joined",
+          "kind": "reference"
+        },
+        "op": "lt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:60:00Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "null"
+          }
+        ],
+        "sql": "((CASE WHEN instr(CAST(\"joined\" AS BLOB), x'00') = 0 AND \"joined\" GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]*' AND (substr(\"joined\", 20) = 'Z' OR substr(\"joined\", 20) GLOB '[+-][0-9][0-9]:[0-9][0-9]' OR (substr(\"joined\", 20, 1) = '.' AND (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END) > 0 AND substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) NOT GLOB '*[^0-9]*' AND (\"joined\" GLOB '*Z' OR \"joined\" GLOB '*[+-][0-9][0-9]:[0-9][0-9]'))) AND strftime('%Y-%m-%d', substr(\"joined\", 1, 19)) = substr(\"joined\", 1, 10) AND strftime('%s', substr(\"joined\", 1, 19)) IS NOT NULL AND substr(\"joined\", 12, 2) < '24' AND (\"joined\" GLOB '*Z' OR (substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) <= '23' AND substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) <= '59')) THEN CAST(strftime('%s', substr(\"joined\", 1, 19)) AS INTEGER) * 1000 + CASE WHEN substr(\"joined\", 20, 1) = '.' THEN CAST(substr(substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) || '00', 1, 3) AS INTEGER) ELSE 0 END - (CASE WHEN \"joined\" GLOB '*Z' THEN 0 ELSE (CASE substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END, 1) WHEN '-' THEN -1 ELSE 1 END) * (CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) AS INTEGER) * 60 + CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) AS INTEGER)) END) * 60000 END) < ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > binds %j, outside the one grammar, as NULL, so the comparison is unknown",
+      "id": "sql.compile.dialects-instants.sqlite-outside-the-grammar-x22-2020x2d-01x2d-01t25x3a-00x3a-00zx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "joined",
+          "kind": "reference"
+        },
+        "op": "lt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T25:00:00Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "null"
+          }
+        ],
+        "sql": "((CASE WHEN instr(CAST(\"joined\" AS BLOB), x'00') = 0 AND \"joined\" GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]*' AND (substr(\"joined\", 20) = 'Z' OR substr(\"joined\", 20) GLOB '[+-][0-9][0-9]:[0-9][0-9]' OR (substr(\"joined\", 20, 1) = '.' AND (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END) > 0 AND substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) NOT GLOB '*[^0-9]*' AND (\"joined\" GLOB '*Z' OR \"joined\" GLOB '*[+-][0-9][0-9]:[0-9][0-9]'))) AND strftime('%Y-%m-%d', substr(\"joined\", 1, 19)) = substr(\"joined\", 1, 10) AND strftime('%s', substr(\"joined\", 1, 19)) IS NOT NULL AND substr(\"joined\", 12, 2) < '24' AND (\"joined\" GLOB '*Z' OR (substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) <= '23' AND substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) <= '59')) THEN CAST(strftime('%s', substr(\"joined\", 1, 19)) AS INTEGER) * 1000 + CASE WHEN substr(\"joined\", 20, 1) = '.' THEN CAST(substr(substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) || '00', 1, 3) AS INTEGER) ELSE 0 END - (CASE WHEN \"joined\" GLOB '*Z' THEN 0 ELSE (CASE substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END, 1) WHEN '-' THEN -1 ELSE 1 END) * (CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) AS INTEGER) * 60 + CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) AS INTEGER)) END) * 60000 END) < ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > binds %j, outside the one grammar, as NULL, so the comparison is unknown",
+      "id": "sql.compile.dialects-instants.sqlite-outside-the-grammar-x22-2020x2d-13x2d-01t00x3a-00x3a-00zx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "joined",
+          "kind": "reference"
+        },
+        "op": "lt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-13-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "null"
+          }
+        ],
+        "sql": "((CASE WHEN instr(CAST(\"joined\" AS BLOB), x'00') = 0 AND \"joined\" GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]*' AND (substr(\"joined\", 20) = 'Z' OR substr(\"joined\", 20) GLOB '[+-][0-9][0-9]:[0-9][0-9]' OR (substr(\"joined\", 20, 1) = '.' AND (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END) > 0 AND substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) NOT GLOB '*[^0-9]*' AND (\"joined\" GLOB '*Z' OR \"joined\" GLOB '*[+-][0-9][0-9]:[0-9][0-9]'))) AND strftime('%Y-%m-%d', substr(\"joined\", 1, 19)) = substr(\"joined\", 1, 10) AND strftime('%s', substr(\"joined\", 1, 19)) IS NOT NULL AND substr(\"joined\", 12, 2) < '24' AND (\"joined\" GLOB '*Z' OR (substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) <= '23' AND substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) <= '59')) THEN CAST(strftime('%s', substr(\"joined\", 1, 19)) AS INTEGER) * 1000 + CASE WHEN substr(\"joined\", 20, 1) = '.' THEN CAST(substr(substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) || '00', 1, 3) AS INTEGER) ELSE 0 END - (CASE WHEN \"joined\" GLOB '*Z' THEN 0 ELSE (CASE substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END, 1) WHEN '-' THEN -1 ELSE 1 END) * (CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) AS INTEGER) * 60 + CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) AS INTEGER)) END) * 60000 END) < ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > binds %j, outside the one grammar, as NULL, so the comparison is unknown",
+      "id": "sql.compile.dialects-instants.sqlite-outside-the-grammar-x22-2020x2d-00x2d-10t00x3a-00x3a-00zx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "joined",
+          "kind": "reference"
+        },
+        "op": "lt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-00-10T00:00:00Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "null"
+          }
+        ],
+        "sql": "((CASE WHEN instr(CAST(\"joined\" AS BLOB), x'00') = 0 AND \"joined\" GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]*' AND (substr(\"joined\", 20) = 'Z' OR substr(\"joined\", 20) GLOB '[+-][0-9][0-9]:[0-9][0-9]' OR (substr(\"joined\", 20, 1) = '.' AND (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END) > 0 AND substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) NOT GLOB '*[^0-9]*' AND (\"joined\" GLOB '*Z' OR \"joined\" GLOB '*[+-][0-9][0-9]:[0-9][0-9]'))) AND strftime('%Y-%m-%d', substr(\"joined\", 1, 19)) = substr(\"joined\", 1, 10) AND strftime('%s', substr(\"joined\", 1, 19)) IS NOT NULL AND substr(\"joined\", 12, 2) < '24' AND (\"joined\" GLOB '*Z' OR (substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) <= '23' AND substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) <= '59')) THEN CAST(strftime('%s', substr(\"joined\", 1, 19)) AS INTEGER) * 1000 + CASE WHEN substr(\"joined\", 20, 1) = '.' THEN CAST(substr(substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) || '00', 1, 3) AS INTEGER) ELSE 0 END - (CASE WHEN \"joined\" GLOB '*Z' THEN 0 ELSE (CASE substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END, 1) WHEN '-' THEN -1 ELSE 1 END) * (CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) AS INTEGER) * 60 + CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) AS INTEGER)) END) * 60000 END) < ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > binds %j, outside the one grammar, as NULL, so the comparison is unknown",
+      "id": "sql.compile.dialects-instants.sqlite-outside-the-grammar-x22-2020x2d-01x2d-00t00x3a-00x3a-00zx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "joined",
+          "kind": "reference"
+        },
+        "op": "lt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-00T00:00:00Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "null"
+          }
+        ],
+        "sql": "((CASE WHEN instr(CAST(\"joined\" AS BLOB), x'00') = 0 AND \"joined\" GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]*' AND (substr(\"joined\", 20) = 'Z' OR substr(\"joined\", 20) GLOB '[+-][0-9][0-9]:[0-9][0-9]' OR (substr(\"joined\", 20, 1) = '.' AND (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END) > 0 AND substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) NOT GLOB '*[^0-9]*' AND (\"joined\" GLOB '*Z' OR \"joined\" GLOB '*[+-][0-9][0-9]:[0-9][0-9]'))) AND strftime('%Y-%m-%d', substr(\"joined\", 1, 19)) = substr(\"joined\", 1, 10) AND strftime('%s', substr(\"joined\", 1, 19)) IS NOT NULL AND substr(\"joined\", 12, 2) < '24' AND (\"joined\" GLOB '*Z' OR (substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) <= '23' AND substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) <= '59')) THEN CAST(strftime('%s', substr(\"joined\", 1, 19)) AS INTEGER) * 1000 + CASE WHEN substr(\"joined\", 20, 1) = '.' THEN CAST(substr(substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) || '00', 1, 3) AS INTEGER) ELSE 0 END - (CASE WHEN \"joined\" GLOB '*Z' THEN 0 ELSE (CASE substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END, 1) WHEN '-' THEN -1 ELSE 1 END) * (CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) AS INTEGER) * 60 + CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) AS INTEGER)) END) * 60000 END) < ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > binds %j, outside the one grammar, as NULL, so the comparison is unknown",
+      "id": "sql.compile.dialects-instants.sqlite-outside-the-grammar-x22-1900x2d-02x2d-29t00x3a-00x3a-00zx22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "joined",
+          "kind": "reference"
+        },
+        "op": "lt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "1900-02-29T00:00:00Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "null"
+          }
+        ],
+        "sql": "((CASE WHEN instr(CAST(\"joined\" AS BLOB), x'00') = 0 AND \"joined\" GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]*' AND (substr(\"joined\", 20) = 'Z' OR substr(\"joined\", 20) GLOB '[+-][0-9][0-9]:[0-9][0-9]' OR (substr(\"joined\", 20, 1) = '.' AND (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END) > 0 AND substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) NOT GLOB '*[^0-9]*' AND (\"joined\" GLOB '*Z' OR \"joined\" GLOB '*[+-][0-9][0-9]:[0-9][0-9]'))) AND strftime('%Y-%m-%d', substr(\"joined\", 1, 19)) = substr(\"joined\", 1, 10) AND strftime('%s', substr(\"joined\", 1, 19)) IS NOT NULL AND substr(\"joined\", 12, 2) < '24' AND (\"joined\" GLOB '*Z' OR (substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) <= '23' AND substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) <= '59')) THEN CAST(strftime('%s', substr(\"joined\", 1, 19)) AS INTEGER) * 1000 + CASE WHEN substr(\"joined\", 20, 1) = '.' THEN CAST(substr(substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) || '00', 1, 3) AS INTEGER) ELSE 0 END - (CASE WHEN \"joined\" GLOB '*Z' THEN 0 ELSE (CASE substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END, 1) WHEN '-' THEN -1 ELSE 1 END) * (CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) AS INTEGER) * 60 + CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) AS INTEGER)) END) * 60000 END) < ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > binds %j, outside the one grammar, as NULL, so the comparison is unknown",
+      "id": "sql.compile.dialects-instants.sqlite-outside-the-grammar-x22-2020x2d-01x2d-01t00x3a-00x3a-00z-x22",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "joined",
+          "kind": "reference"
+        },
+        "op": "lt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00Z "
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 1577836800999
+          }
+        ],
+        "sql": "((CASE WHEN instr(CAST(\"joined\" AS BLOB), x'00') = 0 AND \"joined\" GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]*' AND (substr(\"joined\", 20) = 'Z' OR substr(\"joined\", 20) GLOB '[+-][0-9][0-9]:[0-9][0-9]' OR (substr(\"joined\", 20, 1) = '.' AND (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END) > 0 AND substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) NOT GLOB '*[^0-9]*' AND (\"joined\" GLOB '*Z' OR \"joined\" GLOB '*[+-][0-9][0-9]:[0-9][0-9]'))) AND strftime('%Y-%m-%d', substr(\"joined\", 1, 19)) = substr(\"joined\", 1, 10) AND strftime('%s', substr(\"joined\", 1, 19)) IS NOT NULL AND substr(\"joined\", 12, 2) < '24' AND (\"joined\" GLOB '*Z' OR (substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) <= '23' AND substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) <= '59')) THEN CAST(strftime('%s', substr(\"joined\", 1, 19)) AS INTEGER) * 1000 + CASE WHEN substr(\"joined\", 20, 1) = '.' THEN CAST(substr(substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) || '00', 1, 3) AS INTEGER) ELSE 0 END - (CASE WHEN \"joined\" GLOB '*Z' THEN 0 ELSE (CASE substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END, 1) WHEN '-' THEN -1 ELSE 1 END) * (CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) AS INTEGER) * 60 + CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) AS INTEGER)) END) * 60000 END) = ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > truncates a fraction to the millisecond, as the evaluator does",
+      "id": "sql.compile.dialects-instants.sqlite-truncates-2020x2d-01x2d-01t00x3a-00x3a-00x2e-9996z",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "joined",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00.9996Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 1577836800500
+          }
+        ],
+        "sql": "((CASE WHEN instr(CAST(\"joined\" AS BLOB), x'00') = 0 AND \"joined\" GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]*' AND (substr(\"joined\", 20) = 'Z' OR substr(\"joined\", 20) GLOB '[+-][0-9][0-9]:[0-9][0-9]' OR (substr(\"joined\", 20, 1) = '.' AND (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END) > 0 AND substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) NOT GLOB '*[^0-9]*' AND (\"joined\" GLOB '*Z' OR \"joined\" GLOB '*[+-][0-9][0-9]:[0-9][0-9]'))) AND strftime('%Y-%m-%d', substr(\"joined\", 1, 19)) = substr(\"joined\", 1, 10) AND strftime('%s', substr(\"joined\", 1, 19)) IS NOT NULL AND substr(\"joined\", 12, 2) < '24' AND (\"joined\" GLOB '*Z' OR (substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) <= '23' AND substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) <= '59')) THEN CAST(strftime('%s', substr(\"joined\", 1, 19)) AS INTEGER) * 1000 + CASE WHEN substr(\"joined\", 20, 1) = '.' THEN CAST(substr(substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) || '00', 1, 3) AS INTEGER) ELSE 0 END - (CASE WHEN \"joined\" GLOB '*Z' THEN 0 ELSE (CASE substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END, 1) WHEN '-' THEN -1 ELSE 1 END) * (CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) AS INTEGER) * 60 + CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) AS INTEGER)) END) * 60000 END) = ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > truncates a fraction to the millisecond, as the evaluator does",
+      "id": "sql.compile.dialects-instants.sqlite-truncates-2020x2d-01x2d-01t00x3a-00x3a-00x2e-5z",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "joined",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00.5Z"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 1577836800000
+          }
+        ],
+        "sql": "(? < (CASE WHEN instr(CAST(\"note\" AS BLOB), x'00') = 0 AND \"note\" GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]*' AND (substr(\"note\", 20) = 'Z' OR substr(\"note\", 20) GLOB '[+-][0-9][0-9]:[0-9][0-9]' OR (substr(\"note\", 20, 1) = '.' AND (length(\"note\") - 20 - CASE WHEN \"note\" GLOB '*Z' THEN 1 ELSE 6 END) > 0 AND substr(\"note\", 21, (length(\"note\") - 20 - CASE WHEN \"note\" GLOB '*Z' THEN 1 ELSE 6 END)) NOT GLOB '*[^0-9]*' AND (\"note\" GLOB '*Z' OR \"note\" GLOB '*[+-][0-9][0-9]:[0-9][0-9]'))) AND strftime('%Y-%m-%d', substr(\"note\", 1, 19)) = substr(\"note\", 1, 10) AND strftime('%s', substr(\"note\", 1, 19)) IS NOT NULL AND substr(\"note\", 12, 2) < '24' AND (\"note\" GLOB '*Z' OR (substr(\"note\", CASE WHEN \"note\" GLOB '*Z' THEN length(\"note\") ELSE length(\"note\") - 5 END + 1, 2) <= '23' AND substr(\"note\", CASE WHEN \"note\" GLOB '*Z' THEN length(\"note\") ELSE length(\"note\") - 5 END + 4, 2) <= '59')) THEN CAST(strftime('%s', substr(\"note\", 1, 19)) AS INTEGER) * 1000 + CASE WHEN substr(\"note\", 20, 1) = '.' THEN CAST(substr(substr(\"note\", 21, (length(\"note\") - 20 - CASE WHEN \"note\" GLOB '*Z' THEN 1 ELSE 6 END)) || '00', 1, 3) AS INTEGER) ELSE 0 END - (CASE WHEN \"note\" GLOB '*Z' THEN 0 ELSE (CASE substr(\"note\", CASE WHEN \"note\" GLOB '*Z' THEN length(\"note\") ELSE length(\"note\") - 5 END, 1) WHEN '-' THEN -1 ELSE 1 END) * (CAST(substr(\"note\", CASE WHEN \"note\" GLOB '*Z' THEN length(\"note\") ELSE length(\"note\") - 5 END + 1, 2) AS INTEGER) * 60 + CAST(substr(\"note\", CASE WHEN \"note\" GLOB '*Z' THEN length(\"note\") ELSE length(\"note\") - 5 END + 4, 2) AS INTEGER)) END) * 60000 END))"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > compares as instants when the literal is on the left, and against a column with no declared kind",
+      "id": "sql.compile.dialects-instants.sqlite-literal-on-the-left-against-an-undeclared-column",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00Z"
+        },
+        "op": "lt",
+        "right": {
+          "key": "note",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 1577836800000
+          },
+          {
+            "type": "number",
+            "value": 1609455600000
+          }
+        ],
+        "sql": "((CASE WHEN instr(CAST(\"joined\" AS BLOB), x'00') = 0 AND \"joined\" GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]*' AND (substr(\"joined\", 20) = 'Z' OR substr(\"joined\", 20) GLOB '[+-][0-9][0-9]:[0-9][0-9]' OR (substr(\"joined\", 20, 1) = '.' AND (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END) > 0 AND substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) NOT GLOB '*[^0-9]*' AND (\"joined\" GLOB '*Z' OR \"joined\" GLOB '*[+-][0-9][0-9]:[0-9][0-9]'))) AND strftime('%Y-%m-%d', substr(\"joined\", 1, 19)) = substr(\"joined\", 1, 10) AND strftime('%s', substr(\"joined\", 1, 19)) IS NOT NULL AND substr(\"joined\", 12, 2) < '24' AND (\"joined\" GLOB '*Z' OR (substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) <= '23' AND substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) <= '59')) THEN CAST(strftime('%s', substr(\"joined\", 1, 19)) AS INTEGER) * 1000 + CASE WHEN substr(\"joined\", 20, 1) = '.' THEN CAST(substr(substr(\"joined\", 21, (length(\"joined\") - 20 - CASE WHEN \"joined\" GLOB '*Z' THEN 1 ELSE 6 END)) || '00', 1, 3) AS INTEGER) ELSE 0 END - (CASE WHEN \"joined\" GLOB '*Z' THEN 0 ELSE (CASE substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END, 1) WHEN '-' THEN -1 ELSE 1 END) * (CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 1, 2) AS INTEGER) * 60 + CAST(substr(\"joined\", CASE WHEN \"joined\" GLOB '*Z' THEN length(\"joined\") ELSE length(\"joined\") - 5 END + 4, 2) AS INTEGER)) END) * 60000 END) IN (?, ?))"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > compares every operand of a membership as an instant",
+      "id": "sql.compile.dialects-instants.sqlite-membership-of-instants",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "candidates": [
+          {
+            "kind": "instantLiteral",
+            "value": "2020-01-01T00:00:00Z"
+          },
+          {
+            "kind": "instantLiteral",
+            "value": "2021-01-01T00:00:00+01:00"
+          }
+        ],
+        "kind": "memberOf",
+        "op": "in",
+        "operand": {
+          "key": "joined",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 18
+          }
+        ],
+        "sql": "(\"age\" > ?)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > leaves a comparison that has no instant operand as it was",
+      "id": "sql.compile.dialects-instants.sqlite-comparison-with-no-instant",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 18
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "timestamp",
+            "value": "2020-01-01T00:00:00+02:00"
+          }
+        ],
+        "sql": "(\"joined\" >= $1::timestamptz)"
+      },
+      "from": "compile.dialects.unit.test.ts: the sqlite dialect > leaves an instant as the text it is under PostgreSQL, which compares points in time itself",
+      "id": "sql.compile.dialects-instants.postgres-leaves-an-instant-as-text",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "joined",
+          "kind": "reference"
+        },
+        "op": "gte",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00+02:00"
+        }
+      }
+    }
+  ]
+}

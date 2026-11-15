@@ -1,0 +1,5806 @@
+{
+  "cases": [
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "half"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (eq against 0.5 under postgres)",
+      "id": "sql.execute.numbers.postgres-eq-against-0x2e-5",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0.5
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "one",
+          "sextillion",
+          "two-to-53-plus-2"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (gt against 0.5 under postgres)",
+      "id": "sql.execute.numbers.postgres-gt-against-0x2e-5",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0.5
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "tenth",
+          "tiny",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (lt against 0.5 under postgres)",
+      "id": "sql.execute.numbers.postgres-lt-against-0x2e-5",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0.5
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (neq against 0.5 under postgres)",
+      "id": "sql.execute.numbers.postgres-neq-against-0x2e-5",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0.5
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "half",
+          "one"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (in 0.5 under postgres)",
+      "id": "sql.execute.numbers.postgres-in-0x2e-5",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "numberLiteral",
+              "value": 0.5
+            },
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "value",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "minus-one-and-a-half"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (eq against -1.5 under postgres)",
+      "id": "sql.execute.numbers.postgres-eq-against-x2d-1x2e-5",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": -1.5
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "half",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (gt against -1.5 under postgres)",
+      "id": "sql.execute.numbers.postgres-gt-against-x2d-1x2e-5",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": -1.5
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "minus-sextillion",
+          "minus-two-to-53-minus-2"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (lt against -1.5 under postgres)",
+      "id": "sql.execute.numbers.postgres-lt-against-x2d-1x2e-5",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": -1.5
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (neq against -1.5 under postgres)",
+      "id": "sql.execute.numbers.postgres-neq-against-x2d-1x2e-5",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": -1.5
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "minus-one-and-a-half",
+          "one"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (in -1.5 under postgres)",
+      "id": "sql.execute.numbers.postgres-in-x2d-1x2e-5",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "numberLiteral",
+              "value": -1.5
+            },
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "value",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "tenth"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (eq against 0.1 under postgres)",
+      "id": "sql.execute.numbers.postgres-eq-against-0x2e-1",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0.1
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "half",
+          "one",
+          "sextillion",
+          "two-to-53-plus-2"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (gt against 0.1 under postgres)",
+      "id": "sql.execute.numbers.postgres-gt-against-0x2e-1",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0.1
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "tiny",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (lt against 0.1 under postgres)",
+      "id": "sql.execute.numbers.postgres-lt-against-0x2e-1",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0.1
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "one",
+          "sextillion",
+          "tiny",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (neq against 0.1 under postgres)",
+      "id": "sql.execute.numbers.postgres-neq-against-0x2e-1",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0.1
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "one",
+          "tenth"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (in 0.1 under postgres)",
+      "id": "sql.execute.numbers.postgres-in-0x2e-1",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "numberLiteral",
+              "value": 0.1
+            },
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "value",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (eq against 0 under postgres)",
+      "id": "sql.execute.numbers.postgres-eq-against-0",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "half",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (gt against 0 under postgres)",
+      "id": "sql.execute.numbers.postgres-gt-against-0",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (lt against 0 under postgres)",
+      "id": "sql.execute.numbers.postgres-lt-against-0",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (neq against 0 under postgres)",
+      "id": "sql.execute.numbers.postgres-neq-against-0",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "one",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (in 0 under postgres)",
+      "id": "sql.execute.numbers.postgres-in-0",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "numberLiteral",
+              "value": 0
+            },
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "value",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (eq against negative zero under postgres)",
+      "id": "sql.execute.numbers.postgres-eq-against-negative-zero",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "-0"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "half",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (gt against negative zero under postgres)",
+      "id": "sql.execute.numbers.postgres-gt-against-negative-zero",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "-0"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (lt against negative zero under postgres)",
+      "id": "sql.execute.numbers.postgres-lt-against-negative-zero",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "-0"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (neq against negative zero under postgres)",
+      "id": "sql.execute.numbers.postgres-neq-against-negative-zero",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "-0"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "one",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (in negative zero under postgres)",
+      "id": "sql.execute.numbers.postgres-in-negative-zero",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "numberLiteral",
+              "value": {
+                "$number": "-0"
+              }
+            },
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "value",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "one"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (eq against 1 under postgres)",
+      "id": "sql.execute.numbers.postgres-eq-against-1",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "sextillion",
+          "two-to-53-plus-2"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (gt against 1 under postgres)",
+      "id": "sql.execute.numbers.postgres-gt-against-1",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "tenth",
+          "tiny",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (lt against 1 under postgres)",
+      "id": "sql.execute.numbers.postgres-lt-against-1",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (neq against 1 under postgres)",
+      "id": "sql.execute.numbers.postgres-neq-against-1",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "one"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (in 1 under postgres)",
+      "id": "sql.execute.numbers.postgres-in-1",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            },
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "value",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "two-to-53-plus-2"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (eq against 9007199254740994 under postgres)",
+      "id": "sql.execute.numbers.postgres-eq-against-9007199254740994",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 9007199254740994
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "sextillion"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (gt against 9007199254740994 under postgres)",
+      "id": "sql.execute.numbers.postgres-gt-against-9007199254740994",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 9007199254740994
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "one",
+          "tenth",
+          "tiny",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (lt against 9007199254740994 under postgres)",
+      "id": "sql.execute.numbers.postgres-lt-against-9007199254740994",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 9007199254740994
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (neq against 9007199254740994 under postgres)",
+      "id": "sql.execute.numbers.postgres-neq-against-9007199254740994",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 9007199254740994
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "one",
+          "two-to-53-plus-2"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (in 9007199254740994 under postgres)",
+      "id": "sql.execute.numbers.postgres-in-9007199254740994",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "numberLiteral",
+              "value": 9007199254740994
+            },
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "value",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "minus-two-to-53-minus-2"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (eq against -9007199254740994 under postgres)",
+      "id": "sql.execute.numbers.postgres-eq-against-x2d-9007199254740994",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": -9007199254740994
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (gt against -9007199254740994 under postgres)",
+      "id": "sql.execute.numbers.postgres-gt-against-x2d-9007199254740994",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": -9007199254740994
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "minus-sextillion"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (lt against -9007199254740994 under postgres)",
+      "id": "sql.execute.numbers.postgres-lt-against-x2d-9007199254740994",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": -9007199254740994
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (neq against -9007199254740994 under postgres)",
+      "id": "sql.execute.numbers.postgres-neq-against-x2d-9007199254740994",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": -9007199254740994
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "minus-two-to-53-minus-2",
+          "one"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (in -9007199254740994 under postgres)",
+      "id": "sql.execute.numbers.postgres-in-x2d-9007199254740994",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "numberLiteral",
+              "value": -9007199254740994
+            },
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "value",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "sextillion"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (eq against 1e+21 under postgres)",
+      "id": "sql.execute.numbers.postgres-eq-against-1ex2b-21",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1e+21
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": []
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (gt against 1e+21 under postgres)",
+      "id": "sql.execute.numbers.postgres-gt-against-1ex2b-21",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1e+21
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "one",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (lt against 1e+21 under postgres)",
+      "id": "sql.execute.numbers.postgres-lt-against-1ex2b-21",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1e+21
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "one",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (neq against 1e+21 under postgres)",
+      "id": "sql.execute.numbers.postgres-neq-against-1ex2b-21",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1e+21
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "one",
+          "sextillion"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (in 1e+21 under postgres)",
+      "id": "sql.execute.numbers.postgres-in-1ex2b-21",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "numberLiteral",
+              "value": 1e+21
+            },
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "value",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "minus-sextillion"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (eq against -1e+21 under postgres)",
+      "id": "sql.execute.numbers.postgres-eq-against-x2d-1ex2b-21",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": -1e+21
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-two-to-53-minus-2",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (gt against -1e+21 under postgres)",
+      "id": "sql.execute.numbers.postgres-gt-against-x2d-1ex2b-21",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": -1e+21
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": []
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (lt against -1e+21 under postgres)",
+      "id": "sql.execute.numbers.postgres-lt-against-x2d-1ex2b-21",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": -1e+21
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-two-to-53-minus-2",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (neq against -1e+21 under postgres)",
+      "id": "sql.execute.numbers.postgres-neq-against-x2d-1ex2b-21",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": -1e+21
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "minus-sextillion",
+          "one"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (in -1e+21 under postgres)",
+      "id": "sql.execute.numbers.postgres-in-x2d-1ex2b-21",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "numberLiteral",
+              "value": -1e+21
+            },
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "value",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "tiny"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (eq against 1e-7 under postgres)",
+      "id": "sql.execute.numbers.postgres-eq-against-1ex2d-7",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1e-7
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "half",
+          "one",
+          "sextillion",
+          "tenth",
+          "two-to-53-plus-2"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (gt against 1e-7 under postgres)",
+      "id": "sql.execute.numbers.postgres-gt-against-1ex2d-7",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1e-7
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (lt against 1e-7 under postgres)",
+      "id": "sql.execute.numbers.postgres-lt-against-1ex2d-7",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1e-7
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "one",
+          "sextillion",
+          "tenth",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (neq against 1e-7 under postgres)",
+      "id": "sql.execute.numbers.postgres-neq-against-1ex2d-7",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1e-7
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "one",
+          "tiny"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (in 1e-7 under postgres)",
+      "id": "sql.execute.numbers.postgres-in-1ex2d-7",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "numberLiteral",
+              "value": 1e-7
+            },
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "value",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": []
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (eq against Infinity under postgres)",
+      "id": "sql.execute.numbers.postgres-eq-against-infinity",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "Infinity"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": []
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (gt against Infinity under postgres)",
+      "id": "sql.execute.numbers.postgres-gt-against-infinity",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "Infinity"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (lt against Infinity under postgres)",
+      "id": "sql.execute.numbers.postgres-lt-against-infinity",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "Infinity"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (neq against Infinity under postgres)",
+      "id": "sql.execute.numbers.postgres-neq-against-infinity",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "Infinity"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "one"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (in Infinity under postgres)",
+      "id": "sql.execute.numbers.postgres-in-infinity",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "numberLiteral",
+              "value": {
+                "$number": "Infinity"
+              }
+            },
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "value",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": []
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (eq against -Infinity under postgres)",
+      "id": "sql.execute.numbers.postgres-eq-against-x2d-infinity",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "-Infinity"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (gt against -Infinity under postgres)",
+      "id": "sql.execute.numbers.postgres-gt-against-x2d-infinity",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "-Infinity"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": []
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (lt against -Infinity under postgres)",
+      "id": "sql.execute.numbers.postgres-lt-against-x2d-infinity",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "-Infinity"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (neq against -Infinity under postgres)",
+      "id": "sql.execute.numbers.postgres-neq-against-x2d-infinity",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "-Infinity"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "one"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (in -Infinity under postgres)",
+      "id": "sql.execute.numbers.postgres-in-x2d-infinity",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "numberLiteral",
+              "value": {
+                "$number": "-Infinity"
+              }
+            },
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "value",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": []
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (eq against 9007199254740992 under postgres)",
+      "id": "sql.execute.numbers.postgres-eq-against-9007199254740992",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 9007199254740992
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "sextillion",
+          "two-to-53-plus-2"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (gt against 9007199254740992 under postgres)",
+      "id": "sql.execute.numbers.postgres-gt-against-9007199254740992",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 9007199254740992
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "one",
+          "tenth",
+          "tiny",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (lt against 9007199254740992 under postgres)",
+      "id": "sql.execute.numbers.postgres-lt-against-9007199254740992",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 9007199254740992
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (neq against 9007199254740992 under postgres)",
+      "id": "sql.execute.numbers.postgres-neq-against-9007199254740992",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 9007199254740992
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "one"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (in 9007199254740992 under postgres)",
+      "id": "sql.execute.numbers.postgres-in-9007199254740992",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "numberLiteral",
+              "value": 9007199254740992
+            },
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "value",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": []
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (eq against 5e-324 under postgres)",
+      "id": "sql.execute.numbers.postgres-eq-against-5ex2d-324",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 5e-324
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "half",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (gt against 5e-324 under postgres)",
+      "id": "sql.execute.numbers.postgres-gt-against-5ex2d-324",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 5e-324
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (lt against 5e-324 under postgres)",
+      "id": "sql.execute.numbers.postgres-lt-against-5ex2d-324",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 5e-324
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (neq against 5e-324 under postgres)",
+      "id": "sql.execute.numbers.postgres-neq-against-5ex2d-324",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 5e-324
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "one"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (in 5e-324 under postgres)",
+      "id": "sql.execute.numbers.postgres-in-5ex2d-324",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "numberLiteral",
+              "value": 5e-324
+            },
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "value",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "half"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (eq against 0.5 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-eq-against-0x2e-5",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0.5
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "one",
+          "sextillion",
+          "two-to-53-plus-2"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (gt against 0.5 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-gt-against-0x2e-5",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0.5
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "tenth",
+          "tiny",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (lt against 0.5 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-lt-against-0x2e-5",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0.5
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (neq against 0.5 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-neq-against-0x2e-5",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0.5
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "half",
+          "one"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (in 0.5 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-in-0x2e-5",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "numberLiteral",
+              "value": 0.5
+            },
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "value",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "minus-one-and-a-half"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (eq against -1.5 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-eq-against-x2d-1x2e-5",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": -1.5
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "half",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (gt against -1.5 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-gt-against-x2d-1x2e-5",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": -1.5
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "minus-sextillion",
+          "minus-two-to-53-minus-2"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (lt against -1.5 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-lt-against-x2d-1x2e-5",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": -1.5
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (neq against -1.5 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-neq-against-x2d-1x2e-5",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": -1.5
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "minus-one-and-a-half",
+          "one"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (in -1.5 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-in-x2d-1x2e-5",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "numberLiteral",
+              "value": -1.5
+            },
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "value",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "tenth"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (eq against 0.1 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-eq-against-0x2e-1",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0.1
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "half",
+          "one",
+          "sextillion",
+          "two-to-53-plus-2"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (gt against 0.1 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-gt-against-0x2e-1",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0.1
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "tiny",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (lt against 0.1 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-lt-against-0x2e-1",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0.1
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "one",
+          "sextillion",
+          "tiny",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (neq against 0.1 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-neq-against-0x2e-1",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0.1
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "one",
+          "tenth"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (in 0.1 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-in-0x2e-1",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "numberLiteral",
+              "value": 0.1
+            },
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "value",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (eq against 0 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-eq-against-0",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "half",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (gt against 0 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-gt-against-0",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (lt against 0 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-lt-against-0",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (neq against 0 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-neq-against-0",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "one",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (in 0 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-in-0",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "numberLiteral",
+              "value": 0
+            },
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "value",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (eq against negative zero under sqlite)",
+      "id": "sql.execute.numbers.sqlite-eq-against-negative-zero",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "-0"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "half",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (gt against negative zero under sqlite)",
+      "id": "sql.execute.numbers.sqlite-gt-against-negative-zero",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "-0"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (lt against negative zero under sqlite)",
+      "id": "sql.execute.numbers.sqlite-lt-against-negative-zero",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "-0"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (neq against negative zero under sqlite)",
+      "id": "sql.execute.numbers.sqlite-neq-against-negative-zero",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "-0"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "one",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (in negative zero under sqlite)",
+      "id": "sql.execute.numbers.sqlite-in-negative-zero",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "numberLiteral",
+              "value": {
+                "$number": "-0"
+              }
+            },
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "value",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "one"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (eq against 1 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-eq-against-1",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "sextillion",
+          "two-to-53-plus-2"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (gt against 1 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-gt-against-1",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "tenth",
+          "tiny",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (lt against 1 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-lt-against-1",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (neq against 1 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-neq-against-1",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "one"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (in 1 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-in-1",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            },
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "value",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "two-to-53-plus-2"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (eq against 9007199254740994 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-eq-against-9007199254740994",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 9007199254740994
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "sextillion"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (gt against 9007199254740994 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-gt-against-9007199254740994",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 9007199254740994
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "one",
+          "tenth",
+          "tiny",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (lt against 9007199254740994 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-lt-against-9007199254740994",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 9007199254740994
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (neq against 9007199254740994 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-neq-against-9007199254740994",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 9007199254740994
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "one",
+          "two-to-53-plus-2"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (in 9007199254740994 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-in-9007199254740994",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "numberLiteral",
+              "value": 9007199254740994
+            },
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "value",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "minus-two-to-53-minus-2"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (eq against -9007199254740994 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-eq-against-x2d-9007199254740994",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": -9007199254740994
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (gt against -9007199254740994 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-gt-against-x2d-9007199254740994",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": -9007199254740994
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "minus-sextillion"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (lt against -9007199254740994 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-lt-against-x2d-9007199254740994",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": -9007199254740994
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (neq against -9007199254740994 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-neq-against-x2d-9007199254740994",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": -9007199254740994
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "minus-two-to-53-minus-2",
+          "one"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (in -9007199254740994 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-in-x2d-9007199254740994",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "numberLiteral",
+              "value": -9007199254740994
+            },
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "value",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "sextillion"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (eq against 1e+21 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-eq-against-1ex2b-21",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1e+21
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": []
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (gt against 1e+21 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-gt-against-1ex2b-21",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1e+21
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "one",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (lt against 1e+21 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-lt-against-1ex2b-21",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1e+21
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "one",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (neq against 1e+21 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-neq-against-1ex2b-21",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1e+21
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "one",
+          "sextillion"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (in 1e+21 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-in-1ex2b-21",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "numberLiteral",
+              "value": 1e+21
+            },
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "value",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "minus-sextillion"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (eq against -1e+21 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-eq-against-x2d-1ex2b-21",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": -1e+21
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-two-to-53-minus-2",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (gt against -1e+21 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-gt-against-x2d-1ex2b-21",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": -1e+21
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": []
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (lt against -1e+21 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-lt-against-x2d-1ex2b-21",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": -1e+21
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-two-to-53-minus-2",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (neq against -1e+21 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-neq-against-x2d-1ex2b-21",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": -1e+21
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "minus-sextillion",
+          "one"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (in -1e+21 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-in-x2d-1ex2b-21",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "numberLiteral",
+              "value": -1e+21
+            },
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "value",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "tiny"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (eq against 1e-7 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-eq-against-1ex2d-7",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1e-7
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "half",
+          "one",
+          "sextillion",
+          "tenth",
+          "two-to-53-plus-2"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (gt against 1e-7 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-gt-against-1ex2d-7",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1e-7
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (lt against 1e-7 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-lt-against-1ex2d-7",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1e-7
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "one",
+          "sextillion",
+          "tenth",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (neq against 1e-7 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-neq-against-1ex2d-7",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1e-7
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "one",
+          "tiny"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (in 1e-7 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-in-1ex2d-7",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "numberLiteral",
+              "value": 1e-7
+            },
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "value",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": []
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (eq against Infinity under sqlite)",
+      "id": "sql.execute.numbers.sqlite-eq-against-infinity",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "Infinity"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": []
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (gt against Infinity under sqlite)",
+      "id": "sql.execute.numbers.sqlite-gt-against-infinity",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "Infinity"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (lt against Infinity under sqlite)",
+      "id": "sql.execute.numbers.sqlite-lt-against-infinity",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "Infinity"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (neq against Infinity under sqlite)",
+      "id": "sql.execute.numbers.sqlite-neq-against-infinity",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "Infinity"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "one"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (in Infinity under sqlite)",
+      "id": "sql.execute.numbers.sqlite-in-infinity",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "numberLiteral",
+              "value": {
+                "$number": "Infinity"
+              }
+            },
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "value",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": []
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (eq against -Infinity under sqlite)",
+      "id": "sql.execute.numbers.sqlite-eq-against-x2d-infinity",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "-Infinity"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (gt against -Infinity under sqlite)",
+      "id": "sql.execute.numbers.sqlite-gt-against-x2d-infinity",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "-Infinity"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": []
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (lt against -Infinity under sqlite)",
+      "id": "sql.execute.numbers.sqlite-lt-against-x2d-infinity",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "-Infinity"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (neq against -Infinity under sqlite)",
+      "id": "sql.execute.numbers.sqlite-neq-against-x2d-infinity",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": {
+              "$number": "-Infinity"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "one"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (in -Infinity under sqlite)",
+      "id": "sql.execute.numbers.sqlite-in-x2d-infinity",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "numberLiteral",
+              "value": {
+                "$number": "-Infinity"
+              }
+            },
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "value",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": []
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (eq against 9007199254740992 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-eq-against-9007199254740992",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 9007199254740992
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "sextillion",
+          "two-to-53-plus-2"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (gt against 9007199254740992 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-gt-against-9007199254740992",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 9007199254740992
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "one",
+          "tenth",
+          "tiny",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (lt against 9007199254740992 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-lt-against-9007199254740992",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 9007199254740992
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (neq against 9007199254740992 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-neq-against-9007199254740992",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 9007199254740992
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "one"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (in 9007199254740992 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-in-9007199254740992",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "numberLiteral",
+              "value": 9007199254740992
+            },
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "value",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": []
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (eq against 5e-324 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-eq-against-5ex2d-324",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 5e-324
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "half",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (gt against 5e-324 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-gt-against-5ex2d-324",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 5e-324
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (lt against 5e-324 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-lt-against-5ex2d-324",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 5e-324
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "half",
+          "minus-one-and-a-half",
+          "minus-sextillion",
+          "minus-two-to-53-minus-2",
+          "one",
+          "sextillion",
+          "tenth",
+          "tiny",
+          "two-to-53-plus-2",
+          "zero"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (neq against 5e-324 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-neq-against-5ex2d-324",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "value",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 5e-324
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "one"
+        ]
+      },
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (in 5e-324 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-in-5ex2d-324",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "value": {
+              "column": "value",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "numberLiteral",
+              "value": 5e-324
+            },
+            {
+              "kind": "numberLiteral",
+              "value": 1
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "value",
+            "kind": "reference"
+          }
+        }
+      }
+    }
+  ]
+}

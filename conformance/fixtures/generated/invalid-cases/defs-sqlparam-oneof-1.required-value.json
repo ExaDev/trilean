@@ -1,0 +1,38 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "timestamp"
+          }
+        ],
+        "sql": "(\"joined\" >= $1::timestamptz)"
+      },
+      "from": "compile.predicates.unit.test.ts: compare > casts an instant literal to timestamptz so an offset survives the comparison",
+      "id": "sql.compile.compile-predicates.compare-casts-an-instant-literal-to-timestamptz",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "joined",
+          "kind": "reference"
+        },
+        "op": "gte",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "2020-01-01T00:00:00+02:00"
+        }
+      }
+    }
+  ]
+}

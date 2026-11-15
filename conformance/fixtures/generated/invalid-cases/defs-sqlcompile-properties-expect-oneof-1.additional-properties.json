@@ -1,0 +1,26 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "error": {
+          "message": "no column mapped for reference key 'unmapped'",
+          "name": "CallerError"
+        },
+        "unexpectedMember": 1
+      },
+      "from": "compile.mechanics.unit.test.ts: column identifiers > propagates an error thrown by columnFor unchanged",
+      "id": "sql.compile.compile-mechanics.column-identifiers-propagates-an-error-thrown-by",
+      "kind": "sql-compile",
+      "options": {
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "unmapped",
+          "kind": "reference"
+        }
+      }
+    }
+  ]
+}

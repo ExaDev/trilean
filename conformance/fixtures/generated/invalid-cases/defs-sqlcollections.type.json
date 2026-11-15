@@ -1,0 +1,26 @@
+{
+  "cases": [
+    {
+      "expect": null,
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > accepts a column of three segments",
+      "id": "sql.guard.refusals.sqlite-accepts-a-column-of-three-segments",
+      "kind": "sql-guard",
+      "options": {
+        "collections": "not-the-type",
+        "columns": {
+          "k": {
+            "column": "s.t.c"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "evaluator": {
+    "collections": {
+      "kids": {
+        "foreignKey": "owner",
+        "items": [
+          "rank"
+        ],
+        "table": "kids"
+      }
+    },
+    "idColumn": "id",
+    "table": "owners"
+  },
+  "tables": {
+    "kids": {
+      "columns": {
+        "id": "text",
+        "owner": "text",
+        "rank": "number"
+      },
+      "primaryKey": "id",
+      "rows": [
+        {
+          "id": "k1",
+          "owner": "o1",
+          "rank": 2
+        }
+      ]
+    },
+    "owners": {
+      "columns": {
+        "age": "number",
+        "id": "text"
+      },
+      "primaryKey": "id",
+      "rows": [
+        {
+          "age": {
+            "v": 1
+          },
+          "id": "o1"
+        },
+        {
+          "age": null,
+          "id": "o2"
+        }
+      ]
+    }
+  }
+}

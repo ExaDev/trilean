@@ -1,0 +1,39 @@
+{
+  "cases": [
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": []
+      },
+      "expectTableCounts": {
+        "subjects": "not-the-type"
+      },
+      "fixture": "subjects",
+      "from": "sqlite.edge-cases.integration.test.ts: degenerate and adversarial fragments > treats an injection attempt as data and leaves the table standing",
+      "id": "sql.execute.sqlite-edge-cases.degenerate-and-adversarial-fragments-treats-an-i",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "name",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "ada'; DROP TABLE subjects; --"
+          }
+        }
+      }
+    }
+  ]
+}

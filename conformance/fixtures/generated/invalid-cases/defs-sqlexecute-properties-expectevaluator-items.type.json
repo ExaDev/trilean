@@ -1,0 +1,41 @@
+{
+  "cases": [
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "glob-plain"
+        ]
+      },
+      "expectEvaluator": [
+        1,
+        "glob-plain"
+      ],
+      "fixture": "nul-subjects",
+      "from": "sqlite.identifiers.integration.test.ts: a pattern or a subject with a NUL, which GLOB reads only up to > matches a stored value without a NUL as the evaluator does, and never selects one with a NUL",
+      "id": "sql.execute.identifiers-nul.sqlite-matches-a-stored-value-without-a-nul-as-the-evaluator-doesx2c-a",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "note",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a.*c$"
+          }
+        }
+      }
+    }
+  ]
+}

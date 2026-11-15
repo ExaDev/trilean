@@ -1,0 +1,763 @@
+{
+  "cases": [
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "ada",
+          "unknown"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "postgres.predicates.integration.test.ts: comparisons against a column that can be NULL > excludes the row whose age is unknown",
+      "id": "sql.execute.postgres-predicates.comparisons-against-a-column-that-can-be-null-ex",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "age",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 18
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "grace"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "postgres.predicates.integration.test.ts: comparisons against a column that can be NULL > still excludes it under negation, which two-valued logic could not do",
+      "id": "sql.execute.postgres-predicates.comparisons-against-a-column-that-can-be-null-st",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "not",
+          "operand": {
+            "kind": "compare",
+            "left": {
+              "key": "age",
+              "kind": "reference"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 18
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "ada",
+          "lin",
+          "unknown"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "postgres.predicates.integration.test.ts: comparisons against a column that can be NULL > keeps a row whose unknown comparison is absorbed by a true disjunct",
+      "id": "sql.execute.postgres-predicates.comparisons-against-a-column-that-can-be-null-ke",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "anyOf",
+          "operands": [
+            {
+              "kind": "compare",
+              "left": {
+                "key": "age",
+                "kind": "reference"
+              },
+              "op": "gt",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 18
+              }
+            },
+            {
+              "kind": "textCompare",
+              "left": {
+                "key": "name",
+                "kind": "reference"
+              },
+              "op": "equals",
+              "right": {
+                "kind": "textLiteral",
+                "value": "lin"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "ada",
+          "grace",
+          "lin"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "postgres.predicates.integration.test.ts: comparisons against a column that can be NULL > collapses an unknown conjunct absorbed by a false one, observably under negation",
+      "id": "sql.execute.postgres-predicates.comparisons-against-a-column-that-can-be-null-co",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "not",
+          "operand": {
+            "kind": "allOf",
+            "operands": [
+              {
+                "kind": "compare",
+                "left": {
+                  "key": "age",
+                  "kind": "reference"
+                },
+                "op": "gt",
+                "right": {
+                  "kind": "numberLiteral",
+                  "value": 18
+                }
+              },
+              {
+                "kind": "textCompare",
+                "left": {
+                  "key": "name",
+                  "kind": "reference"
+                },
+                "op": "equals",
+                "right": {
+                  "kind": "textLiteral",
+                  "value": "nobody"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "ada",
+          "lin"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "postgres.predicates.integration.test.ts: comparisons against a column that can be NULL > compares instants across a NULL",
+      "id": "sql.execute.postgres-predicates.comparisons-against-a-column-that-can-be-null-co-2",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "joined",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "instantLiteral",
+            "value": "2022-01-01T00:00:00Z"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "ada",
+          "lin"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "postgres.predicates.integration.test.ts: comparisons against a column that can be NULL > compares booleans for equality across a NULL",
+      "id": "sql.execute.postgres-predicates.comparisons-against-a-column-that-can-be-null-co-3",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "active",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "booleanLiteral",
+            "value": true
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "ada",
+          "grace"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "postgres.predicates.integration.test.ts: exists > partitions the table, because it is the one predicate neither engine leaves unknown",
+      "id": "sql.execute.postgres-predicates.exists-partitions-the-table-because-it-is-the-on",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "exists",
+          "operand": {
+            "key": "note",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "lin",
+          "unknown"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "postgres.predicates.integration.test.ts: exists > partitions the table, because it is the one predicate neither engine leaves unknown",
+      "id": "sql.execute.postgres-predicates.exists-partitions-the-table-because-it-is-the-on-2",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "not",
+          "operand": {
+            "kind": "exists",
+            "operand": {
+              "key": "note",
+              "kind": "reference"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "ada",
+          "grace"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "postgres.predicates.integration.test.ts: textCompare > matches a pattern with PostgreSQL's own regular-expression operator, once postgresRegexpPushdown opts into it",
+      "id": "sql.execute.postgres-predicates.textcompare-matches-a-pattern-with-postgresql-s",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            }
+          },
+          "postgresRegexpPushdown": true
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "name",
+            "kind": "reference"
+          },
+          "op": "matches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^(a|g)"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "grace",
+          "lin"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "postgres.predicates.integration.test.ts: textCompare > leaves a NULL operand unknown under a negated match, once postgresRegexpPushdown opts into it",
+      "id": "sql.execute.postgres-predicates.textcompare-leaves-a-null-operand-unknown-under",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            }
+          },
+          "postgresRegexpPushdown": true
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "name",
+            "kind": "reference"
+          },
+          "op": "notMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "grace"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "postgres.predicates.integration.test.ts: portableMatches/portableNotMatches (trilean-regex, translated to PostgreSQL's own syntax) > matches a start-anchored literal prefix",
+      "id": "sql.execute.postgres-predicates.portablematches-portablenotmatches-trilean-regex",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "name",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^gr"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "ada",
+          "lin"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "postgres.predicates.integration.test.ts: portableMatches/portableNotMatches (trilean-regex, translated to PostgreSQL's own syntax) > matches a bounded-repetition character class",
+      "id": "sql.execute.postgres-predicates.portablematches-portablenotmatches-trilean-regex-2",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "name",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^[a-z]{3,4}$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "ada",
+          "lin"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "postgres.predicates.integration.test.ts: portableMatches/portableNotMatches (trilean-regex, translated to PostgreSQL's own syntax) > matches an alternation",
+      "id": "sql.execute.postgres-predicates.portablematches-portablenotmatches-trilean-regex-3",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "name",
+            "kind": "reference"
+          },
+          "op": "portableMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^(?:ada|lin)$"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "grace",
+          "lin"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "postgres.predicates.integration.test.ts: portableMatches/portableNotMatches (trilean-regex, translated to PostgreSQL's own syntax) > portableNotMatches is the negation, and still leaves an unresolved name unknown",
+      "id": "sql.execute.postgres-predicates.portablematches-portablenotmatches-trilean-regex-4",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "name",
+            "kind": "reference"
+          },
+          "op": "portableNotMatches",
+          "right": {
+            "kind": "textLiteral",
+            "value": "^a"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "ada"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "postgres.predicates.integration.test.ts: memberOf > matches a candidate list",
+      "id": "sql.execute.postgres-predicates.memberof-matches-a-candidate-list",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "textLiteral",
+              "value": "ada"
+            },
+            {
+              "kind": "textLiteral",
+              "value": "nobody"
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "name",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "grace",
+          "lin"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "postgres.predicates.integration.test.ts: memberOf > leaves NOT IN unknown for a NULL operand",
+      "id": "sql.execute.postgres-predicates.memberof-leaves-not-in-unknown-for-a-null-operan",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "textLiteral",
+              "value": "ada"
+            }
+          ],
+          "kind": "memberOf",
+          "op": "notIn",
+          "operand": {
+            "key": "name",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": []
+      },
+      "fixture": "subjects",
+      "from": "postgres.predicates.integration.test.ts: memberOf > compiles an empty 'in' to something that is false, not unknown, for a known operand",
+      "id": "sql.execute.postgres-predicates.memberof-compiles-an-empty-in-to-something-that",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "name",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "ada",
+          "grace",
+          "lin"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "postgres.predicates.integration.test.ts: memberOf > compiles an empty 'in' to something that is false, not unknown, for a known operand",
+      "id": "sql.execute.postgres-predicates.memberof-compiles-an-empty-in-to-something-that-2",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "not",
+          "operand": {
+            "candidates": [],
+            "kind": "memberOf",
+            "op": "in",
+            "operand": {
+              "key": "name",
+              "kind": "reference"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "ada",
+          "grace",
+          "lin"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "postgres.predicates.integration.test.ts: memberOf > compiles an empty 'notIn' to something that is true, not unknown, for a known operand",
+      "id": "sql.execute.postgres-predicates.memberof-compiles-an-empty-notin-to-something-th",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [],
+          "kind": "memberOf",
+          "op": "notIn",
+          "operand": {
+            "key": "name",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": []
+      },
+      "fixture": "subjects",
+      "from": "postgres.predicates.integration.test.ts: memberOf > compiles an empty 'notIn' to something that is true, not unknown, for a known operand",
+      "id": "sql.execute.postgres-predicates.memberof-compiles-an-empty-notin-to-something-th-2",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            }
+          }
+        },
+        "tree": {
+          "kind": "not",
+          "operand": {
+            "candidates": [],
+            "kind": "memberOf",
+            "op": "notIn",
+            "operand": {
+              "key": "name",
+              "kind": "reference"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "result": [
+          [
+            true
+          ]
+        ]
+      },
+      "fixture": "subjects",
+      "from": "postgres.predicates.integration.test.ts: portableMatches/portableNotMatches (trilean-regex, translated to PostgreSQL's own syntax) > PostgreSQL's own bare '.' already matches a newline under '~', exactly like trilean-regex's own '.', so this compiler translates it unchanged",
+      "id": "sql.execute.postgres-predicates.portablematches-portablenotmatches-trilean-regex-5",
+      "kind": "sql-execute",
+      "run": {
+        "params": [
+          "a\nc",
+          "a.c"
+        ],
+        "sql": "SELECT ($1::text ~ $2::text) AS result"
+      }
+    }
+  ]
+}

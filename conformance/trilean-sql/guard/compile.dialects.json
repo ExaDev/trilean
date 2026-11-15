@@ -1,0 +1,67 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "nodeKind": "textCompare",
+        "path": "$",
+        "reason": "options.sqliteRegexpAvailable is false: the caller has stated no regexp(pattern, value) function can be registered on this SQLite target, so 'matches' would compile to SQL that fails at query execution time with \"no such function: REGEXP\" instead of at compile time"
+      },
+      "from": "compile.dialects.unit.test.ts: sqliteRegexpAvailable > agrees with findUnpushableNodeKind rather than only compilePredicateNode's own check",
+      "id": "sql.guard.compile-dialects.sqliteregexpavailable-agrees-with-findunpushable",
+      "kind": "sql-guard",
+      "options": {
+        "dialect": "sqlite",
+        "sqliteRegexpAvailable": false
+      },
+      "tree": {
+        "kind": "textCompare",
+        "left": {
+          "key": "name",
+          "kind": "reference"
+        },
+        "op": "matches",
+        "right": {
+          "kind": "textLiteral",
+          "value": "^a"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "dialect": "mysql",
+          "implemented": [
+            "postgres",
+            "sqlite"
+          ],
+          "message": "unknown dialect \"mysql\": this version compiles \"postgres\", \"sqlite\"",
+          "name": "UnknownDialectError"
+        }
+      },
+      "from": "compile.dialects.unit.test.ts: a dialect this version does not implement > never reports such a tree as pushable, which would promise a compilation that cannot happen",
+      "id": "sql.guard.compile-dialects.a-dialect-this-version-does-not-implement-never",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "mysql"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "age",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 18
+        }
+      }
+    }
+  ]
+}

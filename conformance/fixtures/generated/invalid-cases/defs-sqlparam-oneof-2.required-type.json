@@ -1,0 +1,53 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "params": [
+          {
+            "value": true
+          }
+        ],
+        "sql": "(\"active\" = ?)"
+      },
+      "from": "recorded: trilean-sql src/compile.ts (compare eq boolean under sqlite)",
+      "id": "sql.compile.matrix.sqlite-compare-eq-boolean",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "active": {
+            "column": "active",
+            "paramType": "boolean"
+          },
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          },
+          "joined": {
+            "column": "joined",
+            "paramType": "timestamp"
+          },
+          "name": {
+            "column": "name",
+            "paramType": "text"
+          },
+          "note": {
+            "column": "note"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "active",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "kind": "booleanLiteral",
+          "value": true
+        }
+      }
+    }
+  ]
+}
