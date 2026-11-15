@@ -7,6 +7,8 @@
 /** The deepest nesting of arrays and objects `trilean` reads, and the most elements of an array: the limits its documentation states. */
 export const MAX_NESTING_DEPTH = 500;
 export const MAX_ARRAY_LENGTH = 65536;
+export const MAX_STRING_UNITS = 1048576;
+export const MAX_TEXT_UNITS = 4194304;
 
 /** How many hostile values are read in a row, which would exhaust the module's stack if each leaked the frames it crossed, and the length of a sparse array small enough to be read. */
 const HOSTILE_ROUNDS = 3000;
@@ -279,6 +281,33 @@ export function run(trilean, cases) {
       nested(MAX_NESTING_DEPTH, (v) => [v], 1),
     ),
     "the module's stack was not given back",
+  );
+
+  // A string named many times is copied at each place it is named, so the text of a read is counted: four strings of the longest length are read, a fifth is refused, and so is one string a unit longer than the longest.
+  const longest = "a".repeat(MAX_STRING_UNITS);
+  const named = (times) => new Array(times).fill(longest);
+  const fits = MAX_TEXT_UNITS / MAX_STRING_UNITS;
+  check(
+    "the most text a read may hold is read",
+    accepts("JsonValueSchema", named(fits)),
+    "refused",
+  );
+  check(
+    "one more string of the longest length is refused at the string that passes the limit",
+    refusal("JsonValueSchema", named(fits + 1))?.path.join() === String(fits),
+    "accepted or refused elsewhere",
+  );
+  check(
+    "a string one unit over the longest is refused from its length",
+    refusal("JsonValueSchema", longest + "a")?.message.includes(
+      String(MAX_STRING_UNITS + 1),
+    ) === true,
+    "accepted or refused for another reason",
+  );
+  check(
+    "an object key one unit over the longest is refused",
+    refusal("JsonValueSchema", { [longest + "a"]: 1 }) !== undefined,
+    "accepted",
   );
 
   // A value that names one array twice at each of forty levels has two to the fortieth places: it is refused once the count of values read passes the limit, and not read in full.

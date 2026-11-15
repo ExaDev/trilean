@@ -1,7 +1,10 @@
 //! What reading a document as a schema does, beyond the cases the conformance corpus pins.
 
 use json_shape::Value;
-use trilean::schemas::{self, MAX_ARRAY_LENGTH, MAX_NESTING_DEPTH, MAX_VALUES, SCHEMAS};
+use trilean::schemas::{
+    self, MAX_ARRAY_LENGTH, MAX_NESTING_DEPTH, MAX_STRING_UNITS, MAX_TEXT_UNITS, MAX_VALUES,
+    SCHEMAS,
+};
 
 fn parse(text: &str) -> Value {
     serde_json::from_str(text).expect("valid JSON")
@@ -122,12 +125,16 @@ fn the_declarations_name_every_type_the_package_exports() {
 const STATED_NESTING_DEPTH: usize = 500;
 const STATED_ARRAY_LENGTH: usize = 65_536;
 const STATED_VALUES: usize = 1_000_000;
+const STATED_STRING_UNITS: usize = 1_048_576;
+const STATED_TEXT_UNITS: usize = 4_194_304;
 
 #[test]
 fn the_limits_are_the_ones_the_documentation_states() {
     assert_eq!(MAX_NESTING_DEPTH, STATED_NESTING_DEPTH);
     assert_eq!(MAX_ARRAY_LENGTH, STATED_ARRAY_LENGTH);
     assert_eq!(MAX_VALUES, STATED_VALUES);
+    assert_eq!(MAX_STRING_UNITS, STATED_STRING_UNITS);
+    assert_eq!(MAX_TEXT_UNITS, STATED_TEXT_UNITS);
 }
 
 /// Runs `test` on a thread with a stack of a size a native caller reading a value at the limit is expected to have: the
@@ -246,4 +253,47 @@ fn a_document_of_more_values_than_the_limit_is_refused_once_it_has_been_read_tha
         .expect_err("more values than the limit");
     assert_eq!(issues.len(), 1);
     assert!(issues[0].message.contains("more than 1000000 values"));
+}
+
+#[test]
+fn a_string_of_the_most_units_is_read_and_one_unit_more_is_refused_at_the_string() {
+    let string = |units: usize| Value::String("a".repeat(units));
+    assert!(
+        schemas::read("JsonValueSchema", &string(STATED_STRING_UNITS))
+            .expect("a schema")
+            .is_ok()
+    );
+    let issues = schemas::read("JsonValueSchema", &string(STATED_STRING_UNITS + 1))
+        .expect("a schema")
+        .expect_err("one unit too many");
+    assert_eq!(issues.len(), 1);
+    assert!(
+        issues[0]
+            .message
+            .contains("a string may have at most 1048576")
+    );
+    let key = Value::Object(vec![("a".repeat(STATED_STRING_UNITS + 1), Value::Null)]);
+    assert!(
+        schemas::read("JsonValueSchema", &key)
+            .expect("a schema")
+            .is_err()
+    );
+}
+
+#[test]
+fn text_named_more_than_once_is_counted_at_each_place_and_refused_past_the_limit() {
+    let list =
+        |count: usize| Value::Array(vec![Value::String("a".repeat(STATED_STRING_UNITS)); count]);
+    let fits = STATED_TEXT_UNITS / STATED_STRING_UNITS;
+    assert!(
+        schemas::read("JsonValueSchema", &list(fits))
+            .expect("a schema")
+            .is_ok()
+    );
+    let issues = schemas::read("JsonValueSchema", &list(fits + 1))
+        .expect("a schema")
+        .expect_err("more text than the limit");
+    assert_eq!(issues.len(), 1);
+    assert!(issues[0].message.contains("code units of text in all"));
+    assert_eq!(issues[0].pointer(), format!("/{fits}"));
 }

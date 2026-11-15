@@ -25,7 +25,10 @@ export type SchemaReading =
 
 use std::cell::RefCell;
 
-use trilean::schemas::{MAX_ARRAY_LENGTH, MAX_NESTING_DEPTH, MAX_VALUES, nesting_limit};
+use trilean::schemas::{
+    MAX_ARRAY_LENGTH, MAX_NESTING_DEPTH, MAX_STRING_UNITS, MAX_TEXT_UNITS, MAX_VALUES,
+    nesting_limit,
+};
 
 thread_local! {
     /// `Array.isArray` and `Object.keys`, which are called as functions so that a value that makes them throw (a revoked
@@ -97,12 +100,35 @@ fn is_plain(object: &Object) -> Result<bool, JsValue> {
     Ok(prototype.is_null() || prototype == Reflect::get_prototype_of(&Object::new())?)
 }
 
-/// A JavaScript string as text. A string that holds an unpaired surrogate has no text, since a Rust string holds
+/// What one read has counted so far, against the limits that bound it: the values, and the code units of text that have
+/// been copied into the module.
+#[derive(Default)]
+struct Budget {
+    values: usize,
+    text: usize,
+}
+
+/// A JavaScript string as text, which `what` names in a message. It is counted against the limits on one string and on
+/// all the text of one read from its length, before a unit of it is copied, so a string that is too long, or one that is
+/// named many times, costs nothing. A string that holds an unpaired surrogate has no text, since a Rust string holds
 /// scalar values, so it is refused and not changed into a different string.
-fn text_of(string: &js_sys::JsString, path: &[PathSegment]) -> Result<String, Found> {
+fn text_of(
+    string: &js_sys::JsString,
+    what: &str,
+    path: &[PathSegment],
+    budget: &mut Budget,
+) -> Result<String, Found> {
+    let units = string.length() as usize;
+    if units > MAX_STRING_UNITS {
+        return Err(issue(path, trilean::schemas::string_too_long(units)));
+    }
+    budget.text = budget.text.saturating_add(units);
+    if budget.text > MAX_TEXT_UNITS {
+        return Err(issue(path, trilean::schemas::too_much_text()));
+    }
     let text = String::from(string);
     if text.contains('\u{FFFD}') && has_unpaired_surrogate(string) {
-        return Err(issue(path, "a string holds an unpaired surrogate"));
+        return Err(issue(path, format!("{what} holds an unpaired surrogate")));
     }
     Ok(text)
 }
@@ -138,10 +164,10 @@ fn read_value(
     value: &JsValue,
     path: &mut Vec<PathSegment>,
     depth: usize,
-    values: &mut usize,
+    budget: &mut Budget,
 ) -> Result<Value, Found> {
-    *values += 1;
-    if *values > MAX_VALUES {
+    budget.values += 1;
+    if budget.values > MAX_VALUES {
         return Err(issue(path, trilean::schemas::too_many_values()));
     }
     if value.is_null() {
@@ -161,7 +187,7 @@ fn read_value(
         };
     }
     if let Some(string) = value.dyn_ref::<js_sys::JsString>() {
-        return text_of(string, path).map(Value::String);
+        return text_of(string, "a string", path, budget).map(Value::String);
     }
     let (is_array_function, keys_function) = helpers().map_err(|_| host_failure(path))?;
     let is_array = value.is_object()
@@ -207,7 +233,7 @@ fn read_value(
                 Ok(element) if element.is_undefined() => {
                     Err(issue(path, "expected a JSON value, found undefined"))
                 }
-                Ok(element) => read_value(&element, path, depth + 1, values),
+                Ok(element) => read_value(&element, path, depth + 1, budget),
             };
             path.pop();
             elements.push(read?);
@@ -232,17 +258,14 @@ fn read_value(
         let Some(key_text) = key.dyn_ref::<js_sys::JsString>() else {
             continue;
         };
-        let name = text_of(key_text, path).map_err(|found| Found {
-            message: "an object key holds an unpaired surrogate".to_owned(),
-            ..found
-        })?;
+        let name = text_of(key_text, "an object key", path, budget)?;
         let member = Reflect::get(object, &key).map_err(|_| host_failure(path))?;
         // A property that is `undefined` is an absent one, as it is to a reader of the object.
         if member.is_undefined() {
             continue;
         }
         path.push(PathSegment::Key(name.clone()));
-        let read = read_value(&member, path, depth + 1, values);
+        let read = read_value(&member, path, depth + 1, budget);
         path.pop();
         members.push((name, read?));
     }
@@ -322,7 +345,7 @@ pub fn read_schema(
     #[wasm_bindgen(unchecked_param_type = "string")] name: &str,
     #[wasm_bindgen(unchecked_param_type = "unknown")] value: &JsValue,
 ) -> Result<JsValue, JsValue> {
-    let converted = match read_value(value, &mut Vec::new(), 0, &mut 0) {
+    let converted = match read_value(value, &mut Vec::new(), 0, &mut Budget::default()) {
         Ok(converted) => converted,
         Err(found) => return Ok(issues_to_js(&[found])),
     };
