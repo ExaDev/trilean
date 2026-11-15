@@ -2,7 +2,7 @@
 //! test is registered, started when its body begins, skipped when it is skipped), so it is the run's own account and
 //! not a count taken afterwards from the data the run read: a runner that drops, filters or never starts a case fails.
 
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::{BTreeMap, BTreeSet, HashMap};
 
 use crate::envelope::Requirement;
 use crate::manifest::Manifest;
@@ -53,11 +53,12 @@ impl Completeness {
         self.skipped.push((id.to_owned(), why.to_owned()));
     }
 
-    /// Compares the record with the manifest, for a run of `implementation` that provides `provides`: it fails unless
-    /// the cases registered are the cases of the manifest's files, without a repeat; the cases skipped are exactly
-    /// those the manifest lists as skipped for the implementation and those that need what it does not provide; every
-    /// registered case that is not skipped started once; and nothing started that was not registered or was skipped.
-    /// Every failure is a message.
+    /// Compares the record with the manifest, for a run of `implementation` that provides `provides`. The manifest holds
+    /// counts and lists of skipped ids, not the ids of every case, so the check is: as many cases were registered as the
+    /// manifest's files hold, none twice; the cases skipped are exactly those the manifest lists as skipped for the
+    /// implementation and those that need what it does not provide, and each of them was registered; every registered
+    /// case that was not skipped started once; and nothing started that was not registered or was skipped. Every
+    /// failure is a message.
     pub fn finish(
         &self,
         manifest: &Manifest,
@@ -94,23 +95,29 @@ impl Completeness {
                 }
             }
         }
-        let skipped: BTreeSet<String> = self.skipped.iter().map(|(id, _)| id.clone()).collect();
+        let reasons: HashMap<&str, &str> = self
+            .skipped
+            .iter()
+            .map(|(id, why)| (id.as_str(), why.as_str()))
+            .collect();
+        let skipped: BTreeSet<String> = reasons.keys().map(|id| (*id).to_owned()).collect();
         for id in expected.difference(&skipped) {
             problems.push(format!(
                 "{id} is skipped in the manifest and was not skipped"
             ));
         }
         for id in skipped.difference(&expected) {
-            let why = self
-                .skipped
-                .iter()
-                .find(|(skipped_id, _)| skipped_id == id)
-                .map_or("", |(_, why)| why.as_str());
+            let why = reasons.get(id.as_str()).copied().unwrap_or("");
             problems.push(format!(
                 "{id} was skipped ({why}) and the manifest does not list it"
             ));
         }
         let registered: BTreeSet<&str> = self.registered.iter().map(String::as_str).collect();
+        for id in &skipped {
+            if !registered.contains(id.as_str()) {
+                problems.push(format!("{id} was skipped and never registered"));
+            }
+        }
         let started = counts(&self.started);
         for id in &self.registered {
             if skipped.contains(id) {
@@ -333,5 +340,43 @@ mod tests {
         all.register("e");
         all.started("e");
         assert!(all.finish(&manifest(), Implementation::Rust, &[]).is_err());
+    }
+
+    #[test]
+    fn a_skip_of_a_case_that_was_never_registered_fails_the_run() {
+        let mut run = rust_run();
+        run.registered.retain(|id| id != "c");
+        run.register("zz");
+        run.started("zz");
+        let problems = failures(&run);
+        assert!(
+            problems
+                .iter()
+                .any(|problem| problem.contains("c was skipped and never registered")),
+            "{problems:?}"
+        );
+    }
+
+    #[test]
+    fn a_very_long_run_is_checked_in_linear_time() {
+        // A scan of the skipped list for each unexpected skip is some 4 * 10^10 steps for a run of this size, which takes minutes.
+        let mut manifest = Manifest::default();
+        manifest.files.insert(
+            "pkg/area/file.json".to_owned(),
+            ManifestEntry {
+                cases: 300_000,
+                ..ManifestEntry::default()
+            },
+        );
+        let mut run = Completeness::scoped("pkg/");
+        for n in 0..300_000 {
+            let id = format!("c{n:06}");
+            run.register(&id);
+            run.skipped(&id, "unwell");
+        }
+        let problems = run
+            .finish(&manifest, Implementation::Rust, &[])
+            .unwrap_err();
+        assert_eq!(problems.len(), 300_000);
     }
 }

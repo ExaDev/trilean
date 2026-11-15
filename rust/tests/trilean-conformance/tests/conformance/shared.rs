@@ -5,7 +5,7 @@
 use std::fs;
 use std::path::Path;
 
-use corpus_format::{Entry, Layout, Tree, check_canonical, select};
+use corpus_format::{Entry, Layout, Manifest, Tree, check_canonical, parse_canonical, select};
 
 use super::corpus_root;
 
@@ -104,14 +104,38 @@ fn check_selection(failures: &mut Vec<String>) {
                 )),
                 Err(error) => failures.push(error),
             }
-            // Every corpus file, the manifest and the schemas are in the canonical form.
+            // Every corpus file, the manifest and the schemas are in the canonical form, and the manifest lists as many
+            // files as were selected, so a root that selected nothing cannot pass by examining nothing.
             let root_json = ["manifest.json", "case.schema.json", "manifest.schema.json"];
+            let mut examined = 0;
             for name in found.files.iter().map(String::as_str).chain(root_json) {
-                if let Some(Entry::File(bytes)) = tree.get(name)
-                    && let Err(problem) = check_canonical(bytes)
-                {
-                    failures.push(format!("{name}: {problem}"));
+                match tree.get(name) {
+                    Some(Entry::File(bytes)) => {
+                        examined += 1;
+                        if let Err(problem) = check_canonical(bytes) {
+                            failures.push(format!("{name}: {problem}"));
+                        }
+                    }
+                    _ => failures.push(format!("{name}: selected and not a file")),
                 }
+            }
+            match tree.get("manifest.json") {
+                Some(Entry::File(bytes)) => match parse_canonical(bytes)
+                    .map_err(|problem| problem.to_string())
+                    .and_then(|value| Manifest::from_value(&value, LAYOUT.depth))
+                {
+                    Ok(manifest) if manifest.files.len() == found.files.len() => {}
+                    Ok(manifest) => failures.push(format!(
+                        "the manifest lists {} files and {} were selected",
+                        manifest.files.len(),
+                        found.files.len()
+                    )),
+                    Err(error) => failures.push(format!("manifest.json: {error}")),
+                },
+                _ => failures.push("manifest.json is missing".to_owned()),
+            }
+            if examined != found.files.len() + root_json.len() {
+                failures.push(format!("{examined} corpus files were examined"));
             }
         }
         Err(error) => failures.push(error),
@@ -159,7 +183,45 @@ fn check_fixture_bytes(failures: &mut Vec<String>) {
     }
 }
 
+/// The JSON files of the corpus's own skipped directories (a package's fixtures and schemas), which neither the corpus
+/// selection nor the shared fixture directory holds, are canonical too.
+fn check_skipped_directories(failures: &mut Vec<String>) {
+    let tree = match read_tree(&corpus_root(), false) {
+        Ok(tree) => tree,
+        Err(error) => {
+            failures.push(error);
+            return;
+        }
+    };
+    let selection = select(&tree, LAYOUT);
+    let mut examined = 0;
+    for (path, entry) in &tree {
+        let Entry::File(bytes) = entry else { continue };
+        let skipped = path
+            .split('/')
+            .rev()
+            .skip(1)
+            .any(|segment| matches!(segment, "fixtures" | "schema" | "runner"));
+        if !path.ends_with(".json") || !skipped || path.starts_with("fixtures/") {
+            continue;
+        }
+        examined += 1;
+        if selection.files.contains(path) {
+            failures.push(format!(
+                "{path} is both selected and in a skipped directory"
+            ));
+        }
+        if let Err(problem) = check_canonical(bytes) {
+            failures.push(format!("{path}: {problem}"));
+        }
+    }
+    if examined == 0 {
+        failures.push("no JSON file of a skipped directory of the corpus was examined".to_owned());
+    }
+}
+
 pub fn check(failures: &mut Vec<String>) {
+    check_skipped_directories(failures);
     check_selection(failures);
     check_fixture_bytes(failures);
 }
