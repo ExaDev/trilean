@@ -424,6 +424,8 @@ A test stays in an implementation's own suite when a case cannot state it. Each 
 | json-schema.integration.test.ts | resolves every reference it holds | T4 |
 | json-schema.integration.test.ts | and an exported schema's JSON Schema resolves its references within its own definitions | T4 |
 | json-schema.integration.test.ts | is the version-pinned $id, a draft 2020-12 schema whose root is either tree | T4 |
+| json-schema.integration.test.ts | is able to tell two documents apart: a required key removed, a constant changed, a closed object opened and a member of a union dropped are each a difference | T4 |
+| json-schema.integration.test.ts | has the same meaning for %s: every constraint, every property and every alternative | T4 |
 | json-schema.integration.test.ts | reads %s alike for every tree of the corpus and every mutant | T4 |
 | schema-pipeline.integration.test.ts | survives JSON.parse as a real own key: the control confirming the fixture is genuinely hazardous before validation | T1 |
 | schema-pipeline.integration.test.ts | cannot hijack a downstream copy's prototype once validated, where the unvalidated parse still can | T1 |
