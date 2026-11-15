@@ -2,6 +2,12 @@
   "cases": [
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": "MarkerThatMustNotAppear\u0000",
+          "problem": "the name contains a NUL character, which a quoted identifier cannot carry",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.operand",
         "reason": "the column mapped for this reference cannot be used: the name contains a NUL character, which a quoted identifier cannot carry"
@@ -38,6 +44,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": "MarkerThatMustNotAppear\u0000",
+          "problem": "the name contains a NUL character, which a quoted identifier cannot carry",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.item.operand",
         "reason": "the column mapped for this reference cannot be used: the name contains a NUL character, which a quoted identifier cannot carry"
@@ -78,6 +90,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": "MarkerThatMustNotAppear\u0000",
+          "problem": "the name contains a NUL character, which a quoted identifier cannot carry",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.operand.combiner.item",
         "reason": "the column mapped for this reference cannot be used: the name contains a NUL character, which a quoted identifier cannot carry"
@@ -121,6 +139,39 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": {
+            "codeUnits": [
+              77,
+              97,
+              114,
+              107,
+              101,
+              114,
+              84,
+              104,
+              97,
+              116,
+              77,
+              117,
+              115,
+              116,
+              78,
+              111,
+              116,
+              65,
+              112,
+              112,
+              101,
+              97,
+              114,
+              55296
+            ]
+          },
+          "problem": "the name contains an unpaired surrogate, which has no UTF-8 form",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.operand",
         "reason": "the column mapped for this reference cannot be used: the name contains an unpaired surrogate, which has no UTF-8 form"
@@ -184,6 +235,39 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": {
+            "codeUnits": [
+              77,
+              97,
+              114,
+              107,
+              101,
+              114,
+              84,
+              104,
+              97,
+              116,
+              77,
+              117,
+              115,
+              116,
+              78,
+              111,
+              116,
+              65,
+              112,
+              112,
+              101,
+              97,
+              114,
+              55296
+            ]
+          },
+          "problem": "the name contains an unpaired surrogate, which has no UTF-8 form",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.item.operand",
         "reason": "the column mapped for this reference cannot be used: the name contains an unpaired surrogate, which has no UTF-8 form"
@@ -251,6 +335,39 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": {
+            "codeUnits": [
+              77,
+              97,
+              114,
+              107,
+              101,
+              114,
+              84,
+              104,
+              97,
+              116,
+              77,
+              117,
+              115,
+              116,
+              78,
+              111,
+              116,
+              65,
+              112,
+              112,
+              101,
+              97,
+              114,
+              55296
+            ]
+          },
+          "problem": "the name contains an unpaired surrogate, which has no UTF-8 form",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.operand.combiner.item",
         "reason": "the column mapped for this reference cannot be used: the name contains an unpaired surrogate, which has no UTF-8 form"
@@ -321,6 +438,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": "",
+          "problem": "the name is empty",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.operand",
         "reason": "the column mapped for this reference cannot be used: the name is empty"
@@ -357,6 +480,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": "",
+          "problem": "the name is empty",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.item.operand",
         "reason": "the column mapped for this reference cannot be used: the name is empty"
@@ -397,6 +526,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": "",
+          "problem": "the name is empty",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.operand.combiner.item",
         "reason": "the column mapped for this reference cannot be used: the name is empty"
@@ -440,6 +575,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": "MarkerThatMustNotAppear..col",
+          "problem": "a dot-separated segment is empty",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.operand",
         "reason": "the column mapped for this reference cannot be used: a dot-separated segment is empty"
@@ -476,6 +617,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": "MarkerThatMustNotAppear..col",
+          "problem": "a dot-separated segment is empty",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.item.operand",
         "reason": "the column mapped for this reference cannot be used: a dot-separated segment is empty"
@@ -516,6 +663,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": "MarkerThatMustNotAppear..col",
+          "problem": "a dot-separated segment is empty",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.operand.combiner.item",
         "reason": "the column mapped for this reference cannot be used: a dot-separated segment is empty"
@@ -559,6 +712,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": "MarkerThatMustNotAppear.a.b.c",
+          "problem": "the name has 4 dot-separated segments and at most 3 are accepted for a column: PostgreSQL takes a leading database name only when it is the database the connection is on, which the compiler cannot know",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.operand",
         "reason": "the column mapped for this reference cannot be used: the name has 4 dot-separated segments and at most 3 are accepted for a column: PostgreSQL takes a leading database name only when it is the database the connection is on, which the compiler cannot know"
@@ -595,6 +754,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": "MarkerThatMustNotAppear.a.b.c",
+          "problem": "the name has 4 dot-separated segments and at most 3 are accepted for a column: PostgreSQL takes a leading database name only when it is the database the connection is on, which the compiler cannot know",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.item.operand",
         "reason": "the column mapped for this reference cannot be used: the name has 4 dot-separated segments and at most 3 are accepted for a column: PostgreSQL takes a leading database name only when it is the database the connection is on, which the compiler cannot know"
@@ -635,6 +800,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": "MarkerThatMustNotAppear.a.b.c",
+          "problem": "the name has 4 dot-separated segments and at most 3 are accepted for a column: PostgreSQL takes a leading database name only when it is the database the connection is on, which the compiler cannot know",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.operand.combiner.item",
         "reason": "the column mapped for this reference cannot be used: the name has 4 dot-separated segments and at most 3 are accepted for a column: PostgreSQL takes a leading database name only when it is the database the connection is on, which the compiler cannot know"
@@ -678,6 +849,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": "MarkerThatMustNotAppear\u0000",
+          "problem": "the name contains a NUL character, which a quoted identifier cannot carry",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.left",
         "reason": "the column mapped for this reference cannot be used: the name contains a NUL character, which a quoted identifier cannot carry"
@@ -720,6 +897,39 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": {
+            "codeUnits": [
+              77,
+              97,
+              114,
+              107,
+              101,
+              114,
+              84,
+              104,
+              97,
+              116,
+              77,
+              117,
+              115,
+              116,
+              78,
+              111,
+              116,
+              65,
+              112,
+              112,
+              101,
+              97,
+              114,
+              55296
+            ]
+          },
+          "problem": "the name contains an unpaired surrogate, which has no UTF-8 form",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.left",
         "reason": "the column mapped for this reference cannot be used: the name contains an unpaired surrogate, which has no UTF-8 form"
@@ -789,6 +999,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": "",
+          "problem": "the name is empty",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.left",
         "reason": "the column mapped for this reference cannot be used: the name is empty"
@@ -831,6 +1047,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": "MarkerThatMustNotAppear..col",
+          "problem": "a dot-separated segment is empty",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.left",
         "reason": "the column mapped for this reference cannot be used: a dot-separated segment is empty"
@@ -873,6 +1095,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": "MarkerThatMustNotAppear.a.b.c",
+          "problem": "the name has 4 dot-separated segments and at most 3 are accepted for a column: PostgreSQL takes a leading database name only when it is the database the connection is on, which the compiler cannot know",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.left",
         "reason": "the column mapped for this reference cannot be used: the name has 4 dot-separated segments and at most 3 are accepted for a column: PostgreSQL takes a leading database name only when it is the database the connection is on, which the compiler cannot know"
@@ -915,6 +1143,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "c",
+          "name": "MarkerThatMustNotAppear\u0000",
+          "problem": "the name contains a NUL character, which a quoted identifier cannot carry",
+          "role": "table"
+        },
         "nodeKind": "some",
         "path": "$",
         "reason": "the table mapped for this collection cannot be used: the name contains a NUL character, which a quoted identifier cannot carry"
@@ -955,6 +1189,39 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "c",
+          "name": {
+            "codeUnits": [
+              77,
+              97,
+              114,
+              107,
+              101,
+              114,
+              84,
+              104,
+              97,
+              116,
+              77,
+              117,
+              115,
+              116,
+              78,
+              111,
+              116,
+              65,
+              112,
+              112,
+              101,
+              97,
+              114,
+              55296
+            ]
+          },
+          "problem": "the name contains an unpaired surrogate, which has no UTF-8 form",
+          "role": "table"
+        },
         "nodeKind": "some",
         "path": "$",
         "reason": "the table mapped for this collection cannot be used: the name contains an unpaired surrogate, which has no UTF-8 form"
@@ -1022,6 +1289,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "c",
+          "name": "",
+          "problem": "the name is empty",
+          "role": "table"
+        },
         "nodeKind": "some",
         "path": "$",
         "reason": "the table mapped for this collection cannot be used: the name is empty"
@@ -1062,6 +1335,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "c",
+          "name": "MarkerThatMustNotAppear..tbl",
+          "problem": "a dot-separated segment is empty",
+          "role": "table"
+        },
         "nodeKind": "some",
         "path": "$",
         "reason": "the table mapped for this collection cannot be used: a dot-separated segment is empty"
@@ -1102,6 +1381,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "c",
+          "name": "MarkerThatMustNotAppear.s.t",
+          "problem": "the name has 3 dot-separated segments and at most 2 are accepted for a table: PostgreSQL takes a leading database name only when it is the database the connection is on, which the compiler cannot know",
+          "role": "table"
+        },
         "nodeKind": "some",
         "path": "$",
         "reason": "the table mapped for this collection cannot be used: the name has 3 dot-separated segments and at most 2 are accepted for a table: PostgreSQL takes a leading database name only when it is the database the connection is on, which the compiler cannot know"
@@ -2730,6 +3015,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": "MarkerThatMustNotAppear\u0000",
+          "problem": "the name contains a NUL character, which a quoted identifier cannot carry",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.operand",
         "reason": "the column mapped for this reference cannot be used: the name contains a NUL character, which a quoted identifier cannot carry"
@@ -2766,6 +3057,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": "MarkerThatMustNotAppear\u0000",
+          "problem": "the name contains a NUL character, which a quoted identifier cannot carry",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.item.operand",
         "reason": "the column mapped for this reference cannot be used: the name contains a NUL character, which a quoted identifier cannot carry"
@@ -2806,6 +3103,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": "MarkerThatMustNotAppear\u0000",
+          "problem": "the name contains a NUL character, which a quoted identifier cannot carry",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.operand.combiner.item",
         "reason": "the column mapped for this reference cannot be used: the name contains a NUL character, which a quoted identifier cannot carry"
@@ -2849,6 +3152,39 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": {
+            "codeUnits": [
+              77,
+              97,
+              114,
+              107,
+              101,
+              114,
+              84,
+              104,
+              97,
+              116,
+              77,
+              117,
+              115,
+              116,
+              78,
+              111,
+              116,
+              65,
+              112,
+              112,
+              101,
+              97,
+              114,
+              55296
+            ]
+          },
+          "problem": "the name contains an unpaired surrogate, which has no UTF-8 form",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.operand",
         "reason": "the column mapped for this reference cannot be used: the name contains an unpaired surrogate, which has no UTF-8 form"
@@ -2912,6 +3248,39 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": {
+            "codeUnits": [
+              77,
+              97,
+              114,
+              107,
+              101,
+              114,
+              84,
+              104,
+              97,
+              116,
+              77,
+              117,
+              115,
+              116,
+              78,
+              111,
+              116,
+              65,
+              112,
+              112,
+              101,
+              97,
+              114,
+              55296
+            ]
+          },
+          "problem": "the name contains an unpaired surrogate, which has no UTF-8 form",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.item.operand",
         "reason": "the column mapped for this reference cannot be used: the name contains an unpaired surrogate, which has no UTF-8 form"
@@ -2979,6 +3348,39 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": {
+            "codeUnits": [
+              77,
+              97,
+              114,
+              107,
+              101,
+              114,
+              84,
+              104,
+              97,
+              116,
+              77,
+              117,
+              115,
+              116,
+              78,
+              111,
+              116,
+              65,
+              112,
+              112,
+              101,
+              97,
+              114,
+              55296
+            ]
+          },
+          "problem": "the name contains an unpaired surrogate, which has no UTF-8 form",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.operand.combiner.item",
         "reason": "the column mapped for this reference cannot be used: the name contains an unpaired surrogate, which has no UTF-8 form"
@@ -3049,6 +3451,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": "",
+          "problem": "the name is empty",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.operand",
         "reason": "the column mapped for this reference cannot be used: the name is empty"
@@ -3085,6 +3493,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": "",
+          "problem": "the name is empty",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.item.operand",
         "reason": "the column mapped for this reference cannot be used: the name is empty"
@@ -3125,6 +3539,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": "",
+          "problem": "the name is empty",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.operand.combiner.item",
         "reason": "the column mapped for this reference cannot be used: the name is empty"
@@ -3168,6 +3588,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": "MarkerThatMustNotAppear..col",
+          "problem": "a dot-separated segment is empty",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.operand",
         "reason": "the column mapped for this reference cannot be used: a dot-separated segment is empty"
@@ -3204,6 +3630,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": "MarkerThatMustNotAppear..col",
+          "problem": "a dot-separated segment is empty",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.item.operand",
         "reason": "the column mapped for this reference cannot be used: a dot-separated segment is empty"
@@ -3244,6 +3676,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": "MarkerThatMustNotAppear..col",
+          "problem": "a dot-separated segment is empty",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.operand.combiner.item",
         "reason": "the column mapped for this reference cannot be used: a dot-separated segment is empty"
@@ -3287,6 +3725,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": "MarkerThatMustNotAppear.a.b.c",
+          "problem": "the name has 4 dot-separated segments and SQLite accepts at most 3 for a column",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.operand",
         "reason": "the column mapped for this reference cannot be used: the name has 4 dot-separated segments and SQLite accepts at most 3 for a column"
@@ -3323,6 +3767,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": "MarkerThatMustNotAppear.a.b.c",
+          "problem": "the name has 4 dot-separated segments and SQLite accepts at most 3 for a column",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.item.operand",
         "reason": "the column mapped for this reference cannot be used: the name has 4 dot-separated segments and SQLite accepts at most 3 for a column"
@@ -3363,6 +3813,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": "MarkerThatMustNotAppear.a.b.c",
+          "problem": "the name has 4 dot-separated segments and SQLite accepts at most 3 for a column",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.operand.combiner.item",
         "reason": "the column mapped for this reference cannot be used: the name has 4 dot-separated segments and SQLite accepts at most 3 for a column"
@@ -3406,6 +3862,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": "MarkerThatMustNotAppear\u0000",
+          "problem": "the name contains a NUL character, which a quoted identifier cannot carry",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.left",
         "reason": "the column mapped for this reference cannot be used: the name contains a NUL character, which a quoted identifier cannot carry"
@@ -3448,6 +3910,39 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": {
+            "codeUnits": [
+              77,
+              97,
+              114,
+              107,
+              101,
+              114,
+              84,
+              104,
+              97,
+              116,
+              77,
+              117,
+              115,
+              116,
+              78,
+              111,
+              116,
+              65,
+              112,
+              112,
+              101,
+              97,
+              114,
+              55296
+            ]
+          },
+          "problem": "the name contains an unpaired surrogate, which has no UTF-8 form",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.left",
         "reason": "the column mapped for this reference cannot be used: the name contains an unpaired surrogate, which has no UTF-8 form"
@@ -3517,6 +4012,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": "",
+          "problem": "the name is empty",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.left",
         "reason": "the column mapped for this reference cannot be used: the name is empty"
@@ -3559,6 +4060,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": "MarkerThatMustNotAppear..col",
+          "problem": "a dot-separated segment is empty",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.left",
         "reason": "the column mapped for this reference cannot be used: a dot-separated segment is empty"
@@ -3601,6 +4108,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "k",
+          "name": "MarkerThatMustNotAppear.a.b.c",
+          "problem": "the name has 4 dot-separated segments and SQLite accepts at most 3 for a column",
+          "role": "column"
+        },
         "nodeKind": "reference",
         "path": "$.left",
         "reason": "the column mapped for this reference cannot be used: the name has 4 dot-separated segments and SQLite accepts at most 3 for a column"
@@ -3643,6 +4156,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "c",
+          "name": "MarkerThatMustNotAppear\u0000",
+          "problem": "the name contains a NUL character, which a quoted identifier cannot carry",
+          "role": "table"
+        },
         "nodeKind": "some",
         "path": "$",
         "reason": "the table mapped for this collection cannot be used: the name contains a NUL character, which a quoted identifier cannot carry"
@@ -3683,6 +4202,39 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "c",
+          "name": {
+            "codeUnits": [
+              77,
+              97,
+              114,
+              107,
+              101,
+              114,
+              84,
+              104,
+              97,
+              116,
+              77,
+              117,
+              115,
+              116,
+              78,
+              111,
+              116,
+              65,
+              112,
+              112,
+              101,
+              97,
+              114,
+              55296
+            ]
+          },
+          "problem": "the name contains an unpaired surrogate, which has no UTF-8 form",
+          "role": "table"
+        },
         "nodeKind": "some",
         "path": "$",
         "reason": "the table mapped for this collection cannot be used: the name contains an unpaired surrogate, which has no UTF-8 form"
@@ -3750,6 +4302,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "c",
+          "name": "",
+          "problem": "the name is empty",
+          "role": "table"
+        },
         "nodeKind": "some",
         "path": "$",
         "reason": "the table mapped for this collection cannot be used: the name is empty"
@@ -3790,6 +4348,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "c",
+          "name": "MarkerThatMustNotAppear..tbl",
+          "problem": "a dot-separated segment is empty",
+          "role": "table"
+        },
         "nodeKind": "some",
         "path": "$",
         "reason": "the table mapped for this collection cannot be used: a dot-separated segment is empty"
@@ -3830,6 +4394,12 @@
     },
     {
       "expect": {
+        "identifier": {
+          "key": "c",
+          "name": "MarkerThatMustNotAppear.s.t",
+          "problem": "the name has 3 dot-separated segments and SQLite accepts at most 2 for a table",
+          "role": "table"
+        },
         "nodeKind": "some",
         "path": "$",
         "reason": "the table mapped for this collection cannot be used: the name has 3 dot-separated segments and SQLite accepts at most 2 for a table"

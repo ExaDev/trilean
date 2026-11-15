@@ -294,7 +294,7 @@ An `error` names the failure by `name`, always with `message`, the exact text of
 
 #### sql-guard
 
-`expect` is `null` for a tree the compiler translates, `{ "nodeKind", "path", "reason" }` for the first node it does not (the path is rooted at `$`, the reason is the exact text), or an `error` as above for a guard that throws, which it does for an unimplemented dialect and for an exception from a callback. A case without `options` calls the guard with none: the dialect is then `postgres` and the reasons describe it.
+`expect` is `null` for a tree the compiler translates, `{ "nodeKind", "path", "reason" }` for the first node it does not (the path is rooted at `$`, the reason is the exact text), with `identifier` (`{ "role", "key", "name", "problem" }`) added where the refusal is a mapped name the dialect cannot render as an identifier and only there: `role` is `column` or `table`, `key` the reference or collection key the mapping was asked about, `name` the name it returned (a text, so it may be written as `codeUnits`) and `problem` the exact description, which the thrown `InvalidColumnError` or `InvalidCollectionTableError` gives too (a case that leaves `identifier` out pins that the guard reports none), or an `error` as above for a guard that throws, which it does for an unimplemented dialect and for an exception from a callback. A case without `options` calls the guard with none: the dialect is then `postgres` and the reasons describe it.
 
 #### sql-pattern
 

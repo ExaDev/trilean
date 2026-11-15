@@ -253,6 +253,26 @@ export function runGuardCase(testCase: SqlGuardCase): void {
     path: expected.path,
   });
   expect(textProblems(found.reason, expected.reason)).toEqual([]);
+  // A refusal of a mapped name carries the name it is about, and no other refusal does: a case that leaves `identifier` out pins that the guard reports none.
+  expect(
+    found.identifier === undefined
+      ? undefined
+      : {
+          role: found.identifier.role,
+          key: found.identifier.key,
+          name: found.identifier.name,
+          problem: found.identifier.problem,
+        },
+  ).toEqual(
+    expected.identifier === undefined
+      ? undefined
+      : {
+          role: expected.identifier.role,
+          key: expected.identifier.key,
+          name: textToString(expected.identifier.name),
+          problem: expected.identifier.problem,
+        },
+  );
 }
 
 export function runPatternCase(testCase: SqlPatternCase): void {

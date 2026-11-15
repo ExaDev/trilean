@@ -1,0 +1,45 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "identifier": {
+          "name": "",
+          "problem": "the name is empty",
+          "role": "column"
+        },
+        "nodeKind": "reference",
+        "path": "$.operand",
+        "reason": "the column mapped for this reference cannot be used: the name is empty"
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > a column with an empty name",
+      "id": "sql.guard.refusals.sqlite-a-column-with-an-empty-name",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": ""
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    }
+  ]
+}
