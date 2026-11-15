@@ -19,8 +19,13 @@ export interface UnpushableNode {
   /** A dotted path from the root of the tree, e.g. `$.operands[1].left`. */
   path: string;
   reason: string;
-  /** Set when the refusal is a mapped name the dialect cannot render as an identifier: which mapping returned it and under which key. `compilePredicateNode` reports it as `InvalidColumnError` or `InvalidCollectionTableError`. */
-  identifier?: { role: "column" | "table"; key: string; problem: string };
+  /** Set when the refusal is a mapped name the dialect cannot render as an identifier: which mapping returned it, under which key, and the name it returned: the name of the mapping that was refused, which for a column inside a collection is that collection's own column and not the outer mapping's. `compilePredicateNode` reports it as `InvalidColumnError` or `InvalidCollectionTableError`. */
+  identifier?: {
+    role: "column" | "table";
+    key: string;
+    name: string;
+    problem: string;
+  };
 }
 
 /**
@@ -153,7 +158,12 @@ function resolveCollectionForGuard(
       kind,
       path,
       reason: `the table mapped for this collection cannot be used: ${tableProblem}`,
-      identifier: { role: "table", key: collection, problem: tableProblem },
+      identifier: {
+        role: "table",
+        key: collection,
+        name: binding.table,
+        problem: tableProblem,
+      },
     };
   }
 
@@ -190,9 +200,10 @@ function findUnpushableExpression(
       }
 
       if (options !== undefined) {
+        const column = options.columnFor(node.key).column;
         const columnProblem = identifierProblem(
           "column",
-          options.columnFor(node.key).column,
+          column,
           options.dialect,
         );
         if (columnProblem !== undefined) {
@@ -203,6 +214,7 @@ function findUnpushableExpression(
             identifier: {
               role: "column",
               key: node.key,
+              name: column,
               problem: columnProblem,
             },
           };
