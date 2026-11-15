@@ -55,14 +55,32 @@ enum Kind {
     Other,
 }
 
-fn children(tree: &Tree) -> BTreeMap<String, BTreeMap<String, Kind>> {
-    let mut children: BTreeMap<String, BTreeMap<String, Kind>> = BTreeMap::new();
-    children.entry(String::new()).or_default();
+/// One name in a directory: what it is and, for a directory, what is in it.
+struct Node<'a> {
+    kind: Kind,
+    children: BTreeMap<&'a str, Node<'a>>,
+}
+
+impl Node<'_> {
+    fn new(kind: Kind) -> Self {
+        Node {
+            kind,
+            children: BTreeMap::new(),
+        }
+    }
+}
+
+/// The names of a tree as nested directories, to the depth a corpus file is at and no further: what is deeper than that
+/// only makes the directory it is in a problem, so it is not kept. Names are slices of the tree's keys and every key is
+/// walked once, so the work is linear in the total length of the keys whatever the length or depth of one path, and
+/// the nesting, which the scan recurses through, is as deep as the layout and no deeper.
+fn nest(tree: &Tree, layout: Layout) -> Node<'_> {
+    let mut root = Node::new(Kind::Directory);
     for (path, entry) in tree {
-        let segments: Vec<&str> = path.split('/').collect();
-        let mut parent = String::new();
-        for (position, segment) in segments.iter().enumerate() {
-            let last = position + 1 == segments.len();
+        let mut directory = &mut root;
+        let mut segments = path.split('/').enumerate().peekable();
+        while let Some((depth, segment)) = segments.next() {
+            let last = segments.peek().is_none();
             let kind = if !last {
                 Kind::Directory
             } else {
@@ -72,59 +90,53 @@ fn children(tree: &Tree) -> BTreeMap<String, BTreeMap<String, Kind>> {
                     Entry::Other => Kind::Other,
                 }
             };
-            let siblings = children.entry(parent.clone()).or_default();
+            let node = directory
+                .children
+                .entry(segment)
+                .or_insert_with(|| Node::new(kind));
             // A path inside a directory makes it a directory, whatever another entry says it is.
-            let slot = siblings.entry((*segment).to_owned()).or_insert(kind);
             if kind == Kind::Directory {
-                *slot = Kind::Directory;
+                node.kind = Kind::Directory;
             }
-            let own = if parent.is_empty() {
-                (*segment).to_owned()
-            } else {
-                format!("{parent}/{segment}")
-            };
-            if kind == Kind::Directory {
-                children.entry(own.clone()).or_default();
+            if depth >= layout.depth {
+                break;
             }
-            parent = own;
+            directory = node;
         }
     }
-    children
+    root
 }
 
 fn scan(
-    children: &BTreeMap<String, BTreeMap<String, Kind>>,
+    directory: &Node<'_>,
     relative: &str,
     depth: usize,
     layout: Layout,
     selection: &mut Selection,
 ) {
-    let Some(entries) = children.get(relative) else {
-        return;
-    };
-    let mut names: Vec<(&String, &Kind)> = entries.iter().collect();
+    let mut names: Vec<(&&str, &Node<'_>)> = directory.children.iter().collect();
     names.sort_by(|left, right| utf16_order(left.0, right.0));
-    for (name, kind) in names {
+    for (name, node) in names {
         if name.starts_with('.') {
             continue;
         }
         let path = if relative.is_empty() {
-            name.clone()
+            (*name).to_owned()
         } else {
             format!("{relative}/{name}")
         };
-        match kind {
+        match node.kind {
             Kind::Directory => {
-                if NON_CASE_DIRECTORIES.contains(&name.as_str()) {
+                if NON_CASE_DIRECTORIES.contains(name) {
                     continue;
                 }
                 if depth < layout.depth && is_name(name) {
-                    scan(children, &path, depth + 1, layout, selection);
+                    scan(node, &path, depth + 1, layout, selection);
                 } else {
                     selection.problems.push(path);
                 }
             }
-            Kind::File if depth == 0 && ROOT_FILES.contains(&name.as_str()) => {}
+            Kind::File if depth == 0 && ROOT_FILES.contains(name) => {}
             Kind::File if depth == layout.depth && name.ends_with(".json") && is_name(name) => {
                 selection.files.push(path);
             }
@@ -139,7 +151,7 @@ fn scan(
 /// hyphens and underscores. Anything else is returned in [`Selection::problems`], for the caller to fail on.
 pub fn select(tree: &Tree, layout: Layout) -> Selection {
     let mut selection = Selection::default();
-    scan(&children(tree), "", 0, layout, &mut selection);
+    scan(&nest(tree, layout), "", 0, layout, &mut selection);
     selection
 }
 
@@ -273,5 +285,24 @@ mod tests {
             LAYOUT,
         );
         assert_eq!(selection.files, ["pkg/area/one.json"]);
+    }
+
+    #[test]
+    fn a_path_of_many_segments_costs_work_linear_in_its_length() {
+        // Keeping every prefix of the path as a key, or copying it, costs the square of the length: 400,000 segments is some
+        // hundred billion bytes touched, which takes minutes. Walking the path once takes milliseconds.
+        let path = vec!["a"; 400_000].join("/");
+        let selection = select(&tree(&[(path.as_str(), file())]), LAYOUT);
+        assert_eq!(selection.files, Vec::<String>::new());
+        assert_eq!(selection.problems.len(), 1);
+    }
+
+    #[test]
+    fn a_tree_of_many_siblings_is_selected_in_order() {
+        let paths: Vec<String> = (0..50_000).map(|n| format!("p/a/{n:06}.json")).collect();
+        let entries: Vec<(&str, Entry)> =
+            paths.iter().map(|path| (path.as_str(), file())).collect();
+        let selection = select(&tree(&entries), LAYOUT);
+        assert_eq!(selection.files, paths);
     }
 }

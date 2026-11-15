@@ -19,6 +19,8 @@ use std::collections::BTreeSet;
 
 use json_shape::Value;
 
+use crate::canonical::MAX_DEPTH;
+
 /// A decoded value. Text is UTF-16 code units, since that is what a case compares.
 #[derive(Clone, Debug, PartialEq)]
 pub enum Decoded {
@@ -68,14 +70,17 @@ impl Encodings {
         Encodings::default()
     }
 
-    /// Adds an encoding. The name starts with `$` and is not one the shared set has.
-    pub fn with(mut self, name: &str, check: EncodingCheck) -> Self {
-        assert!(
-            name.starts_with('$') && !SHARED.contains(&name),
-            "{name} is not a name a repository may register"
-        );
+    /// Adds an encoding. The name starts with `$` and is not one the shared set has or one already added, which is
+    /// refused with the reason.
+    pub fn with(mut self, name: &str, check: EncodingCheck) -> Result<Self, String> {
+        if !name.starts_with('$') || name.len() < 2 {
+            return Err(format!("{name} does not start with `$` and a name"));
+        }
+        if SHARED.contains(&name) || self.extra.iter().any(|(known, _)| known == name) {
+            return Err(format!("{name} is already an encoding"));
+        }
         self.extra.push((name.to_owned(), check));
-        self
+        Ok(self)
     }
 }
 
@@ -137,7 +142,15 @@ fn code_units(value: &Value, path: &str) -> Result<Vec<u16>, DecodeError> {
         .collect()
 }
 
-fn decode_at(value: &Value, encodings: &Encodings, path: &str) -> Result<Decoded, DecodeError> {
+fn decode_at(
+    value: &Value,
+    encodings: &Encodings,
+    path: &str,
+    depth: usize,
+) -> Result<Decoded, DecodeError> {
+    if matches!(value, Value::Array(_) | Value::Object(_)) && depth > MAX_DEPTH {
+        return fail(path, format!("nesting is deeper than {MAX_DEPTH} levels"));
+    }
     match value {
         Value::Null => Ok(Decoded::Null),
         Value::Bool(flag) => Ok(Decoded::Bool(*flag)),
@@ -146,10 +159,12 @@ fn decode_at(value: &Value, encodings: &Encodings, path: &str) -> Result<Decoded
         Value::Array(items) => items
             .iter()
             .enumerate()
-            .map(|(position, item)| decode_at(item, encodings, &format!("{path}[{position}]")))
+            .map(|(position, item)| {
+                decode_at(item, encodings, &format!("{path}[{position}]"), depth + 1)
+            })
             .collect::<Result<_, _>>()
             .map(Decoded::Array),
-        Value::Object(pairs) => decode_object(pairs, encodings, path),
+        Value::Object(pairs) => decode_object(pairs, encodings, path, depth),
     }
 }
 
@@ -157,6 +172,7 @@ fn decode_object(
     pairs: &[(String, Value)],
     encodings: &Encodings,
     path: &str,
+    depth: usize,
 ) -> Result<Decoded, DecodeError> {
     let marker = pairs
         .iter()
@@ -166,7 +182,7 @@ fn decode_object(
         for (key, item) in pairs {
             members.push((
                 key.encode_utf16().collect(),
-                decode_at(item, encodings, &format!("{path}.{key}"))?,
+                decode_at(item, encodings, &format!("{path}.{key}"), depth + 1)?,
             ));
         }
         return Ok(Decoded::Object(members));
@@ -207,7 +223,7 @@ fn decode_object(
                 fail(&at, "must be true")
             }
         }
-        "$object" => decode_members(member, encodings, &at),
+        "$object" => decode_members(member, encodings, &at, depth),
         "codeUnits" => code_units(member, &at).map(Decoded::Text),
         other => match encodings.extra.iter().find(|(known, _)| known == other) {
             Some((_, check)) => check(member)
@@ -221,7 +237,12 @@ fn decode_object(
     }
 }
 
-fn decode_members(member: &Value, encodings: &Encodings, at: &str) -> Result<Decoded, DecodeError> {
+fn decode_members(
+    member: &Value,
+    encodings: &Encodings,
+    at: &str,
+    depth: usize,
+) -> Result<Decoded, DecodeError> {
     let Some(entries) = member.as_array() else {
         return fail(at, "must be an array of [name, value] pairs");
     };
@@ -242,7 +263,10 @@ fn decode_members(member: &Value, encodings: &Encodings, at: &str) -> Result<Dec
         if !seen.insert(name.clone()) {
             return fail(&here, "a name is not repeated");
         }
-        members.push((name, decode_at(item, encodings, &format!("{here}[1]"))?));
+        members.push((
+            name,
+            decode_at(item, encodings, &format!("{here}[1]"), depth + 3)?,
+        ));
     }
     Ok(Decoded::Object(members))
 }
@@ -250,7 +274,7 @@ fn decode_members(member: &Value, encodings: &Encodings, at: &str) -> Result<Dec
 /// Decodes a document's value: the encodings above become the value they stand for, an ordinary object stays one,
 /// and anything the set does not allow is an error naming the place.
 pub fn decode(value: &Value, encodings: &Encodings) -> Result<Decoded, DecodeError> {
-    decode_at(value, encodings, "$")
+    decode_at(value, encodings, "$", 1)
 }
 
 #[cfg(test)]
@@ -393,13 +417,15 @@ mod tests {
         let value = object(&[("$bigint", text("1"))]);
         let error = read(&value).unwrap_err();
         assert!(error.message.contains("not an encoding"), "{error}");
-        let registered = Encodings::shared().with("$bigint", |value| {
-            value
-                .as_str()
-                .filter(|text| text.bytes().all(|byte| byte.is_ascii_digit()))
-                .map(|_| ())
-                .ok_or_else(|| "must be digits".to_owned())
-        });
+        let registered = Encodings::shared()
+            .with("$bigint", |value| {
+                value
+                    .as_str()
+                    .filter(|text| text.bytes().all(|byte| byte.is_ascii_digit()))
+                    .map(|_| ())
+                    .ok_or_else(|| "must be digits".to_owned())
+            })
+            .unwrap();
         assert!(matches!(
             decode(&value, &registered),
             Ok(Decoded::Custom { .. })
@@ -408,9 +434,41 @@ mod tests {
     }
 
     #[test]
-    #[should_panic(expected = "not a name a repository may register")]
-    fn the_shared_names_cannot_be_registered_again() {
-        let _ = Encodings::shared().with("$number", |_| Ok(()));
+    fn a_name_a_repository_may_not_register_is_refused_with_the_reason() {
+        let check: EncodingCheck = |_| Ok(());
+        for name in ["$number", "$undefined", "$object"] {
+            let error = Encodings::shared().with(name, check).unwrap_err();
+            assert!(error.contains("already an encoding"), "{error}");
+        }
+        for name in ["number", "", "$", "codeUnits"] {
+            assert!(Encodings::shared().with(name, check).is_err(), "{name:?}");
+        }
+        let twice = Encodings::shared()
+            .with("$a", check)
+            .unwrap()
+            .with("$a", check);
+        assert!(twice.is_err());
+    }
+
+    #[test]
+    fn nesting_past_the_bound_is_refused_and_does_not_recurse_without_end() {
+        let nested = |levels: usize| {
+            (1..levels).fold(Value::Array(Vec::new()), |inner, _| {
+                Value::Array(vec![inner])
+            })
+        };
+        assert!(read(&nested(MAX_DEPTH)).is_ok());
+        let error = read(&nested(MAX_DEPTH + 1)).unwrap_err();
+        assert!(error.message.contains("deeper than"), "{error}");
+        let mut value = Value::Null;
+        for _ in 0..100_000 {
+            value = Value::Array(vec![value]);
+        }
+        assert!(read(&value).is_err());
+        let mut current = value;
+        while let Value::Array(mut items) = current {
+            current = items.pop().unwrap_or(Value::Null);
+        }
     }
 
     #[test]

@@ -24,7 +24,9 @@ mod manifest;
 mod name;
 mod select;
 
-pub use canonical::{MAX_DEPTH, Problem, check_canonical, key_problems, write_canonical};
+pub use canonical::{
+    MAX_DEPTH, Problem, check_canonical, key_problems, parse_canonical, write_canonical,
+};
 pub use compare::{Mismatch, compare, fragments, subset};
 pub use completeness::{Completeness, Implementation};
 pub use decode::{DecodeError, Decoded, Encodings, decode};

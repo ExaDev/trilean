@@ -1,7 +1,7 @@
 //! The manifest: what the corpus is said to hold, so a corpus that loses a file or a case, or a runner that skips one,
 //! is a failure and never a smaller green run.
 
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::{BTreeMap, BTreeSet, HashSet};
 
 use json_shape::Value;
 
@@ -34,10 +34,20 @@ pub struct Manifest {
 
 type Check<T> = Result<T, String>;
 
+/// The members of an object, refusing one that names a member twice: a value read by a general JSON reader has already
+/// merged a repeated name, and one built from the bytes as written (see `parse_canonical`) still has it, so a manifest
+/// never holds an entry that is silently one of two.
 fn object<'a>(value: &'a Value, at: &str) -> Check<&'a [(String, Value)]> {
-    value
+    let pairs = value
         .as_object()
-        .ok_or_else(|| format!("{at}: expected an object"))
+        .ok_or_else(|| format!("{at}: expected an object"))?;
+    let mut seen = HashSet::with_capacity(pairs.len());
+    for (name, _) in pairs {
+        if !seen.insert(name.as_str()) {
+            return Err(format!("{at}: \"{name}\" is given twice"));
+        }
+    }
+    Ok(pairs)
 }
 
 /// The members of the object at `at`: every key in `required` present, and no key outside `required` and `optional`.
@@ -111,12 +121,28 @@ fn requirement_named(name: &str) -> Option<Requirement> {
     }
 }
 
-fn entry(name: &str, value: &Value) -> Check<ManifestEntry> {
+/// Whether two lists of ids, each ascending, have an id in common, in one pass over both.
+fn common_id<'a>(left: &'a [String], right: &[String]) -> Option<&'a String> {
+    let (mut one, mut two) = (0, 0);
+    while one < left.len() && two < right.len() {
+        match left[one].cmp(&right[two]) {
+            std::cmp::Ordering::Less => one += 1,
+            std::cmp::Ordering::Greater => two += 1,
+            std::cmp::Ordering::Equal => return Some(&left[one]),
+        }
+    }
+    None
+}
+
+fn entry(name: &str, value: &Value, depth: usize) -> Check<ManifestEntry> {
     let at = format!("manifest {name}");
     let parts: Vec<&str> = name.split('/').collect();
-    if parts.len() != 3 || !parts.iter().all(|part| is_name(part)) || !name.ends_with(".json") {
+    if parts.len() != depth + 1
+        || !parts.iter().all(|part| is_name(part))
+        || !name.ends_with(".json")
+    {
         return Err(format!(
-            "{at}: a corpus file is named <package>/<area>/<name>.json"
+            "{at}: a corpus file is a .json file {depth} directories down, with lower-case names"
         ));
     }
     let pairs = exact_keys(value, &at, &["cases", "skip"], &["generated", "requires"])?;
@@ -142,7 +168,7 @@ fn entry(name: &str, value: &Value) -> Check<ManifestEntry> {
     };
     let skip_ts = list("ts", "\"skip.ts\"")?;
     let skip_rust = list("rust", "\"skip.rust\"")?;
-    if let Some(id) = skip_ts.iter().find(|id| skip_rust.contains(id)) {
+    if let Some(id) = common_id(&skip_ts, &skip_rust) {
         return Err(format!(
             "{at}: {id} is listed in both \"skip.ts\" and \"skip.rust\""
         ));
@@ -169,10 +195,10 @@ fn entry(name: &str, value: &Value) -> Check<ManifestEntry> {
 }
 
 impl Manifest {
-    /// Reads a manifest document: `{ "files": { "<package>/<area>/<name>.json": { "cases", "skip": { "rust", "ts" },
-    /// "requires"?, "generated"? } } }`, with no other member, at least one file, and every list of ids ascending
-    /// and without repeats.
-    pub fn from_value(value: &Value) -> Result<Manifest, String> {
+    /// Reads a manifest document: `{ "files": { "<path>.json": { "cases", "skip": { "rust", "ts" }, "requires"?,
+    /// "generated"? } } }`, with no other member, no member given twice, at least one file, every file `depth`
+    /// directories down (the `depth` of the corpus's `Layout`) and every list of ids ascending and without repeats.
+    pub fn from_value(value: &Value, depth: usize) -> Result<Manifest, String> {
         let top = exact_keys(value, "manifest", &["files"], &[])?;
         let files = member(top, "files")
             .map(|files| object(files, "manifest"))
@@ -182,7 +208,9 @@ impl Manifest {
         }
         let mut manifest = Manifest::default();
         for (name, value) in files {
-            manifest.files.insert(name.clone(), entry(name, value)?);
+            manifest
+                .files
+                .insert(name.clone(), entry(name, value, depth)?);
         }
         Ok(manifest)
     }
@@ -350,7 +378,7 @@ mod tests {
             "requires",
             pairs(vec![("ecmascript-regex", ids(&["a", "b"]))]),
         ));
-        let manifest = Manifest::from_value(&manifest_with(pairs(entry))).unwrap();
+        let manifest = Manifest::from_value(&manifest_with(pairs(entry)), 2).unwrap();
         let read = &manifest.files["pkg/area/file.json"];
         assert_eq!(read.cases, 3);
         assert!(read.generated);
@@ -362,7 +390,7 @@ mod tests {
         let with = |change: &Change| {
             let mut entry = plain_entry();
             change(&mut entry);
-            Manifest::from_value(&manifest_with(pairs(entry)))
+            Manifest::from_value(&manifest_with(pairs(entry)), 2)
         };
         assert!(with(&|_| {}).is_ok());
         assert!(with(&|entry| entry[0].1 = Value::Number(0.0)).is_err());
@@ -399,21 +427,24 @@ mod tests {
 
     #[test]
     fn the_manifest_must_name_files_by_the_layout_and_hold_one() {
-        assert!(Manifest::from_value(&pairs(vec![("files", pairs(vec![]))])).is_err());
+        assert!(Manifest::from_value(&pairs(vec![("files", pairs(vec![]))]), 2).is_err());
         let bad = pairs(vec![(
             "files",
             pairs(vec![("Pkg/area/file.json", pairs(plain_entry()))]),
         )]);
-        assert!(Manifest::from_value(&bad).is_err());
+        assert!(Manifest::from_value(&bad, 2).is_err());
         let shallow = pairs(vec![(
             "files",
             pairs(vec![("pkg/file.json", pairs(plain_entry()))]),
         )]);
-        assert!(Manifest::from_value(&shallow).is_err());
-        assert!(Manifest::from_value(&pairs(vec![])).is_err());
+        assert!(Manifest::from_value(&shallow, 2).is_err());
+        assert!(Manifest::from_value(&pairs(vec![]), 2).is_err());
         assert!(
-            Manifest::from_value(&pairs(vec![("files", pairs(vec![])), ("x", Value::Null)]))
-                .is_err()
+            Manifest::from_value(
+                &pairs(vec![("files", pairs(vec![])), ("x", Value::Null)]),
+                2
+            )
+            .is_err()
         );
     }
 
@@ -506,5 +537,83 @@ mod tests {
             .requires
             .insert(Requirement::EcmascriptRegex, vec!["a".to_owned()]);
         assert!(manifest_problems(&corpus, &recorded).is_empty());
+    }
+
+    #[test]
+    fn a_member_given_twice_is_refused_wherever_it_is() {
+        let doubled = pairs(vec![(
+            "files",
+            pairs(vec![
+                ("pkg/area/file.json", pairs(plain_entry())),
+                ("pkg/area/file.json", pairs(plain_entry())),
+            ]),
+        )]);
+        let error = Manifest::from_value(&doubled, 2).unwrap_err();
+        assert!(error.contains("given twice"), "{error}");
+        let mut entry = plain_entry();
+        entry.push(("cases", Value::Number(5.0)));
+        assert!(Manifest::from_value(&manifest_with(pairs(entry)), 2).is_err());
+        let top = pairs(vec![
+            (
+                "files",
+                pairs(vec![("pkg/area/file.json", pairs(plain_entry()))]),
+            ),
+            ("files", pairs(vec![])),
+        ]);
+        assert!(Manifest::from_value(&top, 2).is_err());
+    }
+
+    #[test]
+    fn the_depth_of_a_corpus_file_is_the_layouts() {
+        let at = |path: &str, depth: usize| {
+            let value = pairs(vec![("files", pairs(vec![(path, pairs(plain_entry()))]))]);
+            Manifest::from_value(&value, depth).is_ok()
+        };
+        assert!(at("pkg/file.json", 1));
+        assert!(!at("pkg/file.json", 2));
+        assert!(at("pkg/area/file.json", 2));
+        assert!(at("a/b/c/file.json", 3));
+        assert!(at("file.json", 0));
+        assert!(!at("pkg/area/file.json", 1));
+    }
+
+    #[test]
+    fn long_skip_lists_are_checked_in_linear_time() {
+        // A scan of one list for each id of the other is some 4 * 10^10 steps for these lists, which takes minutes.
+        let evens: Vec<String> = (0..200_000).map(|n| format!("e{:06}", 2 * n)).collect();
+        let odds: Vec<String> = (0..200_000).map(|n| format!("e{:06}", 2 * n + 1)).collect();
+        let ids = |list: &[String]| Value::Array(list.iter().map(|id| text(id)).collect());
+        let value = pairs(vec![(
+            "files",
+            pairs(vec![(
+                "pkg/area/file.json",
+                pairs(vec![
+                    ("cases", Value::Number(400_000.0)),
+                    (
+                        "skip",
+                        pairs(vec![("rust", ids(&odds)), ("ts", ids(&evens))]),
+                    ),
+                ]),
+            )]),
+        )]);
+        assert!(Manifest::from_value(&value, 2).is_ok());
+        let mut shared = odds.clone();
+        shared.push("e399998".to_owned());
+        shared.sort();
+        let value = pairs(vec![(
+            "files",
+            pairs(vec![(
+                "pkg/area/file.json",
+                pairs(vec![
+                    ("cases", Value::Number(400_000.0)),
+                    (
+                        "skip",
+                        pairs(vec![("rust", ids(&shared)), ("ts", ids(&evens))]),
+                    ),
+                ]),
+            )]),
+        )]);
+        let error = Manifest::from_value(&value, 2).unwrap_err();
+        assert!(error.contains("both"), "{error}");
     }
 }

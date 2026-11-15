@@ -56,6 +56,12 @@ struct Parser<'a> {
     /// The problems of the content that do not stop the read: key order, a repeated key, an unpaired surrogate, a
     /// number not in its shortest form.
     problems: Vec<Problem>,
+    /// The UTF-16 code units of the string `string` read last, an unpaired surrogate included, which a Rust string cannot hold.
+    units: Vec<u16>,
+}
+
+fn push_char(units: &mut Vec<u16>, character: char) {
+    units.extend(character.encode_utf16(&mut [0; 2]).iter().copied());
 }
 
 fn problem(offset: usize, message: impl Into<String>) -> Problem {
@@ -72,6 +78,7 @@ impl<'a> Parser<'a> {
             text,
             position: 0,
             problems: Vec::new(),
+            units: Vec::new(),
         }
     }
 
@@ -158,6 +165,7 @@ impl<'a> Parser<'a> {
         self.enter(depth)?;
         self.expect(b'{')?;
         let mut pairs: Vec<(String, Doc)> = Vec::new();
+        let mut last_units: Option<Vec<u16>> = None;
         self.skip_space();
         if self.peek() == Some(b'}') {
             self.position += 1;
@@ -170,9 +178,11 @@ impl<'a> Parser<'a> {
                 return Err(problem(self.position, "expected a key"));
             }
             let key = self.string()?;
-            if let Some((before, _)) = pairs.last()
-                && utf16_order(&key, before).is_le()
+            let key_units = std::mem::take(&mut self.units);
+            if let Some(before) = &last_units
+                && key_units <= *before
             {
+                let before = String::from_utf16_lossy(before);
                 self.problems.push(problem(
                     key_at,
                     format!(
@@ -180,6 +190,7 @@ impl<'a> Parser<'a> {
                     ),
                 ));
             }
+            last_units = Some(key_units);
             self.skip_space();
             self.expect(b':')?;
             let value = self.value(depth)?;
@@ -216,7 +227,7 @@ impl<'a> Parser<'a> {
     fn string(&mut self) -> Result<String, Problem> {
         let start = self.position;
         self.expect(b'"')?;
-        let mut out = String::new();
+        let mut units: Vec<u16> = Vec::new();
         loop {
             let Some(byte) = self.peek() else {
                 return Err(problem(start, "unterminated string"));
@@ -224,7 +235,8 @@ impl<'a> Parser<'a> {
             match byte {
                 b'"' => {
                     self.position += 1;
-                    return Ok(out);
+                    self.units = units.clone();
+                    return Ok(String::from_utf16_lossy(&units));
                 }
                 b'\\' => {
                     self.position += 1;
@@ -233,14 +245,14 @@ impl<'a> Parser<'a> {
                     };
                     self.position += 1;
                     match escape {
-                        b'"' => out.push('"'),
-                        b'\\' => out.push('\\'),
-                        b'/' => out.push('/'),
-                        b'b' => out.push('\u{8}'),
-                        b'f' => out.push('\u{c}'),
-                        b'n' => out.push('\n'),
-                        b'r' => out.push('\r'),
-                        b't' => out.push('\t'),
+                        b'"' => push_char(&mut units, '"'),
+                        b'\\' => push_char(&mut units, '\\'),
+                        b'/' => push_char(&mut units, '/'),
+                        b'b' => push_char(&mut units, '\u{8}'),
+                        b'f' => push_char(&mut units, '\u{c}'),
+                        b'n' => push_char(&mut units, '\n'),
+                        b'r' => push_char(&mut units, '\r'),
+                        b't' => push_char(&mut units, '\t'),
                         b'u' => {
                             let first = self.hex4()?;
                             match first {
@@ -263,13 +275,16 @@ impl<'a> Parser<'a> {
                                         let code = 0x10000
                                             + ((u32::from(first) - 0xD800) << 10)
                                             + (u32::from(second) - 0xDC00);
-                                        out.push(char::from_u32(code).unwrap_or('\u{fffd}'));
+                                        push_char(
+                                            &mut units,
+                                            char::from_u32(code).unwrap_or('\u{fffd}'),
+                                        );
                                     } else {
                                         self.problems.push(problem(
                                             self.position,
                                             "a string holds an unpaired surrogate",
                                         ));
-                                        out.push('\u{fffd}');
+                                        units.push(first);
                                     }
                                 }
                                 0xDC00..=0xDFFF => {
@@ -277,11 +292,9 @@ impl<'a> Parser<'a> {
                                         self.position,
                                         "a string holds an unpaired surrogate",
                                     ));
-                                    out.push('\u{fffd}');
+                                    units.push(first);
                                 }
-                                unit => {
-                                    out.push(char::from_u32(u32::from(unit)).unwrap_or('\u{fffd}'))
-                                }
+                                unit => units.push(unit),
                             }
                         }
                         _ => {
@@ -301,7 +314,7 @@ impl<'a> Parser<'a> {
                         .chars()
                         .next()
                         .ok_or_else(|| problem(self.position, "unterminated string"))?;
-                    out.push(character);
+                    push_char(&mut units, character);
                     self.position += character.len_utf8();
                 }
             }
@@ -418,20 +431,25 @@ pub fn key_problems(bytes: &[u8]) -> Vec<Problem> {
 }
 
 /// The canonical text of a value. Object keys are written in UTF-16 code unit order, whatever order the pairs are in.
-pub fn write_canonical(value: &Value) -> String {
+/// A value nested deeper than [`MAX_DEPTH`] is refused, since the text could not be read back by [`check_canonical`] and
+/// writing it would recurse as deep as the value does.
+pub fn write_canonical(value: &Value) -> Result<String, Problem> {
     let mut out = String::new();
-    write_value(value, 0, &mut out);
+    write_value(value, 0, &mut out)?;
     out.push('\n');
-    out
+    Ok(out)
 }
 
-fn write_value(value: &Value, level: usize, out: &mut String) {
+fn write_value(value: &Value, level: usize, out: &mut String) -> Result<(), Problem> {
+    if matches!(value, Value::Array(_) | Value::Object(_)) && level + 1 > MAX_DEPTH {
+        return Err(too_deep());
+    }
     match value {
         Value::Array(items) if !items.is_empty() => {
             out.push_str("[\n");
             for (position, item) in items.iter().enumerate() {
                 out.push_str(&"  ".repeat(level + 1));
-                write_value(item, level + 1, out);
+                write_value(item, level + 1, out)?;
                 if position + 1 < items.len() {
                     out.push(',');
                 }
@@ -448,7 +466,7 @@ fn write_value(value: &Value, level: usize, out: &mut String) {
                 out.push_str(&"  ".repeat(level + 1));
                 out.push_str(&Value::String(key.clone()).to_string());
                 out.push_str(": ");
-                write_value(item, level + 1, out);
+                write_value(item, level + 1, out)?;
                 if position + 1 < sorted.len() {
                     out.push(',');
                 }
@@ -460,6 +478,23 @@ fn write_value(value: &Value, level: usize, out: &mut String) {
         Value::Array(_) => out.push_str("[]"),
         Value::Object(_) => out.push_str("{}"),
         scalar => out.push_str(&scalar.to_string()),
+    }
+    Ok(())
+}
+
+fn too_deep() -> Problem {
+    problem(0, format!("nesting is deeper than {MAX_DEPTH} levels"))
+}
+
+/// The value a canonical document holds, read by the same parser that checks it, so the two cannot disagree. The layout is
+/// not looked at (see [`check_canonical`]); the content is: a repeated key, a key out of order, an unpaired surrogate, a number not in its shortest form or nesting past [`MAX_DEPTH`] is the
+/// first [`Problem`] found, and a document that is not valid JSON or UTF-8 is the one problem it is. The value keeps every
+/// object pair as written.
+pub fn parse_canonical(bytes: &[u8]) -> Result<Value, Problem> {
+    let (problems, value) = read(bytes)?;
+    match problems.into_iter().next() {
+        Some(first) => Err(first),
+        None => Ok(value),
     }
 }
 
@@ -478,11 +513,8 @@ fn position_of(bytes: &[u8], offset: usize) -> (usize, usize) {
 /// that is not, as a [`Problem`]. The content rules of [`key_problems`] come first, so a file with keys out of order
 /// is reported for that and not for its layout.
 pub fn check_canonical(bytes: &[u8]) -> Result<(), Problem> {
-    let (problems, value) = read(bytes)?;
-    if let Some(first) = problems.into_iter().next() {
-        return Err(first);
-    }
-    let written = write_canonical(&value);
+    let value = parse_canonical(bytes)?;
+    let written = write_canonical(&value)?;
     if written.as_bytes() == bytes {
         return Ok(());
     }
@@ -536,7 +568,7 @@ mod tests {
             ("10".to_owned(), Value::Bool(true)),
             ("2".to_owned(), Value::Array(Vec::new())),
         ]);
-        let text = write_canonical(&value);
+        let text = write_canonical(&value).unwrap();
         assert_eq!(check_canonical(text.as_bytes()), Ok(()), "{text}");
         assert!(text.find("\"10\"").unwrap() < text.find("\"2\"").unwrap());
         assert!(text.contains("\\n\\u0001\\\"\\\\😀"));
@@ -630,11 +662,85 @@ mod tests {
     #[test]
     fn nesting_is_limited() {
         // The innermost array is the first level, so `nested(MAX_DEPTH - 1)` holds MAX_DEPTH arrays.
-        let at_limit = write_canonical(&nested(MAX_DEPTH - 1));
+        let at_limit = write_canonical(&nested(MAX_DEPTH - 1)).unwrap();
         assert_eq!(check_canonical(at_limit.as_bytes()), Ok(()));
-        let deeper = write_canonical(&nested(MAX_DEPTH));
+        let deeper = format!(
+            "{}{}\n",
+            "[".repeat(MAX_DEPTH + 1),
+            "]".repeat(MAX_DEPTH + 1)
+        );
         refused(&deeper, "deeper than");
         refused(&"[".repeat(100_000), "deeper than");
+    }
+
+    #[test]
+    fn the_writer_refuses_a_value_the_reader_would_refuse_and_does_not_recurse_past_the_bound() {
+        let problem = write_canonical(&nested(MAX_DEPTH)).unwrap_err();
+        assert!(problem.message.contains("deeper than"), "{problem}");
+        // A value far deeper than the stack could write is refused at the bound, so this returns at all.
+        let mut value = Value::Null;
+        for _ in 0..100_000 {
+            value = Value::Array(vec![value]);
+        }
+        assert!(write_canonical(&value).is_err());
+        // Dropping a value this deep recurses too; take it apart from the inside out.
+        let mut current = value;
+        while let Value::Array(mut items) = current {
+            current = items.pop().unwrap_or(Value::Null);
+        }
+    }
+
+    #[test]
+    fn parse_canonical_returns_the_value_the_check_read() {
+        let text = "{\n  \"a\": [\n    1\n  ]\n}\n";
+        let value = parse_canonical(text.as_bytes()).unwrap();
+        assert_eq!(write_canonical(&value).unwrap(), text);
+        assert_eq!(
+            value,
+            Value::Object(vec![(
+                "a".to_owned(),
+                Value::Array(vec![Value::Number(1.0)])
+            )])
+        );
+        for bad in [
+            "{\n  \"a\": 1,\n  \"a\": 2\n}\n",
+            "97.0\n",
+            "{\n  \"b\": 1,\n  \"a\": 2\n}\n",
+        ] {
+            assert!(parse_canonical(bad.as_bytes()).is_err(), "{bad}");
+        }
+    }
+
+    #[test]
+    fn unpaired_surrogate_keys_are_compared_by_code_unit() {
+        // D800 is below E000. A scan that read each unpaired surrogate as U+FFFD put it above E000 and found a second problem.
+        let text = "{\n  \"\\ud800\": 1,\n  \"\\ue000\": 2\n}\n";
+        let problems = key_problems(text.as_bytes());
+        assert_eq!(problems.len(), 1, "{problems:?}");
+        assert!(problems[0].message.contains("unpaired surrogate"));
+        // Two different unpaired surrogates are two problems and not also a repeated key.
+        let two = "{\n  \"\\ud800\": 1,\n  \"\\ud801\": 2\n}\n";
+        let problems = key_problems(two.as_bytes());
+        assert_eq!(problems.len(), 2, "{problems:?}");
+        assert!(problems.iter().all(|p| !p.message.contains("ascending")));
+        // The same unpaired surrogate twice is a repeated key.
+        let repeated = "{\n  \"\\ud800\": 1,\n  \"\\ud800\": 2\n}\n";
+        assert!(
+            key_problems(repeated.as_bytes())
+                .iter()
+                .any(|p| p.message.contains("ascending"))
+        );
+    }
+
+    #[test]
+    fn line_separators_and_delete_are_written_as_themselves() {
+        // `JSON.stringify` writes U+2028, U+2029 and U+007F literally, and so does the canonical form.
+        for character in ['\u{2028}', '\u{2029}', '\u{7f}'] {
+            let text = format!("\"{character}\"\n");
+            assert_eq!(check_canonical(text.as_bytes()), Ok(()), "{character:?}");
+            let escaped = format!("\"\\u{:04x}\"\n", u32::from(character));
+            refused(&escaped, "not in canonical form");
+        }
     }
 
     #[test]

@@ -5,6 +5,8 @@
 //! value is [`Decoded::Undefined`] counts as absent, since JSON has no `undefined`; an expectation of `$undefined`
 //! requires the member to be there and to be undefined. Every other value must match structurally.
 
+use std::collections::HashMap;
+
 use crate::decode::Decoded;
 use crate::envelope::Tolerance;
 
@@ -83,11 +85,13 @@ fn step(path: &str, name: &[u16]) -> String {
     format!("{path}.{}", shown(name))
 }
 
-fn find<'a>(members: &'a [(Vec<u16>, Decoded)], name: &[u16]) -> Option<&'a Decoded> {
-    members
-        .iter()
-        .find(|(candidate, _)| candidate == name)
-        .map(|(_, value)| value)
+/// The members of an object by name, the first of a repeated name winning, built once so a lookup is constant time.
+fn index(members: &[(Vec<u16>, Decoded)]) -> HashMap<&[u16], &Decoded> {
+    let mut by_name = HashMap::with_capacity(members.len());
+    for (name, value) in members {
+        by_name.entry(name.as_slice()).or_insert(value);
+    }
+    by_name
 }
 
 fn walk(
@@ -124,9 +128,10 @@ fn walk(
             Ok(())
         }
         (Decoded::Object(wanted), Decoded::Object(got)) => {
+            let actual = index(got);
             for (name, item) in wanted {
                 let here = step(path, name);
-                match find(got, name) {
+                match actual.get(name.as_slice()) {
                     Some(other) => walk(other, item, tolerance, partial, &here)?,
                     None if matches!(item, Decoded::Undefined) => {
                         return mismatch(
@@ -138,8 +143,11 @@ fn walk(
                 }
             }
             if !partial {
+                let expected = index(wanted);
                 for (name, other) in got {
-                    if !matches!(other, Decoded::Undefined) && find(wanted, name).is_none() {
+                    if !matches!(other, Decoded::Undefined)
+                        && !expected.contains_key(name.as_slice())
+                    {
                         return mismatch(&step(path, name), "the member is not expected");
                     }
                 }
@@ -412,5 +420,60 @@ mod tests {
         let text = units("😀a");
         assert!(fragments(&text, &[vec![0xD83D, 0xDE00], units("a")], false).is_ok());
         assert!(fragments(&text, &[vec![0xDE00], units("a")], false).is_ok());
+    }
+
+    fn custom(name: &str, value: json_shape::Value) -> Decoded {
+        Decoded::Custom {
+            name: name.to_owned(),
+            value,
+        }
+    }
+
+    #[test]
+    fn a_registered_encodings_values_are_equal_by_name_and_json_value() {
+        use json_shape::Value;
+        let one = custom("$big", Value::String("1".to_owned()));
+        assert!(equal(&one, &one.clone()));
+        assert!(!equal(&one, &custom("$big", Value::String("2".to_owned()))));
+        assert!(!equal(
+            &one,
+            &custom("$other", Value::String("1".to_owned()))
+        ));
+        // Equal as JSON Schema defines it: the order of an object's members does not matter.
+        let first = custom(
+            "$big",
+            Value::Object(vec![
+                ("a".to_owned(), Value::Null),
+                ("b".to_owned(), Value::Null),
+            ]),
+        );
+        let second = custom(
+            "$big",
+            Value::Object(vec![
+                ("b".to_owned(), Value::Null),
+                ("a".to_owned(), Value::Null),
+            ]),
+        );
+        assert!(equal(&first, &second));
+        assert!(!equal(&one, &Decoded::Null));
+    }
+
+    #[test]
+    fn an_object_of_many_members_is_compared_in_linear_time() {
+        // A scan for each member is some 4 * 10^10 steps, which takes minutes; a lookup table takes milliseconds.
+        let members = |reverse: bool| {
+            let mut names: Vec<usize> = (0..200_000).collect();
+            if reverse {
+                names.reverse();
+            }
+            Decoded::Object(
+                names
+                    .into_iter()
+                    .map(|n| (units(&n.to_string()), number(n as f64)))
+                    .collect(),
+            )
+        };
+        assert!(equal(&members(false), &members(true)));
+        assert!(subset(&members(false), &members(true), None).is_ok());
     }
 }
