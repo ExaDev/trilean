@@ -259,7 +259,9 @@ impl<T: Shape> Shape for Box<T> {
     }
 }
 
-/// An object whose values all have one shape, kept in input order.
+/// An object whose values all have one shape, kept in input order. A key called `__proto__` is dropped when the map is
+/// built, as it is when a document is read as the shape (see [`crate::normalise`]): a consumer that assigns the keys to
+/// an object of its own would otherwise change that object's prototype.
 #[derive(Clone, Debug, PartialEq)]
 pub struct Map<T>(pub Vec<(String, T)>);
 
@@ -300,7 +302,7 @@ impl<T: Shape> Shape for Map<T> {
             return mismatch(path, "an object");
         };
         let mut built = Vec::with_capacity(pairs.len());
-        for (key, entry) in pairs {
+        for (key, entry) in pairs.iter().filter(|(key, _)| key != "__proto__") {
             path.push_key(key);
             let item = T::build(entry, path);
             path.pop();

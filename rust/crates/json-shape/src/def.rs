@@ -102,6 +102,10 @@ pub struct ObjectDef {
     pub fields: Vec<FieldDef>,
     /// Whether a key outside `fields` is refused.
     pub closed: bool,
+    /// Whether a closed object's validation lets a key outside `fields` pass instead of refusing it. The schema and the
+    /// declarations still say the object is closed, and building the value drops the key, so a document that has one is
+    /// read as the object without it. It has no effect on an object that is not closed.
+    pub strips: bool,
     /// The shape of the value of a key outside `fields`, for an object that holds any key but types its value.
     pub additional: Option<Box<ShapeDef>>,
     /// When not empty, at least one of these keys is present.
@@ -250,6 +254,52 @@ impl Definitions {
 
     pub fn is_empty(&self) -> bool {
         self.entries.is_empty()
+    }
+
+    /// Marks every closed object, in every definition, for which `strip` holds as one whose validation lets an unknown
+    /// key pass (see [`ObjectDef::strips`]), and returns the definitions. The schema and the declarations still write
+    /// those objects as closed, so the document describes the objects a check accepts after the key is dropped.
+    pub fn stripping(mut self, strip: impl Fn(&ObjectDef) -> bool) -> Self {
+        fn visit(shape: &mut ShapeDef, strip: &dyn Fn(&ObjectDef) -> bool) {
+            match &mut shape.kind {
+                Kind::Object(object) => {
+                    if object.closed && strip(object) {
+                        object.strips = true;
+                    }
+                    for field in &mut object.fields {
+                        visit(&mut field.shape, strip);
+                    }
+                    if let Some(additional) = &mut object.additional {
+                        visit(additional, strip);
+                    }
+                }
+                Kind::Array { items, .. } => visit(items, strip),
+                Kind::Map { values, .. } => visit(values, strip),
+                Kind::OneOf(shapes) | Kind::AllOf(shapes) => {
+                    shapes.iter_mut().for_each(|part| visit(part, strip));
+                }
+                Kind::Tagged { variants, .. } => {
+                    variants
+                        .iter_mut()
+                        .for_each(|(_, variant)| visit(variant, strip));
+                }
+                Kind::Not(inner) => visit(inner, strip),
+                Kind::Any
+                | Kind::Null
+                | Kind::Bool
+                | Kind::ConstBool(_)
+                | Kind::ConstString(_)
+                | Kind::Enum(_)
+                | Kind::String { .. }
+                | Kind::Integer { .. }
+                | Kind::Number { .. }
+                | Kind::Ref(_) => {}
+            }
+        }
+        for (_, shape) in &mut self.entries {
+            visit(shape, &strip);
+        }
+        self
     }
 
     /// The definitions without the one named `name`, for a document that holds that shape inline.

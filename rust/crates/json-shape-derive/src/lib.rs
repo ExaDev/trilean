@@ -777,6 +777,7 @@ fn object_definition(
             ::json_shape::ObjectDef {
                 fields: __fields,
                 closed: #strict && __additional.is_none(),
+                strips: false,
                 additional: __additional,
                 any_of_keys: ::std::vec![#(#any_of_keys.to_owned()),*],
                 one_of_keys: ::std::vec![#(#one_of_keys.to_owned()),*],
@@ -1158,6 +1159,7 @@ fn tagged_variant(
                     ::json_shape::ShapeDef::new(::json_shape::Kind::Object(::json_shape::ObjectDef {
                         fields: __fields,
                         closed: #strict,
+                        strips: false,
                         additional: ::core::option::Option::None,
                         any_of_keys: ::std::vec::Vec::new(),
                         one_of_keys: ::std::vec::Vec::new(),

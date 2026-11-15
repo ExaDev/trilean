@@ -29,6 +29,16 @@ pub fn check_with_work(
     (checker.issues, checker.work)
 }
 
+/// The document as `shape` reads it, for a document that `check` accepted: an object keeps the keys its shape names, in
+/// the order the shape lists them (a tag first), then the keys its shape types without naming (in the document's
+/// order), a map drops a key called `__proto__`, and a union is read as the alternative that matches. A closed object
+/// that strips (see [`crate::ObjectDef::strips`]) loses the keys it does not name. The value is undefined for a
+/// document `check` refused.
+pub fn normalise(definitions: &Definitions, shape: &ShapeDef, value: &Value) -> Value {
+    let checker = Checker::new(definitions, HashMap::new());
+    checker.normalised(shape, value)
+}
+
 /// Whether `value` matches `shape`.
 pub fn accepts(definitions: &Definitions, shape: &ShapeDef, value: &Value) -> bool {
     check(definitions, shape, value).is_empty()
@@ -114,8 +124,11 @@ impl<'a> Checker<'a> {
     }
 
     /// Whether `value` could match `shape`: false only when it certainly does not, from its kind and the keys a
-    /// closed or required field demands. Cheap and never descends into children.
-    fn may_match(&self, shape: &ShapeDef, value: &Value, depth: usize) -> bool {
+    /// closed or required field demands. Cheap and never descends into children. With `sharp` it also compares a
+    /// constant string a required field holds and the tag a tagged union is told apart by, which tells the variants of
+    /// a union apart for reading a document as a shape; a check does not use it, so that a value whose tag no variant
+    /// has is reported at the tag and not as matching none of the alternatives.
+    fn may_match(&self, shape: &ShapeDef, value: &Value, depth: usize, sharp: bool) -> bool {
         match &shape.kind {
             Kind::Any => true,
             Kind::Null => *value == Value::Null,
@@ -125,28 +138,115 @@ impl<'a> Checker<'a> {
             }
             Kind::Integer { .. } | Kind::Number { .. } => matches!(value, Value::Number(_)),
             Kind::Array { .. } => matches!(value, Value::Array(_)),
-            Kind::Map { .. } | Kind::Tagged { .. } => matches!(value, Value::Object(_)),
+            Kind::Map { .. } => matches!(value, Value::Object(_)),
+            Kind::Tagged { tag, variants } => {
+                matches!(value, Value::Object(_))
+                    && (!sharp
+                        || value.get(tag).and_then(Value::as_str).is_some_and(|name| {
+                            variants.iter().any(|(variant, _)| variant == name)
+                        }))
+            }
             Kind::Object(object) => {
                 matches!(value, Value::Object(_))
-                    && object
-                        .fields
-                        .iter()
-                        .all(|field| !field.required || value.get(&field.name).is_some())
+                    && object.fields.iter().all(|field| {
+                        match (value.get(&field.name), &field.shape.kind) {
+                            (None, _) => !field.required,
+                            (Some(found), Kind::ConstString(expected)) if sharp => {
+                                found.as_str() == Some(expected)
+                            }
+                            (Some(_), _) => true,
+                        }
+                    })
             }
             Kind::OneOf(alternatives) => {
                 depth >= FILTER_DEPTH
                     || alternatives
                         .iter()
-                        .any(|alternative| self.may_match(alternative, value, depth + 1))
+                        .any(|alternative| self.may_match(alternative, value, depth + 1, sharp))
             }
             Kind::Not(_) => true,
             Kind::AllOf(parts) => parts
                 .iter()
-                .all(|part| self.may_match(part, value, depth + 1)),
+                .all(|part| self.may_match(part, value, depth + 1, sharp)),
             Kind::Ref(name) => match self.definitions.get(name) {
-                Some(target) if depth < FILTER_DEPTH => self.may_match(target, value, depth + 1),
+                Some(target) if depth < FILTER_DEPTH => {
+                    self.may_match(target, value, depth + 1, sharp)
+                }
                 _ => true,
             },
+        }
+    }
+
+    /// `value` read as `shape` (see [`normalise`]).
+    fn normalised(&self, shape: &ShapeDef, value: &Value) -> Value {
+        match (&shape.kind, value) {
+            (Kind::Array { items, .. }, Value::Array(elements)) => Value::Array(
+                elements
+                    .iter()
+                    .map(|element| self.normalised(items, element))
+                    .collect(),
+            ),
+            (Kind::Map { values, .. }, Value::Object(pairs)) => Value::Object(
+                pairs
+                    .iter()
+                    .filter(|(key, _)| key != "__proto__")
+                    .map(|(key, entry)| (key.clone(), self.normalised(values, entry)))
+                    .collect(),
+            ),
+            (Kind::Object(object), Value::Object(pairs)) => {
+                let mut read: Vec<(String, Value)> = object
+                    .fields
+                    .iter()
+                    .filter_map(|field| {
+                        value
+                            .get(&field.name)
+                            .map(|entry| (field.name.clone(), self.normalised(&field.shape, entry)))
+                    })
+                    .collect();
+                if !object.closed || object.additional.is_some() {
+                    for (key, entry) in pairs {
+                        if object.fields.iter().any(|field| field.name == *key) {
+                            continue;
+                        }
+                        let kept = match &object.additional {
+                            Some(shape) => self.normalised(shape, entry),
+                            None => entry.clone(),
+                        };
+                        read.push((key.clone(), kept));
+                    }
+                }
+                Value::Object(read)
+            }
+            (Kind::OneOf(alternatives), _) => {
+                let candidates: Vec<&ShapeDef> = alternatives
+                    .iter()
+                    .filter(|alternative| self.may_match(alternative, value, 0, true))
+                    .collect();
+                let chosen = match candidates.as_slice() {
+                    [only] => Some(*only),
+                    _ => candidates.iter().copied().find(|alternative| {
+                        let mut checker = Checker::new(self.definitions, HashMap::new());
+                        checker.accepts_memo(alternative, value)
+                    }),
+                };
+                chosen.map_or_else(
+                    || value.clone(),
+                    |alternative| self.normalised(alternative, value),
+                )
+            }
+            (Kind::Tagged { tag, variants }, _) => value
+                .get(tag)
+                .and_then(Value::as_str)
+                .and_then(|name| variants.iter().find(|(variant, _)| variant == name))
+                .map_or_else(
+                    || value.clone(),
+                    |(_, variant)| self.normalised(variant, value),
+                ),
+            (Kind::Ref(name), _) => self
+                .definitions
+                .get(name)
+                .map_or_else(|| value.clone(), |target| self.normalised(target, value)),
+            _ => value.clone(),
         }
     }
 
@@ -355,15 +455,14 @@ impl<'a> Checker<'a> {
                     self.path.pop();
                 }
                 None if field.required => {
-                    self.report(format!(
-                        "missing the required property {}",
-                        json_text(&field.name)
-                    ));
+                    self.path.push_key(&field.name);
+                    self.report("missing the required property");
+                    self.path.pop();
                 }
                 None => {}
             }
         }
-        if object.closed || object.additional.is_some() {
+        if (object.closed && !object.strips) || object.additional.is_some() {
             for (key, entry) in pairs {
                 if object.fields.iter().any(|field| field.name == *key) {
                     continue;
@@ -407,7 +506,7 @@ impl<'a> Checker<'a> {
     fn one_of(&mut self, alternatives: &[ShapeDef], value: &Value) {
         let candidates: Vec<&ShapeDef> = alternatives
             .iter()
-            .filter(|alternative| self.may_match(alternative, value, 0))
+            .filter(|alternative| self.may_match(alternative, value, 0, false))
             .collect();
         let mut matching = 0;
         for candidate in &candidates {
