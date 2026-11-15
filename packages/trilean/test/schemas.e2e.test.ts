@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
+import * as built from "../dist/index.js";
 import type { StandardSchemaV1 } from "../dist/index.js";
+import { run } from "./support/consumer-core.mjs";
+import { validateCases } from "./support/validate-cases";
 import {
   ComputedValueSchema,
   ExpressionNodeSchema,
@@ -11,9 +14,6 @@ import {
 } from "../dist/index.js";
 
 /** What the built package's schema objects do with a value that is not JSON, and the shape of what they answer. The cases a tree is checked against are in the conformance corpus; what stays here is the boundary between JavaScript and the module, which a native implementation has no counterpart of. */
-
-const NESTING_BEYOND_THE_LIMIT = 5000;
-const NESTING_WITHIN_THE_LIMIT = 100;
 
 type Schema = StandardSchemaV1<unknown, unknown>;
 
@@ -168,25 +168,16 @@ describe("a schema object of the built package", () => {
     expect(result).toEqual({ value: { constructor: 1, toString: 2 } });
   });
 
-  it("refuses a value nested beyond the limit with an issue, not a stack overflow, and reads one within it", () => {
-    let deep: unknown = 1;
-    for (let level = 0; level < NESTING_BEYOND_THE_LIMIT; level += 1) {
-      deep = [deep];
-    }
-    expect(issuesOf(JsonValueSchema, deep)[0]?.message).toContain(
-      "nested too deeply",
-    );
-    let shallow: unknown = 1;
-    for (let level = 0; level < NESTING_WITHIN_THE_LIMIT; level += 1) {
-      shallow = [shallow];
-    }
-    expect(validate(JsonValueSchema, shallow)).toEqual({ value: shallow });
-  });
-
   it("reads the same tree to the same value on every call", () => {
     const tree = { kind: "negate", operand: literal };
     const first = validate(ExpressionNodeSchema, tree);
     expect(validate(ExpressionNodeSchema, tree)).toEqual(first);
     expect(validate(ExpressionNodeSchema, tree)).toEqual({ value: tree });
+  });
+
+  it("passes the checks every host of the package runs, which are the corpus's validate cases and the limits at their edges", () => {
+    const { executed, failures } = run(built, validateCases());
+    expect(failures).toEqual([]);
+    expect(executed).toBeGreaterThan(validateCases().length);
   });
 });
