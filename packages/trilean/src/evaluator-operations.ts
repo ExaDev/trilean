@@ -222,6 +222,24 @@ export function compareValues(
   }
 }
 
+/** Tests `text` against `compiled` and frees it. The compiled pattern owns memory inside the wasm module until it is freed, and the finaliser frees it only after the event loop has turned, so a synchronous pass over many rows would hold every pattern: it is freed as soon as it has answered, or has failed to. A failure of the test is the one thrown, even when the free that follows it fails too, since a module that has panicked is spent and its second failure says less than its first. */
+function testAndFree(compiled: CompiledPattern, text: string): boolean {
+  let isMatch: boolean;
+  try {
+    isMatch = compiled.test(text);
+  } catch (error) {
+    try {
+      compiled.free();
+    } catch {
+      // The error of the test is the one reported.
+    }
+    throw error;
+  }
+  compiled.free();
+
+  return isMatch;
+}
+
 /** `textCompare`'s two operands must both resolve to the `text` computed-value kind -- any other kind, on either operand, is `wrong-type` (see the `textCompare` section of README.md). `equals`/`notEquals` are exact string equality; `matches`/`notMatches` interpret `right`'s text as an ECMAScript regular expression tested against `left`'s text; `portableMatches`/`portableNotMatches` interpret it as a pattern in `trilean-regex`'s own restricted grammar instead, matched by that package's finite-automaton reference matcher rather than the host's native `RegExp` engine -- see the `textCompare` section of README.md for when to reach for the portable pair instead of the plain one. An invalid pattern is `wrong-type` rather than a thrown exception either way -- every data-quality problem stays inside the `Evaluation` result, per `Evaluation<T>`'s own doc comment in evaluation.ts. */
 export function compareText(
   op: TextComparisonOperator,
@@ -266,21 +284,17 @@ export function compareText(
       try {
         compiled = compilePattern(right.value);
       } catch (error) {
-        const reason =
-          error instanceof RegexParseError ? error.message : String(error);
+        // Only a pattern the grammar refuses is data. Anything else is a fault of the module, which a result must not pass off as a bad pattern.
+        if (!(error instanceof RegexParseError)) {
+          throw error;
+        }
 
         return indeterminate(
           "wrong-type",
-          `'${right.value}' is not a valid trilean-regex pattern: ${reason}`,
+          `'${right.value}' is not a valid trilean-regex pattern: ${error.message}`,
         );
       }
-      // The compiled pattern owns memory inside the wasm module until it is freed, and the finaliser frees it only after the event loop has turned, so a synchronous pass over many rows would hold every pattern. It is freed as soon as it has answered.
-      let isMatch: boolean;
-      try {
-        isMatch = compiled.test(left.value);
-      } finally {
-        compiled.free();
-      }
+      const isMatch = testAndFree(compiled, left.value);
 
       return definite(op === "portableMatches" ? isMatch : !isMatch);
     }
