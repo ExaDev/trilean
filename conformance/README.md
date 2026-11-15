@@ -127,7 +127,7 @@ Some files are written by a generator, `packages/trilean/scripts/generate-corpus
 { "id": "...", "from": "...", "kind": "regex-match", "pattern": "^a$", "inputs": [ { "input": "a", "matches": true } ] }
 ```
 
-Each input is tested against the pattern, through every entry point the implementation offers for testing a pattern (compiled once and reused, and compiled per call), and all of them must give `matches`.
+Each input is tested against the pattern, through every entry point the implementation offers for testing a pattern (compiled once and reused, and compiled per call), and all of them must give `matches`. An input gives `refused: true` in place of `matches` (exactly one of the two) when the matcher may not test it against the pattern: it is longer than the input limit, or the pattern's states times the input's length plus one is over the work limit. Every entry point must then refuse it with the input-limit error, and a refused input has no answer. The corpus states the work limit's boundary with the largest pattern, which a few hundred code units reach, so no case holds an input of a million code units; the length limit is pinned by the implementation's own tests.
 
 `regex-match` takes an optional `dialect`: `trilean`, the default, is the language of the package's own matcher. `ecmascript` is the language of an unflagged ECMAScript `RegExp`: the pattern is read as that engine reads it, over UTF-16 code units, with no `^` or `$` at a line break (no `m` flag), no `.` that excludes line terminators (the patterns the derived builders write use `[\s\S]` and `[^\/]`, which take every code unit, a line terminator and an unpaired surrogate among them), and `test` finding a match anywhere. Each `matches` was recorded from `new RegExp(pattern).test(input)`. The generator that writes these cases (see Generated files) recomputes every answer from the host's `RegExp`, which checks that the recorded answers still hold and tests no implementation of this repository. An implementation compiles each pattern through the entry point it offers for that language, which refuses a construct that means something else there (`compile_ecmascript_subset` in the Rust crate, `compileEcmascriptSubset` in the package), and gives the recorded answer.
 
@@ -147,10 +147,10 @@ The cases are the specification of the package's behaviour: the reason codes, th
 | `call` | 181 |
 | `cli` | 95 |
 | `document` | 36 |
-| `evaluate` | 813 |
+| `evaluate` | 815 |
 | `inputs` | 13 |
 | `number-format` | 40 |
-| `regex-match` | 136 |
+| `regex-match` | 138 |
 | `regex-parse` | 98 |
 | `serialise` | 38 |
 | `validate` | 127 |

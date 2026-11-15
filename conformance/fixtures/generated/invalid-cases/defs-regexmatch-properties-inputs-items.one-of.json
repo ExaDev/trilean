@@ -1,0 +1,19 @@
+{
+  "cases": [
+    {
+      "from": "matcher.unit.test.ts: groups > groups for repetition",
+      "id": "match.groups.groups-for-repetition.1",
+      "inputs": [
+        {
+          "input": "ababab",
+          "matches": true,
+          "refused": {
+            "copied": 1
+          }
+        }
+      ],
+      "kind": "regex-match",
+      "pattern": "(?:ab)+"
+    }
+  ]
+}

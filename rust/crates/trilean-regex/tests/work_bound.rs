@@ -17,7 +17,7 @@ fn patterns() -> Vec<String> {
 }
 
 fn visits(compiled: &CompiledPattern, subject: &str) -> usize {
-    let (matched, visits) = compiled.test_counted(subject);
+    let (matched, visits) = compiled.test_counted(subject).expect("within the limits");
     assert!(!matched);
     visits
 }
@@ -65,8 +65,8 @@ fn the_counted_and_uncounted_entry_points_agree() {
     let compiled = compile_pattern("^(?:a+)+b$").expect("pattern");
     for subject in ["aaab", "aaac", "", "b"] {
         assert_eq!(
-            compiled.test(subject),
-            compiled.test_counted(subject).0,
+            compiled.test(subject).expect("short"),
+            compiled.test_counted(subject).expect("short").0,
             "{subject}"
         );
     }
@@ -75,7 +75,9 @@ fn the_counted_and_uncounted_entry_points_agree() {
 #[test]
 fn a_match_found_early_stops_the_work() {
     let compiled = compile_pattern("^a").expect("pattern");
-    let (matched, early) = compiled.test_counted(&"a".repeat(SUBJECT_LENGTH));
+    let (matched, early) = compiled
+        .test_counted(&"a".repeat(SUBJECT_LENGTH))
+        .expect("within the limits");
     assert!(matched);
     assert!(early < compiled.state_count() * 2);
 }

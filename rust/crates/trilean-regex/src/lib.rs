@@ -15,9 +15,10 @@ mod shorthand;
 
 pub use ast::{CharClassNode, CharRange, RegexNode, char_class_matches, range_contains};
 pub use ecma::{EcmaSubsetError, compile_ecmascript_subset, compile_ecmascript_subset_utf16};
-pub use error::RegexParseError;
+pub use error::{InputLimit, RegexInputError, RegexParseError, TestPatternError};
 pub use matcher::{
-    CompiledPattern, MAX_STATES, compile_pattern, compile_pattern_utf16, test_pattern,
+    CompiledPattern, MAX_INPUT_UNITS, MAX_STATES, MAX_WORK, compile_pattern, compile_pattern_utf16,
+    test_pattern,
 };
 pub use parser::{
     MAX_NESTING_DEPTH, MAX_PATTERN_UNITS, check_pattern_length, parse_regex, parse_regex_utf16,

@@ -77,6 +77,116 @@ impl fmt::Display for RegexParseError {
 
 impl std::error::Error for RegexParseError {}
 
+/// Why a compiled pattern may not be tested against an input: the input is longer than `MAX_INPUT_UNITS`, or the work its length allows the pattern is over `MAX_WORK`.
+///
+/// The error names the numbers and echoes no input, which may be as long as the caller likes.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct RegexInputError {
+    limit: InputLimit,
+    input_units: usize,
+    reason: &'static str,
+    states: usize,
+    work: u64,
+}
+
+/// Which limit an input ran into.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum InputLimit {
+    /// The input is longer than `MAX_INPUT_UNITS`.
+    Length,
+    /// The pattern's states times the input's length is over `MAX_WORK`.
+    Work,
+}
+
+impl RegexInputError {
+    pub(crate) fn too_long(input_units: usize) -> Self {
+        Self {
+            limit: InputLimit::Length,
+            input_units,
+            reason: "the input is longer than the limit",
+            states: 0,
+            work: 0,
+        }
+    }
+
+    pub(crate) fn too_much_work(input_units: usize, states: usize, work: u64) -> Self {
+        Self {
+            limit: InputLimit::Work,
+            input_units,
+            reason: "the work the input allows the pattern is over the limit",
+            states,
+            work,
+        }
+    }
+
+    /// Which limit the input ran into.
+    pub fn limit(&self) -> InputLimit {
+        self.limit
+    }
+
+    /// The length of the refused input, in UTF-16 code units.
+    pub fn input_units(&self) -> usize {
+        self.input_units
+    }
+}
+
+impl fmt::Display for RegexInputError {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self.limit {
+            InputLimit::Length => write!(
+                formatter,
+                "input refused: {}: the input is {} code units long, and an input may be at most {}",
+                self.reason,
+                self.input_units,
+                crate::matcher::MAX_INPUT_UNITS
+            ),
+            InputLimit::Work => write!(
+                formatter,
+                "input refused: {}: {} states against {} code units allow up to {} state visits, and a test may take at most {}",
+                self.reason,
+                self.states,
+                self.input_units,
+                self.work,
+                crate::matcher::MAX_WORK
+            ),
+        }
+    }
+}
+
+impl std::error::Error for RegexInputError {}
+
+/// Why `test_pattern` gave no answer.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum TestPatternError {
+    /// The pattern is not in the grammar.
+    Parse(RegexParseError),
+    /// The input may not be tested against the compiled pattern.
+    Input(RegexInputError),
+}
+
+impl fmt::Display for TestPatternError {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::Parse(error) => error.fmt(formatter),
+            Self::Input(error) => error.fmt(formatter),
+        }
+    }
+}
+
+impl std::error::Error for TestPatternError {}
+
+impl From<RegexParseError> for TestPatternError {
+    fn from(error: RegexParseError) -> Self {
+        Self::Parse(error)
+    }
+}
+
+impl From<RegexInputError> for TestPatternError {
+    fn from(error: RegexInputError) -> Self {
+        Self::Input(error)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

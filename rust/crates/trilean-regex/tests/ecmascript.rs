@@ -94,8 +94,8 @@ fn a_pattern_outside_the_grammar_is_a_parse_error() {
 #[test]
 fn a_compiled_subset_pattern_matches_as_the_grammar_does() {
     let compiled = compile_ecmascript_subset(r"^[^\/]*\/[\s\S]*$").expect("pattern");
-    assert!(compiled.test("a/b\nc"));
-    assert!(!compiled.test("a"));
+    assert!(compiled.test("a/b\nc").expect("short"));
+    assert!(!compiled.test("a").expect("short"));
 }
 
 #[test]

@@ -94,14 +94,19 @@ A pattern, a subject and a shorthand letter are strings, and anything else (a nu
 
 ### Limits
 
-A string crosses into the module as the UTF-16 code units it is, so an unpaired surrogate behaves exactly as it does in a JavaScript `RegExp` without the `u` flag. A pattern beyond a limit is a `RegexParseError`:
+A string crosses into the module as the UTF-16 code units it is, so an unpaired surrogate behaves exactly as it does in a JavaScript `RegExp` without the `u` flag. A pattern beyond a limit is a `RegexParseError`, and an input beyond a limit is a `RegexInputError`. The pattern limits:
 
 - a pattern is at most 400,000 code units long, and a longer one is refused from its length alone: it is not read or copied into the module, and the error names the length and echoes none of it;
 - groups nest at most 128 deep;
 - a repetition bound is a count that fits in 32 bits;
 - a pattern compiles to at most 100,000 automaton states, the match state included, which is checked from the tree before the automaton is built. A count multiplies what it repeats, and counts nest: `a{99999}` is within the limit, `a{100000}` is not, `(?:a{1000}){1000}` is not, and nor are several counts that are each within it and together are not.
 
-The simulation does at most one visit to a state per position of the input, so a test takes at most the pattern's states times the input's length plus one, whatever the pattern is.
+The simulation does at most one visit to a state per position of the input, so a test takes at most the pattern's states times the input's length plus one, whatever the pattern is. That bound is what a test is limited by, and the limits on an input are checked from lengths alone, before the input is copied into the module, so a refused input costs nothing proportional to it:
+
+- an input is at most 1,000,000 code units long;
+- the pattern's states times the input's length plus one is at most 100,000,000, so a pattern of a hundred states is tested against an input of the longest length, and a pattern at the state limit against at most 999 code units. The limit is on the bound, not on the visits a particular input happens to cause, so it is the same whatever the input holds.
+
+A `RegexInputError` names the numbers and echoes no input, and the compiled pattern stays usable. Both limits are per call; they bound one synchronous call, not the memory a held pattern costs.
 
 ### Memory
 

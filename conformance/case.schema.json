@@ -913,12 +913,37 @@
         "inputs": {
           "items": {
             "additionalProperties": false,
+            "oneOf": [
+              {
+                "properties": {
+                  "matches": {}
+                },
+                "required": [
+                  "matches"
+                ],
+                "type": "object"
+              },
+              {
+                "properties": {
+                  "refused": {}
+                },
+                "required": [
+                  "refused"
+                ],
+                "type": "object"
+              }
+            ],
             "properties": {
               "input": {
                 "$ref": "#/$defs/text"
               },
               "matches": {
+                "description": "Whether the pattern matches the input. Absent when refused is given instead.",
                 "type": "boolean"
+              },
+              "refused": {
+                "const": true,
+                "description": "That the matcher refuses the input, as one over a limit on its length or on the work its length allows the pattern, so there is no answer to give. Every entry point refuses it with the input-limit error."
               },
               "workBound": {
                 "additionalProperties": false,
@@ -937,8 +962,7 @@
               }
             },
             "required": [
-              "input",
-              "matches"
+              "input"
             ],
             "type": "object"
           },

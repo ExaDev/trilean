@@ -1371,12 +1371,37 @@
     },
     "MatchInput": {
       "additionalProperties": false,
+      "oneOf": [
+        {
+          "properties": {
+            "matches": {}
+          },
+          "required": [
+            "matches"
+          ],
+          "type": "object"
+        },
+        {
+          "properties": {
+            "refused": {}
+          },
+          "required": [
+            "refused"
+          ],
+          "type": "object"
+        }
+      ],
       "properties": {
         "input": {
           "$ref": "#/$defs/Text"
         },
         "matches": {
+          "description": "Whether the pattern matches the input. Absent when `refused` is given instead.",
           "type": "boolean"
+        },
+        "refused": {
+          "const": true,
+          "description": "That the matcher refuses the input, as one over a limit on its length or on the work its length allows the pattern (`MAX_INPUT_UNITS`, `MAX_WORK`), so there is no answer to give. A refusal is the same in every runtime: a `RegexInputError`."
         },
         "workBound": {
           "$ref": "#/$defs/WorkBound",
@@ -1384,8 +1409,7 @@
         }
       },
       "required": [
-        "input",
-        "matches"
+        "input"
       ],
       "type": "object"
     },

@@ -245,7 +245,8 @@ mod tests {
             [
                 "RegexParseError",
                 "UnsupportedConstructError",
-                "InternalError"
+                "InternalError",
+                "RegexInputError"
             ]
         );
         let index = index_js(package, GLUE, &errors, "#init");
@@ -256,7 +257,7 @@ mod tests {
         assert!(!index.contains("initSync"));
         assert!(!index.contains("default"));
         assert!(index.contains(
-            "registerErrorClasses(RegexParseError, UnsupportedConstructError, InternalError);"
+            "registerErrorClasses(RegexParseError, UnsupportedConstructError, InternalError, RegexInputError);"
         ));
         assert_eq!(index.matches("registerErrorClasses").count(), 2);
     }

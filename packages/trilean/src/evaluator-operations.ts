@@ -1,5 +1,9 @@
 import type { CompiledPattern } from "trilean-regex";
-import { RegexParseError, compilePattern } from "trilean-regex";
+import {
+  RegexInputError,
+  RegexParseError,
+  compilePattern,
+} from "trilean-regex";
 import type { ComputedValue, DurationUnit, Unit } from "./computed-value";
 import {
   combineUnitsForDivide,
@@ -294,7 +298,19 @@ export function compareText(
           `'${right.value}' is not a valid trilean-regex pattern: ${error.message}`,
         );
       }
-      const isMatch = testAndFree(compiled, left.value);
+      let isMatch: boolean;
+      try {
+        isMatch = testAndFree(compiled, left.value);
+      } catch (error) {
+        if (!(error instanceof RegexInputError)) {
+          throw error;
+        }
+
+        return indeterminate(
+          "domain-error",
+          `the text cannot be tested against '${right.value}': ${error.message}`,
+        );
+      }
 
       return definite(op === "portableMatches" ? isMatch : !isMatch);
     }

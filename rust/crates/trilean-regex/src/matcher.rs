@@ -5,7 +5,7 @@
 use std::cell::RefCell;
 
 use crate::ast::{CharClassNode, RegexNode, char_class_matches};
-use crate::error::RegexParseError;
+use crate::error::{RegexInputError, RegexParseError, TestPatternError};
 use crate::parser::parse_regex_utf16;
 
 /// What a consuming state accepts.
@@ -134,6 +134,18 @@ impl Compiler {
 /// The most states a pattern may compile to, the final match state included. A state and its mark take at most `BYTES_PER_STATE` bytes (a test holds the type to it), so a compiled pattern takes at most about eight megabytes: the limit is that figure divided by the size of a state, chosen so that a service holding a few hundred patterns at once stays within a few gigabytes. It bounds the memory a pattern can take before anything is allocated for it: `a{99999}` is within the limit and `a{100000}` is not, and so is `(?:a{1000}){1000}`, whose nested counts multiply. A pattern over it is a `RegexParseError` at the repetition that went over, or at index 0 when only the sum of several did.
 pub const MAX_STATES: usize = 100_000;
 
+/// The longest input, in UTF-16 code units, that a test reads. The input is copied once into a vector of code units, two bytes each, so the copy is at most two megabytes however long the caller's string is; a longer input is refused from its length alone, before it is copied.
+pub const MAX_INPUT_UNITS: usize = 1_000_000;
+
+/// The most NFA state visits the bound of one test may allow: `state_count() * (input length + 1)` is at most this. A visit is the epsilon closure expanding one state: a comparison of the state's mark, a match on its kind and at most two pushes, with no allocation once the pattern's scratch space has grown, so a visit costs a constant number of operations and this limit caps one synchronous call at a stated number of them, whatever the pattern and the input. It is `MAX_STATES` times a thousand positions, so a pattern at the state limit may be tested against at most 999 code units, and a pattern of a hundred states against an input at `MAX_INPUT_UNITS`.
+///
+/// The bound is what is limited, not the count a test happens to reach: the count of `a{99999}` against a thousand `a`s is a small fraction of it, but a pattern's worst case is its bound, and a limit on the bound is a limit the caller can check before testing. The limit is per call. The scratch space is reused, so what a held pattern costs does not grow with the calls made on it.
+pub const MAX_WORK: u64 = 100_000_000;
+
+/// The work limit is the state limit times a thousand positions, which its documentation states.
+#[cfg(test)]
+const _: () = assert!(MAX_WORK == MAX_STATES as u64 * 1_000);
+
 /// The most bytes a state and its mark take together, which `MAX_STATES` is derived from.
 #[cfg(test)]
 const BYTES_PER_STATE: usize = 80;
@@ -220,25 +232,59 @@ impl CompiledPattern {
         self.states.len()
     }
 
+    /// Refuses an input of `units` UTF-16 code units that this pattern may not be tested against: one longer than `MAX_INPUT_UNITS`, or one for which the bound `state_count() * (units + 1)` on the visits of a call is over `MAX_WORK`. A caller that has not yet copied the input into Rust asks this first, with the length alone, so nothing proportional to a refused input is allocated. Every test below asks it before it simulates anything.
+    pub fn check_input(&self, units: usize) -> Result<(), RegexInputError> {
+        if units > MAX_INPUT_UNITS {
+            return Err(RegexInputError::too_long(units));
+        }
+        let work = self.states.len() as u64 * (units as u64 + 1);
+        if work > MAX_WORK {
+            return Err(RegexInputError::too_much_work(
+                units,
+                self.states.len(),
+                work,
+            ));
+        }
+        Ok(())
+    }
+
     /// Whether any substring of `input` matches: a search, as a bare `RegExp.prototype.test` is, with `^` and `$` ordinary states of the automaton and not a separate mode. `input` is read as UTF-16 code units.
-    pub fn test(&self, input: &str) -> bool {
-        self.test_counted(input).0
+    ///
+    /// # Errors
+    ///
+    /// `RegexInputError` if `check_input` refuses the input's length in code units.
+    pub fn test(&self, input: &str) -> Result<bool, RegexInputError> {
+        self.test_counted(input).map(|(matched, _)| matched)
     }
 
     /// `test` for input that is already code units, which may hold an unpaired surrogate.
-    pub fn test_utf16(&self, input: &[u16]) -> bool {
-        self.test_utf16_counted(input).0
+    ///
+    /// # Errors
+    ///
+    /// `RegexInputError` if `check_input` refuses the input's length.
+    pub fn test_utf16(&self, input: &[u16]) -> Result<bool, RegexInputError> {
+        self.test_utf16_counted(input).map(|(matched, _)| matched)
     }
 
     /// `test`, with the number of NFA state visits it took.
-    pub fn test_counted(&self, input: &str) -> (bool, usize) {
+    ///
+    /// # Errors
+    ///
+    /// `RegexInputError` if `check_input` refuses the input's length in code units. The length is counted before the input is copied.
+    pub fn test_counted(&self, input: &str) -> Result<(bool, usize), RegexInputError> {
+        self.check_input(input.encode_utf16().count())?;
         self.test_utf16_counted(&input.encode_utf16().collect::<Vec<u16>>())
     }
 
     /// `test_utf16`, with the number of NFA state visits it took.
     ///
     /// A visit is the epsilon closure expanding a state, at most once per state per input position, so the count is at most `state_count() * (input.len() + 1)`: it never depends on how the pattern is nested or on what the input contains. The simulation adds a fresh thread at every position, as if `.*?` preceded the pattern, without building that prefix (Cox, "Regular Expression Matching Can Be Simple And Fast").
-    pub fn test_utf16_counted(&self, input: &[u16]) -> (bool, usize) {
+    ///
+    /// # Errors
+    ///
+    /// `RegexInputError` if `check_input` refuses the input's length.
+    pub fn test_utf16_counted(&self, input: &[u16]) -> Result<(bool, usize), RegexInputError> {
+        self.check_input(input.len())?;
         let mut scratch = self.scratch.borrow_mut();
         let mut simulation = Simulation {
             states: &self.states,
@@ -264,7 +310,7 @@ impl CompiledPattern {
             simulation.scratch.stack.push(self.start);
             matched = simulation.close(position + 1, length);
         }
-        (matched, simulation.visits)
+        Ok((matched, simulation.visits))
     }
 }
 
@@ -312,8 +358,12 @@ pub fn compile_pattern(pattern: &str) -> Result<CompiledPattern, RegexParseError
 }
 
 /// Parses `pattern` and tests it against `input` in one call, which costs what compiling and testing once cost.
-pub fn test_pattern(pattern: &str, input: &str) -> Result<bool, RegexParseError> {
-    compile_pattern(pattern).map(|compiled| compiled.test(input))
+///
+/// # Errors
+///
+/// `TestPatternError::Parse` if the pattern is refused, and `TestPatternError::Input` if the compiled pattern may not be tested against the input.
+pub fn test_pattern(pattern: &str, input: &str) -> Result<bool, TestPatternError> {
+    Ok(compile_pattern(pattern)?.test(input)?)
 }
 
 #[cfg(test)]
@@ -378,13 +428,12 @@ mod tests {
     #[test]
     fn a_pattern_tested_twice_gives_the_same_answer_and_the_same_work_without_a_new_allocation() {
         let compiled = crate::compile_pattern("^(?:a|ab)+c$").expect("pattern");
-        let first = compiled.test_counted("aabac");
+        let first = compiled.test_counted("aabac").expect("short");
         let capacity = compiled.scratch.borrow().marks.capacity();
-        assert_eq!(compiled.test_counted("aabac"), first);
+        assert_eq!(compiled.test_counted("aabac"), Ok(first));
         assert_eq!(compiled.scratch.borrow().marks.capacity(), capacity);
-        assert_eq!(
-            compiled.test_counted("aabax"),
-            (false, compiled.test_counted("aabax").1)
-        );
+        let (matched, visits) = compiled.test_counted("aabax").expect("short");
+        assert!(!matched);
+        assert_eq!(compiled.test_counted("aabax"), Ok((false, visits)));
     }
 }
