@@ -1,3 +1,53 @@
+## [2.0.0](https://github.com/ExaDev/trilean/compare/trilean%401.13.12...trilean%402.0.0) (2026-11-15)
+
+### ⚠ BREAKING CHANGES
+
+* **trilean-regex:** a test of an input over MAX_INPUT_UNITS, or over MAX_WORK for the pattern, throws
+  RegexInputError, where it ran for as long as its work took.
+* **trilean-regex:** the package is ES modules only (require() works through require(esm) from Node
+  20.19 and 22.12), and only the entry point is exported. A negated shorthand class is accepted inside
+  a character class. compileToNfa, matchesNfa, CompiledNfa and NfaState are no longer exported, since
+  NFA states hold closures. CompiledPattern is a class with a test method. A pattern with groups
+  nested more than 128 deep, or a repetition bound above 4294967295, is a RegexParseError.
+  RegexParseError is built from the finished message, which only the package does.
+* **trilean:** the package no longer has a CommonJS build. Import it as an ES module, or require
+  it on Node 20.19, 22.12 or later, which can require an ES module without a flag. The main and
+  module fields are removed, engines.node is ^20.19.0 || >=22.12.0, and require of the package on an
+  earlier Node fails with ERR_REQUIRE_ESM. It depends on trilean-regex 2, whose own breaking changes
+  apply.
+* **trilean:** the subpaths evaluator-test-helpers of trilean and compile-test-helpers and
+  guard-test-helpers of trilean-sql are no longer published.
+
+### Features
+
+* **trilean-regex:** refuse an input over a limit on its length or on the work it allows ([9edb2d2](https://github.com/ExaDev/trilean/commit/9edb2d23831a5cf10bece3e31d666542ab815aa7))
+* **trilean-regex:** ship the wasm build under the existing package name ([200dc6c](https://github.com/ExaDev/trilean/commit/200dc6cec5c64b35f7b8eac3731d7df0f2c7814f))
+* **trilean:** ship ES modules only ([28ba730](https://github.com/ExaDev/trilean/commit/28ba730b0477183aba8a3cf2550b8b4d4267f0df))
+
+### Bug Fixes
+
+* **trilean:** free the compiled pattern as soon as a portableMatches evaluation has answered ([897beb2](https://github.com/ExaDev/trilean/commit/897beb259a7e82b1deaff975e864033908c55890))
+* **trilean:** ship no test helper and no escaped description ([65a8eb8](https://github.com/ExaDev/trilean/commit/65a8eb85a74cd9b16e5457f76e4acc0673133847))
+* **trilean:** throw the error of a failed test of a portable pattern, and no fault as a bad pattern ([b86bbb0](https://github.com/ExaDev/trilean/commit/b86bbb00ba0247c608aad897a9bb317eb31b7dae))
+
+### Documentation
+
+* **trilean:** drop an em dash from the rewritten backtracking bullet ([04a758b](https://github.com/ExaDev/trilean/commit/04a758bc6a38f901536af7ca690185217b244ee0))
+* **trilean:** write the comments of the smoke test without a spaced double hyphen ([5f648a4](https://github.com/ExaDev/trilean/commit/5f648a4fec62159ea0448aa6b4af4be7f61a2da4))
+
+### Tests
+
+* **trilean-regex:** hold every loader to the fixture table ([7aa9a89](https://github.com/ExaDev/trilean/commit/7aa9a89903942358c2c4112a2875eb7ba4427fb1))
+
+### Build System
+
+* **trilean-regex:** bring the port into line with the corpus and the workspace on main ([209317d](https://github.com/ExaDev/trilean/commit/209317dfa3a688c59e9a80223549f692ecfe0a75))
+
+
+### Dependencies
+
+- Updated trilean-regex to 2.0.0
+
 ## [1.13.12](https://github.com/ExaDev/trilean/compare/trilean%401.13.11...trilean%401.13.12) (2026-11-14)
 
 ### Tests

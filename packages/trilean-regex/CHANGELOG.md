@@ -1,3 +1,68 @@
+## [2.0.0](https://github.com/ExaDev/trilean/compare/trilean-regex%401.0.24...trilean-regex%402.0.0) (2026-11-15)
+
+### ⚠ BREAKING CHANGES
+
+* **trilean-regex:** a pattern longer than 400,000 UTF-16 code units is a RegexParseError, where it was
+  read, and one of 150,000 or more atoms threw a RangeError from the wasm stack.
+* **trilean-regex:** a test of an input over MAX_INPUT_UNITS, or over MAX_WORK for the pattern, throws
+  RegexInputError, where it ran for as long as its work took.
+* **trilean-regex:** the package is ES modules only (require() works through require(esm) from Node
+  20.19 and 22.12), and only the entry point is exported. A negated shorthand class is accepted inside
+  a character class. compileToNfa, matchesNfa, CompiledNfa and NfaState are no longer exported, since
+  NFA states hold closures. CompiledPattern is a class with a test method. A pattern with groups
+  nested more than 128 deep, or a repetition bound above 4294967295, is a RegexParseError.
+  RegexParseError is built from the finished message, which only the package does.
+* **trilean-regex:** the package is ES modules only and exports only its entry point: the main and
+  module fields, the documented trilean-regex/errors subpath and every other subpath are gone, and
+  require() works only through require(esm) from Node 20.19 and 22.12. Importing it in a browser
+  fetches the module with top-level await, so a browser build needs a target that allows it; Node,
+  Bun and Deno import the module from the package with no file read. The sideEffects field is
+  removed. Its declarations need only the ES library, and Symbol.dispose is no longer declared. A
+  pattern, subject or shorthand letter that is not a string is a TypeError. rangeContains and
+  charClassMatches take code units. A negated shorthand class is accepted inside a class.
+  compileToNfa, matchesNfa, CompiledNfa and NfaState are removed. CompiledPattern is a class with
+  test and free. RegexParseError is built from its finished message and InternalError is added. A
+  pattern with groups nested over 128 deep, a repetition bound over 4294967295 or more than 100000
+  automaton states is a RegexParseError. Dependants whose CommonJS entries require this package fail
+  with ERR_REQUIRE_ESM on Node before 20.19 and 22.12.
+* **trilean-regex:** the text of five RegexParseError reasons changes: a spaced double hyphen becomes a
+  colon in the reasons for a quantifier that is itself quantified, a capturing group, an unterminated
+  character class, an empty character class and an unexpected character. Code that matches the old
+  text must match the new.
+
+### Features
+
+* **trilean-regex:** carry the module in the package for Node, so a bundle needs nothing beside it ([dda1f7d](https://github.com/ExaDev/trilean/commit/dda1f7d4af796a06cded5f349a7450ab7d3d5425))
+* **trilean-regex:** port the parser and matcher to a Rust crate ([be15f4f](https://github.com/ExaDev/trilean/commit/be15f4fc0b2fc6771960e65ab6b78f119e094f43))
+* **trilean-regex:** refuse an input over a limit on its length or on the work it allows ([9edb2d2](https://github.com/ExaDev/trilean/commit/9edb2d23831a5cf10bece3e31d666542ab815aa7))
+* **trilean-regex:** ship the wasm build under the existing package name ([200dc6c](https://github.com/ExaDev/trilean/commit/200dc6cec5c64b35f7b8eac3731d7df0f2c7814f))
+
+### Bug Fixes
+
+* **trilean-regex:** judge an ECMAScript class by the set it denotes and bound the automaton ([e5528b7](https://github.com/ExaDev/trilean/commit/e5528b7e874101b8d1783f8d1b967850f4634519))
+* **trilean-regex:** make the package work under every bundler, and say what it needs ([1f6a7ee](https://github.com/ExaDev/trilean/commit/1f6a7eeafef173c9ab13d1b20e5f5448bd85e9bc))
+* **trilean-regex:** refuse a pattern by its length before it is read ([01df26e](https://github.com/ExaDev/trilean/commit/01df26e7c7ecd006170d324887db2bf236746977))
+* **trilean-regex:** write the parser's messages without a spaced double hyphen ([4d1c2a0](https://github.com/ExaDev/trilean/commit/4d1c2a0211401dcdc22c5609292059a199fc66f2))
+
+### Code Refactoring
+
+* **trilean-regex:** decide range membership in the crate, not in the binding ([8a9fc13](https://github.com/ExaDev/trilean/commit/8a9fc134f37c13ecadd629a866845efb89ddcca0))
+
+### Documentation
+
+* **trilean-regex:** say what MAX_PATTERN_UNITS bounds and that the state limit is per pattern ([58c2c71](https://github.com/ExaDev/trilean/commit/58c2c71a33f252ec3b4653aa03cf930ddd2bca09))
+
+### Tests
+
+* **trilean-regex:** build the consumer with Vite and with esbuild for the browser too ([275e6c0](https://github.com/ExaDev/trilean/commit/275e6c0bb2e1b9567f25e2d9ab3c54771aab0727))
+* **trilean-regex:** derive the state limit from a state's size, restore recorded sources ([c45c824](https://github.com/ExaDev/trilean/commit/c45c824415f66dcecb03fc7c3c8d2f9395f15b34))
+* **trilean-regex:** give the differential against RegExp the time its work needs ([b67a015](https://github.com/ExaDev/trilean/commit/b67a01520fb1f4d5c94f2f2e875c685645ad0f48))
+
+### Build System
+
+* **trilean-regex:** bring the port into line with the corpus and the workspace on main ([209317d](https://github.com/ExaDev/trilean/commit/209317dfa3a688c59e9a80223549f692ecfe0a75))
+* **trilean-regex:** print the sizes, and build a copy with the test hooks for the tests ([c70689d](https://github.com/ExaDev/trilean/commit/c70689dfaa5acfcff46cb2ce558c4fad3c5cd2bd))
+
 ## [1.0.24](https://github.com/ExaDev/trilean/compare/trilean-regex%401.0.23...trilean-regex%401.0.24) (2026-11-14)
 
 ### Tests

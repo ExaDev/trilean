@@ -1,3 +1,29 @@
+## [3.0.0](https://github.com/ExaDev/trilean/compare/trilean-sql%402.3.0...trilean-sql%403.0.0) (2026-11-15)
+
+### ⚠ BREAKING CHANGES
+
+* **trilean-sql:** the package no longer has a CommonJS build. Import it as an ES module, or require
+  it on Node 20.19, 22.12 or later, which can require an ES module without a flag. The main and
+  module fields are removed, engines.node is ^20.19.0 || >=22.12.0, and require of the package on an
+  earlier Node fails with ERR_REQUIRE_ESM. It depends on trilean 2 and trilean-regex 2, whose own
+  breaking changes apply.
+* **trilean:** the subpaths evaluator-test-helpers of trilean and compile-test-helpers and
+  guard-test-helpers of trilean-sql are no longer published.
+
+### Features
+
+* **trilean-sql:** ship ES modules only ([07e7a69](https://github.com/ExaDev/trilean/commit/07e7a69664491ac51b4157ae196c05ce374bf5a8))
+
+### Bug Fixes
+
+* **trilean:** ship no test helper and no escaped description ([65a8eb8](https://github.com/ExaDev/trilean/commit/65a8eb85a74cd9b16e5457f76e4acc0673133847))
+
+
+### Dependencies
+
+- Updated trilean-regex to 2.0.0
+- Updated trilean to 2.0.0
+
 ## [2.3.0](https://github.com/ExaDev/trilean/compare/trilean-sql%402.2.42...trilean-sql%402.3.0) (2026-11-14)
 
 ### Features
