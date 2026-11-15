@@ -49,24 +49,45 @@ export interface CountOptions {
   probe?: ExpressionNode;
 }
 
+/** Whether a second argument of `count` is an options object or absent, and not a node or another value that a caller written for `count(collection, filter, probe)` passes, which an options object would read as nothing. */
+function isOptions(value: unknown): value is CountOptions | undefined {
+  return (
+    value === undefined ||
+    (typeof value === "object" &&
+      value !== null &&
+      !Array.isArray(value) &&
+      !Object.hasOwn(value, "kind"))
+  );
+}
+
 export const count = (
   collection: JsonValue,
-  { filter, probe }: CountOptions = {},
-): ExpressionNode => ({
-  kind: "fold",
-  collection,
-  filter,
-  combiner: {
-    mode: "reduce",
-    initial: { kind: "numberLiteral", value: 0 },
-    combine: {
-      kind: "arithmetic",
-      op: "add",
-      left: { kind: "accumulator" },
-      right: probe ? presenceOf(probe) : { kind: "numberLiteral", value: 1 },
+  ...rest: readonly [options?: CountOptions]
+): ExpressionNode => {
+  const [options]: readonly unknown[] = rest;
+  if (rest.length > 1 || !isOptions(options)) {
+    throw new TypeError(
+      "count takes its filter and probe as one options object, count(collection, { filter, probe }), and was given something else",
+    );
+  }
+  const { filter, probe }: CountOptions = options ?? {};
+
+  return {
+    kind: "fold",
+    collection,
+    filter,
+    combiner: {
+      mode: "reduce",
+      initial: { kind: "numberLiteral", value: 0 },
+      combine: {
+        kind: "arithmetic",
+        op: "add",
+        left: { kind: "accumulator" },
+        right: probe ? presenceOf(probe) : { kind: "numberLiteral", value: 1 },
+      },
     },
-  },
-});
+  };
+};
 
 export const average = (
   collection: JsonValue,
