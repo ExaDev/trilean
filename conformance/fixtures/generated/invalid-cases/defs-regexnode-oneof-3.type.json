@@ -2,21 +2,12 @@
   "cases": [
     {
       "expect": {
-        "ast": {
-          "branches": [
-            {
-              "codeUnit": 97,
-              "kind": "literal"
-            },
-            "not-the-type"
-          ],
-          "kind": "alternation"
-        }
+        "ast": "not-the-type"
       },
-      "from": "parser.unit.test.ts: alternation > allows an empty branch",
-      "id": "parse.alternation.allows-an-empty-branch.1",
+      "from": "recorded: trilean-regex src/parser.ts (no original test; cjk)",
+      "id": "parse.utf-16-code-units.cjk.1",
       "kind": "regex-parse",
-      "pattern": "a|"
+      "pattern": "日本"
     }
   ]
 }
