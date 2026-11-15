@@ -5,7 +5,10 @@
 use std::fs;
 use std::path::Path;
 
-use corpus_format::{Entry, Layout, Manifest, Tree, check_canonical, parse_canonical, select};
+use corpus_format::{
+    CaseSets, CaseSummary, Entry, Layout, Loader, Manifest, Tree, check_canonical, check_corpus,
+    fixtures, parse_canonical, select,
+};
 
 use super::corpus_root;
 
@@ -220,8 +223,68 @@ fn check_skipped_directories(failures: &mut Vec<String>) {
     }
 }
 
+/// This repository's reading of a corpus file, as the crate's loader: the types and the rules beside them.
+struct TrileanLoader;
+
+impl Loader for TrileanLoader {
+    fn load(&self, _name: &str, bytes: &[u8]) -> Result<Vec<CaseSummary>, String> {
+        let value: serde_json::Value =
+            serde_json::from_slice(bytes).map_err(|error| error.to_string())?;
+        let facts = super::validate::validate_file(&value)?;
+        Ok(facts
+            .ids
+            .iter()
+            .map(|id| CaseSummary {
+                id: id.clone(),
+                skip: if facts.ts_skip_ids.contains(id) {
+                    Some(corpus_format::Skip::Ts)
+                } else if facts.rust_skip_ids.contains(id) {
+                    Some(corpus_format::Skip::Rust)
+                } else {
+                    None
+                },
+                requires: Vec::new(),
+            })
+            .collect())
+    }
+}
+
+/// The crate holds this repository's real corpus to its rules, and this repository's fixtures hold the crate and the loader to
+/// theirs: every set the README lists as asserted by every loader is driven by the crate, with this loader's reading of a case file.
+fn check_crate_fixtures(failures: &mut Vec<String>) {
+    match read_tree(&corpus_root(), true) {
+        Ok(tree) => failures.extend(
+            check_corpus(&tree, &TrileanLoader)
+                .into_iter()
+                .map(|problem| format!("corpus-format: corpus: {problem}")),
+        ),
+        Err(error) => failures.push(error),
+    }
+    match read_tree(&corpus_root().join("fixtures"), false) {
+        Ok(tree) => failures.extend(
+            fixtures(
+                &tree,
+                &TrileanLoader,
+                &CaseSets {
+                    pairs: &[
+                        ("invalid-cases", "repaired-cases"),
+                        ("refused-kinds/invalid", "refused-kinds/repaired"),
+                        ("schema-only/invalid-cases", "schema-only/repaired-cases"),
+                        ("generated/invalid-cases", "generated/repaired-cases"),
+                    ],
+                    valid: &["valid-cases", "schema-only/valid-cases"],
+                },
+            )
+            .into_iter()
+            .map(|problem| format!("corpus-format: fixtures: {problem}")),
+        ),
+        Err(error) => failures.push(error),
+    }
+}
+
 pub fn check(failures: &mut Vec<String>) {
     check_skipped_directories(failures);
     check_selection(failures);
     check_fixture_bytes(failures);
+    check_crate_fixtures(failures);
 }

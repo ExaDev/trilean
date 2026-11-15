@@ -10,9 +10,6 @@ publish = false
 
 [dependencies]
 json-shape.workspace = true
-
-[dev-dependencies]
-# Test only: the check that the workspace reads a number literal as the nearest double.
 serde_json.workspace = true
 
 [lints]

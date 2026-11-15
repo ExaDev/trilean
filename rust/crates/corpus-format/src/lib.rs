@@ -10,7 +10,9 @@
 //! - [`Envelope`]: what every case has, whatever its kind;
 //! - [`Manifest`] and [`manifest_problems`]: what the corpus is said to hold;
 //! - [`Completeness`]: what a run is checked against the manifest with;
-//! - [`compare`], [`subset`] and [`fragments`]: how an expectation is compared with a result.
+//! - [`compare`], [`subset`] and [`fragments`]: how an expectation is compared with a result;
+//! - [`check_corpus`] and [`fixtures`]: a whole corpus, and the fixtures that hold the rules to account, given a repository's
+//!   own [`Loader`] for its case files.
 //!
 //! It holds no case kind, no schema of a kind, no executor and no list of classes to scrub: each is one repository's
 //! behaviour.
@@ -18,6 +20,7 @@
 mod canonical;
 mod compare;
 mod completeness;
+mod corpus;
 mod decode;
 mod envelope;
 mod manifest;
@@ -29,6 +32,7 @@ pub use canonical::{
 };
 pub use compare::{Mismatch, compare, fragments, subset};
 pub use completeness::{Completeness, Implementation};
+pub use corpus::{CORPUS_LAYOUT, CaseSets, Loader, check_corpus, fixtures};
 pub use decode::{DecodeError, Decoded, Encodings, decode};
 pub use envelope::{Envelope, Requirement, Skip, Tolerance};
 pub use manifest::{CaseSummary, CorpusFile, Manifest, ManifestEntry, manifest_problems};
