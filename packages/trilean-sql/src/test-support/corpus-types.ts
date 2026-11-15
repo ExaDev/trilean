@@ -135,6 +135,12 @@ export interface SqlGuardCase extends CaseBase {
         readonly nodeKind: string;
         readonly path: string;
         readonly reason: string;
+        readonly identifier?: {
+          readonly role: "column" | "table";
+          readonly key: string;
+          readonly name: Text;
+          readonly problem: string;
+        };
       }
     | { readonly error: SqlErrorData };
 }

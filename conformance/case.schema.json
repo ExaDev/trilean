@@ -2060,6 +2060,9 @@
             {
               "additionalProperties": false,
               "properties": {
+                "identifier": {
+                  "$ref": "#/$defs/sqlGuardIdentifier"
+                },
                 "nodeKind": {
                   "type": "string"
                 },
@@ -2121,6 +2124,36 @@
         "kind",
         "tree",
         "expect"
+      ],
+      "type": "object"
+    },
+    "sqlGuardIdentifier": {
+      "additionalProperties": false,
+      "description": "The name a refusal is about, when the refusal is a mapped name the dialect cannot render as an identifier: which mapping returned it (`role`), the reference key or collection key the mapping was asked about (`key`), the name it returned (`name`) and the description of the refusal, exactly (`problem`).",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "name": {
+          "$ref": "#/$defs/text"
+        },
+        "problem": {
+          "description": "The text exactly, character for character.",
+          "minLength": 1,
+          "type": "string"
+        },
+        "role": {
+          "enum": [
+            "column",
+            "table"
+          ]
+        }
+      },
+      "required": [
+        "role",
+        "key",
+        "name",
+        "problem"
       ],
       "type": "object"
     },

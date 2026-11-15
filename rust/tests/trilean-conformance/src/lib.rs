@@ -1026,10 +1026,33 @@ pub enum SqlGuardExpect {
         path: String,
         #[shape(min_length = 1)]
         reason: String,
+        identifier: Option<SqlGuardIdentifier>,
     },
     Failed {
         error: SqlError,
     },
+}
+
+/// The name a refusal is about when the refusal is a mapped name the dialect cannot render as an identifier.
+#[derive(Shape, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct SqlGuardIdentifier {
+    pub role: SqlGuardIdentifierRole,
+    /// The reference key or collection key the mapping was asked about.
+    pub key: String,
+    /// The name the mapping returned.
+    pub name: Text,
+    /// The description of the refusal, exactly.
+    #[shape(min_length = 1)]
+    pub problem: String,
+}
+
+/// Which mapping returned the refused name.
+#[derive(Shape, Clone, Copy, Debug, PartialEq, Eq)]
+#[serde(rename_all = "lowercase")]
+pub enum SqlGuardIdentifierRole {
+    Column,
+    Table,
 }
 
 #[derive(Shape, Clone, Debug, PartialEq)]

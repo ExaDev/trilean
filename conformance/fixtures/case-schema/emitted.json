@@ -2177,6 +2177,9 @@
         {
           "additionalProperties": false,
           "properties": {
+            "identifier": {
+              "$ref": "#/$defs/SqlGuardIdentifier"
+            },
             "nodeKind": {
               "type": "string"
             },
@@ -2207,6 +2210,42 @@
           ],
           "type": "object"
         }
+      ]
+    },
+    "SqlGuardIdentifier": {
+      "additionalProperties": false,
+      "description": "The name a refusal is about when the refusal is a mapped name the dialect cannot render as an identifier.",
+      "properties": {
+        "key": {
+          "description": "The reference key or collection key the mapping was asked about.",
+          "type": "string"
+        },
+        "name": {
+          "$ref": "#/$defs/Text",
+          "description": "The name the mapping returned."
+        },
+        "problem": {
+          "description": "The description of the refusal, exactly.",
+          "minLength": 1,
+          "type": "string"
+        },
+        "role": {
+          "$ref": "#/$defs/SqlGuardIdentifierRole"
+        }
+      },
+      "required": [
+        "role",
+        "key",
+        "name",
+        "problem"
+      ],
+      "type": "object"
+    },
+    "SqlGuardIdentifierRole": {
+      "description": "Which mapping returned the refused name.",
+      "enum": [
+        "column",
+        "table"
       ]
     },
     "SqlOptions": {
