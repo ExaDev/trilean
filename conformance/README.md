@@ -150,7 +150,7 @@ The cases are the specification of the package's behaviour: the reason codes, th
 | `evaluate` | 815 |
 | `inputs` | 13 |
 | `number-format` | 40 |
-| `regex-match` | 138 |
+| `regex-match` | 139 |
 | `regex-parse` | 98 |
 | `serialise` | 38 |
 | `validate` | 127 |

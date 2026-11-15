@@ -19,7 +19,7 @@
       }
     },
     "trilean-regex/match/matcher.json": {
-      "cases": 62,
+      "cases": 63,
       "skip": {
         "rust": [],
         "ts": []
