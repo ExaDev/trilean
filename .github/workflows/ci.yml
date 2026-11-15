@@ -162,12 +162,109 @@ jobs:
           command: |
             pnpm --filter trilean-regex build
             pnpm --filter trilean-regex pack --pack-destination "$RUNNER_TEMP/pack"
+            # `trilean` is packed here too, so the job that installs the packed packages in each runtime repeats neither the toolchain setup nor the builds. The version of `zod` the workspace resolves for `trilean` is recorded beside the tarballs (empty once `trilean` has no such dependency), so the consumer installs the same one and not whatever the registry holds that day.
+            pnpm --filter trilean build
+            pnpm --filter trilean pack --pack-destination "$RUNNER_TEMP/pack"
+            (cd packages/trilean && node -p "try { require('zod/package.json').version } catch { '' }") > "$RUNNER_TEMP/pack/zod-version.txt"
             pnpm exec playwright install --with-deps chromium
             for runtime in node chromium workerd; do
               node conformance/runner/$runtime.mjs "$RUNNER_TEMP"/pack/trilean-regex-*.tgz
             done
             # A consumer built from the same package with Rollup and with webpack, in production mode, run in Chromium and in Node.
             pnpm --filter trilean-regex test:e2e
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: packed-packages
+          path: ${{ runner.temp }}/pack
+          retention-days: 1
+          if-no-files-found: error
+
+  # The packed packages of `wasm-conformance`, installed the way a consumer installs them into a directory of their own, and the corpus's regex and validate cases run through their public entry points in each runtime the packages claim to support: the oldest Node of each supported line, Bun and Deno. The runtimes are pinned to exact versions, so a new release cannot change what passes without a change here, and they run no secret and no code of this repository's source tree.
+  packed-consumer:
+    name: Packed consumer
+    needs: [wasm-conformance]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: packed-packages
+          path: ${{ runner.temp }}/pack
+      - name: Install the tarballs into a directory of their own
+        run: |
+          consumer="$RUNNER_TEMP/consumer"
+          mkdir -p "$consumer/corpus/trilean-regex/match" "$consumer/corpus/trilean-regex/parse" "$consumer/corpus/trilean/validate"
+          for file in manifest.json trilean-regex/match/matcher.json trilean-regex/parse/parser.json trilean/validate/tree.json trilean/validate/computed-value.json; do
+            cp "conformance/$file" "$consumer/corpus/$file"
+          done
+          cp packages/trilean/test/runtimes/consumer.mjs "$consumer/"
+          cd "$consumer"
+          regex_tarball="$(ls "$RUNNER_TEMP"/pack/trilean-regex-*.tgz)"
+          trilean_tarball="$(ls "$RUNNER_TEMP"/pack/trilean-[0-9]*.tgz)"
+          zod_version="$(cat "$RUNNER_TEMP/pack/zod-version.txt")"
+          # `trilean` depends on the exact version of `trilean-regex` it was released with, which the registry may not hold, so the override makes that dependency the tarball too (`$trilean-regex` is the direct dependency's own specification), and `zod` is held at the version the workspace resolved.
+          overrides='"trilean-regex": "$trilean-regex"'
+          if [ -n "$zod_version" ]; then
+            overrides="$overrides, \"zod\": \"$zod_version\""
+          fi
+          printf '{ "private": true, "type": "module", "dependencies": { "trilean-regex": "file:%s", "trilean": "file:%s" }, "overrides": { %s } }\n' "$regex_tarball" "$trilean_tarball" "$overrides" > package.json
+          npm install --ignore-scripts --no-audit --no-fund
+          # The override must have taken effect: one copy of `trilean-regex` is installed, and it is the packed one, byte for byte where it counts.
+          copies="$(find node_modules -path '*/trilean-regex/package.json' | wc -l)"
+          test "$copies" = 1 || { echo "expected one trilean-regex, found $copies"; find node_modules -path '*/trilean-regex/package.json'; exit 1; }
+          packed="$(tar -xzOf "$regex_tarball" package/dist/trilean_regex_bg.wasm | sha256sum | cut -d' ' -f1)"
+          installed="$(sha256sum node_modules/trilean-regex/dist/trilean_regex_bg.wasm | cut -d' ' -f1)"
+          test "$packed" = "$installed" || { echo "the installed trilean-regex is not the packed one"; exit 1; }
+          npm ls --all
+          mkdir -p "$GITHUB_WORKSPACE/consumer-artifact"
+          tar -czf "$GITHUB_WORKSPACE/consumer-artifact/consumer.tgz" -C "$consumer" .
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: packed-consumer
+          path: consumer-artifact/consumer.tgz
+          retention-days: 1
+          if-no-files-found: error
+
+  runtimes:
+    name: Runtime ${{ matrix.runtime }} ${{ matrix.version }}
+    needs: [packed-consumer]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { runtime: node, version: 20.19.0 }
+          - { runtime: node, version: 22.12.0 }
+          - { runtime: bun, version: 1.4.4 }
+          - { runtime: deno, version: 2.9.8 }
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: packed-consumer
+      - name: Unpack the consumer
+        run: mkdir consumer && tar -xzf consumer.tgz -C consumer
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        if: matrix.runtime == 'node'
+        with:
+          node-version: ${{ matrix.version }}
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        if: matrix.runtime == 'bun'
+        with:
+          bun-version: ${{ matrix.version }}
+      - uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed # v2.0.5
+        if: matrix.runtime == 'deno'
+        with:
+          deno-version: ${{ matrix.version }}
+      - name: Run the corpus through the public entry points
+        working-directory: consumer
+        run: |
+          case "${{ matrix.runtime }}" in
+            node) node consumer.mjs corpus ;;
+            bun) bun consumer.mjs corpus ;;
+            deno) deno run --allow-read consumer.mjs corpus ;;
+          esac
 
   # The Rust workspace under rust/ is built and tested by cargo, not turbo, so these jobs sit beside the turbo-driven ones and need no pnpm install. The toolchain is whatever rust/rust-toolchain.toml pins, so the file stays the one place that names a version, and every cargo command runs against the committed Cargo.lock. The commands live in scripts/rust-checks.sh so the pre-push hook runs the same ones.
   rust:
@@ -223,6 +320,8 @@ jobs:
         test-smoke,
         test-workers,
         wasm-conformance,
+        packed-consumer,
+        runtimes,
         rust,
         cargo-deny,
       ]
