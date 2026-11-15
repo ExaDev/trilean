@@ -13,6 +13,7 @@ import {
 import { ExpressionNodeSchema, PredicateNodeSchema } from "../tree";
 import type { ExpressionNode } from "../tree";
 
+import { parseAs } from "../read-as";
 /**
  * The corpus files that are generated from the TypeScript implementation instead of extracted from a test, written the way the repository's lint writes a corpus file (keys sorted, two-space indent, one element per line) so that regenerating changes no byte of what is committed. `conformance.generated.unit.test.ts` regenerates them into a temporary directory and compares them with the committed files; `scripts/generate-corpus.ts` writes them into `conformance/`. Everything here is deterministic: the inputs are the lists below and the answers are the host's own.
  */
@@ -358,17 +359,17 @@ function serialise(): unknown {
   ])[] = [
     [
       "PredicateNodeSchema",
-      (input) => PredicateNodeSchema.parse(input),
+      (input) => parseAs(PredicateNodeSchema, input),
       PREDICATES,
     ],
     [
       "ExpressionNodeSchema",
-      (input) => ExpressionNodeSchema.parse(input),
+      (input) => parseAs(ExpressionNodeSchema, input),
       EXPRESSIONS,
     ],
     [
       "ComputedValueSchema",
-      (input) => ComputedValueSchema.parse(input),
+      (input) => parseAs(ComputedValueSchema, input),
       COMPUTED,
     ],
   ];

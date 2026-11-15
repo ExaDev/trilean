@@ -148,12 +148,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "trilean"
+version = "0.0.0"
+dependencies = [
+ "json-shape",
+ "serde_json",
+]
+
+[[package]]
 name = "trilean-conformance"
 version = "0.0.0"
 dependencies = [
  "corpus-format",
  "json-shape",
  "serde_json",
+ "trilean",
  "trilean-regex",
 ]
 
@@ -167,6 +176,16 @@ version = "0.0.0"
 dependencies = [
  "js-sys",
  "trilean-regex",
+ "wasm-bindgen",
+]
+
+[[package]]
+name = "trilean-wasm"
+version = "0.0.0"
+dependencies = [
+ "js-sys",
+ "json-shape",
+ "trilean",
  "wasm-bindgen",
 ]
 
@@ -223,6 +242,11 @@ dependencies = [
 [[package]]
 name = "xtask"
 version = "0.0.0"
+dependencies = [
+ "json-shape",
+ "serde_json",
+ "trilean",
+]
 
 [[package]]
 name = "zmij"

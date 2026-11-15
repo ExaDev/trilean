@@ -35,12 +35,13 @@ export default defineConfig({
           include: [
             "test/smoke.e2e.test.ts",
             "test/declaration-shape.e2e.test.ts",
+            "test/schemas.e2e.test.ts",
             "test/cli.e2e.test.ts",
           ],
         },
       },
       {
-        // Runs the test/workers suite under the real Cloudflare Workers runtime (workerd) via @cloudflare/vitest-plugin' cloudflareTest plugin. trilean's evaluator is designed to carry zero Node-API usage; this config turns that design property into a runtime-checked fact rather than an assertion -- if any module (or zod itself) touched a Node-only API, the workerd isolate would throw instead of the test passing.
+        // Runs the test/workers suite under the real Cloudflare Workers runtime (workerd) via @cloudflare/vitest-plugin' cloudflareTest plugin. trilean's evaluator is designed to carry zero Node-API usage; this config turns that design property into a runtime-checked fact rather than an assertion -- if any module (or the module that reads the trees) touched a Node-only API, the workerd isolate would throw instead of the test passing.
         plugins: [
           cloudflareTest({ wrangler: { configPath: "./wrangler.jsonc" } }),
         ],

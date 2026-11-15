@@ -3,11 +3,12 @@ import { ComputedValueSchema } from "../computed-value";
 import { ExpressionNodeSchema, PredicateNodeSchema } from "../tree";
 import type { NumberFormatCase, SerialiseCase } from "./corpus-types";
 import { decodeNumbers } from "./values";
+import { parseAs } from "../read-as";
 
 const PARSERS: Readonly<Record<string, (input: unknown) => unknown>> = {
-  PredicateNodeSchema: (input) => PredicateNodeSchema.parse(input),
-  ExpressionNodeSchema: (input) => ExpressionNodeSchema.parse(input),
-  ComputedValueSchema: (input) => ComputedValueSchema.parse(input),
+  PredicateNodeSchema: (input) => parseAs(PredicateNodeSchema, input),
+  ExpressionNodeSchema: (input) => parseAs(ExpressionNodeSchema, input),
+  ComputedValueSchema: (input) => parseAs(ComputedValueSchema, input),
 };
 
 /** Parses the text with the named schema and serialises the result again: the text must be exactly the case's. */

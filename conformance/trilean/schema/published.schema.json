@@ -1,0 +1,804 @@
+{
+  "$defs": {
+    "ExpressionNode": {
+      "anyOf": [
+        {
+          "oneOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "kind": {
+                  "const": "numberLiteral",
+                  "type": "string"
+                },
+                "unit": {
+                  "additionalProperties": {
+                    "type": "number"
+                  },
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "type": "object"
+                },
+                "value": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "kind",
+                "value"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "kind": {
+                  "const": "textLiteral",
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "kind",
+                "value"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "kind": {
+                  "const": "booleanLiteral",
+                  "type": "string"
+                },
+                "value": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "kind",
+                "value"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "kind": {
+                  "const": "instantLiteral",
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "kind",
+                "value"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "kind": {
+                  "const": "durationLiteral",
+                  "type": "string"
+                },
+                "unit": {
+                  "enum": [
+                    "ms",
+                    "s",
+                    "min",
+                    "h",
+                    "d"
+                  ],
+                  "type": "string"
+                },
+                "value": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "kind",
+                "value",
+                "unit"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "key": {
+                  "$ref": "#/$defs/schema0"
+                },
+                "kind": {
+                  "const": "reference",
+                  "type": "string"
+                },
+                "unit": {
+                  "additionalProperties": {
+                    "type": "number"
+                  },
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "type": "object"
+                }
+              },
+              "required": [
+                "kind",
+                "key"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "kind": {
+                  "const": "arithmetic",
+                  "type": "string"
+                },
+                "left": {
+                  "$ref": "#/$defs/ExpressionNode"
+                },
+                "op": {
+                  "enum": [
+                    "add",
+                    "subtract",
+                    "multiply",
+                    "divide",
+                    "power",
+                    "modulo"
+                  ],
+                  "type": "string"
+                },
+                "right": {
+                  "$ref": "#/$defs/ExpressionNode"
+                }
+              },
+              "required": [
+                "kind",
+                "op",
+                "left",
+                "right"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "kind": {
+                  "const": "negate",
+                  "type": "string"
+                },
+                "operand": {
+                  "$ref": "#/$defs/ExpressionNode"
+                }
+              },
+              "required": [
+                "kind",
+                "operand"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "args": {
+                  "items": {
+                    "$ref": "#/$defs/ExpressionNode"
+                  },
+                  "type": "array"
+                },
+                "fn": {
+                  "type": "string"
+                },
+                "kind": {
+                  "const": "call",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "kind",
+                "fn",
+                "args"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "keys": {
+                  "items": {
+                    "$ref": "#/$defs/ExpressionNode"
+                  },
+                  "type": "array"
+                },
+                "kind": {
+                  "const": "lookup",
+                  "type": "string"
+                },
+                "table": {
+                  "$ref": "#/$defs/schema0"
+                }
+              },
+              "required": [
+                "kind",
+                "table",
+                "keys"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "cases": {
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "then": {
+                        "$ref": "#/$defs/ExpressionNode"
+                      },
+                      "when": {
+                        "$ref": "#/$defs/PredicateNode"
+                      }
+                    },
+                    "required": [
+                      "when",
+                      "then"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "fallback": {
+                  "$ref": "#/$defs/ExpressionNode"
+                },
+                "hitPolicy": {
+                  "enum": [
+                    "first",
+                    "unique"
+                  ],
+                  "type": "string"
+                },
+                "kind": {
+                  "const": "conditional",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "kind",
+                "cases",
+                "fallback"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "collection": {
+                  "$ref": "#/$defs/schema0"
+                },
+                "combiner": {
+                  "oneOf": [
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "item": {
+                          "$ref": "#/$defs/ExpressionNode"
+                        },
+                        "mode": {
+                          "const": "max",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "mode",
+                        "item"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "item": {
+                          "$ref": "#/$defs/ExpressionNode"
+                        },
+                        "mode": {
+                          "const": "min",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "mode",
+                        "item"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "combine": {
+                          "$ref": "#/$defs/ExpressionNode"
+                        },
+                        "initial": {
+                          "$ref": "#/$defs/ExpressionNode"
+                        },
+                        "mode": {
+                          "const": "reduce",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "mode",
+                        "initial",
+                        "combine"
+                      ],
+                      "type": "object"
+                    }
+                  ]
+                },
+                "filter": {
+                  "$ref": "#/$defs/PredicateNode"
+                },
+                "kind": {
+                  "const": "fold",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "kind",
+                "collection",
+                "combiner"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "kind": {
+                  "const": "accumulator",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "kind"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "kind": {
+                  "const": "delegate",
+                  "type": "string"
+                },
+                "payload": {
+                  "$ref": "#/$defs/schema0"
+                },
+                "system": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "kind",
+                "system",
+                "payload"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "key": {
+                  "$ref": "#/$defs/schema0"
+                },
+                "kind": {
+                  "const": "treeReference",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "kind",
+                "key"
+              ],
+              "type": "object"
+            }
+          ]
+        },
+        {
+          "anyOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "im": {
+                  "type": "number"
+                },
+                "kind": {
+                  "const": "complexLiteral",
+                  "type": "string"
+                },
+                "re": {
+                  "type": "number"
+                },
+                "unit": {
+                  "additionalProperties": {
+                    "type": "number"
+                  },
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "type": "object"
+                }
+              },
+              "required": [
+                "kind",
+                "re",
+                "im"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "kind": {
+                  "const": "complexLiteral",
+                  "type": "string"
+                },
+                "magnitude": {
+                  "type": "number"
+                },
+                "phase": {
+                  "type": "number"
+                },
+                "unit": {
+                  "additionalProperties": {
+                    "type": "number"
+                  },
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "type": "object"
+                }
+              },
+              "required": [
+                "kind",
+                "magnitude",
+                "phase"
+              ],
+              "type": "object"
+            }
+          ]
+        }
+      ]
+    },
+    "PredicateNode": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "not",
+              "type": "string"
+            },
+            "operand": {
+              "$ref": "#/$defs/PredicateNode"
+            }
+          },
+          "required": [
+            "kind",
+            "operand"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "and",
+              "type": "string"
+            },
+            "left": {
+              "$ref": "#/$defs/PredicateNode"
+            },
+            "right": {
+              "$ref": "#/$defs/PredicateNode"
+            }
+          },
+          "required": [
+            "kind",
+            "left",
+            "right"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "or",
+              "type": "string"
+            },
+            "left": {
+              "$ref": "#/$defs/PredicateNode"
+            },
+            "right": {
+              "$ref": "#/$defs/PredicateNode"
+            }
+          },
+          "required": [
+            "kind",
+            "left",
+            "right"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "allOf",
+              "type": "string"
+            },
+            "operands": {
+              "items": {
+                "$ref": "#/$defs/PredicateNode"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "kind",
+            "operands"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "anyOf",
+              "type": "string"
+            },
+            "operands": {
+              "items": {
+                "$ref": "#/$defs/PredicateNode"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "kind",
+            "operands"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "compare",
+              "type": "string"
+            },
+            "left": {
+              "$ref": "#/$defs/ExpressionNode"
+            },
+            "op": {
+              "enum": [
+                "gt",
+                "gte",
+                "lt",
+                "lte",
+                "eq",
+                "neq"
+              ],
+              "type": "string"
+            },
+            "right": {
+              "$ref": "#/$defs/ExpressionNode"
+            }
+          },
+          "required": [
+            "kind",
+            "op",
+            "left",
+            "right"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "textCompare",
+              "type": "string"
+            },
+            "left": {
+              "$ref": "#/$defs/ExpressionNode"
+            },
+            "op": {
+              "enum": [
+                "equals",
+                "notEquals",
+                "matches",
+                "notMatches",
+                "portableMatches",
+                "portableNotMatches"
+              ],
+              "type": "string"
+            },
+            "right": {
+              "$ref": "#/$defs/ExpressionNode"
+            }
+          },
+          "required": [
+            "kind",
+            "op",
+            "left",
+            "right"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "candidates": {
+              "items": {
+                "$ref": "#/$defs/ExpressionNode"
+              },
+              "type": "array"
+            },
+            "kind": {
+              "const": "memberOf",
+              "type": "string"
+            },
+            "op": {
+              "enum": [
+                "in",
+                "notIn"
+              ],
+              "type": "string"
+            },
+            "operand": {
+              "$ref": "#/$defs/ExpressionNode"
+            }
+          },
+          "required": [
+            "kind",
+            "op",
+            "operand",
+            "candidates"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "exists",
+              "type": "string"
+            },
+            "operand": {
+              "$ref": "#/$defs/ExpressionNode"
+            }
+          },
+          "required": [
+            "kind",
+            "operand"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "collection": {
+              "$ref": "#/$defs/schema0"
+            },
+            "filter": {
+              "$ref": "#/$defs/PredicateNode"
+            },
+            "item": {
+              "$ref": "#/$defs/PredicateNode"
+            },
+            "kind": {
+              "const": "some",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "collection",
+            "item"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "collection": {
+              "$ref": "#/$defs/schema0"
+            },
+            "filter": {
+              "$ref": "#/$defs/PredicateNode"
+            },
+            "item": {
+              "$ref": "#/$defs/PredicateNode"
+            },
+            "kind": {
+              "const": "every",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "collection",
+            "item"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "key": {
+              "$ref": "#/$defs/schema0"
+            },
+            "kind": {
+              "const": "treeReference",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "key"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "schema0": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        },
+        {
+          "items": {
+            "$ref": "#/$defs/schema0"
+          },
+          "type": "array"
+        },
+        {
+          "additionalProperties": {
+            "$ref": "#/$defs/schema0"
+          },
+          "propertyNames": {
+            "type": "string"
+          },
+          "type": "object"
+        }
+      ]
+    }
+  },
+  "$id": "https://cdn.jsdelivr.net/npm/trilean@1.13.0/schemas/trilean.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/PredicateNode"
+    },
+    {
+      "$ref": "#/$defs/ExpressionNode"
+    }
+  ]
+}

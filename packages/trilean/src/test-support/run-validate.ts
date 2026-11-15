@@ -1,50 +1,39 @@
 import { expect } from "vitest";
 import * as computedValue from "../computed-value";
 import * as evaluation from "../evaluation";
+import { readAs } from "../read-as";
 import * as tree from "../tree";
+import type { StandardSchemaV1 } from "../../generated/schemas.js";
 import type { ValidateCase } from "./corpus-types";
 import { jsonEquals } from "./json-equal";
 import { decodeNumbers } from "./values";
 
-interface Issue {
-  readonly path: readonly PropertyKey[];
-  readonly message: string;
-}
-
-interface Schema {
-  readonly safeParse: (input: unknown) =>
-    | { readonly success: true; readonly data: unknown }
-    | {
-        readonly success: false;
-        readonly error: { readonly issues: readonly Issue[] };
-      };
-}
-
-function isSchema(value: unknown): value is Schema {
+function isSchema(value: unknown): value is StandardSchemaV1<unknown, unknown> {
   return (
     typeof value === "object" &&
     value !== null &&
-    "safeParse" in value &&
-    typeof value.safeParse === "function"
+    "~standard" in value &&
+    typeof value["~standard"] === "object"
   );
 }
 
 /** Every exported schema of the package, by export name: the name a `validate` case gives. */
-const schemas = new Map<string, Schema>(
+const schemas = new Map<string, StandardSchemaV1<unknown, unknown>>(
   [computedValue, evaluation, tree].flatMap((module) =>
-    Object.entries(module).filter((entry): entry is [string, Schema] =>
-      isSchema(entry[1]),
+    Object.entries(module).filter(
+      (entry): entry is [string, StandardSchemaV1<unknown, unknown>] =>
+        isSchema(entry[1]),
     ),
   ),
 );
 
-/** Validates the input with the named schema and compares the verdict, the parsed value . */
+/** Validates the input with the named schema and compares the verdict, the parsed value and the keys it holds. */
 export function runValidateCase(testCase: ValidateCase): void {
   const schema = schemas.get(testCase.schema);
   if (schema === undefined) {
     throw new Error(`no schema is exported under the name ${testCase.schema}`);
   }
-  const result = schema.safeParse(decodeNumbers(testCase.input));
+  const result = readAs(schema, decodeNumbers(testCase.input));
   const wanted = testCase.expect;
   expect(
     result.success,

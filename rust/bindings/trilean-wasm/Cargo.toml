@@ -1,0 +1,21 @@
+[package]
+name = "trilean-wasm"
+description = "The wasm binding of trilean: reads a document as one of the package's schemas in Node, Bun, Deno, browsers and Workers."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+js-sys.workspace = true
+json-shape.workspace = true
+trilean.workspace = true
+wasm-bindgen.workspace = true
+
+[lints]
+workspace = true

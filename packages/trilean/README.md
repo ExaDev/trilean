@@ -18,7 +18,7 @@ npm install trilean
 pnpm add trilean
 ```
 
-The package ships as dual ESM and CJS builds, is isomorphic (no assumptions about a Node, browser, or Workers runtime — see [Design principles](#design-principles)), and has zero runtime dependencies beyond [Zod](https://zod.dev).
+The package is ES modules only (Node 20.19, 22.12 or later can `require()` it), is isomorphic (no assumptions about a Node, browser, or Workers runtime — see [Design principles](#design-principles)), and depends only on [`trilean-regex`](https://www.npmjs.com/package/trilean-regex). Its trees are read and validated by a WebAssembly module built from Rust, which every runtime starts the way `trilean-regex` documents.
 
 ```ts
 import { evaluatePredicate, type PredicateNode, type Resolvers } from "trilean";
@@ -196,7 +196,7 @@ pnpm install
 pnpm build          # tsdown -> dist/ and the trilean command in dist-cli/, then generates schemas/trilean.schema.json
 pnpm test           # unit suite, against src/
 pnpm test:integration # multi-kind composition, schema-pipeline, and function-registry/delegate tests, against src/
-pnpm test:smoke     # builds first, then checks dist/ in both ESM and CJS, the generated JSON Schema and the built trilean command
+pnpm test:smoke     # builds first, then checks dist/ loaded as ES modules and through require(), the generated JSON Schema and the built trilean command
 pnpm test:workers   # runs the evaluator inside a real Cloudflare Workers isolate
 pnpm lint
 pnpm typecheck
@@ -330,34 +330,30 @@ Every fully-known input pair produces the correct classical XOR, and every combi
 
 ## Schema strategy
 
-The canonical definition lives in one place: a [Zod](https://zod.dev) schema per node kind. The TypeScript type is inferred from the schema (`z.infer<...>`), and a portable wire-format schema for documentation or cross-language interoperability is mechanically derived from the same Zod schema via `z.toJSONSchema()`. There is exactly one hand-authored artefact; the runtime validator and the JSON Schema document cannot drift apart because the second is generated from the first, not maintained alongside it.
+The canonical definition lives in one place: a Rust type per node kind, in `rust/crates/trilean`. Reading a document through it is validating it, with the path of every problem, and the same definition writes the TypeScript types, the JSON Schema and the schema objects this package exports, so none of the four can drift from another.
+
+Every exported `*Schema` is a frozen [Standard Schema](https://standardschema.dev) (version 1) object, which validation libraries and forms libraries already accept, and carries its JSON Schema as `jsonSchema`:
 
 ```ts
-import { z } from "zod";
+import { PredicateNodeSchema, type PredicateNode } from "trilean";
 
-// A JSON value with no further meaning imposed by this schema — used for every
-// opaque payload (reference keys, table identifiers, collection references,
-// delegation payloads). "Opaque" means "uninterpreted by this package", not
-// "untyped" — every one of these must still be plain, serialisable JSON.
-type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue };
-const JsonValueSchema: z.ZodType<JsonValue> = z.lazy(() =>
-  z.union([z.string(), z.number(), z.boolean(), z.null(), z.array(JsonValueSchema), z.record(z.string(), JsonValueSchema)])
-);
+const result = PredicateNodeSchema["~standard"].validate(JSON.parse(text));
+if (result.issues === undefined) {
+  const tree: PredicateNode = result.value; // keys the schema does not name are dropped
+} else {
+  for (const issue of result.issues) console.error(issue.path, issue.message);
+}
+
+PredicateNodeSchema.jsonSchema; // a JSON Schema document, with its definitions under $defs, to embed in another schema
 ```
 
-Node schemas are `z.discriminatedUnion("kind", [...])` over per-kind `z.object` shapes, following the concrete definitions below. A generated JSON Schema document (produced once, as a build step, via `z.toJSONSchema(PredicateNodeSchema)` / `z.toJSONSchema(ExpressionNodeSchema)`) is what a non-TypeScript consumer or an authoring UI would target.
+`validate` answers synchronously. A value that no JSON value is (a function, a `Date`, a number that is not finite, a string with an unpaired surrogate) is an issue at its path, as is an object that is not plain. A key the schema does not name is dropped from what `validate` returns and does not make the value invalid, as it never did; the published JSON Schema is stricter and says such a key is not allowed, which is the one difference between them. A complex literal is the exception: one that mixes its rectangular and polar fields, or carries any other key, is refused.
+
+The operators and node kinds are plain arrays, `comparisonOperators`, `textComparisonOperators`, `membershipOperators`, `arithmeticOperators`, `hitPolicies`, `durationUnits`, `predicateKinds` and `expressionKinds`, so code that needs the list does not read it out of a schema.
+
+A generated JSON Schema document (written by the build from the same definition) is what a non-TypeScript consumer or an authoring UI would target.
 
 The generated document carries a version-pinned `$id` — a jsDelivr URL naming the exact published version, e.g. `https://cdn.jsdelivr.net/npm/trilean@1.2.3/schemas/trilean.schema.json` — so a consumer's own rule file can point its `$schema` at a fixed target rather than a moving one. The file's bytes are exactly its RFC 8785 (JSON Canonicalization Scheme) canonical form — keys sorted recursively, no whitespace between tokens, no trailing newline — so `canonicalize(JSON.parse(file)) === file` holds under any JCS implementation, and the same input always produces the same bytes. That makes the file's own SHA-256 re-derivable from its parsed content alone, which is what lets a downloaded copy be checked against this package's SBOM and build-provenance attestations (see the release workflow).
-
-### Performance
-
-A consumer that parses and evaluates many trees at high throughput can opt into Zod 4.5's compiled-schema fast path by importing `zod/compile` once, at their own application's entry point:
-
-```ts
-import "zod/compile";
-```
-
-This package deliberately does **not** import it itself — `zod/compile` has global side effects on the Zod runtime, which would contradict this package's own `sideEffects: false` declaration and could surprise a consumer who never asked for it. Opting in (or not) is left entirely to whoever embeds the package.
 
 ## The predicate tree
 
@@ -1018,7 +1014,7 @@ The security research here surfaced findings worth knowing independent of the co
 
 | Tool | Category | Portable data | Async access | Missing ≠ false | Vendor-agnostic | Mixes logic & math | No code-exec risk | Published schema |
 |---|---|---|---|---|---|---|---|---|
-| [trilean](https://www.npmjs.com/package/trilean) | — | 🟢<br>JSON, Zod-validated, RFC 8785 canonical | 🟢<br>three typed resolver contracts | 🟢<br>definite/indeterminate, typed reason | 🟢<br>no assumptions about consumer data | 🟢<br>compare/textCompare/memberOf take formulas | 🟢<br>call's fn is a registry key, never code | 🟢<br>one Zod schema generates both |
+| [trilean](https://www.npmjs.com/package/trilean) | — | 🟢<br>JSON, schema-validated, RFC 8785 canonical | 🟢<br>three typed resolver contracts | 🟢<br>definite/indeterminate, typed reason | 🟢<br>no assumptions about consumer data | 🟢<br>compare/textCompare/memberOf take formulas | 🟢<br>call's fn is a registry key, never code | 🟢<br>one Zod schema generates both |
 | [JsonLogic](https://www.npmjs.com/package/json-logic-js) | Rule engine | 🟢 | 🔴<br>direct path lookup | 🔴<br>counts as false | 🟢 | 🟢<br>any operand can be another rule | 🟡<br>`method` op is an acknowledged escape hatch | 🔴<br>a JSON Schema request was never resolved |
 | [json-rules-engine](https://www.npmjs.com/package/json-rules-engine) | Rule engine | 🟢 | 🟢<br>async fact handlers | 🔴<br>undocumented | 🟢 | 🔴<br>docs call inline formulas "a design smell" | 🟢<br>operators are name-based registry lookups | 🔴<br>a proposed schema was never merged |
 | [json-rules-engine-simplified](https://www.npmjs.com/package/json-rules-engine-simplified) | Rule engine | 🟢 | 🔴<br>direct path lookup | 🔴<br>falls through to false | 🟢 | 🔴<br>no arithmetic/formula node exists | 🟢<br>no `eval()`, by the project's own claim | 🔴<br>README prose only |

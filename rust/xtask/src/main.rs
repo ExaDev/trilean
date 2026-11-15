@@ -10,7 +10,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::{Command, ExitCode};
 
-use packages::Package;
+use packages::{Flavour, Package};
 
 fn main() -> ExitCode {
     let arguments: Vec<String> = std::env::args().skip(1).collect();
@@ -93,8 +93,18 @@ fn build_npm_package(package: &Package, test_hooks: bool) -> Result<(), String> 
     let rust = rust_directory();
     let root = rust.parent().ok_or("the rust directory has no parent")?;
     let package_directory = root.join("packages").join(package.name);
-    let out_name = if test_hooks { "dist-test" } else { "dist" };
-    let dist = package_directory.join(out_name);
+    if test_hooks && package.flavour != Flavour::Api {
+        return Err(format!(
+            "{} has no copy for the tests of its binding, which only a package whose entry point is the binding's API has",
+            package.name
+        ));
+    }
+    let out_name = if test_hooks {
+        "dist-test".to_owned()
+    } else {
+        package.out_dir.to_owned()
+    };
+    let dist = package_directory.join(&out_name);
 
     let lock = fs::read_to_string(rust.join("Cargo.lock")).map_err(|error| error.to_string())?;
     let wanted =
@@ -145,7 +155,11 @@ fn build_npm_package(package: &Package, test_hooks: bool) -> Result<(), String> 
 
     let written = generate::write_support_files(package, &dist, test_hooks)?;
     if !test_hooks {
-        check_package_manifest(&package_directory.join("package.json"), &written)?;
+        check_package_manifest(
+            &package_directory.join("package.json"),
+            package.out_dir,
+            &written,
+        )?;
     }
     for (name, bytes) in &written.sizes {
         println!(
@@ -180,11 +194,12 @@ fn gzip_size(path: &Path) -> Result<usize, String> {
     Ok(output.stdout.len())
 }
 
-/// The `./dist/...` paths a package manifest names, in `exports`, `imports` and everywhere else it can.
-fn dist_paths(manifest: &str) -> BTreeSet<String> {
+/// The `./<out_dir>/...` paths a package manifest names, in `exports`, `imports` and everywhere else it can.
+fn dist_paths(manifest: &str, out_dir: &str) -> BTreeSet<String> {
     let mut paths = BTreeSet::new();
     let mut rest = manifest;
-    while let Some(start) = rest.find("\"./dist/") {
+    let prefix = format!("\"./{out_dir}/");
+    while let Some(start) = rest.find(&prefix) {
         let after = &rest[start + 1..];
         let Some(end) = after.find('"') else { break };
         paths.insert(after[..end].to_owned());
@@ -194,7 +209,11 @@ fn dist_paths(manifest: &str) -> BTreeSet<String> {
 }
 
 /// Checks that the manifest names exactly the entry points that were written: every path it names exists, and every entry point that was written is named.
-fn check_package_manifest(path: &Path, written: &generate::Written) -> Result<(), String> {
+fn check_package_manifest(
+    path: &Path,
+    out_dir: &str,
+    written: &generate::Written,
+) -> Result<(), String> {
     let manifest =
         fs::read_to_string(path).map_err(|error| format!("{}: {error}", path.display()))?;
     // `sideEffects` is a promise to every bundler about which modules may be dropped when nothing they export is used. The entry point has effects (it starts the module and registers the error classes), so a list that leaves it out, which is the mistake that is easy to make, makes a bundler drop them and the first call fail. No list is written, and a false one cannot be added.
@@ -204,17 +223,17 @@ fn check_package_manifest(path: &Path, written: &generate::Written) -> Result<()
             path.display()
         ));
     }
-    let named = dist_paths(&manifest);
+    let named = dist_paths(&manifest, out_dir);
     let wanted: BTreeSet<String> = written
         .entry_points
         .iter()
-        .map(|file| format!("./dist/{file}"))
+        .map(|file| format!("./{out_dir}/{file}"))
         .collect();
     if named == wanted {
         return Ok(());
     }
     Err(format!(
-        "{} names {named:?} under dist, and the build wrote the entry points {wanted:?}",
+        "{} names {named:?} under {out_dir}, and the build wrote the entry points {wanted:?}",
         path.display()
     ))
 }
@@ -241,7 +260,7 @@ mod tests {
     fn dist_paths_finds_every_dist_path_whatever_key_names_it() {
         let manifest = r##"{ "types": "./dist/index.d.ts", "imports": { "#init": { "node": "./dist/init.node.js" } }, "files": ["dist"], "x": "./src/a.js" }"##;
         assert_eq!(
-            dist_paths(manifest).into_iter().collect::<Vec<_>>(),
+            dist_paths(manifest, "dist").into_iter().collect::<Vec<_>>(),
             ["./dist/index.d.ts", "./dist/init.node.js"]
         );
     }
@@ -260,21 +279,21 @@ mod tests {
             r#"{ "a": "./dist/index.js", "b": "./dist/init.node.js" }"#,
         )
         .expect("write");
-        assert!(check_package_manifest(&manifest, &written).is_ok());
+        assert!(check_package_manifest(&manifest, "dist", &written).is_ok());
         fs::write(&manifest, r#"{ "a": "./dist/index.js" }"#).expect("write");
-        assert!(check_package_manifest(&manifest, &written).is_err());
+        assert!(check_package_manifest(&manifest, "dist", &written).is_err());
         fs::write(
             &manifest,
             r#"{ "a": "./dist/index.js", "b": "./dist/init.node.js", "c": "./dist/other.js" }"#,
         )
         .expect("write");
-        assert!(check_package_manifest(&manifest, &written).is_err());
+        assert!(check_package_manifest(&manifest, "dist", &written).is_err());
         fs::write(
             &manifest,
             r#"{ "sideEffects": false, "a": "./dist/index.js", "b": "./dist/init.node.js" }"#,
         )
         .expect("write");
-        assert!(check_package_manifest(&manifest, &written).is_err());
+        assert!(check_package_manifest(&manifest, "dist", &written).is_err());
         fs::remove_dir_all(&dir).expect("cleanup");
     }
 }

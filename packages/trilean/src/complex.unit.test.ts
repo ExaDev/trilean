@@ -8,6 +8,7 @@ import {
 import { evaluateValue } from "./evaluator-factory";
 import type { Resolvers } from "./resolvers";
 import { ExpressionNodeSchema } from "./tree";
+import { parseAs } from "./read-as";
 
 /** No helper below reaches a resolver at all; these exist only to satisfy `evaluateValue`'s signature for the one node-building check. */
 const resolvers: Resolvers = {
@@ -77,7 +78,7 @@ describe("complexMagnitude, complexPhase", () => {
 describe("complexLiteralFromPolar", () => {
   it("builds a complexLiteral the expression tree accepts, evaluating to the value complexFromPolar would have produced directly", async () => {
     const node = complexLiteralFromPolar(2, 0, { V: 1 });
-    expect(ExpressionNodeSchema.parse(node)).toEqual(node);
+    expect(parseAs(ExpressionNodeSchema, node)).toEqual(node);
 
     const result = await evaluateValue(node, undefined, resolvers);
     expect(result).toEqual({

@@ -8,5 +8,10 @@ license.workspace = true
 repository.workspace = true
 publish = false
 
+[dependencies]
+json-shape.workspace = true
+serde_json.workspace = true
+trilean.workspace = true
+
 [lints]
 workspace = true

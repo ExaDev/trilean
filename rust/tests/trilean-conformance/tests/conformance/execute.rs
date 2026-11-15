@@ -1,4 +1,4 @@
-//! Runs the regex cases against the native crate. A file reaches this module only after `validate` has accepted it in full, so a field that the format requires is read without a second check of its shape.
+//! Runs the cases of the kinds the native crates execute against them: the regex cases, the cases that read a document as one of trilean's schemas, the ones that read and write a document again, and the ones that write a number. A file reaches this module only after `validate` has accepted it in full, so a field that the format requires is read without a second check of its shape.
 
 use serde_json::{Map, Value, json};
 use trilean_regex::{
@@ -24,8 +24,10 @@ pub fn run_file(name: &str, file: &Value) -> Outcome {
     };
     let cases = file["cases"].as_array().map_or(&[][..], Vec::as_slice);
     for case in cases {
-        if !matches!(case["kind"].as_str(), Some("regex-parse" | "regex-match"))
-            || case.get("skip").and_then(Value::as_str) == Some("rust")
+        if !matches!(
+            case["kind"].as_str(),
+            Some("regex-parse" | "regex-match" | "validate" | "serialise" | "number-format")
+        ) || case.get("skip").and_then(Value::as_str) == Some("rust")
         {
             continue;
         }
@@ -45,6 +47,9 @@ fn run_case(case: &Value) -> Check<()> {
     match case["kind"].as_str() {
         Some("regex-parse") => run_parse_case(case),
         Some("regex-match") => run_match_case(case),
+        Some("validate") => run_validate_case(case),
+        Some("serialise") => run_serialise_case(case),
+        Some("number-format") => run_number_format_case(case),
         other => Err(format!("no executor for the kind {other:?}")),
     }
 }
@@ -256,4 +261,110 @@ fn run_match_case(case: &Value) -> Check<()> {
         }
     }
     Ok(())
+}
+
+/// The corpus JSON value as the value a schema reads, with each `{"$number": ...}` that names a number the canonical
+/// JSON form cannot hold replaced by that number. `None` when the value holds a NaN or an infinity, which no value of
+/// `json_shape` can: a schema refuses such a number, so a case that has one expects a refusal.
+fn decode_value(value: &Value) -> Option<json_shape::Value> {
+    Some(match value {
+        Value::Null => json_shape::Value::Null,
+        Value::Bool(flag) => json_shape::Value::Bool(*flag),
+        Value::Number(number) => json_shape::Value::Number(number.as_f64()?),
+        Value::String(text) => json_shape::Value::String(text.clone()),
+        Value::Array(items) => {
+            json_shape::Value::Array(items.iter().map(decode_value).collect::<Option<Vec<_>>>()?)
+        }
+        Value::Object(members) => {
+            if members.len() == 1
+                && let Some(Value::String(name)) = members.get("$number")
+            {
+                return match name.as_str() {
+                    "-0" => Some(json_shape::Value::Number(-0.0)),
+                    _ => None,
+                };
+            }
+            json_shape::Value::Object(
+                members
+                    .iter()
+                    .map(|(key, entry)| Some((key.clone(), decode_value(entry)?)))
+                    .collect::<Option<Vec<_>>>()?,
+            )
+        }
+    })
+}
+
+fn run_validate_case(case: &Value) -> Check<()> {
+    let name = case["schema"].as_str().unwrap_or_default();
+    let wanted = &case["expect"];
+    let accepted = wanted["ok"].as_bool() == Some(true);
+    let read = match decode_value(&case["input"]) {
+        Some(input) => trilean::schemas::read(name, &input)
+            .ok_or_else(|| format!("no schema is exported under the name {name}"))?,
+        None => Err(Vec::new()),
+    };
+    match (read, accepted) {
+        (Ok(read), true) => match wanted.get("value") {
+            None => Ok(()),
+            Some(expected) => {
+                let expected = decode_value(expected)
+                    .ok_or("the expected value holds a NaN or an infinity")?;
+                if read.json_equal(&expected) {
+                    Ok(())
+                } else {
+                    Err(format!("{name} read {read}, expected {expected}"))
+                }
+            }
+        },
+        (Err(_), false) => Ok(()),
+        (Ok(read), false) => Err(format!("{name} accepted the input and read {read}")),
+        (Err(issues), true) => Err(format!(
+            "{name} refused the input: {}",
+            issues
+                .iter()
+                .map(|issue| format!("{} {}", issue.pointer(), issue.message))
+                .collect::<Vec<_>>()
+                .join("; ")
+        )),
+    }
+}
+
+fn run_serialise_case(case: &Value) -> Check<()> {
+    let name = case["schema"].as_str().unwrap_or_default();
+    let text = case["input"].as_str().unwrap_or_default();
+    let input: json_shape::Value =
+        serde_json::from_str(text).map_err(|error| format!("the input is not JSON: {error}"))?;
+    let read = trilean::schemas::read(name, &input)
+        .ok_or_else(|| format!("no schema is exported under the name {name}"))?
+        .map_err(|issues| format!("{name} refused the input: {} problems", issues.len()))?;
+    let written = read.to_string();
+    let expected = case["expect"].as_str().unwrap_or_default();
+    if written == expected {
+        Ok(())
+    } else {
+        Err(format!("written {written}, expected {expected}"))
+    }
+}
+
+fn run_number_format_case(case: &Value) -> Check<()> {
+    let value = &case["value"];
+    let number = match value {
+        Value::Object(members) => match members.get("$number").and_then(Value::as_str) {
+            Some("-0") => -0.0,
+            Some("Infinity") => f64::INFINITY,
+            Some("-Infinity") => f64::NEG_INFINITY,
+            Some("NaN") => f64::NAN,
+            other => return Err(format!("$number names {other:?}")),
+        },
+        other => other
+            .as_f64()
+            .ok_or("a number-format case needs a number")?,
+    };
+    let written = trilean::ecmascript::number_to_string(number);
+    let expected = case["expect"].as_str().unwrap_or_default();
+    if written == expected {
+        Ok(())
+    } else {
+        Err(format!("written {written}, expected {expected}"))
+    }
 }
