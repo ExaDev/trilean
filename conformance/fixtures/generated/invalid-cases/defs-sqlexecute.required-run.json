@@ -1,19 +1,16 @@
 {
   "cases": [
     {
-      "dialect": "sqlite",
+      "dialect": "postgres",
       "expect": {
-        "rows": [
-          "ada",
-          "grace"
+        "queryError": [
+          "invalid byte sequence"
         ]
       },
       "fixture": "subjects",
-      "from": "x.unit.test.ts: a fixture",
-      "id": "optional.15",
-      "kind": "sql-execute",
-      "reason": "the implementation cannot run this case",
-      "skip": "rust"
+      "from": "postgres.identifiers.integration.test.ts: a text value holding a NUL > is refused at compile time, so the engine never sees it",
+      "id": "sql.execute.identifiers-nul.postgres-the-engine-rejects-a-nul",
+      "kind": "sql-execute"
     }
   ]
 }

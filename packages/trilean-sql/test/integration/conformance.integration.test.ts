@@ -197,7 +197,9 @@ async function runCase(testCase: SqlExecuteCase): Promise<void> {
         expect(outcome.rows.map((row) => row[0])).toEqual(expected.rows);
       }
       expect(await evaluatorRows(fixture, tree)).toEqual(
-        testCase.expectEvaluator ?? expected.rows,
+        testCase.expectEvaluator ??
+          testCase.expectEvaluatorLenient ??
+          expected.rows,
       );
     }
     const counts = Object.entries(testCase.expectTableCounts ?? {});

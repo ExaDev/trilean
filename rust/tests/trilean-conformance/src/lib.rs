@@ -1127,9 +1127,13 @@ pub struct SqlExecute {
     pub connection: Option<SqlConnection>,
     pub dialect: SqlDialect,
     pub expect: SqlExecuteExpect,
-    /// The ids the evaluator selects, given only where they differ from the rows because the engine reads a stored value
-    /// as unknown that the evaluator reads as a value.
+    /// The ids the evaluator selects, given only where they differ from the rows by the contract of the engine (a
+    /// stored value holding a NUL, which its GLOB reads only up to).
     pub expect_evaluator: Option<Vec<String>>,
+    /// The ids the TypeScript evaluator selects where they differ from the rows because it reads a stored instant
+    /// through `Date.parse`, a leniency of JavaScript and not a contract of the corpus. The loader reads it and no
+    /// runner of this implementation uses it.
+    pub expect_evaluator_lenient: Option<Vec<String>>,
     /// The exact text the compilation produced.
     pub expect_sql: Option<String>,
     /// The number of rows each named table holds once the query has run.

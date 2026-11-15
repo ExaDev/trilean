@@ -163,6 +163,7 @@ export interface SqlExecuteCase extends CaseBase {
     | { readonly queryError: readonly Text[] };
   readonly expectSql?: string;
   readonly expectEvaluator?: readonly string[];
+  readonly expectEvaluatorLenient?: readonly string[];
   readonly expectTableCounts?: Readonly<Record<string, number>>;
 }
 
