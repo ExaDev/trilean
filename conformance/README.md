@@ -362,6 +362,9 @@ A test stays in an implementation's own suite when a case cannot state it. Each 
 | declaration-shape.e2e.test.ts | exports both node-tree schemas in place | T4 |
 | declaration-shape.e2e.test.ts | declares nothing bare and re-exports nothing through a trailing list | T4 |
 | declaration-shape.e2e.test.ts | declaration shape of %s | T4 |
+| derived-aggregates.count.unit.test.ts | builds the same count whether the options are given as an empty object or left out | T1 |
+| derived-aggregates.count.unit.test.ts | refuses %s given as its second argument, the shape of the signature before the options object | T1 |
+| derived-aggregates.count.unit.test.ts | refuses %s, which the options object would have read as nothing | T1 |
 | duration-order.unit.test.ts | is exact for every pair of near-equal durations in different units, subnormals included | T3 |
 | duration-order.unit.test.ts | leaves a NaN unordered against anything, $leftUnit against $rightUnit | T3 |
 | duration-order.unit.test.ts | finds equal infinities equal and orders them against finite values, $leftUnit against $rightUnit | T3 |
