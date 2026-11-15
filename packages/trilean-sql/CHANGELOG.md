@@ -1,3 +1,20 @@
+## [3.0.1](https://github.com/ExaDev/trilean/compare/trilean-sql%403.0.0...trilean-sql%403.0.1) (2026-11-15)
+
+### Bug Fixes
+
+* **trilean-sql:** report the column or table that was refused in an identifier error ([2ee71b5](https://github.com/ExaDev/trilean/commit/2ee71b50fbe75044f2977341c53beac06440649a))
+* **trilean-sql:** write refusal reasons without a spaced double hyphen ([b45a53c](https://github.com/ExaDev/trilean/commit/b45a53c5a0dc22d69535fa951a105696c1cfd530))
+
+### Tests
+
+* move the trilean-sql tests into the conformance corpus ([3df0426](https://github.com/ExaDev/trilean/commit/3df0426fe6b62d4dd0670e8aa8143f2c1cd3b3f5))
+* separate the TypeScript evaluator's lenient instant reading from the corpus contract ([5c0ec4b](https://github.com/ExaDev/trilean/commit/5c0ec4bf8a1122dd266f380f2ffda499c4b04801))
+
+
+### Dependencies
+
+- Updated trilean to 2.0.1
+
 ## [3.0.0](https://github.com/ExaDev/trilean/compare/trilean-sql%402.3.0...trilean-sql%403.0.0) (2026-11-15)
 
 ### ⚠ BREAKING CHANGES

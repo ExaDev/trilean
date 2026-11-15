@@ -1,3 +1,9 @@
+## [2.0.1](https://github.com/ExaDev/trilean/compare/trilean%402.0.0...trilean%402.0.1) (2026-11-15)
+
+### Tests
+
+* move the trilean-sql tests into the conformance corpus ([3df0426](https://github.com/ExaDev/trilean/commit/3df0426fe6b62d4dd0670e8aa8143f2c1cd3b3f5))
+
 ## [2.0.0](https://github.com/ExaDev/trilean/compare/trilean%401.13.12...trilean%402.0.0) (2026-11-15)
 
 ### ⚠ BREAKING CHANGES
