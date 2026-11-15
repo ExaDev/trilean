@@ -373,6 +373,7 @@ A test stays in an implementation's own suite when a case cannot state it. Each 
 | declaration-shape.e2e.test.ts | declares nothing bare and re-exports nothing through a trailing list | T4 |
 | declaration-shape.e2e.test.ts | declaration shape of %s | T4 |
 | declarations.e2e.test.ts | compile with the ES library alone under %s resolution | T4 |
+| depth-limit.e2e.test.ts | is at most half of the smallest depth, over every shape, at which a Node's stack or the module's stack gives out | T4 |
 | derived-aggregates.count.unit.test.ts | builds the same count whether the options are given as an empty object or left out | T1 |
 | derived-aggregates.count.unit.test.ts | refuses %s given as its second argument, the shape of the signature before the options object | T1 |
 | derived-aggregates.count.unit.test.ts | refuses %s, which the options object would have read as nothing | T1 |

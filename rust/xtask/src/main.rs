@@ -26,10 +26,15 @@ fn main() -> ExitCode {
 fn run(arguments: &[String]) -> Result<(), String> {
     match arguments {
         [command, name, rest @ ..] if command == "npm" && rest.len() <= 1 => {
-            let test_hooks = match rest {
-                [] => false,
-                [flag] if flag == "--test-hooks" => true,
-                _ => return Err("usage: cargo xtask npm <package> [--test-hooks]".to_owned()),
+            let flag = match rest {
+                [] => None,
+                [flag] if flag == "--test-hooks" => Some(Variant::TestHooks),
+                [flag] if flag == "--measure" => Some(Variant::Measure),
+                _ => {
+                    return Err(
+                        "usage: cargo xtask npm <package> [--test-hooks | --measure]".to_owned(),
+                    );
+                }
             };
             let package = Package::named(name).ok_or_else(|| {
                 format!(
@@ -37,9 +42,9 @@ fn run(arguments: &[String]) -> Result<(), String> {
                     Package::names().join(", ")
                 )
             })?;
-            build_npm_package(package, test_hooks)
+            build_npm_package(package, flag)
         }
-        _ => Err("usage: cargo xtask npm <package> [--test-hooks]".to_owned()),
+        _ => Err("usage: cargo xtask npm <package> [--test-hooks | --measure]".to_owned()),
     }
 }
 
@@ -88,8 +93,19 @@ fn target_directory(rust: &Path) -> PathBuf {
     std::env::var_os("CARGO_TARGET_DIR").map_or_else(|| rust.join("target"), PathBuf::from)
 }
 
-/// Builds the package's `dist`, or with `test_hooks` its `dist-test`: the same files from a build of the binding crate with its `test-hooks` feature on, which adds what only the tests of the binding call (a deliberate panic), and is never published.
-fn build_npm_package(package: &Package, test_hooks: bool) -> Result<(), String> {
+/// A build of a package that is not the one that is published.
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum Variant {
+    /// `dist-test`: the same files from a build of the binding crate with its `test-hooks` feature on, which adds what only the tests of the binding call (a deliberate panic).
+    TestHooks,
+    /// `measure`: the glue and the module alone, from a build with `--cfg trilean_measure` set, which lifts the limits on what the module reads so that a test can find the depth at which a host's stack gives out. It has no entry point and no manifest, and the package's `files` do not name it.
+    Measure,
+}
+
+/// Builds the package's `dist`, or the variant asked for, none of which is published.
+fn build_npm_package(package: &Package, variant: Option<Variant>) -> Result<(), String> {
+    let test_hooks = variant == Some(Variant::TestHooks);
+    let measure = variant == Some(Variant::Measure);
     let rust = rust_directory();
     let root = rust.parent().ok_or("the rust directory has no parent")?;
     let package_directory = root.join("packages").join(package.name);
@@ -99,8 +115,16 @@ fn build_npm_package(package: &Package, test_hooks: bool) -> Result<(), String> 
             package.name
         ));
     }
+    if measure && package.flavour != Flavour::Schemas {
+        return Err(format!(
+            "{} has no build with its limits lifted, which only a package of schemas has",
+            package.name
+        ));
+    }
     let out_name = if test_hooks {
         "dist-test".to_owned()
+    } else if measure {
+        "measure".to_owned()
     } else {
         package.out_dir.to_owned()
     };
@@ -120,9 +144,18 @@ fn build_npm_package(package: &Package, test_hooks: bool) -> Result<(), String> 
     }
 
     let cargo = std::env::var_os("CARGO").unwrap_or_else(|| "cargo".into());
+    let measure_target = rust.join("target/measure");
     run_checked(
         Command::new(cargo)
             .current_dir(&rust)
+            .envs(if measure {
+                vec![
+                    ("RUSTFLAGS", "--cfg trilean_measure".to_owned()),
+                    ("CARGO_TARGET_DIR", measure_target.display().to_string()),
+                ]
+            } else {
+                Vec::new()
+            })
             .args(["build", "--locked", "--package", package.binding])
             .args(["--target", "wasm32-unknown-unknown", "--release"])
             .args(if test_hooks {
@@ -136,9 +169,13 @@ fn build_npm_package(package: &Package, test_hooks: bool) -> Result<(), String> 
         fs::remove_dir_all(&dist).map_err(|error| error.to_string())?;
     }
     fs::create_dir_all(&dist).map_err(|error| error.to_string())?;
-    let module = target_directory(&rust)
-        .join("wasm32-unknown-unknown/release")
-        .join(format!("{}.wasm", package.binding.replace('-', "_")));
+    let module = if measure {
+        measure_target
+    } else {
+        target_directory(&rust)
+    }
+    .join("wasm32-unknown-unknown/release")
+    .join(format!("{}.wasm", package.binding.replace('-', "_")));
     run_checked(
         Command::new("wasm-bindgen")
             // The generated module does not locate the `.wasm` file itself: each `#init` module says where the module is, and a bundler that follows `new URL(..., import.meta.url)` in the generated glue as well as in `init.browser.js` fails in module concatenation (webpack, production).
@@ -153,6 +190,13 @@ fn build_npm_package(package: &Package, test_hooks: bool) -> Result<(), String> 
         fs::remove_file(raw_declarations).map_err(|error| error.to_string())?;
     }
 
+    if measure {
+        println!(
+            "built packages/{}/{out_name}: the glue and the module",
+            package.name
+        );
+        return Ok(());
+    }
     let written = generate::write_support_files(package, &dist, test_hooks)?;
     if !test_hooks {
         check_package_manifest(

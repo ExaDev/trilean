@@ -3,6 +3,7 @@ dist/
 dist-test/
 schemas/
 /packages/*/generated/
+/packages/*/measure/
 *.tsbuildinfo
 .DS_Store
 coverage/

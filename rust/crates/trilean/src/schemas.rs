@@ -22,16 +22,18 @@ use crate::{
 /// The deepest nesting of arrays and objects a value may have to be read, which a document deeper than this is refused
 /// at, with an issue, before anything recurses to it.
 ///
-/// It is derived from where a stack gives out: a host's own call stack is about a megabyte (Node's default is 984 KB), as
-/// is the module's, and reading a level costs a frame in each. The limit is at most half of the depth at which either
-/// gives out for the costliest shape of tree, so a caller that has already used up to half of its host's stack before it
-/// reads a value still reads one at the limit. A host whose stack is smaller than Node's default, or a caller deeper in
-/// its own stack than that, can run out first, and V8 then throws a `RangeError` at the entry of the module, which no
-/// code in the module can turn into an issue; the documentation of the package says so.
+/// It is derived from where a stack gives out, which `packages/trilean/test/depth-limit.e2e.test.ts` measures on every
+/// run and does not take from this comment: the test builds the module with the limit lifted (`sh scripts/rust.sh xtask npm trilean --measure`), finds by bisection the deepest value of each of several shapes of tree that a Node with its default
+/// stack reads without a trap, and finds the same for the module's own 1 MiB stack, and it fails unless this limit is at
+/// most half of the smallest of them. Half is the margin: a caller that has already used up to half of its host's stack
+/// before it reads a value still reads one at the limit. A host whose stack is smaller than Node's default, or a
+/// caller deeper in its own stack than that, can run out first, and V8 then throws a `RangeError` at the entry of the
+/// module, which no code in the module can turn into an issue; the documentation of the package says so.
 pub const MAX_NESTING_DEPTH: usize = 500;
 
 /// The depth a read is held to: `MAX_NESTING_DEPTH`, except in a build made to measure where the stack gives out, which
-/// has none. The cfg is set by no build that is published.
+/// has none. That build is made by `sh scripts/rust.sh xtask npm trilean --measure`, which sets `--cfg trilean_measure` for it alone,
+/// into a target directory of its own, and writes where the package does not ship; no other build has the cfg.
 #[cfg(not(trilean_measure))]
 pub const fn nesting_limit() -> usize {
     MAX_NESTING_DEPTH
