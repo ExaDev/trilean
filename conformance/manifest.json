@@ -166,7 +166,7 @@
       }
     },
     "trilean/evaluate/evaluator.comparison.json": {
-      "cases": 59,
+      "cases": 60,
       "skip": {
         "rust": [],
         "ts": []
