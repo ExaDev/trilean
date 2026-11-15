@@ -499,18 +499,18 @@ export function compilePredicateNode(
 
   const unpushable = findUnpushableNodeKind(node, memoised);
   if (unpushable !== undefined) {
+    // The guard names the mapping that was refused, so the error reports the column or table that cannot be used, never another mapping's for the same key.
     if (unpushable.identifier?.role === "column") {
       throw new InvalidColumnError(
         unpushable.identifier.key,
-        memoised.columnFor(unpushable.identifier.key).column,
+        unpushable.identifier.name,
         unpushable.identifier.problem,
       );
     }
     if (unpushable.identifier?.role === "table") {
-      const table = memoised.collectionFor?.(unpushable.identifier.key).table;
       throw new InvalidCollectionTableError(
         unpushable.identifier.key,
-        table ?? "",
+        unpushable.identifier.name,
         unpushable.identifier.problem,
       );
     }
