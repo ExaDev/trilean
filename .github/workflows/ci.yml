@@ -172,6 +172,8 @@ jobs:
             done
             # A consumer built from the same package with Rollup and with webpack, in production mode, run in Chromium and in Node.
             pnpm --filter trilean-regex test:e2e
+            # The same for `trilean`, which is built and packed above and whose packed package holds a second wasm module beside the one of `trilean-regex`: each bundler, in a browser, in Node from a directory holding only the bundle, and in workerd.
+            pnpm --filter trilean test:e2e
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: packed-packages

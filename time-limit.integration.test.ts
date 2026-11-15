@@ -19,6 +19,8 @@ const NOT_A_WALK: Readonly<Record<string, string>> = {
     "is this guard, which names the corpus path in its own patterns and walks nothing",
   "release-workspace.integration.test.ts":
     "compares path strings with the release configuration and reads no corpus file",
+  "packages/trilean/test/workers/reader.e2e.test.ts":
+    "runs in the Workers runtime, which has no filesystem for the helper to count the corpus with, and checks the cases of four validate files that are imported into it as modules",
   "packages/trilean-regex/test/runner-budget.unit.test.ts":
     "lists the few files of conformance/runner, which is not corpus data",
 };

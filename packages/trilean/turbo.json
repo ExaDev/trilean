@@ -21,6 +21,13 @@
       "dependsOn": ["$TURBO_EXTENDS$", "_build"],
       "inputs": ["$TURBO_EXTENDS$", "$TURBO_ROOT$/conformance/**"]
     },
+    // Builds a consumer with each bundler from the packed package and of `trilean-regex` and runs it in a browser, in Node and in workerd, which is why it is its own task: it follows both builds, needs a browser installed and is never cached.
+    "_test:e2e": {
+      "cache": false,
+      "dependsOn": ["^_build", "_build"],
+      "inputs": ["test/**", "vitest.config.ts", "package.json"],
+      "passThroughEnv": ["PLAYWRIGHT_BROWSERS_PATH"]
+    },
     "_test:integration": {
       "dependsOn": ["$TURBO_EXTENDS$", "_build"]
     },

@@ -112,6 +112,7 @@
         "vitest.config.ts",
         "test/smoke.e2e.test.ts",
         "test/declaration-shape.e2e.test.ts",
+        "test/declarations.e2e.test.ts",
         "test/schemas.e2e.test.ts",
         "test/cli.e2e.test.ts"
       ],

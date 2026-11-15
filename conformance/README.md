@@ -328,6 +328,16 @@ A test stays in an implementation's own suite when a case cannot state it. Each 
 | Test file | Test | Code |
 | --- | --- | --- |
 | builtin-functions.unit.test.ts | is frozen, so changing the export cannot change what evaluation resolves | T1 |
+| bundlers.e2e.test.ts | runs when built by Rollup, with the module file copied beside the bundle | T4 |
+| bundlers.e2e.test.ts | runs when built by esbuild, with the module file copied beside the bundle | T4 |
+| bundlers.e2e.test.ts | runs when built by Vite (Rolldown) in production mode, which emits the module file itself | T4 |
+| bundlers.e2e.test.ts | runs when built by webpack in production mode | T4 |
+| bundlers.e2e.test.ts | runs when built by esbuild, from a directory holding only the bundle | T4 |
+| bundlers.e2e.test.ts | runs when built by Rollup, from a directory holding only the bundle | T4 |
+| bundlers.e2e.test.ts | runs when built by webpack, from a directory holding only the bundle | T4 |
+| bundlers.e2e.test.ts | runs under workerd when built by esbuild with the module files left as modules, which Workers compiles | T4 |
+| bundlers.e2e.test.ts | evaluates a tree that reaches both wasm modules and exits 0 | T4 |
+| bundlers.e2e.test.ts | reads the generated files beside it and not a copy of its own | T4 |
 | cli-run.integration.test.ts | prints the version for --version | T9 |
 | cli-unrepresentable.integration.test.ts | prints nothing on standard output, names the problem on standard error and exits 2 | T6 |
 | cli.e2e.test.ts | is the file package.json's bin names, with a node shebang | T4 |
@@ -362,6 +372,7 @@ A test stays in an implementation's own suite when a case cannot state it. Each 
 | declaration-shape.e2e.test.ts | exports both node-tree schemas in place | T4 |
 | declaration-shape.e2e.test.ts | declares nothing bare and re-exports nothing through a trailing list | T4 |
 | declaration-shape.e2e.test.ts | declaration shape of %s | T4 |
+| declarations.e2e.test.ts | compile with the ES library alone under %s resolution | T4 |
 | derived-aggregates.count.unit.test.ts | builds the same count whether the options are given as an empty object or left out | T1 |
 | derived-aggregates.count.unit.test.ts | refuses %s given as its second argument, the shape of the signature before the options object | T1 |
 | derived-aggregates.count.unit.test.ts | refuses %s, which the options object would have read as nothing | T1 |
@@ -427,6 +438,7 @@ A test stays in an implementation's own suite when a case cannot state it. Each 
 | json-schema.integration.test.ts | is able to tell two documents apart: a required key removed, a constant changed, a closed object opened and a member of a union dropped are each a difference | T4 |
 | json-schema.integration.test.ts | has the same meaning for %s: every constraint, every property and every alternative | T4 |
 | json-schema.integration.test.ts | reads %s alike for every tree of the corpus and every mutant | T4 |
+| reader.e2e.test.ts | passes the checks every host runs | T5 |
 | schema-pipeline.integration.test.ts | survives JSON.parse as a real own key: the control confirming the fixture is genuinely hazardous before validation | T1 |
 | schema-pipeline.integration.test.ts | cannot hijack a downstream copy's prototype once validated, where the unvalidated parse still can | T1 |
 | schema-pipeline.integration.test.ts | never leaks onto the shared Object.prototype, the global half of the attack | T1 |
