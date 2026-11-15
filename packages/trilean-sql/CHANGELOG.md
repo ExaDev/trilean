@@ -1,3 +1,9 @@
+## [3.0.2](https://github.com/ExaDev/trilean/compare/trilean-sql%403.0.1...trilean-sql%403.0.2) (2026-11-15)
+
+### Tests
+
+* **trilean-sql:** pin the identifier a guard refusal reports ([bf36c02](https://github.com/ExaDev/trilean/commit/bf36c02a9a8c2300862d4015568aa0045dd6051d))
+
 ## [3.0.1](https://github.com/ExaDev/trilean/compare/trilean-sql%403.0.0...trilean-sql%403.0.1) (2026-11-15)
 
 ### Bug Fixes
