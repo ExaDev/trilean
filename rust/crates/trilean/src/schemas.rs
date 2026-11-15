@@ -60,6 +60,33 @@ pub const MAX_ARRAY_LENGTH: usize = 65_536;
 /// parts, and a million values is more than any tree or list the evaluator accepts holds.
 pub const MAX_VALUES: usize = 1_000_000;
 
+/// The most code units one string, or one object key, may have, which a longer one is refused at, with an issue, from its
+/// length, before a unit of it is copied. It is the length of the longest text a portable pattern is tested against
+/// (`trilean_regex::MAX_INPUT_UNITS`, a million) rounded up to a power of two, so a text that the matcher accepts can be
+/// read.
+pub const MAX_STRING_UNITS: usize = 1_048_576;
+
+/// The most code units of text, in all the strings and object keys of one document, which a read may copy. A string that
+/// a value names more than once is copied once for each place it is named, so a count of values does not bound it: a
+/// string of a hundred million units named forty times is forty values. A unit is up to three bytes once copied into the
+/// module, and the text is held about four times at its largest, as it is read, as it is read again to be returned
+/// without the keys a map drops, as the copy that is checked, and as the string written back to the host, so the limit is
+/// four million units, which is four strings of the longest length: three bytes a unit and four copies make 48 megabytes
+/// of the module's memory at the most, under what a Workers isolate has to give.
+pub const MAX_TEXT_UNITS: usize = 4_194_304;
+
+/// The issue message for a string of `units` code units, which is more than `MAX_STRING_UNITS`.
+pub fn string_too_long(units: usize) -> String {
+    format!("the string has {units} code units, and a string may have at most {MAX_STRING_UNITS}")
+}
+
+/// The issue message for a document with more than `MAX_TEXT_UNITS` code units of text.
+pub fn too_much_text() -> String {
+    format!(
+        "the value holds more than {MAX_TEXT_UNITS} code units of text in all, which is more than can be read"
+    )
+}
+
 /// The issue message for a document with more than `MAX_VALUES` values.
 pub fn too_many_values() -> String {
     format!("the value holds more than {MAX_VALUES} values, which is more than can be read")
@@ -74,12 +101,25 @@ pub fn array_too_long(length: usize) -> String {
 /// `MAX_ARRAY_LENGTH` elements, and a value nested more than `MAX_NESTING_DEPTH` levels. A value nested beyond the
 /// limit is reported once, at the first value that is too deep, and not descended into.
 fn limit_issues(value: &Value) -> Vec<Issue> {
+    /// Adds `units` to the text counted so far, and reports the document once, at the string that passed the limit.
+    fn note_text(units: usize, path: &[PathSegment], issues: &mut Vec<Issue>, text: &mut usize) {
+        let before = *text;
+        *text = before.saturating_add(units);
+        if before <= MAX_TEXT_UNITS && *text > MAX_TEXT_UNITS {
+            issues.push(Issue {
+                path: path.to_vec(),
+                message: too_much_text(),
+            });
+        }
+    }
+
     fn visit(
         value: &Value,
         depth: usize,
         path: &mut Vec<PathSegment>,
         issues: &mut Vec<Issue>,
         values: &mut usize,
+        text: &mut usize,
     ) {
         *values += 1;
         if *values == MAX_VALUES + 1 {
@@ -90,6 +130,16 @@ fn limit_issues(value: &Value) -> Vec<Issue> {
         }
         if *values > MAX_VALUES {
             return;
+        }
+        if let Value::String(string) = value {
+            let units = string.encode_utf16().count();
+            if units > MAX_STRING_UNITS {
+                issues.push(Issue {
+                    path: path.clone(),
+                    message: string_too_long(units),
+                });
+            }
+            note_text(units, path, issues, text);
         }
         let (Value::Array(_) | Value::Object(_)) = value else {
             return;
@@ -114,14 +164,22 @@ fn limit_issues(value: &Value) -> Vec<Issue> {
                 }
                 for (index, element) in elements.iter().enumerate() {
                     path.push(PathSegment::Index(index));
-                    visit(element, depth + 1, path, issues, values);
+                    visit(element, depth + 1, path, issues, values, text);
                     path.pop();
                 }
             }
             Value::Object(members) => {
                 for (key, member) in members {
                     path.push(PathSegment::Key(key.clone()));
-                    visit(member, depth + 1, path, issues, values);
+                    let units = key.encode_utf16().count();
+                    if units > MAX_STRING_UNITS {
+                        issues.push(Issue {
+                            path: path.clone(),
+                            message: string_too_long(units),
+                        });
+                    }
+                    note_text(units, path, issues, text);
+                    visit(member, depth + 1, path, issues, values, text);
                     path.pop();
                 }
             }
@@ -129,7 +187,7 @@ fn limit_issues(value: &Value) -> Vec<Issue> {
         }
     }
     let mut issues = Vec::new();
-    visit(value, 0, &mut Vec::new(), &mut issues, &mut 0);
+    visit(value, 0, &mut Vec::new(), &mut issues, &mut 0, &mut 0);
     issues
 }
 
