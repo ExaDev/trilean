@@ -1,0 +1,19 @@
+[package]
+name = "corpus-format"
+description = "The format of a language-neutral conformance corpus: which files are corpus files, canonical bytes, encodings, manifest, completeness and comparison."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[dependencies]
+json-shape.workspace = true
+
+[dev-dependencies]
+# Test only: the check that the workspace reads a number literal as the nearest double.
+serde_json.workspace = true
+
+[lints]
+workspace = true
