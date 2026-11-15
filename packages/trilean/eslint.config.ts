@@ -85,6 +85,23 @@ export default defineConfig(
     files: ["src/tree.ts"],
     linterOptions: { noInlineConfig: false },
   },
+  // The checks a consumer of the packed package runs are plain JavaScript that runs in a browser, in a Worker and in Node alike, so no TypeScript program includes them: they are linted without type information, against the globals of those hosts.
+  {
+    files: ["test/support/**/*.mjs"],
+    extends: [tseslint.configs.disableTypeChecked],
+    languageOptions: { globals: { ...globals.node, ...globals.browser } },
+    rules: Object.fromEntries(
+      [
+        "exadev/no-array-isarray-mutation",
+        "exadev/no-enum-number-widening",
+        "exadev/no-enum-reverse-lookup-widening",
+        "exadev/no-map-instanceof-mutation",
+        "exadev/no-set-instanceof-mutation",
+        "exadev/prefer-numeric-sort-compare",
+        "exadev/prefer-readonly-object-param",
+      ].map((rule) => [rule, "off"]),
+    ),
+  },
   {
     files: ["**/*.test.ts"],
     rules: {

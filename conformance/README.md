@@ -435,8 +435,8 @@ A test stays in an implementation's own suite when a case cannot state it. Each 
 | schemas.e2e.test.ts | refuses a string with an unpaired surrogate, which no Rust string holds, and reads a pair | T4 |
 | schemas.e2e.test.ts | drops a __proto__ key wherever the schema holds an opaque value or a map, and leaves Object.prototype alone | T4 |
 | schemas.e2e.test.ts | returns an object whose keys are own data properties, so a key named like an Object method is data | T4 |
-| schemas.e2e.test.ts | refuses a value nested beyond the limit with an issue, not a stack overflow, and reads one within it | T4 |
 | schemas.e2e.test.ts | reads the same tree to the same value on every call | T4 |
+| schemas.e2e.test.ts | passes the checks every host of the package runs, which are the corpus's validate cases and the limits at their edges | T4 |
 | schemas.e2e.test.ts | refuses %s as an opaque payload, at its path, without throwing | T4 |
 | smoke.e2e.test.ts | ship no test helper | T4 |
 | smoke.e2e.test.ts | dist/index.js exposes every expected export | T4 |

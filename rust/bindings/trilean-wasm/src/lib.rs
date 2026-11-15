@@ -5,7 +5,7 @@
 //! with a message and the path of the value it is about. Nothing here is validation logic: the value is converted to
 //! an ordered JSON value, `trilean::schemas::read` decides, and the answer is converted back.
 
-use js_sys::{Array, Object, Reflect};
+use js_sys::{Array, Function, Object, Reflect};
 use json_shape::{Issue, PathSegment, Value};
 use wasm_bindgen::prelude::*;
 
@@ -23,7 +23,37 @@ export type SchemaReading =
   | { readonly issues: readonly SchemaIssue[] };
 "#;
 
-use trilean::schemas::{MAX_ARRAY_LENGTH, MAX_NESTING_DEPTH};
+use std::cell::RefCell;
+
+use trilean::schemas::{MAX_ARRAY_LENGTH, MAX_NESTING_DEPTH, MAX_VALUES, nesting_limit};
+
+thread_local! {
+    /// `Array.isArray` and `Object.keys`, which are called as functions so that a value that makes them throw (a revoked
+    /// or hostile `Proxy`) is an issue and not an exception through the module's frames.
+    static HELPERS: RefCell<Option<(Function, Function)>> = const { RefCell::new(None) };
+}
+
+/// The two helpers, looked up once.
+fn helpers() -> Result<(Function, Function), JsValue> {
+    HELPERS.with(|cell| {
+        if let Some(found) = cell.borrow().as_ref() {
+            return Ok(found.clone());
+        }
+        let global = js_sys::global();
+        let lookup = |constructor: &str, name: &str| -> Result<Function, JsValue> {
+            let constructor = Reflect::get(&global, &JsValue::from_str(constructor))?;
+            Ok(Reflect::get(&constructor, &JsValue::from_str(name))?.unchecked_into())
+        };
+        let found = (lookup("Array", "isArray")?, lookup("Object", "keys")?);
+        *cell.borrow_mut() = Some(found.clone());
+        Ok(found)
+    })
+}
+
+/// A failure of the host while a value was being read, which is an issue at the path of the value and not an exception.
+fn host_failure(path: &[PathSegment]) -> Found {
+    issue(path, "the value could not be read: reading it threw")
+}
 
 struct Found {
     path: Vec<PathSegment>,
@@ -55,8 +85,6 @@ fn kind_of(value: &JsValue) -> &'static str {
         "a number"
     } else if value.is_string() {
         "a string"
-    } else if Array::is_array(value) {
-        "an array"
     } else {
         "an object"
     }
@@ -64,9 +92,9 @@ fn kind_of(value: &JsValue) -> &'static str {
 
 /// Whether the object is a plain one: its prototype is `Object.prototype` or none, so a `Date`, a `Map`, a class
 /// instance and every other object that is not data are refused.
-fn is_plain(object: &Object) -> bool {
-    let prototype = Object::get_prototype_of(object);
-    prototype.is_null() || prototype == Object::get_prototype_of(&Object::new())
+fn is_plain(object: &Object) -> Result<bool, JsValue> {
+    let prototype = Reflect::get_prototype_of(object)?;
+    Ok(prototype.is_null() || prototype == Reflect::get_prototype_of(&Object::new())?)
 }
 
 /// A JavaScript string as text. A string that holds an unpaired surrogate has no text, since a Rust string holds
@@ -103,7 +131,19 @@ fn has_unpaired_surrogate(string: &js_sys::JsString) -> bool {
 }
 
 /// A JavaScript value as an ordered JSON value, or the first thing about it that no JSON value is.
-fn read_value(value: &JsValue, path: &mut Vec<PathSegment>, depth: usize) -> Result<Value, Found> {
+///
+/// Every step that can run the value's own code (a getter, a `Proxy` trap) goes through a call that reports a throw as
+/// a result, so an exception never crosses the module's frames, which would leak them.
+fn read_value(
+    value: &JsValue,
+    path: &mut Vec<PathSegment>,
+    depth: usize,
+    values: &mut usize,
+) -> Result<Value, Found> {
+    *values += 1;
+    if *values > MAX_VALUES {
+        return Err(issue(path, trilean::schemas::too_many_values()));
+    }
     if value.is_null() {
         return Ok(Value::Null);
     }
@@ -123,14 +163,20 @@ fn read_value(value: &JsValue, path: &mut Vec<PathSegment>, depth: usize) -> Res
     if let Some(string) = value.dyn_ref::<js_sys::JsString>() {
         return text_of(string, path).map(Value::String);
     }
-    let is_array = Array::is_array(value);
+    let (is_array_function, keys_function) = helpers().map_err(|_| host_failure(path))?;
+    let is_array = value.is_object()
+        && is_array_function
+            .call1(&JsValue::UNDEFINED, value)
+            .map_err(|_| host_failure(path))?
+            .as_bool()
+            == Some(true);
     if !is_array && !value.is_object() {
         return Err(issue(
             path,
             format!("expected a JSON value, found {}", kind_of(value)),
         ));
     }
-    if depth >= MAX_NESTING_DEPTH {
+    if depth >= nesting_limit() {
         return Err(issue(
             path,
             format!(
@@ -140,7 +186,13 @@ fn read_value(value: &JsValue, path: &mut Vec<PathSegment>, depth: usize) -> Res
     }
     if is_array {
         let array: &Array = value.unchecked_ref();
-        let length = array.length();
+        // The length is read as a property is, which reports a throw, and it is a number and not something that
+        // converts to one: a `Proxy` whose `length` throws or answers with an object is an issue.
+        let length = Reflect::get(array, &JsValue::from_str("length"))
+            .ok()
+            .and_then(|found| found.as_f64())
+            .filter(|found| found.fract() == 0.0 && (0.0..=f64::from(u32::MAX)).contains(found))
+            .ok_or_else(|| host_failure(path))? as u32;
         if length as usize > MAX_ARRAY_LENGTH {
             return Err(issue(
                 path,
@@ -150,11 +202,12 @@ fn read_value(value: &JsValue, path: &mut Vec<PathSegment>, depth: usize) -> Res
         let mut elements = Vec::with_capacity(length as usize);
         for index in 0..length {
             path.push(PathSegment::Index(index as usize));
-            let element = array.get(index);
-            let read = if element.is_undefined() {
-                Err(issue(path, "expected a JSON value, found undefined"))
-            } else {
-                read_value(&element, path, depth + 1)
+            let read = match Reflect::get_u32(array, index) {
+                Err(_) => Err(host_failure(path)),
+                Ok(element) if element.is_undefined() => {
+                    Err(issue(path, "expected a JSON value, found undefined"))
+                }
+                Ok(element) => read_value(&element, path, depth + 1, values),
             };
             path.pop();
             elements.push(read?);
@@ -162,25 +215,34 @@ fn read_value(value: &JsValue, path: &mut Vec<PathSegment>, depth: usize) -> Res
         return Ok(Value::Array(elements));
     }
     let object: &Object = value.unchecked_ref();
-    if !is_plain(object) {
+    if !is_plain(object).map_err(|_| host_failure(path))? {
         return Err(issue(
             path,
             "expected a plain object, found an object of another kind",
         ));
     }
+    let keys: Array = keys_function
+        .call1(&JsValue::UNDEFINED, object)
+        .map_err(|_| host_failure(path))?
+        .unchecked_into();
     let mut members = Vec::new();
-    for key in Object::keys(object).iter() {
-        let Some(name) = key.as_string() else {
+    for key in keys.iter() {
+        // A key is a string, and one with an unpaired surrogate is refused as a string value is, since a Rust string
+        // would hold a different key in its place, and two such keys could become one.
+        let Some(key_text) = key.dyn_ref::<js_sys::JsString>() else {
             continue;
         };
-        let member =
-            Reflect::get(object, &key).map_err(|_| issue(path, "a property could not be read"))?;
+        let name = text_of(key_text, path).map_err(|found| Found {
+            message: "an object key holds an unpaired surrogate".to_owned(),
+            ..found
+        })?;
+        let member = Reflect::get(object, &key).map_err(|_| host_failure(path))?;
         // A property that is `undefined` is an absent one, as it is to a reader of the object.
         if member.is_undefined() {
             continue;
         }
         path.push(PathSegment::Key(name.clone()));
-        let read = read_value(&member, path, depth + 1);
+        let read = read_value(&member, path, depth + 1, values);
         path.pop();
         members.push((name, read?));
     }
@@ -260,7 +322,7 @@ pub fn read_schema(
     #[wasm_bindgen(unchecked_param_type = "string")] name: &str,
     #[wasm_bindgen(unchecked_param_type = "unknown")] value: &JsValue,
 ) -> Result<JsValue, JsValue> {
-    let converted = match read_value(value, &mut Vec::new(), 0) {
+    let converted = match read_value(value, &mut Vec::new(), 0, &mut 0) {
         Ok(converted) => converted,
         Err(found) => return Ok(issues_to_js(&[found])),
     };
@@ -275,4 +337,14 @@ pub fn read_schema(
             &issues.iter().map(found_from).collect::<Vec<_>>(),
         )),
     }
+}
+
+/// The limits a build that is published holds, as `[maxNestingDepth, maxArrayLength, maxValues]`, so that the test that
+/// measures where a host's stack gives out can compare them with what it finds. It is in the build made to measure only.
+#[cfg(trilean_measure)]
+#[wasm_bindgen(js_name = limits)]
+pub fn limits() -> Vec<u32> {
+    [MAX_NESTING_DEPTH, MAX_ARRAY_LENGTH, MAX_VALUES]
+        .map(|limit| u32::try_from(limit).unwrap_or(u32::MAX))
+        .to_vec()
 }
