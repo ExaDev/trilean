@@ -66,6 +66,7 @@ export {
   or,
   xor,
 } from "./derived-connectives";
+export type { CountOptions } from "./derived-aggregates";
 export { average, count, presenceOf, sum } from "./derived-aggregates";
 export { coalesce } from "./derived-values";
 export {

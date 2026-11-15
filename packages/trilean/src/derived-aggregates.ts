@@ -41,10 +41,17 @@ export const presenceOf = (probe: ExpressionNode): ExpressionNode => ({
   fallback: { kind: "numberLiteral", value: 0 },
 });
 
+/** What `count` takes beside the collection. */
+export interface CountOptions {
+  /** Excludes an item from the count: a filtered-out item is as if it were not in the collection. */
+  filter?: PredicateNode;
+  /** Makes the whole count indeterminate when it does not resolve for any item that takes part. */
+  probe?: ExpressionNode;
+}
+
 export const count = (
   collection: JsonValue,
-  filter?: PredicateNode,
-  probe?: ExpressionNode,
+  { filter, probe }: CountOptions = {},
 ): ExpressionNode => ({
   kind: "fold",
   collection,
@@ -69,5 +76,5 @@ export const average = (
   kind: "arithmetic",
   op: "divide",
   left: sum(collection, item, filter),
-  right: count(collection, filter),
+  right: count(collection, { filter }),
 });

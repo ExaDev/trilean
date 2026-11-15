@@ -93,11 +93,6 @@ export default defineConfig(
       ],
     },
   },
-  // `count(collection, filter?, probe?)` is part of the published API, so its signature stays as released.
-  {
-    files: ["src/derived-aggregates.ts"],
-    rules: { "exadev/prefer-options-object-param": "off" },
-  },
   // The consumer check runs in Node, Bun and Deno, none of which is told to read TypeScript, so it is plain JavaScript that no TypeScript program includes: it is linted without type information, against the globals of the three runtimes.
   {
     files: ["test/runtimes/**/*.mjs"],
