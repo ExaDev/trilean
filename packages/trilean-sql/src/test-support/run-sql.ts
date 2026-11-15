@@ -22,14 +22,18 @@ import type {
   SqlParamData,
   SqlPatternCase,
 } from "./corpus-types";
-import { decodeNumbers, decodeTexts, replaceNonFinite } from "./numbers";
+import { decodeNumbers, decodeTexts, replaceUnreadable } from "./numbers";
 import { buildOptions } from "./sql-options";
 import type { CallbackLog } from "./sql-options";
 import { textToString } from "./text";
 
 /** Whether a value has the shape of a predicate tree. The package's schema refuses a NaN or an infinity, which a case may put in a tree to pin what the compiler does with it, so it checks the value with those stood in by zero. */
 function isPredicateNode(value: unknown): value is PredicateNode {
-  return PredicateNodeSchema.safeParse(replaceNonFinite(value)).success;
+  const result = PredicateNodeSchema["~standard"].validate(
+    replaceUnreadable(value),
+  );
+
+  return !(result instanceof Promise) && result.issues === undefined;
 }
 
 /** The tree of a case, with the numbers JSON cannot carry decoded. */
