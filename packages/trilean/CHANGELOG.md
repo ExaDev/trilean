@@ -1,3 +1,9 @@
+## [2.0.2](https://github.com/ExaDev/trilean/compare/trilean%402.0.1...trilean%402.0.2) (2026-11-15)
+
+### Continuous Integration
+
+* run the packed packages under Node 20.19, Node 22.12, Bun and Deno ([307776f](https://github.com/ExaDev/trilean/commit/307776f95bc6eb9ec92254a5d275e7613917ed18))
+
 ## [2.0.1](https://github.com/ExaDev/trilean/compare/trilean%402.0.0...trilean%402.0.1) (2026-11-15)
 
 ### Tests
