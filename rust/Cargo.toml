@@ -39,7 +39,7 @@ syn = { version = "3", default-features = false, features = ["clone-impls", "der
 
 [workspace.lints.rust]
 # `compile_fail` is set by the check of tests/compile-fail, one case name at a time.
-unexpected_cfgs = { level = "warn", check-cfg = ['cfg(compile_fail, values(any()))'] }
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(compile_fail, values(any()))', 'cfg(trilean_measure)'] }
 # Binding crates that need wasm-bindgen's generated FFI relax this in their own manifest, not here.
 unsafe_code = "deny"
 

@@ -23,10 +23,7 @@ export type SchemaReading =
   | { readonly issues: readonly SchemaIssue[] };
 "#;
 
-/// The deepest nesting of arrays and objects a value may have to be read, so that a value nested to the depth of the
-/// call stack is refused with an issue and not a trap. A tree is read at a depth of about two for each level of
-/// nodes, and an evaluator's nesting limit is far below this.
-const MAX_DEPTH: usize = 2_000;
+use trilean::schemas::{MAX_ARRAY_LENGTH, MAX_NESTING_DEPTH};
 
 struct Found {
     path: Vec<PathSegment>,
@@ -133,13 +130,25 @@ fn read_value(value: &JsValue, path: &mut Vec<PathSegment>, depth: usize) -> Res
             format!("expected a JSON value, found {}", kind_of(value)),
         ));
     }
-    if depth >= MAX_DEPTH {
-        return Err(issue(path, "the value is nested too deeply to be read"));
+    if depth >= MAX_NESTING_DEPTH {
+        return Err(issue(
+            path,
+            format!(
+                "the value is nested more than {MAX_NESTING_DEPTH} levels deep, which is more than can be read"
+            ),
+        ));
     }
     if is_array {
         let array: &Array = value.unchecked_ref();
-        let mut elements = Vec::with_capacity(array.length() as usize);
-        for index in 0..array.length() {
+        let length = array.length();
+        if length as usize > MAX_ARRAY_LENGTH {
+            return Err(issue(
+                path,
+                trilean::schemas::array_too_long(length as usize),
+            ));
+        }
+        let mut elements = Vec::with_capacity(length as usize);
+        for index in 0..length {
             path.push(PathSegment::Index(index as usize));
             let element = array.get(index);
             let read = if element.is_undefined() {

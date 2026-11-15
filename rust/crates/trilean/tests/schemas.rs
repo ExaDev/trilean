@@ -1,7 +1,7 @@
 //! What reading a document as a schema does, beyond the cases the conformance corpus pins.
 
 use json_shape::Value;
-use trilean::schemas::{self, SCHEMAS};
+use trilean::schemas::{self, MAX_ARRAY_LENGTH, MAX_NESTING_DEPTH, MAX_VALUES, SCHEMAS};
 
 fn parse(text: &str) -> Value {
     serde_json::from_str(text).expect("valid JSON")
@@ -116,15 +116,134 @@ fn the_declarations_name_every_type_the_package_exports() {
     }
 }
 
+/// The limits as the documentation of the package states them, written out here so that a change to either constant is a
+/// change to this file too. The corpus cannot hold a value this deep (it refuses a file nested more than 64 levels), so
+/// the depth is pinned here and, in each host, by the checks every host runs.
+const STATED_NESTING_DEPTH: usize = 500;
+const STATED_ARRAY_LENGTH: usize = 65_536;
+const STATED_VALUES: usize = 1_000_000;
+
 #[test]
-fn a_deeply_nested_tree_is_read_in_work_that_grows_with_its_size() {
-    let mut text = String::from(r#"{"kind":"numberLiteral","value":1}"#);
-    for _ in 0..100 {
-        text = format!(r#"{{"kind":"negate","operand":{text}}}"#);
+fn the_limits_are_the_ones_the_documentation_states() {
+    assert_eq!(MAX_NESTING_DEPTH, STATED_NESTING_DEPTH);
+    assert_eq!(MAX_ARRAY_LENGTH, STATED_ARRAY_LENGTH);
+    assert_eq!(MAX_VALUES, STATED_VALUES);
+}
+
+/// Runs `test` on a thread with a stack of a size a native caller reading a value at the limit is expected to have: the
+/// frames of a debug build are several times those of a release build, and a test thread has two megabytes. The limit is
+/// derived for a host that has about one, in the release build the package ships, which the checks of the host's own
+/// tests measure.
+fn on_a_large_stack(test: impl FnOnce() + Send + 'static) {
+    std::thread::Builder::new()
+        .stack_size(256 * 1024 * 1024)
+        .spawn(test)
+        .expect("a thread")
+        .join()
+        .expect("the test passed");
+}
+
+/// An array of `containers` arrays nested in one another, the innermost holding the number 1.
+fn arrays(containers: usize) -> Value {
+    let mut value = Value::Number(1.0);
+    for _ in 0..containers {
+        value = Value::Array(vec![value]);
     }
+    value
+}
+
+/// A chain of `nodes` `negate` nodes over a number literal, which takes a nesting level for each node and one more
+/// for the literal.
+fn negations(nodes: usize) -> Value {
+    let mut value = parse(r#"{"kind":"numberLiteral","value":1}"#);
+    for _ in 0..nodes {
+        value = Value::Object(vec![
+            ("kind".to_owned(), Value::String("negate".to_owned())),
+            ("operand".to_owned(), value),
+        ]);
+    }
+    value
+}
+
+#[test]
+fn a_value_nested_to_the_limit_is_read_and_one_level_more_is_refused_at_the_level_that_is_too_deep()
+{
+    on_a_large_stack(|| {
+        let read =
+            schemas::read("JsonValueSchema", &arrays(STATED_NESTING_DEPTH)).expect("a schema");
+        assert!(read.is_ok());
+        let issues = schemas::read("JsonValueSchema", &arrays(STATED_NESTING_DEPTH + 1))
+            .expect("a schema")
+            .expect_err("one level too many");
+        assert_eq!(issues.len(), 1);
+        assert_eq!(issues[0].path.len(), STATED_NESTING_DEPTH);
+        assert!(issues[0].message.contains("nested more than"));
+    });
+}
+
+#[test]
+fn the_deepest_tree_the_limit_allows_is_read_by_the_costliest_shape_without_exhausting_the_stack() {
+    on_a_large_stack(|| {
+        // A node takes one level and the literal at the end one more.
+        let nodes = STATED_NESTING_DEPTH - 1;
+        assert!(
+            schemas::read("ExpressionNodeSchema", &negations(nodes))
+                .expect("a schema")
+                .is_ok()
+        );
+        assert!(
+            schemas::read("ExpressionNodeSchema", &negations(nodes + 1))
+                .expect("a schema")
+                .is_err()
+        );
+    });
+}
+
+#[test]
+fn an_array_of_the_most_elements_is_read_and_one_element_more_is_refused_at_the_array() {
+    let elements = |count: usize| Value::Array(vec![Value::Number(0.0); count]);
     assert!(
-        schemas::read("ExpressionNodeSchema", &parse(&text))
+        schemas::read("JsonValueSchema", &elements(STATED_ARRAY_LENGTH))
             .expect("a schema")
             .is_ok()
     );
+    let issues = schemas::read("JsonValueSchema", &elements(STATED_ARRAY_LENGTH + 1))
+        .expect("a schema")
+        .expect_err("one element too many");
+    assert_eq!(issues.len(), 1);
+    assert!(issues[0].path.is_empty());
+    assert!(
+        issues[0]
+            .message
+            .contains(&(STATED_ARRAY_LENGTH + 1).to_string())
+    );
+    let nested = Value::Object(vec![
+        ("kind".to_owned(), Value::String("delegate".to_owned())),
+        ("system".to_owned(), Value::String("s".to_owned())),
+        (
+            "payload".to_owned(),
+            Value::Array(vec![elements(STATED_ARRAY_LENGTH + 1)]),
+        ),
+    ]);
+    let issues = schemas::read("ExpressionNodeSchema", &nested)
+        .expect("a schema")
+        .expect_err("an array too long inside a node");
+    assert_eq!(issues[0].pointer(), "/payload/0");
+}
+
+#[test]
+fn a_document_of_more_values_than_the_limit_is_refused_once_it_has_been_read_that_far() {
+    let list = Value::Array(vec![Value::Number(0.0); STATED_ARRAY_LENGTH]);
+    let lists = |count: usize| Value::Array(vec![list.clone(); count]);
+    let fits = STATED_VALUES / (STATED_ARRAY_LENGTH + 1) - 1;
+    assert!(
+        schemas::read("JsonValueSchema", &lists(fits))
+            .expect("a schema")
+            .is_ok()
+    );
+    let issues = schemas::read("JsonValueSchema", &lists(fits + 2))
+        .expect("a schema")
+        .expect_err("more values than the limit");
+    assert_eq!(issues.len(), 1);
+    assert!(issues[0].message.contains("more than 1000000 values"));
 }

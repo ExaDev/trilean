@@ -8,8 +8,8 @@
 use std::sync::OnceLock;
 
 use json_shape::{
-    Definitions, Draft, Issue, Kind, SchemaOptions, Shape, ShapeDef, Value, check, json_schema,
-    normalise, schema_definitions, typescript_declarations,
+    Definitions, Draft, Issue, Kind, PathSegment, SchemaOptions, Shape, ShapeDef, Value, check,
+    json_schema, normalise, schema_definitions, typescript_declarations,
 };
 
 use crate::{
@@ -18,6 +18,118 @@ use crate::{
     FoldCombiner, HitPolicy, IndeterminateReason, JsonValue, MembershipOperator, PredicateNode,
     TextComparisonOperator, Unit,
 };
+
+/// The deepest nesting of arrays and objects a value may have to be read, which a document deeper than this is refused
+/// at, with an issue, before anything recurses to it.
+///
+/// It is derived from where a stack gives out: a host's own call stack is about a megabyte (Node's default is 984 KB), as
+/// is the module's, and reading a level costs a frame in each. The limit is at most half of the depth at which either
+/// gives out for the costliest shape of tree, so a caller that has already used up to half of its host's stack before it
+/// reads a value still reads one at the limit. A host whose stack is smaller than Node's default, or a caller deeper in
+/// its own stack than that, can run out first, and V8 then throws a `RangeError` at the entry of the module, which no
+/// code in the module can turn into an issue; the documentation of the package says so.
+pub const MAX_NESTING_DEPTH: usize = 500;
+
+/// The depth a read is held to: `MAX_NESTING_DEPTH`, except in a build made to measure where the stack gives out, which
+/// has none. The cfg is set by no build that is published.
+#[cfg(not(trilean_measure))]
+pub const fn nesting_limit() -> usize {
+    MAX_NESTING_DEPTH
+}
+
+/// The depth a read is held to in a build made to measure where the stack gives out: none.
+#[cfg(trilean_measure)]
+pub const fn nesting_limit() -> usize {
+    usize::MAX
+}
+
+/// The most elements an array of a document may have, which a longer one is refused at, with an issue, before one is
+/// read. Reading an element is a crossing from the host to the module, and each is held as a value of sixteen bytes
+/// on the module's 32-bit memory, so the limit is a megabyte of values and some sixty-five thousand crossings, which
+/// is far more than a candidate list or a collection of keys holds and far less than a length a host can claim for an
+/// array that holds nothing.
+pub const MAX_ARRAY_LENGTH: usize = 65_536;
+
+/// The most values (every array, object, string, number, boolean and null) a document may hold in all, which a larger
+/// one is refused at, with an issue, once it has been read this far. Reading a value is a few crossings from the host
+/// to the module, each about a microsecond, so the limit keeps one read to a few seconds at most; and a value that
+/// shares its parts (a JavaScript value can name one array twice) is read once for each place it is named, so without
+/// a count a value of forty levels could be read two to the fortieth times. A document of JSON text cannot share
+/// parts, and a million values is more than any tree or list the evaluator accepts holds.
+pub const MAX_VALUES: usize = 1_000_000;
+
+/// The issue message for a document with more than `MAX_VALUES` values.
+pub fn too_many_values() -> String {
+    format!("the value holds more than {MAX_VALUES} values, which is more than can be read")
+}
+
+/// The issue message for an array of `length` elements, which is more than `MAX_ARRAY_LENGTH`.
+pub fn array_too_long(length: usize) -> String {
+    format!("the array has {length} elements, and an array may have at most {MAX_ARRAY_LENGTH}")
+}
+
+/// The issues of the limits of this module on `value`, at the paths they are about: an array of more than
+/// `MAX_ARRAY_LENGTH` elements, and a value nested more than `MAX_NESTING_DEPTH` levels. A value nested beyond the
+/// limit is reported once, at the first value that is too deep, and not descended into.
+fn limit_issues(value: &Value) -> Vec<Issue> {
+    fn visit(
+        value: &Value,
+        depth: usize,
+        path: &mut Vec<PathSegment>,
+        issues: &mut Vec<Issue>,
+        values: &mut usize,
+    ) {
+        *values += 1;
+        if *values == MAX_VALUES + 1 {
+            issues.push(Issue {
+                path: path.clone(),
+                message: too_many_values(),
+            });
+        }
+        if *values > MAX_VALUES {
+            return;
+        }
+        let (Value::Array(_) | Value::Object(_)) = value else {
+            return;
+        };
+        if depth >= nesting_limit() {
+            issues.push(Issue {
+                path: path.clone(),
+                message: format!(
+                    "the value is nested more than {MAX_NESTING_DEPTH} levels deep, which is more than can be read"
+                ),
+            });
+            return;
+        }
+        match value {
+            Value::Array(elements) => {
+                if elements.len() > MAX_ARRAY_LENGTH {
+                    issues.push(Issue {
+                        path: path.clone(),
+                        message: array_too_long(elements.len()),
+                    });
+                    return;
+                }
+                for (index, element) in elements.iter().enumerate() {
+                    path.push(PathSegment::Index(index));
+                    visit(element, depth + 1, path, issues, values);
+                    path.pop();
+                }
+            }
+            Value::Object(members) => {
+                for (key, member) in members {
+                    path.push(PathSegment::Key(key.clone()));
+                    visit(member, depth + 1, path, issues, values);
+                    path.pop();
+                }
+            }
+            _ => {}
+        }
+    }
+    let mut issues = Vec::new();
+    visit(value, 0, &mut Vec::new(), &mut issues, &mut 0);
+    issues
+}
 
 /// Where the shape of a schema comes from.
 #[derive(Clone, Copy, Debug)]
@@ -233,6 +345,10 @@ pub fn read(name: &str, value: &Value) -> Option<Result<Value, Vec<Issue>>> {
     let (index, _) = find(name)?;
     let registry = registry();
     let shape = &registry.shapes[index];
+    let issues = limit_issues(value);
+    if !issues.is_empty() {
+        return Some(Err(issues));
+    }
     let issues = check(&registry.definitions, shape, value);
     Some(if issues.is_empty() {
         Ok(normalise(&registry.definitions, shape, value))

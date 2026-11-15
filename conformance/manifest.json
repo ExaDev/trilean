@@ -664,6 +664,13 @@
         "ts": []
       }
     },
+    "trilean/validate/limits.json": {
+      "cases": 2,
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
+    },
     "trilean/validate/pattern-matching.json": {
       "cases": 1,
       "skip": {
