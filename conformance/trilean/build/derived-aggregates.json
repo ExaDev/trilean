@@ -164,15 +164,17 @@
       "args": [
         "items",
         {
-          "kind": "compare",
-          "left": {
-            "key": "amount",
-            "kind": "reference"
-          },
-          "op": "gt",
-          "right": {
-            "kind": "numberLiteral",
-            "value": 1
+          "filter": {
+            "kind": "compare",
+            "left": {
+              "key": "amount",
+              "kind": "reference"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 1
+            }
           }
         }
       ],
@@ -249,10 +251,11 @@
     {
       "args": [
         "mixedCode",
-        null,
         {
-          "key": "code",
-          "kind": "reference"
+          "probe": {
+            "key": "code",
+            "kind": "reference"
+          }
         }
       ],
       "builder": "count",
@@ -311,15 +314,17 @@
       "args": [
         "mixedCode",
         {
-          "kind": "exists",
-          "operand": {
+          "filter": {
+            "kind": "exists",
+            "operand": {
+              "key": "code",
+              "kind": "reference"
+            }
+          },
+          "probe": {
             "key": "code",
             "kind": "reference"
           }
-        },
-        {
-          "key": "code",
-          "kind": "reference"
         }
       ],
       "builder": "count",

@@ -33,6 +33,16 @@ interface Arguments {
   readonly expressions: (from: number) => ExpressionNode[];
   readonly json: (position: number) => JsonValue;
   readonly text: (position: number) => string;
+  /** A member of an options object at a position, read as a predicate tree, or undefined when the object or the member is absent. */
+  readonly optionalPredicateMember: (
+    position: number,
+    name: string,
+  ) => PredicateNode | undefined;
+  /** The same for an expression tree. */
+  readonly optionalExpressionMember: (
+    position: number,
+    name: string,
+  ) => ExpressionNode | undefined;
 }
 
 function argumentsOf(args: readonly Json[]): Arguments {
@@ -48,6 +58,21 @@ function argumentsOf(args: readonly Json[]): Arguments {
   };
   const optional = (position: number): Json | undefined => {
     return args[position] ?? undefined;
+  };
+  const optionalMember = (position: number, name: string): Json | undefined => {
+    const options = optional(position);
+    if (options === undefined) {
+      return undefined;
+    }
+    if (
+      typeof options !== "object" ||
+      options === null ||
+      Array.isArray(options)
+    ) {
+      throw new Error(`argument ${String(position)} must be an options object`);
+    }
+
+    return options[name];
   };
   const text = (position: number): string => {
     const value = at(position);
@@ -77,6 +102,20 @@ function argumentsOf(args: readonly Json[]): Arguments {
       args.slice(from).map((value) => ExpressionNodeSchema.parse(value)),
     json: at,
     text,
+    optionalPredicateMember: (position, name) => {
+      const member = optionalMember(position, name);
+
+      return member === undefined
+        ? undefined
+        : PredicateNodeSchema.parse(member);
+    },
+    optionalExpressionMember: (position, name) => {
+      const member = optionalMember(position, name);
+
+      return member === undefined
+        ? undefined
+        : ExpressionNodeSchema.parse(member);
+    },
   };
 }
 
@@ -94,7 +133,10 @@ const BUILDERS: Readonly<Record<string, (args: Arguments) => unknown>> = {
   sum: (a) => sum(a.json(0), a.expression(1), a.optionalPredicate(2)),
   average: (a) => average(a.json(0), a.expression(1), a.optionalPredicate(2)),
   count: (a) =>
-    count(a.json(0), a.optionalPredicate(1), a.optionalExpression(2)),
+    count(a.json(0), {
+      filter: a.optionalPredicateMember(1, "filter"),
+      probe: a.optionalExpressionMember(1, "probe"),
+    }),
   presenceOf: (a) => presenceOf(a.expression(0)),
   coalesce: (a) => {
     const [first, second, ...rest] = a.expressions(0);
