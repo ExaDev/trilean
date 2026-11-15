@@ -264,41 +264,94 @@ fn run_match_case(case: &Value) -> Check<()> {
 }
 
 /// The corpus JSON value as the value a schema reads, with each `{"$number": ...}` that names a number the canonical
-/// JSON form cannot hold replaced by that number. `None` when the value holds a NaN or an infinity, which no value of
-/// `json_shape` can: a schema refuses such a number, so a case that has one expects a refusal.
-fn decode_value(value: &Value) -> Option<json_shape::Value> {
-    Some(match value {
+/// JSON form cannot hold replaced by that number. `Ok(None)` when the value holds a NaN or an infinity, which no value
+/// of `json_shape` can: a schema refuses such a number, so a case that has one expects a refusal. A name `$number`
+/// does not know is an error, so a misspelt name cannot be read as a refusal.
+fn decode_value(value: &Value) -> Check<Option<json_shape::Value>> {
+    Ok(Some(match value {
         Value::Null => json_shape::Value::Null,
         Value::Bool(flag) => json_shape::Value::Bool(*flag),
-        Value::Number(number) => json_shape::Value::Number(number.as_f64()?),
+        Value::Number(number) => json_shape::Value::Number(
+            number
+                .as_f64()
+                .ok_or_else(|| format!("the number {number} is not a double"))?,
+        ),
         Value::String(text) => json_shape::Value::String(text.clone()),
         Value::Array(items) => {
-            json_shape::Value::Array(items.iter().map(decode_value).collect::<Option<Vec<_>>>()?)
+            let mut decoded = Vec::with_capacity(items.len());
+            for item in items {
+                match decode_value(item)? {
+                    Some(item) => decoded.push(item),
+                    None => return Ok(None),
+                }
+            }
+            json_shape::Value::Array(decoded)
         }
         Value::Object(members) => {
             if members.len() == 1
                 && let Some(Value::String(name)) = members.get("$number")
             {
                 return match name.as_str() {
-                    "-0" => Some(json_shape::Value::Number(-0.0)),
-                    _ => None,
+                    "-0" => Ok(Some(json_shape::Value::Number(-0.0))),
+                    "Infinity" | "-Infinity" | "NaN" => Ok(None),
+                    other => Err(format!(
+                        "$number names {other}, which is not a number a corpus file names"
+                    )),
                 };
             }
-            json_shape::Value::Object(
-                members
-                    .iter()
-                    .map(|(key, entry)| Some((key.clone(), decode_value(entry)?)))
-                    .collect::<Option<Vec<_>>>()?,
-            )
+            let mut decoded = Vec::with_capacity(members.len());
+            for (key, entry) in members {
+                match decode_value(entry)? {
+                    Some(entry) => decoded.push((key.clone(), entry)),
+                    None => return Ok(None),
+                }
+            }
+            json_shape::Value::Object(decoded)
         }
-    })
+    }))
+}
+
+/// Whether two values are equal as the corpus compares them: the same doubles, a negative zero not being a zero, and
+/// an object's members in any order.
+fn identical(read: &json_shape::Value, expected: &json_shape::Value) -> bool {
+    use json_shape::Value::{Array, Bool, Null, Number, Object, String};
+    match (read, expected) {
+        (Null, Null) => true,
+        (Bool(a), Bool(b)) => a == b,
+        (Number(a), Number(b)) => a.to_bits() == b.to_bits() || (a == b && *a != 0.0),
+        (String(a), String(b)) => a == b,
+        (Array(a), Array(b)) => a.len() == b.len() && a.iter().zip(b).all(|(x, y)| identical(x, y)),
+        (Object(a), Object(b)) => {
+            a.len() == b.len()
+                && a.iter().all(|(key, x)| {
+                    b.iter()
+                        .find(|(name, _)| name == key)
+                        .is_some_and(|(_, y)| identical(x, y))
+                })
+        }
+        _ => false,
+    }
+}
+
+/// The path of an issue as the corpus writes it: a list of keys and indexes.
+fn path_of(issue: &json_shape::Issue) -> Value {
+    Value::Array(
+        issue
+            .path
+            .iter()
+            .map(|step| match step {
+                json_shape::PathSegment::Key(key) => json!(key),
+                json_shape::PathSegment::Index(index) => json!(index),
+            })
+            .collect(),
+    )
 }
 
 fn run_validate_case(case: &Value) -> Check<()> {
     let name = case["schema"].as_str().unwrap_or_default();
     let wanted = &case["expect"];
     let accepted = wanted["ok"].as_bool() == Some(true);
-    let read = match decode_value(&case["input"]) {
+    let read = match decode_value(&case["input"])? {
         Some(input) => trilean::schemas::read(name, &input)
             .ok_or_else(|| format!("no schema is exported under the name {name}"))?,
         None => Err(Vec::new()),
@@ -307,16 +360,35 @@ fn run_validate_case(case: &Value) -> Check<()> {
         (Ok(read), true) => match wanted.get("value") {
             None => Ok(()),
             Some(expected) => {
-                let expected = decode_value(expected)
+                let expected = decode_value(expected)?
                     .ok_or("the expected value holds a NaN or an infinity")?;
-                if read.json_equal(&expected) {
+                if identical(&read, &expected) {
                     Ok(())
                 } else {
                     Err(format!("{name} read {read}, expected {expected}"))
                 }
             }
         },
-        (Err(_), false) => Ok(()),
+        (Err(issues), false) => match wanted.get("paths").and_then(Value::as_array) {
+            None => Ok(()),
+            Some(expected) => {
+                let mut found: Vec<String> = issues
+                    .iter()
+                    .map(|issue| path_of(issue).to_string())
+                    .collect();
+                found.sort();
+                found.dedup();
+                let mut expected: Vec<String> = expected.iter().map(Value::to_string).collect();
+                expected.sort();
+                if found == expected {
+                    Ok(())
+                } else {
+                    Err(format!(
+                        "{name} refused at {found:?}, expected {expected:?}"
+                    ))
+                }
+            }
+        },
         (Ok(read), false) => Err(format!("{name} accepted the input and read {read}")),
         (Err(issues), true) => Err(format!(
             "{name} refused the input: {}",

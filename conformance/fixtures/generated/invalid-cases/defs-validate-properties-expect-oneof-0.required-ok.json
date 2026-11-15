@@ -2,13 +2,23 @@
   "cases": [
     {
       "expect": {
-        "value": "first"
+        "value": {
+          "kind": "number",
+          "value": {
+            "$number": "-0"
+          }
+        }
       },
-      "from": "tree.unit.test.ts: expression tree > HitPolicySchema: accepts `\"first\"`/`\"unique\"` and rejects any other value",
-      "id": "tree.expression-tree-hitpolicyschema-accepts-first-unique-and-rejects-any-other-value.1",
-      "input": "first",
+      "from": "recorded: a negative zero is read as a negative zero and not as a zero",
+      "id": "computed-value.a-negative-zero-is-kept.1",
+      "input": {
+        "kind": "number",
+        "value": {
+          "$number": "-0"
+        }
+      },
       "kind": "validate",
-      "schema": "HitPolicySchema"
+      "schema": "ComputedValueSchema"
     }
   ]
 }

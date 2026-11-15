@@ -453,7 +453,19 @@ pub enum ValidateExpect {
     Refused {
         #[shape(constant = false)]
         ok: bool,
+        /// The path of every issue the schema reports, in any order. A refusal that names them pins where and why the
+        /// value was refused, and not only that it was.
+        #[shape(min_items = 1)]
+        paths: Option<Vec<Vec<PathStep>>>,
     },
+}
+
+/// One step of the path to a value: an object key, or an array index.
+#[derive(Shape, Clone, Debug, PartialEq)]
+#[serde(untagged)]
+pub enum PathStep {
+    Key(String),
+    Index(u64),
 }
 
 #[derive(Shape, Clone, Debug, PartialEq)]

@@ -158,7 +158,7 @@ The cases are the specification of the package's behaviour: the reason codes, th
 | `sql-execute` | 1163 |
 | `sql-guard` | 436 |
 | `sql-pattern` | 210 |
-| `validate` | 127 |
+| `validate` | 132 |
 
 Reason codes an expectation names: `domain-error`, `not-found`, `not-yet-known`, `wrong-type`.
 
@@ -182,7 +182,7 @@ Results computed by the engine's `exp`, `log`, `hypot`, `sin`, `cos` and `atan2`
 { "id": "...", "from": "...", "kind": "validate", "schema": "NotNodeSchema", "input": { "kind": "not" }, "expect": { "ok": false } }
 ```
 
-`schema` is one of the names the schema lists (the exports of the package that are schemas), so an implementation with no object of that name still names the same type. `expect` is `{ "ok": false }`, for an input the schema refuses (the case does not pin why), or `{ "ok": true }` with an optional `value`, the parsed value, which must be equal to it: a member the schema does not define is removed, and nothing is added or converted.
+`schema` is one of the names the schema lists (the exports of the package that are schemas), so an implementation with no object of that name still names the same type. `expect` is `{ "ok": false }`, for an input the schema refuses, with an optional `paths`: the path of every issue the schema reports, each a list of the object keys and array indexes from the root to the value the issue is about, in any order, which pins where the value was refused and why and not only that it was (the cases name a refusal's paths unless it is of the whole value), or `{ "ok": true }` with an optional `value`, the parsed value, which must be equal to it: a member the schema does not define is removed, and nothing is added or converted.
 
 #### call
 

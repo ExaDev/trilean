@@ -2455,6 +2455,26 @@
               "properties": {
                 "ok": {
                   "const": false
+                },
+                "paths": {
+                  "description": "The path of every issue the schema reports, each a list of the object keys and array indexes from the root to the value the issue is about, in any order. A refusal that names them pins where and why the value was refused, and not only that it was.",
+                  "items": {
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "maximum": 9007199254740991,
+                          "minimum": 0,
+                          "type": "integer"
+                        }
+                      ]
+                    },
+                    "type": "array"
+                  },
+                  "minItems": 1,
+                  "type": "array"
                 }
               },
               "required": [

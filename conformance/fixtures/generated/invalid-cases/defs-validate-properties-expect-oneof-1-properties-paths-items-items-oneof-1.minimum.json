@@ -1,0 +1,28 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "ok": false,
+        "paths": [
+          [
+            "operands",
+            -1,
+            "kind"
+          ]
+        ]
+      },
+      "from": "tree.unit.test.ts: predicate tree > anyOf: parses a populated operand list and rejects a wrong literal kind",
+      "id": "tree.predicate-tree-anyof-parses-a-populated-operand-list-and-rejects-a-wrong-literal-kind.2",
+      "input": {
+        "kind": "anyOf",
+        "operands": [
+          {
+            "kind": "boom"
+          }
+        ]
+      },
+      "kind": "validate",
+      "schema": "AnyOfNodeSchema"
+    }
+  ]
+}

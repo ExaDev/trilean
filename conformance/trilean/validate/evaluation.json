@@ -70,7 +70,12 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "code"
+          ]
+        ]
       },
       "from": "evaluation.unit.test.ts: IndeterminateReasonSchema > rejects a code that is not one of the reason categories",
       "id": "evaluation.indeterminatereasonschema-rejects-a-code-that-is-not-one-of-the-reason-categories.1",
