@@ -230,6 +230,209 @@ const MUTANTS: readonly unknown[] = [
   { kind: "reference", key: "a", unit: { m: "one" } },
 ];
 
+/** Keywords that say nothing a validator reads: where the document is, what it is called and how it is described. */
+const NOT_MEANING = new Set([
+  "$id",
+  "$schema",
+  "$defs",
+  "description",
+  "title",
+]);
+
+/** The definitions the two documents name differently for the same thing, by the name each is known as: a recursive reference is compared by what it refers to and not by what it is called. */
+const SAME_DEFINITION: Readonly<Record<string, string>> = {
+  CoreExpressionNode: "ExpressionNode",
+  schema0: "JsonValue",
+};
+
+/** The text of a value with the keys of every object in order, so two values that differ only in the order of their keys have one text. */
+function canonical(value: unknown): string {
+  if (Array.isArray(value)) {
+    return `[${value.map(canonical).join(",")}]`;
+  }
+  if (isPlainRecord(value)) {
+    return `{${Object.keys(value)
+      .sort()
+      .map((key) => `${JSON.stringify(key)}:${canonical(value[key])}`)
+      .join(",")}}`;
+  }
+
+  return JSON.stringify(value);
+}
+
+function sortedByText(values: readonly unknown[]): unknown[] {
+  return [...values].sort((a, b) => (canonical(a) < canonical(b) ? -1 : 1));
+}
+
+/** The members of a union, with the unions nested in it flattened into it. */
+function members(value: unknown): unknown[] {
+  return isPlainRecord(value) &&
+    Object.keys(value).length === 1 &&
+    Array.isArray(value.union)
+    ? value.union.flatMap(members)
+    : [value];
+}
+
+/**
+ * A schema document read for what it means to a validator: references followed (a recursive one named by what it refers to), the keywords that do not constrain a value dropped, `required` and `enum` as sets, `oneOf` and `anyOf` as one union of its members as a set, with nested unions flattened, and two keywords dropped where they are implied: a `type` of string beside a `const` or an `enum`, and the `propertyNames` of a string, which every JSON key has.
+ */
+function meaningOf(
+  document: Record<string, unknown>,
+  node: unknown,
+  stack: readonly string[] = [],
+): unknown {
+  if (Array.isArray(node)) {
+    return node.map((entry) => meaningOf(document, entry, stack));
+  }
+  if (!isPlainRecord(node)) {
+    return node;
+  }
+  if (typeof node.$ref === "string") {
+    const name = node.$ref.split("/").pop() ?? node.$ref;
+    if (stack.includes(node.$ref)) {
+      return { cycle: SAME_DEFINITION[name] ?? name };
+    }
+
+    return meaningOf(document, resolve(document, node.$ref), [
+      ...stack,
+      node.$ref,
+    ]);
+  }
+  const meaning: Record<string, unknown> = {};
+  for (const [key, entry] of Object.entries(node)) {
+    if (!NOT_MEANING.has(key)) {
+      meaning[key] = meaningOf(document, entry, stack);
+    }
+  }
+  if (("const" in meaning || "enum" in meaning) && meaning.type === "string") {
+    delete meaning.type;
+  }
+  if (canonical(meaning.propertyNames) === '{"type":"string"}') {
+    delete meaning.propertyNames;
+  }
+  for (const key of ["required", "enum"]) {
+    const entries = meaning[key];
+    if (Array.isArray(entries)) {
+      meaning[key] = sortedByText(entries);
+    }
+  }
+  const union: unknown[] = [];
+  for (const key of ["oneOf", "anyOf"] as const) {
+    const entries = meaning[key];
+    if (Array.isArray(entries)) {
+      union.push(...(entries as unknown[]));
+    }
+  }
+  delete meaning.oneOf;
+  delete meaning.anyOf;
+  if (union.length > 0) {
+    meaning.union = sortedByText(
+      union.flatMap((entry) => members({ union: [entry] })),
+    );
+  }
+
+  return meaning;
+}
+
+/** The pointer, within a definition, of every place where two meanings differ. */
+function differences(a: unknown, b: unknown, at: string): string[] {
+  if (canonical(a) === canonical(b)) {
+    return [];
+  }
+  if (isPlainRecord(a) && isPlainRecord(b)) {
+    return [...new Set([...Object.keys(a), ...Object.keys(b)])].flatMap((key) =>
+      differences(a[key], b[key], `${at}/${key}`),
+    );
+  }
+  if (Array.isArray(a) && Array.isArray(b) && a.length === b.length) {
+    return a.flatMap((entry, index) =>
+      differences(entry, b[index], `${at}[${String(index)}]`),
+    );
+  }
+
+  return [at];
+}
+
+function meaningOfDefinition(
+  document: Record<string, unknown>,
+  name: string,
+): unknown {
+  const ref = `#/$defs/${name}`;
+
+  return meaningOf(document, resolve(document, ref), [ref]);
+}
+
+describe("the schema the build writes means what the schema published with 1.13.0 meant, as a document and not only over a sample", () => {
+  it.each(["PredicateNode", "ExpressionNode"] as const)(
+    "has the same meaning for %s: every constraint, every property and every alternative",
+    (name) => {
+      expect(
+        differences(
+          meaningOfDefinition(shipped, name),
+          meaningOfDefinition(published, name),
+          name,
+        ),
+      ).toEqual([]);
+    },
+  );
+
+  it("is able to tell two documents apart: a required key removed, a constant changed, a closed object opened and a member of a union dropped are each a difference", () => {
+    const clone = (): Record<string, unknown> => {
+      const copy: unknown = JSON.parse(JSON.stringify(shipped));
+
+      return asRecord(copy, "a copy of the schema");
+    };
+    const meaning = (document: Record<string, unknown>) =>
+      meaningOfDefinition(document, "PredicateNode");
+    const defs = (document: Record<string, unknown>) =>
+      asRecord(document.$defs, "$defs");
+    const notNode = (
+      document: Record<string, unknown>,
+    ): Record<string, unknown> => {
+      const branches = defs(document).PredicateNode;
+      const list = asRecord(branches, "PredicateNode").oneOf;
+      const found: unknown = Array.isArray(list)
+        ? (list as unknown[]).find(
+            (entry) =>
+              isPlainRecord(entry) &&
+              JSON.stringify(entry).includes('"const":"not"'),
+          )
+        : undefined;
+
+      return asRecord(found, "the not node");
+    };
+    const original = meaning(shipped);
+    const edits: ((document: Record<string, unknown>) => void)[] = [
+      (document) => {
+        asRecord(notNode(document), "node").required = ["kind"];
+      },
+      (document) => {
+        const properties = asRecord(notNode(document).properties, "properties");
+        properties.kind = { const: "no" };
+      },
+      (document) => {
+        asRecord(notNode(document), "node").additionalProperties = true;
+      },
+      (document) => {
+        const predicate = asRecord(
+          defs(document).PredicateNode,
+          "PredicateNode",
+        );
+        if (Array.isArray(predicate.oneOf)) {
+          predicate.oneOf = predicate.oneOf.slice(1);
+        }
+      },
+    ];
+    for (const edit of edits) {
+      const edited = clone();
+      edit(edited);
+      expect(
+        differences(meaning(edited), original, "PredicateNode"),
+      ).not.toEqual([]);
+    }
+  });
+});
+
 describe("the schema published with 1.13.0 and the schema the build writes say the same of every tree", () => {
   const compile = (document: Record<string, unknown>, definition: string) => {
     const ajv = new Ajv2020({ allErrors: false, strict: false });
