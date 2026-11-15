@@ -13,7 +13,7 @@ use crate::shorthand::{
 /// How deeply groups may nest. A deeper pattern is a parse error rather than a stack overflow, which would be a trap in the wasm build and an abort natively. The parser, the compiler and the destructor of the tree each recurse once per level.
 pub const MAX_NESTING_DEPTH: usize = 128;
 
-/// The longest pattern, in UTF-16 code units, that is read: four code units for each state the automaton may have, since a construct takes at least a unit for each state it adds, and `a{0}` takes four for none. A longer pattern is refused before the parser allocates a tree for it, with a `RegexParseError` that echoes no pattern.
+/// The longest pattern, in UTF-16 code units, that is read: four code units for each state the automaton may have. It bounds what is proportional to the pattern's length, which is the copy of the pattern and the tree the parser builds, and not the automaton: a counted repetition takes few code units for many states (`a{99999}` is eight code units and 99,999 states), and `MAX_STATES` limits those, while `a{0}` takes four code units for no state, so a pattern may be longer than any state count implies. A longer pattern is refused before the parser allocates a tree for it, with a `RegexParseError` that echoes no pattern.
 pub const MAX_PATTERN_UNITS: usize = 4 * MAX_STATES;
 
 /// Refuses a pattern of `length` code units if it is longer than `MAX_PATTERN_UNITS`. A caller that has not yet copied the pattern into Rust asks this first, with the length alone, so nothing proportional to the pattern is allocated for one that is refused.
