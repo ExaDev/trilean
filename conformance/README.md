@@ -338,6 +338,8 @@ A test stays in an implementation's own suite when a case cannot state it. Each 
 | evaluator-operations.free.unit.test.ts | frees the pattern it compiled, so %s over many rows in one synchronous pass holds none | T1 |
 | evaluator-operations.free.unit.test.ts | holds no pattern for an answer of false either | T1 |
 | evaluator-operations.free.unit.test.ts | compiles nothing for a pattern that is not in the grammar, and holds nothing | T1 |
+| evaluator-operations.free.unit.test.ts | throws the error of the test, not the one of the free that follows it, and frees once | T6 |
+| evaluator-operations.free.unit.test.ts | throws what compilePattern throws unless it is a RegexParseError, rather than calling it a bad pattern | T6 |
 | evaluator.complex-arithmetic.unit.test.ts | keeps a negative power of a large base finite where its positive power would overflow | T10 |
 | evaluator.complex-arithmetic.unit.test.ts | a negative exponent is exactly the reciprocal of the positive power when that is representable, for $base to the power -$exponent | T2 |
 | evaluator.monotonicity.unit.test.ts | for every enumerated predicate | T2 |
