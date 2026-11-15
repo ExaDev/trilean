@@ -170,3 +170,34 @@ fn parts_that_share_a_keyword_are_written_as_all_of() {
     assert!(json_shape::accepts(&definitions, &both, &parse("6")));
     assert!(!json_shape::accepts(&definitions, &both, &parse("3")));
 }
+
+#[derive(Shape, Debug)]
+#[serde(deny_unknown_fields)]
+struct Closed {
+    known: u8,
+}
+
+#[test]
+fn a_stripping_object_is_written_closed_and_lets_an_unknown_key_pass() {
+    let document = parse(r#"{"known": 1, "other": true}"#);
+    let refusing = Closed::definitions();
+    assert!(
+        !json_shape::check(&refusing, &Closed::reference(), &document).is_empty(),
+        "a closed object refuses an unknown key"
+    );
+    let stripping = Definitions::of::<Closed>().stripping(|_| true);
+    assert!(json_shape::check(&stripping, &Closed::reference(), &document).is_empty());
+    // The schema and the declarations are the closed ones, and the value built drops the key.
+    assert_eq!(
+        schema_definitions(&stripping, Draft::Draft2020_12, "#/$defs"),
+        schema_definitions(&refusing, Draft::Draft2020_12, "#/$defs")
+    );
+    assert_eq!(
+        json_shape::typescript_declarations(&stripping),
+        json_shape::typescript_declarations(&refusing)
+    );
+    let built = Closed::from_json(&parse(r#"{"known": 1}"#)).expect("valid");
+    assert_eq!(built.known, 1);
+    let kept = Definitions::of::<Closed>().stripping(|_| false);
+    assert!(!json_shape::check(&kept, &Closed::reference(), &document).is_empty());
+}

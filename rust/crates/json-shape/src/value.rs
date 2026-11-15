@@ -203,9 +203,20 @@ fn shortest_digits(magnitude: f64) -> (Vec<u8>, i32) {
 }
 
 /// A number as `JSON.stringify` writes it (ECMAScript's Number-to-string): the shortest digits that read back as the
-/// double, written as digits and zeros for magnitudes from 1e-6 up to below 1e21 and with an exponent outside that,
-/// and `0` for `-0`.
-fn number_text(number: f64) -> String {
+/// double, written as digits and zeros for magnitudes from 1e-6 up to below 1e21 and with an exponent outside that.
+/// Both zeros are `0`, and NaN and the infinities are the texts `NaN`, `Infinity` and `-Infinity`.
+pub fn number_to_string(number: f64) -> String {
+    if number.is_nan() {
+        return "NaN".to_owned();
+    }
+    if number.is_infinite() {
+        return if number < 0.0 {
+            "-Infinity"
+        } else {
+            "Infinity"
+        }
+        .to_owned();
+    }
     if number == 0.0 {
         return "0".to_owned();
     }
@@ -250,7 +261,7 @@ impl fmt::Display for Value {
         match self {
             Value::Null => formatter.write_str("null"),
             Value::Bool(flag) => write!(formatter, "{flag}"),
-            Value::Number(number) => formatter.write_str(&number_text(*number)),
+            Value::Number(number) => formatter.write_str(&number_to_string(*number)),
             Value::String(text) => {
                 formatter.write_str(&serde_json::to_string(text).map_err(|_| fmt::Error)?)
             }
@@ -366,7 +377,7 @@ impl Serialize for Value {
                 if number.fract() == 0.0 && number.abs() < MAX_SAFE_INTEGER {
                     serializer.serialize_i64(*number as i64)
                 } else {
-                    serde_json::value::RawValue::from_string(number_text(*number))
+                    serde_json::value::RawValue::from_string(number_to_string(*number))
                         .map_err(serde::ser::Error::custom)?
                         .serialize(serializer)
                 }

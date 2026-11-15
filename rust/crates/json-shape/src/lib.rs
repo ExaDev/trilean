@@ -53,8 +53,8 @@ pub use pattern::{Pattern, PatternError};
 pub use schema::{Draft, SchemaOptions, json_schema, schema_definitions, schema_of};
 pub use shape::{Map, OpenObject, Shape};
 pub use typescript::typescript_declarations;
-pub use validate::{accepts, check, check_with_work};
-pub use value::{MAX_SAFE_INTEGER, Value};
+pub use validate::{accepts, check, check_with_work, normalise};
+pub use value::{MAX_SAFE_INTEGER, Value, number_to_string};
 
 /// What the derive's generated code names; not part of the contract.
 #[doc(hidden)]
