@@ -1,0 +1,38 @@
+{
+  "evaluator": {
+    "collections": {},
+    "idColumn": "id",
+    "table": "subjects"
+  },
+  "tables": {
+    "subjects": {
+      "columns": {
+        "id": "text",
+        "note": "text"
+      },
+      "primaryKey": "id",
+      "rows": [
+        {
+          "id": "a",
+          "note": "x"
+        },
+        {
+          "id": "nul",
+          "note": "x\u0000y"
+        },
+        {
+          "id": "glob-plain",
+          "note": "abc"
+        },
+        {
+          "id": "glob-nul",
+          "note": "a\u0000bc"
+        },
+        {
+          "id": "glob-nul-tail",
+          "note": "abc\u0000"
+        }
+      ]
+    }
+  }
+}

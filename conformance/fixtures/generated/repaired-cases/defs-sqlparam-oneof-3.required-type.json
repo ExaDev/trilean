@@ -1,0 +1,48 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "null"
+          }
+        ],
+        "sql": "((CASE WHEN instr(CAST(\"col\" AS BLOB), x'00') = 0 AND \"col\" GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][T ][0-9][0-9]:[0-9][0-9]:[0-9][0-9]*' AND (substr(\"col\", 20) = 'Z' OR substr(\"col\", 20) GLOB '[+-][0-9][0-9]:[0-9][0-9]' OR (substr(\"col\", 20, 1) = '.' AND (length(\"col\") - 20 - CASE WHEN \"col\" GLOB '*Z' THEN 1 ELSE 6 END) > 0 AND substr(\"col\", 21, (length(\"col\") - 20 - CASE WHEN \"col\" GLOB '*Z' THEN 1 ELSE 6 END)) NOT GLOB '*[^0-9]*' AND (\"col\" GLOB '*Z' OR \"col\" GLOB '*[+-][0-9][0-9]:[0-9][0-9]'))) AND strftime('%Y-%m-%d', substr(\"col\", 1, 19)) = substr(\"col\", 1, 10) AND strftime('%s', substr(\"col\", 1, 19)) IS NOT NULL AND substr(\"col\", 12, 2) < '24' AND (\"col\" GLOB '*Z' OR (substr(\"col\", CASE WHEN \"col\" GLOB '*Z' THEN length(\"col\") ELSE length(\"col\") - 5 END + 1, 2) <= '23' AND substr(\"col\", CASE WHEN \"col\" GLOB '*Z' THEN length(\"col\") ELSE length(\"col\") - 5 END + 4, 2) <= '59')) THEN CAST(strftime('%s', substr(\"col\", 1, 19)) AS INTEGER) * 1000 + CASE WHEN substr(\"col\", 20, 1) = '.' THEN CAST(substr(substr(\"col\", 21, (length(\"col\") - 20 - CASE WHEN \"col\" GLOB '*Z' THEN 1 ELSE 6 END)) || '00', 1, 3) AS INTEGER) ELSE 0 END - (CASE WHEN \"col\" GLOB '*Z' THEN 0 ELSE (CASE substr(\"col\", CASE WHEN \"col\" GLOB '*Z' THEN length(\"col\") ELSE length(\"col\") - 5 END, 1) WHEN '-' THEN -1 ELSE 1 END) * (CAST(substr(\"col\", CASE WHEN \"col\" GLOB '*Z' THEN length(\"col\") ELSE length(\"col\") - 5 END + 1, 2) AS INTEGER) * 60 + CAST(substr(\"col\", CASE WHEN \"col\" GLOB '*Z' THEN length(\"col\") ELSE length(\"col\") - 5 END + 4, 2) AS INTEGER)) END) * 60000 END) > ?)"
+      },
+      "from": "refusals.unit.test.ts: the sqlite dialect: guard and compiler agree on every refusal > an instant with a NUL",
+      "id": "sql.compile.refusals.sqlite-an-instant-with-a-nul",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "tbl"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "col"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "k",
+          "kind": "reference"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "instantLiteral",
+          "value": "MarkerThatMustNotAppear\u0000"
+        }
+      }
+    }
+  ]
+}

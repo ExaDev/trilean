@@ -1,0 +1,26 @@
+{
+  "evaluator": {
+    "collections": {},
+    "idColumn": "id",
+    "table": "subjects"
+  },
+  "tables": {
+    "subjects": {
+      "columns": {
+        "id": "text",
+        "note": "text"
+      },
+      "primaryKey": "id",
+      "rows": [
+        {
+          "id": "re-nul",
+          "note": "xa\u0000by"
+        },
+        {
+          "id": "re-plain",
+          "note": "xaby"
+        }
+      ]
+    }
+  }
+}

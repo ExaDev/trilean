@@ -1,0 +1,18 @@
+{
+  "cases": [
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/guard.ts (a tree guarded with no options under postgres)",
+      "id": "sql.guard.matrix.postgres-a-tree-guarded-with-no-options",
+      "kind": "sql-guard",
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "note",
+          "kind": "reference"
+        }
+      },
+      "unexpectedMember": 1
+    }
+  ]
+}

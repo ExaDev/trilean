@@ -1,0 +1,130 @@
+{
+  "evaluator": {
+    "collections": {
+      "marks": {
+        "foreignKey": "momentId",
+        "items": [
+          "mark"
+        ],
+        "table": "marks"
+      }
+    },
+    "idColumn": "id",
+    "table": "moments"
+  },
+  "tables": {
+    "marks": {
+      "columns": {
+        "id": "text",
+        "mark": "timestamp",
+        "momentId": "text"
+      },
+      "primaryKey": "id",
+      "rows": [
+        {
+          "id": "m1",
+          "mark": "2020-01-01T00:00:00+02:00",
+          "momentId": "utc"
+        },
+        {
+          "id": "m2",
+          "mark": "2019-12-31T22:00:00Z",
+          "momentId": "utc"
+        },
+        {
+          "id": "m3",
+          "mark": "2020-01-01T03:00:00+02:00",
+          "momentId": "east-two-hours"
+        },
+        {
+          "id": "m4",
+          "mark": "2020-01-01T00:00:00.0Z",
+          "momentId": "east-two-hours"
+        },
+        {
+          "id": "m5",
+          "mark": null,
+          "momentId": "later-day"
+        },
+        {
+          "id": "m6",
+          "mark": "2020-01-01T23:59:59-05:00",
+          "momentId": "later-day"
+        }
+      ]
+    },
+    "moments": {
+      "columns": {
+        "at": "timestamp",
+        "id": "text"
+      },
+      "primaryKey": "id",
+      "rows": [
+        {
+          "at": "2020-01-01 00:00:00Z",
+          "id": "utc-space"
+        },
+        {
+          "at": "2020-01-01T14:00:00+14:00",
+          "id": "east-fourteen"
+        },
+        {
+          "at": "2000-02-29T12:00:00Z",
+          "id": "leap-day"
+        },
+        {
+          "at": "9998-12-31T23:59:59.999Z",
+          "id": "far-future"
+        },
+        {
+          "at": "2020-01-01T00:00:00Z",
+          "id": "utc"
+        },
+        {
+          "at": "2020-01-01T00:00:00.000Z",
+          "id": "utc-ms"
+        },
+        {
+          "at": "2020-01-01T00:00:00.000000Z",
+          "id": "utc-us"
+        },
+        {
+          "at": "2020-01-01T00:00:00+00:00",
+          "id": "utc-zero-offset"
+        },
+        {
+          "at": "2020-01-01T02:00:00+02:00",
+          "id": "east-two-hours"
+        },
+        {
+          "at": "2020-01-01T01:00:00+02:00",
+          "id": "east-one-hour-early"
+        },
+        {
+          "at": "2020-01-01T00:30:00.5+01:00",
+          "id": "east-half-past"
+        },
+        {
+          "at": "2019-12-31T23:59:59-05:00",
+          "id": "west-same-day"
+        },
+        {
+          "at": "2019-12-31T23:59:59.999Z",
+          "id": "just-before"
+        },
+        {
+          "at": "2020-01-01T00:00:00.001Z",
+          "id": "just-after"
+        },
+        {
+          "at": "2020-01-02T00:00:00Z",
+          "id": "later-day"
+        },
+        {
+          "at": null,
+          "id": "unknown"
+        }
+      ]
+    }
+  }
+}

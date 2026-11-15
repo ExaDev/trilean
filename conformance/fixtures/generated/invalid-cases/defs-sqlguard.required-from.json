@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "expect": null,
+      "id": "sql.guard.matrix.postgres-a-tree-guarded-with-no-options",
+      "kind": "sql-guard",
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "note",
+          "kind": "reference"
+        }
+      }
+    }
+  ]
+}

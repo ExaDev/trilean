@@ -664,3 +664,37 @@ describe("the fixture table", () => {
     expect(unread).toEqual([]);
   });
 });
+
+/** The loader files that the TypeScript runner of `trilean-sql` copies from this one. Both copies are removed with the TypeScript they test, and a change to one is made in the other. */
+describe("the loader files copied into trilean-sql", () => {
+  const copied = [
+    "canonical-keys",
+    "corpus-files",
+    "corpus",
+    "text",
+    "read-json",
+    "validate",
+  ];
+  const packages = fileURLToPath(new URL("../../", import.meta.url));
+  /** A file without the sentence that names the other copy, the one place the copies differ: a paragraph of its own at the end of the first comment, or the one line comment of a file with no other. */
+  const withoutHeaderLine = (text: string): string =>
+    text
+      .replace(/\n \*\n \* This file is a copy of [^\n]*/u, "")
+      .replace(/^\/\*\* This file is a copy of [^\n]*\n/u, "");
+
+  it.each(copied)(
+    "%s is the same file here and in trilean-sql, but for the line naming the other",
+    (name) => {
+      const here = readFileSync(
+        join(packages, "trilean", "src", "test-support", `${name}.ts`),
+        "utf8",
+      );
+      const there = readFileSync(
+        join(packages, "trilean-sql", "src", "test-support", `${name}.ts`),
+        "utf8",
+      );
+      expect(there).toContain("This file is a copy of");
+      expect(withoutHeaderLine(here)).toBe(withoutHeaderLine(there));
+    },
+  );
+});

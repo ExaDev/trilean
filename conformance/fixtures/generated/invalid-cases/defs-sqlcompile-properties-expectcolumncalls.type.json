@@ -1,0 +1,59 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 18
+          },
+          {
+            "type": "number",
+            "value": 65
+          }
+        ],
+        "sql": "((\"age\" > $1::double precision) AND (\"age\" < $2::double precision))"
+      },
+      "expectColumnCalls": "not-the-type",
+      "from": "compile.mechanics.unit.test.ts: column identifiers > asks columnFor once per distinct reference key",
+      "id": "sql.compile.compile-mechanics.column-identifiers-asks-columnfor-once-per-disti",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "age": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "and",
+        "left": {
+          "kind": "compare",
+          "left": {
+            "key": "age",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 18
+          }
+        },
+        "right": {
+          "kind": "compare",
+          "left": {
+            "key": "age",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 65
+          }
+        }
+      }
+    }
+  ]
+}

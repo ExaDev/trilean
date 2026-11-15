@@ -1,0 +1,25 @@
+{
+  "cases": [
+    {
+      "expect": null,
+      "from": "x.unit.test.ts: a fixture",
+      "id": "optional.13",
+      "kind": "sql-guard",
+      "options": {
+        "columns": {
+          "note": "not-the-type"
+        },
+        "dialect": "postgres"
+      },
+      "reason": "the implementation cannot run this case",
+      "skip": "ts",
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "note",
+          "kind": "reference"
+        }
+      }
+    }
+  ]
+}

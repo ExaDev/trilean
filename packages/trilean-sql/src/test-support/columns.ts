@@ -5,7 +5,7 @@ import type {
 } from "../options";
 
 /**
- * The schema the unit tests and every integration suite compile against, so a fragment asserted as a string in one is the same fragment executed against a real engine in the others.
+ * The schema the PGlite integration suite compiles against.
  *
  * `age`, `name`, `active` and `joined` each declare a `paramType`; `note` deliberately does not, which is what exercises the compiler's undeclared-column path (no operand-kind checking, and literal placeholders rendered by their own kind instead of the column's).
  */
@@ -28,12 +28,6 @@ function columnForSubject(referenceKey: string): SqlColumnBinding {
 
 export const subjectOptions: SqlCompileOptions = {
   dialect: "postgres",
-  columnFor: columnForSubject,
-};
-
-/** The same mapping compiled for SQLite. Sharing `columnFor` is the point: a column mapping is a property of the schema, not of the dialect, so the only difference between the two suites' options is the dialect they name. */
-export const sqliteSubjectOptions: SqlCompileOptions = {
-  dialect: "sqlite",
   columnFor: columnForSubject,
 };
 
@@ -80,11 +74,5 @@ export function collectionForSubjectTags(
 /** `subjectOptions` with `collectionFor` supplied, for the integration suites' `some`/`every`/`fold` parity tests. */
 export const subjectOptionsWithTags: SqlCompileOptions = {
   ...subjectOptions,
-  collectionFor: collectionForSubjectTags,
-};
-
-/** The same mapping compiled for SQLite. */
-export const sqliteSubjectOptionsWithTags: SqlCompileOptions = {
-  ...sqliteSubjectOptions,
   collectionFor: collectionForSubjectTags,
 };

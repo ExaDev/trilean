@@ -1,0 +1,19 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "params": [],
+        "sql": "(TRUE)"
+      },
+      "id": "sql.compile.compile-dialects.the-sqlite-dialect-compiles-an-empty-allof-and-a",
+      "kind": "sql-compile",
+      "options": {
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "allOf",
+        "operands": []
+      }
+    }
+  ]
+}

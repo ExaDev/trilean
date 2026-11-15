@@ -1,0 +1,15 @@
+{
+  "cases": [
+    {
+      "dialect": "postgres",
+      "expect": {
+        "text": "abc"
+      },
+      "from": "x.unit.test.ts: a fixture",
+      "kind": "sql-pattern",
+      "pattern": "abc",
+      "reason": "the implementation cannot run this case",
+      "skip": "ts"
+    }
+  ]
+}

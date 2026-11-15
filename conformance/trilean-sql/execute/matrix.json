@@ -1,0 +1,2795 @@
+{
+  "cases": [
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "grace",
+          "unknown"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (neq on a number with an unknown under postgres)",
+      "id": "sql.execute.matrix.postgres-neq-on-a-number-with-an-unknown",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "age",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 30
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "grace",
+          "unknown"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (neq on a number with an unknown under sqlite)",
+      "id": "sql.execute.matrix.sqlite-neq-on-a-number-with-an-unknown",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "age",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 30
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": []
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (neq of a column with itself under postgres)",
+      "id": "sql.execute.matrix.postgres-neq-of-a-column-with-itself",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "age",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "key": "age",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": []
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (neq of a column with itself under sqlite)",
+      "id": "sql.execute.matrix.sqlite-neq-of-a-column-with-itself",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "age",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "key": "age",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "ada",
+          "grace",
+          "unknown"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (eq of a column with itself under postgres)",
+      "id": "sql.execute.matrix.postgres-eq-of-a-column-with-itself",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "age",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "key": "age",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "ada",
+          "grace",
+          "unknown"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (eq of a column with itself under sqlite)",
+      "id": "sql.execute.matrix.sqlite-eq-of-a-column-with-itself",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "age",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "key": "age",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "grace"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (neq on booleans with an unknown under postgres)",
+      "id": "sql.execute.matrix.postgres-neq-on-booleans-with-an-unknown",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "active",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "booleanLiteral",
+            "value": true
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "grace"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (neq on booleans with an unknown under sqlite)",
+      "id": "sql.execute.matrix.sqlite-neq-on-booleans-with-an-unknown",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "active",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "booleanLiteral",
+            "value": true
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "grace",
+          "lin"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (neq on instants with an unknown under postgres)",
+      "id": "sql.execute.matrix.postgres-neq-on-instants-with-an-unknown",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "joined",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "instantLiteral",
+            "value": "2020-01-01T00:00:00Z"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "grace",
+          "lin"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (neq on instants with an unknown under sqlite)",
+      "id": "sql.execute.matrix.sqlite-neq-on-instants-with-an-unknown",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "joined",
+            "kind": "reference"
+          },
+          "op": "neq",
+          "right": {
+            "kind": "instantLiteral",
+            "value": "2020-01-01T00:00:00Z"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "grace",
+          "lin"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (notEquals on text with an unknown under postgres)",
+      "id": "sql.execute.matrix.postgres-notequals-on-text-with-an-unknown",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "name",
+            "kind": "reference"
+          },
+          "op": "notEquals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "grace",
+          "lin"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (notEquals on text with an unknown under sqlite)",
+      "id": "sql.execute.matrix.sqlite-notequals-on-text-with-an-unknown",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "name",
+            "kind": "reference"
+          },
+          "op": "notEquals",
+          "right": {
+            "kind": "textLiteral",
+            "value": "ada"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": []
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (equals of two columns under postgres)",
+      "id": "sql.execute.matrix.postgres-equals-of-two-columns",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "name",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "key": "note",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": []
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (equals of two columns under sqlite)",
+      "id": "sql.execute.matrix.sqlite-equals-of-two-columns",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "name",
+            "kind": "reference"
+          },
+          "op": "equals",
+          "right": {
+            "key": "note",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "ada",
+          "grace"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (notEquals of two columns under postgres)",
+      "id": "sql.execute.matrix.postgres-notequals-of-two-columns",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "name",
+            "kind": "reference"
+          },
+          "op": "notEquals",
+          "right": {
+            "key": "note",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "ada",
+          "grace"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (notEquals of two columns under sqlite)",
+      "id": "sql.execute.matrix.sqlite-notequals-of-two-columns",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "textCompare",
+          "left": {
+            "key": "name",
+            "kind": "reference"
+          },
+          "op": "notEquals",
+          "right": {
+            "key": "note",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "ada"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (not of notEquals under postgres)",
+      "id": "sql.execute.matrix.postgres-not-of-notequals",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "not",
+          "operand": {
+            "kind": "textCompare",
+            "left": {
+              "key": "name",
+              "kind": "reference"
+            },
+            "op": "notEquals",
+            "right": {
+              "kind": "textLiteral",
+              "value": "ada"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "ada"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (not of notEquals under sqlite)",
+      "id": "sql.execute.matrix.sqlite-not-of-notequals",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "not",
+          "operand": {
+            "kind": "textCompare",
+            "left": {
+              "key": "name",
+              "kind": "reference"
+            },
+            "op": "notEquals",
+            "right": {
+              "kind": "textLiteral",
+              "value": "ada"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "grace"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (not of an in over an unknown operand under postgres)",
+      "id": "sql.execute.matrix.postgres-not-of-an-in-over-an-unknown-operand",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "not",
+          "operand": {
+            "candidates": [
+              {
+                "kind": "textLiteral",
+                "value": "ada"
+              },
+              {
+                "kind": "textLiteral",
+                "value": "lin"
+              }
+            ],
+            "kind": "memberOf",
+            "op": "in",
+            "operand": {
+              "key": "name",
+              "kind": "reference"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "grace"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (not of an in over an unknown operand under sqlite)",
+      "id": "sql.execute.matrix.sqlite-not-of-an-in-over-an-unknown-operand",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "not",
+          "operand": {
+            "candidates": [
+              {
+                "kind": "textLiteral",
+                "value": "ada"
+              },
+              {
+                "kind": "textLiteral",
+                "value": "lin"
+              }
+            ],
+            "kind": "memberOf",
+            "op": "in",
+            "operand": {
+              "key": "name",
+              "kind": "reference"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "ada"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (in with a column among the candidates under postgres)",
+      "id": "sql.execute.matrix.postgres-in-with-a-column-among-the-candidates",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "key": "note",
+              "kind": "reference"
+            },
+            {
+              "kind": "textLiteral",
+              "value": "ada"
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "name",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "ada"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (in with a column among the candidates under sqlite)",
+      "id": "sql.execute.matrix.sqlite-in-with-a-column-among-the-candidates",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "key": "note",
+              "kind": "reference"
+            },
+            {
+              "kind": "textLiteral",
+              "value": "ada"
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "name",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "grace"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (notIn with a column among the candidates under postgres)",
+      "id": "sql.execute.matrix.postgres-notin-with-a-column-among-the-candidates",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "key": "note",
+              "kind": "reference"
+            },
+            {
+              "kind": "textLiteral",
+              "value": "ada"
+            }
+          ],
+          "kind": "memberOf",
+          "op": "notIn",
+          "operand": {
+            "key": "name",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "grace"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (notIn with a column among the candidates under sqlite)",
+      "id": "sql.execute.matrix.sqlite-notin-with-a-column-among-the-candidates",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "key": "note",
+              "kind": "reference"
+            },
+            {
+              "kind": "textLiteral",
+              "value": "ada"
+            }
+          ],
+          "kind": "memberOf",
+          "op": "notIn",
+          "operand": {
+            "key": "name",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "grace",
+          "unknown"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (in over an unknown column of numbers under postgres)",
+      "id": "sql.execute.matrix.postgres-in-over-an-unknown-column-of-numbers",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "numberLiteral",
+              "value": 12
+            },
+            {
+              "kind": "numberLiteral",
+              "value": 45
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "age",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "grace",
+          "unknown"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (in over an unknown column of numbers under sqlite)",
+      "id": "sql.execute.matrix.sqlite-in-over-an-unknown-column-of-numbers",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "numberLiteral",
+              "value": 12
+            },
+            {
+              "kind": "numberLiteral",
+              "value": 45
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "age",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "ada"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (notIn over an unknown column of numbers under postgres)",
+      "id": "sql.execute.matrix.postgres-notin-over-an-unknown-column-of-numbers",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "numberLiteral",
+              "value": 12
+            },
+            {
+              "kind": "numberLiteral",
+              "value": 45
+            }
+          ],
+          "kind": "memberOf",
+          "op": "notIn",
+          "operand": {
+            "key": "age",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "ada"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (notIn over an unknown column of numbers under sqlite)",
+      "id": "sql.execute.matrix.sqlite-notin-over-an-unknown-column-of-numbers",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "numberLiteral",
+              "value": 12
+            },
+            {
+              "kind": "numberLiteral",
+              "value": 45
+            }
+          ],
+          "kind": "memberOf",
+          "op": "notIn",
+          "operand": {
+            "key": "age",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "ada",
+          "lin"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (in over booleans under postgres)",
+      "id": "sql.execute.matrix.postgres-in-over-booleans",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "booleanLiteral",
+              "value": true
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "active",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "ada",
+          "lin"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (in over booleans under sqlite)",
+      "id": "sql.execute.matrix.sqlite-in-over-booleans",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "booleanLiteral",
+              "value": true
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "active",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "grace"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (notIn over booleans under postgres)",
+      "id": "sql.execute.matrix.postgres-notin-over-booleans",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "booleanLiteral",
+              "value": true
+            }
+          ],
+          "kind": "memberOf",
+          "op": "notIn",
+          "operand": {
+            "key": "active",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "grace"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (notIn over booleans under sqlite)",
+      "id": "sql.execute.matrix.sqlite-notin-over-booleans",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "booleanLiteral",
+              "value": true
+            }
+          ],
+          "kind": "memberOf",
+          "op": "notIn",
+          "operand": {
+            "key": "active",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "ada"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (in over instants under postgres)",
+      "id": "sql.execute.matrix.postgres-in-over-instants",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "instantLiteral",
+              "value": "2020-01-01T00:00:00Z"
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "joined",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "ada"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (in over instants under sqlite)",
+      "id": "sql.execute.matrix.sqlite-in-over-instants",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "candidates": [
+            {
+              "kind": "instantLiteral",
+              "value": "2020-01-01T00:00:00Z"
+            }
+          ],
+          "kind": "memberOf",
+          "op": "in",
+          "operand": {
+            "key": "joined",
+            "kind": "reference"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "lin"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (not of exists under postgres)",
+      "id": "sql.execute.matrix.postgres-not-of-exists",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "not",
+          "operand": {
+            "kind": "exists",
+            "operand": {
+              "key": "age",
+              "kind": "reference"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "lin"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (not of exists under sqlite)",
+      "id": "sql.execute.matrix.sqlite-not-of-exists",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "not",
+          "operand": {
+            "kind": "exists",
+            "operand": {
+              "key": "age",
+              "kind": "reference"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "grace"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (not of an or with an unknown under postgres)",
+      "id": "sql.execute.matrix.postgres-not-of-an-or-with-an-unknown",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "not",
+          "operand": {
+            "kind": "or",
+            "left": {
+              "kind": "compare",
+              "left": {
+                "key": "age",
+                "kind": "reference"
+              },
+              "op": "gt",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 20
+              }
+            },
+            "right": {
+              "kind": "textCompare",
+              "left": {
+                "key": "name",
+                "kind": "reference"
+              },
+              "op": "equals",
+              "right": {
+                "kind": "textLiteral",
+                "value": "lin"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "grace"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (not of an or with an unknown under sqlite)",
+      "id": "sql.execute.matrix.sqlite-not-of-an-or-with-an-unknown",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "not",
+          "operand": {
+            "kind": "or",
+            "left": {
+              "kind": "compare",
+              "left": {
+                "key": "age",
+                "kind": "reference"
+              },
+              "op": "gt",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 20
+              }
+            },
+            "right": {
+              "kind": "textCompare",
+              "left": {
+                "key": "name",
+                "kind": "reference"
+              },
+              "op": "equals",
+              "right": {
+                "kind": "textLiteral",
+                "value": "lin"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "ada"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (an and of an unknown and a true under postgres)",
+      "id": "sql.execute.matrix.postgres-an-and-of-an-unknown-and-a-true",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "and",
+          "left": {
+            "kind": "compare",
+            "left": {
+              "key": "age",
+              "kind": "reference"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 20
+            }
+          },
+          "right": {
+            "kind": "exists",
+            "operand": {
+              "key": "name",
+              "kind": "reference"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "ada"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (an and of an unknown and a true under sqlite)",
+      "id": "sql.execute.matrix.sqlite-an-and-of-an-unknown-and-a-true",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "and",
+          "left": {
+            "kind": "compare",
+            "left": {
+              "key": "age",
+              "kind": "reference"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 20
+            }
+          },
+          "right": {
+            "kind": "exists",
+            "operand": {
+              "key": "name",
+              "kind": "reference"
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "ada",
+          "unknown"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (an or of an unknown and a false under postgres)",
+      "id": "sql.execute.matrix.postgres-an-or-of-an-unknown-and-a-false",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "or",
+          "left": {
+            "kind": "compare",
+            "left": {
+              "key": "age",
+              "kind": "reference"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 20
+            }
+          },
+          "right": {
+            "kind": "compare",
+            "left": {
+              "key": "age",
+              "kind": "reference"
+            },
+            "op": "lt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "ada",
+          "unknown"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (an or of an unknown and a false under sqlite)",
+      "id": "sql.execute.matrix.sqlite-an-or-of-an-unknown-and-a-false",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "or",
+          "left": {
+            "kind": "compare",
+            "left": {
+              "key": "age",
+              "kind": "reference"
+            },
+            "op": "gt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 20
+            }
+          },
+          "right": {
+            "kind": "compare",
+            "left": {
+              "key": "age",
+              "kind": "reference"
+            },
+            "op": "lt",
+            "right": {
+              "kind": "numberLiteral",
+              "value": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": []
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (allOf of an unknown and a false under postgres)",
+      "id": "sql.execute.matrix.postgres-allof-of-an-unknown-and-a-false",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "allOf",
+          "operands": [
+            {
+              "kind": "compare",
+              "left": {
+                "key": "age",
+                "kind": "reference"
+              },
+              "op": "gt",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 20
+              }
+            },
+            {
+              "kind": "compare",
+              "left": {
+                "key": "age",
+                "kind": "reference"
+              },
+              "op": "lt",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 0
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": []
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (allOf of an unknown and a false under sqlite)",
+      "id": "sql.execute.matrix.sqlite-allof-of-an-unknown-and-a-false",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "allOf",
+          "operands": [
+            {
+              "kind": "compare",
+              "left": {
+                "key": "age",
+                "kind": "reference"
+              },
+              "op": "gt",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 20
+              }
+            },
+            {
+              "kind": "compare",
+              "left": {
+                "key": "age",
+                "kind": "reference"
+              },
+              "op": "lt",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 0
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "ada",
+          "grace",
+          "lin",
+          "unknown"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (anyOf of an unknown and a true under postgres)",
+      "id": "sql.execute.matrix.postgres-anyof-of-an-unknown-and-a-true",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "anyOf",
+          "operands": [
+            {
+              "kind": "compare",
+              "left": {
+                "key": "age",
+                "kind": "reference"
+              },
+              "op": "gt",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 20
+              }
+            },
+            {
+              "kind": "exists",
+              "operand": {
+                "key": "name",
+                "kind": "reference"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "ada",
+          "grace",
+          "lin",
+          "unknown"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (anyOf of an unknown and a true under sqlite)",
+      "id": "sql.execute.matrix.sqlite-anyof-of-an-unknown-and-a-true",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "anyOf",
+          "operands": [
+            {
+              "kind": "compare",
+              "left": {
+                "key": "age",
+                "kind": "reference"
+              },
+              "op": "gt",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 20
+              }
+            },
+            {
+              "kind": "exists",
+              "operand": {
+                "key": "name",
+                "kind": "reference"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "ada",
+          "grace",
+          "lin"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (an instant with an offset beyond the stored zone under postgres)",
+      "id": "sql.execute.matrix.postgres-an-instant-with-an-offset-beyond-the-stored-zone",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "joined",
+            "kind": "reference"
+          },
+          "op": "gte",
+          "right": {
+            "kind": "instantLiteral",
+            "value": "2020-01-01T00:00:00Z"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "ada",
+          "grace",
+          "lin"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (an instant with an offset beyond the stored zone under sqlite)",
+      "id": "sql.execute.matrix.sqlite-an-instant-with-an-offset-beyond-the-stored-zone",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "joined",
+            "kind": "reference"
+          },
+          "op": "gte",
+          "right": {
+            "kind": "instantLiteral",
+            "value": "2020-01-01T00:00:00Z"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "ada",
+          "grace",
+          "lin"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (an instant literal with an offset before the stored instants under postgres)",
+      "id": "sql.execute.matrix.postgres-an-instant-literal-with-an-offset-before-the-stored-instants",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "joined",
+            "kind": "reference"
+          },
+          "op": "gte",
+          "right": {
+            "kind": "instantLiteral",
+            "value": "2020-01-01T01:00:00+02:00"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "ada"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (an instant literal with an offset equal to a stored instant under postgres)",
+      "id": "sql.execute.matrix.postgres-an-instant-literal-with-an-offset-equal-to-a-stored-instant",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "joined",
+            "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "instantLiteral",
+            "value": "2020-01-01T02:00:00+02:00"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "ada"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (an instant literal with an offset a stored instant is before under postgres)",
+      "id": "sql.execute.matrix.postgres-an-instant-literal-with-an-offset-a-stored-instant-is-before",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "joined",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "instantLiteral",
+            "value": "2021-03-03T02:00:00+02:00"
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "grace",
+          "lin"
+        ]
+      },
+      "fixture": "subjects",
+      "from": "recorded: trilean-sql src/compile.ts (an instant literal with fractional seconds under postgres)",
+      "id": "sql.execute.matrix.postgres-an-instant-literal-with-fractional-seconds",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "active": {
+              "column": "active",
+              "paramType": "boolean"
+            },
+            "age": {
+              "column": "age",
+              "paramType": "number"
+            },
+            "joined": {
+              "column": "joined",
+              "paramType": "timestamp"
+            },
+            "name": {
+              "column": "name",
+              "paramType": "text"
+            },
+            "note": {
+              "column": "note"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "joined",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "instantLiteral",
+            "value": "2020-01-01T00:00:00.5Z"
+          }
+        }
+      }
+    }
+  ]
+}

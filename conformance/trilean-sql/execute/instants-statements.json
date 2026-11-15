@@ -1,0 +1,26 @@
+{
+  "cases": [
+    {
+      "dialect": "postgres",
+      "expect": {
+        "result": [
+          [
+            false,
+            true
+          ]
+        ]
+      },
+      "fixture": "moments",
+      "from": "postgres.instants.integration.test.ts: the precision PostgreSQL keeps > compares microseconds: a stored fourth digit is kept, so it is not equal to the millisecond before it",
+      "id": "sql.execute.instants-statements.postgres-keeps-microseconds",
+      "kind": "sql-execute",
+      "run": {
+        "params": [
+          "2019-12-31T23:59:59.9996Z",
+          "2019-12-31T23:59:59.999Z"
+        ],
+        "sql": "SELECT $1::timestamptz = $2::timestamptz AS equal, $1::timestamptz > $2::timestamptz AS later"
+      }
+    }
+  ]
+}
