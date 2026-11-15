@@ -849,7 +849,14 @@
               "$ref": "#/$defs/SqlExecuteExpect"
             },
             "expectEvaluator": {
-              "description": "The ids the evaluator selects, given only where they differ from the rows because the engine reads a stored value as unknown that the evaluator reads as a value.",
+              "description": "The ids the evaluator selects, given only where they differ from the rows by the contract of the engine (a stored value holding a NUL, which its GLOB reads only up to).",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "expectEvaluatorLenient": {
+              "description": "The ids the TypeScript evaluator selects where they differ from the rows because it reads a stored instant through `Date.parse`, a leniency of JavaScript and not a contract of the corpus. The loader reads it and no runner of this implementation uses it.",
               "items": {
                 "type": "string"
               },

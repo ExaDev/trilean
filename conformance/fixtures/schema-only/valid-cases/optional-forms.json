@@ -275,6 +275,9 @@
           "grace"
         ]
       },
+      "expectEvaluatorLenient": [
+        "not-an-id-of-any-fixture"
+      ],
       "fixture": "subjects",
       "from": "x.unit.test.ts: a fixture",
       "id": "optional.15",

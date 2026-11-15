@@ -1,35 +1,21 @@
 {
   "cases": [
     {
-      "dialect": "sqlite",
+      "dialect": "postgres",
       "expect": {
-        "rows": [
-          "ada",
-          "grace"
+        "queryError": [
+          "invalid byte sequence"
         ]
       },
       "fixture": "subjects",
-      "id": "optional.15",
+      "id": "sql.execute.identifiers-nul.postgres-the-engine-rejects-a-nul",
       "kind": "sql-execute",
-      "reason": "the implementation cannot run this case",
       "run": {
-        "options": {
-          "columns": {
-            "note": {
-              "column": "note"
-            }
-          },
-          "sqliteRegexpAvailable": true
-        },
-        "tree": {
-          "kind": "exists",
-          "operand": {
-            "key": "note",
-            "kind": "reference"
-          }
-        }
-      },
-      "skip": "rust"
+        "params": [
+          "x\u0000y"
+        ],
+        "sql": "SELECT $1::text"
+      }
     }
   ]
 }

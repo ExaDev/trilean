@@ -1912,7 +1912,14 @@
           ]
         },
         "expectEvaluator": {
-          "description": "The ids trilean's evaluator selects over the fixture, given only where they differ from `expect.rows` because the engine reads a stored value as unknown that the evaluator reads as a value (a NUL the engine's GLOB stops at). Without it the evaluator must select `expect.rows`.",
+          "description": "The ids trilean's evaluator selects over the fixture, given only where they differ from `expect.rows` by the contract of the engine: a stored value holding a NUL, which the engine's GLOB reads only up to. Every port's evaluator must select them. Without it the evaluator must select `expect.rows`.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "expectEvaluatorLenient": {
+          "description": "The ids the TypeScript evaluator selects over the fixture where they differ from `expect.rows` because it reads a stored instant through `Date.parse`, which accepts forms the ECMAScript date-time string format does not promise. It records a JavaScript leniency, not a contract of the corpus: only the TypeScript runner checks it, and a runner of another implementation reads the field and does not use it.",
           "items": {
             "type": "string"
           },

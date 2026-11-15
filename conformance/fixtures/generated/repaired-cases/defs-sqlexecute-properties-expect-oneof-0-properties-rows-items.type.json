@@ -4,33 +4,35 @@
       "dialect": "sqlite",
       "expect": {
         "rows": [
-          "ada",
-          "grace"
+          "one"
         ]
       },
-      "fixture": "subjects",
-      "from": "x.unit.test.ts: a fixture",
-      "id": "optional.15",
+      "fixture": "numbers",
+      "from": "recorded: trilean-sql src/compile.ts (eq against 1 under sqlite)",
+      "id": "sql.execute.numbers.sqlite-eq-against-1",
       "kind": "sql-execute",
-      "reason": "the implementation cannot run this case",
       "run": {
         "options": {
           "columns": {
-            "note": {
-              "column": "note"
+            "value": {
+              "column": "value",
+              "paramType": "number"
             }
-          },
-          "sqliteRegexpAvailable": true
+          }
         },
         "tree": {
-          "kind": "exists",
-          "operand": {
-            "key": "note",
+          "kind": "compare",
+          "left": {
+            "key": "value",
             "kind": "reference"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 1
           }
         }
-      },
-      "skip": "rust"
+      }
     }
   ]
 }

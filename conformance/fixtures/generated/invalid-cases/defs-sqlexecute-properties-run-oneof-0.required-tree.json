@@ -3,27 +3,17 @@
     {
       "dialect": "sqlite",
       "expect": {
-        "rows": [
-          "ada",
-          "grace"
-        ]
+        "rows": []
       },
       "fixture": "subjects",
-      "from": "x.unit.test.ts: a fixture",
-      "id": "optional.15",
+      "from": "sqlite.edge-cases.integration.test.ts: degenerate and adversarial fragments > executes an empty allOf and anyOf as their identities",
+      "id": "sql.execute.sqlite-edge-cases.degenerate-and-adversarial-fragments-executes-an-2",
       "kind": "sql-execute",
-      "reason": "the implementation cannot run this case",
       "run": {
         "options": {
-          "columns": {
-            "note": {
-              "column": "note"
-            }
-          },
-          "sqliteRegexpAvailable": true
+          "columns": {}
         }
-      },
-      "skip": "rust"
+      }
     }
   ]
 }

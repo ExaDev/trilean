@@ -7,7 +7,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-30",
@@ -60,7 +60,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -123,7 +123,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-30",
@@ -176,7 +176,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -241,7 +241,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -301,7 +301,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-zero-text"
       ],
@@ -354,7 +354,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-30",
@@ -407,7 +407,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -472,7 +472,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -531,7 +531,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-offset-no-colon",
         "r-zero-text"
@@ -585,7 +585,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-30",
@@ -638,7 +638,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -701,7 +701,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-30",
@@ -754,7 +754,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -817,7 +817,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-30",
@@ -870,7 +870,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -933,7 +933,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-30",
@@ -986,7 +986,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -1049,7 +1049,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-30",
@@ -1102,7 +1102,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -1167,7 +1167,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -1226,7 +1226,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-offset-no-colon",
         "r-zero-text"
@@ -1282,7 +1282,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -1341,7 +1341,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-offset-no-colon",
         "r-zero-text"
@@ -1397,7 +1397,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -1457,7 +1457,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-zero-text"
       ],
@@ -1512,7 +1512,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -1669,7 +1669,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -1738,7 +1738,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -1797,7 +1797,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-offset-no-colon",
         "r-zero-text"
@@ -1851,7 +1851,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-30",
@@ -1904,7 +1904,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -1969,7 +1969,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -2028,7 +2028,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-offset-no-colon",
         "r-zero-text"
@@ -2084,7 +2084,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -2143,7 +2143,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-offset-no-colon",
         "r-zero-text"
@@ -2199,7 +2199,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -2259,7 +2259,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-zero-text"
       ],
@@ -2314,7 +2314,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -2373,7 +2373,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-offset-no-colon",
         "r-zero-text"
@@ -2429,7 +2429,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -2488,7 +2488,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-offset-no-colon",
         "r-zero-text"
@@ -2544,7 +2544,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -2603,7 +2603,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-offset-no-colon",
         "r-zero-text"
@@ -2659,7 +2659,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -2718,7 +2718,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-offset-no-colon",
         "r-zero-text"
@@ -2774,7 +2774,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -2833,7 +2833,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-offset-no-colon",
         "r-zero-text"
@@ -2887,7 +2887,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-30",
@@ -2940,7 +2940,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -3005,7 +3005,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -3064,7 +3064,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-offset-no-colon",
         "r-zero-text"
@@ -3120,7 +3120,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -3179,7 +3179,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-offset-no-colon",
         "r-zero-text"
@@ -3235,7 +3235,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -3294,7 +3294,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-offset-no-colon",
         "r-zero-text"
@@ -3350,7 +3350,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -3410,7 +3410,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-zero-text"
       ],
@@ -3465,7 +3465,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -3622,7 +3622,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -3691,7 +3691,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -3750,7 +3750,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-offset-no-colon",
         "r-zero-text"
@@ -3804,7 +3804,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-30",
@@ -3857,7 +3857,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -3918,7 +3918,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-offset-no-colon",
         "r-zero-text"
@@ -3971,7 +3971,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -4033,7 +4033,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-offset-no-colon",
         "r-zero-text"
@@ -4086,7 +4086,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -4148,7 +4148,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-zero-text"
       ],
@@ -4200,7 +4200,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -4263,7 +4263,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-offset-no-colon",
         "r-zero-text"
@@ -4316,7 +4316,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -4378,7 +4378,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-offset-no-colon",
         "r-zero-text"
@@ -4431,7 +4431,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -4493,7 +4493,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-offset-no-colon",
         "r-zero-text"
@@ -4546,7 +4546,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -4608,7 +4608,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-offset-no-colon",
         "r-zero-text"
@@ -4661,7 +4661,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -4723,7 +4723,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-offset-no-colon",
         "r-zero-text"
@@ -4776,7 +4776,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -4841,7 +4841,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -4901,7 +4901,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-30",
@@ -4954,7 +4954,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-offset-no-colon",
         "r-zero-text"
@@ -5007,7 +5007,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -5069,7 +5069,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-offset-no-colon",
         "r-zero-text"
@@ -5122,7 +5122,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -5184,7 +5184,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-offset-no-colon",
         "r-zero-text"
@@ -5237,7 +5237,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -5299,7 +5299,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-zero-text"
       ],
@@ -5351,7 +5351,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -5462,7 +5462,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -5531,7 +5531,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -5640,7 +5640,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-offset-no-colon",
         "r-zero-text"
@@ -5693,7 +5693,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -5758,7 +5758,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -5818,7 +5818,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-30",
@@ -5874,7 +5874,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -5934,7 +5934,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-30",
@@ -5990,7 +5990,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -6050,7 +6050,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-30",
@@ -6103,7 +6103,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-zero-text"
       ],
@@ -6155,7 +6155,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -6221,7 +6221,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -6281,7 +6281,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-30",
@@ -6334,7 +6334,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-offset-no-colon",
         "r-zero-text"
@@ -6387,7 +6387,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -6452,7 +6452,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -6512,7 +6512,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-30",
@@ -6568,7 +6568,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -6628,7 +6628,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-30",
@@ -6684,7 +6684,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -6744,7 +6744,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-30",
@@ -6800,7 +6800,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -6860,7 +6860,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-30",
@@ -6916,7 +6916,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -6976,7 +6976,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-30",
@@ -7029,7 +7029,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-offset-no-colon",
         "r-zero-text"
@@ -7082,7 +7082,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -7144,7 +7144,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-offset-no-colon",
         "r-zero-text"
@@ -7197,7 +7197,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -7259,7 +7259,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-zero-text"
       ],
@@ -7311,7 +7311,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -7422,7 +7422,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -7491,7 +7491,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -7600,7 +7600,7 @@
       "expect": {
         "rows": []
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "r-feb-29-common-year",
         "r-offset-no-colon",
         "r-zero-text"
@@ -7653,7 +7653,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -7718,7 +7718,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -7778,7 +7778,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-30",
@@ -7834,7 +7834,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -7891,7 +7891,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-29-common-year",
@@ -7950,7 +7950,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -8007,7 +8007,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-29-common-year",
@@ -8111,7 +8111,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -8179,7 +8179,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -8236,7 +8236,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-29-common-year",
@@ -8340,7 +8340,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -8408,7 +8408,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -8465,7 +8465,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-29-common-year",
@@ -8524,7 +8524,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -8581,7 +8581,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-29-common-year",
@@ -8640,7 +8640,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -8697,7 +8697,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-29-common-year",
@@ -8801,7 +8801,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -8869,7 +8869,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -8926,7 +8926,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-29-common-year",
@@ -9030,7 +9030,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -9143,7 +9143,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -9256,7 +9256,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -9369,7 +9369,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -9482,7 +9482,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -9595,7 +9595,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -9708,7 +9708,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -9775,7 +9775,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-29-common-year",
@@ -9831,7 +9831,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -9891,7 +9891,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-29-common-year",
@@ -9947,7 +9947,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -10009,7 +10009,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -10120,7 +10120,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-29-common-year",
@@ -10176,7 +10176,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -10238,7 +10238,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -10349,7 +10349,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-29-common-year",
@@ -10405,7 +10405,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -10465,7 +10465,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-29-common-year",
@@ -10521,7 +10521,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -10581,7 +10581,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-29-common-year",
@@ -10637,7 +10637,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -10699,7 +10699,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -10810,7 +10810,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-29-common-year",
@@ -10866,7 +10866,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -10928,7 +10928,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -11041,7 +11041,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -11154,7 +11154,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -11267,7 +11267,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -11380,7 +11380,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -11493,7 +11493,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -11606,7 +11606,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-later",
         "in-grammar-offset",
@@ -11718,7 +11718,7 @@
           "in-grammar-offset"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar",
         "in-grammar-offset",
         "r-date-only",
@@ -11777,7 +11777,7 @@
           "in-grammar-later"
         ]
       },
-      "expectEvaluator": [
+      "expectEvaluatorLenient": [
         "in-grammar-later",
         "r-apr-31",
         "r-feb-29-common-year",

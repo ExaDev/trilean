@@ -593,7 +593,9 @@ describe("the ids the evaluator selects do not depend on the zone of the host", 
   const ZONES = ["America/New_York", "Asia/Tokyo"] as const;
   const stated = executeCases.filter(
     (testCase) =>
-      testCase.expectEvaluator !== undefined && "tree" in testCase.run,
+      (testCase.expectEvaluator !== undefined ||
+        testCase.expectEvaluatorLenient !== undefined) &&
+      "tree" in testCase.run,
   );
 
   it("has cases whose evaluator rows are stated", () => {
@@ -649,7 +651,9 @@ describe("the ids the evaluator selects do not depend on the zone of the host", 
               );
 
               return JSON.stringify(rows) ===
-                JSON.stringify(testCase.expectEvaluator)
+                JSON.stringify(
+                  testCase.expectEvaluator ?? testCase.expectEvaluatorLenient,
+                )
                 ? undefined
                 : testCase.id;
             }),
