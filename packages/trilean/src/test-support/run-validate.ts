@@ -47,4 +47,18 @@ export function runValidateCase(testCase: ValidateCase): void {
       ).toBe(true);
     }
   }
+  if (!result.success && !wanted.ok && wanted.paths !== undefined) {
+    const written = (paths: readonly (readonly unknown[])[]): string[] =>
+      [...new Set(paths.map((path) => JSON.stringify(path)))].sort();
+    expect(
+      written(
+        result.issues.map((issue) =>
+          (issue.path ?? []).map((step) =>
+            typeof step === "object" ? step.key : step,
+          ),
+        ),
+      ),
+      `the paths of the issues for ${testCase.schema}`,
+    ).toEqual(written(wanted.paths));
+  }
 }

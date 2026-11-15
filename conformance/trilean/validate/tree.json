@@ -41,7 +41,12 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "operand"
+          ]
+        ]
       },
       "from": "tree.unit.test.ts: predicate tree > not: parses a minimal node and rejects a missing operand",
       "id": "tree.predicate-tree-not-parses-a-minimal-node-and-rejects-a-missing-operand.2",
@@ -116,7 +121,12 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "left"
+          ]
+        ]
       },
       "from": "tree.unit.test.ts: predicate tree > and: parses a minimal node and rejects a wrong-type left",
       "id": "tree.predicate-tree-and-parses-a-minimal-node-and-rejects-a-wrong-type-left.2",
@@ -204,7 +214,12 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "kind"
+          ]
+        ]
       },
       "from": "tree.unit.test.ts: predicate tree > or: parses a minimal node and rejects a missing discriminant",
       "id": "tree.predicate-tree-or-parses-a-minimal-node-and-rejects-a-missing-discriminant.2",
@@ -256,7 +271,12 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "operands"
+          ]
+        ]
       },
       "from": "tree.unit.test.ts: predicate tree > allOf: parses an empty operand list and rejects a non-array operands field",
       "id": "tree.predicate-tree-allof-parses-an-empty-operand-list-and-rejects-a-non-array-operands-field.2",
@@ -302,7 +322,14 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "operands",
+            0,
+            "kind"
+          ]
+        ]
       },
       "from": "tree.unit.test.ts: predicate tree > anyOf: parses a populated operand list and rejects a wrong literal kind",
       "id": "tree.predicate-tree-anyof-parses-a-populated-operand-list-and-rejects-a-wrong-literal-kind.2",
@@ -352,7 +379,12 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "op"
+          ]
+        ]
       },
       "from": "tree.unit.test.ts: predicate tree > compare: parses a minimal node and rejects a missing op",
       "id": "tree.predicate-tree-compare-parses-a-minimal-node-and-rejects-a-missing-op.2",
@@ -405,7 +437,12 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "op"
+          ]
+        ]
       },
       "from": "tree.unit.test.ts: predicate tree > textCompare: parses a minimal node and rejects an unrecognised op literal",
       "id": "tree.predicate-tree-textcompare-parses-a-minimal-node-and-rejects-an-unrecognised-op-literal.2",
@@ -463,7 +500,12 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "candidates"
+          ]
+        ]
       },
       "from": "tree.unit.test.ts: predicate tree > memberOf: parses a minimal node and rejects a non-array candidates field",
       "id": "tree.predicate-tree-memberof-parses-a-minimal-node-and-rejects-a-non-array-candidates-field.2",
@@ -507,7 +549,12 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "operand"
+          ]
+        ]
       },
       "from": "tree.unit.test.ts: predicate tree > exists: parses a minimal node and rejects a missing operand",
       "id": "tree.predicate-tree-exists-parses-a-minimal-node-and-rejects-a-missing-operand.2",
@@ -595,7 +642,12 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "item"
+          ]
+        ]
       },
       "from": "tree.unit.test.ts: predicate tree > some: parses a node with and without an optional filter, and rejects a missing item",
       "id": "tree.predicate-tree-some-parses-a-node-with-and-without-an-optional-filter-and-rejects-a-missing-item.3",
@@ -639,7 +691,12 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "item"
+          ]
+        ]
       },
       "from": "tree.unit.test.ts: predicate tree > every: parses a minimal node and rejects a wrong-type item",
       "id": "tree.predicate-tree-every-parses-a-minimal-node-and-rejects-a-wrong-type-item.2",
@@ -670,7 +727,12 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "key"
+          ]
+        ]
       },
       "from": "tree.unit.test.ts: predicate tree > treeReference: parses a minimal node and rejects a missing key",
       "id": "tree.predicate-tree-treereference-parses-a-minimal-node-and-rejects-a-missing-key.2",
@@ -1026,7 +1088,12 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "kind"
+          ]
+        ]
       },
       "from": "tree.unit.test.ts: predicate tree > round-trips every predicate kind through the top-level discriminated union",
       "id": "tree.predicate-tree-round-trips-every-predicate-kind-through-the-top-level-discriminated-union.13",
@@ -1080,7 +1147,12 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "value"
+          ]
+        ]
       },
       "from": "tree.unit.test.ts: expression tree > numberLiteral: parses with and without an optional unit, and rejects a non-numeric value",
       "id": "tree.expression-tree-numberliteral-parses-with-and-without-an-optional-unit-and-rejects-a-non-numeric-value.3",
@@ -1110,7 +1182,12 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "value"
+          ]
+        ]
       },
       "from": "tree.unit.test.ts: expression tree > textLiteral: parses a minimal node and rejects a missing value",
       "id": "tree.expression-tree-textliteral-parses-a-minimal-node-and-rejects-a-missing-value.2",
@@ -1139,7 +1216,12 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "value"
+          ]
+        ]
       },
       "from": "tree.unit.test.ts: expression tree > booleanLiteral: parses a minimal node and rejects a non-boolean value",
       "id": "tree.expression-tree-booleanliteral-parses-a-minimal-node-and-rejects-a-non-boolean-value.2",
@@ -1169,7 +1251,12 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "value"
+          ]
+        ]
       },
       "from": "tree.unit.test.ts: expression tree > instantLiteral: parses a minimal node and rejects a non-string value",
       "id": "tree.expression-tree-instantliteral-parses-a-minimal-node-and-rejects-a-non-string-value.2",
@@ -1201,7 +1288,12 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "unit"
+          ]
+        ]
       },
       "from": "tree.unit.test.ts: expression tree > durationLiteral: parses a minimal node and rejects a missing (required) unit",
       "id": "tree.expression-tree-durationliteral-parses-a-minimal-node-and-rejects-a-missing-required-unit.2",
@@ -1258,7 +1350,10 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          []
+        ]
       },
       "from": "tree.unit.test.ts: expression tree > complexLiteral: parses a rectangular value with and without an optional unit, and rejects a node carrying only one rectangular component",
       "id": "tree.expression-tree-complexliteral-parses-a-rectangular-value-with-and-without-an-optional-unit-and-rejects-a-node-carrying-only-one-rectangular-comp.3",
@@ -1315,7 +1410,10 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          []
+        ]
       },
       "from": "tree.unit.test.ts: expression tree > complexLiteral: also parses a polar value (magnitude/phase) with and without an optional unit, and rejects a node carrying only one polar component",
       "id": "tree.expression-tree-complexliteral-also-parses-a-polar-value-magnitude-phase-with-and-without-an-optional-unit-and-rejects-a-node-carrying-only-one-p.3",
@@ -1328,7 +1426,10 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          []
+        ]
       },
       "from": "tree.unit.test.ts: expression tree > complexLiteral: rejects both rectangular and polar fields provided at once",
       "id": "tree.expression-tree-complexliteral-rejects-both-rectangular-and-polar-fields-provided-at-once.1",
@@ -1344,7 +1445,10 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          []
+        ]
       },
       "from": "tree.unit.test.ts: expression tree > complexLiteral: rejects neither rectangular nor polar fields provided",
       "id": "tree.expression-tree-complexliteral-rejects-neither-rectangular-nor-polar-fields-provided.1",
@@ -1356,7 +1460,10 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          []
+        ]
       },
       "from": "tree.unit.test.ts: expression tree > complexLiteral: rejects a mixed payload (one rectangular field, one polar field)",
       "id": "tree.expression-tree-complexliteral-rejects-a-mixed-payload-one-rectangular-field-one-polar-field.1",
@@ -1387,7 +1494,12 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "unit"
+          ]
+        ]
       },
       "from": "tree.unit.test.ts: expression tree > reference: parses with and without an optional unit, and rejects an unrecognised unit shape",
       "id": "tree.expression-tree-reference-parses-with-and-without-an-optional-unit-and-rejects-an-unrecognised-unit-shape.2",
@@ -1434,7 +1546,12 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "op"
+          ]
+        ]
       },
       "from": "tree.unit.test.ts: expression tree > arithmetic: parses a minimal node and rejects an unrecognised op",
       "id": "tree.expression-tree-arithmetic-parses-a-minimal-node-and-rejects-an-unrecognised-op.2",
@@ -1478,7 +1595,12 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "operand"
+          ]
+        ]
       },
       "from": "tree.unit.test.ts: expression tree > negate: parses a minimal node and rejects a missing operand",
       "id": "tree.expression-tree-negate-parses-a-minimal-node-and-rejects-a-missing-operand.2",
@@ -1519,7 +1641,12 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "args"
+          ]
+        ]
       },
       "from": "tree.unit.test.ts: expression tree > call: parses a minimal node and rejects a non-array args field",
       "id": "tree.expression-tree-call-parses-a-minimal-node-and-rejects-a-non-array-args-field.2",
@@ -1565,7 +1692,12 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "keys"
+          ]
+        ]
       },
       "from": "tree.unit.test.ts: expression tree > lookup: parses a minimal node and rejects a non-array keys field",
       "id": "tree.expression-tree-lookup-parses-a-minimal-node-and-rejects-a-non-array-keys-field.2",
@@ -1635,7 +1767,12 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "fallback"
+          ]
+        ]
       },
       "from": "tree.unit.test.ts: expression tree > conditional: parses a minimal node and rejects a missing fallback",
       "id": "tree.expression-tree-conditional-parses-a-minimal-node-and-rejects-a-missing-fallback.2",
@@ -1727,7 +1864,12 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "hitPolicy"
+          ]
+        ]
       },
       "from": "tree.unit.test.ts: expression tree > conditional: hitPolicy is optional and defaults to undefined (not `\"first\"`) when absent, accepts `\"first\"`/`\"unique\"`, and rejects any other string",
       "id": "tree.expression-tree-conditional-hitpolicy-is-optional-and-defaults-to-undefined-not-first-when-absent-accepts-first-unique-and-rejects-any-other-stri.4",
@@ -1767,7 +1909,10 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          []
+        ]
       },
       "from": "tree.unit.test.ts: expression tree > HitPolicySchema: accepts `\"first\"`/`\"unique\"` and rejects any other value",
       "id": "tree.expression-tree-hitpolicyschema-accepts-first-unique-and-rejects-any-other-value.3",
@@ -1794,7 +1939,12 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "key"
+          ]
+        ]
       },
       "from": "tree.unit.test.ts: expression tree > treeReference: parses a minimal node, rejects a missing key, and is the same schema object valid from a PredicateNode position too",
       "id": "tree.expression-tree-treereference-parses-a-minimal-node-rejects-a-missing-key-and-is-the-same-schema-object-valid-from-a-predicatenode-position-too.2",
@@ -1823,7 +1973,12 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "key"
+          ]
+        ]
       },
       "from": "tree.unit.test.ts: expression tree > treeReference: parses a minimal node, rejects a missing key, and is the same schema object valid from a PredicateNode position too",
       "id": "tree.expression-tree-treereference-parses-a-minimal-node-rejects-a-missing-key-and-is-the-same-schema-object-valid-from-a-predicatenode-position-too.4",
@@ -1950,7 +2105,12 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "mode"
+          ]
+        ]
       },
       "from": "tree.unit.test.ts: expression tree > fold: parses each combiner mode, with and without an optional filter, and rejects an unrecognised combiner mode",
       "id": "tree.expression-tree-fold-parses-each-combiner-mode-with-and-without-an-optional-filter-and-rejects-an-unrecognised-combiner-mode.4",
@@ -1981,7 +2141,12 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "kind"
+          ]
+        ]
       },
       "from": "tree.unit.test.ts: expression tree > accumulator: parses the zero-field node and rejects an unrelated kind literal",
       "id": "tree.expression-tree-accumulator-parses-the-zero-field-node-and-rejects-an-unrelated-kind-literal.2",
@@ -2016,7 +2181,12 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "system"
+          ]
+        ]
       },
       "from": "tree.unit.test.ts: expression tree > delegate: parses a minimal node and rejects a missing system",
       "id": "tree.expression-tree-delegate-parses-a-minimal-node-and-rejects-a-missing-system.2",
@@ -2392,12 +2562,72 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "kind"
+          ]
+        ]
       },
       "from": "tree.unit.test.ts: expression tree > round-trips every expression kind through the top-level discriminated union",
       "id": "tree.expression-tree-round-trips-every-expression-kind-through-the-top-level-discriminated-union.18",
       "input": {
         "kind": "notARealKind"
+      },
+      "kind": "validate",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": false,
+        "paths": [
+          []
+        ]
+      },
+      "from": "recorded: a complex literal is read strictly, where every other object drops a key it does not name, so that a document mixing its two forms is refused and not reduced to one: the rectangular form with a key it does not name",
+      "id": "tree.a-complex-literal-with-an-unknown-key-is-refused.1",
+      "input": {
+        "extra": true,
+        "im": 2,
+        "kind": "complexLiteral",
+        "re": 1
+      },
+      "kind": "validate",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": false,
+        "paths": [
+          []
+        ]
+      },
+      "from": "recorded: a complex literal is read strictly, where every other object drops a key it does not name, so that a document mixing its two forms is refused and not reduced to one: the rectangular and the polar fields together",
+      "id": "tree.a-complex-literal-with-the-two-forms-mixed-is-refused.1",
+      "input": {
+        "im": 2,
+        "kind": "complexLiteral",
+        "magnitude": 1,
+        "phase": 0.5,
+        "re": 1
+      },
+      "kind": "validate",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": false,
+        "paths": [
+          []
+        ]
+      },
+      "from": "recorded: a complex literal is read strictly, where every other object drops a key it does not name, so that a document mixing its two forms is refused and not reduced to one: the polar form with a key it does not name",
+      "id": "tree.a-complex-literal-in-polar-form-with-an-unknown-key-is-refused.1",
+      "input": {
+        "extra": true,
+        "kind": "complexLiteral",
+        "magnitude": 1,
+        "phase": 0.5
       },
       "kind": "validate",
       "schema": "ExpressionNodeSchema"

@@ -48,7 +48,12 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "im"
+          ]
+        ]
       },
       "from": "computed-value.unit.test.ts: the complex computed-value kind > rejects a value carrying only one of the two components",
       "id": "computed-value.the-complex-computed-value-kind-rejects-a-value-carrying-only-one-of-the-two-components.1",
@@ -61,13 +66,39 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "re"
+          ]
+        ]
       },
       "from": "computed-value.unit.test.ts: the complex computed-value kind > rejects a value carrying only one of the two components",
       "id": "computed-value.the-complex-computed-value-kind-rejects-a-value-carrying-only-one-of-the-two-components.2",
       "input": {
         "im": 4,
         "kind": "complex"
+      },
+      "kind": "validate",
+      "schema": "ComputedValueSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "number",
+          "value": {
+            "$number": "-0"
+          }
+        }
+      },
+      "from": "recorded: a negative zero is read as a negative zero and not as a zero",
+      "id": "computed-value.a-negative-zero-is-kept.1",
+      "input": {
+        "kind": "number",
+        "value": {
+          "$number": "-0"
+        }
       },
       "kind": "validate",
       "schema": "ComputedValueSchema"

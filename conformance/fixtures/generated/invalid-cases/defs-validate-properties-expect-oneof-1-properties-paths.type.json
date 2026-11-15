@@ -1,0 +1,17 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "ok": false,
+        "paths": "not-the-type"
+      },
+      "from": "tree.unit.test.ts: predicate tree > not: parses a minimal node and rejects a missing operand",
+      "id": "tree.predicate-tree-not-parses-a-minimal-node-and-rejects-a-missing-operand.2",
+      "input": {
+        "kind": "not"
+      },
+      "kind": "validate",
+      "schema": "NotNodeSchema"
+    }
+  ]
+}

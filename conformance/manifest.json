@@ -651,7 +651,7 @@
       }
     },
     "trilean/validate/computed-value.json": {
-      "cases": 4,
+      "cases": 5,
       "skip": {
         "rust": [],
         "ts": []
@@ -672,14 +672,14 @@
       }
     },
     "trilean/validate/schema-pipeline.json": {
-      "cases": 10,
+      "cases": 11,
       "skip": {
         "rust": [],
         "ts": []
       }
     },
     "trilean/validate/tree.json": {
-      "cases": 107,
+      "cases": 110,
       "skip": {
         "rust": [],
         "ts": []

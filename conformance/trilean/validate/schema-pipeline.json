@@ -317,7 +317,12 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "kind"
+          ]
+        ]
       },
       "from": "schema-pipeline.integration.test.ts: adversarial input > a wrong literal type for the 'kind' discriminant is rejected, not coerced",
       "id": "pipeline-validate.adversarial-input-a-wrong-literal-type-for-the-kind-discriminant-is-rejected-not-coerced.1",
@@ -338,7 +343,12 @@
     },
     {
       "expect": {
-        "ok": false
+        "ok": false,
+        "paths": [
+          [
+            "kind"
+          ]
+        ]
       },
       "from": "schema-pipeline.integration.test.ts: adversarial input > a 'kind' string that matches no known node kind is rejected",
       "id": "pipeline-validate.adversarial-input-a-kind-string-that-matches-no-known-node-kind-is-rejected.1",
@@ -455,6 +465,30 @@
           "ok": 1
         },
         "system": "externalPricing"
+      },
+      "kind": "validate",
+      "schema": "ExpressionNodeSchema"
+    },
+    {
+      "expect": {
+        "ok": true,
+        "value": {
+          "kind": "numberLiteral",
+          "unit": {
+            "m": 1
+          },
+          "value": 1
+        }
+      },
+      "from": "recorded: a key called __proto__ is dropped from a map of units as it is from an opaque payload",
+      "id": "pipeline-validate.a-proto-key-in-a-unit-is-dropped.1",
+      "input": {
+        "kind": "numberLiteral",
+        "unit": {
+          "__proto__": 2,
+          "m": 1
+        },
+        "value": 1
       },
       "kind": "validate",
       "schema": "ExpressionNodeSchema"

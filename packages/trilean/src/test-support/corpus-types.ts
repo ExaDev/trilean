@@ -38,7 +38,11 @@ export interface ValidateCase extends CaseBase {
   readonly schema: string;
   readonly input: Json;
   readonly expect:
-    { readonly ok: true; readonly value?: Json } | { readonly ok: false };
+    | { readonly ok: true; readonly value?: Json }
+    | {
+        readonly ok: false;
+        readonly paths?: readonly (readonly (string | number)[])[];
+      };
 }
 
 export interface ComputedValueJson {
