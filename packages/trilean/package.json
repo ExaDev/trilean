@@ -9,8 +9,7 @@
     "url": "https://github.com/ExaDev/trilean/issues"
   },
   "dependencies": {
-    "trilean-regex": "2.0.4",
-    "zod": "^4.6.7"
+    "trilean-regex": "2.0.4"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
@@ -41,18 +40,86 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
-    "./*": {
-      "types": "./dist/*.d.ts",
-      "default": "./dist/*.js"
+    "./tree": {
+      "types": "./dist/tree.d.ts",
+      "default": "./dist/tree.js"
     },
-    "./schemas/*.schema.json": "./schemas/*.schema.json"
+    "./evaluation": {
+      "types": "./dist/evaluation.d.ts",
+      "default": "./dist/evaluation.js"
+    },
+    "./resolvers": {
+      "types": "./dist/resolvers.d.ts",
+      "default": "./dist/resolvers.js"
+    },
+    "./functions": {
+      "types": "./dist/functions.d.ts",
+      "default": "./dist/functions.js"
+    },
+    "./builtin-functions": {
+      "types": "./dist/builtin-functions.d.ts",
+      "default": "./dist/builtin-functions.js"
+    },
+    "./computed-value": {
+      "types": "./dist/computed-value.d.ts",
+      "default": "./dist/computed-value.js"
+    },
+    "./json-value": {
+      "types": "./dist/json-value.d.ts",
+      "default": "./dist/json-value.js"
+    },
+    "./evaluator-factory": {
+      "types": "./dist/evaluator-factory.d.ts",
+      "default": "./dist/evaluator-factory.js"
+    },
+    "./evaluator-budget": {
+      "types": "./dist/evaluator-budget.d.ts",
+      "default": "./dist/evaluator-budget.js"
+    },
+    "./derived-connectives": {
+      "types": "./dist/derived-connectives.d.ts",
+      "default": "./dist/derived-connectives.js"
+    },
+    "./derived-aggregates": {
+      "types": "./dist/derived-aggregates.d.ts",
+      "default": "./dist/derived-aggregates.js"
+    },
+    "./derived-values": {
+      "types": "./dist/derived-values.d.ts",
+      "default": "./dist/derived-values.js"
+    },
+    "./derived-patterns": {
+      "types": "./dist/derived-patterns.d.ts",
+      "default": "./dist/derived-patterns.js"
+    },
+    "./complex": {
+      "types": "./dist/complex.d.ts",
+      "default": "./dist/complex.js"
+    },
+    "./input-resolvers": {
+      "types": "./dist/input-resolvers.d.ts",
+      "default": "./dist/input-resolvers.js"
+    },
+    "./evaluate-document": {
+      "types": "./dist/evaluate-document.d.ts",
+      "default": "./dist/evaluate-document.js"
+    },
+    "./schemas/trilean.schema.json": "./schemas/trilean.schema.json"
   },
   "files": [
     "dist",
     "dist-cli",
+    "generated",
     "schemas"
   ],
   "homepage": "https://github.com/ExaDev/trilean/tree/main/packages/trilean",
+  "imports": {
+    "#init": {
+      "workerd": "./generated/init.workerd.js",
+      "node": "./generated/init.node.js",
+      "default": "./generated/init.browser.js"
+    }
+  },
   "keywords": [
     "evaluator",
     "expression",
@@ -60,8 +127,8 @@
     "json",
     "predicate",
     "rules-engine",
-    "three-valued-logic",
-    "zod"
+    "standard-schema",
+    "three-valued-logic"
   ],
   "license": "MIT",
   "publishConfig": {
@@ -75,7 +142,7 @@
     "directory": "packages/trilean"
   },
   "scripts": {
-    "_build": "tsdown && tsx scripts/generate-json-schema.ts",
+    "_build": "sh ../../scripts/rust.sh xtask npm trilean && tsdown",
     "_lint": "eslint . --fix --cache --max-warnings 0",
     "_prepush": "true",
     "_test": "vitest run --project unit",
@@ -96,7 +163,6 @@
     "test:workers": "turbo run _test:workers",
     "typecheck": "turbo run _typecheck _typecheck:attw"
   },
-  "sideEffects": false,
   "type": "module",
   "types": "./dist/index.d.ts"
 }

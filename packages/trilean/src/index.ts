@@ -160,4 +160,17 @@ export {
   TextComparisonOperatorSchema,
   TextLiteralNodeSchema,
   TreeReferenceNodeSchema,
+  arithmeticOperators,
+  comparisonOperators,
+  durationUnits,
+  expressionKinds,
+  hitPolicies,
+  membershipOperators,
+  predicateKinds,
+  textComparisonOperators,
 } from "./tree";
+export type {
+  JsonSchema,
+  StandardSchemaV1,
+  TrileanSchema,
+} from "../generated/schemas.js";

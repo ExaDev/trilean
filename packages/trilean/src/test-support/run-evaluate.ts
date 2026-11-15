@@ -12,6 +12,7 @@ import type { Tolerance } from "./json-equal";
 import { buildResolvers } from "./resolver-data";
 import { decodeNumbers } from "./values";
 import type { RecordedCall } from "./resolver-data";
+import { parseAs } from "../read-as";
 
 /** The modes a case runs in: those it names, else every mode that applies (the compiled predicate exists for predicates only). */
 export function modesOf(testCase: EvaluateCase): readonly Mode[] {
@@ -47,7 +48,7 @@ function registryOf(testCase: EvaluateCase): FunctionRegistry {
 
       return isFunctionFailure(entry.result)
         ? entry.result
-        : ComputedValueSchema.parse(entry.result);
+        : parseAs(ComputedValueSchema, entry.result);
     };
   }
 
@@ -198,12 +199,12 @@ export async function evaluateOnce(
 
   return testCase.as === "predicate"
     ? evaluatePredicate(
-        PredicateNodeSchema.parse(tree),
+        parseAs(PredicateNodeSchema, tree),
         context,
         resolvers.asynchronous,
       )
     : evaluateValue(
-        ExpressionNodeSchema.parse(tree),
+        parseAs(ExpressionNodeSchema, tree),
         context,
         resolvers.asynchronous,
       );
@@ -213,11 +214,11 @@ export async function evaluateOnce(
 export async function runEvaluateCase(testCase: EvaluateCase): Promise<void> {
   const predicateTree =
     testCase.as === "predicate"
-      ? PredicateNodeSchema.parse(decodeNumbers(testCase.tree))
+      ? parseAs(PredicateNodeSchema, decodeNumbers(testCase.tree))
       : undefined;
   const expressionTree =
     testCase.as === "expression"
-      ? ExpressionNodeSchema.parse(decodeNumbers(testCase.tree))
+      ? parseAs(ExpressionNodeSchema, decodeNumbers(testCase.tree))
       : undefined;
   const context = decodeNumbers(testCase.context);
   const runMode = async (mode: Mode): Promise<void> => {

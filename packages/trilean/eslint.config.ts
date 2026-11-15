@@ -28,6 +28,7 @@ export default defineConfig(
       "node_modules",
       ".turbo",
       "schemas",
+      "generated",
     ],
   },
   {
@@ -111,6 +112,16 @@ export default defineConfig(
         "exadev/prefer-readonly-object-param",
       ].map((rule) => [rule, "off"]),
     ),
+  },
+  // These four modules are subpaths of the published package (`trilean/tree`, `trilean/json-value`, `trilean/computed-value`, `trilean/evaluation`), which a dependant imports, and the schemas and types they name are generated from the Rust definitions into one module. The modules are the entry points of those subpaths and nothing else imports a schema through them.
+  {
+    files: [
+      "src/tree.ts",
+      "src/json-value.ts",
+      "src/computed-value.ts",
+      "src/evaluation.ts",
+    ],
+    rules: { "exadev/barrel-policy": "off" },
   },
   // The recursive evaluator passes its state positionally on the hot path, so the call signature stays as it is.
   {

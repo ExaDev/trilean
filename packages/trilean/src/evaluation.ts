@@ -1,4 +1,7 @@
-import { z } from "zod";
+import type { IndeterminateReason } from "../generated/schemas.js";
+
+export type { IndeterminateReason } from "../generated/schemas.js";
+export { IndeterminateReasonSchema } from "../generated/schemas.js";
 
 /**
  * Every evaluation -- of a predicate node or an expression node -- produces exactly one of two outcomes: a definite result, or an indeterminate result carrying a reason. Never a bare boolean/number, and never a thrown exception for a data-quality problem.
@@ -6,15 +9,6 @@ import { z } from "zod";
 export type Evaluation<T> =
   | { status: "definite"; value: T }
   | { status: "indeterminate"; reason: IndeterminateReason };
-
-export const IndeterminateReasonSchema = z.object({
-  /** Which of the four reason categories applies. `not-yet-known` is the only one that is not a property of the data: it says a resolver has not been supplied the value yet, so a later evaluation may settle it either way. */
-  code: z.enum(["not-found", "not-yet-known", "wrong-type", "domain-error"]),
-  /** A human-readable explanation, for logging and debugging. */
-  message: z.string(),
-});
-
-export type IndeterminateReason = z.infer<typeof IndeterminateReasonSchema>;
 
 export function definite<T>(value: T): Evaluation<T> {
   return { status: "definite", value };

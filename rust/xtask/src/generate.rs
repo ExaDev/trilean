@@ -4,7 +4,7 @@ use std::collections::BTreeSet;
 use std::fs;
 use std::path::Path;
 
-use crate::packages::Package;
+use crate::packages::{Flavour, Package};
 
 /// What `write_support_files` wrote that a package manifest must name.
 pub struct Written {
@@ -158,12 +158,196 @@ fn index_declarations(package: &Package, glue_declarations: &str, errors: &[Stri
     )
 }
 
+/// The Standard Schema v1 types (https://standardschema.dev), which the spec asks a library to copy into its own
+/// declarations so that a consumer needs no dependency to read them.
+const STANDARD_SCHEMA_TYPES: &str = r#"/** The Standard Schema interface (https://standardschema.dev), version 1. */
+export interface StandardSchemaV1<Input = unknown, Output = Input> {
+  readonly "~standard": StandardSchemaV1.Props<Input, Output>;
+}
+
+export declare namespace StandardSchemaV1 {
+  interface Props<Input = unknown, Output = Input> {
+    readonly version: 1;
+    readonly vendor: string;
+    readonly validate: (value: unknown) => Result<Output> | Promise<Result<Output>>;
+    readonly types?: Types<Input, Output> | undefined;
+  }
+  type Result<Output> = SuccessResult<Output> | FailureResult;
+  interface SuccessResult<Output> {
+    readonly value: Output;
+    readonly issues?: undefined;
+  }
+  interface FailureResult {
+    readonly issues: ReadonlyArray<Issue>;
+  }
+  interface Issue {
+    readonly message: string;
+    readonly path?: ReadonlyArray<PropertyKey | PathSegment> | undefined;
+  }
+  interface PathSegment {
+    readonly key: PropertyKey;
+  }
+  interface Types<Input = unknown, Output = Input> {
+    readonly input: Input;
+    readonly output: Output;
+  }
+  type InferInput<Schema extends StandardSchemaV1> = NonNullable<Schema["~standard"]["types"]>["input"];
+  type InferOutput<Schema extends StandardSchemaV1> = NonNullable<Schema["~standard"]["types"]>["output"];
+}
+
+/** A JSON Schema document, which refers to its definitions as `#/$defs/<name>`. */
+export interface JsonSchema {
+  readonly [key: string]: unknown;
+}
+
+/** A schema of this package: a Standard Schema whose `validate` reads a value as the schema does, and its JSON Schema, with the definitions it refers to under `$defs`, for embedding in another schema. */
+export interface TrileanSchema<T> extends StandardSchemaV1<unknown, T> {
+  readonly jsonSchema: JsonSchema;
+}
+
+"#;
+
+/// A JSON string literal of the text, which a JavaScript module holds as source.
+fn js_text(text: &str) -> String {
+    json_shape::Value::String(text.to_owned()).to_string()
+}
+
+/// The generated module of the schemas: one frozen Standard Schema object for each schema of `trilean::schemas`, the
+/// plain arrays beside them, and nothing that reads a value itself: `validate` hands it to the module.
+fn schemas_js(package: &Package) -> String {
+    let mut text = format!(
+        "import \"#init\";\nimport {{ readSchema }} from \"./{glue}.js\";\n\n",
+        glue = package.glue
+    );
+    text.push_str(
+        "function freeze(value) {\n  if (typeof value === \"object\" && value !== null && !Object.isFrozen(value)) {\n    Object.values(value).forEach(freeze);\n    Object.freeze(value);\n  }\n  return value;\n}\n\n",
+    );
+    text.push_str(&format!(
+        "const definitions = freeze(JSON.parse({}));\n\n",
+        js_text(&trilean::schemas::definitions_schema().to_string())
+    ));
+    text.push_str(
+        "function schema(name, source) {\n  return Object.freeze({\n    \"~standard\": Object.freeze({\n      version: 1,\n      vendor: \"trilean\",\n      validate: (value) => readSchema(name, value),\n    }),\n    jsonSchema: freeze({ ...JSON.parse(source), $defs: definitions }),\n  });\n}\n\n",
+    );
+    for schema in trilean::schemas::SCHEMAS {
+        let source = trilean::schemas::json_schema_of(schema.name)
+            .map(|document| document.to_string())
+            .unwrap_or_default();
+        text.push_str(&format!(
+            "export const {name} = schema({name_text}, {source});\n",
+            name = schema.name,
+            name_text = js_text(schema.name),
+            source = js_text(&source)
+        ));
+    }
+    text.push('\n');
+    for (name, _, members) in trilean::schemas::enumerations() {
+        let list: Vec<String> = members.iter().map(|member| js_text(member)).collect();
+        text.push_str(&format!(
+            "export const {name} = Object.freeze([{}]);\n",
+            list.join(", ")
+        ));
+    }
+    text
+}
+
+/// The declarations of the schemas module: the Standard Schema types, every type of the package, and the type of every
+/// exported schema and array.
+fn schemas_declarations() -> String {
+    let mut text = String::from(STANDARD_SCHEMA_TYPES);
+    text.push_str(&trilean::schemas::typescript());
+    text.push('\n');
+    for schema in trilean::schemas::SCHEMAS {
+        text.push_str(&format!(
+            "export declare const {}: TrileanSchema<{}>;\n",
+            schema.name, schema.type_name
+        ));
+    }
+    text.push('\n');
+    for (name, element, _) in trilean::schemas::enumerations() {
+        text.push_str(&format!(
+            "export declare const {name}: readonly {element}[];\n"
+        ));
+    }
+    text
+}
+
+/// The document the package publishes as `schemas/trilean.schema.json`, in RFC 8785 form: the keys sorted at every
+/// level, numbers as ECMAScript writes them, and no trailing newline, so the file's bytes are exactly its canonical
+/// form and a consumer can re-derive its digest from the parsed content.
+fn published_schema(version: &str) -> String {
+    let id = format!("https://cdn.jsdelivr.net/npm/trilean@{version}/schemas/trilean.schema.json");
+    trilean::schemas::published_document(&id).canonical()
+}
+
+/// The version a package manifest declares.
+fn manifest_version(package_directory: &Path) -> Result<String, String> {
+    let path = package_directory.join("package.json");
+    let manifest =
+        fs::read_to_string(&path).map_err(|error| format!("{}: {error}", path.display()))?;
+    let value: json_shape::Value =
+        serde_json::from_str(&manifest).map_err(|error| format!("{}: {error}", path.display()))?;
+    value
+        .get("version")
+        .and_then(json_shape::Value::as_str)
+        .map(str::to_owned)
+        .ok_or_else(|| format!("{} has no version", path.display()))
+}
+
+/// Writes the files of a package whose own modules import generated schemas: the `#init` modules, the module of the
+/// schemas and its declarations, and the document the package publishes.
+fn write_schema_files(package: &Package, dist: &Path) -> Result<Written, String> {
+    let read = |name: String| {
+        fs::read_to_string(dist.join(&name)).map_err(|error| format!("{name}: {error}"))
+    };
+    let glue_declarations = read(format!("{}.d.ts", package.glue))?;
+    let consumer = consumer_declarations(&glue_declarations);
+    let wasm = fs::read(dist.join(format!("{}_bg.wasm", package.glue)))
+        .map_err(|error| format!("{}_bg.wasm: {error}", package.glue))?;
+    let inline_name = format!("{}_inline.js", package.glue);
+    let glue_declarations_name = format!("{}.d.ts", package.glue);
+    let files = [
+        ("init.node.js", init_node(package)),
+        (inline_name.as_str(), inline_module(&wasm)),
+        ("init.workerd.js", init_workerd(package)),
+        ("init.browser.js", init_browser(package)),
+        (glue_declarations_name.as_str(), consumer),
+        ("schemas.js", schemas_js(package)),
+        ("schemas.d.ts", schemas_declarations()),
+    ];
+    for (name, contents) in &files {
+        fs::write(dist.join(name), contents).map_err(|error| format!("{name}: {error}"))?;
+    }
+    let package_directory = dist
+        .parent()
+        .ok_or("the generated directory has no parent")?;
+    let published = package_directory.join("schemas");
+    fs::create_dir_all(&published).map_err(|error| error.to_string())?;
+    fs::write(
+        published.join("trilean.schema.json"),
+        published_schema(&manifest_version(package_directory)?),
+    )
+    .map_err(|error| error.to_string())?;
+    Ok(Written {
+        entry_points: ["init.node.js", "init.workerd.js", "init.browser.js"]
+            .map(str::to_owned)
+            .into(),
+        sizes: vec![
+            (format!("{}_bg.wasm", package.glue), wasm.len()),
+            (inline_name.clone(), files_len(&files, &inline_name)),
+        ],
+    })
+}
+
 /// Writes the entry point, the `#init` modules and the error classes beside what `wasm-bindgen` wrote.
 pub fn write_support_files(
     package: &Package,
     dist: &Path,
     test_hooks: bool,
 ) -> Result<Written, String> {
+    if package.flavour == Flavour::Schemas {
+        return write_schema_files(package, dist);
+    }
     let read = |name: String| {
         fs::read_to_string(dist.join(&name)).map_err(|error| format!("{name}: {error}"))
     };

@@ -6,8 +6,13 @@ import { builtinFunctions } from "./builtin-functions";
 import { createInputResolvers, parseInputs } from "./input-resolvers";
 import { isPlainRecord } from "./plain-record";
 import type { ExpressionNode, PredicateNode } from "./tree";
-import { ExpressionNodeSchema, PredicateNodeSchema } from "./tree";
-import type { z } from "zod";
+import {
+  ExpressionNodeSchema,
+  PredicateNodeSchema,
+  predicateKinds,
+} from "./tree";
+import { readAs } from "./read-as";
+import type { StandardSchemaV1 } from "../generated/schemas.js";
 
 export type TreeKind = "predicate" | "expression";
 
@@ -41,9 +46,7 @@ export type DocumentEvaluation =
     }
   | { outcome: "unrepresentable"; issues: readonly string[] };
 
-const predicateKinds: ReadonlySet<string> = new Set(
-  PredicateNodeSchema.options.map((option) => option.shape.kind.value),
-);
+const predicateKindSet: ReadonlySet<string> = new Set(predicateKinds);
 
 /** What a definite expression result that `ComputedValueSchema` refuses is reported as: the only way a result fails it is a non-finite number, which JSON would write as `null`. The evaluator's arithmetic and the built-in functions already keep one from forming, so this is the last check before a value leaves the document boundary, and it fails loudly rather than print a different value from the one computed. */
 const NOT_REPRESENTABLE = "(result): the value is not a finite number";
@@ -53,29 +56,15 @@ const AMBIGUOUS_TREE_KIND =
 
 const defaultEvaluator = createSyncEvaluator({ functions: builtinFunctions });
 
-/** Turns zod's issues into `path: message` lines. A failed union wraps one list of issues per branch, each path relative to the union; the branch the input got furthest into (the deepest path) is the one it was meant to match, so only that branch's issues are reported, under the union's own path. */
-function describeIssues(
-  issues: readonly z.core.$ZodIssue[],
-  parentPath: readonly PropertyKey[] = [],
-): string[] {
-  return issues.flatMap((issue) => {
-    const path = [...parentPath, ...issue.path];
-    if (issue.code === "invalid_union" && issue.errors.length > 0) {
-      const deepest = issue.errors.reduce((best, branch) =>
-        maxPathLength(branch) > maxPathLength(best) ? branch : best,
-      );
+/** Turns the issues of a schema into `path: message` lines, a path being its keys and indexes joined by dots, and `(root)` for the value itself. */
+function describeIssues(issues: readonly StandardSchemaV1.Issue[]): string[] {
+  return issues.map((issue) => {
+    const path = (issue.path ?? []).map((segment) =>
+      String(typeof segment === "object" ? segment.key : segment),
+    );
 
-      return describeIssues(deepest, path);
-    }
-
-    return [
-      `${path.length === 0 ? "(root)" : path.join(".")}: ${issue.message}`,
-    ];
+    return `${path.length === 0 ? "(root)" : path.join(".")}: ${issue.message}`;
   });
-}
-
-function maxPathLength(issues: readonly z.core.$ZodIssue[]): number {
-  return Math.max(0, ...issues.map((issue) => issue.path.length));
 }
 
 function resolveTreeKind(
@@ -86,7 +75,7 @@ function resolveTreeKind(
   const kind = isPlainRecord(tree) ? tree.kind : undefined;
   if (kind === "treeReference") return "ambiguous";
 
-  return typeof kind === "string" && predicateKinds.has(kind)
+  return typeof kind === "string" && predicateKindSet.has(kind)
     ? "predicate"
     : "expression";
 }
@@ -133,12 +122,12 @@ export function evaluateDocument({
     };
   }
   if (treeKind === "predicate") {
-    const parsed = PredicateNodeSchema.safeParse(tree);
+    const parsed = readAs(PredicateNodeSchema, tree);
     if (!parsed.success) {
       return {
         outcome: "rejected",
         reason: "invalid",
-        issues: describeIssues(parsed.error.issues),
+        issues: describeIssues(parsed.issues),
       };
     }
     const node: PredicateNode = parsed.data;
@@ -149,19 +138,19 @@ export function evaluateDocument({
       evaluation: evaluator.evaluatePredicate(node, undefined, resolvers),
     };
   }
-  const parsed = ExpressionNodeSchema.safeParse(tree);
+  const parsed = readAs(ExpressionNodeSchema, tree);
   if (!parsed.success) {
     return {
       outcome: "rejected",
       reason: "invalid",
-      issues: describeIssues(parsed.error.issues),
+      issues: describeIssues(parsed.issues),
     };
   }
   const node: ExpressionNode = parsed.data;
   const evaluation = evaluator.evaluateValue(node, undefined, resolvers);
   if (
     evaluation.status === "definite" &&
-    !ComputedValueSchema.safeParse(evaluation.value).success
+    !readAs(ComputedValueSchema, evaluation.value).success
   ) {
     return { outcome: "unrepresentable", issues: [NOT_REPRESENTABLE] };
   }

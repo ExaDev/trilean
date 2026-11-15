@@ -23,6 +23,7 @@ import type { ExpressionNode, PredicateNode } from "../tree";
 import type { BuildCase, Json } from "./corpus-types";
 import { jsonEquals } from "./json-equal";
 import { decodeNumbers } from "./values";
+import { parseAs } from "../read-as";
 
 /** What one argument of a builder is: a corpus JSON value that must be a predicate tree, an expression tree, a collection reference, or a string. `null` stands for an argument left out. */
 interface Arguments {
@@ -84,22 +85,24 @@ function argumentsOf(args: readonly Json[]): Arguments {
   };
 
   return {
-    predicate: (position) => PredicateNodeSchema.parse(at(position)),
+    predicate: (position) => parseAs(PredicateNodeSchema, at(position)),
     optionalPredicate: (position) => {
       const value = optional(position);
 
-      return value === undefined ? undefined : PredicateNodeSchema.parse(value);
+      return value === undefined
+        ? undefined
+        : parseAs(PredicateNodeSchema, value);
     },
-    expression: (position) => ExpressionNodeSchema.parse(at(position)),
+    expression: (position) => parseAs(ExpressionNodeSchema, at(position)),
     optionalExpression: (position) => {
       const value = optional(position);
 
       return value === undefined
         ? undefined
-        : ExpressionNodeSchema.parse(value);
+        : parseAs(ExpressionNodeSchema, value);
     },
     expressions: (from) =>
-      args.slice(from).map((value) => ExpressionNodeSchema.parse(value)),
+      args.slice(from).map((value) => parseAs(ExpressionNodeSchema, value)),
     json: at,
     text,
     optionalPredicateMember: (position, name) => {
@@ -107,14 +110,14 @@ function argumentsOf(args: readonly Json[]): Arguments {
 
       return member === undefined
         ? undefined
-        : PredicateNodeSchema.parse(member);
+        : parseAs(PredicateNodeSchema, member);
     },
     optionalExpressionMember: (position, name) => {
       const member = optionalMember(position, name);
 
       return member === undefined
         ? undefined
-        : ExpressionNodeSchema.parse(member);
+        : parseAs(ExpressionNodeSchema, member);
     },
   };
 }

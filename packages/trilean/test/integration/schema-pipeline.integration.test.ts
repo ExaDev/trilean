@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { ExpressionNodeSchema } from "../../src/index";
+import { readAs } from "../../src/read-as";
 
 /**
  * What validation keeps and drops is in the conformance corpus (`conformance/trilean/validate/schema-pipeline.json`). What stays here is what a native implementation has no counterpart of: the negative control that the fixture is hazardous before validation, a copy made by assignment, and the global `Object.prototype`.
@@ -45,7 +46,7 @@ describe("a __proto__ key inside an opaque JsonValue payload", () => {
 
   function validatedPayload(): Record<string, unknown> {
     const parsed: unknown = JSON.parse(delegateJson);
-    const validated = ExpressionNodeSchema.safeParse(parsed);
+    const validated = readAs(ExpressionNodeSchema, parsed);
     if (!validated.success || validated.data.kind !== "delegate") {
       throw new Error("expected the fixture to validate as a delegate node");
     }

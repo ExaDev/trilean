@@ -112,6 +112,7 @@
         "vitest.config.ts",
         "test/smoke.e2e.test.ts",
         "test/declaration-shape.e2e.test.ts",
+        "test/schemas.e2e.test.ts",
         "test/cli.e2e.test.ts"
       ],
       // Deliberately empty rather than dist/**: dist/ is `_build`'s output, and two tasks claiming the same output directory means a cache replay of one can overwrite the other's. The smoke run itself produces nothing worth caching.

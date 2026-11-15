@@ -21,7 +21,7 @@ The files are UTF-8 (a loader refuses a file that is not, rather than reading re
 Every loader applies this one rule, and each runs it over `fixtures/loader-selection` (a tree and the files it must select and the entries it must refuse) so the loaders cannot disagree:
 
 - A name that starts with a dot is ignored, at any depth.
-- A directory called `fixtures`, `schema` or `runner` is skipped, at any depth, directly under the root included. It holds data cases refer to or the runners themselves, never cases.
+- A directory called `fixtures`, `schema` or `runner` is skipped, at any depth, directly under the root included. It holds data cases refer to or the runners themselves, never cases. `trilean/schema/published.schema.json` is the JSON Schema that trilean 1.13.0 published, which the package's tests compare the one its build writes with; it is held beside the corpus because it belongs to no case.
 - A name is lower-case ASCII letters, digits, dots, hyphens and underscores, and starts with a letter or digit, so every loader orders names the same way. The root's own files are the exception. A name that is not is a failure.
 - A corpus file is a `.json` file at `<package>/<area>/<name>.json`. The area names the case kind it holds (or, for the regex cases in another dialect, the dialect), and a file takes its name from the test file it was extracted from (`parse/parser.json` from `parser.unit.test.ts`).
 - The root holds only `README.md`, `case.schema.json`, `manifest.json` and `manifest.schema.json` as files.
@@ -328,6 +328,14 @@ A test stays in an implementation's own suite when a case cannot state it. Each 
 | Test file | Test | Code |
 | --- | --- | --- |
 | builtin-functions.unit.test.ts | is frozen, so changing the export cannot change what evaluation resolves | T1 |
+| cli-run.integration.test.ts | prints the version for --version | T9 |
+| cli-unrepresentable.integration.test.ts | prints nothing on standard output, names the problem on standard error and exits 2 | T6 |
+| cli.e2e.test.ts | is the file package.json's bin names, with a node shebang | T4 |
+| cli.e2e.test.ts | evaluates a tree read from standard input and exits 0 | T4 |
+| cli.e2e.test.ts | exits 1 for an indeterminate result | T4 |
+| cli.e2e.test.ts | exits 2 with the problem on standard error for an invalid tree | T4 |
+| cli.e2e.test.ts | reports the package version | T4 |
+| cli.e2e.test.ts | keeps quiet and keeps its exit status when the reader of standard output has gone | T4 |
 | complex-division.unit.test.ts | does not collapse a representable quotient to zero when |divisor| is near the top of the range | T3 |
 | complex-division.unit.test.ts | divides a value by itself to exactly one | T3 |
 | complex-division.unit.test.ts | returns a quotient as large as the dividend when the divisor is about one | T3 |
@@ -351,14 +359,13 @@ A test stays in an implementation's own suite when a case cannot state it. Each 
 | complex.unit.test.ts | reads a negative real number as +pi whatever the sign of its zero imaginary part, and zero as 0 | T3 |
 | complex.unit.test.ts | round-trips a magnitude and phase through the rectangular form | T3 |
 | complex.unit.test.ts | builds a complexLiteral the expression tree accepts, evaluating to the value complexFromPolar would have produced directly | T3 |
+| declaration-shape.e2e.test.ts | exports both node-tree schemas in place | T4 |
+| declaration-shape.e2e.test.ts | declares nothing bare and re-exports nothing through a trailing list | T4 |
+| declaration-shape.e2e.test.ts | declaration shape of %s | T4 |
 | duration-order.unit.test.ts | is exact for every pair of near-equal durations in different units, subnormals included | T3 |
 | duration-order.unit.test.ts | leaves a NaN unordered against anything, $leftUnit against $rightUnit | T3 |
 | duration-order.unit.test.ts | finds equal infinities equal and orders them against finite values, $leftUnit against $rightUnit | T3 |
 | duration-order.unit.test.ts | orders %j and %j as %i | T3 |
-| integer-power.unit.test.ts | returns the identity for exponent zero without multiplying | T3 |
-| integer-power.unit.test.ts | handles an exponent past the safe integers, whose low bits are all zero | T3 |
-| integer-power.unit.test.ts | matches repeated multiplication for exponent $exponent | T3 |
-| integer-power.unit.test.ts | multiplies a number of times logarithmic in the exponent $exponent | T3 |
 | evaluate-document.non-finite.unit.test.ts | passes a representable result through | T6 |
 | evaluate-document.non-finite.unit.test.ts | rejects a definite result from %s that JSON would print as null | T6 |
 | evaluate-document.unit.test.ts | lets a collection error propagate for a tree that folds over a list the inputs do not hold | T1 |
@@ -376,11 +383,11 @@ A test stays in an implementation's own suite when a case cannot state it. Each 
 | evaluator-compiled.unit.test.ts | throws, as the interpreter does, when a resolver returns a promise | T2 |
 | evaluator-compiled.unit.test.ts | reports a delegate node as wrong-type when the resolvers register no handler | T2 |
 | evaluator-compiled.unit.test.ts | passes the context to the resolvers untouched | T2 |
-| evaluator-operations.free.unit.test.ts | frees the pattern it compiled, so %s over many rows in one synchronous pass holds none | T1 |
 | evaluator-operations.free.unit.test.ts | holds no pattern for an answer of false either | T1 |
 | evaluator-operations.free.unit.test.ts | compiles nothing for a pattern that is not in the grammar, and holds nothing | T1 |
 | evaluator-operations.free.unit.test.ts | throws the error of the test, not the one of the free that follows it, and frees once | T6 |
 | evaluator-operations.free.unit.test.ts | throws what compilePattern throws unless it is a RegexParseError, rather than calling it a bad pattern | T6 |
+| evaluator-operations.free.unit.test.ts | frees the pattern it compiled, so %s over many rows in one synchronous pass holds none | T1 |
 | evaluator.complex-arithmetic.unit.test.ts | keeps a negative power of a large base finite where its positive power would overflow | T10 |
 | evaluator.complex-arithmetic.unit.test.ts | a negative exponent is exactly the reciprocal of the positive power when that is representable, for $base to the power -$exponent | T2 |
 | evaluator.monotonicity.unit.test.ts | for every enumerated predicate | T2 |
@@ -404,27 +411,33 @@ A test stays in an implementation's own suite when a case cannot state it. Each 
 | input-resolvers.unit.test.ts | gives the items the same scope as a parsed list | T7 |
 | input-resolvers.unit.test.ts | does not treat a map handed in as a context as an item | T7 |
 | input-resolvers.unit.test.ts | exports the item type that createInputResolvers and parseInputs take and return | T7 |
-| cli.e2e.test.ts | is the file package.json's bin names, with a node shebang | T4 |
-| cli.e2e.test.ts | evaluates a tree read from standard input and exits 0 | T4 |
-| cli.e2e.test.ts | exits 1 for an indeterminate result | T4 |
-| cli.e2e.test.ts | exits 2 with the problem on standard error for an invalid tree | T4 |
-| cli.e2e.test.ts | reports the package version | T4 |
-| cli.e2e.test.ts | keeps quiet and keeps its exit status when the reader of standard output has gone | T4 |
-| declaration-shape.e2e.test.ts | exports both node-tree schemas in place | T4 |
-| declaration-shape.e2e.test.ts | declares nothing bare and re-exports nothing through a trailing list | T4 |
-| declaration-shape.e2e.test.ts | declaration shape of %s | T4 |
-| cli-run.integration.test.ts | prints the version for --version | T9 |
-| cli-unrepresentable.integration.test.ts | prints nothing on standard output, names the problem on standard error and exits 2 | T6 |
-| json-schema-consistency.integration.test.ts | the predicate tree's generated 'kind' consts are exactly PredicateNodeSchema's own discriminated-union options | T4 |
-| json-schema-consistency.integration.test.ts | the expression tree's generated 'kind' consts are exactly ExpressionNodeSchema's own discriminated-union options | T4 |
-| json-schema-consistency.integration.test.ts | treeReference is present in both the predicate and expression discriminant sets | T4 |
-| json-schema-consistency.integration.test.ts | hoists the repeated sub-schemas into $defs rather than inlining them | T4 |
-| json-schema-consistency.integration.test.ts | emits at least one reference, so the assertion below cannot pass vacuously | T4 |
-| json-schema-consistency.integration.test.ts | emits every reference in a form that resolves inside the converted document | T4 |
-| json-schema-consistency.integration.test.ts | %s's mutual recursion converts to resolvable references | T4 |
+| integer-power.unit.test.ts | returns the identity for exponent zero without multiplying | T3 |
+| integer-power.unit.test.ts | handles an exponent past the safe integers, whose low bits are all zero | T3 |
+| integer-power.unit.test.ts | matches repeated multiplication for exponent $exponent | T3 |
+| integer-power.unit.test.ts | multiplies a number of times logarithmic in the exponent $exponent | T3 |
+| json-schema.integration.test.ts | lists exactly the predicate kinds, from the exported schema and from the published file | T4 |
+| json-schema.integration.test.ts | lists exactly the expression kinds, from the exported schema and from the published file | T4 |
+| json-schema.integration.test.ts | holds treeReference in both trees, and the one kind they share | T4 |
+| json-schema.integration.test.ts | resolves every reference it holds | T4 |
+| json-schema.integration.test.ts | and an exported schema's JSON Schema resolves its references within its own definitions | T4 |
+| json-schema.integration.test.ts | is the version-pinned $id, a draft 2020-12 schema whose root is either tree | T4 |
+| json-schema.integration.test.ts | reads %s alike for every tree of the corpus and every mutant | T4 |
 | schema-pipeline.integration.test.ts | survives JSON.parse as a real own key: the control confirming the fixture is genuinely hazardous before validation | T1 |
 | schema-pipeline.integration.test.ts | cannot hijack a downstream copy's prototype once validated, where the unvalidated parse still can | T1 |
 | schema-pipeline.integration.test.ts | never leaks onto the shared Object.prototype, the global half of the attack | T1 |
+| schemas.e2e.test.ts | is a frozen Standard Schema v1 with the vendor and a JSON Schema | T4 |
+| schemas.e2e.test.ts | answers synchronously, never with a promise | T4 |
+| schemas.e2e.test.ts | reads a value as the schema reads it: its keys in the schema's order, an unknown key dropped | T4 |
+| schemas.e2e.test.ts | names the kinds the trees accept as plain frozen arrays | T4 |
+| schemas.e2e.test.ts | reports an issue with its message and the path of the part it is about | T4 |
+| schemas.e2e.test.ts | reports the index of an element of an array in a path as a number | T4 |
+| schemas.e2e.test.ts | refuses undefined inside an array and ignores it as an object member | T4 |
+| schemas.e2e.test.ts | refuses a string with an unpaired surrogate, which no Rust string holds, and reads a pair | T4 |
+| schemas.e2e.test.ts | drops a __proto__ key wherever the schema holds an opaque value or a map, and leaves Object.prototype alone | T4 |
+| schemas.e2e.test.ts | returns an object whose keys are own data properties, so a key named like an Object method is data | T4 |
+| schemas.e2e.test.ts | refuses a value nested beyond the limit with an issue, not a stack overflow, and reads one within it | T4 |
+| schemas.e2e.test.ts | reads the same tree to the same value on every call | T4 |
+| schemas.e2e.test.ts | refuses %s as an opaque payload, at its path, without throwing | T4 |
 | smoke.e2e.test.ts | ship no test helper | T4 |
 | smoke.e2e.test.ts | dist/index.js exposes every expected export | T4 |
 | smoke.e2e.test.ts | dist/tree.js exposes both node-tree schemas | T4 |
@@ -440,7 +453,7 @@ A test stays in an implementation's own suite when a case cannot state it. Each 
 | smoke.e2e.test.ts | built deep-import subpath: %s | T4 |
 | smoke.e2e.test.ts | exports %s as an object | T4 |
 | smoke.e2e.test.ts | composed rule (fold max + memberOf + implies) against the built package: %s | T4 |
-| smoke.e2e.test.ts | %s's generated 'kind' consts are exactly the built package's own %s options | T4 |
+| smoke.e2e.test.ts | %s's generated 'kind' consts are exactly the built package's own %s | T4 |
 | trilean.e2e.test.ts | base case: isActive eq true AND sum(items.amount) via reduce fold > x + y -> definite true | T5 |
 | trilean.e2e.test.ts | items: [] variation -> definite false (the fold-over-empty identity feeds through to and's own absorbing false) | T5 |
 | trilean.e2e.test.ts | x missing from data variation -> indeterminate not-found (and does NOT absorb here) | T5 |

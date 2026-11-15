@@ -2,6 +2,7 @@ import type { ComputedValue } from "./computed-value";
 import { ComputedValueSchema } from "./computed-value";
 import { isPlainRecord } from "./plain-record";
 import type { SyncResolvers } from "./resolvers";
+import { readAs } from "./read-as";
 
 /** A plain JSON number, string or boolean is the unit-less value of that kind; anything else must already be a complete `ComputedValue` (the only way to supply units, durations, instants or complex values). Both routes end in `ComputedValueSchema`, so a number that is not finite (`1e999` parses to `Infinity`) is refused whichever way it was written, and a field the schema does not define is dropped rather than carried along. */
 function toComputedValue(raw: unknown): ComputedValue | undefined {
@@ -13,7 +14,7 @@ function toComputedValue(raw: unknown): ComputedValue | undefined {
         : typeof raw === "boolean"
           ? { kind: "boolean", value: raw }
           : raw;
-  const parsed = ComputedValueSchema.safeParse(candidate);
+  const parsed = readAs(ComputedValueSchema, candidate);
 
   return parsed.success ? parsed.data : undefined;
 }

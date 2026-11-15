@@ -29,6 +29,7 @@ import {
 } from "./evaluator-operations";
 import { literalValue } from "./evaluator-literals";
 import type { FunctionRegistry } from "./functions";
+import { readAs } from "./read-as";
 import { type Task, all, wait } from "./evaluator-effect";
 import type { EvaluationContext, EvaluatorResolvers } from "./resolvers";
 import {
@@ -376,7 +377,7 @@ export function* evaluatePredicateInternal(
           "the tree for the treeReference key is not yet known",
         );
       }
-      const parsed = PredicateNodeSchema.safeParse(resolution.node);
+      const parsed = readAs(PredicateNodeSchema, resolution.node);
       if (!parsed.success) {
         return indeterminate(
           "wrong-type",
@@ -801,7 +802,7 @@ export function* evaluateValueInternal(
           "the tree for the treeReference key is not yet known",
         );
       }
-      const parsed = ExpressionNodeSchema.safeParse(resolution.node);
+      const parsed = readAs(ExpressionNodeSchema, resolution.node);
       if (!parsed.success) {
         return indeterminate(
           "wrong-type",
