@@ -1,6 +1,8 @@
 import { cloudflareTest } from "@cloudflare/vitest-plugin";
 import { defineConfig } from "vitest/config";
 
+const BUNDLER_TIMEOUT_MS = 180000;
+
 /**
  * Coverage is a Vitest "unsupported option" inside a project config -- it can only be defined once, here in the root config, and applies across the whole run regardless of which project(s) are selected.
  *
@@ -35,9 +37,19 @@ export default defineConfig({
           include: [
             "test/smoke.e2e.test.ts",
             "test/declaration-shape.e2e.test.ts",
+            "test/declarations.e2e.test.ts",
             "test/schemas.e2e.test.ts",
             "test/cli.e2e.test.ts",
           ],
+        },
+      },
+      {
+        // Builds a consumer with each bundler from the packed tarballs of this package and of `trilean-regex`, and runs it in headless Chromium, in Node and in workerd, so it needs a browser installed and is run by its own job.
+        test: {
+          name: "e2e",
+          include: ["test/bundlers.e2e.test.ts"],
+          testTimeout: BUNDLER_TIMEOUT_MS,
+          hookTimeout: BUNDLER_TIMEOUT_MS,
         },
       },
       {
