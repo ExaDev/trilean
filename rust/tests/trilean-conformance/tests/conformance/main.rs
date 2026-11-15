@@ -14,6 +14,7 @@ mod canonical;
 mod execute;
 mod schema;
 mod selection;
+mod shared;
 mod validate;
 
 use std::collections::{BTreeMap, BTreeSet};
@@ -489,6 +490,7 @@ fn counts(files: &[LoadedFile]) -> (usize, usize, usize) {
 fn main() -> ExitCode {
     let mut failures = Vec::new();
     check_selection_fixture(&mut failures);
+    shared::check(&mut failures);
     check_pairs(
         "invalid-cases",
         "repaired-cases",
