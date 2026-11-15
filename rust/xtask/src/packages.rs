@@ -14,11 +14,12 @@ pub struct Package {
     pub errors_declarations: &'static str,
 }
 
-const PACKAGES: [Package; 1] = [Package {
-    name: "trilean-regex",
-    binding: "trilean-regex-wasm",
-    glue: "trilean_regex",
-    errors_js: r#"/** A pattern the parser refuses. `message` names the index, the reason, the pattern and a caret under the position. */
+const PACKAGES: [Package; 2] = [
+    Package {
+        name: "trilean-regex",
+        binding: "trilean-regex-wasm",
+        glue: "trilean_regex",
+        errors_js: r#"/** A pattern the parser refuses. `message` names the index, the reason, the pattern and a caret under the position. */
 export class RegexParseError extends Error {
   constructor(message, pattern, index) {
     super(message);
@@ -54,7 +55,7 @@ export class RegexInputError extends Error {
   }
 }
 "#,
-    errors_declarations: r#"/** A pattern the parser refuses. `message` names the index, the reason, the pattern and a caret under the position; `index` is the offset in UTF-16 code units into `pattern`. */
+        errors_declarations: r#"/** A pattern the parser refuses. `message` names the index, the reason, the pattern and a caret under the position; `index` is the offset in UTF-16 code units into `pattern`. */
 export declare class RegexParseError extends Error {
   readonly pattern: string;
   readonly index: number;
@@ -78,7 +79,54 @@ export declare class RegexInputError extends Error {
   constructor(message: string);
 }
 "#,
-}];
+    },
+    Package {
+        name: "corpus-format",
+        binding: "corpus-format-wasm",
+        glue: "corpus_format",
+        errors_js: r#"/** A document or an argument the package refuses: JSON text that does not parse, a manifest that is not well-formed, a name that is not a requirement. `message` says which. */
+export class CorpusFormatError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "CorpusFormatError";
+  }
+}
+
+/** A value whose encodings do not decode: a `$`-prefixed member that is not one of the closed set, an encoding with another member beside it, or one whose value is of the wrong form. `path` is the place in the value, as `$` followed by `.name` and `[index]` steps. */
+export class DecodeError extends Error {
+  constructor(message, path) {
+    super(message);
+    this.name = "DecodeError";
+    this.path = path;
+  }
+}
+
+/** A bug in the package: Rust panicked. `message` carries the panic's message and location. The instance that panicked is spent and the panic is to be reported. */
+export class InternalError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "InternalError";
+  }
+}
+"#,
+        errors_declarations: r#"/** A document or an argument the package refuses: JSON text that does not parse, a manifest that is not well-formed, a name that is not a requirement. `message` says which. */
+export declare class CorpusFormatError extends Error {
+  constructor(message: string);
+}
+
+/** A value whose encodings do not decode: a `$`-prefixed member that is not one of the closed set, an encoding with another member beside it, or one whose value is of the wrong form. `path` is the place in the value, as `$` followed by `.name` and `[index]` steps. */
+export declare class DecodeError extends Error {
+  readonly path: string;
+  constructor(message: string, path: string);
+}
+
+/** A bug in the package: Rust panicked. `message` carries the panic's message and location. The instance that panicked is spent and the panic is to be reported. */
+export declare class InternalError extends Error {
+  constructor(message: string);
+}
+"#,
+    },
+];
 
 impl Package {
     pub fn named(name: &str) -> Option<&'static Package> {

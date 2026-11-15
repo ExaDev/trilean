@@ -29,6 +29,7 @@ minimumReleaseAge: 60
 
 # Bare package names (no @version), per pnpm's own documented syntax (https://pnpm.io/settings#minimumreleaseageexclude). Each is an org-owned package published only by its own semantic-release CI with npm OIDC trusted publishing, so a version-agnostic exemption is a deliberate, low-risk choice rather than an entry needing an edit on every release.
 minimumReleaseAgeExclude:
+  - "@exadev/corpus-format"
   - "@exadev/eslint-config"
   - "@exadev/semantic-release-workspace"
   - "combinatrix"

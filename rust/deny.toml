@@ -40,6 +40,7 @@ allow = [
     { crate = "rustversion", reason = "wasm-bindgen's build script chooses what to compile by the compiler version with it." },
     { crate = "cfg-if", reason = "wasm-bindgen and js-sys choose code by target with it." },
     { crate = "bumpalo", reason = "wasm-bindgen-macro-support allocates the syntax it builds in it." },
+    { crate = "corpus-format-wasm", reason = "The wasm binding of corpus-format, built into the npm package @exadev/corpus-format." },
     { crate = "corpus-format", reason = "The format of a language-neutral conformance corpus: file selection, canonical bytes, encodings, manifest, completeness and comparison." },
     { crate = "json-shape", reason = "Validates JSON against a type's shape and writes its JSON Schema and TypeScript declarations." },
     { crate = "json-shape-compile-fail", reason = "Holds the constructs the derive must refuse to compile; built only with a cfg flag set by the compile-fail check." },
