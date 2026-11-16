@@ -8,7 +8,7 @@ import type { SqlDialect } from "../options";
 
 const NUL = "\u0000";
 
-/** The most bytes of an identifier PostgreSQL keeps: "The system uses no more than NAMEDATALEN -1 bytes of an identifier; longer names can be written in commands, but they will be truncated. By default, NAMEDATALEN is 64 so the maximum identifier length is 63 bytes" (https://www.postgresql.org/docs/current/sql-syntax-lexical.html#SQL-SYNTAX-IDENTIFIERS). Each dot-separated segment is an identifier of its own, and the count is of bytes in UTF-8, not of characters. A longer name is cut silently, so two distinct names that agree in their first 63 bytes would name one column. */
+/** The most bytes of an identifier PostgreSQL keeps: "The system uses no more than NAMEDATALEN -1 bytes of an identifier; longer names can be written in commands, but they will be truncated. By default, NAMEDATALEN is 64 so the maximum identifier length is 63 bytes", a value fixed when the server is compiled, so this assumes the default (https://www.postgresql.org/docs/current/sql-syntax-lexical.html#SQL-SYNTAX-IDENTIFIERS). Each dot-separated segment is an identifier of its own, and the count is of bytes in UTF-8, not of characters. A longer name is cut silently, so two distinct names that agree in their first 63 bytes would name one column. */
 export const POSTGRES_IDENTIFIER_BYTES = 63;
 
 const encoder = new TextEncoder();
