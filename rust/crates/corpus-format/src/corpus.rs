@@ -440,20 +440,47 @@ mod tests {
             change(&mut entries);
             check_corpus(&tree_of(&entries), &Ids)
         };
-        assert_eq!(with(&|_| {}).len(), 0);
+        assert_eq!(with(&|_| {}), Vec::<String>::new());
         assert_eq!(
-            with(&|entries| entries.retain(|(path, _)| *path != "manifest.json")).len(),
-            1
+            with(&|entries| entries.retain(|(path, _)| *path != "manifest.json")),
+            ["manifest.json: the corpus has no manifest"]
         );
-        assert!(!with(&|entries| entries.push(("stray.json", "{}\n"))).is_empty());
-        assert!(!with(&|entries| entries[1].1 = "{\"ids\":[\"a\",\"b\"]}\n").is_empty());
-        assert!(!with(&|entries| entries[1].1 = "{\n  \"bad\": true\n}\n").is_empty());
-        assert!(!with(&|entries| entries[1].1 = "{\n  \"ids\": [\n    \"a\"\n  ]\n}\n").is_empty());
-        assert!(!with(&|entries| entries[0].1 = "{\n  \"files\": {}\n}\n").is_empty());
+        assert_eq!(
+            with(&|entries| entries.push(("stray.json", "{}\n"))),
+            ["stray.json: not a corpus file and not a recognised root file"]
+        );
+        assert_eq!(
+            with(&|entries| entries[1].1 = "{\"ids\":[\"a\",\"b\"]}\n"),
+            [
+                "pkg/area/file.json: at byte 1: not in canonical form: line 1, column 2 differs from what the writer writes",
+                "manifest.json: pkg/area/file.json is not in the corpus",
+            ]
+        );
+        assert_eq!(
+            with(&|entries| entries[1].1 = "{\n  \"bad\": true\n}\n"),
+            [
+                "pkg/area/file.json: bad",
+                "manifest.json: pkg/area/file.json is not in the corpus",
+            ]
+        );
+        assert_eq!(
+            with(&|entries| entries[1].1 = "{\n  \"ids\": [\n    \"a\"\n  ]\n}\n"),
+            ["manifest.json: pkg/area/file.json: 2 cases are recorded, the file has 1"]
+        );
+        assert_eq!(
+            with(&|entries| entries[0].1 = "{\n  \"files\": {}\n}\n"),
+            ["manifest.json: manifest: \"files\" must not be empty"]
+        );
         let other = FILE.replace('b', "c");
         let mut entries = good();
         entries.push(("pkg/area/other.json", Box::leak(other.into_boxed_str())));
-        assert!(!check_corpus(&tree_of(&entries), &Ids).is_empty());
+        assert_eq!(
+            check_corpus(&tree_of(&entries), &Ids),
+            [
+                "pkg/area/other.json: the id a is also in pkg/area/file.json",
+                "manifest.json: pkg/area/other.json is not listed",
+            ]
+        );
     }
 
     #[test]
@@ -737,6 +764,91 @@ mod tests {
         exactly_one(
             &[("canonical-keys/repaired/x.json", Some(OUT_OF_ORDER))],
             "canonical-keys/repaired/x.json: the rule must not find a problem",
+        );
+    }
+
+    #[test]
+    fn a_malformed_selection_expectation_is_a_named_problem() {
+        let expected = |text: &str| text.to_owned();
+        let with = |text: String| problems_with(&[("loader-selection/expected.json", Some(&text))]);
+        let one = |problems: Vec<String>, fragment: &str| {
+            assert_eq!(problems.len(), 1, "{problems:?}");
+            assert!(
+                problems[0].contains(fragment),
+                "{problems:?} does not name {fragment}"
+            );
+        };
+        one(
+            with(expected("{\n  \"problems\": []\n}\n")),
+            "loader-selection: selected is missing",
+        );
+        one(
+            with(expected("{\n  \"selected\": []\n}\n")),
+            "loader-selection: problems is missing",
+        );
+        one(
+            with(expected("{\n  \"problems\": [],\n  \"selected\": 1\n}\n")),
+            "loader-selection: selected must be a list",
+        );
+        one(
+            with(expected(
+                "{\n  \"problems\": [\n    1\n  ],\n  \"selected\": []\n}\n",
+            )),
+            "loader-selection: problems must be a list of strings",
+        );
+    }
+
+    #[test]
+    fn a_malformed_differential_document_is_a_named_problem() {
+        let with = |text: &str| problems_with(&[("canonical-keys/differential.json", Some(text))]);
+        let one = |problems: Vec<String>, fragment: &str| {
+            assert_eq!(problems.len(), 1, "{problems:?}");
+            assert!(
+                problems[0].contains(fragment),
+                "{problems:?} does not name {fragment}"
+            );
+        };
+        one(
+            with("{\n  \"documents\": [\n    {\n      \"problems\": 0\n    }\n  ]\n}\n"),
+            "canonical-keys/differential.json: a document is a text",
+        );
+        one(
+            with(
+                "{\n  \"documents\": [\n    {\n      \"problems\": \"none\",\n      \"text\": \"{}\"\n    }\n  ]\n}\n",
+            ),
+            "canonical-keys/differential.json: problems is a count",
+        );
+        one(
+            with("{\n  \"documents\": 3\n}\n"),
+            "must hold a non-empty list of documents",
+        );
+    }
+
+    #[test]
+    fn a_malformed_text_form_pair_is_a_named_problem() {
+        let with = |text: &str| problems_with(&[("text-forms/pairs.json", Some(text))]);
+        let one = |problems: Vec<String>, fragment: &str| {
+            assert_eq!(problems.len(), 1, "{problems:?}");
+            assert!(
+                problems[0].contains(fragment),
+                "{problems:?} does not name {fragment}"
+            );
+        };
+        one(
+            with(
+                "{\n  \"pairs\": [\n    {\n      \"codeUnits\": [\n        97\n      ]\n    }\n  ]\n}\n",
+            ),
+            "text-forms/pairs.json: a pair has a text",
+        );
+        one(
+            with("{\n  \"pairs\": [\n    {\n      \"text\": \"a\"\n    }\n  ]\n}\n"),
+            "text-forms/pairs.json: a pair has code units",
+        );
+        one(
+            with(
+                "{\n  \"pairs\": [\n    {\n      \"codeUnits\": [\n        65536\n      ],\n      \"text\": \"a\"\n    }\n  ]\n}\n",
+            ),
+            "text-forms/pairs.json: $.codeUnits: a code unit is an integer from 0 to 65535",
         );
     }
 }
