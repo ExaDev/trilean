@@ -9,6 +9,7 @@ export const MAX_NESTING_DEPTH = 500;
 export const MAX_ARRAY_LENGTH = 65536;
 export const MAX_STRING_UNITS = 1048576;
 export const MAX_TEXT_UNITS = 4194304;
+export const MAX_VALUES = 1000000;
 
 /** How many hostile values are read in a row, which would exhaust the module's stack if each leaked the frames it crossed, and the length of a sparse array small enough to be read. */
 const HOSTILE_ROUNDS = 3000;
@@ -320,6 +321,76 @@ export function run(trilean, cases) {
     refusal("JsonValueSchema", shared)?.message.includes("values") === true,
     "accepted or refused for another reason",
   );
+
+  // The most values and the most text one read may hold, together, are read: the module's memory for a whole read is the sum of its parts, and a host with less memory than that fails here and not in use.
+  const strings = MAX_TEXT_UNITS / MAX_STRING_UNITS;
+  const lists = Math.floor((MAX_VALUES - strings - 1) / (MAX_ARRAY_LENGTH + 1));
+  const most = [];
+  for (let list = 0; list < lists; list += 1) {
+    most.push(new Array(MAX_ARRAY_LENGTH).fill(1));
+  }
+  for (let text = 0; text < strings; text += 1) {
+    most.push(longest);
+  }
+  check(
+    "the most values and the most text together are read",
+    accepts("JsonValueSchema", most),
+    "refused",
+  );
+
+  // An array's elements are held once they are read: a nest of arrays that each claim the longest length is refused at the first hole it reaches, and the module reserves nothing from the claimed lengths on the way down.
+  let claimed = new Array(MAX_ARRAY_LENGTH);
+  claimed[1] = 1;
+  for (let level = 1; level < MAX_NESTING_DEPTH - 1; level += 1) {
+    const outer = new Array(MAX_ARRAY_LENGTH);
+    outer[0] = claimed;
+    claimed = outer;
+  }
+  check(
+    "a nest of arrays that each claim the longest length is refused at a hole, with nothing reserved from the claims",
+    refusal("JsonValueSchema", claimed) !== undefined,
+    "accepted",
+  );
+
+  // A key named __proto__ is data in a value a host builds, as it is when it is parsed, and is dropped from a map, an opaque value and a unit, leaving Object.prototype as it was.
+  const parsed = JSON.parse(
+    '{"kind":"reference","key":{"__proto__":{"polluted":true},"a":1},"unit":{"__proto__":2,"m":1}}',
+  );
+  const defined = { kind: "reference", key: { a: 1 }, unit: { m: 1 } };
+  Object.defineProperty(defined.key, "__proto__", {
+    value: { polluted: true },
+    enumerable: true,
+    configurable: true,
+    writable: true,
+  });
+  Object.defineProperty(defined.unit, "__proto__", {
+    value: 2,
+    enumerable: true,
+    configurable: true,
+    writable: true,
+  });
+  for (const [how, input] of [
+    ["parsed", parsed],
+    ["defined", defined],
+  ]) {
+    const result = read("ExpressionNodeSchema", input);
+    check(
+      `a __proto__ key of a map, an opaque value and a unit is dropped (${how})`,
+      result.issues === undefined &&
+        JSON.stringify(result.value) ===
+          JSON.stringify({
+            kind: "reference",
+            key: { a: 1 },
+            unit: { m: 1 },
+          }) &&
+        !Object.hasOwn(result.value.key, "__proto__") &&
+        !Object.hasOwn(result.value.unit, "__proto__") &&
+        Object.hasOwn({}, "polluted") === false &&
+        {}.polluted === undefined &&
+        Object.getPrototypeOf({}) === Object.prototype,
+      JSON.stringify(result),
+    );
+  }
 
   const keys = refusal("JsonValueSchema", { "\ud800": 1, "\ud801": 2 });
   check(

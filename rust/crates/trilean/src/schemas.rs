@@ -72,7 +72,12 @@ pub const MAX_STRING_UNITS: usize = 1_048_576;
 /// module, and the text is held about four times at its largest, as it is read, as it is read again to be returned
 /// without the keys a map drops, as the copy that is checked, and as the string written back to the host, so the limit is
 /// four million units, which is four strings of the longest length: three bytes a unit and four copies make 48 megabytes
-/// of the module's memory at the most, under what a Workers isolate has to give.
+/// of the module's memory at the most. That is one part of the memory of a whole read, which is bounded by its parts:
+/// the text, these 48 megabytes; the values, `MAX_VALUES` of them at sixteen bytes each as they are read, as they are
+/// normalised and as they are returned, 48 megabytes; and an array's elements, which are held only once they are read,
+/// since nothing is reserved from a length that a host claims. The whole is at most about a hundred megabytes for a value
+/// that has the most values and the most text together, which the tests of the hosts read, under the 128 megabytes of a
+/// Workers isolate.
 pub const MAX_TEXT_UNITS: usize = 4_194_304;
 
 /// The issue message for a string of `units` code units, which is more than `MAX_STRING_UNITS`.
