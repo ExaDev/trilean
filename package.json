@@ -30,7 +30,7 @@
     "miniflare": "4.20260730.0",
     "playwright": "1.65.1",
     "prettier": "^3.9.10",
-    "rollup": "4.68.0",
+    "rollup": "4.68.2",
     "semantic-release": "^25.0.9",
     "turbo": "^2.11.10",
     "typescript": "^6.0.3",
