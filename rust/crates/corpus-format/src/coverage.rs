@@ -11,6 +11,10 @@ use std::collections::BTreeSet;
 use json_shape::{Definitions, Kind, ShapeDef, Value, accepts};
 
 /// What the instances are walked along, as the places in the shape that can be used.
+/// The prefix of a place that names a reference to a definition the shape does not have, which is a fault of the shape and
+/// not a form an instance could use.
+const DANGLING: &str = "dangling:";
+
 struct Forms<'a> {
     definitions: &'a Definitions,
 }
@@ -26,10 +30,15 @@ impl Forms<'_> {
     ) {
         match &shape.kind {
             Kind::Ref(name) => {
-                if reached.insert(name.clone())
-                    && let Some(definition) = self.definitions.get(name)
-                {
-                    self.all(definition, name, reached, found);
+                // A definition is followed once, which is what ends the walk of a type that refers to itself.
+                if !reached.insert(name.clone()) {
+                    return;
+                }
+                match self.definitions.get(name) {
+                    Some(definition) => self.all(definition, name, reached, found),
+                    None => {
+                        found.insert(format!("{DANGLING}{name}"));
+                    }
                 }
             }
             Kind::Object(object) => {
@@ -175,7 +184,8 @@ impl Forms<'_> {
 /// The forms of `root` that no instance uses, as messages in order: a property of an object, a branch of a `oneOf`, a
 /// variant of a tagged union and a value of an enum, each named by its place (the definition it is in and the path
 /// below it). `definitions` are the named shapes `root` refers to, as the repository's types derive them. An empty list
-/// is a corpus that uses every form its shape allows.
+/// is a corpus that uses every form its shape allows. A reference to a definition `definitions` does not hold is a fault of
+/// the shape and is reported by name.
 pub fn schema_coverage(
     definitions: &Definitions,
     root: &ShapeDef,
@@ -190,7 +200,10 @@ pub fn schema_coverage(
     }
     every
         .difference(&used)
-        .map(|form| format!("no instance uses {form}"))
+        .map(|form| match form.strip_prefix(DANGLING) {
+            Some(name) => format!("the shape refers to {name}, which it does not define"),
+            None => format!("no instance uses {form}"),
+        })
         .collect()
 }
 
@@ -309,5 +322,138 @@ mod tests {
     fn an_instance_the_shape_does_not_describe_uses_nothing() {
         let unused = coverage(&[r#"[1,2]"#, r#"{"unknown":1}"#, r#"7"#]);
         assert_eq!(unused, coverage(&[]));
+    }
+
+    #[expect(dead_code, reason = "described and walked only")]
+    #[derive(Shape)]
+    struct Node {
+        name: String,
+        children: Vec<Node>,
+    }
+
+    #[expect(dead_code, reason = "described and walked only")]
+    #[derive(Shape)]
+    struct Leaf {
+        value: u8,
+        kind: Size,
+    }
+
+    #[expect(dead_code, reason = "described and walked only")]
+    #[derive(Shape)]
+    struct Shared {
+        left: Leaf,
+        right: Leaf,
+    }
+
+    #[expect(dead_code, reason = "described and walked only")]
+    #[derive(Shape)]
+    struct Bag {
+        by_name: json_shape::Map<Leaf>,
+    }
+
+    #[expect(dead_code, reason = "described and walked only")]
+    #[derive(Shape)]
+    struct Base {
+        id: String,
+    }
+
+    #[expect(dead_code, reason = "described and walked only")]
+    #[derive(Shape)]
+    struct Both {
+        base: Base,
+        leaf: Leaf,
+    }
+
+    fn unused_of<T: Shape>(instances: &[&str]) -> Vec<String> {
+        let instances: Vec<Value> = instances.iter().map(|text| parse(text)).collect();
+        schema_coverage(&Definitions::of::<T>(), &T::reference(), &instances)
+    }
+
+    #[test]
+    fn a_type_that_refers_to_itself_is_walked_once_and_its_instances_to_their_depth() {
+        assert_eq!(
+            unused_of::<Node>(&[]),
+            [
+                "no instance uses Node/properties/children",
+                "no instance uses Node/properties/name"
+            ]
+        );
+        let nested =
+            r#"{"name":"a","children":[{"name":"b","children":[{"name":"c","children":[]}]}]}"#;
+        assert_eq!(unused_of::<Node>(&[nested]), Vec::<String>::new());
+    }
+
+    #[test]
+    fn a_definition_used_in_two_places_is_reported_once_and_credited_from_either() {
+        assert_eq!(
+            unused_of::<Shared>(&[]),
+            [
+                "no instance uses Leaf/properties/kind",
+                "no instance uses Leaf/properties/value",
+                "no instance uses Shared/properties/left",
+                "no instance uses Shared/properties/right",
+                "no instance uses Size/enum:large",
+                "no instance uses Size/enum:small",
+            ]
+        );
+        let through_left = r#"{"left":{"value":1,"kind":"small"}}"#;
+        assert_eq!(
+            unused_of::<Shared>(&[through_left]),
+            [
+                "no instance uses Shared/properties/right",
+                "no instance uses Size/enum:large"
+            ]
+        );
+    }
+
+    #[test]
+    fn the_values_of_a_map_are_walked_and_credited() {
+        assert_eq!(
+            unused_of::<Bag>(&[]),
+            [
+                "no instance uses Bag/properties/by_name",
+                "no instance uses Leaf/properties/kind",
+                "no instance uses Leaf/properties/value",
+                "no instance uses Size/enum:large",
+                "no instance uses Size/enum:small",
+            ]
+        );
+        let one = r#"{"by_name":{"x":{"value":1,"kind":"small"},"y":{"value":2,"kind":"large"}}}"#;
+        assert_eq!(unused_of::<Bag>(&[one]), Vec::<String>::new());
+    }
+
+    #[test]
+    fn every_part_of_an_all_of_is_walked_and_credited() {
+        let definitions = Definitions::of::<Both>();
+        let root = ShapeDef::new(Kind::AllOf(vec![Base::reference(), Leaf::reference()]));
+        let none = schema_coverage(&definitions, &root, &[]);
+        assert!(
+            none.iter().any(|form| form.contains("Base/properties/id")),
+            "{none:?}"
+        );
+        assert!(
+            none.iter()
+                .any(|form| form.contains("Leaf/properties/value")),
+            "{none:?}"
+        );
+        let used = parse(r#"{"id":"a","value":1,"kind":"small"}"#);
+        assert_eq!(
+            schema_coverage(&definitions, &root, &[used]),
+            ["no instance uses Size/enum:large"]
+        );
+    }
+
+    #[test]
+    fn a_reference_to_a_definition_the_shape_does_not_hold_is_named() {
+        let root = ShapeDef::new(Kind::Ref("Missing".to_owned()));
+        assert_eq!(
+            schema_coverage(&Definitions::default(), &root, &[]),
+            ["the shape refers to Missing, which it does not define"]
+        );
+        // An instance cannot use it, so it is reported whatever the instances are.
+        assert_eq!(
+            schema_coverage(&Definitions::default(), &root, &[parse("{}")]),
+            ["the shape refers to Missing, which it does not define"]
+        );
     }
 }
