@@ -1,3 +1,14 @@
+## [2.0.6](https://github.com/ExaDev/trilean/compare/trilean%402.0.5...trilean%402.0.6) (2026-11-16)
+
+### Build System
+
+* **deps-dev:** bump @exadev/eslint-config from 3.0.0 to 3.1.0 ([8e12b3d](https://github.com/ExaDev/trilean/commit/8e12b3d91e08001262a0b3d41b4bef2ed9bacb5c))
+
+
+### Dependencies
+
+- Updated trilean-regex to 2.0.2
+
 ## [2.0.5](https://github.com/ExaDev/trilean/compare/trilean%402.0.4...trilean%402.0.5) (2026-11-16)
 
 ### Build System
