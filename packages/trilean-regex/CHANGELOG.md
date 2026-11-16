@@ -1,3 +1,9 @@
+## [2.0.1](https://github.com/ExaDev/trilean/compare/trilean-regex%402.0.0...trilean-regex%402.0.1) (2026-11-16)
+
+### Tests
+
+* apply the derived time limit to every test that reads the corpus and say what it guards ([4bd1e0d](https://github.com/ExaDev/trilean/commit/4bd1e0d05907f305626aed0b60eefddac71d21e6))
+
 ## [2.0.0](https://github.com/ExaDev/trilean/compare/trilean-regex%401.0.24...trilean-regex%402.0.0) (2026-11-15)
 
 ### ⚠ BREAKING CHANGES
