@@ -165,7 +165,7 @@ describe("corpus loading", () => {
     () => {
       expect(checkCorpus(CORPUS_ROOT).problems).toEqual([]);
     },
-    caseLimit(manifestCases(CORPUS_ROOT)),
+    caseLimit({ cases: manifestCases(CORPUS_ROOT) }),
   );
 
   it(
@@ -173,50 +173,67 @@ describe("corpus loading", () => {
     () => {
       expectPairs("invalid-cases", "repaired-cases", validateCorpusFile);
     },
-    fileLimit(jsonFilesUnder(FIXTURES)),
+    fileLimit({ files: jsonFilesUnder(FIXTURES) }),
   );
 
-  it("rejects every invalid execute fixture, each for its one defect", () => {
-    expectPairs(
-      "execute-fixtures/invalid",
-      "execute-fixtures/repaired",
-      validateFixture,
-    );
-  });
-
-  it("rejects every invalid manifest fixture, each for its one defect", () => {
-    expectPairs("manifests/invalid", "manifests/repaired", validateManifest);
-  });
-
-  it("rejects every invalid corpus fixture, each for its one defect", () => {
-    const names = fixtureNames("corpora/invalid");
-    expect(fixtureNames("corpora/repaired")).toEqual(names);
-    for (const name of names) {
-      expect(
-        checkCorpus(join(FIXTURES, "corpora", "invalid", name)).problems.length,
-        `corpora/invalid/${name} must have a problem`,
-      ).toBeGreaterThan(0);
-      expect(
-        checkCorpus(join(FIXTURES, "corpora", "repaired", name)).problems,
-        `corpora/repaired/${name}`,
-      ).toEqual([]);
-    }
-  });
-
-  it("accepts every valid fixture", () => {
-    for (const name of fixtureNames("valid-cases")) {
-      const result = validateCorpusFile(
-        readJson(join(FIXTURES, "valid-cases", name)),
+  it(
+    "rejects every invalid execute fixture, each for its one defect",
+    () => {
+      expectPairs(
+        "execute-fixtures/invalid",
+        "execute-fixtures/repaired",
+        validateFixture,
       );
-      expect(result.ok ? [] : result.problems, name).toEqual([]);
-    }
-    for (const name of fixtureNames("manifests/valid")) {
-      const result = validateManifest(
-        readJson(join(FIXTURES, "manifests", "valid", name)),
-      );
-      expect(result.ok ? [] : result.problems, name).toEqual([]);
-    }
-  });
+    },
+    fileLimit({ files: jsonFilesUnder(FIXTURES) }),
+  );
+
+  it(
+    "rejects every invalid manifest fixture, each for its one defect",
+    () => {
+      expectPairs("manifests/invalid", "manifests/repaired", validateManifest);
+    },
+    fileLimit({ files: jsonFilesUnder(FIXTURES) }),
+  );
+
+  it(
+    "rejects every invalid corpus fixture, each for its one defect",
+    () => {
+      const names = fixtureNames("corpora/invalid");
+      expect(fixtureNames("corpora/repaired")).toEqual(names);
+      for (const name of names) {
+        expect(
+          checkCorpus(join(FIXTURES, "corpora", "invalid", name)).problems
+            .length,
+          `corpora/invalid/${name} must have a problem`,
+        ).toBeGreaterThan(0);
+        expect(
+          checkCorpus(join(FIXTURES, "corpora", "repaired", name)).problems,
+          `corpora/repaired/${name}`,
+        ).toEqual([]);
+      }
+    },
+    fileLimit({ files: jsonFilesUnder(FIXTURES) }),
+  );
+
+  it(
+    "accepts every valid fixture",
+    () => {
+      for (const name of fixtureNames("valid-cases")) {
+        const result = validateCorpusFile(
+          readJson(join(FIXTURES, "valid-cases", name)),
+        );
+        expect(result.ok ? [] : result.problems, name).toEqual([]);
+      }
+      for (const name of fixtureNames("manifests/valid")) {
+        const result = validateManifest(
+          readJson(join(FIXTURES, "manifests", "valid", name)),
+        );
+        expect(result.ok ? [] : result.problems, name).toEqual([]);
+      }
+    },
+    fileLimit({ files: jsonFilesUnder(FIXTURES) }),
+  );
 
   it("reads both forms of a text as the same UTF-16 code units", () => {
     const document = readJson(join(FIXTURES, "text-forms", "pairs.json"));

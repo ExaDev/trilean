@@ -16,6 +16,6 @@ describe("the case schema", () => {
     () => {
       expect(unusedForms(CORPUS_ROOT)).toEqual([]);
     },
-    fileLimit(jsonFilesUnder(CORPUS_ROOT)),
+    fileLimit({ files: jsonFilesUnder(CORPUS_ROOT) }),
   );
 });

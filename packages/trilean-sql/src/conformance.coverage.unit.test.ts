@@ -1,3 +1,4 @@
+import { caseLimit } from "../../../corpus-time-limit";
 import { fileURLToPath } from "node:url";
 import { parseRegex } from "trilean-regex";
 import {
@@ -664,5 +665,6 @@ describe("the ids the evaluator selects do not depend on the zone of the host", 
         restore();
       }
     },
+    caseLimit({ cases: stated.length }),
   );
 });
