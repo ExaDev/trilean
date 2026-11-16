@@ -8,7 +8,7 @@
     "@commitlint/cli": "^21.2.4",
     "@commitlint/config-conventional": "^21.2.3",
     "@eslint/js": "^10.0.1",
-    "@exadev/eslint-config": "3.0.0",
+    "@exadev/eslint-config": "3.1.0",
     "@exadev/semantic-release-workspace": "3.4.0",
     "@rollup/plugin-node-resolve": "16.0.3",
     "@semantic-release/changelog": "^7.0.0",
