@@ -1,0 +1,3212 @@
+{
+  "cases": [
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.postgres-every-line-break-and-tab",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"\nAND\t1 = 1",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "every",
+        "path": "$",
+        "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.postgres-every-nul-at-the-end",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"\u0000",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "every",
+        "path": "$",
+        "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.postgres-every-nul-at-the-start",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\u0000\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "every",
+        "path": "$",
+        "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.postgres-every-nul-in-the-middle",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \u0000\"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.postgres-every-other-control-characters",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '\u0001\u001f'",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.postgres-every-plain",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.postgres-every-quote-and-block-comment",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> 'it''s' /* c */",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "every",
+        "path": "$",
+        "reason": "the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.postgres-every-unpaired-high-surrogate",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": {
+              "codeUnits": [
+                34,
+                116,
+                97,
+                103,
+                115,
+                34,
+                46,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                73,
+                100,
+                34,
+                32,
+                61,
+                32,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                115,
+                34,
+                46,
+                34,
+                105,
+                100,
+                34,
+                32,
+                65,
+                78,
+                68,
+                32,
+                39,
+                120,
+                39,
+                32,
+                60,
+                62,
+                32,
+                39,
+                55296,
+                39
+              ]
+            },
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "every",
+        "path": "$",
+        "reason": "the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.postgres-every-unpaired-low-surrogate",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": {
+              "codeUnits": [
+                34,
+                116,
+                97,
+                103,
+                115,
+                34,
+                46,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                73,
+                100,
+                34,
+                32,
+                61,
+                32,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                115,
+                34,
+                46,
+                34,
+                105,
+                100,
+                34,
+                32,
+                65,
+                78,
+                68,
+                32,
+                39,
+                120,
+                39,
+                32,
+                60,
+                62,
+                32,
+                39,
+                56320,
+                39
+              ]
+            },
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.postgres-every-well-formed-pair",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '😀'",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.postgres-fold-line-break-and-tab",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"\nAND\t1 = 1",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "fold",
+        "path": "$.left",
+        "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.postgres-fold-nul-at-the-end",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"\u0000",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "fold",
+        "path": "$.left",
+        "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.postgres-fold-nul-at-the-start",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\u0000\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "fold",
+        "path": "$.left",
+        "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.postgres-fold-nul-in-the-middle",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \u0000\"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.postgres-fold-other-control-characters",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '\u0001\u001f'",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.postgres-fold-plain",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.postgres-fold-quote-and-block-comment",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> 'it''s' /* c */",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "fold",
+        "path": "$.left",
+        "reason": "the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.postgres-fold-unpaired-high-surrogate",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": {
+              "codeUnits": [
+                34,
+                116,
+                97,
+                103,
+                115,
+                34,
+                46,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                73,
+                100,
+                34,
+                32,
+                61,
+                32,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                115,
+                34,
+                46,
+                34,
+                105,
+                100,
+                34,
+                32,
+                65,
+                78,
+                68,
+                32,
+                39,
+                120,
+                39,
+                32,
+                60,
+                62,
+                32,
+                39,
+                55296,
+                39
+              ]
+            },
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "fold",
+        "path": "$.left",
+        "reason": "the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.postgres-fold-unpaired-low-surrogate",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": {
+              "codeUnits": [
+                34,
+                116,
+                97,
+                103,
+                115,
+                34,
+                46,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                73,
+                100,
+                34,
+                32,
+                61,
+                32,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                115,
+                34,
+                46,
+                34,
+                105,
+                100,
+                34,
+                32,
+                65,
+                78,
+                68,
+                32,
+                39,
+                120,
+                39,
+                32,
+                60,
+                62,
+                32,
+                39,
+                56320,
+                39
+              ]
+            },
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.postgres-fold-well-formed-pair",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '😀'",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.postgres-some-line-break-and-tab",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"\nAND\t1 = 1",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "some",
+        "path": "$",
+        "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.postgres-some-nul-at-the-end",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"\u0000",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "some",
+        "path": "$",
+        "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.postgres-some-nul-at-the-start",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\u0000\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "some",
+        "path": "$",
+        "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.postgres-some-nul-in-the-middle",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \u0000\"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.postgres-some-other-control-characters",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '\u0001\u001f'",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.postgres-some-plain",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.postgres-some-quote-and-block-comment",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> 'it''s' /* c */",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "some",
+        "path": "$",
+        "reason": "the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.postgres-some-unpaired-high-surrogate",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": {
+              "codeUnits": [
+                34,
+                116,
+                97,
+                103,
+                115,
+                34,
+                46,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                73,
+                100,
+                34,
+                32,
+                61,
+                32,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                115,
+                34,
+                46,
+                34,
+                105,
+                100,
+                34,
+                32,
+                65,
+                78,
+                68,
+                32,
+                39,
+                120,
+                39,
+                32,
+                60,
+                62,
+                32,
+                39,
+                55296,
+                39
+              ]
+            },
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "some",
+        "path": "$",
+        "reason": "the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.postgres-some-unpaired-low-surrogate",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": {
+              "codeUnits": [
+                34,
+                116,
+                97,
+                103,
+                115,
+                34,
+                46,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                73,
+                100,
+                34,
+                32,
+                61,
+                32,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                115,
+                34,
+                46,
+                34,
+                105,
+                100,
+                34,
+                32,
+                65,
+                78,
+                68,
+                32,
+                39,
+                120,
+                39,
+                32,
+                60,
+                62,
+                32,
+                39,
+                56320,
+                39
+              ]
+            },
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.postgres-some-well-formed-pair",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '😀'",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.sqlite-every-line-break-and-tab",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"\nAND\t1 = 1",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "every",
+        "path": "$",
+        "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.sqlite-every-nul-at-the-end",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"\u0000",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "every",
+        "path": "$",
+        "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.sqlite-every-nul-at-the-start",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\u0000\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "every",
+        "path": "$",
+        "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.sqlite-every-nul-in-the-middle",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \u0000\"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.sqlite-every-other-control-characters",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '\u0001\u001f'",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.sqlite-every-plain",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.sqlite-every-quote-and-block-comment",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> 'it''s' /* c */",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "every",
+        "path": "$",
+        "reason": "the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.sqlite-every-unpaired-high-surrogate",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": {
+              "codeUnits": [
+                34,
+                116,
+                97,
+                103,
+                115,
+                34,
+                46,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                73,
+                100,
+                34,
+                32,
+                61,
+                32,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                115,
+                34,
+                46,
+                34,
+                105,
+                100,
+                34,
+                32,
+                65,
+                78,
+                68,
+                32,
+                39,
+                120,
+                39,
+                32,
+                60,
+                62,
+                32,
+                39,
+                55296,
+                39
+              ]
+            },
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "every",
+        "path": "$",
+        "reason": "the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.sqlite-every-unpaired-low-surrogate",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": {
+              "codeUnits": [
+                34,
+                116,
+                97,
+                103,
+                115,
+                34,
+                46,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                73,
+                100,
+                34,
+                32,
+                61,
+                32,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                115,
+                34,
+                46,
+                34,
+                105,
+                100,
+                34,
+                32,
+                65,
+                78,
+                68,
+                32,
+                39,
+                120,
+                39,
+                32,
+                60,
+                62,
+                32,
+                39,
+                56320,
+                39
+              ]
+            },
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.sqlite-every-well-formed-pair",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '😀'",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.sqlite-fold-line-break-and-tab",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"\nAND\t1 = 1",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "fold",
+        "path": "$.left",
+        "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.sqlite-fold-nul-at-the-end",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"\u0000",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "fold",
+        "path": "$.left",
+        "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.sqlite-fold-nul-at-the-start",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\u0000\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "fold",
+        "path": "$.left",
+        "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.sqlite-fold-nul-in-the-middle",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \u0000\"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.sqlite-fold-other-control-characters",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '\u0001\u001f'",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.sqlite-fold-plain",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.sqlite-fold-quote-and-block-comment",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> 'it''s' /* c */",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "fold",
+        "path": "$.left",
+        "reason": "the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.sqlite-fold-unpaired-high-surrogate",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": {
+              "codeUnits": [
+                34,
+                116,
+                97,
+                103,
+                115,
+                34,
+                46,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                73,
+                100,
+                34,
+                32,
+                61,
+                32,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                115,
+                34,
+                46,
+                34,
+                105,
+                100,
+                34,
+                32,
+                65,
+                78,
+                68,
+                32,
+                39,
+                120,
+                39,
+                32,
+                60,
+                62,
+                32,
+                39,
+                55296,
+                39
+              ]
+            },
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "fold",
+        "path": "$.left",
+        "reason": "the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.sqlite-fold-unpaired-low-surrogate",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": {
+              "codeUnits": [
+                34,
+                116,
+                97,
+                103,
+                115,
+                34,
+                46,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                73,
+                100,
+                34,
+                32,
+                61,
+                32,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                115,
+                34,
+                46,
+                34,
+                105,
+                100,
+                34,
+                32,
+                65,
+                78,
+                68,
+                32,
+                39,
+                120,
+                39,
+                32,
+                60,
+                62,
+                32,
+                39,
+                56320,
+                39
+              ]
+            },
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.sqlite-fold-well-formed-pair",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '😀'",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.sqlite-some-line-break-and-tab",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"\nAND\t1 = 1",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "some",
+        "path": "$",
+        "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.sqlite-some-nul-at-the-end",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"\u0000",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "some",
+        "path": "$",
+        "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.sqlite-some-nul-at-the-start",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\u0000\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "some",
+        "path": "$",
+        "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.sqlite-some-nul-in-the-middle",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \u0000\"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.sqlite-some-other-control-characters",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '\u0001\u001f'",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.sqlite-some-plain",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.sqlite-some-quote-and-block-comment",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> 'it''s' /* c */",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "some",
+        "path": "$",
+        "reason": "the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.sqlite-some-unpaired-high-surrogate",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": {
+              "codeUnits": [
+                34,
+                116,
+                97,
+                103,
+                115,
+                34,
+                46,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                73,
+                100,
+                34,
+                32,
+                61,
+                32,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                115,
+                34,
+                46,
+                34,
+                105,
+                100,
+                34,
+                32,
+                65,
+                78,
+                68,
+                32,
+                39,
+                120,
+                39,
+                32,
+                60,
+                62,
+                32,
+                39,
+                55296,
+                39
+              ]
+            },
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "nodeKind": "some",
+        "path": "$",
+        "reason": "the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.sqlite-some-unpaired-low-surrogate",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": {
+              "codeUnits": [
+                34,
+                116,
+                97,
+                103,
+                115,
+                34,
+                46,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                73,
+                100,
+                34,
+                32,
+                61,
+                32,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                115,
+                34,
+                46,
+                34,
+                105,
+                100,
+                34,
+                32,
+                65,
+                78,
+                68,
+                32,
+                39,
+                120,
+                39,
+                32,
+                60,
+                62,
+                32,
+                39,
+                56320,
+                39
+              ]
+            },
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": null,
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.guard.joins.sqlite-some-well-formed-pair",
+      "kind": "sql-guard",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '😀'",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    }
+  ]
+}

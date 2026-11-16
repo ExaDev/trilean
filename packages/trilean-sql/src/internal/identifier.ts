@@ -90,3 +90,17 @@ export function valueProblem(
     ? "SQLite's GLOB reads a pattern only up to its first NUL character, so the pattern would match as a shorter one"
     : undefined;
 }
+
+/**
+ * Why SQL text a caller wrote, which the compiler writes into the statement as given (a collection's `join`), cannot be carried, or `undefined` when it can. The same two classes a name is refused for apply, in both dialects: the NUL character, which ends the statement text SQLite is given ("zSql is read up to the first zero terminator", https://www.sqlite.org/c3ref/prepare.html) and which PostgreSQL does not accept in a statement (a string constant "cannot contain the character with code zero", https://www.postgresql.org/docs/current/sql-syntax-lexical.html), so the engine would read a statement other than the one compiled; and an unpaired UTF-16 surrogate, which has no UTF-8 form, the encoding both engines read the statement in. Nothing else of the text is judged: it is the caller's SQL.
+ */
+export function statementTextProblem(text: string): string | undefined {
+  if (text.includes(NUL)) {
+    return "the SQL text contains a NUL character, which a statement cannot carry";
+  }
+  if (!text.isWellFormed()) {
+    return "the SQL text contains an unpaired surrogate, which has no UTF-8 form";
+  }
+
+  return undefined;
+}

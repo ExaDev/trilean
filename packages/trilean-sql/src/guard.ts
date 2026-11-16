@@ -6,7 +6,11 @@ import type {
   SqlDialect,
   SqlParamType,
 } from "./options";
-import { identifierProblem, valueProblem } from "./internal/identifier";
+import {
+  identifierProblem,
+  statementTextProblem,
+  valueProblem,
+} from "./internal/identifier";
 import { assertImplementedDialect } from "./options";
 import {
   renderPostgresPattern,
@@ -164,6 +168,15 @@ function resolveCollectionForGuard(
         name: binding.table,
         problem: tableProblem,
       },
+    };
+  }
+
+  const joinProblem = statementTextProblem(binding.join);
+  if (joinProblem !== undefined) {
+    return {
+      kind,
+      path,
+      reason: `the join mapped for this collection cannot be used: ${joinProblem}`,
     };
   }
 

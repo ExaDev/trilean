@@ -88,6 +88,13 @@
         "ts": []
       }
     },
+    "trilean-sql/compile/joins.json": {
+      "cases": 60,
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
+    },
     "trilean-sql/compile/matrix.json": {
       "cases": 230,
       "skip": {
@@ -293,6 +300,13 @@
     },
     "trilean-sql/guard/identifiers-length.json": {
       "cases": 40,
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
+    },
+    "trilean-sql/guard/joins.json": {
+      "cases": 60,
       "skip": {
         "rust": [],
         "ts": []

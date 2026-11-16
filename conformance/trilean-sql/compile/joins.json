@@ -1,0 +1,3472 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" IS NOT NULL AND NOT \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN FALSE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE TRUE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"score\" IS NOT NULL) AS \"item_ok\" FROM \"tags\" WHERE \"tags\".\"subjectId\" = \"subjects\".\"id\"\nAND\t1 = 1) AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.postgres-every-line-break-and-tab",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"\nAND\t1 = 1",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'every' at $: the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "every",
+          "path": "$",
+          "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.postgres-every-nul-at-the-end",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"\u0000",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'every' at $: the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "every",
+          "path": "$",
+          "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.postgres-every-nul-at-the-start",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\u0000\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'every' at $: the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "every",
+          "path": "$",
+          "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.postgres-every-nul-in-the-middle",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \u0000\"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" IS NOT NULL AND NOT \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN FALSE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE TRUE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"score\" IS NOT NULL) AS \"item_ok\" FROM \"tags\" WHERE \"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '\u0001\u001f') AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.postgres-every-other-control-characters",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '\u0001\u001f'",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" IS NOT NULL AND NOT \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN FALSE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE TRUE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"score\" IS NOT NULL) AS \"item_ok\" FROM \"tags\" WHERE \"tags\".\"subjectId\" = \"subjects\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.postgres-every-plain",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" IS NOT NULL AND NOT \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN FALSE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE TRUE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"score\" IS NOT NULL) AS \"item_ok\" FROM \"tags\" WHERE \"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> 'it''s' /* c */) AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.postgres-every-quote-and-block-comment",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> 'it''s' /* c */",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'every' at $: the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "every",
+          "path": "$",
+          "reason": "the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.postgres-every-unpaired-high-surrogate",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": {
+              "codeUnits": [
+                34,
+                116,
+                97,
+                103,
+                115,
+                34,
+                46,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                73,
+                100,
+                34,
+                32,
+                61,
+                32,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                115,
+                34,
+                46,
+                34,
+                105,
+                100,
+                34,
+                32,
+                65,
+                78,
+                68,
+                32,
+                39,
+                120,
+                39,
+                32,
+                60,
+                62,
+                32,
+                39,
+                55296,
+                39
+              ]
+            },
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'every' at $: the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "every",
+          "path": "$",
+          "reason": "the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.postgres-every-unpaired-low-surrogate",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": {
+              "codeUnits": [
+                34,
+                116,
+                97,
+                103,
+                115,
+                34,
+                46,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                73,
+                100,
+                34,
+                32,
+                61,
+                32,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                115,
+                34,
+                46,
+                34,
+                105,
+                100,
+                34,
+                32,
+                65,
+                78,
+                68,
+                32,
+                39,
+                120,
+                39,
+                32,
+                60,
+                62,
+                32,
+                39,
+                56320,
+                39
+              ]
+            },
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" IS NOT NULL AND NOT \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN FALSE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE TRUE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"score\" IS NOT NULL) AS \"item_ok\" FROM \"tags\" WHERE \"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '😀') AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.postgres-every-well-formed-pair",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '😀'",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 0
+          }
+        ],
+        "sql": "((SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_value\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE MAX(\"item_value\") END FROM (SELECT \"filter_ok\", \"item_value\" FROM (SELECT TRUE AS \"filter_ok\", \"score\" AS \"item_value\" FROM \"tags\" WHERE \"tags\".\"subjectId\" = \"subjects\".\"id\"\nAND\t1 = 1) AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\") > $1::double precision)"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.postgres-fold-line-break-and-tab",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"\nAND\t1 = 1",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'fold' at $.left: the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "fold",
+          "path": "$.left",
+          "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.postgres-fold-nul-at-the-end",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"\u0000",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'fold' at $.left: the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "fold",
+          "path": "$.left",
+          "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.postgres-fold-nul-at-the-start",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\u0000\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'fold' at $.left: the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "fold",
+          "path": "$.left",
+          "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.postgres-fold-nul-in-the-middle",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \u0000\"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 0
+          }
+        ],
+        "sql": "((SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_value\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE MAX(\"item_value\") END FROM (SELECT \"filter_ok\", \"item_value\" FROM (SELECT TRUE AS \"filter_ok\", \"score\" AS \"item_value\" FROM \"tags\" WHERE \"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '\u0001\u001f') AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\") > $1::double precision)"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.postgres-fold-other-control-characters",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '\u0001\u001f'",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 0
+          }
+        ],
+        "sql": "((SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_value\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE MAX(\"item_value\") END FROM (SELECT \"filter_ok\", \"item_value\" FROM (SELECT TRUE AS \"filter_ok\", \"score\" AS \"item_value\" FROM \"tags\" WHERE \"tags\".\"subjectId\" = \"subjects\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\") > $1::double precision)"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.postgres-fold-plain",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 0
+          }
+        ],
+        "sql": "((SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_value\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE MAX(\"item_value\") END FROM (SELECT \"filter_ok\", \"item_value\" FROM (SELECT TRUE AS \"filter_ok\", \"score\" AS \"item_value\" FROM \"tags\" WHERE \"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> 'it''s' /* c */) AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\") > $1::double precision)"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.postgres-fold-quote-and-block-comment",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> 'it''s' /* c */",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'fold' at $.left: the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "fold",
+          "path": "$.left",
+          "reason": "the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.postgres-fold-unpaired-high-surrogate",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": {
+              "codeUnits": [
+                34,
+                116,
+                97,
+                103,
+                115,
+                34,
+                46,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                73,
+                100,
+                34,
+                32,
+                61,
+                32,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                115,
+                34,
+                46,
+                34,
+                105,
+                100,
+                34,
+                32,
+                65,
+                78,
+                68,
+                32,
+                39,
+                120,
+                39,
+                32,
+                60,
+                62,
+                32,
+                39,
+                55296,
+                39
+              ]
+            },
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'fold' at $.left: the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "fold",
+          "path": "$.left",
+          "reason": "the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.postgres-fold-unpaired-low-surrogate",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": {
+              "codeUnits": [
+                34,
+                116,
+                97,
+                103,
+                115,
+                34,
+                46,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                73,
+                100,
+                34,
+                32,
+                61,
+                32,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                115,
+                34,
+                46,
+                34,
+                105,
+                100,
+                34,
+                32,
+                65,
+                78,
+                68,
+                32,
+                39,
+                120,
+                39,
+                32,
+                60,
+                62,
+                32,
+                39,
+                56320,
+                39
+              ]
+            },
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 0
+          }
+        ],
+        "sql": "((SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_value\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE MAX(\"item_value\") END FROM (SELECT \"filter_ok\", \"item_value\" FROM (SELECT TRUE AS \"filter_ok\", \"score\" AS \"item_value\" FROM \"tags\" WHERE \"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '😀') AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\") > $1::double precision)"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.postgres-fold-well-formed-pair",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '😀'",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"score\" IS NOT NULL) AS \"item_ok\" FROM \"tags\" WHERE \"tags\".\"subjectId\" = \"subjects\".\"id\"\nAND\t1 = 1) AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.postgres-some-line-break-and-tab",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"\nAND\t1 = 1",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'some' at $: the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "some",
+          "path": "$",
+          "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.postgres-some-nul-at-the-end",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"\u0000",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'some' at $: the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "some",
+          "path": "$",
+          "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.postgres-some-nul-at-the-start",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\u0000\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'some' at $: the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "some",
+          "path": "$",
+          "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.postgres-some-nul-in-the-middle",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \u0000\"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"score\" IS NOT NULL) AS \"item_ok\" FROM \"tags\" WHERE \"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '\u0001\u001f') AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.postgres-some-other-control-characters",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '\u0001\u001f'",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"score\" IS NOT NULL) AS \"item_ok\" FROM \"tags\" WHERE \"tags\".\"subjectId\" = \"subjects\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.postgres-some-plain",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"score\" IS NOT NULL) AS \"item_ok\" FROM \"tags\" WHERE \"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> 'it''s' /* c */) AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.postgres-some-quote-and-block-comment",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> 'it''s' /* c */",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'some' at $: the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "some",
+          "path": "$",
+          "reason": "the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.postgres-some-unpaired-high-surrogate",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": {
+              "codeUnits": [
+                34,
+                116,
+                97,
+                103,
+                115,
+                34,
+                46,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                73,
+                100,
+                34,
+                32,
+                61,
+                32,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                115,
+                34,
+                46,
+                34,
+                105,
+                100,
+                34,
+                32,
+                65,
+                78,
+                68,
+                32,
+                39,
+                120,
+                39,
+                32,
+                60,
+                62,
+                32,
+                39,
+                55296,
+                39
+              ]
+            },
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'some' at $: the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "some",
+          "path": "$",
+          "reason": "the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.postgres-some-unpaired-low-surrogate",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": {
+              "codeUnits": [
+                34,
+                116,
+                97,
+                103,
+                115,
+                34,
+                46,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                73,
+                100,
+                34,
+                32,
+                61,
+                32,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                115,
+                34,
+                46,
+                34,
+                105,
+                100,
+                34,
+                32,
+                65,
+                78,
+                68,
+                32,
+                39,
+                120,
+                39,
+                32,
+                60,
+                62,
+                32,
+                39,
+                56320,
+                39
+              ]
+            },
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"score\" IS NOT NULL) AS \"item_ok\" FROM \"tags\" WHERE \"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '😀') AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.postgres-some-well-formed-pair",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '😀'",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" IS NOT NULL AND NOT \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN FALSE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE TRUE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"score\" IS NOT NULL) AS \"item_ok\" FROM \"tags\" WHERE \"tags\".\"subjectId\" = \"subjects\".\"id\"\nAND\t1 = 1) AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.sqlite-every-line-break-and-tab",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"\nAND\t1 = 1",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'every' at $: the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "every",
+          "path": "$",
+          "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.sqlite-every-nul-at-the-end",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"\u0000",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'every' at $: the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "every",
+          "path": "$",
+          "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.sqlite-every-nul-at-the-start",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\u0000\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'every' at $: the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "every",
+          "path": "$",
+          "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.sqlite-every-nul-in-the-middle",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \u0000\"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" IS NOT NULL AND NOT \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN FALSE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE TRUE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"score\" IS NOT NULL) AS \"item_ok\" FROM \"tags\" WHERE \"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '\u0001\u001f') AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.sqlite-every-other-control-characters",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '\u0001\u001f'",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" IS NOT NULL AND NOT \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN FALSE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE TRUE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"score\" IS NOT NULL) AS \"item_ok\" FROM \"tags\" WHERE \"tags\".\"subjectId\" = \"subjects\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.sqlite-every-plain",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" IS NOT NULL AND NOT \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN FALSE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE TRUE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"score\" IS NOT NULL) AS \"item_ok\" FROM \"tags\" WHERE \"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> 'it''s' /* c */) AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.sqlite-every-quote-and-block-comment",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> 'it''s' /* c */",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'every' at $: the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "every",
+          "path": "$",
+          "reason": "the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.sqlite-every-unpaired-high-surrogate",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": {
+              "codeUnits": [
+                34,
+                116,
+                97,
+                103,
+                115,
+                34,
+                46,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                73,
+                100,
+                34,
+                32,
+                61,
+                32,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                115,
+                34,
+                46,
+                34,
+                105,
+                100,
+                34,
+                32,
+                65,
+                78,
+                68,
+                32,
+                39,
+                120,
+                39,
+                32,
+                60,
+                62,
+                32,
+                39,
+                55296,
+                39
+              ]
+            },
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'every' at $: the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "every",
+          "path": "$",
+          "reason": "the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.sqlite-every-unpaired-low-surrogate",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": {
+              "codeUnits": [
+                34,
+                116,
+                97,
+                103,
+                115,
+                34,
+                46,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                73,
+                100,
+                34,
+                32,
+                61,
+                32,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                115,
+                34,
+                46,
+                34,
+                105,
+                100,
+                34,
+                32,
+                65,
+                78,
+                68,
+                32,
+                39,
+                120,
+                39,
+                32,
+                60,
+                62,
+                32,
+                39,
+                56320,
+                39
+              ]
+            },
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" IS NOT NULL AND NOT \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN FALSE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE TRUE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"score\" IS NOT NULL) AS \"item_ok\" FROM \"tags\" WHERE \"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '😀') AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.sqlite-every-well-formed-pair",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '😀'",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "every"
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 0
+          }
+        ],
+        "sql": "((SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_value\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE MAX(\"item_value\") END FROM (SELECT \"filter_ok\", \"item_value\" FROM (SELECT TRUE AS \"filter_ok\", \"score\" AS \"item_value\" FROM \"tags\" WHERE \"tags\".\"subjectId\" = \"subjects\".\"id\"\nAND\t1 = 1) AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\") > ?)"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.sqlite-fold-line-break-and-tab",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"\nAND\t1 = 1",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'fold' at $.left: the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "fold",
+          "path": "$.left",
+          "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.sqlite-fold-nul-at-the-end",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"\u0000",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'fold' at $.left: the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "fold",
+          "path": "$.left",
+          "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.sqlite-fold-nul-at-the-start",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\u0000\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'fold' at $.left: the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "fold",
+          "path": "$.left",
+          "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.sqlite-fold-nul-in-the-middle",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \u0000\"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 0
+          }
+        ],
+        "sql": "((SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_value\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE MAX(\"item_value\") END FROM (SELECT \"filter_ok\", \"item_value\" FROM (SELECT TRUE AS \"filter_ok\", \"score\" AS \"item_value\" FROM \"tags\" WHERE \"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '\u0001\u001f') AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\") > ?)"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.sqlite-fold-other-control-characters",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '\u0001\u001f'",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 0
+          }
+        ],
+        "sql": "((SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_value\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE MAX(\"item_value\") END FROM (SELECT \"filter_ok\", \"item_value\" FROM (SELECT TRUE AS \"filter_ok\", \"score\" AS \"item_value\" FROM \"tags\" WHERE \"tags\".\"subjectId\" = \"subjects\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\") > ?)"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.sqlite-fold-plain",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 0
+          }
+        ],
+        "sql": "((SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_value\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE MAX(\"item_value\") END FROM (SELECT \"filter_ok\", \"item_value\" FROM (SELECT TRUE AS \"filter_ok\", \"score\" AS \"item_value\" FROM \"tags\" WHERE \"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> 'it''s' /* c */) AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\") > ?)"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.sqlite-fold-quote-and-block-comment",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> 'it''s' /* c */",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'fold' at $.left: the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "fold",
+          "path": "$.left",
+          "reason": "the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.sqlite-fold-unpaired-high-surrogate",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": {
+              "codeUnits": [
+                34,
+                116,
+                97,
+                103,
+                115,
+                34,
+                46,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                73,
+                100,
+                34,
+                32,
+                61,
+                32,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                115,
+                34,
+                46,
+                34,
+                105,
+                100,
+                34,
+                32,
+                65,
+                78,
+                68,
+                32,
+                39,
+                120,
+                39,
+                32,
+                60,
+                62,
+                32,
+                39,
+                55296,
+                39
+              ]
+            },
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'fold' at $.left: the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "fold",
+          "path": "$.left",
+          "reason": "the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.sqlite-fold-unpaired-low-surrogate",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": {
+              "codeUnits": [
+                34,
+                116,
+                97,
+                103,
+                115,
+                34,
+                46,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                73,
+                100,
+                34,
+                32,
+                61,
+                32,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                115,
+                34,
+                46,
+                34,
+                105,
+                100,
+                34,
+                32,
+                65,
+                78,
+                68,
+                32,
+                39,
+                120,
+                39,
+                32,
+                60,
+                62,
+                32,
+                39,
+                56320,
+                39
+              ]
+            },
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [
+          {
+            "type": "number",
+            "value": 0
+          }
+        ],
+        "sql": "((SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_value\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE MAX(\"item_value\") END FROM (SELECT \"filter_ok\", \"item_value\" FROM (SELECT TRUE AS \"filter_ok\", \"score\" AS \"item_value\" FROM \"tags\" WHERE \"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '😀') AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\") > ?)"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.sqlite-fold-well-formed-pair",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '😀'",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "collection": "c",
+          "combiner": {
+            "item": {
+              "key": "k",
+              "kind": "reference"
+            },
+            "mode": "max"
+          },
+          "kind": "fold"
+        },
+        "op": "gt",
+        "right": {
+          "kind": "numberLiteral",
+          "value": 0
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"score\" IS NOT NULL) AS \"item_ok\" FROM \"tags\" WHERE \"tags\".\"subjectId\" = \"subjects\".\"id\"\nAND\t1 = 1) AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.sqlite-some-line-break-and-tab",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"\nAND\t1 = 1",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'some' at $: the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "some",
+          "path": "$",
+          "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.sqlite-some-nul-at-the-end",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"\u0000",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'some' at $: the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "some",
+          "path": "$",
+          "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.sqlite-some-nul-at-the-start",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\u0000\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'some' at $: the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "some",
+          "path": "$",
+          "reason": "the join mapped for this collection cannot be used: the SQL text contains a NUL character, which a statement cannot carry"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.sqlite-some-nul-in-the-middle",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \u0000\"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"score\" IS NOT NULL) AS \"item_ok\" FROM \"tags\" WHERE \"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '\u0001\u001f') AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.sqlite-some-other-control-characters",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '\u0001\u001f'",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"score\" IS NOT NULL) AS \"item_ok\" FROM \"tags\" WHERE \"tags\".\"subjectId\" = \"subjects\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.sqlite-some-plain",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\"",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"score\" IS NOT NULL) AS \"item_ok\" FROM \"tags\" WHERE \"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> 'it''s' /* c */) AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.sqlite-some-quote-and-block-comment",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> 'it''s' /* c */",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'some' at $: the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "some",
+          "path": "$",
+          "reason": "the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.sqlite-some-unpaired-high-surrogate",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": {
+              "codeUnits": [
+                34,
+                116,
+                97,
+                103,
+                115,
+                34,
+                46,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                73,
+                100,
+                34,
+                32,
+                61,
+                32,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                115,
+                34,
+                46,
+                34,
+                105,
+                100,
+                34,
+                32,
+                65,
+                78,
+                68,
+                32,
+                39,
+                120,
+                39,
+                32,
+                60,
+                62,
+                32,
+                39,
+                55296,
+                39
+              ]
+            },
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "message": "cannot compile 'some' at $: the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form",
+          "name": "UnsupportedNodeError",
+          "nodeKind": "some",
+          "path": "$",
+          "reason": "the join mapped for this collection cannot be used: the SQL text contains an unpaired surrogate, which has no UTF-8 form"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.sqlite-some-unpaired-low-surrogate",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": {
+              "codeUnits": [
+                34,
+                116,
+                97,
+                103,
+                115,
+                34,
+                46,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                73,
+                100,
+                34,
+                32,
+                61,
+                32,
+                34,
+                115,
+                117,
+                98,
+                106,
+                101,
+                99,
+                116,
+                115,
+                34,
+                46,
+                34,
+                105,
+                100,
+                34,
+                32,
+                65,
+                78,
+                68,
+                32,
+                39,
+                120,
+                39,
+                32,
+                60,
+                62,
+                32,
+                39,
+                56320,
+                39
+              ]
+            },
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"score\" IS NOT NULL) AS \"item_ok\" FROM \"tags\" WHERE \"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '😀') AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the SQL text of a collection join, which is written into the statement as given)",
+      "id": "sql.compile.joins.sqlite-some-well-formed-pair",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "score",
+                "paramType": "number"
+              }
+            },
+            "join": "\"tags\".\"subjectId\" = \"subjects\".\"id\" AND 'x' <> '😀'",
+            "table": "tags"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "age",
+            "paramType": "number"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    }
+  ]
+}
