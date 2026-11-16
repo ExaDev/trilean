@@ -1,3 +1,9 @@
+## [3.0.5](https://github.com/ExaDev/trilean/compare/trilean-sql%403.0.4...trilean-sql%403.0.5) (2026-11-16)
+
+### Bug Fixes
+
+* **trilean-sql:** refuse a PostgreSQL identifier past its 63 bytes ([ead8ed7](https://github.com/ExaDev/trilean/commit/ead8ed723626daca7166ff81010e703e1aaf1381)), closes [#163](https://github.com/ExaDev/trilean/issues/163)
+
 ## [3.0.4](https://github.com/ExaDev/trilean/compare/trilean-sql%403.0.3...trilean-sql%403.0.4) (2026-11-16)
 
 ### Tests
