@@ -19,7 +19,7 @@ const LAYOUT: Layout = Layout { depth: 2 };
 const NOT_READ: [&str; 3] = ["fixtures", "schema", "runner"];
 
 /// The tree under `root`, with a directory in `NOT_READ` listed and not entered when `skip_unread` is set.
-fn read_tree(root: &Path, skip_unread: bool) -> Result<Tree, String> {
+pub fn read_tree(root: &Path, skip_unread: bool) -> Result<Tree, String> {
     let mut tree = Tree::new();
     fn walk(root: &Path, relative: &str, skip_unread: bool, tree: &mut Tree) -> Result<(), String> {
         let directory = if relative.is_empty() {
