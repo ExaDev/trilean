@@ -269,6 +269,48 @@ importers:
         specifier: 5.112.2
         version: 5.112.2(esbuild@0.28.2)(lightningcss@1.33.0)(postcss@8.5.27)(sharp@0.35.5(@types/node@26.6.5))(uglify-js@3.19.3)
 
+  packages/corpus-format:
+    devDependencies:
+      '@arethetypeswrong/cli':
+        specifier: ^0.18.5
+        version: 0.18.5
+      '@exadev/eslint-config':
+        specifier: 3.0.0
+        version: 3.0.0(@eslint/json@2.1.1)(eslint@10.14.0(jiti@2.6.1)(supports-color@10.2.2))(supports-color@10.2.2)(typescript-eslint@8.71.1(eslint@10.14.0(jiti@2.6.1)(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3))(typescript@6.0.3)
+      '@types/node':
+        specifier: ^26.6.5
+        version: 26.6.5
+      eslint:
+        specifier: ^10.14.0
+        version: 10.14.0(jiti@2.6.1)(supports-color@10.2.2)
+      eslint-config-prettier:
+        specifier: ^10.1.8
+        version: 10.1.8(eslint@10.14.0(jiti@2.6.1)(supports-color@10.2.2))
+      eslint-plugin-prettier:
+        specifier: ^5.5.6
+        version: 5.5.6(eslint-config-prettier@10.1.8(eslint@10.14.0(jiti@2.6.1)(supports-color@10.2.2)))(eslint@10.14.0(jiti@2.6.1)(supports-color@10.2.2))(prettier@3.9.10)
+      globals:
+        specifier: ^17.14.0
+        version: 17.14.0
+      prettier:
+        specifier: ^3.9.10
+        version: 3.9.10
+      publint:
+        specifier: ^0.3.25
+        version: 0.3.25
+      turbo:
+        specifier: ^2.11.10
+        version: 2.11.10
+      typescript:
+        specifier: ^6.0.3
+        version: 6.0.3
+      typescript-eslint:
+        specifier: ^8.71.1
+        version: 8.71.1(eslint@10.14.0(jiti@2.6.1)(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3)
+      vitest:
+        specifier: ^5.1.0
+        version: 5.1.0(@types/node@26.6.5)(vite@8.3.6(@types/node@26.6.5)(esbuild@0.28.2)(jiti@2.6.1)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1))
+
   packages/trilean:
     dependencies:
       trilean-regex:
@@ -4981,7 +5023,7 @@ snapshots:
       commander: 10.0.1
       marked: 9.1.6
       marked-terminal: 7.3.0(marked@9.1.6)
-      semver: 7.8.5
+      semver: 7.8.6
 
   '@arethetypeswrong/core@0.18.5':
     dependencies:

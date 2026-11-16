@@ -1,6 +1,7 @@
 [workspace]
 resolver = "2"
 members = [
+    "bindings/corpus-format-wasm",
     "bindings/trilean-regex-wasm",
     "crates/corpus-format",
     "crates/json-shape",

@@ -172,6 +172,9 @@ jobs:
             done
             # A consumer built from the same package with Rollup and with webpack, in production mode, run in Chromium and in Node.
             pnpm --filter trilean-regex test:e2e
+            # The corpus format package is built the same way, and its consumer is built with the same bundlers.
+            pnpm --filter @exadev/corpus-format build
+            pnpm --filter @exadev/corpus-format test:e2e
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: packed-packages

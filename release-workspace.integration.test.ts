@@ -207,8 +207,10 @@ function expectedSources(
   metadata: CargoMetadata,
   packageName: string,
 ): readonly string[] {
+  // The binding crate is named after the package without its npm scope.
+  const crateName = packageName.replace(/^@[^/]+\//, "");
   const binding = metadata.packages.find(
-    ({ name }) => name === `${packageName}-wasm`,
+    ({ name }) => name === `${crateName}-wasm`,
   );
   if (binding === undefined) {
     return [];
@@ -254,6 +256,15 @@ describe("release-workspace.config.ts packageSources against the Rust workspace"
     expect(expectedSources(cargoMetadata(), "trilean-regex")).toEqual([
       "rust/bindings/trilean-regex-wasm",
       "rust/crates/trilean-regex",
+    ]);
+  });
+
+  it("reads a scoped package's binding crate by its name without the scope, and follows the crates it links", () => {
+    expect(expectedSources(cargoMetadata(), "@exadev/corpus-format")).toEqual([
+      "rust/bindings/corpus-format-wasm",
+      "rust/crates/corpus-format",
+      "rust/crates/json-shape",
+      "rust/crates/json-shape-derive",
     ]);
   });
 });

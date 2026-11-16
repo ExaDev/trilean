@@ -11,6 +11,7 @@ The pnpm workspace holding the trilean packages. Each package is versioned, rele
 | [trilean](packages/trilean/README.md) | `packages/trilean` | [`trilean`](https://www.npmjs.com/package/trilean) on npm, [`@exadev/trilean`](https://github.com/ExaDev/trilean/pkgs/npm/trilean) on GitHub Packages |
 | [trilean-sql](packages/trilean-sql/README.md) | `packages/trilean-sql` | [`trilean-sql`](https://www.npmjs.com/package/trilean-sql) on npm, [`@exadev/trilean-sql`](https://github.com/ExaDev/trilean/pkgs/npm/trilean-sql) on GitHub Packages |
 | [trilean-regex](packages/trilean-regex/README.md) | `packages/trilean-regex` | [`trilean-regex`](https://www.npmjs.com/package/trilean-regex) on npm, [`@exadev/trilean-regex`](https://github.com/ExaDev/trilean/pkgs/npm/trilean-regex) on GitHub Packages |
+| [@exadev/corpus-format](packages/corpus-format/README.md) | `packages/corpus-format` | [`@exadev/corpus-format`](https://www.npmjs.com/package/@exadev/corpus-format) on npm |
 
 Each package is versioned, released, and published independently of every other, from its own commit history. There is no lockstep version shared across the workspace.
 
@@ -41,7 +42,8 @@ The `pnpm <task>` scripts are thin wrappers over `turbo run _<task>`; the unders
 ├── packages/
 │   ├── trilean/        the evaluation library, with its own README, CHANGELOG, and configs
 │   ├── trilean-sql/    the SQL compiler over trilean's predicate trees, likewise self-contained
-│   └── trilean-regex/  the portable regex grammar trilean-sql pushes down where it can, likewise self-contained
+│   ├── trilean-regex/  the portable regex grammar trilean-sql pushes down where it can, likewise self-contained
+│   └── corpus-format/  the format of the conformance corpus as one wasm build, the core of every JavaScript runner of it
 ├── conformance/        language-neutral cases every implementation of a package runs, and their format (its own README)
 ├── rust/               the Rust workspace: its crates (the JSON shape mechanism, its derive and the corpus loader), toolchain pin and crate allowlist
 ├── scripts/            the checks that run outside turbo: every `check-*` script has a test that CI runs on pull requests; `rust.sh` has `test-rust-sh.sh`, and `rust-paths.sh` and `rust-checks.sh` are exercised by the pre-push and turbo-scope tests and by the `rust` job; the pre-push hook runs the Rust ones when a push touches Rust (`check-tool-pins.py` also checks against crates.io on a schedule)

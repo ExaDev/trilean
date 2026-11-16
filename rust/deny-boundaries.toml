@@ -17,6 +17,6 @@ deny = [
     { crate = "quote", wrappers = ["json-shape-derive", "serde_derive", "syn", "wasm-bindgen-macro", "wasm-bindgen-macro-support"], reason = "Only the derive macros generate code; syn's printing feature uses it." },
     { crate = "proc-macro2", wrappers = ["json-shape-derive", "quote", "serde_derive", "syn", "wasm-bindgen-macro-support"], reason = "The token types of the derive macros and the crates they are written with." },
     # The libraries that cross the boundary to JavaScript belong in a binding crate, never in a crate that carries logic, which builds and tests natively without a wasm toolchain.
-    { crate = "wasm-bindgen", wrappers = ["js-sys", "trilean-regex-wasm"], reason = "The glue to JavaScript belongs in a binding crate, never in a crate that carries logic." },
-    { crate = "js-sys", wrappers = ["trilean-regex-wasm"], reason = "JavaScript's built-in objects belong in a binding crate, never in a crate that carries logic." },
+    { crate = "wasm-bindgen", wrappers = ["js-sys", "corpus-format-wasm", "trilean-regex-wasm"], reason = "The glue to JavaScript belongs in a binding crate, never in a crate that carries logic." },
+    { crate = "js-sys", wrappers = ["corpus-format-wasm", "trilean-regex-wasm"], reason = "JavaScript's built-in objects belong in a binding crate, never in a crate that carries logic." },
 ]
