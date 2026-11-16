@@ -67,6 +67,13 @@
         "ts": []
       }
     },
+    "trilean-sql/compile/identifiers-length.json": {
+      "cases": 40,
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
+    },
     "trilean-sql/compile/identifiers-refused.json": {
       "cases": 182,
       "skip": {
@@ -139,6 +146,13 @@
     },
     "trilean-sql/compile/sqlite.predicates.json": {
       "cases": 2,
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
+    },
+    "trilean-sql/execute/identifiers-long.json": {
+      "cases": 8,
       "skip": {
         "rust": [],
         "ts": []
@@ -272,6 +286,13 @@
     },
     "trilean-sql/guard/guard.supported.json": {
       "cases": 15,
+      "skip": {
+        "rust": [],
+        "ts": []
+      }
+    },
+    "trilean-sql/guard/identifiers-length.json": {
+      "cases": 40,
       "skip": {
         "rust": [],
         "ts": []

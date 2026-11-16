@@ -154,9 +154,9 @@ The cases are the specification of the package's behaviour: the reason codes, th
 | `regex-match` | 139 |
 | `regex-parse` | 98 |
 | `serialise` | 38 |
-| `sql-compile` | 1388 |
-| `sql-execute` | 1155 |
-| `sql-guard` | 336 |
+| `sql-compile` | 1428 |
+| `sql-execute` | 1163 |
+| `sql-guard` | 376 |
 | `sql-pattern` | 210 |
 | `validate` | 127 |
 
@@ -513,6 +513,12 @@ The PostgreSQL integration tests are cases of `trilean-sql/execute`, and the PGl
 | sqlite-instant.unit.test.ts | is the work the expression does | S3 |
 | sqlite-instant.unit.test.ts | refuses %s out of range | S3 |
 | sqlite-instant.unit.test.ts | reads %s at the top of its range | S3 |
+| identifier.unit.test.ts | is the 63 bytes PostgreSQL documents | S3 |
+| identifier.unit.test.ts | accepts a %s segment of exactly the limit and refuses one a byte over | S3 |
+| identifier.unit.test.ts | counts bytes and not characters: %s characters | S3 |
+| identifier.unit.test.ts | counts each dot-separated segment on its own | S3 |
+| identifier.unit.test.ts | reports the longest segment and never repeats the name | S3 |
+| identifier.unit.test.ts | is a rule of PostgreSQL only: SQLite carries a longer name | S3 |
 | pglite.identifiers.integration.test.ts | does not stop a name that can be carried from running | S1 |
 | pglite.identifiers.integration.test.ts | is refused at compile time, so the engine never sees it | S1 |
 | pglite.identifiers.integration.test.ts | is quoted once and the instant comparison runs and selects the later row | S1 |

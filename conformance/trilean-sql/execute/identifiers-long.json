@@ -1,0 +1,286 @@
+{
+  "cases": [
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "r1",
+          "r2",
+          "r3"
+        ]
+      },
+      "fixture": "identifiers-long",
+      "from": "recorded: trilean-sql src/internal/identifier.ts (a column name at the byte limit of a PostgreSQL identifier)",
+      "id": "sql.execute.identifiers-long.postgres-column-accent-62-bytes",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "ééééééééééééééééééééééééééééééé": {
+              "column": "ééééééééééééééééééééééééééééééé",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "ééééééééééééééééééééééééééééééé",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "r3"
+        ]
+      },
+      "fixture": "identifiers-long",
+      "from": "recorded: trilean-sql src/internal/identifier.ts (a column name at the byte limit of a PostgreSQL identifier)",
+      "id": "sql.execute.identifiers-long.postgres-column-ascii-63-bytes",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": {
+              "column": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "r1",
+          "r2",
+          "r3"
+        ]
+      },
+      "fixture": "identifiers-long",
+      "from": "recorded: trilean-sql src/internal/identifier.ts (a column name at the byte limit of a PostgreSQL identifier)",
+      "id": "sql.execute.identifiers-long.postgres-column-emoji-60-bytes",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀": {
+              "column": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "postgres",
+      "expect": {
+        "rows": [
+          "r2",
+          "r3"
+        ]
+      },
+      "fixture": "identifiers-long",
+      "from": "recorded: trilean-sql src/internal/identifier.ts (a column name at the byte limit of a PostgreSQL identifier)",
+      "id": "sql.execute.identifiers-long.postgres-column-euro-63-bytes",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "€€€€€€€€€€€€€€€€€€€€€": {
+              "column": "€€€€€€€€€€€€€€€€€€€€€",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "€€€€€€€€€€€€€€€€€€€€€",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "r1",
+          "r2",
+          "r3"
+        ]
+      },
+      "fixture": "identifiers-long",
+      "from": "recorded: trilean-sql src/internal/identifier.ts (a column name at the byte limit of a PostgreSQL identifier)",
+      "id": "sql.execute.identifiers-long.sqlite-column-accent-62-bytes",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "ééééééééééééééééééééééééééééééé": {
+              "column": "ééééééééééééééééééééééééééééééé",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "ééééééééééééééééééééééééééééééé",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "r3"
+        ]
+      },
+      "fixture": "identifiers-long",
+      "from": "recorded: trilean-sql src/internal/identifier.ts (a column name at the byte limit of a PostgreSQL identifier)",
+      "id": "sql.execute.identifiers-long.sqlite-column-ascii-63-bytes",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": {
+              "column": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "r1",
+          "r2",
+          "r3"
+        ]
+      },
+      "fixture": "identifiers-long",
+      "from": "recorded: trilean-sql src/internal/identifier.ts (a column name at the byte limit of a PostgreSQL identifier)",
+      "id": "sql.execute.identifiers-long.sqlite-column-emoji-60-bytes",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀": {
+              "column": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "expect": {
+        "rows": [
+          "r2",
+          "r3"
+        ]
+      },
+      "fixture": "identifiers-long",
+      "from": "recorded: trilean-sql src/internal/identifier.ts (a column name at the byte limit of a PostgreSQL identifier)",
+      "id": "sql.execute.identifiers-long.sqlite-column-euro-63-bytes",
+      "kind": "sql-execute",
+      "run": {
+        "options": {
+          "columns": {
+            "€€€€€€€€€€€€€€€€€€€€€": {
+              "column": "€€€€€€€€€€€€€€€€€€€€€",
+              "paramType": "number"
+            }
+          }
+        },
+        "tree": {
+          "kind": "compare",
+          "left": {
+            "key": "€€€€€€€€€€€€€€€€€€€€€",
+            "kind": "reference"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 0
+          }
+        }
+      }
+    }
+  ]
+}
