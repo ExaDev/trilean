@@ -8,6 +8,11 @@ import type { SqlDialect } from "../options";
 
 const NUL = "\u0000";
 
+/** The most bytes of an identifier PostgreSQL keeps: "The system uses no more than NAMEDATALEN -1 bytes of an identifier; longer names can be written in commands, but they will be truncated. By default, NAMEDATALEN is 64 so the maximum identifier length is 63 bytes" (https://www.postgresql.org/docs/current/sql-syntax-lexical.html#SQL-SYNTAX-IDENTIFIERS). Each dot-separated segment is an identifier of its own, and the count is of bytes in UTF-8, not of characters. A longer name is cut silently, so two distinct names that agree in their first 63 bytes would name one column. */
+export const POSTGRES_IDENTIFIER_BYTES = 63;
+
+const encoder = new TextEncoder();
+
 /** The most dot-separated segments a column may have: `schema.table.column`. SQLite's expression syntax is `schema-name.table-name.column-name` (https://www.sqlite.org/lang_expr.html). PostgreSQL's page on schemas says that "the even more general syntax database.schema.table can be used too, but at present this is just for pro forma compliance with the SQL standard. If you write a database name, it must be the same as the database you are connected to" (https://www.postgresql.org/docs/current/ddl-schemas.html). The compiler does not know the database the connection is on, so a leading database segment is refused as a choice, and the caller omits it. */
 export const MAX_COLUMN_SEGMENTS: Readonly<Record<SqlDialect, number>> = {
   postgres: 3,
@@ -23,7 +28,7 @@ export const MAX_TABLE_SEGMENTS: Readonly<Record<SqlDialect, number>> = {
 /**
  * Why a column or table name cannot be rendered as a quoted identifier for `dialect`, or `undefined` when it can.
  *
- * Refused: an empty name or segment; the NUL character, which neither engine accepts in a quoted identifier (PostgreSQL: "Quoted identifiers can contain any character, except the character with code zero", https://www.postgresql.org/docs/current/sql-syntax-lexical.html#SQL-SYNTAX-IDENTIFIERS) and which ends the statement text SQLite is given ("zSql is read up to the first zero terminator", https://www.sqlite.org/c3ref/prepare.html); an unpaired UTF-16 surrogate, which has no UTF-8 form, the encoding both engines read the statement in; and more segments than the dialect accepts. Every other character, a quote included, is carried by doubling the quote.
+ * Refused: an empty name or segment; the NUL character, which neither engine accepts in a quoted identifier (PostgreSQL: "Quoted identifiers can contain any character, except the character with code zero", https://www.postgresql.org/docs/current/sql-syntax-lexical.html#SQL-SYNTAX-IDENTIFIERS) and which ends the statement text SQLite is given ("zSql is read up to the first zero terminator", https://www.sqlite.org/c3ref/prepare.html); an unpaired UTF-16 surrogate, which has no UTF-8 form, the encoding both engines read the statement in; more segments than the dialect accepts; and, for PostgreSQL, a segment of more than {@link POSTGRES_IDENTIFIER_BYTES} bytes in UTF-8. Every other character, a quote included, is carried by doubling the quote.
  */
 export function identifierProblem(
   role: "column" | "table",
@@ -49,6 +54,15 @@ export function identifierProblem(
     return dialect === "postgres"
       ? `the name has ${String(segments.length)} dot-separated segments and at most ${String(most)} are accepted for a ${role}: PostgreSQL takes a leading database name only when it is the database the connection is on, which the compiler cannot know`
       : `the name has ${String(segments.length)} dot-separated segments and SQLite accepts at most ${String(most)} for a ${role}`;
+  }
+
+  if (dialect === "postgres") {
+    const longest = Math.max(
+      ...segments.map((segment) => encoder.encode(segment).length),
+    );
+    if (longest > POSTGRES_IDENTIFIER_BYTES) {
+      return `a dot-separated segment of the name is ${String(longest)} bytes in UTF-8 and PostgreSQL keeps at most ${String(POSTGRES_IDENTIFIER_BYTES)} bytes of an identifier, so a longer name is cut short and two names that agree in their first ${String(POSTGRES_IDENTIFIER_BYTES)} bytes would be one`;
+    }
   }
 
   return undefined;

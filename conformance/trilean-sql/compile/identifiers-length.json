@@ -1,0 +1,1304 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"ééééééééééééééééééééééééééééééé\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.postgres-column-accent-62-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "ééééééééééééééééééééééééééééééé"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "éééééééééééééééééééééééééééééééé",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: a dot-separated segment of the name is 64 bytes in UTF-8 and PostgreSQL keeps at most 63 bytes of an identifier, so a longer name is cut short and two names that agree in their first 63 bytes would be one",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.postgres-column-accent-64-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "éééééééééééééééééééééééééééééééé"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.postgres-column-ascii-63-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: a dot-separated segment of the name is 64 bytes in UTF-8 and PostgreSQL keeps at most 63 bytes of an identifier, so a longer name is cut short and two names that agree in their first 63 bytes would be one",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.postgres-column-ascii-64-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.postgres-column-emoji-60-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: a dot-separated segment of the name is 64 bytes in UTF-8 and PostgreSQL keeps at most 63 bytes of an identifier, so a longer name is cut short and two names that agree in their first 63 bytes would be one",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.postgres-column-emoji-64-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"€€€€€€€€€€€€€€€€€€€€€\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.postgres-column-euro-63-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "€€€€€€€€€€€€€€€€€€€€€"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "€€€€€€€€€€€€€€€€€€€€€€",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: a dot-separated segment of the name is 66 bytes in UTF-8 and PostgreSQL keeps at most 63 bytes of an identifier, so a longer name is cut short and two names that agree in their first 63 bytes would be one",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.postgres-column-euro-66-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "€€€€€€€€€€€€€€€€€€€€€€"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "column": "aaaaaaaaaa.bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: a dot-separated segment of the name is 64 bytes in UTF-8 and PostgreSQL keeps at most 63 bytes of an identifier, so a longer name is cut short and two names that agree in their first 63 bytes would be one",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.postgres-column-second-segment-64-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "aaaaaaaaaa.bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\".\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.postgres-column-segments-each-63-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"col\" IS NOT NULL) AS \"item_ok\" FROM \"ééééééééééééééééééééééééééééééé\" WHERE TRUE) AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.postgres-table-accent-62-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "ééééééééééééééééééééééééééééééé"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "collectionKey": "c",
+          "message": "collectionFor(\"c\") returned a name that is not a usable table identifier: a dot-separated segment of the name is 64 bytes in UTF-8 and PostgreSQL keeps at most 63 bytes of an identifier, so a longer name is cut short and two names that agree in their first 63 bytes would be one",
+          "name": "InvalidCollectionTableError",
+          "table": "éééééééééééééééééééééééééééééééé"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.postgres-table-accent-64-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "éééééééééééééééééééééééééééééééé"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"col\" IS NOT NULL) AS \"item_ok\" FROM \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\" WHERE TRUE) AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.postgres-table-ascii-63-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "collectionKey": "c",
+          "message": "collectionFor(\"c\") returned a name that is not a usable table identifier: a dot-separated segment of the name is 64 bytes in UTF-8 and PostgreSQL keeps at most 63 bytes of an identifier, so a longer name is cut short and two names that agree in their first 63 bytes would be one",
+          "name": "InvalidCollectionTableError",
+          "table": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.postgres-table-ascii-64-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"col\" IS NOT NULL) AS \"item_ok\" FROM \"😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀\" WHERE TRUE) AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.postgres-table-emoji-60-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "collectionKey": "c",
+          "message": "collectionFor(\"c\") returned a name that is not a usable table identifier: a dot-separated segment of the name is 64 bytes in UTF-8 and PostgreSQL keeps at most 63 bytes of an identifier, so a longer name is cut short and two names that agree in their first 63 bytes would be one",
+          "name": "InvalidCollectionTableError",
+          "table": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.postgres-table-emoji-64-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"col\" IS NOT NULL) AS \"item_ok\" FROM \"€€€€€€€€€€€€€€€€€€€€€\" WHERE TRUE) AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.postgres-table-euro-63-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "€€€€€€€€€€€€€€€€€€€€€"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "collectionKey": "c",
+          "message": "collectionFor(\"c\") returned a name that is not a usable table identifier: a dot-separated segment of the name is 66 bytes in UTF-8 and PostgreSQL keeps at most 63 bytes of an identifier, so a longer name is cut short and two names that agree in their first 63 bytes would be one",
+          "name": "InvalidCollectionTableError",
+          "table": "€€€€€€€€€€€€€€€€€€€€€€"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.postgres-table-euro-66-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "€€€€€€€€€€€€€€€€€€€€€€"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "collectionKey": "c",
+          "message": "collectionFor(\"c\") returned a name that is not a usable table identifier: a dot-separated segment of the name is 64 bytes in UTF-8 and PostgreSQL keeps at most 63 bytes of an identifier, so a longer name is cut short and two names that agree in their first 63 bytes would be one",
+          "name": "InvalidCollectionTableError",
+          "table": "aaaaaaaaaa.bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        }
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.postgres-table-second-segment-64-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "aaaaaaaaaa.bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"col\" IS NOT NULL) AS \"item_ok\" FROM \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\".\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\" WHERE TRUE) AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.postgres-table-segments-each-63-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "postgres"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"ééééééééééééééééééééééééééééééé\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.sqlite-column-accent-62-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "ééééééééééééééééééééééééééééééé"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"éééééééééééééééééééééééééééééééé\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.sqlite-column-accent-64-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "éééééééééééééééééééééééééééééééé"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.sqlite-column-ascii-63-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.sqlite-column-ascii-64-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.sqlite-column-emoji-60-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.sqlite-column-emoji-64-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"€€€€€€€€€€€€€€€€€€€€€\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.sqlite-column-euro-63-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "€€€€€€€€€€€€€€€€€€€€€"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"€€€€€€€€€€€€€€€€€€€€€€\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.sqlite-column-euro-66-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "€€€€€€€€€€€€€€€€€€€€€€"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"aaaaaaaaaa\".\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.sqlite-column-second-segment-64-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "aaaaaaaaaa.bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\".\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\" IS NOT NULL)"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.sqlite-column-segments-each-63-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "columns": {
+          "k": {
+            "column": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "kind": "exists",
+        "operand": {
+          "key": "k",
+          "kind": "reference"
+        }
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"col\" IS NOT NULL) AS \"item_ok\" FROM \"ééééééééééééééééééééééééééééééé\" WHERE TRUE) AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.sqlite-table-accent-62-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "ééééééééééééééééééééééééééééééé"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"col\" IS NOT NULL) AS \"item_ok\" FROM \"éééééééééééééééééééééééééééééééé\" WHERE TRUE) AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.sqlite-table-accent-64-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "éééééééééééééééééééééééééééééééé"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"col\" IS NOT NULL) AS \"item_ok\" FROM \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\" WHERE TRUE) AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.sqlite-table-ascii-63-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"col\" IS NOT NULL) AS \"item_ok\" FROM \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\" WHERE TRUE) AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.sqlite-table-ascii-64-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"col\" IS NOT NULL) AS \"item_ok\" FROM \"😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀\" WHERE TRUE) AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.sqlite-table-emoji-60-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"col\" IS NOT NULL) AS \"item_ok\" FROM \"😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀\" WHERE TRUE) AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.sqlite-table-emoji-64-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"col\" IS NOT NULL) AS \"item_ok\" FROM \"€€€€€€€€€€€€€€€€€€€€€\" WHERE TRUE) AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.sqlite-table-euro-63-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "€€€€€€€€€€€€€€€€€€€€€"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"col\" IS NOT NULL) AS \"item_ok\" FROM \"€€€€€€€€€€€€€€€€€€€€€€\" WHERE TRUE) AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.sqlite-table-euro-66-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "€€€€€€€€€€€€€€€€€€€€€€"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"col\" IS NOT NULL) AS \"item_ok\" FROM \"aaaaaaaaaa\".\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\" WHERE TRUE) AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.sqlite-table-second-segment-64-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "aaaaaaaaaa.bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    },
+    {
+      "expect": {
+        "params": [],
+        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"col\" IS NOT NULL) AS \"item_ok\" FROM \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\".\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\" WHERE TRUE) AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+      },
+      "from": "recorded: trilean-sql src/internal/identifier.ts (the byte limit of a PostgreSQL identifier)",
+      "id": "sql.compile.identifiers-length.sqlite-table-segments-each-63-bytes",
+      "kind": "sql-compile",
+      "options": {
+        "collections": {
+          "c": {
+            "columns": {
+              "k": {
+                "column": "col"
+              }
+            },
+            "join": "TRUE",
+            "table": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        },
+        "columns": {
+          "k": {
+            "column": "outer"
+          }
+        },
+        "dialect": "sqlite"
+      },
+      "tree": {
+        "collection": "c",
+        "item": {
+          "kind": "exists",
+          "operand": {
+            "key": "k",
+            "kind": "reference"
+          }
+        },
+        "kind": "some"
+      }
+    }
+  ]
+}

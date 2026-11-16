@@ -1,0 +1,42 @@
+{
+  "evaluator": {
+    "collections": {},
+    "idColumn": "id",
+    "table": "long_names"
+  },
+  "tables": {
+    "long_names": {
+      "columns": {
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": "number",
+        "id": "text",
+        "ééééééééééééééééééééééééééééééé": "number",
+        "€€€€€€€€€€€€€€€€€€€€€": "number",
+        "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀": "number"
+      },
+      "primaryKey": "id",
+      "rows": [
+        {
+          "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": -1,
+          "id": "r1",
+          "ééééééééééééééééééééééééééééééé": 1,
+          "€€€€€€€€€€€€€€€€€€€€€": 0,
+          "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀": 2
+        },
+        {
+          "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": 0,
+          "id": "r2",
+          "ééééééééééééééééééééééééééééééé": 4,
+          "€€€€€€€€€€€€€€€€€€€€€": 2,
+          "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀": 6
+        },
+        {
+          "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": 1,
+          "id": "r3",
+          "ééééééééééééééééééééééééééééééé": 7,
+          "€€€€€€€€€€€€€€€€€€€€€": 4,
+          "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀": 10
+        }
+      ]
+    }
+  }
+}

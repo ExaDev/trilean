@@ -1658,8 +1658,12 @@
     },
     {
       "expect": {
-        "params": [],
-        "sql": "(\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\" IS NOT NULL)"
+        "error": {
+          "column": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "message": "columnFor(\"k\") returned a name that is not a usable column identifier: a dot-separated segment of the name is 300 bytes in UTF-8 and PostgreSQL keeps at most 63 bytes of an identifier, so a longer name is cut short and two names that agree in their first 63 bytes would be one",
+          "name": "InvalidColumnError",
+          "referenceKey": "k"
+        }
       },
       "from": "recorded: trilean-sql src/compile.ts (a column named a name of 300 characters under postgres)",
       "id": "sql.compile.identifiers.postgres-a-column-named-a-name-of-300-characters",
@@ -1682,8 +1686,12 @@
     },
     {
       "expect": {
-        "params": [],
-        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\" IS NOT NULL) AS \"item_ok\" FROM \"t\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+        "error": {
+          "column": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "message": "columnFor(\"w\") returned a name that is not a usable column identifier: a dot-separated segment of the name is 300 bytes in UTF-8 and PostgreSQL keeps at most 63 bytes of an identifier, so a longer name is cut short and two names that agree in their first 63 bytes would be one",
+          "name": "InvalidColumnError",
+          "referenceKey": "w"
+        }
       },
       "from": "recorded: trilean-sql src/compile.ts (a collection column named a name of 300 characters under postgres)",
       "id": "sql.compile.identifiers.postgres-a-collection-column-named-a-name-of-300-characters",
@@ -1716,8 +1724,12 @@
     },
     {
       "expect": {
-        "params": [],
-        "sql": "(SELECT CASE WHEN MAX(CASE WHEN \"filter_ok\" AND \"item_ok\" THEN 1 ELSE 0 END) = 1 THEN TRUE WHEN MAX(CASE WHEN \"filter_ok\" IS NULL OR \"item_ok\" IS NULL THEN 1 ELSE 0 END) = 1 THEN NULL ELSE FALSE END FROM (SELECT \"filter_ok\", \"item_ok\" FROM (SELECT TRUE AS \"filter_ok\", (\"w\" IS NOT NULL) AS \"item_ok\" FROM \"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\" WHERE \"t\".\"k\" = \"s\".\"id\") AS \"t\" WHERE \"filter_ok\" IS NULL OR \"filter_ok\") AS \"v\")"
+        "error": {
+          "collectionKey": "tags",
+          "message": "collectionFor(\"tags\") returned a name that is not a usable table identifier: a dot-separated segment of the name is 300 bytes in UTF-8 and PostgreSQL keeps at most 63 bytes of an identifier, so a longer name is cut short and two names that agree in their first 63 bytes would be one",
+          "name": "InvalidCollectionTableError",
+          "table": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        }
       },
       "from": "recorded: trilean-sql src/compile.ts (a collection table named a name of 300 characters under postgres)",
       "id": "sql.compile.identifiers.postgres-a-collection-table-named-a-name-of-300-characters",
