@@ -4,6 +4,7 @@ import Ajv2020 from "ajv/dist/2020.js";
 import type { ValidateFunction } from "ajv";
 import { format, resolveConfig } from "prettier";
 import { describe, expect, it } from "vitest";
+import { fileLimit } from "./corpus-time-limit";
 
 /**
  * The Rust crate json-shape validates two tables of documents with the validator its test types derive: `documents.json`, written by hand for edge cases, and `generated.json`, built from the type descriptors (a minimal accepting document, the other accepting forms and one mutation per constraint). Rust tests check that the schemas beside them (`schema.json` for draft 2020-12, `schema-draft-07.json` for draft-07) and `generated.json` are what the types emit and generate. This test gives the same documents the verdict of the same schemas under Ajv in strict mode, in both drafts, so a derived validator and an emitted schema cannot accept different documents without one of the two suites failing.
@@ -182,26 +183,34 @@ describe("the case schema the Rust types emit", () => {
     ].flatMap(jsonFiles),
   ];
 
-  it("gives every file of the corpus and of the fixtures the verdict the hand-kept schema gives", () => {
-    const disagreements = files.filter(
-      (file) => committed(file) !== emitted(file),
-    );
-    expect(disagreements).toEqual([]);
-    // A loop over nothing, or over files all of one verdict, would pass whatever the schemas said.
-    const accepted = files.filter(committed).length;
-    expect(accepted).toBeGreaterThan(MINIMUM_PER_VERDICT);
-    expect(files.length - accepted).toBeGreaterThan(MINIMUM_PER_VERDICT);
-  });
+  it(
+    "gives every file of the corpus and of the fixtures the verdict the hand-kept schema gives",
+    () => {
+      const disagreements = files.filter(
+        (file) => committed(file) !== emitted(file),
+      );
+      expect(disagreements).toEqual([]);
+      // A loop over nothing, or over files all of one verdict, would pass whatever the schemas said.
+      const accepted = files.filter(committed).length;
+      expect(accepted).toBeGreaterThan(MINIMUM_PER_VERDICT);
+      expect(files.length - accepted).toBeGreaterThan(MINIMUM_PER_VERDICT);
+    },
+    fileLimit(files.length),
+  );
 
-  it("refuses every generated invalid file and accepts its repaired twin", () => {
-    for (const file of jsonFiles("fixtures/generated/invalid-cases")) {
-      expect(emitted(file), file).toBe(false);
-      expect(
-        emitted(file.replace("/invalid-cases/", "/repaired-cases/")),
-        file,
-      ).toBe(true);
-    }
-  });
+  it(
+    "refuses every generated invalid file and accepts its repaired twin",
+    () => {
+      for (const file of jsonFiles("fixtures/generated/invalid-cases")) {
+        expect(emitted(file), file).toBe(false);
+        expect(
+          emitted(file.replace("/invalid-cases/", "/repaired-cases/")),
+          file,
+        ).toBe(true);
+      }
+    },
+    fileLimit(jsonFiles("fixtures/generated/invalid-cases").length * 2),
+  );
 });
 
 describe("the files the Rust tests write under conformance", () => {
@@ -211,20 +220,24 @@ describe("the files the Rust tests write under conformance", () => {
     ...jsonFiles("fixtures/case-schema"),
   ];
 
-  it("leaves every one unchanged when the formatter runs over it", async () => {
-    expect(written.length).toBeGreaterThan(MINIMUM_WRITTEN_FILES);
-    const formatted = await Promise.all(
-      written.map(async (relative) => {
-        const path = `${CORPUS}/${relative}`;
-        const text = readFileSync(path, "utf8");
-        const options = await resolveConfig(path);
+  it(
+    "leaves every one unchanged when the formatter runs over it",
+    async () => {
+      expect(written.length).toBeGreaterThan(MINIMUM_WRITTEN_FILES);
+      const formatted = await Promise.all(
+        written.map(async (relative) => {
+          const path = `${CORPUS}/${relative}`;
+          const text = readFileSync(path, "utf8");
+          const options = await resolveConfig(path);
 
-        return (await format(text, { ...options, filepath: path })) === text
-          ? undefined
-          : relative;
-      }),
-    );
-    const changed = formatted.filter((relative) => relative !== undefined);
-    expect(changed).toEqual([]);
-  });
+          return (await format(text, { ...options, filepath: path })) === text
+            ? undefined
+            : relative;
+        }),
+      );
+      const changed = formatted.filter((relative) => relative !== undefined);
+      expect(changed).toEqual([]);
+    },
+    fileLimit(written.length),
+  );
 });

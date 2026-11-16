@@ -3,6 +3,12 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import {
+  caseLimit,
+  fileLimit,
+  jsonFilesUnder,
+  manifestCases,
+} from "../../../corpus-time-limit";
+import {
   checkCorpus,
   completenessProblems,
   createRunRecord,
@@ -150,28 +156,36 @@ describe("corpus loading", () => {
     });
   });
 
-  it("finds nothing wrong with the real corpus", () => {
-    expect(checkCorpus(CORPUS_ROOT).problems).toEqual([]);
-  });
+  it(
+    "finds nothing wrong with the real corpus",
+    () => {
+      expect(checkCorpus(CORPUS_ROOT).problems).toEqual([]);
+    },
+    caseLimit(manifestCases(CORPUS_ROOT)),
+  );
 
-  it("rejects every invalid-case fixture, each for its one defect", () => {
-    expectPairs("invalid-cases", "repaired-cases", validateCorpusFile);
-    expectPairs(
-      "refused-kinds/invalid",
-      "refused-kinds/repaired",
-      validateCorpusFile,
-    );
-    expectPairs(
-      "schema-only/invalid-cases",
-      "schema-only/repaired-cases",
-      validateCorpusFile,
-    );
-    expectPairs(
-      "generated/invalid-cases",
-      "generated/repaired-cases",
-      validateCorpusFile,
-    );
-  });
+  it(
+    "rejects every invalid-case fixture, each for its one defect",
+    () => {
+      expectPairs("invalid-cases", "repaired-cases", validateCorpusFile);
+      expectPairs(
+        "refused-kinds/invalid",
+        "refused-kinds/repaired",
+        validateCorpusFile,
+      );
+      expectPairs(
+        "schema-only/invalid-cases",
+        "schema-only/repaired-cases",
+        validateCorpusFile,
+      );
+      expectPairs(
+        "generated/invalid-cases",
+        "generated/repaired-cases",
+        validateCorpusFile,
+      );
+    },
+    fileLimit(jsonFilesUnder(FIXTURES)),
+  );
 
   it("rejects every file whose keys are not canonical, each for its one defect", () => {
     expectPairs("canonical-keys/invalid", "canonical-keys/repaired", () => ({

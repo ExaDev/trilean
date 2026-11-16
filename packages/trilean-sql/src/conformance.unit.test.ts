@@ -3,6 +3,12 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import {
+  caseLimit,
+  fileLimit,
+  jsonFilesUnder,
+  manifestCases,
+} from "../../../corpus-time-limit";
+import {
   checkCorpus,
   completenessProblems,
   createRunRecord,
@@ -154,13 +160,21 @@ describe("corpus loading", () => {
     });
   });
 
-  it("finds nothing wrong with the real corpus", () => {
-    expect(checkCorpus(CORPUS_ROOT).problems).toEqual([]);
-  });
+  it(
+    "finds nothing wrong with the real corpus",
+    () => {
+      expect(checkCorpus(CORPUS_ROOT).problems).toEqual([]);
+    },
+    caseLimit(manifestCases(CORPUS_ROOT)),
+  );
 
-  it("rejects every invalid-case fixture, each for its one defect", () => {
-    expectPairs("invalid-cases", "repaired-cases", validateCorpusFile);
-  });
+  it(
+    "rejects every invalid-case fixture, each for its one defect",
+    () => {
+      expectPairs("invalid-cases", "repaired-cases", validateCorpusFile);
+    },
+    fileLimit(jsonFilesUnder(FIXTURES)),
+  );
 
   it("rejects every invalid execute fixture, each for its one defect", () => {
     expectPairs(
