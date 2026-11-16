@@ -1,3 +1,13 @@
+## [3.0.6](https://github.com/ExaDev/trilean/compare/trilean-sql%403.0.5...trilean-sql%403.0.6) (2026-11-16)
+
+### Bug Fixes
+
+* **trilean-sql:** refuse a collection join the engine cannot take ([3f8a83a](https://github.com/ExaDev/trilean/commit/3f8a83a85314e13a56f0a07be071597e7ed8e792)), closes [#162](https://github.com/ExaDev/trilean/issues/162)
+
+### Documentation
+
+* **trilean-sql:** say the 63 bytes of a PostgreSQL identifier assume the default NAMEDATALEN ([9eb06f3](https://github.com/ExaDev/trilean/commit/9eb06f3aa32d96db23087a5e9dea945c36932ffc))
+
 ## [3.0.5](https://github.com/ExaDev/trilean/compare/trilean-sql%403.0.4...trilean-sql%403.0.5) (2026-11-16)
 
 ### Bug Fixes
