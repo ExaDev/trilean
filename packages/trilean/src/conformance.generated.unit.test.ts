@@ -8,6 +8,7 @@ import {
   generatedDerived,
 } from "./test-support/generated-corpus";
 import { readJson } from "./test-support/read-json";
+import { fileLimit } from "../../../corpus-time-limit";
 import { validateManifest } from "./test-support/validate";
 
 const CORPUS_ROOT = fileURLToPath(
@@ -39,40 +40,52 @@ describe("the generated files", () => {
     ).toBeLessThanOrEqual(budget);
   });
 
-  it("are exactly what the generator writes", () => {
-    expect(generated.size).toBeGreaterThan(GENERATED_CORPUS_FILES.length);
-    const differing = [...generated]
-      .filter(
-        ([path, content]) =>
-          readFileSync(join(CORPUS_ROOT, path), "utf8") !== content,
-      )
-      .map(([path]) => path);
-    expect(differing).toEqual([]);
-  });
+  it(
+    "are exactly what the generator writes",
+    () => {
+      expect(generated.size).toBeGreaterThan(GENERATED_CORPUS_FILES.length);
+      const differing = [...generated]
+        .filter(
+          ([path, content]) =>
+            readFileSync(join(CORPUS_ROOT, path), "utf8") !== content,
+        )
+        .map(([path]) => path);
+      expect(differing).toEqual([]);
+    },
+    fileLimit({ files: generated.size }),
+  );
 
-  it("include every file under the generated fixture directories, and no other", () => {
-    const expected = [...generated.keys()]
-      .filter((path) => path.startsWith("fixtures/generated/"))
-      .sort();
-    const present = ["invalid-cases", "repaired-cases"].flatMap((directory) =>
-      readdirSync(join(CORPUS_ROOT, "fixtures", "generated", directory)).map(
-        (name) => `fixtures/generated/${directory}/${name}`,
-      ),
-    );
-    expect(present.sort()).toEqual(expected);
-  });
+  it(
+    "include every file under the generated fixture directories, and no other",
+    () => {
+      const expected = [...generated.keys()]
+        .filter((path) => path.startsWith("fixtures/generated/"))
+        .sort();
+      const present = ["invalid-cases", "repaired-cases"].flatMap((directory) =>
+        readdirSync(join(CORPUS_ROOT, "fixtures", "generated", directory)).map(
+          (name) => `fixtures/generated/${directory}/${name}`,
+        ),
+      );
+      expect(present.sort()).toEqual(expected);
+    },
+    fileLimit({ files: generated.size }),
+  );
 
-  it("are the files the manifest marks as generated, and no others", () => {
-    const manifest = validateManifest(
-      readJson(join(CORPUS_ROOT, "manifest.json")),
-    );
-    if (!manifest.ok) {
-      throw new Error(manifest.problems.join("\n"));
-    }
-    const marked = Object.entries(manifest.value.files)
-      .filter(([, entry]) => entry.generated === true)
-      .map(([name]) => name)
-      .sort();
-    expect(marked).toEqual([...GENERATED_CORPUS_FILES].sort());
-  });
+  it(
+    "are the files the manifest marks as generated, and no others",
+    () => {
+      const manifest = validateManifest(
+        readJson(join(CORPUS_ROOT, "manifest.json")),
+      );
+      if (!manifest.ok) {
+        throw new Error(manifest.problems.join("\n"));
+      }
+      const marked = Object.entries(manifest.value.files)
+        .filter(([, entry]) => entry.generated === true)
+        .map(([name]) => name)
+        .sort();
+      expect(marked).toEqual([...GENERATED_CORPUS_FILES].sort());
+    },
+    fileLimit({ files: generated.size }),
+  );
 });

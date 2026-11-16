@@ -1,6 +1,7 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { describe, expect, it } from "vitest";
+import { caseLimit } from "../../../corpus-time-limit";
 
 /** Every answer the corpus records for the `ecmascript` dialect is what an unflagged `RegExp` says, whichever implementation runs the case or skips it: the recording is the claim, and nothing else in the repository reads the host's engine for the cases written by hand. */
 
@@ -90,16 +91,22 @@ describe("the ecmascript corpus files", () => {
   it("are there", () => {
     expect(files.length).toBeGreaterThan(0);
   });
-  it.each(files)("record what RegExp says in %s", (file) => {
-    const wrong: string[] = [];
-    for (const testCase of casesOf(file)) {
-      const expression = new RegExp(text(testCase.pattern));
-      for (const { input, matches } of testCase.inputs) {
-        if (expression.test(text(input)) !== matches) {
-          wrong.push(`${testCase.id}: ${JSON.stringify(text(input))}`);
+  it.each(files)(
+    "record what RegExp says in %s",
+    (file) => {
+      const wrong: string[] = [];
+      for (const testCase of casesOf(file)) {
+        const expression = new RegExp(text(testCase.pattern));
+        for (const { input, matches } of testCase.inputs) {
+          if (expression.test(text(input)) !== matches) {
+            wrong.push(`${testCase.id}: ${JSON.stringify(text(input))}`);
+          }
         }
       }
-    }
-    expect(wrong).toEqual([]);
-  });
+      expect(wrong).toEqual([]);
+    },
+    caseLimit({
+      cases: files.reduce((sum, file) => sum + casesOf(file).length, 0),
+    }),
+  );
 });

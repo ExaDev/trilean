@@ -195,7 +195,7 @@ describe("the case schema the Rust types emit", () => {
       expect(accepted).toBeGreaterThan(MINIMUM_PER_VERDICT);
       expect(files.length - accepted).toBeGreaterThan(MINIMUM_PER_VERDICT);
     },
-    fileLimit(files.length),
+    fileLimit({ files: files.length }),
   );
 
   it(
@@ -209,7 +209,9 @@ describe("the case schema the Rust types emit", () => {
         ).toBe(true);
       }
     },
-    fileLimit(jsonFiles("fixtures/generated/invalid-cases").length * 2),
+    fileLimit({
+      files: jsonFiles("fixtures/generated/invalid-cases").length * 2,
+    }),
   );
 });
 
@@ -238,6 +240,6 @@ describe("the files the Rust tests write under conformance", () => {
       const changed = formatted.filter((relative) => relative !== undefined);
       expect(changed).toEqual([]);
     },
-    fileLimit(written.length),
+    fileLimit({ files: written.length }),
   );
 });

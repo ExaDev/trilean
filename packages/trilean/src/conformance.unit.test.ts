@@ -161,7 +161,7 @@ describe("corpus loading", () => {
     () => {
       expect(checkCorpus(CORPUS_ROOT).problems).toEqual([]);
     },
-    caseLimit(manifestCases(CORPUS_ROOT)),
+    caseLimit({ cases: manifestCases(CORPUS_ROOT) }),
   );
 
   it(
@@ -184,104 +184,125 @@ describe("corpus loading", () => {
         validateCorpusFile,
       );
     },
-    fileLimit(jsonFilesUnder(FIXTURES)),
+    fileLimit({ files: jsonFilesUnder(FIXTURES) }),
   );
 
-  it("rejects every file whose keys are not canonical, each for its one defect", () => {
-    expectPairs("canonical-keys/invalid", "canonical-keys/repaired", () => ({
-      ok: true,
-    }));
-    for (const name of fixtureNames("canonical-keys/invalid")) {
-      expect(
-        () => readJson(join(FIXTURES, "canonical-keys", "invalid", name)),
-        `readJson refuses invalid/${name}`,
-      ).toThrow();
-      expect(
-        readJson(join(FIXTURES, "canonical-keys", "repaired", name)),
-        `readJson reads repaired/${name}`,
-      ).toBeDefined();
-      for (const side of ["invalid", "repaired"]) {
-        const text = readFileSync(
-          join(FIXTURES, "canonical-keys", side, name),
-          "utf8",
-        );
-        expect(keyProblems(text).length > 0, `${side}/${name}`).toBe(
-          side === "invalid",
-        );
-      }
-    }
-  });
-
-  it("finds in every generated document the number of problems the file records", () => {
-    const document = readJson(
-      join(FIXTURES, "canonical-keys", "differential.json"),
-    );
-    const documents: unknown = isRecord(document)
-      ? document.documents
-      : undefined;
-    if (!Array.isArray(documents) || documents.length === 0) {
-      throw new Error("differential.json must hold a non-empty list");
-    }
-    const differing = documents.flatMap((entry: unknown, position: number) =>
-      isRecord(entry) &&
-      typeof entry.text === "string" &&
-      keyProblems(entry.text).length === entry.problems
-        ? []
-        : [position],
-    );
-    expect(differing).toEqual([]);
-    expect(
-      documents.some(
-        (entry: unknown) => isRecord(entry) && entry.problems !== 0,
-      ),
-      "the documents include some that break the rule",
-    ).toBe(true);
-    expect(
-      documents.some(
-        (entry: unknown) => isRecord(entry) && entry.problems === 0,
-      ),
-      "the documents include some that keep the rule",
-    ).toBe(true);
-  });
-
-  it("rejects every invalid manifest fixture, each for its one defect", () => {
-    expectPairs("manifests/invalid", "manifests/repaired", validateManifest);
-  });
-
-  it("rejects every invalid corpus fixture, each for its one defect", () => {
-    const names = fixtureNames("corpora/invalid");
-    expect(fixtureNames("corpora/repaired")).toEqual(names);
-    for (const name of names) {
-      expect(
-        checkCorpus(join(FIXTURES, "corpora", "invalid", name)).problems.length,
-        `corpora/invalid/${name} must have a problem`,
-      ).toBeGreaterThan(0);
-      expect(
-        checkCorpus(join(FIXTURES, "corpora", "repaired", name)).problems,
-        `corpora/repaired/${name}`,
-      ).toEqual([]);
-    }
-  });
-
-  it("accepts every valid fixture", () => {
-    for (const directory of ["valid-cases", "schema-only/valid-cases"]) {
-      for (const name of fixtureNames(directory)) {
-        const result = validateCorpusFile(
-          readJson(join(FIXTURES, directory, name)),
-        );
+  it(
+    "rejects every file whose keys are not canonical, each for its one defect",
+    () => {
+      expectPairs("canonical-keys/invalid", "canonical-keys/repaired", () => ({
+        ok: true,
+      }));
+      for (const name of fixtureNames("canonical-keys/invalid")) {
         expect(
-          result.ok ? [] : result.problems,
-          `${directory}/${name}`,
+          () => readJson(join(FIXTURES, "canonical-keys", "invalid", name)),
+          `readJson refuses invalid/${name}`,
+        ).toThrow();
+        expect(
+          readJson(join(FIXTURES, "canonical-keys", "repaired", name)),
+          `readJson reads repaired/${name}`,
+        ).toBeDefined();
+        for (const side of ["invalid", "repaired"]) {
+          const text = readFileSync(
+            join(FIXTURES, "canonical-keys", side, name),
+            "utf8",
+          );
+          expect(keyProblems(text).length > 0, `${side}/${name}`).toBe(
+            side === "invalid",
+          );
+        }
+      }
+    },
+    fileLimit({ files: jsonFilesUnder(FIXTURES) }),
+  );
+
+  it(
+    "finds in every generated document the number of problems the file records",
+    () => {
+      const document = readJson(
+        join(FIXTURES, "canonical-keys", "differential.json"),
+      );
+      const documents: unknown = isRecord(document)
+        ? document.documents
+        : undefined;
+      if (!Array.isArray(documents) || documents.length === 0) {
+        throw new Error("differential.json must hold a non-empty list");
+      }
+      const differing = documents.flatMap((entry: unknown, position: number) =>
+        isRecord(entry) &&
+        typeof entry.text === "string" &&
+        keyProblems(entry.text).length === entry.problems
+          ? []
+          : [position],
+      );
+      expect(differing).toEqual([]);
+      expect(
+        documents.some(
+          (entry: unknown) => isRecord(entry) && entry.problems !== 0,
+        ),
+        "the documents include some that break the rule",
+      ).toBe(true);
+      expect(
+        documents.some(
+          (entry: unknown) => isRecord(entry) && entry.problems === 0,
+        ),
+        "the documents include some that keep the rule",
+      ).toBe(true);
+    },
+    fileLimit({ files: jsonFilesUnder(FIXTURES) }),
+  );
+
+  it(
+    "rejects every invalid manifest fixture, each for its one defect",
+    () => {
+      expectPairs("manifests/invalid", "manifests/repaired", validateManifest);
+    },
+    fileLimit({ files: jsonFilesUnder(FIXTURES) }),
+  );
+
+  it(
+    "rejects every invalid corpus fixture, each for its one defect",
+    () => {
+      const names = fixtureNames("corpora/invalid");
+      expect(fixtureNames("corpora/repaired")).toEqual(names);
+      for (const name of names) {
+        expect(
+          checkCorpus(join(FIXTURES, "corpora", "invalid", name)).problems
+            .length,
+          `corpora/invalid/${name} must have a problem`,
+        ).toBeGreaterThan(0);
+        expect(
+          checkCorpus(join(FIXTURES, "corpora", "repaired", name)).problems,
+          `corpora/repaired/${name}`,
         ).toEqual([]);
       }
-    }
-    for (const name of fixtureNames("manifests/valid")) {
-      const result = validateManifest(
-        readJson(join(FIXTURES, "manifests", "valid", name)),
-      );
-      expect(result.ok ? [] : result.problems, name).toEqual([]);
-    }
-  });
+    },
+    fileLimit({ files: jsonFilesUnder(FIXTURES) }),
+  );
+
+  it(
+    "accepts every valid fixture",
+    () => {
+      for (const directory of ["valid-cases", "schema-only/valid-cases"]) {
+        for (const name of fixtureNames(directory)) {
+          const result = validateCorpusFile(
+            readJson(join(FIXTURES, directory, name)),
+          );
+          expect(
+            result.ok ? [] : result.problems,
+            `${directory}/${name}`,
+          ).toEqual([]);
+        }
+      }
+      for (const name of fixtureNames("manifests/valid")) {
+        const result = validateManifest(
+          readJson(join(FIXTURES, "manifests", "valid", name)),
+        );
+        expect(result.ok ? [] : result.problems, name).toEqual([]);
+      }
+    },
+    fileLimit({ files: jsonFilesUnder(FIXTURES) }),
+  );
 
   it("reads both forms of a text as the same UTF-16 code units", () => {
     const document = readJson(join(FIXTURES, "text-forms", "pairs.json"));

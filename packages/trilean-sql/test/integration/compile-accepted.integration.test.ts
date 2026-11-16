@@ -5,6 +5,7 @@ import {
 import { fileURLToPath } from "node:url";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { checkCorpus } from "../../src/test-support/corpus";
+import { caseLimit, manifestCases } from "../../../../corpus-time-limit";
 import type { SqlCompileCase } from "../../src/test-support/corpus-types";
 import { decodeNumbers } from "../../src/test-support/numbers";
 import { bindable, openPostgres, openSqlite } from "./corpus-engines";
@@ -188,32 +189,40 @@ afterAll(async () => {
 });
 
 describe("the statements the compile cases record are accepted by their engine", () => {
-  it("runs every recorded PostgreSQL statement", async () => {
-    const selected = cases.filter(
-      (testCase) => testCase.options.dialect === "postgres",
-    );
-    const outcome = await run(postgres, "postgres", selected, (error) =>
-      POSTGRES_UNRESOLVED.has(codeOf(error) ?? ""),
-    );
-    expect(outcome.failures).toEqual([]);
-    expect(outcome.accepted + outcome.unresolved).toBe(selected.length);
-    expect(outcome.accepted).toBeGreaterThan(0);
-  });
-
-  it("runs every recorded SQLite statement", async () => {
-    const selected = cases.filter(
-      (testCase) => testCase.options.dialect === "sqlite",
-    );
-    const engine = openSqlite(readFixture("subjects"), true);
-    try {
-      const outcome = await run(engine, "sqlite", selected, (error) =>
-        SQLITE_UNRESOLVED.test(messageOf(error)),
+  it(
+    "runs every recorded PostgreSQL statement",
+    async () => {
+      const selected = cases.filter(
+        (testCase) => testCase.options.dialect === "postgres",
+      );
+      const outcome = await run(postgres, "postgres", selected, (error) =>
+        POSTGRES_UNRESOLVED.has(codeOf(error) ?? ""),
       );
       expect(outcome.failures).toEqual([]);
       expect(outcome.accepted + outcome.unresolved).toBe(selected.length);
       expect(outcome.accepted).toBeGreaterThan(0);
-    } finally {
-      await engine.close();
-    }
-  });
+    },
+    caseLimit({ cases: manifestCases(CORPUS_ROOT) }),
+  );
+
+  it(
+    "runs every recorded SQLite statement",
+    async () => {
+      const selected = cases.filter(
+        (testCase) => testCase.options.dialect === "sqlite",
+      );
+      const engine = openSqlite(readFixture("subjects"), true);
+      try {
+        const outcome = await run(engine, "sqlite", selected, (error) =>
+          SQLITE_UNRESOLVED.test(messageOf(error)),
+        );
+        expect(outcome.failures).toEqual([]);
+        expect(outcome.accepted + outcome.unresolved).toBe(selected.length);
+        expect(outcome.accepted).toBeGreaterThan(0);
+      } finally {
+        await engine.close();
+      }
+    },
+    caseLimit({ cases: manifestCases(CORPUS_ROOT) }),
+  );
 });

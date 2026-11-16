@@ -3,7 +3,7 @@
 /**
  * The time limit of a test that walks the corpus, derived from the work it does and not from the runner's default of five seconds, which fits one file and not a corpus that grows (ExaDev/trilean#167). The limit is a fixed setup allowance plus the number of units the test handles times a ceiling per unit; a test names its units and passes the result as its `timeout`.
  *
- * The setup allowance covers what a test pays once whatever its size: importing a formatter or a schema compiler and resolving its configuration on a cold cache. A unit is one file read and checked, or one case validated. Each ceiling is about thirty times the cost of that work on a core to itself, a margin that a loaded shared host stays under and a walk that grew quadratic does not.
+ * The setup allowance covers what a test pays once whatever its size: importing a formatter or a schema compiler and resolving its configuration on a cold cache. A unit is one file read and checked, or one case validated. This is a flake guard: it stops a loaded host or a cold cache from failing a correct walk, and a walk that costs more per unit than its ceiling fails. It is not a detector of complexity, since a limit linear in the corpus admits a walk that has grown quadratic until the corpus is much larger.
  */
 
 import { readFileSync, readdirSync } from "node:fs";
@@ -46,12 +46,12 @@ export function manifestCases(corpusRoot: string): number {
   );
 }
 
-/** The limit, in milliseconds, for a test that handles `files` files. */
-export function fileLimit(files: number): number {
-  return SETUP_ALLOWANCE_MS + files * FILE_CEILING_MS;
+/** The limit, in milliseconds, for a test that handles `files` files. The unit is named in the argument so that a count of cases cannot be passed for files. */
+export function fileLimit(work: { readonly files: number }): number {
+  return SETUP_ALLOWANCE_MS + work.files * FILE_CEILING_MS;
 }
 
 /** The limit, in milliseconds, for a test that handles `cases` cases. */
-export function caseLimit(cases: number): number {
-  return SETUP_ALLOWANCE_MS + cases * CASE_CEILING_MS;
+export function caseLimit(work: { readonly cases: number }): number {
+  return SETUP_ALLOWANCE_MS + work.cases * CASE_CEILING_MS;
 }

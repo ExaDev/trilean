@@ -5,6 +5,7 @@ import {
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { caseLimit, manifestCases } from "../../../../corpus-time-limit";
 import { compilePredicateNode } from "../../src/compile";
 import {
   checkCorpus,
@@ -242,46 +243,54 @@ for (const { name, file } of corpus) {
 }
 
 describe("the fixtures", () => {
-  it("are each valid, each named by a case, and each case names one that exists", () => {
-    const named = new Set(
-      corpus.flatMap(({ file }) =>
-        file.cases.flatMap((testCase) =>
-          testCase.kind === "sql-execute" ? [testCase.fixture] : [],
+  it(
+    "are each valid, each named by a case, and each case names one that exists",
+    () => {
+      const named = new Set(
+        corpus.flatMap(({ file }) =>
+          file.cases.flatMap((testCase) =>
+            testCase.kind === "sql-execute" ? [testCase.fixture] : [],
+          ),
         ),
-      ),
-    );
-    const present = fixtureNames();
-    expect(present.filter((name) => !named.has(name))).toEqual([]);
-    expect([...named].filter((name) => !present.includes(name))).toEqual([]);
-    for (const name of present) {
-      expect(readFixture(name).tables.length).toBeGreaterThan(0);
-    }
-  });
+      );
+      const present = fixtureNames();
+      expect(present.filter((name) => !named.has(name))).toEqual([]);
+      expect([...named].filter((name) => !present.includes(name))).toEqual([]);
+      for (const name of present) {
+        expect(readFixture(name).tables.length).toBeGreaterThan(0);
+      }
+    },
+    caseLimit({ cases: manifestCases(CORPUS_ROOT) }),
+  );
 });
 
 describe("corpus completeness", () => {
-  it("registers and skips cases so that they add up to the manifest's share for this runner", () => {
-    const manifest = validateManifest(
-      readJson(join(CORPUS_ROOT, "manifest.json")),
-    );
-    if (!manifest.ok) {
-      throw new Error(manifest.problems.join("\n"));
-    }
-    const entries = Object.entries(manifest.value.files)
-      .filter(([name]) => name.startsWith(SHARE))
-      .map(([, entry]) => entry);
-    expect(
-      entries.length,
-      "the manifest lists no file for this runner",
-    ).toBeGreaterThan(0);
-    expect(
-      completenessProblems(
-        {
-          total: entries.reduce((sum, entry) => sum + entry.cases, 0),
-          skip: entries.flatMap((entry) => entry.skip.ts),
-        },
-        record,
-      ),
-    ).toEqual([]);
-  });
+  it(
+    "registers and skips cases so that they add up to the manifest's share for this runner",
+    () => {
+      const manifest = validateManifest(
+        readJson(join(CORPUS_ROOT, "manifest.json")),
+      );
+      if (!manifest.ok) {
+        throw new Error(manifest.problems.join("\n"));
+      }
+      const entries = Object.entries(manifest.value.files)
+        .filter(([name]) => name.startsWith(SHARE))
+        .map(([, entry]) => entry);
+      expect(
+        entries.length,
+        "the manifest lists no file for this runner",
+      ).toBeGreaterThan(0);
+      expect(
+        completenessProblems(
+          {
+            total: entries.reduce((sum, entry) => sum + entry.cases, 0),
+            skip: entries.flatMap((entry) => entry.skip.ts),
+          },
+          record,
+        ),
+      ).toEqual([]);
+    },
+    caseLimit({ cases: manifestCases(CORPUS_ROOT) }),
+  );
 });
