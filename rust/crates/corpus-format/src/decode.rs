@@ -15,11 +15,12 @@
 //! registered, or it is refused; so is an encoding with any other member beside it, or with a value of the wrong form.
 //! Nothing is passed through as an ordinary object, because a loader that does so reads a mistake as data.
 
-use std::collections::BTreeSet;
+use std::collections::HashSet;
 
 use json_shape::Value;
 
 use crate::canonical::MAX_DEPTH;
+use crate::trail::{Step, Trail, render};
 
 /// A decoded value. Text is UTF-16 code units, since that is what a case compares.
 #[derive(Clone, Debug, PartialEq)]
@@ -93,9 +94,9 @@ const NUMBER_NAMES: [(&str, f64); 4] = [
     ("NaN", f64::NAN),
 ];
 
-fn fail<T>(path: &str, message: impl Into<String>) -> Result<T, DecodeError> {
+fn fail<T>(trail: &[Step<'_>], message: impl Into<String>) -> Result<T, DecodeError> {
     Err(DecodeError {
-        path: path.to_owned(),
+        path: render(trail),
         message: message.into(),
     })
 }
@@ -109,69 +110,75 @@ fn integer_like(name: &[u16]) -> bool {
         .is_ok_and(|number| number != u32::MAX && number.to_string() == text)
 }
 
-fn text_of(value: &Value, path: &str) -> Result<Vec<u16>, DecodeError> {
+/// Runs `f` with `step` added to the trail, and takes it off again.
+fn within<'a, T>(trail: &mut Trail<'a>, step: Step<'a>, f: impl FnOnce(&mut Trail<'a>) -> T) -> T {
+    trail.push(step);
+    let result = f(trail);
+    trail.pop();
+    result
+}
+
+fn text_of<'a>(value: &'a Value, trail: &mut Trail<'a>) -> Result<Vec<u16>, DecodeError> {
     match value {
         Value::String(text) => Ok(text.encode_utf16().collect()),
         Value::Object(pairs) if matches!(pairs.as_slice(), [(key, _)] if key == "codeUnits") => {
-            code_units(&pairs[0].1, path)
+            code_units(&pairs[0].1, trail)
         }
         _ => fail(
-            path,
+            trail,
             "expected a text: a string or { \"codeUnits\": [...] }",
         ),
     }
 }
 
-fn code_units(value: &Value, path: &str) -> Result<Vec<u16>, DecodeError> {
+fn code_units(value: &Value, trail: &[Step<'_>]) -> Result<Vec<u16>, DecodeError> {
     let Some(items) = value.as_array() else {
-        return fail(path, "\"codeUnits\" must be an array of code units");
+        return fail(trail, "\"codeUnits\" must be an array of code units");
     };
-    items
-        .iter()
-        .map(|item| {
-            item.as_f64()
-                .filter(|number| {
-                    number.fract() == 0.0 && (0.0..=f64::from(u16::MAX)).contains(number)
-                })
-                .map(|number| number as u16)
-                .ok_or_else(|| DecodeError {
-                    path: path.to_owned(),
-                    message: "a code unit is an integer from 0 to 65535".to_owned(),
-                })
-        })
-        .collect()
+    let mut units = Vec::with_capacity(items.len());
+    for item in items {
+        match item
+            .as_f64()
+            .filter(|number| number.fract() == 0.0 && (0.0..=f64::from(u16::MAX)).contains(number))
+        {
+            Some(number) => units.push(number as u16),
+            None => return fail(trail, "a code unit is an integer from 0 to 65535"),
+        }
+    }
+    Ok(units)
 }
 
-fn decode_at(
-    value: &Value,
+fn decode_at<'a>(
+    value: &'a Value,
     encodings: &Encodings,
-    path: &str,
+    trail: &mut Trail<'a>,
     depth: usize,
 ) -> Result<Decoded, DecodeError> {
     if matches!(value, Value::Array(_) | Value::Object(_)) && depth > MAX_DEPTH {
-        return fail(path, format!("nesting is deeper than {MAX_DEPTH} levels"));
+        return fail(trail, format!("nesting is deeper than {MAX_DEPTH} levels"));
     }
     match value {
         Value::Null => Ok(Decoded::Null),
         Value::Bool(flag) => Ok(Decoded::Bool(*flag)),
         Value::Number(number) => Ok(Decoded::Number(*number)),
         Value::String(text) => Ok(Decoded::Text(text.encode_utf16().collect())),
-        Value::Array(items) => items
-            .iter()
-            .enumerate()
-            .map(|(position, item)| {
-                decode_at(item, encodings, &format!("{path}[{position}]"), depth + 1)
-            })
-            .collect::<Result<_, _>>()
-            .map(Decoded::Array),
-        Value::Object(pairs) => decode_object(pairs, encodings, path, depth),
+        Value::Array(items) => {
+            let mut decoded = Vec::with_capacity(items.len());
+            for (position, item) in items.iter().enumerate() {
+                decoded.push(within(trail, Step::Index(position), |trail| {
+                    decode_at(item, encodings, trail, depth + 1)
+                })?);
+            }
+            Ok(Decoded::Array(decoded))
+        }
+        Value::Object(pairs) => decode_object(pairs, encodings, trail, depth),
     }
 }
 
-fn decode_object(
-    pairs: &[(String, Value)],
+fn decode_object<'a>(
+    pairs: &'a [(String, Value)],
     encodings: &Encodings,
-    path: &str,
+    trail: &mut Trail<'a>,
     depth: usize,
 ) -> Result<Decoded, DecodeError> {
     let marker = pairs
@@ -182,91 +189,97 @@ fn decode_object(
         for (key, item) in pairs {
             members.push((
                 key.encode_utf16().collect(),
-                decode_at(item, encodings, &format!("{path}.{key}"), depth + 1)?,
+                within(trail, Step::Key(key), |trail| {
+                    decode_at(item, encodings, trail, depth + 1)
+                })?,
             ));
         }
         return Ok(Decoded::Object(members));
     };
     if pairs.len() != 1 {
         return fail(
-            path,
+            trail,
             format!("an encoding has the one member \"{name}\" and no other"),
         );
     }
-    let at = format!("{path}.{name}");
+    let at = |trail: &mut Trail<'a>| trail.push(Step::Key(name));
     match name.as_str() {
         "$number" => {
-            let Some(text) = member.as_str() else {
-                return fail(
-                    &at,
+            at(trail);
+            let result = match member.as_str().and_then(|text| {
+                NUMBER_NAMES
+                    .iter()
+                    .find(|(known, _)| *known == text)
+                    .map(|(_, number)| *number)
+            }) {
+                Some(number) => Ok(Decoded::Number(number)),
+                None => fail(
+                    trail,
                     "must be \"-0\", \"Infinity\", \"-Infinity\" or \"NaN\"",
-                );
+                ),
             };
-            NUMBER_NAMES
-                .iter()
-                .find(|(known, _)| *known == text)
-                .map(|(_, number)| Decoded::Number(*number))
-                .map_or_else(
-                    || {
-                        fail(
-                            &at,
-                            "must be \"-0\", \"Infinity\", \"-Infinity\" or \"NaN\"",
-                        )
-                    },
-                    Ok,
-                )
+            trail.pop();
+            result
         }
-        "$undefined" => {
+        "$undefined" => within(trail, Step::Key(name), |trail| {
             if member.as_bool() == Some(true) {
                 Ok(Decoded::Undefined)
             } else {
-                fail(&at, "must be true")
+                fail(trail, "must be true")
             }
-        }
-        "$object" => decode_members(member, encodings, &at, depth),
-        "codeUnits" => code_units(member, &at).map(Decoded::Text),
+        }),
+        "$object" => within(trail, Step::Key(name), |trail| {
+            decode_members(member, encodings, trail, depth)
+        }),
+        "codeUnits" => within(trail, Step::Key(name), |trail| {
+            code_units(member, trail).map(Decoded::Text)
+        }),
         other => match encodings.extra.iter().find(|(known, _)| known == other) {
-            Some((_, check)) => check(member)
-                .map(|()| Decoded::Custom {
-                    name: other.to_owned(),
-                    value: member.clone(),
-                })
-                .or_else(|message| fail(&at, message)),
-            None => fail(path, format!("{other} is not an encoding of this corpus")),
+            Some((_, check)) => within(trail, Step::Key(name), |trail| {
+                check(member)
+                    .map(|()| Decoded::Custom {
+                        name: other.to_owned(),
+                        value: member.clone(),
+                    })
+                    .or_else(|message| fail(trail, message))
+            }),
+            None => fail(trail, format!("{other} is not an encoding of this corpus")),
         },
     }
 }
 
-fn decode_members(
-    member: &Value,
+fn decode_members<'a>(
+    member: &'a Value,
     encodings: &Encodings,
-    at: &str,
+    trail: &mut Trail<'a>,
     depth: usize,
 ) -> Result<Decoded, DecodeError> {
     let Some(entries) = member.as_array() else {
-        return fail(at, "must be an array of [name, value] pairs");
+        return fail(trail, "must be an array of [name, value] pairs");
     };
-    let mut seen: BTreeSet<Vec<u16>> = BTreeSet::new();
+    let mut seen: HashSet<Vec<u16>> = HashSet::with_capacity(entries.len());
     let mut members = Vec::with_capacity(entries.len());
     for (position, entry) in entries.iter().enumerate() {
-        let here = format!("{at}[{position}]");
-        let Some([name, item]) = entry.as_array() else {
-            return fail(&here, "must be a [name, value] pair");
-        };
-        let name = text_of(name, &format!("{here}[0]"))?;
-        if integer_like(&name) {
-            return fail(
-                &here,
-                "an integer-like name is not kept in order by a JavaScript object",
-            );
-        }
-        if !seen.insert(name.clone()) {
-            return fail(&here, "a name is not repeated");
-        }
-        members.push((
-            name,
-            decode_at(item, encodings, &format!("{here}[1]"), depth + 3)?,
-        ));
+        let decoded = within(trail, Step::Index(position), |trail| {
+            let Some([name, item]) = entry.as_array() else {
+                return fail(trail, "must be a [name, value] pair");
+            };
+            let name = within(trail, Step::Index(0), |trail| text_of(name, trail))?;
+            if integer_like(&name) {
+                return fail(
+                    trail,
+                    "an integer-like name is not kept in order by a JavaScript object",
+                );
+            }
+            if !seen.insert(name.clone()) {
+                return fail(trail, "a name is not repeated");
+            }
+            let item = within(trail, Step::Index(1), |trail| {
+                decode_at(item, encodings, trail, depth + 3)
+            })?;
+            Ok((name, item))
+        })?;
+        members.push(decoded);
     }
     Ok(Decoded::Object(members))
 }
@@ -274,7 +287,7 @@ fn decode_members(
 /// Decodes a document's value: the encodings above become the value they stand for, an ordinary object stays one,
 /// and anything the set does not allow is an error naming the place.
 pub fn decode(value: &Value, encodings: &Encodings) -> Result<Decoded, DecodeError> {
-    decode_at(value, encodings, "$", 1)
+    decode_at(value, encodings, &mut Vec::new(), 1)
 }
 
 #[cfg(test)]
@@ -493,5 +506,29 @@ mod tests {
     fn an_error_names_its_place() {
         let value = object(&[("a", Value::Array(vec![object(&[("$number", text("x"))])]))]);
         assert_eq!(read(&value).unwrap_err().path, "$.a[0].$number");
+    }
+
+    #[test]
+    fn members_under_a_long_name_are_decoded_without_a_path_string_each() {
+        // A path string rebuilt from the root for each member costs the length of the path each time, and a name may be
+        // as long as a document; the trail is written once, for the error reported, so the count of trails written is
+        // the work and is the same however long the name and however many the members.
+        let long = "k".repeat(10_000);
+        let members = |bad: bool| {
+            let mut pairs: Vec<(String, Value)> = (0..100_000)
+                .map(|n| (format!("{n:08}"), Value::Number(f64::from(n))))
+                .collect();
+            if bad {
+                pairs.push(("z".to_owned(), object(&[("$number", text("x"))])));
+            }
+            Value::Object(vec![(long.clone(), Value::Object(pairs))])
+        };
+        crate::trail::RENDERED.with(|count| count.set(0));
+        assert!(read(&members(false)).is_ok());
+        assert_eq!(crate::trail::RENDERED.with(std::cell::Cell::get), 0);
+        let error = read(&members(true)).unwrap_err();
+        assert_eq!(crate::trail::RENDERED.with(std::cell::Cell::get), 1);
+        assert_eq!(error.path.len(), 1 + 1 + 10_000 + 1 + 1 + 1 + 7);
+        assert!(error.path.ends_with(".z.$number"));
     }
 }
