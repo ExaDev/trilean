@@ -225,7 +225,9 @@ fn read_value(
                 trilean::schemas::array_too_long(length as usize),
             ));
         }
-        let mut elements = Vec::with_capacity(length as usize);
+        // Nothing is reserved from the length: it is the host's claim, and a nest of arrays that each claim the longest length
+        // would reserve their whole claim for a document that holds few values.
+        let mut elements = Vec::new();
         for index in 0..length {
             path.push(PathSegment::Index(index as usize));
             let read = match Reflect::get_u32(array, index) {
