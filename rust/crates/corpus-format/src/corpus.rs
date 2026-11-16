@@ -463,4 +463,84 @@ mod tests {
                 .any(|problem| problem.contains("loader-selection"))
         );
     }
+
+    /// The problems of `fixtures` that mention `fragment`, for a tree that holds only the files a test names.
+    fn problems_about(entries: &[(&str, &str)], fragment: &str) -> Vec<String> {
+        fixtures(&tree_of(entries), &Ids, &CaseSets::default())
+            .into_iter()
+            .filter(|problem| problem.contains(fragment))
+            .collect()
+    }
+
+    const EXPECTED_ONE_FILE: &str =
+        "{\n  \"problems\": [],\n  \"selected\": [\n    \"pkg/area/a.json\"\n  ]\n}\n";
+    const EXPECTED_NO_FILE: &str = "{\n  \"problems\": [],\n  \"selected\": []\n}\n";
+
+    #[test]
+    fn a_selection_that_differs_from_the_one_a_fixture_expects_is_reported() {
+        let tree = ("loader-selection/tree/pkg/area/a.json", "{}\n");
+        let agreeing = problems_about(
+            &[("loader-selection/expected.json", EXPECTED_ONE_FILE), tree],
+            "loader-selection",
+        );
+        assert_eq!(agreeing, Vec::<String>::new());
+        let differing = problems_about(
+            &[("loader-selection/expected.json", EXPECTED_NO_FILE), tree],
+            "loader-selection",
+        );
+        assert_eq!(differing.len(), 1, "{differing:?}");
+        assert!(
+            differing[0].contains("selected [\"pkg/area/a.json\"]"),
+            "{differing:?}"
+        );
+        let missing = problems_about(&[tree], "loader-selection");
+        assert_eq!(missing.len(), 1, "{missing:?}");
+    }
+
+    #[test]
+    fn a_problem_the_fixture_does_not_expect_is_reported() {
+        let tree = [
+            ("loader-selection/expected.json", EXPECTED_ONE_FILE),
+            ("loader-selection/tree/pkg/area/a.json", "{}\n"),
+            ("loader-selection/tree/pkg/area/Stray.json", "{}\n"),
+        ];
+        let reported = problems_about(&tree, "loader-selection");
+        assert_eq!(reported.len(), 1, "{reported:?}");
+    }
+
+    const CANONICAL: &str = "{\n  \"a\": 1\n}\n";
+    const OUT_OF_ORDER: &str = "{\n  \"b\": 1,\n  \"a\": 2\n}\n";
+
+    #[test]
+    fn an_invalid_canonical_keys_file_that_the_rule_accepts_is_reported() {
+        let accepted = problems_about(
+            &[
+                ("canonical-keys/invalid/x.json", CANONICAL),
+                ("canonical-keys/repaired/x.json", CANONICAL),
+            ],
+            "canonical-keys/invalid/x.json",
+        );
+        assert_eq!(accepted.len(), 1, "{accepted:?}");
+        assert!(accepted[0].contains("must find a problem"), "{accepted:?}");
+        let refused = problems_about(
+            &[
+                ("canonical-keys/invalid/x.json", OUT_OF_ORDER),
+                ("canonical-keys/repaired/x.json", CANONICAL),
+            ],
+            "canonical-keys/x.json",
+        );
+        assert_eq!(refused, Vec::<String>::new());
+    }
+
+    #[test]
+    fn a_repaired_canonical_keys_file_that_the_rule_refuses_is_reported() {
+        let refused = problems_about(
+            &[
+                ("canonical-keys/invalid/x.json", OUT_OF_ORDER),
+                ("canonical-keys/repaired/x.json", OUT_OF_ORDER),
+            ],
+            "canonical-keys/repaired/x.json",
+        );
+        assert_eq!(refused.len(), 1, "{refused:?}");
+    }
 }

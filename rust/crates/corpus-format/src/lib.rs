@@ -26,6 +26,7 @@ mod envelope;
 mod manifest;
 mod name;
 mod select;
+mod trail;
 
 pub use canonical::{
     MAX_DEPTH, Problem, check_canonical, key_problems, parse_canonical, write_canonical,

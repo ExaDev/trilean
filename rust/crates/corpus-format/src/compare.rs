@@ -9,6 +9,7 @@ use std::collections::HashMap;
 
 use crate::decode::Decoded;
 use crate::envelope::Tolerance;
+use crate::trail::{Step, Trail, render};
 
 /// Where two values differ.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -24,9 +25,9 @@ impl std::fmt::Display for Mismatch {
     }
 }
 
-fn mismatch<T>(path: &str, message: impl Into<String>) -> Result<T, Mismatch> {
+fn mismatch<T>(trail: &[Step<'_>], message: impl Into<String>) -> Result<T, Mismatch> {
     Err(Mismatch {
-        path: path.to_owned(),
+        path: render(trail),
         message: message.into(),
     })
 }
@@ -81,10 +82,6 @@ fn describe(value: &Decoded) -> &'static str {
     }
 }
 
-fn step(path: &str, name: &[u16]) -> String {
-    format!("{path}.{}", shown(name))
-}
-
 /// The members of an object by name, the first of a repeated name winning, built once so a lookup is constant time.
 fn index(members: &[(Vec<u16>, Decoded)]) -> HashMap<&[u16], &Decoded> {
     let mut by_name = HashMap::with_capacity(members.len());
@@ -94,53 +91,50 @@ fn index(members: &[(Vec<u16>, Decoded)]) -> HashMap<&[u16], &Decoded> {
     by_name
 }
 
-fn walk(
-    actual: &Decoded,
-    expected: &Decoded,
+fn walk<'a>(
+    actual: &'a Decoded,
+    expected: &'a Decoded,
     tolerance: Option<&Tolerance>,
     partial: bool,
-    path: &str,
+    trail: &mut Trail<'a>,
 ) -> Result<(), Mismatch> {
     match (expected, actual) {
         (Decoded::Number(wanted), Decoded::Number(got)) => {
             if within(*got, *wanted, tolerance) {
                 Ok(())
             } else {
-                mismatch(path, format!("expected {wanted:?}, got {got:?}"))
+                mismatch(trail, format!("expected {wanted:?}, got {got:?}"))
             }
         }
         (Decoded::Array(wanted), Decoded::Array(got)) => {
             if wanted.len() != got.len() {
                 return mismatch(
-                    path,
+                    trail,
                     format!("expected {} elements, got {}", wanted.len(), got.len()),
                 );
             }
             for (position, (item, other)) in wanted.iter().zip(got).enumerate() {
-                walk(
-                    other,
-                    item,
-                    tolerance,
-                    partial,
-                    &format!("{path}[{position}]"),
-                )?;
+                trail.push(Step::Index(position));
+                let result = walk(other, item, tolerance, partial, trail);
+                trail.pop();
+                result?;
             }
             Ok(())
         }
         (Decoded::Object(wanted), Decoded::Object(got)) => {
-            let actual = index(got);
+            let present = index(got);
             for (name, item) in wanted {
-                let here = step(path, name);
-                match actual.get(name.as_slice()) {
-                    Some(other) => walk(other, item, tolerance, partial, &here)?,
-                    None if matches!(item, Decoded::Undefined) => {
-                        return mismatch(
-                            &here,
-                            "expected a member that is undefined, the member is absent",
-                        );
-                    }
-                    None => return mismatch(&here, "expected a member, the member is absent"),
-                }
+                trail.push(Step::Units(name));
+                let result = match present.get(name.as_slice()) {
+                    Some(other) => walk(other, item, tolerance, partial, trail),
+                    None if matches!(item, Decoded::Undefined) => mismatch(
+                        trail,
+                        "expected a member that is undefined, the member is absent",
+                    ),
+                    None => mismatch(trail, "expected a member, the member is absent"),
+                };
+                trail.pop();
+                result?;
             }
             if !partial {
                 let expected = index(wanted);
@@ -148,7 +142,10 @@ fn walk(
                     if !matches!(other, Decoded::Undefined)
                         && !expected.contains_key(name.as_slice())
                     {
-                        return mismatch(&step(path, name), "the member is not expected");
+                        trail.push(Step::Units(name));
+                        let result = mismatch(trail, "the member is not expected");
+                        trail.pop();
+                        return result;
                     }
                 }
             }
@@ -156,7 +153,7 @@ fn walk(
         }
         (Decoded::Text(wanted), Decoded::Text(got)) if wanted == got => Ok(()),
         (Decoded::Text(wanted), Decoded::Text(got)) => mismatch(
-            path,
+            trail,
             format!("expected {:?}, got {:?}", shown(wanted), shown(got)),
         ),
         (Decoded::Null, Decoded::Null) | (Decoded::Undefined, Decoded::Undefined) => Ok(()),
@@ -172,7 +169,7 @@ fn walk(
             },
         ) if left == right && a.json_equal(b) => Ok(()),
         _ => mismatch(
-            path,
+            trail,
             format!("expected {}, got {}", describe(expected), describe(actual)),
         ),
     }
@@ -184,7 +181,7 @@ pub fn compare(
     expected: &Decoded,
     tolerance: Option<&Tolerance>,
 ) -> Result<(), Mismatch> {
-    walk(actual, expected, tolerance, false, "$")
+    walk(actual, expected, tolerance, false, &mut Vec::new())
 }
 
 /// Whether `actual` matches `expected` where `expected` names only some of the members: an object matches when every
@@ -195,7 +192,7 @@ pub fn subset(
     expected: &Decoded,
     tolerance: Option<&Tolerance>,
 ) -> Result<(), Mismatch> {
-    walk(actual, expected, tolerance, true, "$")
+    walk(actual, expected, tolerance, true, &mut Vec::new())
 }
 
 /// Whether the fragments occur in `text` in order, each after the end of the one before, all as UTF-16 code units. With
@@ -218,15 +215,8 @@ pub fn fragments(
         if fragment.is_empty() {
             return Err("a fragment is not empty".to_owned());
         }
-        let found = (from..=text.len().saturating_sub(fragment.len())).find(|start| {
-            text.len() >= start + fragment.len()
-                && text[*start..*start + fragment.len()]
-                    .iter()
-                    .zip(fragment)
-                    .all(|(left, right)| fold(*left) == fold(*right))
-        });
-        match found {
-            Some(start) => from = start + fragment.len(),
+        match find(&text[from..], fragment, fold) {
+            Some(start) => from += start + fragment.len(),
             None => {
                 return Err(format!(
                     "{:?} does not occur in {:?} after position {from}",
@@ -237,6 +227,38 @@ pub fn fragments(
         }
     }
     Ok(())
+}
+
+/// The first position of `pattern` in `text`, comparing units as `fold` maps them, by the Knuth-Morris-Pratt search: the
+/// work is linear in the lengths of the two, whatever they hold. `pattern` is not empty.
+fn find(text: &[u16], pattern: &[u16], fold: impl Fn(u16) -> u16) -> Option<usize> {
+    let wanted: Vec<u16> = pattern.iter().map(|unit| fold(*unit)).collect();
+    // `reach[n]` is the length of the longest proper prefix of `wanted[..=n]` that is also a suffix of it.
+    let mut reach = vec![0usize; wanted.len()];
+    let mut matched = 0;
+    for position in 1..wanted.len() {
+        while matched > 0 && wanted[position] != wanted[matched] {
+            matched = reach[matched - 1];
+        }
+        if wanted[position] == wanted[matched] {
+            matched += 1;
+        }
+        reach[position] = matched;
+    }
+    matched = 0;
+    for (position, unit) in text.iter().enumerate() {
+        let unit = fold(*unit);
+        while matched > 0 && unit != wanted[matched] {
+            matched = reach[matched - 1];
+        }
+        if unit == wanted[matched] {
+            matched += 1;
+        }
+        if matched == wanted.len() {
+            return Some(position + 1 - wanted.len());
+        }
+    }
+    None
 }
 
 #[cfg(test)]
@@ -475,5 +497,59 @@ mod tests {
         };
         assert!(equal(&members(false), &members(true)));
         assert!(subset(&members(false), &members(true), None).is_ok());
+    }
+
+    #[test]
+    fn a_search_that_backs_up_over_a_partial_match_still_finds_it() {
+        let find =
+            |text: &str, fragment: &str| fragments(&units(text), &[units(fragment)], false).is_ok();
+        assert!(find("aaab", "aab"));
+        assert!(find("abababc", "ababc"));
+        assert!(find("aabaabaaa", "aabaaa"));
+        assert!(!find("aabaab", "aabaaa"));
+        assert!(find("a", "a"));
+        assert!(!find("", "a"));
+        assert!(!find("a", "ab"));
+    }
+
+    #[test]
+    fn a_long_text_and_fragment_are_searched_in_linear_time() {
+        // The worst case of a search that tries every start: a text of a's and a fragment of a's ending in a b is some
+        // 10^10 steps for these lengths, which takes minutes; the linear search takes milliseconds.
+        let text = vec![u16::from(b'a'); 200_000];
+        let mut fragment = vec![u16::from(b'a'); 100_000];
+        fragment.push(u16::from(b'b'));
+        assert!(fragments(&text, &[fragment.clone()], false).is_err());
+        let mut found = text;
+        found.push(u16::from(b'b'));
+        assert!(fragments(&found, &[fragment], false).is_ok());
+    }
+
+    #[test]
+    fn members_under_a_long_name_are_compared_without_a_path_string_each() {
+        // A path string rebuilt from the root for each member costs the length of the path each time, and a name may be
+        // as long as a document; the trail is written once, for the difference reported, so the count of trails written
+        // is the work and is the same however long the name and however many the members.
+        let long = "k".repeat(10_000);
+        let wide = |last: f64| {
+            let members = Decoded::Object(
+                (0..100_000)
+                    .map(|n| {
+                        (
+                            units(&format!("{n:08}")),
+                            number(if n == 99_999 { last } else { 0.0 }),
+                        )
+                    })
+                    .collect(),
+            );
+            Decoded::Object(vec![(units(&long), members)])
+        };
+        crate::trail::RENDERED.with(|count| count.set(0));
+        assert!(compare(&wide(1.0), &wide(1.0), None).is_ok());
+        assert_eq!(crate::trail::RENDERED.with(std::cell::Cell::get), 0);
+        let mismatch = compare(&wide(1.0), &wide(2.0), None).unwrap_err();
+        assert_eq!(crate::trail::RENDERED.with(std::cell::Cell::get), 1);
+        assert!(mismatch.path.ends_with(".00099999"));
+        assert_eq!(mismatch.path.len(), 1 + 1 + 10_000 + 1 + 8);
     }
 }

@@ -44,8 +44,8 @@ export default defineConfig(
     },
   },
   {
-    // The conformance runners are plain JavaScript, which no TypeScript program includes, so they are linted without type information: typescript-eslint's rules that need it are off, and so are this repository's own that need it (the ones that throw when a file has none), and every other rule applies.
-    files: ["conformance/runner/**/*.mjs"],
+    // The conformance runners and the scripts that write a crate's test data are plain JavaScript, which no TypeScript program includes, so they are linted without type information: typescript-eslint's rules that need it are off, and so are this repository's own that need it (the ones that throw when a file has none), and every other rule applies.
+    files: ["conformance/runner/**/*.mjs", "rust/crates/*/tests/**/*.mjs"],
     extends: [tseslint.configs.disableTypeChecked],
     languageOptions: { globals: { ...globals.node, ...globals.browser } },
     rules: Object.fromEntries(
@@ -59,6 +59,11 @@ export default defineConfig(
         "exadev/prefer-readonly-object-param",
       ].map((rule) => [rule, "off"]),
     ),
+  },
+  {
+    // The script that writes a crate's test data states the doubles and the generator's constants it writes: naming each would hide what the table holds behind a list of constants.
+    files: ["rust/crates/*/tests/**/*.mjs"],
+    rules: { "@typescript-eslint/no-magic-numbers": "off" },
   },
   eslintPluginPrettierRecommended,
 );

@@ -1,7 +1,9 @@
 //! The number form of a canonical file is the text `JSON.stringify` writes for the double, which `json_shape` implements
 //! by hand. `number-forms.txt` holds, for a spread of doubles (the edge values, every decade's boundaries, random bit
 //! patterns, shortest-digit and tie cases), the bits of the double and the text a JavaScript engine writes for it, so
-//! the routine is held to the engine itself and not to a handful of literals.
+//! the routine is held to the engine itself and not to a handful of literals. The table is written by
+//! `number-forms.mjs` beside it, whose header gives the command, and the test below fails when a value the script names as
+//! a boundary is missing from it.
 
 use corpus_format::{check_canonical, write_canonical};
 use json_shape::Value;
@@ -26,6 +28,35 @@ fn the_table_is_large_and_spread() {
     assert!(forms.iter().any(|(_, text)| text.contains("e+")));
     assert!(forms.iter().any(|(_, text)| text.contains("e-")));
     assert!(forms.iter().any(|(number, _)| number.is_subnormal()));
+}
+
+/// The values where `JSON.stringify` changes form or the shortest digits are most likely wrong, as the text the engine writes.
+const BOUNDARIES: [&str; 13] = [
+    "9.999999999999997e-7",
+    "0.000001",
+    "1e-7",
+    "100000000000000000000",
+    "1e+21",
+    "9007199254740991",
+    "9007199254740992",
+    "9007199254740994",
+    "5e-324",
+    "2.225073858507201e-308",
+    "2.2250738585072014e-308",
+    "1.7976931348623157e+308",
+    "123456789012345680000",
+];
+
+#[test]
+fn the_boundaries_of_the_form_are_in_the_table() {
+    let texts: Vec<&str> = forms().iter().map(|(_, text)| *text).collect();
+    for boundary in BOUNDARIES {
+        assert!(texts.contains(&boundary), "{boundary} is not in the table");
+        assert!(
+            texts.contains(&format!("-{boundary}").as_str()),
+            "-{boundary} is not in the table"
+        );
+    }
 }
 
 #[test]
