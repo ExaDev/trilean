@@ -1,7 +1,7 @@
 /* Writes tests/number-forms.txt: one line per double, `<its 64 bits as 16 hexadecimal digits> <the text JSON.stringify writes
    for it>`, the engine's own answer for the routine in `json_shape` to be held to.
 
-   Run from the repository root with a current Node (V8's number to string is what the corpus format follows):
+   Run from the repository root with Node (V8's number to string is what the corpus format follows). The table was written with Node v26.13.0 and rewritten byte for byte, checked with `cmp`, under Node v22.23.4:
 
      node rust/crates/corpus-format/tests/number-forms.mjs > rust/crates/corpus-format/tests/number-forms.txt
 

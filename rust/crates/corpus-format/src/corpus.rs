@@ -240,7 +240,13 @@ fn check_selection(tree: &Tree, problems: &mut Vec<String>) {
             document.get("problems").ok_or("problems is missing")?,
             "problems",
         )?;
-        let found = select(&subtree(tree, "loader-selection/tree"), CORPUS_LAYOUT);
+        let files = subtree(tree, "loader-selection/tree");
+        if files.is_empty() {
+            return Err(
+                "tree holds no files, so no selection is held to what is expected".to_owned(),
+            );
+        }
+        let found = select(&files, CORPUS_LAYOUT);
         if found.files == selected && found.problems == wanted_problems {
             Ok(())
         } else {
@@ -388,6 +394,7 @@ fn tree_of(entries: &[(&str, &str)]) -> Tree {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::collections::BTreeMap;
 
     /// A loader whose files are `{ "ids": [...] }`, and which refuses a file that says `"bad": true`.
     struct Ids;
@@ -464,83 +471,272 @@ mod tests {
         );
     }
 
-    /// The problems of `fixtures` that mention `fragment`, for a tree that holds only the files a test names.
-    fn problems_about(entries: &[(&str, &str)], fragment: &str) -> Vec<String> {
-        fixtures(&tree_of(entries), &Ids, &CaseSets::default())
+    /// The files of a complete, consistent set of fixtures, each by its path under the fixture directory. A test changes
+    /// one entry and states the one problem that must follow, so a rule removed from `fixtures` is a test that fails.
+    fn fixture_files() -> BTreeMap<String, String> {
+        let manifest_of = |cases: u8| {
+            format!(
+                "{{\n  \"files\": {{\n    \"pkg/area/file.json\": {{\n      \"cases\": {cases},\n      \"skip\": {{\n        \"rust\": [],\n        \"ts\": []\n      }}\n    }}\n  }}\n}}\n"
+            )
+        };
+        let corpus = |name: &str, cases: u8| {
+            [
+                (
+                    format!("corpora/{name}/c/manifest.json"),
+                    manifest_of(cases),
+                ),
+                (
+                    format!("corpora/{name}/c/pkg/area/file.json"),
+                    FILE.to_owned(),
+                ),
+            ]
+        };
+        let mut files: Vec<(String, String)> = vec![
+            (
+                "loader-selection/expected.json".into(),
+                EXPECTED_ONE_FILE.into(),
+            ),
+            (
+                "loader-selection/tree/pkg/area/a.json".into(),
+                "{}\n".into(),
+            ),
+            ("invalid-cases/x.json".into(), BAD_CASE.into()),
+            ("repaired-cases/x.json".into(), FILE.into()),
+            ("valid-cases/x.json".into(), FILE.into()),
+            ("manifests/invalid/x.json".into(), EMPTY_MANIFEST.into()),
+            ("manifests/repaired/x.json".into(), MANIFEST.into()),
+            ("manifests/valid/x.json".into(), MANIFEST.into()),
+            ("canonical-keys/invalid/x.json".into(), OUT_OF_ORDER.into()),
+            ("canonical-keys/repaired/x.json".into(), CANONICAL.into()),
+            (
+                "canonical-keys/differential.json".into(),
+                DIFFERENTIAL.into(),
+            ),
+            ("text-forms/pairs.json".into(), PAIRS.into()),
+        ];
+        files.extend(corpus("invalid", 3));
+        files.extend(corpus("repaired", 2));
+        files.into_iter().collect()
+    }
+
+    const BAD_CASE: &str = "{\n  \"bad\": true\n}\n";
+    const EMPTY_MANIFEST: &str = "{\n  \"files\": {}\n}\n";
+    const DIFFERENTIAL: &str = "{\n  \"documents\": [\n    {\n      \"problems\": 0,\n      \"text\": \"{}\"\n    },\n    {\n      \"problems\": 1,\n      \"text\": \"{\\\"b\\\": 1, \\\"a\\\": 2}\"\n    }\n  ]\n}\n";
+    const PAIRS: &str = "{\n  \"pairs\": [\n    {\n      \"codeUnits\": [\n        97\n      ],\n      \"text\": \"a\"\n    }\n  ]\n}\n";
+
+    /// The problems of `fixtures` for the fixture files with `changes` applied: an entry given with a text replaces or adds
+    /// the file, and one given with `None` removes it.
+    fn problems_with(changes: &[(&str, Option<&str>)]) -> Vec<String> {
+        let mut files = fixture_files();
+        for (path, text) in changes {
+            match text {
+                Some(text) => files.insert((*path).to_owned(), (*text).to_owned()),
+                None => files.remove(*path),
+            };
+        }
+        let tree: Tree = files
             .into_iter()
-            .filter(|problem| problem.contains(fragment))
-            .collect()
+            .map(|(path, text)| (path, Entry::File(text.into_bytes())))
+            .collect();
+        let sets = CaseSets {
+            pairs: &[("invalid-cases", "repaired-cases")],
+            valid: &["valid-cases"],
+        };
+        fixtures(&tree, &Ids, &sets)
+    }
+
+    /// The change must make exactly one problem, and it must name `fragment`.
+    fn exactly_one(changes: &[(&str, Option<&str>)], fragment: &str) {
+        let problems = problems_with(changes);
+        assert_eq!(problems.len(), 1, "{problems:?}");
+        assert!(
+            problems[0].contains(fragment),
+            "{problems:?} does not name {fragment}"
+        );
+    }
+
+    #[test]
+    fn a_consistent_set_of_fixtures_has_no_problem() {
+        assert_eq!(problems_with(&[]), Vec::<String>::new());
+    }
+
+    #[test]
+    fn the_case_pairs_hold_each_invalid_file_refused_its_twin_accepted_and_the_names_equal() {
+        exactly_one(
+            &[("invalid-cases/x.json", Some(FILE))],
+            "invalid-cases/x.json validated, and must not",
+        );
+        exactly_one(
+            &[("repaired-cases/x.json", Some(BAD_CASE))],
+            "repaired-cases/x.json must validate",
+        );
+        exactly_one(
+            &[("invalid-cases/y.json", Some(BAD_CASE))],
+            "do not hold the same names",
+        );
+        // With the twin gone the set is also empty, which is its own problem.
+        let missing = problems_with(&[("repaired-cases/x.json", None)]);
+        assert_eq!(missing.len(), 2, "{missing:?}");
+        assert!(
+            missing
+                .iter()
+                .any(|problem| problem.contains("do not hold the same names")),
+            "{missing:?}"
+        );
+        assert!(
+            missing
+                .iter()
+                .any(|problem| problem.contains("fixtures/repaired-cases holds no fixtures")),
+            "{missing:?}"
+        );
+    }
+
+    #[test]
+    fn the_valid_sets_hold_each_file_accepted_and_at_least_one_file() {
+        exactly_one(
+            &[("valid-cases/x.json", Some(BAD_CASE))],
+            "valid-cases/x.json must validate",
+        );
+        exactly_one(
+            &[("valid-cases/x.json", None)],
+            "fixtures/valid-cases holds no fixtures",
+        );
+    }
+
+    #[test]
+    fn the_manifest_sets_hold_each_invalid_refused_each_repaired_and_valid_accepted_and_the_names_equal()
+     {
+        exactly_one(
+            &[("manifests/invalid/x.json", Some(MANIFEST))],
+            "manifests/invalid/x.json validated, and must not",
+        );
+        exactly_one(
+            &[("manifests/repaired/x.json", Some(EMPTY_MANIFEST))],
+            "manifests/repaired/x.json must validate",
+        );
+        exactly_one(
+            &[("manifests/valid/x.json", Some(EMPTY_MANIFEST))],
+            "manifests/valid/x.json must validate",
+        );
+        exactly_one(
+            &[("manifests/invalid/y.json", Some(EMPTY_MANIFEST))],
+            "manifests/repaired and fixtures/manifests/invalid do not hold the same names",
+        );
+        exactly_one(
+            &[("manifests/valid/x.json", None)],
+            "fixtures/manifests/valid holds no fixtures",
+        );
+    }
+
+    #[test]
+    fn the_whole_corpora_hold_each_invalid_one_with_a_problem_each_repaired_one_with_none_and_the_names_equal()
+     {
+        let consistent = problems_with(&[]);
+        assert!(consistent.is_empty());
+        exactly_one(
+            &[("corpora/invalid/c/manifest.json", Some(MANIFEST))],
+            "corpora/invalid/c has no problem, and must",
+        );
+        let repaired = problems_with(&[(
+            "corpora/repaired/c/manifest.json",
+            Some(&MANIFEST.replace('2', "3")),
+        )]);
+        assert_eq!(repaired.len(), 1, "{repaired:?}");
+        assert!(
+            repaired[0].starts_with("corpora/repaired/c: "),
+            "{repaired:?}"
+        );
+        let names = problems_with(&[
+            ("corpora/repaired/c/manifest.json", None),
+            ("corpora/repaired/c/pkg/area/file.json", None),
+        ]);
+        assert!(
+            names.iter().any(|problem| problem
+                .contains("corpora/invalid and fixtures/corpora/repaired")
+                || problem.contains("fixtures/corpora/repaired holds no fixtures")),
+            "{names:?}"
+        );
+        let other = problems_with(&[("corpora/invalid/d/manifest.json", Some(EMPTY_MANIFEST))]);
+        assert!(
+            other
+                .iter()
+                .any(|problem| problem.contains("do not hold the same names")),
+            "{other:?}"
+        );
+    }
+
+    #[test]
+    fn the_canonical_keys_set_holds_the_twins_the_same_names_and_the_differential_counts() {
+        exactly_one(
+            &[("canonical-keys/invalid/y.json", Some(OUT_OF_ORDER))],
+            "canonical-keys/repaired and fixtures/canonical-keys/invalid do not hold the same names",
+        );
+        let wrong = DIFFERENTIAL.replace("\"problems\": 1", "\"problems\": 2");
+        exactly_one(
+            &[("canonical-keys/differential.json", Some(&wrong))],
+            "the rule disagrees on documents [1]",
+        );
+        let empty = "{\n  \"documents\": []\n}\n";
+        exactly_one(
+            &[("canonical-keys/differential.json", Some(empty))],
+            "must hold a non-empty list of documents",
+        );
+        exactly_one(
+            &[("canonical-keys/differential.json", None)],
+            "differential.json is missing",
+        );
+    }
+
+    #[test]
+    fn the_text_forms_hold_both_forms_of_each_text_equal_and_at_least_one_pair() {
+        let unequal = PAIRS.replace("97", "98");
+        exactly_one(
+            &[("text-forms/pairs.json", Some(&unequal))],
+            "text-forms/pairs.json: text \"a\" is",
+        );
+        let empty = "{\n  \"pairs\": []\n}\n";
+        exactly_one(
+            &[("text-forms/pairs.json", Some(empty))],
+            "must hold a non-empty list of pairs",
+        );
+        exactly_one(&[("text-forms/pairs.json", None)], "pairs.json is missing");
+    }
+
+    #[test]
+    fn the_selection_fixture_holds_a_tree_with_files_in_it_and_the_selection_it_expects() {
+        exactly_one(
+            &[("loader-selection/tree/pkg/area/a.json", None)],
+            "tree holds no files",
+        );
+        exactly_one(
+            &[("loader-selection/expected.json", Some(EXPECTED_NO_FILE))],
+            "loader-selection: selected [\"pkg/area/a.json\"]",
+        );
+        exactly_one(
+            &[("loader-selection/tree/pkg/area/Stray.json", Some("{}\n"))],
+            "loader-selection: selected",
+        );
+        exactly_one(
+            &[("loader-selection/expected.json", None)],
+            "loader-selection/expected.json is missing",
+        );
     }
 
     const EXPECTED_ONE_FILE: &str =
         "{\n  \"problems\": [],\n  \"selected\": [\n    \"pkg/area/a.json\"\n  ]\n}\n";
     const EXPECTED_NO_FILE: &str = "{\n  \"problems\": [],\n  \"selected\": []\n}\n";
-
-    #[test]
-    fn a_selection_that_differs_from_the_one_a_fixture_expects_is_reported() {
-        let tree = ("loader-selection/tree/pkg/area/a.json", "{}\n");
-        let agreeing = problems_about(
-            &[("loader-selection/expected.json", EXPECTED_ONE_FILE), tree],
-            "loader-selection",
-        );
-        assert_eq!(agreeing, Vec::<String>::new());
-        let differing = problems_about(
-            &[("loader-selection/expected.json", EXPECTED_NO_FILE), tree],
-            "loader-selection",
-        );
-        assert_eq!(differing.len(), 1, "{differing:?}");
-        assert!(
-            differing[0].contains("selected [\"pkg/area/a.json\"]"),
-            "{differing:?}"
-        );
-        let missing = problems_about(&[tree], "loader-selection");
-        assert_eq!(missing.len(), 1, "{missing:?}");
-    }
-
-    #[test]
-    fn a_problem_the_fixture_does_not_expect_is_reported() {
-        let tree = [
-            ("loader-selection/expected.json", EXPECTED_ONE_FILE),
-            ("loader-selection/tree/pkg/area/a.json", "{}\n"),
-            ("loader-selection/tree/pkg/area/Stray.json", "{}\n"),
-        ];
-        let reported = problems_about(&tree, "loader-selection");
-        assert_eq!(reported.len(), 1, "{reported:?}");
-    }
-
     const CANONICAL: &str = "{\n  \"a\": 1\n}\n";
     const OUT_OF_ORDER: &str = "{\n  \"b\": 1,\n  \"a\": 2\n}\n";
 
     #[test]
-    fn an_invalid_canonical_keys_file_that_the_rule_accepts_is_reported() {
-        let accepted = problems_about(
-            &[
-                ("canonical-keys/invalid/x.json", CANONICAL),
-                ("canonical-keys/repaired/x.json", CANONICAL),
-            ],
-            "canonical-keys/invalid/x.json",
+    fn a_canonical_keys_file_the_rule_accepts_or_refuses_wrongly_is_reported() {
+        exactly_one(
+            &[("canonical-keys/invalid/x.json", Some(CANONICAL))],
+            "canonical-keys/invalid/x.json: the rule must find a problem",
         );
-        assert_eq!(accepted.len(), 1, "{accepted:?}");
-        assert!(accepted[0].contains("must find a problem"), "{accepted:?}");
-        let refused = problems_about(
-            &[
-                ("canonical-keys/invalid/x.json", OUT_OF_ORDER),
-                ("canonical-keys/repaired/x.json", CANONICAL),
-            ],
-            "canonical-keys/x.json",
+        exactly_one(
+            &[("canonical-keys/repaired/x.json", Some(OUT_OF_ORDER))],
+            "canonical-keys/repaired/x.json: the rule must not find a problem",
         );
-        assert_eq!(refused, Vec::<String>::new());
-    }
-
-    #[test]
-    fn a_repaired_canonical_keys_file_that_the_rule_refuses_is_reported() {
-        let refused = problems_about(
-            &[
-                ("canonical-keys/invalid/x.json", OUT_OF_ORDER),
-                ("canonical-keys/repaired/x.json", OUT_OF_ORDER),
-            ],
-            "canonical-keys/repaired/x.json",
-        );
-        assert_eq!(refused.len(), 1, "{refused:?}");
     }
 }
