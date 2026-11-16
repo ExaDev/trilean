@@ -154,9 +154,9 @@ The cases are the specification of the package's behaviour: the reason codes, th
 | `regex-match` | 139 |
 | `regex-parse` | 98 |
 | `serialise` | 38 |
-| `sql-compile` | 1428 |
+| `sql-compile` | 1488 |
 | `sql-execute` | 1163 |
-| `sql-guard` | 376 |
+| `sql-guard` | 436 |
 | `sql-pattern` | 210 |
 | `validate` | 127 |
 
@@ -519,6 +519,9 @@ The PostgreSQL integration tests are cases of `trilean-sql/execute`, and the PGl
 | identifier.unit.test.ts | counts each dot-separated segment on its own | S3 |
 | identifier.unit.test.ts | reports the longest segment and never repeats the name | S3 |
 | identifier.unit.test.ts | is a rule of PostgreSQL only: SQLite carries a longer name | S3 |
+| statement-text.unit.test.ts | is refused for %s | S3 |
+| statement-text.unit.test.ts | is carried: %s | S3 |
+| statement-text.unit.test.ts | never repeats the text | S3 |
 | pglite.identifiers.integration.test.ts | does not stop a name that can be carried from running | S1 |
 | pglite.identifiers.integration.test.ts | is refused at compile time, so the engine never sees it | S1 |
 | pglite.identifiers.integration.test.ts | is quoted once and the instant comparison runs and selects the later row | S1 |
