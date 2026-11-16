@@ -1,3 +1,9 @@
+## [2.0.5](https://github.com/ExaDev/trilean/compare/trilean%402.0.4...trilean%402.0.5) (2026-11-16)
+
+### Build System
+
+* **deps-dev:** bump @vitest/coverage-v8 from 5.0.4 to 5.1.0 ([f0ad7b7](https://github.com/ExaDev/trilean/commit/f0ad7b7bbd957cbf82dee9b1f03399910e4880ff))
+
 ## [2.0.4](https://github.com/ExaDev/trilean/compare/trilean%402.0.3...trilean%402.0.4) (2026-11-16)
 
 ### Build System

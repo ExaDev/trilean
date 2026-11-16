@@ -1,3 +1,14 @@
+## [3.0.8](https://github.com/ExaDev/trilean/compare/trilean-sql%403.0.7...trilean-sql%403.0.8) (2026-11-16)
+
+### Build System
+
+* **deps-dev:** bump @vitest/coverage-v8 from 5.0.4 to 5.1.0 ([f0ad7b7](https://github.com/ExaDev/trilean/commit/f0ad7b7bbd957cbf82dee9b1f03399910e4880ff))
+
+
+### Dependencies
+
+- Updated trilean to 2.0.5
+
 ## [3.0.7](https://github.com/ExaDev/trilean/compare/trilean-sql%403.0.6...trilean-sql%403.0.7) (2026-11-16)
 
 
