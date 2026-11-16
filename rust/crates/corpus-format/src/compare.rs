@@ -527,9 +527,11 @@ mod tests {
 
     #[test]
     fn members_under_a_long_name_are_compared_without_a_path_string_each() {
-        // A path string rebuilt from the root for each member costs the length of the path each time, and a name may be
-        // as long as a document; the trail is written once, for the difference reported, so the count of trails written
-        // is the work and is the same however long the name and however many the members.
+        // The comparison takes its place as a stack of steps (`walk` has no parameter a path string could be passed in), and
+        // writes it out only for a difference: the count of trails written is the work, and is the same however long the
+        // name and however many the members. The count does not see a `format!` that bypasses the trail; the signature of
+        // `walk`, which this test calls with a trail, makes one impossible without changing it, and a changed signature
+        // does not compile here.
         let long = "k".repeat(10_000);
         let wide = |last: f64| {
             let members = Decoded::Object(
@@ -544,11 +546,14 @@ mod tests {
             );
             Decoded::Object(vec![(units(&long), members)])
         };
+        let (one, two) = (wide(1.0), wide(2.0));
+        let mut trail: crate::trail::Trail<'_> = Vec::new();
         crate::trail::RENDERED.with(|count| count.set(0));
-        assert!(compare(&wide(1.0), &wide(1.0), None).is_ok());
+        assert!(walk(&one, &one, None, false, &mut trail).is_ok());
         assert_eq!(crate::trail::RENDERED.with(std::cell::Cell::get), 0);
-        let mismatch = compare(&wide(1.0), &wide(2.0), None).unwrap_err();
+        let mismatch = walk(&two, &one, None, false, &mut trail).unwrap_err();
         assert_eq!(crate::trail::RENDERED.with(std::cell::Cell::get), 1);
+        assert!(trail.is_empty());
         assert!(mismatch.path.ends_with(".00099999"));
         assert_eq!(mismatch.path.len(), 1 + 1 + 10_000 + 1 + 8);
     }

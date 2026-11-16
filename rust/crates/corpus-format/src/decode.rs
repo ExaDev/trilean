@@ -510,9 +510,10 @@ mod tests {
 
     #[test]
     fn members_under_a_long_name_are_decoded_without_a_path_string_each() {
-        // A path string rebuilt from the root for each member costs the length of the path each time, and a name may be
-        // as long as a document; the trail is written once, for the error reported, so the count of trails written is
-        // the work and is the same however long the name and however many the members.
+        // The decoding takes its place as a stack of steps (`decode_at` has no parameter a path string could be passed in),
+        // and writes it out only for an error: the count of trails written is the work. The count does not see a `format!`
+        // that bypasses the trail; the signature of `decode_at`, which this test calls with a trail, makes one impossible
+        // without changing it, and a changed signature does not compile here.
         let long = "k".repeat(10_000);
         let members = |bad: bool| {
             let mut pairs: Vec<(String, Value)> = (0..100_000)
@@ -523,11 +524,15 @@ mod tests {
             }
             Value::Object(vec![(long.clone(), Value::Object(pairs))])
         };
+        let (good, bad) = (members(false), members(true));
+        let encodings = Encodings::shared();
+        let mut trail: Trail<'_> = Vec::new();
         crate::trail::RENDERED.with(|count| count.set(0));
-        assert!(read(&members(false)).is_ok());
+        assert!(decode_at(&good, &encodings, &mut trail, 1).is_ok());
         assert_eq!(crate::trail::RENDERED.with(std::cell::Cell::get), 0);
-        let error = read(&members(true)).unwrap_err();
+        let error = decode_at(&bad, &encodings, &mut trail, 1).unwrap_err();
         assert_eq!(crate::trail::RENDERED.with(std::cell::Cell::get), 1);
+        assert!(trail.is_empty());
         assert_eq!(error.path.len(), 1 + 1 + 10_000 + 1 + 1 + 1 + 7);
         assert!(error.path.ends_with(".z.$number"));
     }
