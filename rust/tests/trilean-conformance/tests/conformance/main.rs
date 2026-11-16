@@ -11,6 +11,7 @@
 //! other is skipped for want of a native executor.
 
 mod canonical;
+mod coverage;
 mod execute;
 mod schema;
 mod selection;
@@ -491,6 +492,7 @@ fn main() -> ExitCode {
     let mut failures = Vec::new();
     check_selection_fixture(&mut failures);
     shared::check(&mut failures);
+    coverage::check(&mut failures);
     check_pairs(
         "invalid-cases",
         "repaired-cases",
