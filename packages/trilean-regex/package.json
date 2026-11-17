@@ -11,7 +11,7 @@
     "@types/node": "^26.6.5",
     "eslint": "^10.14.0",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.6",
+    "eslint-plugin-prettier": "^5.5.7",
     "globals": "^17.14.0",
     "prettier": "^3.9.10",
     "publint": "^0.3.25",
