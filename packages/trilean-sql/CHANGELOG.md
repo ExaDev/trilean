@@ -1,3 +1,9 @@
+## [3.0.12](https://github.com/ExaDev/trilean/compare/trilean-sql%403.0.11...trilean-sql%403.0.12) (2026-11-17)
+
+### Build System
+
+* **deps-dev:** bump @electric-sql/pglite from 0.5.15 to 0.5.16 ([4b8c7bb](https://github.com/ExaDev/trilean/commit/4b8c7bbb46ec05b7121d6be37260e1ec70eea83f))
+
 ## [3.0.11](https://github.com/ExaDev/trilean/compare/trilean-sql%403.0.10...trilean-sql%403.0.11) (2026-11-17)
 
 ### Build System
