@@ -1,3 +1,14 @@
+## [2.0.8](https://github.com/ExaDev/trilean/compare/trilean%402.0.7...trilean%402.0.8) (2026-11-17)
+
+### Build System
+
+* **deps-dev:** bump eslint-plugin-prettier from 5.5.6 to 5.5.7 ([65ab21a](https://github.com/ExaDev/trilean/commit/65ab21acaee54c5fd00906d399438971a45c4137))
+
+
+### Dependencies
+
+- Updated trilean-regex to 2.0.4
+
 ## [2.0.7](https://github.com/ExaDev/trilean/compare/trilean%402.0.6...trilean%402.0.7) (2026-11-17)
 
 ### Build System
