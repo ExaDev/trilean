@@ -1,3 +1,16 @@
+## [3.0.10](https://github.com/ExaDev/trilean/compare/trilean-sql%403.0.9...trilean-sql%403.0.10) (2026-11-17)
+
+### Build System
+
+* **deps-dev:** bump @testcontainers/postgresql from 12.2.0 to 12.2.1 ([4f56a09](https://github.com/ExaDev/trilean/commit/4f56a098e8c8bb51c2cd2d5f711e241dfa758635))
+* **deps-dev:** bump typescript-eslint from 8.71.1 to 8.72.2 ([ae56b2e](https://github.com/ExaDev/trilean/commit/ae56b2efe0bd32470cb02800419394b87c503507))
+
+
+### Dependencies
+
+- Updated trilean-regex to 2.0.3
+- Updated trilean to 2.0.7
+
 ## [3.0.9](https://github.com/ExaDev/trilean/compare/trilean-sql%403.0.8...trilean-sql%403.0.9) (2026-11-16)
 
 ### Build System
