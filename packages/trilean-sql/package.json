@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
-    "@electric-sql/pglite": "^0.5.15",
+    "@electric-sql/pglite": "^0.5.16",
     "@exadev/eslint-config": "3.1.0",
     "@testcontainers/postgresql": "^12.2.1",
     "@types/better-sqlite3": "^9.6.0",
