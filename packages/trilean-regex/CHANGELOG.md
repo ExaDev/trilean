@@ -1,3 +1,9 @@
+## [2.0.6](https://github.com/ExaDev/trilean/compare/trilean-regex%402.0.5...trilean-regex%402.0.6) (2026-11-18)
+
+### Build System
+
+* **deps-dev:** bump turbo from 2.11.10 to 2.11.11 ([e9858c8](https://github.com/ExaDev/trilean/commit/e9858c82be475cb032953efab92678032ca87903))
+
 ## [2.0.5](https://github.com/ExaDev/trilean/compare/trilean-regex%402.0.4...trilean-regex%402.0.5) (2026-11-18)
 
 ### Build System
