@@ -7,11 +7,13 @@
 //! every kind in full through the types of `trilean_conformance`. A case is registered when its id is read from the
 //! raw document and checked when it passes that validation, two observations by different code that must agree per
 //! file. It counts every case in one of three categories: a case marked `skip: rust` is skipped because it is marked,
-//! a case of a regex kind is executed against the native crate (see `execute`), a stated work bound included, and any
-//! other is skipped for want of a native executor.
+//! a case of a kind the native crates execute is executed against them (see `execute`), a regex case's stated work
+//! bound included, and any other is skipped for want of a native executor. Every node kind and operator the schema
+//! defines must occur in an executed `evaluate` case (see `coverage_problems`).
 
 mod canonical;
 mod coverage;
+mod evaluate;
 mod execute;
 mod schema;
 mod selection;
@@ -261,6 +263,8 @@ struct LoadedFile {
     rust_skip_ids: Vec<String>,
     /// The cases of the file this loader executed.
     executed: usize,
+    /// The node kinds and operators the trees of the file's executed `evaluate` cases hold.
+    evaluated_tags: BTreeSet<(String, String)>,
 }
 
 /// Loads and checks a whole corpus root by every rule `conformance/README.md` states: the files selected, each file
@@ -284,6 +288,7 @@ fn check_corpus(root: &Path) -> (Vec<LoadedFile>, Vec<String>) {
         let mut run = execute::Outcome {
             executed: 0,
             failures: Vec::new(),
+            evaluated_tags: BTreeSet::new(),
         };
         let facts = read_json(&root.join(&name))
             .and_then(|value| {
@@ -309,6 +314,7 @@ fn check_corpus(root: &Path) -> (Vec<LoadedFile>, Vec<String>) {
                     ts_skip_ids: facts.ts_skip_ids,
                     rust_skip_ids: facts.rust_skip_ids,
                     executed: run.executed,
+                    evaluated_tags: run.evaluated_tags,
                 });
             }
             Err(error) => problems.push(error),
@@ -424,6 +430,7 @@ fn self_check_completeness(failures: &mut Vec<String>) {
         ts_skip_ids: Vec::new(),
         rust_skip_ids: rust.iter().map(|id| (*id).to_owned()).collect(),
         executed: 0,
+        evaluated_tags: BTreeSet::new(),
     };
     let manifest = |cases: usize, rust: &[&str]| {
         BTreeMap::from([(
@@ -479,13 +486,38 @@ fn self_check_completeness(failures: &mut Vec<String>) {
 }
 
 /// The cases this runner executed, skipped because they are marked `rust`, and skipped for want of an executor. The
-/// executed ones are the cases of the regex kinds that are not marked.
+/// executed ones are the unmarked cases of the kinds `execute` runs.
 fn counts(files: &[LoadedFile]) -> (usize, usize, usize) {
     let total: usize = files.iter().map(|file| file.case_count).sum();
     let skipped_marked: usize = files.iter().map(|file| file.rust_skip_ids.len()).sum();
     let executed: usize = files.iter().map(|file| file.executed).sum();
 
     (executed, skipped_marked, total - skipped_marked - executed)
+}
+
+/// Every node kind, operator, hit policy and duration unit the schema defines must occur in the tree of a case the
+/// native evaluator executes, so no part of the tree language goes untested natively. The members come from the
+/// schema's own enumerations, so a kind added to the schema without a case fails here.
+fn coverage_problems(files: &[LoadedFile]) -> Vec<String> {
+    let seen: BTreeSet<&(String, String)> =
+        files.iter().flat_map(|file| &file.evaluated_tags).collect();
+    let mut problems = Vec::new();
+    for (exported, _, members) in trilean::schemas::enumerations() {
+        let field = match exported {
+            "predicateKinds" | "expressionKinds" => "kind",
+            "hitPolicies" => "hitPolicy",
+            "durationUnits" => "unit",
+            _ => "op",
+        };
+        for member in members {
+            if !seen.contains(&(field.to_owned(), member.clone())) {
+                problems.push(format!(
+                    "no evaluate case the native evaluator executes holds {field} {member} ({exported})"
+                ));
+            }
+        }
+    }
+    problems
 }
 
 fn main() -> ExitCode {
@@ -532,6 +564,7 @@ fn main() -> ExitCode {
     schema::check(&mut failures);
     let (files, problems) = check_corpus(&corpus_root());
     failures.extend(problems);
+    failures.extend(coverage_problems(&files));
     let (executed, skipped_marked, skipped_without_executor) = counts(&files);
     for file in &files {
         println!(
