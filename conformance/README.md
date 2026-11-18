@@ -324,6 +324,7 @@ A test stays in an implementation's own suite when a case cannot state it. Each 
 | T8 | it checks that something runs in bounded time or work, which a case, giving an answer, cannot | keep its own time or work bound test next to the cases that pin the answer; the matcher also bounds its work by counting state visits |
 | T9 | it checks a value the command is given by its host and not by its arguments or files (the version), which a case has nowhere to state | test its own command's version output |
 | T10 | its original asserted an inequality (a sign, finiteness) of a result in the subnormal range, whose last digits differ between conforming implementations, so a case pinning the value would over-constrain it | test the inequality of the original on its own result |
+| T11 | it tests `trilean/zod`, the adapter that makes each schema a Zod schema for a TypeScript dependant composing Zod schemas, which wraps the package's own schemas and has no behaviour of its own for a case to pin | test whatever adapter it offers to a schema library of its own language the same way: against its own schemas over every validate case, and inside that library's own composition and JSON Schema writer |
 
 | Test file | Test | Code |
 | --- | --- | --- |
@@ -373,6 +374,7 @@ A test stays in an implementation's own suite when a case cannot state it. Each 
 | declaration-shape.e2e.test.ts | declares nothing bare and re-exports nothing through a trailing list | T4 |
 | declaration-shape.e2e.test.ts | declaration shape of %s | T4 |
 | declarations.e2e.test.ts | compile with the ES library alone under %s resolution | T4 |
+| declarations.e2e.test.ts | compile with zod, and name the types of schemas built from them in the declarations a dependant emits, under %s resolution | T4 |
 | depth-limit.e2e.test.ts | is at most half of the smallest depth, over every shape, at which a Node's stack or the module's stack gives out | T4 |
 | derived-aggregates.count.unit.test.ts | builds the same count whether the options are given as an empty object or left out | T1 |
 | derived-aggregates.count.unit.test.ts | refuses %s given as its second argument, the shape of the signature before the options object | T1 |
@@ -440,6 +442,7 @@ A test stays in an implementation's own suite when a case cannot state it. Each 
 | json-schema.integration.test.ts | has the same meaning for %s: every constraint, every property and every alternative | T4 |
 | json-schema.integration.test.ts | reads %s alike for every tree of the corpus and every mutant | T4 |
 | reader.e2e.test.ts | passes the checks every host runs | T5 |
+| reader.e2e.test.ts | passes the checks every host runs through the schemas of trilean/zod | T5 |
 | schema-pipeline.integration.test.ts | survives JSON.parse as a real own key: the control confirming the fixture is genuinely hazardous before validation | T1 |
 | schema-pipeline.integration.test.ts | cannot hijack a downstream copy's prototype once validated, where the unvalidated parse still can | T1 |
 | schema-pipeline.integration.test.ts | never leaks onto the shared Object.prototype, the global half of the attack | T1 |
@@ -487,6 +490,25 @@ A test stays in an implementation's own suite when a case cannot state it. Each 
 | trilean.e2e.test.ts | portableMatches matches via trilean-regex's own compiled NFA | T5 |
 | trilean.e2e.test.ts | portableNotMatches is the negation, still inside the isolate | T5 |
 | trilean.e2e.test.ts | an invalid trilean-regex pattern resolves wrong-type rather than throwing out of the isolate | T5 |
+| zod.e2e.test.ts | is the built module the exports map names | T4 |
+| zod.e2e.test.ts | is the only entry point that imports zod | T4 |
+| zod.e2e.test.ts | declares zod an optional peer dependency and not a dependency | T4 |
+| zod.e2e.test.ts | reads a tree inside a Zod object and writes its JSON Schema with the definitions at the root | T4 |
+| zod.unit.test.ts | are one Zod schema for each schema the package exports, wrapping that schema | T11 |
+| zod.unit.test.ts | covers every validate case of the corpus | T11 |
+| zod.unit.test.ts | accepts, returns and refuses at the same paths as the core schema: $id | T11 |
+| zod.unit.test.ts | is a shape value of z.object and an option of z.union | T11 |
+| zod.unit.test.ts | has Zod's methods | T11 |
+| zod.unit.test.ts | infers this package's own types | T11 |
+| zod.unit.test.ts | files every definition at the root of the document, in %s mode | T11 |
+| zod.unit.test.ts | files each definition as the package's own JSON Schema states it | T11 |
+| zod.unit.test.ts | accepts with a JSON Schema validator what the schema reads, and refuses what it refuses | T11 |
+| zod.unit.test.ts | writes a schema of trilean/zod alone as a reference to its definition | T11 |
+| zod.unit.test.ts | names its definitions under definitions for draft-07, and refuses a target that cannot say what the schema says | T11 |
+| zod.unit.test.ts | refers to the shared document for the schemas of a registry | T11 |
+| zod.unit.test.ts | refuses a document holding two different definitions under one name | T11 |
+| zod.unit.test.ts | holds the limits of the package at their edges | T11 |
+| zod.unit.test.ts | drops a key the schema does not name, inside a strict Zod object too | T11 |
 
 ## Adding a case
 

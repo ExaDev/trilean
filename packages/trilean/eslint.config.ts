@@ -146,6 +146,11 @@ export default defineConfig(
     files: ["src/evaluator.ts", "src/evaluator-collection.ts"],
     rules: { "max-params": "off" },
   },
+  // Zod's extension points are written to in place: a schema's constructor sets its own `_zod.parse` and `_zod.processJSONSchema`, `parse` writes the value it reads into the payload it is handed, and `processJSONSchema` writes into the JSON Schema object Zod's writer hands it.
+  {
+    files: ["src/zod.ts"],
+    rules: { "no-param-reassign": "off" },
+  },
   // Each resumption of a task depends on the result of the one before it, so the async driver awaits them in turn.
   {
     files: ["src/evaluator-effect.ts"],

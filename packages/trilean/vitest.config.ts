@@ -31,7 +31,7 @@ export default defineConfig({
         },
       },
       {
-        // Checks the built package rather than src/: dist/'s ESM and CJS entry points resolved through package.json's own `exports` map, and the generated schemas/trilean.schema.json. The `_test:smoke` turbo task depends on `_build`, so the output under test is always rebuilt from current source rather than whatever dist/ happened to be left lying around. See test/smoke.e2e.test.ts, test/declaration-shape.e2e.test.ts and test/cli.e2e.test.ts (the built `trilean` command).
+        // Checks the built package rather than src/: dist/'s ESM and CJS entry points resolved through package.json's own `exports` map, and the generated schemas/trilean.schema.json. The `_test:smoke` turbo task depends on `_build`, so the output under test is always rebuilt from current source rather than whatever dist/ happened to be left lying around. See test/smoke.e2e.test.ts, test/declaration-shape.e2e.test.ts, test/cli.e2e.test.ts (the built `trilean` command) and test/zod.e2e.test.ts (the `trilean/zod` entry point, and that no other entry point imports zod).
         test: {
           name: "smoke",
           include: [
@@ -40,6 +40,7 @@ export default defineConfig({
             "test/declarations.e2e.test.ts",
             "test/schemas.e2e.test.ts",
             "test/cli.e2e.test.ts",
+            "test/zod.e2e.test.ts",
           ],
         },
       },
