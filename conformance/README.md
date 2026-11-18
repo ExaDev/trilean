@@ -493,6 +493,7 @@ A test stays in an implementation's own suite when a case cannot state it. Each 
 | zod.e2e.test.ts | is the built module the exports map names | T4 |
 | zod.e2e.test.ts | is the only entry point that imports zod | T4 |
 | zod.e2e.test.ts | declares zod an optional peer dependency and not a dependency | T4 |
+| zod.e2e.test.ts | passes the checks every host of the package runs, through the schemas of trilean/zod | T4 |
 | zod.e2e.test.ts | reads a tree inside a Zod object and writes its JSON Schema with the definitions at the root | T4 |
 | zod.unit.test.ts | are one Zod schema for each schema the package exports, wrapping that schema | T11 |
 | zod.unit.test.ts | covers every validate case of the corpus | T11 |
@@ -507,7 +508,7 @@ A test stays in an implementation's own suite when a case cannot state it. Each 
 | zod.unit.test.ts | names its definitions under definitions for draft-07, and refuses a target that cannot say what the schema says | T11 |
 | zod.unit.test.ts | refers to the shared document for the schemas of a registry | T11 |
 | zod.unit.test.ts | refuses a document holding two different definitions under one name | T11 |
-| zod.unit.test.ts | holds the limits of the package at their edges | T11 |
+| zod.unit.test.ts | refuses a value one past the depth or the length limit, at the value that is past it | T11 |
 | zod.unit.test.ts | drops a key the schema does not name, inside a strict Zod object too | T11 |
 
 ## Adding a case

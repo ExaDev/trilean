@@ -3,7 +3,10 @@ import Ajv2020 from "ajv/dist/2020.js";
 import { describe, expect, expectTypeOf, it } from "vitest";
 import { fileLimit, jsonFilesUnder } from "../../../corpus-time-limit";
 import * as z from "zod";
-import { run } from "../test/support/consumer-core.mjs";
+import {
+  MAX_ARRAY_LENGTH,
+  MAX_NESTING_DEPTH,
+} from "../test/support/consumer-core.mjs";
 import * as computedValue from "./computed-value";
 import * as evaluation from "./evaluation";
 import type {
@@ -26,7 +29,7 @@ import {
   type ComputedValueSchema,
   ExpressionNodeSchema,
   type IndeterminateReasonSchema,
-  type JsonValueSchema,
+  JsonValueSchema,
   NotNodeSchema,
   PredicateNodeSchema,
   UnitSchema,
@@ -438,10 +441,31 @@ describe("the JSON Schema z.toJSONSchema writes", () => {
 });
 
 describe("validation through trilean/zod", () => {
-  it("holds the limits of the package at their edges", () => {
-    const { executed, failures } = run({ ...core, ...zod }, []);
-    expect(failures).toEqual([]);
-    expect(executed).toBeGreaterThan(0);
+  // The whole set of checks every host runs at the limits is run through trilean/zod in test/zod.e2e.test.ts, against the built package; these are the depth and length limits at their edges, which cost little.
+  it("refuses a value one past the depth or the length limit, at the value that is past it", () => {
+    const nested = (levels: number): unknown => {
+      let value: unknown = 1;
+      for (let level = 0; level < levels; level += 1) value = [value];
+
+      return value;
+    };
+    expect(JsonValueSchema.safeParse(nested(MAX_NESTING_DEPTH)).success).toBe(
+      true,
+    );
+    const tooDeep = JsonValueSchema.safeParse(nested(MAX_NESTING_DEPTH + 1));
+    expect(tooDeep.error?.issues.map(({ path }) => path.length)).toEqual([
+      MAX_NESTING_DEPTH,
+    ]);
+    expect(
+      z
+        .object({ value: JsonValueSchema })
+        .safeParse({ value: new Array<number>(MAX_ARRAY_LENGTH).fill(0) })
+        .success,
+    ).toBe(true);
+    const tooLong = z
+      .object({ value: JsonValueSchema })
+      .safeParse({ value: new Array<number>(MAX_ARRAY_LENGTH + 1).fill(0) });
+    expect(tooLong.error?.issues.map(({ path }) => path)).toEqual([["value"]]);
   });
 
   it("drops a key the schema does not name, inside a strict Zod object too", () => {

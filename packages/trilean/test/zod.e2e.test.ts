@@ -1,4 +1,4 @@
-/* Checks `trilean/zod` in the built package: the export resolves to the built module, the module works with Zod, and no other entry point of the package (its subpaths, the modules they import and the `trilean` command) imports `zod`, which is an optional peer dependency that a dependant who never imports `trilean/zod` does not install.
+/* Checks `trilean/zod` in the built package: the export resolves to the built module, the module works with Zod and passes the checks every host runs (the corpus's validate cases and the limits at their edges), and no other entry point of the package (its subpaths, the modules they import and the `trilean` command) imports `zod`, which is an optional peer dependency that a dependant who never imports `trilean/zod` does not install.
 
    Checks the built package like smoke.e2e.test.ts does (the `_test:smoke` turbo task depends on `_build`), and is a member of tsconfig.node.json's program, so it may use Node APIs. */
 
@@ -6,7 +6,10 @@ import { existsSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import * as z from "zod";
+import * as built from "../dist/index.js";
 import type * as ZodModule from "../dist/zod.js";
+import { run } from "./support/consumer-core.mjs";
+import { validateCases } from "./support/validate-cases";
 
 const PACKAGE = resolve(import.meta.dirname, "..");
 
@@ -114,6 +117,15 @@ describe("trilean/zod in the built package", () => {
       record(manifest.peerDependenciesMeta, "peerDependenciesMeta").zod,
     ).toEqual({ optional: true });
     expect(record(manifest.dependencies, "dependencies").zod).toBeUndefined();
+  });
+
+  it("passes the checks every host of the package runs, through the schemas of trilean/zod", () => {
+    const { executed, failures } = run(
+      { ...built, ...zodEntry },
+      validateCases(),
+    );
+    expect(failures).toEqual([]);
+    expect(executed).toBeGreaterThan(validateCases().length);
   });
 
   it("reads a tree inside a Zod object and writes its JSON Schema with the definitions at the root", () => {
