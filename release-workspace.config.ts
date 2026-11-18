@@ -59,12 +59,13 @@ const config: Pick<
       "rust/crates/trilean-regex",
       "rust/bindings/trilean-regex-wasm",
     ],
-    // The crates the trilean wasm module links: its binding, the crate of values, trees and their evaluator, the crates that read and describe a shape, and the regex engine the evaluator runs patterns with.
+    // The crates the trilean wasm module links: its binding, the crate of values, trees and their evaluator, the crates that read and describe a shape and their pattern grammar, and the regex engine the evaluator runs patterns with.
     trilean: [
       "rust/bindings/trilean-wasm",
-      "rust/crates/json-shape",
-      "rust/crates/json-shape-derive",
-      "rust/crates/trilean",
+      "rust/crates/trilean-eval",
+      "rust/crates/trilean-json-shape",
+      "rust/crates/trilean-json-shape-derive",
+      "rust/crates/trilean-json-shape-pattern",
       "rust/crates/trilean-regex",
     ],
   },

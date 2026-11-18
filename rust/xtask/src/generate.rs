@@ -209,10 +209,10 @@ export interface TrileanSchema<T> extends StandardSchemaV1<unknown, T> {
 
 /// A JSON string literal of the text, which a JavaScript module holds as source.
 fn js_text(text: &str) -> String {
-    json_shape::Value::String(text.to_owned()).to_string()
+    trilean_json_shape::Value::String(text.to_owned()).to_string()
 }
 
-/// The generated module of the schemas: one frozen Standard Schema object for each schema of `trilean::schemas`, the
+/// The generated module of the schemas: one frozen Standard Schema object for each schema of `trilean_eval::schemas`, the
 /// plain arrays beside them, and nothing that reads a value itself: `validate` hands it to the module.
 fn schemas_js(package: &Package) -> String {
     let mut text = format!(
@@ -224,13 +224,13 @@ fn schemas_js(package: &Package) -> String {
     );
     text.push_str(&format!(
         "const definitions = freeze(JSON.parse({}));\n\n",
-        js_text(&trilean::schemas::definitions_schema().to_string())
+        js_text(&trilean_eval::schemas::definitions_schema().to_string())
     ));
     text.push_str(
         "function schema(name, source) {\n  return Object.freeze({\n    \"~standard\": Object.freeze({\n      version: 1,\n      vendor: \"trilean\",\n      validate: (value) => readSchema(name, value),\n    }),\n    jsonSchema: freeze({ ...JSON.parse(source), $defs: definitions }),\n  });\n}\n\n",
     );
-    for schema in trilean::schemas::SCHEMAS {
-        let source = trilean::schemas::json_schema_of(schema.name)
+    for schema in trilean_eval::schemas::SCHEMAS {
+        let source = trilean_eval::schemas::json_schema_of(schema.name)
             .map(|document| document.to_string())
             .unwrap_or_default();
         text.push_str(&format!(
@@ -241,7 +241,7 @@ fn schemas_js(package: &Package) -> String {
         ));
     }
     text.push('\n');
-    for (name, _, members) in trilean::schemas::enumerations() {
+    for (name, _, members) in trilean_eval::schemas::enumerations() {
         let list: Vec<String> = members.iter().map(|member| js_text(member)).collect();
         text.push_str(&format!(
             "export const {name} = Object.freeze([{}]);\n",
@@ -255,16 +255,16 @@ fn schemas_js(package: &Package) -> String {
 /// exported schema and array.
 fn schemas_declarations() -> String {
     let mut text = String::from(STANDARD_SCHEMA_TYPES);
-    text.push_str(&trilean::schemas::typescript());
+    text.push_str(&trilean_eval::schemas::typescript());
     text.push('\n');
-    for schema in trilean::schemas::SCHEMAS {
+    for schema in trilean_eval::schemas::SCHEMAS {
         text.push_str(&format!(
             "export declare const {}: TrileanSchema<{}>;\n",
             schema.name, schema.type_name
         ));
     }
     text.push('\n');
-    for (name, element, _) in trilean::schemas::enumerations() {
+    for (name, element, _) in trilean_eval::schemas::enumerations() {
         text.push_str(&format!(
             "export declare const {name}: readonly {element}[];\n"
         ));
@@ -277,7 +277,7 @@ fn schemas_declarations() -> String {
 /// form and a consumer can re-derive its digest from the parsed content.
 fn published_schema(version: &str) -> String {
     let id = format!("https://cdn.jsdelivr.net/npm/trilean@{version}/schemas/trilean.schema.json");
-    trilean::schemas::published_document(&id).canonical()
+    trilean_eval::schemas::published_document(&id).canonical()
 }
 
 /// The version a package manifest declares.
@@ -285,11 +285,11 @@ fn manifest_version(package_directory: &Path) -> Result<String, String> {
     let path = package_directory.join("package.json");
     let manifest =
         fs::read_to_string(&path).map_err(|error| format!("{}: {error}", path.display()))?;
-    let value: json_shape::Value =
+    let value: trilean_json_shape::Value =
         serde_json::from_str(&manifest).map_err(|error| format!("{}: {error}", path.display()))?;
     value
         .get("version")
-        .and_then(json_shape::Value::as_str)
+        .and_then(trilean_json_shape::Value::as_str)
         .map(str::to_owned)
         .ok_or_else(|| format!("{} has no version", path.display()))
 }

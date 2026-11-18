@@ -1,4 +1,4 @@
-//! The number form of a canonical file is the text `JSON.stringify` writes for the double, which `json_shape` implements
+//! The number form of a canonical file is the text `JSON.stringify` writes for the double, which `trilean_json_shape` implements
 //! by hand. `number-forms.txt` holds, for a spread of doubles (the edge values, every decade's boundaries, random bit
 //! patterns, shortest-digit and tie cases), the bits of the double and the text a JavaScript engine writes for it, so
 //! the routine is held to the engine itself and not to a handful of literals. The table is written by
@@ -6,7 +6,7 @@
 //! a boundary is missing from it.
 
 use corpus_format::{check_canonical, write_canonical};
-use json_shape::Value;
+use trilean_json_shape::Value;
 
 const FORMS: &str = include_str!("number-forms.txt");
 
@@ -84,7 +84,7 @@ fn the_engines_text_is_canonical_and_reads_back_as_the_double() {
     for (number, text) in forms() {
         let document = format!("{text}\n");
         assert_eq!(check_canonical(document.as_bytes()), Ok(()), "{text}");
-        let value = json_shape::Value::Number(number);
+        let value = trilean_json_shape::Value::Number(number);
         assert_eq!(
             write_canonical(&value).as_deref(),
             Ok(document.as_str()),

@@ -9,7 +9,7 @@ repository.workspace = true
 publish = false
 
 [dependencies]
-json-shape.workspace = true
+trilean-json-shape.workspace = true
 
 [dev-dependencies]
 # Test only: the reading of a case file by the stub loader of a test, and the check that the workspace reads a number as the nearest double.

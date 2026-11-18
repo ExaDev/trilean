@@ -6,7 +6,7 @@
 
 use std::any::TypeId;
 
-use json_shape::{
+use trilean_json_shape::{
     Class, Issues, Kind, Map, ObjectDef, OpenObject, Path, Registry, Shape, ShapeDef, Value,
 };
 
@@ -64,7 +64,7 @@ impl Shape for BadSpecialNumber {
     fn definition() -> ShapeDef {
         ShapeDef::new(Kind::AllOf(vec![
             ShapeDef::new(Kind::Object(ObjectDef {
-                fields: vec![json_shape::FieldDef {
+                fields: vec![trilean_json_shape::FieldDef {
                     name: "$number".to_owned(),
                     shape: ShapeDef::new(Kind::Any),
                     required: true,

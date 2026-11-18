@@ -1,0 +1,31 @@
+[package]
+name = "trilean-json-shape"
+description = "One Rust definition for validating JSON, a JSON Schema and TypeScript declarations."
+version = "2.0.8"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme = "README.md"
+keywords = ["json", "json-schema", "validation", "typescript", "serde"]
+categories = ["encoding", "parser-implementations", "data-structures"]
+# The agreement test reads the shared tables of documents in the repository's conformance directory, which a published crate does not hold.
+exclude = ["tests/agreement.rs"]
+
+# The npm package this crate is released with: it takes that package's version at every release (scripts/crate-versions.py).
+[package.metadata.trilean-release]
+npm-package = "trilean"
+
+[dependencies]
+trilean-json-shape-derive.workspace = true
+trilean-json-shape-pattern.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+
+[dev-dependencies]
+# The derive of serde itself, which the rename_all test compares the shape's keys with.
+serde = { workspace = true, features = ["derive"] }
+
+[lints]
+workspace = true

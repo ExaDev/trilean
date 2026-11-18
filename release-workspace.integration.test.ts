@@ -257,9 +257,10 @@ describe("release-workspace.config.ts packageSources against the Rust workspace"
     ]);
     expect(expectedSources(cargoMetadata(), "trilean")).toEqual([
       "rust/bindings/trilean-wasm",
-      "rust/crates/json-shape",
-      "rust/crates/json-shape-derive",
-      "rust/crates/trilean",
+      "rust/crates/trilean-eval",
+      "rust/crates/trilean-json-shape",
+      "rust/crates/trilean-json-shape-derive",
+      "rust/crates/trilean-json-shape-pattern",
       "rust/crates/trilean-regex",
     ]);
   });

@@ -1,5 +1,5 @@
-// expect: named `default` found for struct `json_shape::Path`
+// expect: named `default` found for struct `trilean_json_shape::Path`
 // A `Path` carries what one conversion remembers, so only `Shape::from_json` makes one, for one document.
-pub fn made() -> json_shape::Path {
-    json_shape::Path::default()
+pub fn made() -> trilean_json_shape::Path {
+    trilean_json_shape::Path::default()
 }

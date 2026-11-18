@@ -1,12 +1,19 @@
 [package]
 name = "trilean-regex"
 description = "A portable regular-expression grammar over UTF-16 code units, with a Thompson-construction matcher that never backtracks."
-version.workspace = true
+version = "2.0.4"
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
 repository.workspace = true
-publish = false
+homepage.workspace = true
+readme = "README.md"
+keywords = ["regex", "regular-expression", "nfa", "parser", "utf-16"]
+categories = ["text-processing", "parser-implementations", "wasm"]
+
+# The npm package this crate is released with: it takes that package's version at every release (scripts/crate-versions.py).
+[package.metadata.trilean-release]
+npm-package = "trilean-regex"
 
 [lints]
 workspace = true

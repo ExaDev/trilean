@@ -1,5 +1,5 @@
 // expect: a flattened field must be a struct that derives Shape
-use json_shape::Shape;
+use trilean_json_shape::Shape;
 
 #[derive(Shape)]
 pub struct Wrong {

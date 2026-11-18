@@ -17,7 +17,7 @@
 
 use std::collections::HashSet;
 
-use json_shape::Value;
+use trilean_json_shape::Value;
 
 use crate::canonical::MAX_DEPTH;
 use crate::trail::{Step, Trail, render};

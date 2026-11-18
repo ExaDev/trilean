@@ -7,7 +7,7 @@ import { describe, expect, it } from "vitest";
 import { fileLimit } from "./corpus-time-limit";
 
 /**
- * The Rust crate json-shape validates two tables of documents with the validator its test types derive: `documents.json`, written by hand for edge cases, and `generated.json`, built from the type descriptors (a minimal accepting document, the other accepting forms and one mutation per constraint). Rust tests check that the schemas beside them (`schema.json` for draft 2020-12, `schema-draft-07.json` for draft-07) and `generated.json` are what the types emit and generate. This test gives the same documents the verdict of the same schemas under Ajv in strict mode, in both drafts, so a derived validator and an emitted schema cannot accept different documents without one of the two suites failing.
+ * The Rust crate trilean-json-shape validates two tables of documents with the validator its test types derive: `documents.json`, written by hand for edge cases, and `generated.json`, built from the type descriptors (a minimal accepting document, the other accepting forms and one mutation per constraint). Rust tests check that the schemas beside them (`schema.json` for draft 2020-12, `schema-draft-07.json` for draft-07) and `generated.json` are what the types emit and generate. This test gives the same documents the verdict of the same schemas under Ajv in strict mode, in both drafts, so a derived validator and an emitted schema cannot accept different documents without one of the two suites failing.
  */
 
 // How many files of each verdict the corpus and its fixtures must hold for the comparison to compare something.
@@ -82,7 +82,7 @@ const DRAFTS = [
   },
 ] as const;
 
-describe("json-shape agreement", () => {
+describe("trilean-json-shape agreement", () => {
   for (const draft of DRAFTS) {
     for (const table of ["documents.json", "generated.json"]) {
       it(`gives every document of ${table} the verdict the table records, in ${draft.name}`, () => {

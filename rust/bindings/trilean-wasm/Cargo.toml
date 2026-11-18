@@ -13,8 +13,8 @@ crate-type = ["cdylib"]
 
 [dependencies]
 js-sys.workspace = true
-json-shape.workspace = true
-trilean.workspace = true
+trilean-eval.workspace = true
+trilean-json-shape.workspace = true
 wasm-bindgen.workspace = true
 
 [lints]

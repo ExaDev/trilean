@@ -1,5 +1,5 @@
 // expect: #[shape(constant = "text")] applies only to a string
-use json_shape::Shape;
+use trilean_json_shape::Shape;
 
 #[derive(Shape)]
 pub struct Wrong {

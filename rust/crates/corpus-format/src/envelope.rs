@@ -1,6 +1,6 @@
 //! What every case has, whatever its kind. A repository's case types embed it with `#[serde(flatten)]`.
 
-use json_shape::Shape;
+use trilean_json_shape::Shape;
 
 /// Which implementation cannot run a case: `ts` for a case the TypeScript implementation skips, `rust` for a case
 /// every build of the Rust implementation skips, wherever it runs (native, or wasm under Node, a browser or Workers).

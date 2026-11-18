@@ -279,18 +279,18 @@ fn run_match_case(case: &Value) -> Check<()> {
 
 /// The corpus JSON value as the value a schema reads, with each `{"$number": ...}` that names a number the canonical
 /// JSON form cannot hold replaced by that number. `Ok(None)` when the value holds a NaN or an infinity, which no value
-/// of `json_shape` can: a schema refuses such a number, so a case that has one expects a refusal. A name `$number`
+/// of `trilean_json_shape` can: a schema refuses such a number, so a case that has one expects a refusal. A name `$number`
 /// does not know is an error, so a misspelt name cannot be read as a refusal.
-fn decode_value(value: &Value) -> Check<Option<json_shape::Value>> {
+fn decode_value(value: &Value) -> Check<Option<trilean_json_shape::Value>> {
     Ok(Some(match value {
-        Value::Null => json_shape::Value::Null,
-        Value::Bool(flag) => json_shape::Value::Bool(*flag),
-        Value::Number(number) => json_shape::Value::Number(
+        Value::Null => trilean_json_shape::Value::Null,
+        Value::Bool(flag) => trilean_json_shape::Value::Bool(*flag),
+        Value::Number(number) => trilean_json_shape::Value::Number(
             number
                 .as_f64()
                 .ok_or_else(|| format!("the number {number} is not a double"))?,
         ),
-        Value::String(text) => json_shape::Value::String(text.clone()),
+        Value::String(text) => trilean_json_shape::Value::String(text.clone()),
         Value::Array(items) => {
             let mut decoded = Vec::with_capacity(items.len());
             for item in items {
@@ -299,14 +299,14 @@ fn decode_value(value: &Value) -> Check<Option<json_shape::Value>> {
                     None => return Ok(None),
                 }
             }
-            json_shape::Value::Array(decoded)
+            trilean_json_shape::Value::Array(decoded)
         }
         Value::Object(members) => {
             if members.len() == 1
                 && let Some(Value::String(name)) = members.get("$number")
             {
                 return match name.as_str() {
-                    "-0" => Ok(Some(json_shape::Value::Number(-0.0))),
+                    "-0" => Ok(Some(trilean_json_shape::Value::Number(-0.0))),
                     "Infinity" | "-Infinity" | "NaN" => Ok(None),
                     other => Err(format!(
                         "$number names {other}, which is not a number a corpus file names"
@@ -320,15 +320,15 @@ fn decode_value(value: &Value) -> Check<Option<json_shape::Value>> {
                     None => return Ok(None),
                 }
             }
-            json_shape::Value::Object(decoded)
+            trilean_json_shape::Value::Object(decoded)
         }
     }))
 }
 
 /// Whether two values are equal as the corpus compares them: the same doubles, a negative zero not being a zero, and
 /// an object's members in any order.
-fn identical(read: &json_shape::Value, expected: &json_shape::Value) -> bool {
-    use json_shape::Value::{Array, Bool, Null, Number, Object, String};
+fn identical(read: &trilean_json_shape::Value, expected: &trilean_json_shape::Value) -> bool {
+    use trilean_json_shape::Value::{Array, Bool, Null, Number, Object, String};
     match (read, expected) {
         (Null, Null) => true,
         (Bool(a), Bool(b)) => a == b,
@@ -348,14 +348,14 @@ fn identical(read: &json_shape::Value, expected: &json_shape::Value) -> bool {
 }
 
 /// The path of an issue as the corpus writes it: a list of keys and indexes.
-fn path_of(issue: &json_shape::Issue) -> Value {
+fn path_of(issue: &trilean_json_shape::Issue) -> Value {
     Value::Array(
         issue
             .path
             .iter()
             .map(|step| match step {
-                json_shape::PathSegment::Key(key) => json!(key),
-                json_shape::PathSegment::Index(index) => json!(index),
+                trilean_json_shape::PathSegment::Key(key) => json!(key),
+                trilean_json_shape::PathSegment::Index(index) => json!(index),
             })
             .collect(),
     )
@@ -366,7 +366,7 @@ fn run_validate_case(case: &Value) -> Check<()> {
     let wanted = &case["expect"];
     let accepted = wanted["ok"].as_bool() == Some(true);
     let read = match decode_value(&case["input"])? {
-        Some(input) => trilean::schemas::read(name, &input)
+        Some(input) => trilean_eval::schemas::read(name, &input)
             .ok_or_else(|| format!("no schema is exported under the name {name}"))?,
         None => Err(Vec::new()),
     };
@@ -418,9 +418,9 @@ fn run_validate_case(case: &Value) -> Check<()> {
 fn run_serialise_case(case: &Value) -> Check<()> {
     let name = case["schema"].as_str().unwrap_or_default();
     let text = case["input"].as_str().unwrap_or_default();
-    let input: json_shape::Value =
+    let input: trilean_json_shape::Value =
         serde_json::from_str(text).map_err(|error| format!("the input is not JSON: {error}"))?;
-    let read = trilean::schemas::read(name, &input)
+    let read = trilean_eval::schemas::read(name, &input)
         .ok_or_else(|| format!("no schema is exported under the name {name}"))?
         .map_err(|issues| format!("{name} refused the input: {} problems", issues.len()))?;
     let written = read.to_string();
@@ -446,7 +446,7 @@ fn run_number_format_case(case: &Value) -> Check<()> {
             .as_f64()
             .ok_or("a number-format case needs a number")?,
     };
-    let written = trilean::ecmascript::number_to_string(number);
+    let written = trilean_eval::ecmascript::number_to_string(number);
     let expected = case["expect"].as_str().unwrap_or_default();
     if written == expected {
         Ok(())

@@ -9,9 +9,9 @@
 use std::fs;
 use std::path::Path;
 
-use json_shape::{Draft, SchemaOptions, schema_of};
 use serde_json::{Map, Value};
 use trilean_conformance::CorpusFile;
+use trilean_json_shape::{Draft, SchemaOptions, schema_of};
 
 /// Keys that say something about a schema for a reader, not what it accepts.
 const NOTES: [&str; 5] = ["description", "title", "$id", "$schema", "$comment"];

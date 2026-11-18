@@ -4,7 +4,7 @@
 //! given as a [`Loader`]; everything around it is here: which files are corpus files, that each is in the canonical
 //! form, that ids are unique across files, and that the corpus is what its manifest says.
 
-use json_shape::Value;
+use trilean_json_shape::Value;
 
 use crate::canonical::{check_canonical, key_problems, parse_canonical};
 use crate::decode::{Encodings, decode};

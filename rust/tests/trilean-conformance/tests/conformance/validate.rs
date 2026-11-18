@@ -9,9 +9,9 @@
 
 use std::collections::{BTreeMap, BTreeSet};
 
-use json_shape::{Shape, Value as Shaped};
 use serde_json::{Map, Value};
 use trilean_conformance::{Case, CorpusFile, RegexNode, RegexParseExpect, Skip, Text};
+use trilean_json_shape::{Shape, Value as Shaped};
 
 type Check<T> = Result<T, String>;
 
