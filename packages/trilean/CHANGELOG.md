@@ -1,3 +1,13 @@
+## [3.1.0](https://github.com/ExaDev/trilean/compare/trilean%403.0.0...trilean%403.1.0) (2026-11-18)
+
+### Features
+
+* **trilean:** offer every schema as a Zod schema in trilean/zod ([e6cff81](https://github.com/ExaDev/trilean/commit/e6cff81905caf0871134d8775cd544d9a05173c1))
+
+### Tests
+
+* **trilean:** run the host checks through trilean/zod against the built package ([3eb91fa](https://github.com/ExaDev/trilean/commit/3eb91fa59d2a10fca4c6e0c77c0a4bc141b27473))
+
 ## [3.0.0](https://github.com/ExaDev/trilean/compare/trilean%402.0.8...trilean%403.0.0) (2026-11-18)
 
 ### ⚠ BREAKING CHANGES
