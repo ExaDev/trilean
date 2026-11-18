@@ -1,3 +1,57 @@
+## [3.0.0](https://github.com/ExaDev/trilean/compare/trilean%402.0.8...trilean%403.0.0) (2026-11-18)
+
+### ⚠ BREAKING CHANGES
+
+* **trilean:** `count` takes its filter and probe as `count(collection, { filter, probe })`
+  instead of as a second and third argument.
+* **trilean:** `count` throws a TypeError when its second argument is a node.
+* **trilean:** the exported schemas are Standard Schema objects with no Zod methods (`parse`,
+  `safeParse`, `.options`, `.shape`), so a dependant reads a value with `~standard.validate` and the
+  operator and kind lists from the exported arrays. The issue messages are this package's own and
+  not Zod's. A string or an object key that holds an unpaired surrogate is refused where 1.13.0
+  accepted it, a key called `__proto__` is dropped from every opaque value and map where `z.record`
+  kept it, a hole or an `undefined` inside an array is refused, and a value nested more than 500
+  levels, an array of more than 65,536 elements, a value of more than 1,000,000 values in all, a
+  string or an object key of more than 1,048,576 code units and a value of more than 4,194,304 code
+  units of text in all are refused, where 1.13.0 read them. `trilean/complex-division`,
+  `trilean/duration-order`, `trilean/evaluator`, `trilean/evaluator-collection`,
+  `trilean/evaluator-compiled`, `trilean/evaluator-effect`, `trilean/evaluator-literals`,
+  `trilean/evaluator-operations`, `trilean/integer-power` and `trilean/plain-record` are no longer
+  importable, and the `sideEffects` field is removed.
+
+### Features
+
+* **trilean:** define the values and trees in Rust, and drop Zod ([bf96219](https://github.com/ExaDev/trilean/commit/bf962198a355e3f8d791bdafe76b7196f97f3e43))
+* **trilean:** take count's filter and probe as one options object ([07dbc14](https://github.com/ExaDev/trilean/commit/07dbc147ba6938024c9da470d0c3f03d0f22c164))
+
+### Bug Fixes
+
+* **trilean:** bound the length of an array and the depth of a value before they are read ([9f63b96](https://github.com/ExaDev/trilean/commit/9f63b96bba6317c213234080d074d70798164561))
+* **trilean:** bound the text one read copies, and refuse a count given an array ([cf72ccb](https://github.com/ExaDev/trilean/commit/cf72ccba082d50d1b6da3aa8618b6fcce268b9ec))
+* **trilean:** give a throwing value back as an issue, and refuse a key that is not text ([8e406e2](https://github.com/ExaDev/trilean/commit/8e406e220a49969773ca5323b1946db045fa7000))
+* **trilean:** refuse a node given to count where its options object goes ([fabbf54](https://github.com/ExaDev/trilean/commit/fabbf54994860e09f2a9577331ee32178ddd9bc1))
+* **trilean:** reserve nothing from a host's array length and test __proto__ everywhere ([05d34e4](https://github.com/ExaDev/trilean/commit/05d34e49b69e171e87533a5beb29c0aca5fc2f3e))
+
+### Documentation
+
+* **trilean:** state the limits of the reader, and write the lines the change touched without a dash ([a57fa47](https://github.com/ExaDev/trilean/commit/a57fa4740e7f1ec2dc7e3343df549c8f59b39105))
+
+### Tests
+
+* **trilean:** build the packed trilean with each bundler and run it in a browser, Node and workerd ([a5f42ee](https://github.com/ExaDev/trilean/commit/a5f42eefef345aee0d1836c94a85a0c66a50deb3))
+* **trilean:** compare the JSON Schema with the one published in 1.13.0 as a document ([49ca58e](https://github.com/ExaDev/trilean/commit/49ca58ec785e3b477edea65fe2e8b5aea2665ac6))
+* **trilean:** measure where a stack gives out, and hold the nesting limit to half of it ([1e27f5e](https://github.com/ExaDev/trilean/commit/1e27f5ec81fed848d3aab75ebe9d374d2c427618))
+* **trilean:** pin where the native corpus refuses a value, and fail on a name it does not know ([df81796](https://github.com/ExaDev/trilean/commit/df81796bf1132b0324b4d8e9474370e298a920a5))
+
+### Build System
+
+* **rust:** name the crates for crates.io and give each a version to publish at ([90e1cea](https://github.com/ExaDev/trilean/commit/90e1ceaa38f704bf545b4b88bcf07ddb7ea04957))
+
+
+### Dependencies
+
+- Updated trilean-regex to 2.0.5
+
 ## [2.0.8](https://github.com/ExaDev/trilean/compare/trilean%402.0.7...trilean%402.0.8) (2026-11-17)
 
 ### Build System

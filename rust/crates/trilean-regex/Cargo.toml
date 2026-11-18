@@ -1,7 +1,7 @@
 [package]
 name = "trilean-regex"
 description = "A portable regular-expression grammar over UTF-16 code units, with a Thompson-construction matcher that never backtracks."
-version = "2.0.4"
+version = "2.0.5"
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true

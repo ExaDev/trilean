@@ -1,3 +1,9 @@
+## [2.0.5](https://github.com/ExaDev/trilean/compare/trilean-regex%402.0.4...trilean-regex%402.0.5) (2026-11-18)
+
+### Build System
+
+* **rust:** name the crates for crates.io and give each a version to publish at ([90e1cea](https://github.com/ExaDev/trilean/commit/90e1ceaa38f704bf545b4b88bcf07ddb7ea04957))
+
 ## [2.0.4](https://github.com/ExaDev/trilean/compare/trilean-regex%402.0.3...trilean-regex%402.0.4) (2026-11-17)
 
 ### Build System

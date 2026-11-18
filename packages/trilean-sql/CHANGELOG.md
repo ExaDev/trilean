@@ -1,3 +1,15 @@
+## [3.0.13](https://github.com/ExaDev/trilean/compare/trilean-sql%403.0.12...trilean-sql%403.0.13) (2026-11-18)
+
+### Tests
+
+* **trilean-sql:** read the operators and node kinds from the arrays trilean exports ([4db39a6](https://github.com/ExaDev/trilean/commit/4db39a6d46a4c6ed00a242c7402b507d24dc6207))
+
+
+### Dependencies
+
+- Updated trilean-regex to 2.0.5
+- Updated trilean to 3.0.0
+
 ## [3.0.12](https://github.com/ExaDev/trilean/compare/trilean-sql%403.0.11...trilean-sql%403.0.12) (2026-11-17)
 
 ### Build System
