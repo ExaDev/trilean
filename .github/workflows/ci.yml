@@ -308,6 +308,32 @@ jobs:
       - name: Check which workspace crates may use the code-generation crates
         run: sh scripts/rust.sh deny-bans "$PWD/rust/Cargo.toml" "$PWD/rust/deny-boundaries.toml"
 
+  # The crates published to crates.io, packaged and verified as crates.io would receive them, without uploading anything: each one's version is checked against the npm package it is released with, the files each would ship are listed, and the publish dry run (`rust.sh publish-dry-run`) packages them together in dependency order and builds each from its own package against the others' (a crate crates.io does not hold yet resolves from that set). A version crates.io already holds is a warning in a dry run, so this passes between releases too. scripts/crate-versions.py names the crates, so a crate that becomes publishable is covered without an edit here.
+  crates:
+    name: Crates publish dry run
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install the pinned toolchain
+        working-directory: rust
+        run: rustup toolchain install
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          workspaces: rust
+      - name: Check every published crate has its npm package's version
+        run: python3 -I scripts/crate-versions.py check
+      - name: List the files each crate is published with
+        run: |
+          mapfile -t crates < <(python3 -I scripts/crate-versions.py published)
+          sh scripts/rust.sh package-list "${crates[@]}"
+      - name: Package and verify every crate, in dependency order, without uploading
+        run: |
+          mapfile -t crates < <(python3 -I scripts/crate-versions.py published)
+          sh scripts/rust.sh publish-dry-run "${crates[@]}"
+
   # Single stable branch-protection target aggregating every job that runs on every PR, so the required status check doesn't need updating whenever a job is added, renamed, or split.
   required-checks:
     name: Required Checks
@@ -326,6 +352,7 @@ jobs:
         runtimes,
         rust,
         cargo-deny,
+        crates,
       ]
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -418,6 +445,48 @@ jobs:
             echo "::notice::No new package tag; nothing was released by this run."
           fi
           echo "matrix=$MATRIX" >> "$GITHUB_OUTPUT"
+
+  # The crates released with each package this run released, published to crates.io at the version the release commit gave them (scripts/semantic-release-crate-versions.mjs), after the npm publish, through crates.io trusted publishing: the OIDC token of this job is exchanged for a publish token that lasts 30 minutes and is revoked when the job ends, so no crates.io token is stored. Each crate's trusted publisher names this repository and ci.yml. What crates.io already holds is left out, so the job publishes whatever an earlier run left unpublished as well, and does nothing when everything is there; it fails, naming the crates, when crates.io has never held one, because trusted publishing configures a crate that exists and the first release of each is published with an API token by hand.
+  publish-crates:
+    name: Publish crates to crates.io
+    needs: release
+    if: needs.release.result == 'success'
+    # Never two at once: a second run would find the same versions missing and race the first to upload them.
+    concurrency:
+      group: publish-crates
+      cancel-in-progress: false
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      id-token: write # OIDC identity for crates.io trusted publishing (no stored token)
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # The release commit every tag of this run points at (the single commit strategy tags them all at one commit), whose crate versions are the released ones; with nothing released this run, the commit the run is for, whose crate versions are those of the last release.
+          ref: ${{ needs.release.outputs.matrix != '[]' && fromJSON(needs.release.outputs.matrix)[0].tag || github.sha }}
+          persist-credentials: false
+      - name: Install the pinned toolchain
+        working-directory: rust
+        run: rustup toolchain install
+      - name: List the crates crates.io does not hold at their version
+        id: unpublished
+        run: |
+          crates=$(python3 -I scripts/crate-versions.py unpublished | tr '\n' ' ')
+          echo "crates=$crates" >> "$GITHUB_OUTPUT"
+      - name: Exchange the OIDC token for a crates.io publish token
+        if: steps.unpublished.outputs.crates != ''
+        id: auth
+        uses: rust-lang/crates-io-auth-action@3268eb413133e2960fa4ae0e963ca76380c54cd9 # v1.0.6
+      - name: Publish them, in dependency order
+        if: steps.unpublished.outputs.crates != ''
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ steps.auth.outputs.token }}
+          CRATES: ${{ steps.unpublished.outputs.crates }}
+        # CRATES is `-p <crate>` pairs separated by spaces, one argument each.
+        run: |
+          read -r -a crates <<< "$CRATES"
+          sh scripts/rust.sh publish "${crates[@]}"
 
   notify-hive:
     name: Notify novus-power/hive

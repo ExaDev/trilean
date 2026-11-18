@@ -12,6 +12,9 @@
 #   compile-fail                every file in rust/tests/compile-fail/cases must fail to compile with the text its `// expect:` line gives
 #   metadata [manifest]         the workspace members as cargo metadata JSON on stdout
 #   metadata-resolved           the workspace and its resolved dependency graph as cargo metadata JSON on stdout
+#   package-list <crates>       the files each named crate would be published with (`-p <crate>` per crate)
+#   publish-dry-run <crates>    packages and verifies the named crates together, in dependency order, without uploading (`-p <crate>` per crate)
+#   publish <crates>            publishes the named crates to crates.io, in dependency order, with the token in CARGO_REGISTRY_TOKEN
 #   xtask <arguments>           the repository's build tasks, for example `xtask npm trilean-regex`, which builds that npm package from its binding crate
 #   install-wasm-bindgen        installs the wasm-bindgen command line tool at the version Cargo.lock pins, unless that version is already installed
 set -eu
@@ -61,6 +64,9 @@ case "$check" in
     fi
     ;;
   metadata-resolved) cargo metadata --locked --format-version 1 ;;
+  package-list) cargo package --locked --list "$@" ;;
+  publish-dry-run) cargo publish --locked --dry-run "$@" ;;
+  publish) cargo publish --locked "$@" ;;
   xtask) cargo run --locked --package xtask -- "$@" ;;
   install-wasm-bindgen)
     version=$(awk '/^name = "wasm-bindgen"$/ { getline; gsub(/version = |"/, ""); print; exit }' Cargo.lock)
@@ -70,7 +76,7 @@ case "$check" in
     fi
     ;;
   *)
-    echo "usage: rust.sh fmt|clippy|test|compile-fail|deny|advisories|deny-bans|deny-bans-json|metadata|metadata-resolved|xtask|install-wasm-bindgen [arguments]" >&2
+    echo "usage: rust.sh fmt|clippy|test|compile-fail|deny|advisories|deny-bans|deny-bans-json|metadata|metadata-resolved|package-list|publish-dry-run|publish|xtask|install-wasm-bindgen [arguments]" >&2
     exit 2
     ;;
 esac

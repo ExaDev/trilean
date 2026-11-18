@@ -71,6 +71,8 @@ const config: Pick<
   },
   plugins: [
     "@semantic-release/changelog",
+    // Gives the crates released with a package the package's next version, in the same release commit; the crates-io job publishes them after the npm publish. A path, resolved from the workspace root.
+    "./scripts/semantic-release-crate-versions.mjs",
     ["@semantic-release/npm", { npmPublish: true }],
     // successComment overrides @semantic-release/github's own default ("This PR is included in version ${nextRelease.version}"), which names only a bare version with no package -- meaningless on a PR that several independently-versioned packages can release from at once, where the same PR gets one such comment per package that released. `nextRelease.gitTag` is this orchestrator's own `name@version` tag format (see this file's own header comment), so the comment now names which package's release it is, not just which version.
     [
