@@ -502,7 +502,7 @@ fn coverage_problems(files: &[LoadedFile]) -> Vec<String> {
     let seen: BTreeSet<&(String, String)> =
         files.iter().flat_map(|file| &file.evaluated_tags).collect();
     let mut problems = Vec::new();
-    for (exported, _, members) in trilean::schemas::enumerations() {
+    for (exported, _, members) in trilean_eval::schemas::enumerations() {
         let field = match exported {
             "predicateKinds" | "expressionKinds" => "kind",
             "hitPolicies" => "hitPolicy",

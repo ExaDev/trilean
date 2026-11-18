@@ -16,7 +16,7 @@
 
 use std::fmt;
 
-use json_shape::Value;
+use trilean_json_shape::Value;
 
 use crate::name::utf16_order;
 

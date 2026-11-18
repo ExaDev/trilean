@@ -1,5 +1,5 @@
 // expect: is not supported: a second quantifier, a lazy quantifier and counted repetition are not supported
-use json_shape::Shape;
+use trilean_json_shape::Shape;
 
 #[derive(Shape)]
 pub struct Wrong {

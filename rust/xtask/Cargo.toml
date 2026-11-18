@@ -9,9 +9,9 @@ repository.workspace = true
 publish = false
 
 [dependencies]
-json-shape.workspace = true
 serde_json.workspace = true
-trilean.workspace = true
+trilean-eval.workspace = true
+trilean-json-shape.workspace = true
 
 [lints]
 workspace = true

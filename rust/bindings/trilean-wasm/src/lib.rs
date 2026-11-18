@@ -3,10 +3,10 @@
 //! The binding reads a JavaScript value as one of the package's schemas and answers in the shape a Standard Schema
 //! `validate` returns: `{ value }` for a value the schema accepts, read as the schema reads it, or `{ issues }`, each
 //! with a message and the path of the value it is about. Nothing here is validation logic: the value is converted to
-//! an ordered JSON value, `trilean::schemas::read` decides, and the answer is converted back.
+//! an ordered JSON value, `trilean_eval::schemas::read` decides, and the answer is converted back.
 
 use js_sys::{Array, Function, Object, Reflect};
-use json_shape::{Issue, PathSegment, Value};
+use trilean_json_shape::{Issue, PathSegment, Value};
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen(typescript_custom_section)]
@@ -25,7 +25,7 @@ export type SchemaReading =
 
 use std::cell::RefCell;
 
-use trilean::schemas::{
+use trilean_eval::schemas::{
     MAX_ARRAY_LENGTH, MAX_NESTING_DEPTH, MAX_STRING_UNITS, MAX_TEXT_UNITS, MAX_VALUES,
     nesting_limit,
 };
@@ -120,11 +120,11 @@ fn text_of(
 ) -> Result<String, Found> {
     let units = string.length() as usize;
     if units > MAX_STRING_UNITS {
-        return Err(issue(path, trilean::schemas::string_too_long(units)));
+        return Err(issue(path, trilean_eval::schemas::string_too_long(units)));
     }
     budget.text = budget.text.saturating_add(units);
     if budget.text > MAX_TEXT_UNITS {
-        return Err(issue(path, trilean::schemas::too_much_text()));
+        return Err(issue(path, trilean_eval::schemas::too_much_text()));
     }
     let text = String::from(string);
     if text.contains('\u{FFFD}') && has_unpaired_surrogate(string) {
@@ -168,7 +168,7 @@ fn read_value(
 ) -> Result<Value, Found> {
     budget.values += 1;
     if budget.values > MAX_VALUES {
-        return Err(issue(path, trilean::schemas::too_many_values()));
+        return Err(issue(path, trilean_eval::schemas::too_many_values()));
     }
     if value.is_null() {
         return Ok(Value::Null);
@@ -222,7 +222,7 @@ fn read_value(
         if length as usize > MAX_ARRAY_LENGTH {
             return Err(issue(
                 path,
-                trilean::schemas::array_too_long(length as usize),
+                trilean_eval::schemas::array_too_long(length as usize),
             ));
         }
         // Nothing is reserved from the length: it is the host's claim, and a nest of arrays that each claim the longest length
@@ -351,7 +351,7 @@ pub fn read_schema(
         Ok(converted) => converted,
         Err(found) => return Ok(issues_to_js(&[found])),
     };
-    match trilean::schemas::read(name, &converted) {
+    match trilean_eval::schemas::read(name, &converted) {
         None => Err(js_sys::Error::new(&format!("no schema is called {name}")).into()),
         Some(Ok(read)) => {
             let answer = Object::new();

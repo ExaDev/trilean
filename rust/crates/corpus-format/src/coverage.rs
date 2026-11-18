@@ -8,7 +8,7 @@
 
 use std::collections::BTreeSet;
 
-use json_shape::{Definitions, Kind, ShapeDef, Value, accepts};
+use trilean_json_shape::{Definitions, Kind, ShapeDef, Value, accepts};
 
 /// What the instances are walked along, as the places in the shape that can be used.
 /// The prefix of a place that names a reference to a definition the shape does not have, which is a fault of the shape and
@@ -210,7 +210,7 @@ pub fn schema_coverage(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use json_shape::Shape;
+    use trilean_json_shape::Shape;
 
     #[expect(
         dead_code,
@@ -348,7 +348,7 @@ mod tests {
     #[expect(dead_code, reason = "described and walked only")]
     #[derive(Shape)]
     struct Bag {
-        by_name: json_shape::Map<Leaf>,
+        by_name: trilean_json_shape::Map<Leaf>,
     }
 
     #[expect(dead_code, reason = "described and walked only")]

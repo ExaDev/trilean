@@ -330,7 +330,7 @@ Every fully-known input pair produces the correct classical XOR, and every combi
 
 ## Schema strategy
 
-The canonical definition lives in one place: a Rust type per node kind, in `rust/crates/trilean`. Reading a document through it is validating it, with the path of every problem, and the same definition writes the TypeScript types, the JSON Schema and the schema objects this package exports, so none of the four can drift from another.
+The canonical definition lives in one place: a Rust type per node kind, in `rust/crates/trilean-eval`. Reading a document through it is validating it, with the path of every problem, and the same definition writes the TypeScript types, the JSON Schema and the schema objects this package exports, so none of the four can drift from another.
 
 Every exported `*Schema` is a frozen [Standard Schema](https://standardschema.dev) (version 1) object, which validation libraries and forms libraries already accept, and carries its JSON Schema as `jsonSchema`:
 
@@ -1008,7 +1008,7 @@ Twenty-three existing tools — JSON rule engines, expression languages, query-f
 
 The closest structural relative is [GoRules' Zen Engine](https://gorules.io) (`@gorules/zen-engine`), whose JDM format is a genuinely portable JSON decision graph with a real injected extension point — but its outcome model is value-level nulls, not a propagating three-valued logic, and its "Function" node type runs real JavaScript rather than staying within a bounded grammar. The closest semantic relative is [DMN](https://www.omg.org/spec/DMN)'s FEEL expression language, which implements the identical absorbing-AND/OR three-valued truth tables trilean does — but FEEL's canonical form is XML, not JSON.
 
-Worth knowing: a Rust crate on crates.io is also named [`trilean`](https://crates.io/crates/trilean) and also implements Kleene's three-valued logic — a genuine name collision, different ecosystem, no npm conflict, unrelated project.
+Worth knowing: a Rust crate on crates.io is also named [`trilean`](https://crates.io/crates/trilean) and also implements Kleene's three-valued logic, an unrelated project. This package's own Rust crate is published as [`trilean-eval`](https://crates.io/crates/trilean-eval) for that reason.
 
 The security research here surfaced findings worth knowing independent of the comparison: [JSONata](https://jsonata.org) has had multiple prototype-pollution CVEs reaching `Function`/`child_process`; [jexl](https://github.com/TomFrost/Jexl) has a documented, unfixed path to `Function.prototype` via `__proto__`; [expr-eval](https://github.com/silentmatt/expr-eval) has a prototype-pollution CVE (CVE-2026-12866); and MongoDB's `$where`/`$function` and JsonLogic's `method` operator are documented, acknowledged arbitrary-code escape hatches. [CEL](https://cel.dev), [filtrex](https://github.com/cshaa/filtrex), and [Rego](https://www.openpolicyagent.org/docs/policy-language) are the standouts, each explicitly designed and marketed as safe for untrusted input.
 

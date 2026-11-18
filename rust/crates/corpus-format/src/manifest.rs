@@ -3,7 +3,7 @@
 
 use std::collections::{BTreeMap, BTreeSet, HashSet};
 
-use json_shape::Value;
+use trilean_json_shape::Value;
 
 use crate::envelope::{Requirement, Skip};
 use crate::name::is_name;

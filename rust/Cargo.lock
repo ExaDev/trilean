@@ -18,8 +18,8 @@ checksum = "4e7648175b45a9a48536d676f68d918270699102aa8dab5496df06904c914600"
 name = "corpus-format"
 version = "0.0.0"
 dependencies = [
- "json-shape",
  "serde_json",
+ "trilean-json-shape",
 ]
 
 [[package]]
@@ -39,28 +39,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "json-shape"
-version = "0.0.0"
-dependencies = [
- "json-shape-derive",
- "serde",
- "serde_json",
-]
-
-[[package]]
 name = "json-shape-compile-fail"
 version = "0.0.0"
 dependencies = [
- "json-shape",
-]
-
-[[package]]
-name = "json-shape-derive"
-version = "0.0.0"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn",
+ "trilean-json-shape",
 ]
 
 [[package]]
@@ -148,28 +130,52 @@ dependencies = [
 ]
 
 [[package]]
-name = "trilean"
-version = "0.0.0"
-dependencies = [
- "json-shape",
- "serde_json",
- "trilean-regex",
-]
-
-[[package]]
 name = "trilean-conformance"
 version = "0.0.0"
 dependencies = [
  "corpus-format",
- "json-shape",
  "serde_json",
- "trilean",
+ "trilean-eval",
+ "trilean-json-shape",
  "trilean-regex",
 ]
 
 [[package]]
+name = "trilean-eval"
+version = "2.0.8"
+dependencies = [
+ "serde_json",
+ "trilean-json-shape",
+ "trilean-regex",
+]
+
+[[package]]
+name = "trilean-json-shape"
+version = "2.0.8"
+dependencies = [
+ "serde",
+ "serde_json",
+ "trilean-json-shape-derive",
+ "trilean-json-shape-pattern",
+]
+
+[[package]]
+name = "trilean-json-shape-derive"
+version = "2.0.8"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+ "trilean-json-shape-pattern",
+]
+
+[[package]]
+name = "trilean-json-shape-pattern"
+version = "2.0.8"
+
+[[package]]
 name = "trilean-regex"
-version = "0.0.0"
+version = "2.0.4"
 
 [[package]]
 name = "trilean-regex-wasm"
@@ -185,8 +191,8 @@ name = "trilean-wasm"
 version = "0.0.0"
 dependencies = [
  "js-sys",
- "json-shape",
- "trilean",
+ "trilean-eval",
+ "trilean-json-shape",
  "wasm-bindgen",
 ]
 
@@ -244,9 +250,9 @@ dependencies = [
 name = "xtask"
 version = "0.0.0"
 dependencies = [
- "json-shape",
  "serde_json",
- "trilean",
+ "trilean-eval",
+ "trilean-json-shape",
 ]
 
 [[package]]

@@ -1,0 +1,26 @@
+[package]
+name = "trilean-eval"
+description = "The values and trees of trilean: the one definition of a predicate or expression tree, a computed value and an indeterminate reason, with the validation, the JSON Schema and the TypeScript declarations written from it, and the three-valued evaluator of those trees."
+version = "2.0.8"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme = "README.md"
+keywords = ["predicate", "three-valued-logic", "rules-engine", "evaluator", "json-schema"]
+categories = ["data-structures", "encoding", "wasm"]
+
+# The npm package this crate is released with: it takes that package's version at every release (scripts/crate-versions.py).
+[package.metadata.trilean-release]
+npm-package = "trilean"
+
+[dependencies]
+trilean-json-shape.workspace = true
+trilean-regex.workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true
+
+[lints]
+workspace = true

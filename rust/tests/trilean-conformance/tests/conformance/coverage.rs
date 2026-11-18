@@ -7,8 +7,8 @@
 use std::fs;
 
 use corpus_format::{Entry, parse_canonical, schema_coverage, select};
-use json_shape::{Definitions, Shape, Value};
 use trilean_conformance::CorpusFile;
+use trilean_json_shape::{Definitions, Shape, Value};
 
 use super::corpus_root;
 use super::shared::read_tree;

@@ -444,7 +444,7 @@ mod tests {
         assert!(fragments(&text, &[vec![0xDE00], units("a")], false).is_ok());
     }
 
-    fn custom(name: &str, value: json_shape::Value) -> Decoded {
+    fn custom(name: &str, value: trilean_json_shape::Value) -> Decoded {
         Decoded::Custom {
             name: name.to_owned(),
             value,
@@ -453,7 +453,7 @@ mod tests {
 
     #[test]
     fn a_registered_encodings_values_are_equal_by_name_and_json_value() {
-        use json_shape::Value;
+        use trilean_json_shape::Value;
         let one = custom("$big", Value::String("1".to_owned()));
         assert!(equal(&one, &one.clone()));
         assert!(!equal(&one, &custom("$big", Value::String("2".to_owned()))));

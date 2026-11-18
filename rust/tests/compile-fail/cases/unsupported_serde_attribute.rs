@@ -1,5 +1,5 @@
-// expect: the serde attribute `alias` is not supported by json_shape::Shape
-use json_shape::Shape;
+// expect: the serde attribute `alias` is not supported by trilean_json_shape::Shape
+use trilean_json_shape::Shape;
 
 #[derive(Shape)]
 pub struct Wrong {

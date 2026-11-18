@@ -1,4 +1,4 @@
-//! Each file in `cases/` is a construct the `json-shape` derive must refuse. A case is compiled only when the crate
+//! Each file in `cases/` is a construct the `trilean-json-shape` derive must refuse. A case is compiled only when the crate
 //! is built with `--cfg compile_fail="<file stem>"`, which `sh scripts/rust.sh compile-fail` does once per case,
 //! expecting the build to fail with the text the file's `// expect:` line gives. Built without the flag, as every
 //! other check builds it, this crate is empty.
@@ -6,7 +6,7 @@
 //! A case with no line here compiles to nothing, so the check reports it as a case that compiles and fails.
 
 // The cases name the crate; built without a case, nothing does.
-use json_shape as _;
+use trilean_json_shape as _;
 
 #[cfg(compile_fail = "constraint_on_wrong_kind")]
 #[path = "../cases/constraint_on_wrong_kind.rs"]

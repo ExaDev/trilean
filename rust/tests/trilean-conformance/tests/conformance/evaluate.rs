@@ -10,13 +10,13 @@
 use std::cell::RefCell;
 use std::collections::{BTreeMap, BTreeSet};
 
-use json_shape::Value as Json;
 use serde_json::Value;
-use trilean::evaluate::{
+use trilean_eval::evaluate::{
     Evaluation, EvaluationError, Evaluator, FunctionFailure, Functions, Resolution, SyncResolvers,
     TreeResolution,
 };
-use trilean::{ComputedValue, DurationUnit, IndeterminateCode, JsonValue, Unit};
+use trilean_eval::{ComputedValue, DurationUnit, IndeterminateCode, JsonValue, Unit};
+use trilean_json_shape::Value as Json;
 
 type Check<T> = Result<T, String>;
 
@@ -226,7 +226,7 @@ fn unit_at(value: &Json) -> Check<Option<Unit>> {
     let pairs = unit
         .as_object()
         .ok_or_else(|| format!("the unit {unit} is not an object"))?;
-    Ok(Some(json_shape::Map(
+    Ok(Some(trilean_json_shape::Map(
         pairs
             .iter()
             .map(|(dimension, exponent)| {
@@ -494,7 +494,7 @@ impl Functions for TableFunctions {
         }
         // An answer that is a value is read through the schema, as the TypeScript runner reads it.
         Some(
-            match trilean::schemas::read("ComputedValueSchema", result) {
+            match trilean_eval::schemas::read("ComputedValueSchema", result) {
                 Some(Ok(value)) => to_computed(&value).map(Ok),
                 _ => Err(format!(
                     "the function table's answer {result} is not a computed value"
@@ -692,17 +692,17 @@ pub fn run_case(case: &Value) -> Check<()> {
             limit(
                 case,
                 "maxNodes",
-                trilean::evaluate::DEFAULT_MAX_EVALUATION_NODES,
+                trilean_eval::evaluate::DEFAULT_MAX_EVALUATION_NODES,
             )?,
             limit(
                 case,
                 "maxNestingDepth",
-                trilean::evaluate::DEFAULT_MAX_NESTING_DEPTH,
+                trilean_eval::evaluate::DEFAULT_MAX_NESTING_DEPTH,
             )?,
         )
         .map_err(|error| error.to_string())?;
     let outcome = if case["as"].as_str() == Some("predicate") {
-        let tree = trilean::schemas::read_predicate(&tree)
+        let tree = trilean_eval::schemas::read_predicate(&tree)
             .map_err(|issues| format!("the tree is not a predicate: {issues:?}"))?;
         evaluator
             .evaluate_predicate(&tree, &context, &resolvers)
@@ -711,7 +711,7 @@ pub fn run_case(case: &Value) -> Check<()> {
                 Evaluation::Indeterminate(reason) => Evaluation::Indeterminate(reason),
             })
     } else {
-        let tree = trilean::schemas::read_expression(&tree)
+        let tree = trilean_eval::schemas::read_expression(&tree)
             .map_err(|issues| format!("the tree is not an expression: {issues:?}"))?;
         evaluator
             .evaluate_value(&tree, &context, &resolvers)

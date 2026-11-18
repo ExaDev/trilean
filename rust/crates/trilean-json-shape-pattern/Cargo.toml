@@ -1,0 +1,19 @@
+[package]
+name = "trilean-json-shape-pattern"
+description = "The pattern grammar of trilean-json-shape: the subset of ECMAScript regular expressions every JSON Schema validator reads alike, compiled to an automaton that matches in linear time."
+version = "2.0.8"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme = "README.md"
+keywords = ["regex", "json-schema", "pattern", "automaton", "validation"]
+categories = ["text-processing", "parser-implementations"]
+
+# The npm package this crate is released with: it takes that package's version at every release (scripts/crate-versions.py).
+[package.metadata.trilean-release]
+npm-package = "trilean"
+
+[lints]
+workspace = true

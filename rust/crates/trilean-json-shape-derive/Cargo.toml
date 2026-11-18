@@ -1,0 +1,28 @@
+[package]
+name = "trilean-json-shape-derive"
+description = "The derive macro of trilean-json-shape, reading the serde attributes a type already carries."
+version = "2.0.8"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme = "README.md"
+keywords = ["json", "json-schema", "derive", "validation", "serde"]
+categories = ["development-tools::procedural-macro-helpers", "encoding"]
+
+# The npm package this crate is released with: it takes that package's version at every release (scripts/crate-versions.py).
+[package.metadata.trilean-release]
+npm-package = "trilean"
+
+[lib]
+proc-macro = true
+
+[dependencies]
+proc-macro2.workspace = true
+quote.workspace = true
+syn.workspace = true
+trilean-json-shape-pattern.workspace = true
+
+[lints]
+workspace = true

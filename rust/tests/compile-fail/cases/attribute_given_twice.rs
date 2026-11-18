@@ -1,5 +1,5 @@
 // expect: `min` is given twice
-use json_shape::Shape;
+use trilean_json_shape::Shape;
 
 #[derive(Shape)]
 pub struct Wrong {

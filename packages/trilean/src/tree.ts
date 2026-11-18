@@ -1,4 +1,4 @@
-/** The predicate tree and the expression tree: the types, and a schema for each node kind and each enumeration. All of them are generated from the Rust definition in `rust/crates/trilean`, so what a schema reads, the JSON Schema it publishes and the type a node has are one description. A schema is a Standard Schema (https://standardschema.dev): its `~standard.validate` reads a value, and its `jsonSchema` is the JSON Schema to embed in another. The plain arrays name every operator and node kind. */
+/** The predicate tree and the expression tree: the types, and a schema for each node kind and each enumeration. All of them are generated from the Rust definition in `rust/crates/trilean-eval`, so what a schema reads, the JSON Schema it publishes and the type a node has are one description. A schema is a Standard Schema (https://standardschema.dev): its `~standard.validate` reads a value, and its `jsonSchema` is the JSON Schema to embed in another. The plain arrays name every operator and node kind. */
 export type {
   AccumulatorNode,
   AllOfNode,

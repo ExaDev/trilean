@@ -1,5 +1,5 @@
-// expect: json_shape::Shape does not support generic types
-use json_shape::Shape;
+// expect: trilean_json_shape::Shape does not support generic types
+use trilean_json_shape::Shape;
 
 #[derive(Shape)]
 pub struct Wrong<T> {
