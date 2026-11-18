@@ -422,6 +422,38 @@ pub fn read(name: &str, value: &Value) -> Option<Result<Value, Vec<Issue>>> {
     })
 }
 
+/// Reads `value` as a predicate tree, as the `PredicateNodeSchema` schema reads it (a key the tree does not name is
+/// dropped).
+///
+/// # Errors
+///
+/// Every issue, with its path, when `value` is not a predicate tree.
+pub fn read_predicate(value: &Value) -> Result<PredicateNode, Vec<Issue>> {
+    read_typed("PredicateNodeSchema", value)
+}
+
+/// Reads `value` as an expression tree, as the `ExpressionNodeSchema` schema reads it.
+///
+/// # Errors
+///
+/// Every issue, with its path, when `value` is not an expression tree.
+pub fn read_expression(value: &Value) -> Result<ExpressionNode, Vec<Issue>> {
+    read_typed("ExpressionNodeSchema", value)
+}
+
+/// Reads `value` through the schema called `name` and converts what it reads to `T`, whose own shape is the strict
+/// form of that schema: what the schema reads has no key the type does not name.
+fn read_typed<T: Shape>(name: &str, value: &Value) -> Result<T, Vec<Issue>> {
+    match read(name, value) {
+        Some(Ok(normalised)) => T::from_json(&normalised).map_err(|issues| issues.0),
+        Some(Err(issues)) => Err(issues),
+        None => Err(vec![Issue {
+            path: Vec::new(),
+            message: format!("no schema is exported under the name {name}"),
+        }]),
+    }
+}
+
 /// The JSON Schema of the schema called `name`, which refers to the definitions of [`definitions_schema`] as
 /// `#/$defs/<name>`, so a document that embeds it holds those definitions under its own `$defs`. `None` when no schema
 /// is called `name`.
