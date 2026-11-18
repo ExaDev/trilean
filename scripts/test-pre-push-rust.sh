@@ -59,7 +59,7 @@ check "rust push runs" run "refs/heads/rust-change $rust refs/heads/rust-change 
 check "corpus push runs" run "refs/heads/corpus-change $corpus refs/heads/corpus-change $base"
 check "rust script push runs" run "refs/heads/scripts-change $script refs/heads/scripts-change $base"
 check "the Rust setup action push runs" run "refs/heads/action-change $action refs/heads/action-change $base"
-check "another action push skips" skip "refs/heads/other-action $other refs/heads/other-action $base"
+check "another action push runs" run "refs/heads/other-action $other refs/heads/other-action $base"
 check "new docs-only branch skips" skip "refs/heads/docs-only $docs refs/heads/docs-only $zero"
 check "new rust branch runs" run "refs/heads/rust-change $rust refs/heads/rust-change $zero"
 check "deleting a branch skips" skip "(delete) $zero refs/heads/rust-change $rust"
