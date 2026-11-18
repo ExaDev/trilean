@@ -29,7 +29,7 @@ allow-wildcard-paths = true
 
 allow = [
     { crate = "trilean-conformance", reason = "Loads the conformance corpus, checks it against its format and runs the regex cases against the native crates." },
-    { crate = "trilean", reason = "The values and trees of trilean, with the validation, JSON Schema and TypeScript declarations written from their one definition." },
+    { crate = "trilean", reason = "The values and trees of trilean, with the validation, JSON Schema and TypeScript declarations written from their one definition, and the three-valued evaluator of those trees." },
     { crate = "trilean-wasm", reason = "The wasm binding of trilean, built into the npm package." },
     { crate = "trilean-regex", reason = "The regular-expression grammar, parser and matcher. It has no dependencies of its own." },
     { crate = "trilean-regex-wasm", reason = "The wasm binding of trilean-regex, built into the npm package." },

@@ -260,6 +260,7 @@ describe("release-workspace.config.ts packageSources against the Rust workspace"
       "rust/crates/json-shape",
       "rust/crates/json-shape-derive",
       "rust/crates/trilean",
+      "rust/crates/trilean-regex",
     ]);
   });
 });
