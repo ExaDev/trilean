@@ -1,5 +1,7 @@
 import { execFileSync } from "node:child_process";
-import { dirname, relative } from "node:path";
+import { createRequire } from "node:module";
+import { dirname, join, relative } from "node:path";
+import { pathToFileURL } from "node:url";
 import {
   buildDependencyGraph,
   discoverWorkspace,
@@ -263,5 +265,31 @@ describe("release-workspace.config.ts packageSources against the Rust workspace"
       "rust/crates/trilean-json-shape-pattern",
       "rust/crates/trilean-regex",
     ]);
+  });
+});
+
+/** The plugin that gives the crates released with a package that package's version, as the configuration names it. */
+const CRATE_VERSIONS_PLUGIN = "./scripts/semantic-release-crate-versions.mjs";
+
+describe("release-workspace.config.ts plugins", () => {
+  it("resolves every plugin from the workspace root, as the orchestrator does, and the one that versions the crates has a prepare step", async () => {
+    const { plugins } = config;
+    if (plugins === undefined) {
+      throw new Error("release-workspace.config.ts sets no plugins");
+    }
+    const resolve = createRequire(
+      join(REPOSITORY_ROOT, "package.json"),
+    ).resolve;
+    const names = plugins.map((plugin) =>
+      typeof plugin === "string" ? plugin : plugin[0],
+    );
+    for (const name of names) {
+      expect(() => resolve(name), name).not.toThrow();
+    }
+    expect(names).toContain(CRATE_VERSIONS_PLUGIN);
+    const plugin: unknown = await import(
+      pathToFileURL(resolve(CRATE_VERSIONS_PLUGIN)).href
+    );
+    expect(plugin).toHaveProperty("prepare", expect.any(Function));
   });
 });

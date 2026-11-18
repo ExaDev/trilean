@@ -44,8 +44,12 @@ export default defineConfig(
     },
   },
   {
-    // The conformance runners and the scripts that write a crate's test data are plain JavaScript, which no TypeScript program includes, so they are linted without type information: typescript-eslint's rules that need it are off, and so are this repository's own that need it (the ones that throw when a file has none), and every other rule applies.
-    files: ["conformance/runner/**/*.mjs", "rust/crates/*/tests/**/*.mjs"],
+    // The conformance runners, the scripts that write a crate's test data and the release's own plugin are plain JavaScript, which no TypeScript program includes, so they are linted without type information: typescript-eslint's rules that need it are off, and so are this repository's own that need it (the ones that throw when a file has none), and every other rule applies.
+    files: [
+      "conformance/runner/**/*.mjs",
+      "rust/crates/*/tests/**/*.mjs",
+      "scripts/**/*.mjs",
+    ],
     extends: [tseslint.configs.disableTypeChecked],
     languageOptions: { globals: { ...globals.node, ...globals.browser } },
     rules: Object.fromEntries(
