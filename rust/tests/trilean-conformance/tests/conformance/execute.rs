@@ -1,4 +1,6 @@
-//! Runs the cases of the kinds the native crates execute against them: the regex cases, the cases that read a document as one of trilean's schemas, the ones that read and write a document again, and the ones that write a number. A file reaches this module only after `validate` has accepted it in full, so a field that the format requires is read without a second check of its shape.
+//! Runs the cases of the kinds the native crates execute against them: the regex cases, the cases that read a document as one of trilean's schemas, the ones that read and write a document again, the ones that write a number, and the ones that evaluate a tree (see `evaluate`). A file reaches this module only after `validate` has accepted it in full, so a field that the format requires is read without a second check of its shape.
+
+use std::collections::BTreeSet;
 
 use serde_json::{Map, Value, json};
 use trilean_regex::{
@@ -6,6 +8,7 @@ use trilean_regex::{
     compile_pattern_utf16, parse_regex_utf16, test_pattern,
 };
 
+use crate::evaluate;
 use crate::validate::decode_text;
 
 type Check<T> = Result<T, String>;
@@ -14,6 +17,8 @@ type Check<T> = Result<T, String>;
 pub struct Outcome {
     pub executed: usize,
     pub failures: Vec<String>,
+    /// The node kinds and operators the trees of the executed `evaluate` cases hold, as `(field, value)` pairs.
+    pub evaluated_tags: BTreeSet<(String, String)>,
 }
 
 /// Executes every case of a validated file that is of a regex kind and that this implementation does not skip. A case marked `skip: ts` is executed, since the mark names the implementation that skips it.
@@ -21,15 +26,23 @@ pub fn run_file(name: &str, file: &Value) -> Outcome {
     let mut outcome = Outcome {
         executed: 0,
         failures: Vec::new(),
+        evaluated_tags: BTreeSet::new(),
     };
     let cases = file["cases"].as_array().map_or(&[][..], Vec::as_slice);
     for case in cases {
-        if !matches!(
-            case["kind"].as_str(),
-            Some("regex-parse" | "regex-match" | "validate" | "serialise" | "number-format")
-        ) || case.get("skip").and_then(Value::as_str) == Some("rust")
-        {
+        let executes = match case["kind"].as_str() {
+            Some("regex-parse" | "regex-match" | "validate" | "serialise" | "number-format") => {
+                true
+            }
+            Some("evaluate") => evaluate::executes(case),
+            _ => false,
+        };
+        if !executes || case.get("skip").and_then(Value::as_str) == Some("rust") {
             continue;
+        }
+        if case["kind"].as_str() == Some("evaluate") {
+            evaluate::collect_tags(&case["tree"], &mut outcome.evaluated_tags);
+            evaluate::collect_tags(&case["resolvers"]["trees"], &mut outcome.evaluated_tags);
         }
         outcome.executed += 1;
         if let Err(error) = run_case(case) {
@@ -50,6 +63,7 @@ fn run_case(case: &Value) -> Check<()> {
         Some("validate") => run_validate_case(case),
         Some("serialise") => run_serialise_case(case),
         Some("number-format") => run_number_format_case(case),
+        Some("evaluate") => evaluate::run_case(case),
         other => Err(format!("no executor for the kind {other:?}")),
     }
 }

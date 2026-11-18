@@ -2145,6 +2145,7 @@
       "from": "evaluator.comparison.unit.test.ts: textCompare > portableMatches accepts only its own restricted grammar, rejecting an ECMAScript-only construct matches would accept",
       "id": "comparison.textcompare-portablematches-accepts-only-its-own-restricted-grammar-rejecting-an-ecmascript-only-construct-matches-would-accept.1",
       "kind": "evaluate",
+      "reason": "a lookahead needs a complete ECMAScript regular expression engine as the matches host, and the native evaluator's default engine is the ECMAScript subset trilean-regex runs, which refuses it",
       "resolvers": {
         "default": {
           "found": false
@@ -2165,6 +2166,7 @@
           }
         ]
       },
+      "skip": "rust",
       "tree": {
         "kind": "textCompare",
         "left": {

@@ -1,6 +1,6 @@
 [package]
 name = "trilean-conformance"
-description = "Loads the language-neutral conformance corpus, checks every file against its format and runs the cases of the regex kinds against the native crates."
+description = "Loads the language-neutral conformance corpus, checks every file against its format and runs the cases of every kind the native crates implement against them."
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true

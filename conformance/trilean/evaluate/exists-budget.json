@@ -23050,6 +23050,7 @@
       "from": "recorded: trilean src/evaluator.ts (a domain-error of the operand that is no exhausted limit, under an exists)",
       "id": "exists-budget.exists-keeps-every-other-domain-error-as-true-a-built-in-function-given-an-argument-outside-its-domain.1",
       "kind": "evaluate",
+      "reason": "needs the built-in function registry, which the Rust crate does not provide",
       "resolvers": {
         "default": {
           "found": false
@@ -23070,6 +23071,7 @@
           }
         ]
       },
+      "skip": "rust",
       "tree": {
         "kind": "exists",
         "operand": {

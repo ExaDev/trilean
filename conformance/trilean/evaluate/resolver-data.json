@@ -2058,7 +2058,9 @@
       "from": "recorded: trilean conformance/README.md (a rule the README states for resolver data)",
       "id": "resolver-data.the-built-in-functions-are-registered-when-builtin-is-true.1",
       "kind": "evaluate",
+      "reason": "needs the built-in function registry, which the Rust crate does not provide",
       "resolvers": {},
+      "skip": "rust",
       "tree": {
         "args": [
           {

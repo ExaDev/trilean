@@ -413,7 +413,11 @@
     "trilean/evaluate/complex-arithmetic.json": {
       "cases": 6,
       "skip": {
-        "rust": [],
+        "rust": [
+          "complex-integration.a-complexliteral-authored-in-polar-form-composes-through-a-whole-tree-exactly-like-a-rectangular-one-reaches-the-same-ordering-com.1",
+          "complex-integration.complex-values-compose-through-a-whole-tree-reaches-an-ordering-comparison-through-a-registered-magnitude-function.1",
+          "complex-integration.complex-values-compose-through-a-whole-tree-reaches-an-ordering-comparison-through-a-registered-magnitude-function.2"
+        ],
         "ts": []
       }
     },
@@ -476,7 +480,9 @@
     "trilean/evaluate/evaluator.comparison.json": {
       "cases": 60,
       "skip": {
-        "rust": [],
+        "rust": [
+          "comparison.textcompare-portablematches-accepts-only-its-own-restricted-grammar-rejecting-an-ecmascript-only-construct-matches-would-accept.1"
+        ],
         "ts": []
       }
     },
@@ -567,7 +573,9 @@
     "trilean/evaluate/exists-budget.json": {
       "cases": 67,
       "skip": {
-        "rust": [],
+        "rust": [
+          "exists-budget.exists-keeps-every-other-domain-error-as-true-a-built-in-function-given-an-argument-outside-its-domain.1"
+        ],
         "ts": []
       }
     },
@@ -602,7 +610,9 @@
     "trilean/evaluate/resolver-data.json": {
       "cases": 37,
       "skip": {
-        "rust": [],
+        "rust": [
+          "resolver-data.the-built-in-functions-are-registered-when-builtin-is-true.1"
+        ],
         "ts": []
       }
     },

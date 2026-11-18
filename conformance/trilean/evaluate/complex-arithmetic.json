@@ -88,6 +88,7 @@
       "from": "complex-arithmetic.integration.test.ts: complex values compose through a whole tree > reaches an ordering comparison through a registered magnitude function (the original registered its own magnitude function over the exported helper; the case uses the built-in one, which returns the same modulus)",
       "id": "complex-integration.complex-values-compose-through-a-whole-tree-reaches-an-ordering-comparison-through-a-registered-magnitude-function.1",
       "kind": "evaluate",
+      "reason": "needs the built-in function registry, which the Rust crate does not provide",
       "resolvers": {
         "default": {
           "found": false
@@ -127,6 +128,7 @@
           }
         ]
       },
+      "skip": "rust",
       "tree": {
         "kind": "compare",
         "left": {
@@ -176,6 +178,7 @@
       "from": "complex-arithmetic.integration.test.ts: complex values compose through a whole tree > reaches an ordering comparison through a registered magnitude function (the original registered its own magnitude function over the exported helper; the case uses the built-in one, which returns the same modulus)",
       "id": "complex-integration.complex-values-compose-through-a-whole-tree-reaches-an-ordering-comparison-through-a-registered-magnitude-function.2",
       "kind": "evaluate",
+      "reason": "needs the built-in function registry, which the Rust crate does not provide",
       "resolvers": {
         "default": {
           "found": false
@@ -215,6 +218,7 @@
           }
         ]
       },
+      "skip": "rust",
       "tree": {
         "kind": "compare",
         "left": {
@@ -408,6 +412,7 @@
       "from": "complex-arithmetic.integration.test.ts: a complexLiteral authored in polar form composes through a whole tree exactly like a rectangular one > reaches the same ordering comparison through a polar-authored operand as through a rectangular one (the original registered its own magnitude function over the exported helper; the case uses the built-in one, which returns the same modulus)",
       "id": "complex-integration.a-complexliteral-authored-in-polar-form-composes-through-a-whole-tree-exactly-like-a-rectangular-one-reaches-the-same-ordering-com.1",
       "kind": "evaluate",
+      "reason": "needs the built-in function registry, which the Rust crate does not provide",
       "resolvers": {
         "default": {
           "found": false
@@ -447,6 +452,7 @@
           }
         ]
       },
+      "skip": "rust",
       "tree": {
         "kind": "compare",
         "left": {
