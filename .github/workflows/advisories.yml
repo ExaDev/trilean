@@ -25,6 +25,11 @@ concurrency:
 permissions:
   contents: read
 
+# Every run step runs as `bash -eo pipefail`, so a failed command inside a pipeline fails its step (scripts/check-workflow-shells.py).
+defaults:
+  run:
+    shell: bash
+
 jobs:
   advisories:
     name: RustSec advisories
