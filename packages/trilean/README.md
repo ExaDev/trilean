@@ -189,6 +189,28 @@ The command has no table, delegate or tree store to hand a `lookup`, `delegate` 
 
 The same evaluation is available in code as `evaluateDocument`, which takes the node budget as its `maxNodes` option (a positive integer the caller supplies; nothing checks it), with `parseInputs` and `createInputResolvers` for the named-value and list resolvers it uses. `createInputResolvers` takes the lists of items as its `collections` argument, and only items served by its own `resolveCollection` are scoped to an item: an embedder that composes resolvers, overriding `resolveCollection` to serve its own items while keeping its `resolveValue`, gets references inside a fold read from the top-level inputs, and scoping those items is the embedder's responsibility.
 
+### Zod
+
+`trilean/zod` exports the same schemas, under the same names, as [Zod](https://zod.dev) 4 schemas, for code that composes them with its own Zod schemas. `zod` is an optional peer dependency (version 4.2 or later): it is needed only by a dependant that imports `trilean/zod`, and no other entry point of the package imports it.
+
+```ts
+import * as z from "zod";
+import { ExpressionNodeSchema, PredicateNodeSchema } from "trilean/zod";
+
+const Rule = z.object({
+  name: z.string(),
+  when: PredicateNodeSchema.optional().describe("when the rule applies"),
+  value: z.union([ExpressionNodeSchema, z.number()]),
+});
+
+type Rule = z.infer<typeof Rule>; // when?: PredicateNode, value: ExpressionNode | number
+
+const rule = Rule.parse(JSON.parse(text)); // throws a ZodError, with each issue at its path inside the rule
+const document = z.toJSONSchema(Rule); // the trees' definitions under the document's own $defs
+```
+
+Each one wraps the Standard Schema of the same name, so it reads a value exactly as that schema does: the same limits, a key it does not name dropped, and each of that schema's issues as a Zod issue of code `custom` with the same message and path (below the path of the Zod schema holding it). `z.infer` gives this package's types (`PredicateNode`, `ExpressionNode`, `Unit`, `JsonValue`, `ComputedValue`, `IndeterminateReason` and the rest), and every Zod method is there. `z.toJSONSchema`, for its input or output, writes the schema's own JSON Schema in its place and files every definition that reaches under the `$defs` at the root of the document it writes, as `trilean.<name>` (`trilean.PredicateNode`), so every `$ref` resolves however deeply the schema is nested and no definition can take the name of one of the document's own; for the draft-07 target they are filed under `definitions`, and for a registry in its shared document. Draft 4 and OpenAPI 3.0 cannot say what the schemas say (they have no `const`, and OpenAPI 3.0 no `null`), so `z.toJSONSchema` throws for those targets. `toZod(schema)` makes the same Zod schema of any of this package's schemas.
+
 ## Build, test, and lint
 
 ```sh
@@ -1014,7 +1036,7 @@ The security research here surfaced findings worth knowing independent of the co
 
 | Tool | Category | Portable data | Async access | Missing ≠ false | Vendor-agnostic | Mixes logic & math | No code-exec risk | Published schema |
 |---|---|---|---|---|---|---|---|---|
-| [trilean](https://www.npmjs.com/package/trilean) | none | 🟢<br>JSON, schema-validated, RFC 8785 canonical | 🟢<br>three typed resolver contracts | 🟢<br>definite/indeterminate, typed reason | 🟢<br>no assumptions about consumer data | 🟢<br>compare/textCompare/memberOf take formulas | 🟢<br>call's fn is a registry key, never code | 🟢<br>one Zod schema generates both |
+| [trilean](https://www.npmjs.com/package/trilean) | none | 🟢<br>JSON, schema-validated, RFC 8785 canonical | 🟢<br>three typed resolver contracts | 🟢<br>definite/indeterminate, typed reason | 🟢<br>no assumptions about consumer data | 🟢<br>compare/textCompare/memberOf take formulas | 🟢<br>call's fn is a registry key, never code | 🟢<br>one Rust definition generates both |
 | [JsonLogic](https://www.npmjs.com/package/json-logic-js) | Rule engine | 🟢 | 🔴<br>direct path lookup | 🔴<br>counts as false | 🟢 | 🟢<br>any operand can be another rule | 🟡<br>`method` op is an acknowledged escape hatch | 🔴<br>a JSON Schema request was never resolved |
 | [json-rules-engine](https://www.npmjs.com/package/json-rules-engine) | Rule engine | 🟢 | 🟢<br>async fact handlers | 🔴<br>undocumented | 🟢 | 🔴<br>docs call inline formulas "a design smell" | 🟢<br>operators are name-based registry lookups | 🔴<br>a proposed schema was never merged |
 | [json-rules-engine-simplified](https://www.npmjs.com/package/json-rules-engine-simplified) | Rule engine | 🟢 | 🔴<br>direct path lookup | 🔴<br>falls through to false | 🟢 | 🔴<br>no arithmetic/formula node exists | 🟢<br>no `eval()`, by the project's own claim | 🔴<br>README prose only |

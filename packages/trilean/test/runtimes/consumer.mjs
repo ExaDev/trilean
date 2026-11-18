@@ -1,7 +1,9 @@
 /**
  * Runs the conformance corpus's regex and validate cases through the public entry points of the packed `trilean-regex` and `trilean` packages, in whichever runtime executes it: Node, Bun or Deno. It is plain JavaScript on purpose, since the runtimes it must run in do not all read TypeScript, and it imports the two packages by name, so what it exercises is what a consumer installs from the tarballs and never the source tree.
  *
- * Usage: <runtime> consumer.mjs <directory holding the corpus subset and its manifest>
+ * Usage: <runtime> consumer.mjs <directory holding the corpus subset and its manifest> [zod]
+ *
+ * Given `zod`, the validate cases are read through the Zod schemas of `trilean/zod` in place of the package's own, each compared with the package's own schema (the same verdict, value and issue paths), and a Zod object holding a tree is written as JSON Schema with every `$ref` resolving inside the document. Without it, the consumer is one that has not installed Zod, which `trilean` must not need.
  *
  * The cases are those of four corpus files (the regex match and parse cases, and the validate cases of the trees and the computed value), every one of them: a text given as code units and a number JSON cannot hold (`$number`) are decoded as the corpus README specifies, so the cases with an unpaired surrogate, where a difference in the handling of strings between runtimes would show, are run. A case marked `skip: rust` is not run, since the packages are the Rust implementation, and the number of cases run must equal the number the manifest counts for the four files less those it marks, or the run fails: no case is left out unless the manifest says so. A final set of scenarios evaluates trees that reach `trilean-regex` through `trilean`, so the two wasm modules and their error classes are shown to work together in the runtime.
  */
@@ -15,6 +17,15 @@ const directory = process.argv[2];
 if (directory === undefined) {
   throw new Error("name the directory holding the corpus subset");
 }
+const mode = process.argv[3];
+if (mode !== undefined && mode !== "zod") {
+  throw new Error(`the mode is zod or nothing, not ${mode}`);
+}
+/** `trilean/zod` and Zod itself, imported only in the zod mode, since the consumer without it has neither installed. */
+const zodSide =
+  mode === "zod"
+    ? { schemas: await import("trilean/zod"), z: await import("zod") }
+    : undefined;
 
 const FILES = [
   "trilean-regex/match/matcher.json",
@@ -182,10 +193,27 @@ const runParse = (entry) => {
   );
 };
 
+/** The paths of a result's issues, as a sorted list of distinct JSON texts. */
+const issuePaths = (result) =>
+  [
+    ...new Set(
+      (result.issues ?? []).map((issue) =>
+        JSON.stringify(
+          (issue.path ?? []).map((step) =>
+            typeof step === "object" ? step.key : step,
+          ),
+        ),
+      ),
+    ),
+  ].sort();
+
 const runValidate = (entry) => {
-  const result = trilean[entry.schema]["~standard"].validate(
-    decode(entry.input),
-  );
+  const input = decode(entry.input);
+  const own = trilean[entry.schema]["~standard"].validate(input);
+  const result =
+    zodSide === undefined
+      ? own
+      : zodSide.schemas[entry.schema]["~standard"].validate(input);
   const accepted = result.issues === undefined;
   check(
     entry.id,
@@ -195,6 +223,16 @@ const runValidate = (entry) => {
         same(result.value, decode(entry.expect.value))),
     `${entry.schema} ${accepted ? "accepted" : "refused"} the input`,
   );
+  if (zodSide !== undefined) {
+    check(
+      `${entry.id} through trilean/zod`,
+      accepted === (own.issues === undefined) &&
+        (accepted
+          ? same(result.value, own.value)
+          : same(issuePaths(result), issuePaths(own))),
+      `refused at ${issuePaths(result).join(" ")} where the package's own schema refused at ${issuePaths(own).join(" ")}`,
+    );
+  }
 };
 
 let casesRun = 0;
@@ -256,9 +294,63 @@ check(
   JSON.stringify(document),
 );
 
+if (zodSide !== undefined) {
+  const { z } = zodSide;
+  const Rule = z.object({
+    when: zodSide.schemas.PredicateNodeSchema.optional(),
+    value: z.union([zodSide.schemas.ExpressionNodeSchema, z.number()]),
+  });
+  const parsed = Rule.safeParse({
+    when: {
+      kind: "not",
+      operand: { kind: "exists", operand: { kind: "reference", key: "a" } },
+      note: 1,
+    },
+    value: 2,
+  });
+  check(
+    "a tree inside a Zod object, with a key the schema does not name dropped",
+    parsed.success &&
+      parsed.data.when.note === undefined &&
+      parsed.data.value === 2,
+    JSON.stringify(parsed),
+  );
+  const jsonSchema = z.toJSONSchema(Rule);
+  const resolves = (reference) => {
+    let at = jsonSchema;
+    for (const token of reference.slice(2).split("/")) {
+      const key = token.replaceAll("~1", "/").replaceAll("~0", "~");
+      if (at === null || typeof at !== "object" || !Object.hasOwn(at, key))
+        return false;
+      at = at[key];
+    }
+
+    return true;
+  };
+  const references = [];
+  const collect = (value) => {
+    if (Array.isArray(value)) value.forEach(collect);
+    else if (value !== null && typeof value === "object") {
+      for (const [key, item] of Object.entries(value)) {
+        if (key === "$ref") references.push(item);
+        else collect(item);
+      }
+    }
+  };
+  collect(jsonSchema);
+  check(
+    "the JSON Schema of a Zod object holding trees resolves every $ref at its root",
+    references.length > 0 &&
+      references.every(
+        (reference) => reference.startsWith("#/$defs/") && resolves(reference),
+      ),
+    JSON.stringify(references),
+  );
+}
+
 failures.forEach((failure) => console.error(`FAIL ${failure}`));
 console.log(
-  `${runtime}: ${casesRun} of ${casesExpected} cases and ${executed} checks, ${failures.length} failed`,
+  `${runtime}${zodSide === undefined ? "" : " through trilean/zod"}: ${casesRun} of ${casesExpected} cases and ${executed} checks, ${failures.length} failed`,
 );
 if (failures.length > 0 || casesRun === 0) {
   process.exitCode = 1;

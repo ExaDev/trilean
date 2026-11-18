@@ -30,7 +30,8 @@
     "turbo": "^2.11.10",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.72.2",
-    "vitest": "^5.1.0"
+    "vitest": "^5.1.0",
+    "zod": "^4.6.7"
   },
   "engines": {
     "node": "^20.19.0 || >=22.12.0"
@@ -104,6 +105,10 @@
       "types": "./dist/evaluate-document.d.ts",
       "default": "./dist/evaluate-document.js"
     },
+    "./zod": {
+      "types": "./dist/zod.d.ts",
+      "default": "./dist/zod.js"
+    },
     "./schemas/trilean.schema.json": "./schemas/trilean.schema.json"
   },
   "files": [
@@ -128,7 +133,8 @@
     "predicate",
     "rules-engine",
     "standard-schema",
-    "three-valued-logic"
+    "three-valued-logic",
+    "zod"
   ],
   "license": "MIT",
   "publishConfig": {
@@ -166,5 +172,13 @@
     "typecheck": "turbo run _typecheck _typecheck:attw"
   },
   "type": "module",
-  "types": "./dist/index.d.ts"
+  "types": "./dist/index.d.ts",
+  "peerDependencies": {
+    "zod": "^4.2.0"
+  },
+  "peerDependenciesMeta": {
+    "zod": {
+      "optional": true
+    }
+  }
 }

@@ -167,10 +167,10 @@ jobs:
           command: |
             pnpm --filter trilean-regex build
             pnpm --filter trilean-regex pack --pack-destination "$RUNNER_TEMP/pack"
-            # `trilean` is packed here too, so the job that installs the packed packages in each runtime repeats neither the toolchain setup nor the builds. The version of `zod` the workspace resolves for `trilean` is recorded beside the tarballs (empty once `trilean` has no such dependency), so the consumer installs the same one and not whatever the registry holds that day.
+            # `trilean` is packed here too, so the job that installs the packed packages in each runtime repeats neither the toolchain setup nor the builds. The oldest `zod` that `trilean`'s optional peer dependency allows is recorded beside the tarballs, so the consumer of `trilean/zod` installs that one: the package's own tests run against the newest, the version the workspace installs. The range must be a caret on an exact version, which names its oldest version.
             pnpm --filter trilean build
             pnpm --filter trilean pack --pack-destination "$RUNNER_TEMP/pack"
-            (cd packages/trilean && node -p "try { require('zod/package.json').version } catch { '' }") > "$RUNNER_TEMP/pack/zod-version.txt"
+            node -e 'const range = require("./packages/trilean/package.json").peerDependencies.zod; const oldest = /^\^(\d+\.\d+\.\d+)$/.exec(range); if (oldest === null) throw new Error(`the peer range of zod, ${range}, is not a caret on an exact version`); console.log(oldest[1]);' > "$RUNNER_TEMP/pack/zod-version.txt"
             pnpm exec playwright install --with-deps chromium
             for runtime in node chromium workerd; do
               node conformance/runner/$runtime.mjs "$RUNNER_TEMP"/pack/trilean-regex-*.tgz
@@ -186,7 +186,7 @@ jobs:
           retention-days: 1
           if-no-files-found: error
 
-  # The packed packages of `wasm-conformance`, installed the way a consumer installs them into a directory of their own, and the corpus's regex and validate cases run through their public entry points in each runtime the packages claim to support: the oldest Node of each supported line, Bun and Deno. The runtimes are pinned to exact versions, so a new release cannot change what passes without a change here, and they run no secret and no code of this repository's source tree.
+  # The packed packages of `wasm-conformance`, installed the way a consumer installs them into a directory of their own, and the corpus's regex and validate cases run through their public entry points in each runtime the packages claim to support: the oldest Node of each supported line, Bun and Deno. The runtimes are pinned to exact versions, so a new release cannot change what passes without a change here, and they run no secret and no code of this repository's source tree. There are two consumers: one that has not installed `zod`, which `trilean` must not need, and one that has installed the oldest `zod` the optional peer dependency allows and reads the validate cases through `trilean/zod` too.
   packed-consumer:
     name: Packed consumer
     needs: [wasm-conformance]
@@ -198,34 +198,39 @@ jobs:
         with:
           name: packed-packages
           path: ${{ runner.temp }}/pack
-      - name: Install the tarballs into a directory of their own
+      - name: Install the tarballs into two directories of their own, one with zod and one without
         run: |
-          consumer="$RUNNER_TEMP/consumer"
-          mkdir -p "$consumer/corpus/trilean-regex/match" "$consumer/corpus/trilean-regex/parse" "$consumer/corpus/trilean/validate"
-          for file in manifest.json trilean-regex/match/matcher.json trilean-regex/parse/parser.json trilean/validate/tree.json trilean/validate/computed-value.json; do
-            cp "conformance/$file" "$consumer/corpus/$file"
-          done
-          cp packages/trilean/test/runtimes/consumer.mjs "$consumer/"
-          cd "$consumer"
           regex_tarball="$(ls "$RUNNER_TEMP"/pack/trilean-regex-*.tgz)"
           trilean_tarball="$(ls "$RUNNER_TEMP"/pack/trilean-[0-9]*.tgz)"
           zod_version="$(cat "$RUNNER_TEMP/pack/zod-version.txt")"
-          # `trilean` depends on the exact version of `trilean-regex` it was released with, which the registry may not hold, so the override makes that dependency the tarball too (`$trilean-regex` is the direct dependency's own specification), and `zod` is held at the version the workspace resolved.
-          overrides='"trilean-regex": "$trilean-regex"'
-          if [ -n "$zod_version" ]; then
-            overrides="$overrides, \"zod\": \"$zod_version\""
-          fi
-          printf '{ "private": true, "type": "module", "dependencies": { "trilean-regex": "file:%s", "trilean": "file:%s" }, "overrides": { %s } }\n' "$regex_tarball" "$trilean_tarball" "$overrides" > package.json
-          npm install --ignore-scripts --no-audit --no-fund
-          # The override must have taken effect: one copy of `trilean-regex` is installed, and it is the packed one, byte for byte where it counts.
-          copies="$(find node_modules -path '*/trilean-regex/package.json' | wc -l)"
-          test "$copies" = 1 || { echo "expected one trilean-regex, found $copies"; find node_modules -path '*/trilean-regex/package.json'; exit 1; }
-          packed="$(tar -xzOf "$regex_tarball" package/dist/trilean_regex_bg.wasm | sha256sum | cut -d' ' -f1)"
-          installed="$(sha256sum node_modules/trilean-regex/dist/trilean_regex_bg.wasm | cut -d' ' -f1)"
-          test "$packed" = "$installed" || { echo "the installed trilean-regex is not the packed one"; exit 1; }
-          npm ls --all
+          test -n "$zod_version" || { echo "no oldest zod version was recorded beside the tarballs"; exit 1; }
+          # Installs the packed packages into a directory beside the corpus subset and the consumer script, with any further dependencies named by the second argument.
+          install_consumer() {
+            consumer="$RUNNER_TEMP/consumers/$1"
+            mkdir -p "$consumer/corpus/trilean-regex/match" "$consumer/corpus/trilean-regex/parse" "$consumer/corpus/trilean/validate"
+            for file in manifest.json trilean-regex/match/matcher.json trilean-regex/parse/parser.json trilean/validate/tree.json trilean/validate/computed-value.json; do
+              cp "conformance/$file" "$consumer/corpus/$file"
+            done
+            cp packages/trilean/test/runtimes/consumer.mjs "$consumer/"
+            # `trilean` depends on the exact version of `trilean-regex` it was released with, which the registry may not hold, so the override makes that dependency the tarball too (`$trilean-regex` is the direct dependency's own specification).
+            printf '{ "private": true, "type": "module", "dependencies": { "trilean-regex": "file:%s", "trilean": "file:%s"%s }, "overrides": { "trilean-regex": "$trilean-regex" } }\n' "$regex_tarball" "$trilean_tarball" "$2" > "$consumer/package.json"
+            (cd "$consumer" && npm install --ignore-scripts --no-audit --no-fund)
+            # The override must have taken effect: one copy of `trilean-regex` is installed, and it is the packed one, byte for byte where it counts.
+            copies="$(find "$consumer/node_modules" -path '*/trilean-regex/package.json' | wc -l)"
+            test "$copies" = 1 || { echo "expected one trilean-regex, found $copies"; find "$consumer/node_modules" -path '*/trilean-regex/package.json'; exit 1; }
+            packed="$(tar -xzOf "$regex_tarball" package/dist/trilean_regex_bg.wasm | sha256sum | cut -d' ' -f1)"
+            installed="$(sha256sum "$consumer/node_modules/trilean-regex/dist/trilean_regex_bg.wasm" | cut -d' ' -f1)"
+            test "$packed" = "$installed" || { echo "the installed trilean-regex is not the packed one"; exit 1; }
+            (cd "$consumer" && npm ls --all)
+          }
+          install_consumer core ""
+          # `trilean`'s peer dependency on `zod` is optional, so a consumer that does not ask for zod has none installed.
+          test ! -e "$RUNNER_TEMP/consumers/core/node_modules/zod" || { echo "zod was installed for a consumer that does not depend on it"; exit 1; }
+          install_consumer zod ", \"zod\": \"$zod_version\""
+          installed_zod="$(node -p "require('$RUNNER_TEMP/consumers/zod/node_modules/zod/package.json').version")"
+          test "$installed_zod" = "$zod_version" || { echo "expected zod $zod_version, found $installed_zod"; exit 1; }
           mkdir -p "$GITHUB_WORKSPACE/consumer-artifact"
-          tar -czf "$GITHUB_WORKSPACE/consumer-artifact/consumer.tgz" -C "$consumer" .
+          tar -czf "$GITHUB_WORKSPACE/consumer-artifact/consumer.tgz" -C "$RUNNER_TEMP/consumers" .
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: packed-consumer
@@ -264,13 +269,21 @@ jobs:
         if: matrix.runtime == 'deno'
         with:
           deno-version: ${{ matrix.version }}
-      - name: Run the corpus through the public entry points
-        working-directory: consumer
+      - name: Run the corpus through the public entry points, without zod installed
+        working-directory: consumer/core
         run: |
           case "${{ matrix.runtime }}" in
             node) node consumer.mjs corpus ;;
             bun) bun consumer.mjs corpus ;;
             deno) deno run --allow-read consumer.mjs corpus ;;
+          esac
+      - name: Run the corpus through trilean/zod, with the oldest zod it allows
+        working-directory: consumer/zod
+        run: |
+          case "${{ matrix.runtime }}" in
+            node) node consumer.mjs corpus zod ;;
+            bun) bun consumer.mjs corpus zod ;;
+            deno) deno run --allow-read consumer.mjs corpus zod ;;
           esac
 
   # The Rust workspace under rust/ is built and tested by cargo, not turbo, so these jobs sit beside the turbo-driven ones and need no pnpm install. The toolchain is whatever rust/rust-toolchain.toml pins, so the file stays the one place that names a version, and every cargo command runs against the committed Cargo.lock. The commands live in scripts/rust-checks.sh so the pre-push hook runs the same ones.
