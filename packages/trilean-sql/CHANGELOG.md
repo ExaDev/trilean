@@ -1,3 +1,16 @@
+## [3.0.16](https://github.com/ExaDev/trilean/compare/trilean-sql%403.0.15...trilean-sql%403.0.16) (2026-11-18)
+
+### Build System
+
+* **deps-dev:** bump @types/node from 26.6.5 to 26.6.6 ([1e23aa1](https://github.com/ExaDev/trilean/commit/1e23aa188b6ed42201a32a942ee16bcb23032e78))
+* **deps-dev:** bump better-sqlite3 from 13.0.3 to 13.1.1 ([8e0b120](https://github.com/ExaDev/trilean/commit/8e0b120a0abaa9ff1de4aaf41b674d8922a844ef))
+
+
+### Dependencies
+
+- Updated trilean-regex to 2.0.7
+- Updated trilean to 3.1.2
+
 ## [3.0.15](https://github.com/ExaDev/trilean/compare/trilean-sql%403.0.14...trilean-sql%403.0.15) (2026-11-18)
 
 ### Build System
