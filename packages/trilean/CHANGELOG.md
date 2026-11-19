@@ -1,3 +1,14 @@
+## [3.1.5](https://github.com/ExaDev/trilean/compare/trilean%403.1.4...trilean%403.1.5) (2026-11-19)
+
+### Build System
+
+* **deps-dev:** bump prettier from 3.9.10 to 3.10.1 ([cbcb3ea](https://github.com/ExaDev/trilean/commit/cbcb3ea388f79c0209517e7b3787ce0648fe68ab))
+
+
+### Dependencies
+
+- Updated trilean-regex to 2.0.8
+
 ## [3.1.4](https://github.com/ExaDev/trilean/compare/trilean%403.1.3...trilean%403.1.4) (2026-11-19)
 
 ### Build System

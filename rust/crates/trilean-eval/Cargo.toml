@@ -1,7 +1,7 @@
 [package]
 name = "trilean-eval"
 description = "The values and trees of trilean: the one definition of a predicate or expression tree, a computed value and an indeterminate reason, with the validation, the JSON Schema and the TypeScript declarations written from it, and the three-valued evaluator of those trees."
-version = "3.1.4"
+version = "3.1.5"
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
