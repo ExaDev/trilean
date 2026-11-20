@@ -1,7 +1,7 @@
 [package]
 name = "trilean-json-shape"
 description = "One Rust definition for validating JSON, a JSON Schema and TypeScript declarations."
-version = "3.1.6"
+version = "3.1.7"
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true

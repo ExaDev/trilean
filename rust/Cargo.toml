@@ -25,10 +25,10 @@ homepage = "https://github.com/ExaDev/trilean"
 # A crate published to crates.io names each sibling it depends on with a version as well as a path: crates.io keeps the version and drops the path. The version is the sibling's own, which scripts/crate-versions.py writes here when a release moves it.
 [workspace.dependencies]
 corpus-format = { path = "crates/corpus-format" }
-trilean-eval = { path = "crates/trilean-eval", version = "3.1.6" }
-trilean-json-shape = { path = "crates/trilean-json-shape", version = "3.1.6" }
-trilean-json-shape-derive = { path = "crates/trilean-json-shape-derive", version = "3.1.6" }
-trilean-json-shape-pattern = { path = "crates/trilean-json-shape-pattern", version = "3.1.6" }
+trilean-eval = { path = "crates/trilean-eval", version = "3.1.7" }
+trilean-json-shape = { path = "crates/trilean-json-shape", version = "3.1.7" }
+trilean-json-shape-derive = { path = "crates/trilean-json-shape-derive", version = "3.1.7" }
+trilean-json-shape-pattern = { path = "crates/trilean-json-shape-pattern", version = "3.1.7" }
 # Without its default features, which pull in the futures crates the binding does not use.
 js-sys = { version = "0.3.107", default-features = false }
 proc-macro2 = "1"
@@ -36,7 +36,7 @@ quote = "1"
 serde = "1"
 # `float_roundtrip` makes a number literal read as the nearest double, as `JSON.parse` reads it. serde_json's default parser can be one unit in the last place away, so a validator would disagree with a JavaScript reader (and with a JSON Schema validator in JavaScript) at a numeric bound. `raw_value` lets `Value`'s `Serialize` write a number as the text `JSON.stringify` writes, which serde_json's own float writer does not for every double.
 serde_json = { version = "1", features = ["float_roundtrip", "raw_value"] }
-trilean-regex = { path = "crates/trilean-regex", version = "2.0.8" }
+trilean-regex = { path = "crates/trilean-regex", version = "2.0.9" }
 wasm-bindgen = "0.2.130"
 # The lock holds the newest release old enough for the install policy's release-age rule, and moves up by the same rule.
 syn = { version = "3", default-features = false, features = ["clone-impls", "derive", "parsing", "printing", "proc-macro"] }

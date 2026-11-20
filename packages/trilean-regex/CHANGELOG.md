@@ -1,3 +1,9 @@
+## [2.0.9](https://github.com/ExaDev/trilean/compare/trilean-regex%402.0.8...trilean-regex%402.0.9) (2026-11-20)
+
+### Build System
+
+* **deps-dev:** bump eslint from 10.14.0 to 10.15.0 ([461b10d](https://github.com/ExaDev/trilean/commit/461b10d8d2b1280aad61663b9708e6783012299c))
+
 ## [2.0.8](https://github.com/ExaDev/trilean/compare/trilean-regex%402.0.7...trilean-regex%402.0.8) (2026-11-19)
 
 ### Build System
