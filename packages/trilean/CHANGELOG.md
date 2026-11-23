@@ -1,3 +1,9 @@
+## [3.3.1](https://github.com/ExaDev/trilean/compare/trilean%403.3.0...trilean%403.3.1) (2026-11-23)
+
+### Tests
+
+* **trilean:** give the built-package, Workers and tooling tests a limit that fits shared hosts ([861faf2](https://github.com/ExaDev/trilean/commit/861faf25b026338c1f68eb0a08d76a971caf2192))
+
 ## [3.3.0](https://github.com/ExaDev/trilean/compare/trilean%403.2.0...trilean%403.3.0) (2026-11-23)
 
 ### Features
