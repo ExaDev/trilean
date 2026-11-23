@@ -11,6 +11,7 @@ The pnpm workspace holding the trilean packages. Each package is versioned, rele
 | [trilean](packages/trilean/README.md) | `packages/trilean` | [`trilean`](https://www.npmjs.com/package/trilean) on npm, [`@exadev/trilean`](https://github.com/ExaDev/trilean/pkgs/npm/trilean) on GitHub Packages |
 | [trilean-sql](packages/trilean-sql/README.md) | `packages/trilean-sql` | [`trilean-sql`](https://www.npmjs.com/package/trilean-sql) on npm, [`@exadev/trilean-sql`](https://github.com/ExaDev/trilean/pkgs/npm/trilean-sql) on GitHub Packages |
 | [trilean-regex](packages/trilean-regex/README.md) | `packages/trilean-regex` | [`trilean-regex`](https://www.npmjs.com/package/trilean-regex) on npm, [`@exadev/trilean-regex`](https://github.com/ExaDev/trilean/pkgs/npm/trilean-regex) on GitHub Packages |
+| [trilean-linear](packages/trilean-linear/README.md) | `packages/trilean-linear` | [`trilean-linear`](https://www.npmjs.com/package/trilean-linear) on npm, [`@exadev/trilean-linear`](https://github.com/ExaDev/trilean/pkgs/npm/trilean-linear) on GitHub Packages |
 
 Each package is versioned, released, and published independently of every other, from its own commit history. There is no lockstep version shared across the workspace.
 
@@ -51,6 +52,7 @@ The `pnpm <task>` scripts are thin wrappers over `turbo run _<task>`; the unders
 ├── packages/
 │   ├── trilean/        the evaluation library, with its own README, CHANGELOG, and configs
 │   ├── trilean-sql/    the SQL compiler over trilean's predicate trees, likewise self-contained
+│   ├── trilean-linear/ the linear-system solver over trilean's matrix values, likewise self-contained
 │   └── trilean-regex/  the portable regex grammar trilean-sql pushes down where it can, likewise self-contained
 ├── conformance/        language-neutral cases every implementation of a package runs, and their format (its own README)
 ├── rust/               the Rust workspace: its crates (the JSON shape mechanism, its derive and the corpus loader), toolchain pin and crate allowlist
