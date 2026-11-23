@@ -1,3 +1,9 @@
+## [3.0.22](https://github.com/ExaDev/trilean/compare/trilean-sql%403.0.21...trilean-sql%403.0.22) (2026-11-23)
+
+### Tests
+
+* **trilean-sql:** run the PostgreSQL integration cases on PGlite instead of a container ([5390608](https://github.com/ExaDev/trilean/commit/5390608de001f7e9627626ed2e9b2f19be96a338))
+
 ## [3.0.21](https://github.com/ExaDev/trilean/compare/trilean-sql%403.0.20...trilean-sql%403.0.21) (2026-11-20)
 
 ### Build System
