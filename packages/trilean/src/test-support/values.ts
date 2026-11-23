@@ -48,6 +48,7 @@ const COMPUTED_KINDS: ReadonlySet<string> = new Set([
   "instant",
   "duration",
   "complex",
+  "list",
 ]);
 
 function isComputedValue(value: unknown): value is ComputedValue {

@@ -1,18 +1,13 @@
 {
   "cases": [
     {
-      "args": [
-        {
-          "kind": "number",
-          "value": -0.4
-        }
-      ],
+      "args": [],
       "expect": {
-        "kind": "number",
-        "value": 0
+        "items": [],
+        "kind": "list"
       },
-      "function": "round",
-      "id": "builtin.round-never-returns-a-negative-zero.1",
+      "function": "list",
+      "id": "builtin.lists-list-with-no-arguments-is-the-empty-list.1",
       "kind": "call"
     }
   ]

@@ -686,6 +686,28 @@ const average = (collection: JsonValue, item: ExpressionNode, filter?: Predicate
 
 `average` is `sum` divided by `count` over the same `collection`/`filter`, with no `probe` — `sum`'s own `item` already forces every participating item's projected value to resolve, so `average`'s numerator is already indeterminate under exactly the condition a `count` probe exists to detect, with nothing left to duplicate. Nothing new to verify for the empty-collection case either: division's own already-established rule (zero divisor is `domain-error`) is *why* `average` over an empty collection is `domain-error`, since `count` over an empty collection is `0` and `sum(...)/0` already means exactly that.
 
+### List values
+
+A `list` computed value is an ordered list of computed values, each of any kind, a list included, serialised in an `Evaluation` like every other kind: `{ "kind": "list", "items": [ ... ] }`. A list has no order and no equality, so `compare` and `memberOf` refuse it as a wrong type, and arithmetic and `negate` do too. The built-in functions are the closed-form operations on one:
+
+- `list(...items)` builds a list of its arguments, and `list()` is the empty list.
+- `length(list)` is the number of items at the top level, a number without a unit.
+- `at(list, index)` is the item at a zero-based index, which must be an integer number without a unit and within the list, else it is a `domain-error`.
+- `append(list, item)` is a new list with `item` added at the end.
+
+`map`, `filter`, `argmin` and `argmax` are builders over `fold` with a list accumulator, as `sum`, `count` and `average` are, so they add no evaluator logic and run in one pass over the collection. They call the `list`, `append`, `length` and `at` functions, which the built-in registry holds.
+
+```ts
+const map = (collection: JsonValue, item: ExpressionNode, filter?: PredicateNode): ExpressionNode;
+const filter = (collection: JsonValue, predicate: PredicateNode, item: ExpressionNode): ExpressionNode;
+const argmin = (collection: JsonValue, key: ExpressionNode, result: ExpressionNode, filter?: PredicateNode): ExpressionNode;
+const argmax = (collection: JsonValue, key: ExpressionNode, result: ExpressionNode, filter?: PredicateNode): ExpressionNode;
+```
+
+`map` is the list of `item` for each participating item, in collection order, and `filter` is `map` with the predicate given first. `argmin` and `argmax` are the `result` of the participating item whose `key` is least or greatest. A tie keeps the first such item in collection order, the order a `fold` visits, because the accumulator is replaced only by a strictly better key. With no participating item there is no least item, so reading the result is an indeterminate `domain-error`.
+
+A list is bounded two ways, both by the `maxValueEntries` option of the evaluators (default `DEFAULT_MAX_VALUE_ENTRIES`, equal to the default `maxNodes`), which counts one entry per item of every list nested in a value. A list input over it is rejected when the inputs are validated, before anything is evaluated, and a function result over it is an indeterminate `domain-error` that reports an exhausted resource. The entries of the lists a `call` is given are also charged to the `maxNodes` budget before the function runs, so work on a long list ends as the same resource-exhausted result instead of running to completion.
+
 ### Derived values
 
 `coalesce` is never its own evaluated node kind — it is a builder function that assembles an ordinary `conditional`, the same treatment [Derived connectives](#derived-connectives) and [Derived aggregates](#derived-aggregates) already give `xor`/`nand`/`nor`/`implies`/`iff`/`none`/`sum`/`count`/`average`: correctness is inherited from the mechanism it's built from, rather than needing its own independent implementation that could silently drift from it.
@@ -873,7 +895,7 @@ const { evaluateValue } = createEvaluator({
 When every resolver is a plain in-memory read, `createSyncEvaluator` builds the same pair with no promises at all, taking `SyncResolvers` (each resolver returns its result directly) and returning the `Evaluation` directly:
 
 ```ts
-function createSyncEvaluator(options: { functions?: FunctionRegistry; maxNodes?: number; maxNestingDepth?: number }): {
+function createSyncEvaluator(options: { functions?: FunctionRegistry; maxNodes?: number; maxNestingDepth?: number; maxValueEntries?: number }): {
   evaluatePredicate: (node: PredicateNode, context: EvaluationContext, resolvers: SyncResolvers) => Evaluation<boolean>;
   evaluateValue: (node: ExpressionNode, context: EvaluationContext, resolvers: SyncResolvers) => Evaluation<ComputedValue>;
   compilePredicate: (node: PredicateNode) => CompiledPredicate;

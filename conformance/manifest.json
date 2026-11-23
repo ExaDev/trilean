@@ -341,7 +341,7 @@
       }
     },
     "trilean/build/derived-aggregates.json": {
-      "cases": 10,
+      "cases": 16,
       "skip": {
         "rust": [],
         "ts": []
@@ -376,7 +376,7 @@
       }
     },
     "trilean/call/builtin-functions.json": {
-      "cases": 181,
+      "cases": 197,
       "skip": {
         "rust": [],
         "ts": []
@@ -597,6 +597,21 @@
       "cases": 16,
       "skip": {
         "rust": [],
+        "ts": []
+      }
+    },
+    "trilean/evaluate/lists.json": {
+      "cases": 13,
+      "skip": {
+        "rust": [
+          "aggregates.argmax-returns-the-result-of-the-greatest-item.1",
+          "aggregates.argmin-of-no-participating-item-is-indeterminate.1",
+          "aggregates.argmin-returns-the-result-of-the-first-of-the-tied-least-items.1",
+          "aggregates.filter-keeps-the-projected-value-of-the-items-that-satisfy-the-predicate.1",
+          "aggregates.map-collects-the-projected-value-of-every-item-in-order.1",
+          "aggregates.map-over-the-entry-limit-is-resource-exhausted.1",
+          "aggregates.map-within-the-entry-limit-is-definite.1"
+        ],
         "ts": []
       }
     },

@@ -200,6 +200,13 @@ fn computed_json(value: &ComputedValue) -> Json {
             members.push(("im".to_owned(), Json::Number(*im)));
             unit(&mut members, u);
         }
+        ComputedValue::List { items } => {
+            members.push(("kind".to_owned(), text("list")));
+            members.push((
+                "items".to_owned(),
+                Json::Array(items.iter().map(computed_json).collect()),
+            ));
+        }
     }
     Json::Object(members)
 }
@@ -274,6 +281,15 @@ fn to_computed(value: &Json) -> Check<ComputedValue> {
             re: number_at(value, "re")?,
             im: number_at(value, "im")?,
             unit: unit_at(value)?,
+        },
+        "list" => ComputedValue::List {
+            items: value
+                .get("items")
+                .and_then(Json::as_array)
+                .ok_or_else(|| format!("{value} has no list items"))?
+                .iter()
+                .map(to_computed)
+                .collect::<Check<_>>()?,
         },
         other => return Err(format!("{other} is not a computed value kind")),
     })
@@ -700,6 +716,13 @@ pub fn run_case(case: &Value) -> Check<()> {
                 trilean_eval::evaluate::DEFAULT_MAX_NESTING_DEPTH,
             )?,
         )
+        .map_err(|error| error.to_string())?;
+    let evaluator = evaluator
+        .with_max_value_entries(limit(
+            case,
+            "maxValueEntries",
+            trilean_eval::evaluate::DEFAULT_MAX_VALUE_ENTRIES,
+        )?)
         .map_err(|error| error.to_string())?;
     let outcome = if case["as"].as_str() == Some("predicate") {
         let tree = trilean_eval::schemas::read_predicate(&tree)

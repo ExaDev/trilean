@@ -1,4 +1,4 @@
-import type { Unit } from "../generated/schemas.js";
+import type { ComputedValue, Unit } from "../generated/schemas.js";
 
 export type {
   ComputedValue,
@@ -63,4 +63,14 @@ export function combineUnitsForDivide(
   }
 
   return normalizeUnit(combined);
+}
+
+/** The entries a value holds, counted over every list in it: a list holds one entry per item plus the entries of each item that is itself a list, and any other value holds none. It is what `maxValueEntries` bounds and what a `call` is charged for the lists it is given. */
+export function valueEntryCount(value: ComputedValue): number {
+  if (value.kind !== "list") return 0;
+
+  return value.items.reduce(
+    (total, item) => total + 1 + valueEntryCount(item),
+    0,
+  );
 }

@@ -22,7 +22,7 @@ pub enum DurationUnit {
     D,
 }
 
-/// A value an expression evaluates to, of one of six kinds.
+/// A value an expression evaluates to, of one of seven kinds.
 #[derive(Shape, Clone, Debug, PartialEq)]
 #[serde(tag = "kind", rename_all = "camelCase", deny_unknown_fields)]
 pub enum ComputedValue {
@@ -65,4 +65,22 @@ pub enum ComputedValue {
         /// The unit, when it has one.
         unit: Option<Unit>,
     },
+    /// An ordered list of values, each of any kind, a list included. A list holds at most the evaluator's value entry
+    /// limit in entries, counted over every list in the value.
+    List {
+        /// The items, in order.
+        items: Vec<ComputedValue>,
+    },
+}
+
+impl ComputedValue {
+    /// The entries the value holds, counted over every list in it: a list holds one entry per item plus the entries of
+    /// each item that is itself a list, and any other value holds none. It is what the evaluator's value entry limit
+    /// bounds and what a `call` is charged for the lists it is given.
+    pub fn entry_count(&self) -> usize {
+        match self {
+            Self::List { items } => items.iter().map(|item| 1 + item.entry_count()).sum(),
+            _ => 0,
+        }
+    }
 }

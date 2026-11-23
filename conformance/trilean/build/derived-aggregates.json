@@ -507,6 +507,504 @@
       "from": "recorded: trilean src/derived-aggregates.ts (the tree average builds)",
       "id": "aggregates-build.average-empty-kind-reference-key-amount.1",
       "kind": "build"
+    },
+    {
+      "args": [
+        "items",
+        {
+          "key": "cost",
+          "kind": "reference"
+        }
+      ],
+      "builder": "map",
+      "expect": {
+        "collection": "items",
+        "combiner": {
+          "combine": {
+            "args": [
+              {
+                "kind": "accumulator"
+              },
+              {
+                "key": "cost",
+                "kind": "reference"
+              }
+            ],
+            "fn": "append",
+            "kind": "call"
+          },
+          "initial": {
+            "args": [],
+            "fn": "list",
+            "kind": "call"
+          },
+          "mode": "reduce"
+        },
+        "kind": "fold"
+      },
+      "from": "recorded: trilean src/derived-aggregates.ts (the tree map builds)",
+      "id": "aggregates-build.map-items-kind-reference-key-cost.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        "items",
+        {
+          "key": "cost",
+          "kind": "reference"
+        },
+        {
+          "kind": "compare",
+          "left": {
+            "key": "cost",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 20
+          }
+        }
+      ],
+      "builder": "map",
+      "expect": {
+        "collection": "items",
+        "combiner": {
+          "combine": {
+            "args": [
+              {
+                "kind": "accumulator"
+              },
+              {
+                "key": "cost",
+                "kind": "reference"
+              }
+            ],
+            "fn": "append",
+            "kind": "call"
+          },
+          "initial": {
+            "args": [],
+            "fn": "list",
+            "kind": "call"
+          },
+          "mode": "reduce"
+        },
+        "filter": {
+          "kind": "compare",
+          "left": {
+            "key": "cost",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 20
+          }
+        },
+        "kind": "fold"
+      },
+      "from": "recorded: trilean src/derived-aggregates.ts (the tree map builds)",
+      "id": "aggregates-build.map-with-a-filter.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        "items",
+        {
+          "kind": "compare",
+          "left": {
+            "key": "cost",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 20
+          }
+        },
+        {
+          "key": "id",
+          "kind": "reference"
+        }
+      ],
+      "builder": "filter",
+      "expect": {
+        "collection": "items",
+        "combiner": {
+          "combine": {
+            "args": [
+              {
+                "kind": "accumulator"
+              },
+              {
+                "key": "id",
+                "kind": "reference"
+              }
+            ],
+            "fn": "append",
+            "kind": "call"
+          },
+          "initial": {
+            "args": [],
+            "fn": "list",
+            "kind": "call"
+          },
+          "mode": "reduce"
+        },
+        "filter": {
+          "kind": "compare",
+          "left": {
+            "key": "cost",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 20
+          }
+        },
+        "kind": "fold"
+      },
+      "from": "recorded: trilean src/derived-aggregates.ts (the tree filter builds)",
+      "id": "aggregates-build.filter-items-by-a-predicate-projecting-id.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        "items",
+        {
+          "key": "cost",
+          "kind": "reference"
+        },
+        {
+          "key": "id",
+          "kind": "reference"
+        }
+      ],
+      "builder": "argmin",
+      "expect": {
+        "args": [
+          {
+            "collection": "items",
+            "combiner": {
+              "combine": {
+                "cases": [
+                  {
+                    "then": {
+                      "args": [
+                        {
+                          "key": "cost",
+                          "kind": "reference"
+                        },
+                        {
+                          "key": "id",
+                          "kind": "reference"
+                        }
+                      ],
+                      "fn": "list",
+                      "kind": "call"
+                    },
+                    "when": {
+                      "kind": "or",
+                      "left": {
+                        "kind": "compare",
+                        "left": {
+                          "args": [
+                            {
+                              "kind": "accumulator"
+                            }
+                          ],
+                          "fn": "length",
+                          "kind": "call"
+                        },
+                        "op": "eq",
+                        "right": {
+                          "kind": "numberLiteral",
+                          "value": 0
+                        }
+                      },
+                      "right": {
+                        "kind": "compare",
+                        "left": {
+                          "key": "cost",
+                          "kind": "reference"
+                        },
+                        "op": "lt",
+                        "right": {
+                          "args": [
+                            {
+                              "kind": "accumulator"
+                            },
+                            {
+                              "kind": "numberLiteral",
+                              "value": 0
+                            }
+                          ],
+                          "fn": "at",
+                          "kind": "call"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "fallback": {
+                  "kind": "accumulator"
+                },
+                "kind": "conditional"
+              },
+              "initial": {
+                "args": [],
+                "fn": "list",
+                "kind": "call"
+              },
+              "mode": "reduce"
+            },
+            "kind": "fold"
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "fn": "at",
+        "kind": "call"
+      },
+      "from": "recorded: trilean src/derived-aggregates.ts (the tree argmin builds)",
+      "id": "aggregates-build.argmin-key-cost-result-id.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        "items",
+        {
+          "key": "cost",
+          "kind": "reference"
+        },
+        {
+          "key": "id",
+          "kind": "reference"
+        }
+      ],
+      "builder": "argmax",
+      "expect": {
+        "args": [
+          {
+            "collection": "items",
+            "combiner": {
+              "combine": {
+                "cases": [
+                  {
+                    "then": {
+                      "args": [
+                        {
+                          "key": "cost",
+                          "kind": "reference"
+                        },
+                        {
+                          "key": "id",
+                          "kind": "reference"
+                        }
+                      ],
+                      "fn": "list",
+                      "kind": "call"
+                    },
+                    "when": {
+                      "kind": "or",
+                      "left": {
+                        "kind": "compare",
+                        "left": {
+                          "args": [
+                            {
+                              "kind": "accumulator"
+                            }
+                          ],
+                          "fn": "length",
+                          "kind": "call"
+                        },
+                        "op": "eq",
+                        "right": {
+                          "kind": "numberLiteral",
+                          "value": 0
+                        }
+                      },
+                      "right": {
+                        "kind": "compare",
+                        "left": {
+                          "key": "cost",
+                          "kind": "reference"
+                        },
+                        "op": "gt",
+                        "right": {
+                          "args": [
+                            {
+                              "kind": "accumulator"
+                            },
+                            {
+                              "kind": "numberLiteral",
+                              "value": 0
+                            }
+                          ],
+                          "fn": "at",
+                          "kind": "call"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "fallback": {
+                  "kind": "accumulator"
+                },
+                "kind": "conditional"
+              },
+              "initial": {
+                "args": [],
+                "fn": "list",
+                "kind": "call"
+              },
+              "mode": "reduce"
+            },
+            "kind": "fold"
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "fn": "at",
+        "kind": "call"
+      },
+      "from": "recorded: trilean src/derived-aggregates.ts (the tree argmax builds)",
+      "id": "aggregates-build.argmax-key-cost-result-id.1",
+      "kind": "build"
+    },
+    {
+      "args": [
+        "items",
+        {
+          "key": "cost",
+          "kind": "reference"
+        },
+        {
+          "key": "id",
+          "kind": "reference"
+        },
+        {
+          "kind": "compare",
+          "left": {
+            "key": "cost",
+            "kind": "reference"
+          },
+          "op": "lt",
+          "right": {
+            "kind": "numberLiteral",
+            "value": 20
+          }
+        }
+      ],
+      "builder": "argmin",
+      "expect": {
+        "args": [
+          {
+            "collection": "items",
+            "combiner": {
+              "combine": {
+                "cases": [
+                  {
+                    "then": {
+                      "args": [
+                        {
+                          "key": "cost",
+                          "kind": "reference"
+                        },
+                        {
+                          "key": "id",
+                          "kind": "reference"
+                        }
+                      ],
+                      "fn": "list",
+                      "kind": "call"
+                    },
+                    "when": {
+                      "kind": "or",
+                      "left": {
+                        "kind": "compare",
+                        "left": {
+                          "args": [
+                            {
+                              "kind": "accumulator"
+                            }
+                          ],
+                          "fn": "length",
+                          "kind": "call"
+                        },
+                        "op": "eq",
+                        "right": {
+                          "kind": "numberLiteral",
+                          "value": 0
+                        }
+                      },
+                      "right": {
+                        "kind": "compare",
+                        "left": {
+                          "key": "cost",
+                          "kind": "reference"
+                        },
+                        "op": "lt",
+                        "right": {
+                          "args": [
+                            {
+                              "kind": "accumulator"
+                            },
+                            {
+                              "kind": "numberLiteral",
+                              "value": 0
+                            }
+                          ],
+                          "fn": "at",
+                          "kind": "call"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "fallback": {
+                  "kind": "accumulator"
+                },
+                "kind": "conditional"
+              },
+              "initial": {
+                "args": [],
+                "fn": "list",
+                "kind": "call"
+              },
+              "mode": "reduce"
+            },
+            "filter": {
+              "kind": "compare",
+              "left": {
+                "key": "cost",
+                "kind": "reference"
+              },
+              "op": "lt",
+              "right": {
+                "kind": "numberLiteral",
+                "value": 20
+              }
+            },
+            "kind": "fold"
+          },
+          {
+            "kind": "numberLiteral",
+            "value": 1
+          }
+        ],
+        "fn": "at",
+        "kind": "call"
+      },
+      "from": "recorded: trilean src/derived-aggregates.ts (the tree argmin builds)",
+      "id": "aggregates-build.argmin-with-a-filter.1",
+      "kind": "build"
     }
   ]
 }

@@ -2,12 +2,12 @@
   "cases": [
     {
       "expect": {
-        "kind": "number",
-        "value": 0
+        "items": [],
+        "kind": "list"
       },
-      "from": "builtin-functions.unit.test.ts: round > never returns a negative zero",
-      "function": "round",
-      "id": "builtin.round-never-returns-a-negative-zero.1",
+      "from": "recorded: trilean src/builtin-functions.ts (the list functions)",
+      "function": "list",
+      "id": "builtin.lists-list-with-no-arguments-is-the-empty-list.1",
       "kind": "call"
     }
   ]

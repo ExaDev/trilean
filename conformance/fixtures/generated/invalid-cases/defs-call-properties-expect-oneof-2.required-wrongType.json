@@ -1,15 +1,20 @@
 {
   "cases": [
     {
-      "args": [],
+      "args": [
+        {
+          "kind": "number",
+          "value": 1
+        }
+      ],
       "expect": {
         "messageIncludes": [
-          "exactly one"
+          "one list"
         ]
       },
-      "from": "builtin-functions.unit.test.ts: phase > is a wrong-type for a real number, text or a wrong count",
-      "function": "phase",
-      "id": "builtin.phase-is-a-wrong-type-for-a-real-number-text-or-a-wrong-count.3",
+      "from": "recorded: trilean src/builtin-functions.ts (the list functions)",
+      "function": "length",
+      "id": "builtin.lists-length-refuses-a-value-that-is-not-a-list.1",
       "kind": "call"
     }
   ]

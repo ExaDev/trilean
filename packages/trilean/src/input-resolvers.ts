@@ -1,5 +1,6 @@
 import type { ComputedValue } from "./computed-value";
-import { ComputedValueSchema } from "./computed-value";
+import { ComputedValueSchema, valueEntryCount } from "./computed-value";
+import { DEFAULT_MAX_VALUE_ENTRIES } from "./evaluator-budget";
 import { isPlainRecord } from "./plain-record";
 import type { SyncResolvers } from "./resolvers";
 import { readAs } from "./read-as";
@@ -19,6 +20,27 @@ function toComputedValue(raw: unknown): ComputedValue | undefined {
   return parsed.success ? parsed.data : undefined;
 }
 
+const NOT_A_VALUE =
+  "expected a finite number, text, boolean or a complete computed value";
+
+/** A value an input holds, or why it is refused: not a value at all, or a list holding more entries than `maxValueEntries`, which is refused here, before anything is evaluated, so a list too large to hold is never held. */
+function readEntry(
+  label: string,
+  raw: unknown,
+  maxValueEntries: number,
+): { value: ComputedValue } | { issue: string } {
+  const computed = toComputedValue(raw);
+  if (computed === undefined) return { issue: `${label}: ${NOT_A_VALUE}` };
+  const entries = valueEntryCount(computed);
+  if (entries > maxValueEntries) {
+    return {
+      issue: `${label}: holds ${entries.toString()} list entries, more than the maximum of ${maxValueEntries.toString()}`,
+    };
+  }
+
+  return { value: computed };
+}
+
 /** One element of a list input: the named values a `reference` resolves against while a `fold`, `some` or `every` is evaluating that element. */
 export type InputItem = ReadonlyMap<string, ComputedValue>;
 
@@ -31,9 +53,6 @@ export type InputsParseResult =
       collections: ReadonlyMap<string, readonly InputItem[]>;
     }
   | { ok: false; issues: readonly string[] };
-
-const NOT_A_VALUE =
-  "expected a finite number, text, boolean or a complete computed value";
 
 /**
  * The evaluation context while a `fold`, `some` or `every` is evaluating one item. `resolveCollection` wraps each element in one of these, and `resolveValue` reads names from an item only when its context is one, so scope follows what the resolver itself handed out and not the identity or shape of anything else. The class is not exported, so no value passed as a context can be mistaken for an item. The guarantee is about this resolver's own `resolveCollection`: a list served by it is scoped, and the supported way to give it lists is the `collections` argument of `createInputResolvers`. An embedder that composes resolvers, spreading these and overriding `resolveCollection` to serve its own items while keeping this `resolveValue`, serves items that are not wrappers, and a fold over them reads names from the top-level inputs; scoping those items is the embedder's responsibility.
@@ -48,7 +67,11 @@ interface ParsedItem {
 }
 
 /** Validates one element of a list input: a plain object whose every entry is a value, each by the same rules as a top-level input. */
-function parseItem(label: string, raw: unknown): ParsedItem {
+function parseItem(
+  label: string,
+  raw: unknown,
+  maxValueEntries: number,
+): ParsedItem {
   if (!isPlainRecord(raw)) {
     return {
       item: undefined,
@@ -58,11 +81,11 @@ function parseItem(label: string, raw: unknown): ParsedItem {
   const item = new Map<string, ComputedValue>();
   const issues: string[] = [];
   for (const [name, value] of Object.entries(raw)) {
-    const computed = toComputedValue(value);
-    if (computed === undefined) {
-      issues.push(`${label}.${name}: ${NOT_A_VALUE}`);
+    const entry = readEntry(`${label}.${name}`, value, maxValueEntries);
+    if ("issue" in entry) {
+      issues.push(entry.issue);
     } else {
-      item.set(name, computed);
+      item.set(name, entry.value);
     }
   }
   if (issues.length > 0) return { item: undefined, issues };
@@ -73,7 +96,10 @@ function parseItem(label: string, raw: unknown): ParsedItem {
 /**
  * Validates a plain object of inputs and splits it into named values and lists of items. An entry that is an array is a list: every element must be an object of named values (see `toComputedValue` for the accepted shapes of each value), and the list is what a `fold`, `some` or `every` resolves its `collection` to. Any other entry is one named value. Every entry is checked up front, so a malformed input is reported as one by name and position rather than surfacing later as a `not-found` reference.
  */
-export function parseInputs(raw: unknown): InputsParseResult {
+export function parseInputs(
+  raw: unknown,
+  maxValueEntries: number = DEFAULT_MAX_VALUE_ENTRIES,
+): InputsParseResult {
   if (!isPlainRecord(raw)) {
     return {
       ok: false,
@@ -90,6 +116,7 @@ export function parseInputs(raw: unknown): InputsParseResult {
         const parsedItem = parseItem(
           `inputs.${name}[${String(index)}]`,
           element,
+          maxValueEntries,
         );
         issues.push(...parsedItem.issues);
         if (parsedItem.item !== undefined) items.push(parsedItem.item);
@@ -97,11 +124,11 @@ export function parseInputs(raw: unknown): InputsParseResult {
       collections.set(name, items);
       continue;
     }
-    const computed = toComputedValue(value);
-    if (computed === undefined) {
-      issues.push(`inputs.${name}: ${NOT_A_VALUE}`);
+    const entry = readEntry(`inputs.${name}`, value, maxValueEntries);
+    if ("issue" in entry) {
+      issues.push(entry.issue);
     } else {
-      inputs.set(name, computed);
+      inputs.set(name, entry.value);
     }
   }
 

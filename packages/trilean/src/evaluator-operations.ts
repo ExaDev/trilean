@@ -21,7 +21,6 @@ import {
   compareDurations,
   millisecondsPerDurationUnit,
 } from "./duration-order";
-import type { FunctionRegistry } from "./functions";
 import type { Absence } from "./resolvers";
 import { powerByRepeatedSquaring } from "./integer-power";
 import type {
@@ -221,6 +220,11 @@ export function compareValues(
           ? left.re === right.re && left.im === right.im
           : left.re !== right.re || left.im !== right.im,
       );
+    case "list":
+      return indeterminate(
+        "wrong-type",
+        "comparison is not defined for list values; a list has no order and no equality",
+      );
     default:
       throw new Error("unreachable computed-value kind");
   }
@@ -401,6 +405,11 @@ export function computeMembershipMatch(
       return definite(
         operand.re === candidate.re && operand.im === candidate.im,
       );
+    case "list":
+      return indeterminate(
+        "wrong-type",
+        "membership is not defined for list values",
+      );
     default:
       throw new Error("unreachable computed-value kind");
   }
@@ -436,6 +445,7 @@ export function applyNegate(operand: ComputedValue): Evaluation<ComputedValue> {
     case "text":
     case "instant":
     case "boolean":
+    case "list":
       return indeterminate(
         "wrong-type",
         `cannot negate a '${operand.kind}' value`,
@@ -823,6 +833,8 @@ function hasFiniteMagnitude(value: ComputedValue): boolean {
     case "boolean":
     case "instant":
       return true;
+    case "list":
+      return value.items.every(hasFiniteMagnitude);
     default:
       throw new Error("unreachable computed-value kind");
   }
@@ -865,28 +877,4 @@ export function checkReferenceUnit(
   }
 
   return undefined;
-}
-
-/** `call`'s own function-registry dispatch, given the `fn` name off the tree and its already-evaluated `args`. `node.fn` comes off the serialised tree, which this design treats as data that may have been authored anywhere (see README.md's opening section), while `FunctionRegistry` is an ordinary object with `Object.prototype` on its chain. A bare index lookup would therefore resolve `toString`, `valueOf`, `constructor` and friends as though a consumer had registered them; only the registry's own keys count as registered function names. */
-export function invokeRegisteredFunction(
-  functions: Readonly<FunctionRegistry>,
-  fnName: string,
-  args: readonly ComputedValue[],
-): Evaluation<ComputedValue> {
-  const fn = Object.hasOwn(functions, fnName) ? functions[fnName] : undefined;
-  if (fn === undefined) {
-    return indeterminate(
-      "wrong-type",
-      `no function registered under the name '${fnName}'`,
-    );
-  }
-  const outcome = fn(args);
-  if ("domainError" in outcome) {
-    return indeterminate("domain-error", outcome.domainError);
-  }
-  if ("wrongType" in outcome) {
-    return indeterminate("wrong-type", outcome.wrongType);
-  }
-
-  return definite(outcome);
 }

@@ -144,11 +144,11 @@ The cases are the specification of the package's behaviour: the reason codes, th
 
 | Kind | Cases |
 | --- | ---: |
-| `build` | 88 |
-| `call` | 181 |
+| `build` | 94 |
+| `call` | 197 |
 | `cli` | 95 |
 | `document` | 36 |
-| `evaluate` | 816 |
+| `evaluate` | 829 |
 | `inputs` | 13 |
 | `number-format` | 40 |
 | `regex-match` | 139 |

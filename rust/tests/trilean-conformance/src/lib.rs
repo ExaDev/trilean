@@ -482,12 +482,16 @@ pub struct Validate {
 #[derive(Shape, Clone, Copy, Debug, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub enum Builder {
+    Argmax,
+    Argmin,
     Average,
     Coalesce,
     Count,
+    Filter,
     HierarchicalGlobPattern,
     Iff,
     Implies,
+    Map,
     Nand,
     None,
     Nor,
@@ -513,12 +517,16 @@ pub struct Build {
 #[serde(rename_all = "camelCase")]
 pub enum Function {
     AbsoluteValue,
+    Append,
     ArcCosine,
     ArcSine,
     ArcTangent,
     ArcTangent2,
+    At,
     Cosine,
     Exponential,
+    Length,
+    List,
     Logarithm,
     Magnitude,
     Maximum,
@@ -679,6 +687,9 @@ pub struct Evaluator {
     #[serde(rename = "maxNodes")]
     #[shape(min = 1)]
     pub max_nodes: Option<u64>,
+    #[serde(rename = "maxValueEntries")]
+    #[shape(min = 1)]
+    pub max_value_entries: Option<u64>,
 }
 
 /// What the tree is evaluated as.
