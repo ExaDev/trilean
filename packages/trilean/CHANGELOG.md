@@ -1,3 +1,9 @@
+## [3.3.0](https://github.com/ExaDev/trilean/compare/trilean%403.2.0...trilean%403.3.0) (2026-11-23)
+
+### Features
+
+* **trilean:** add the matrix value kind with closed-form matrix functions ([590b224](https://github.com/ExaDev/trilean/commit/590b22485de55b76b0f9295e5d6f93809a02c135)), references [#210](https://github.com/ExaDev/trilean/issues/210)
+
 ## [3.2.0](https://github.com/ExaDev/trilean/compare/trilean%403.1.7...trilean%403.2.0) (2026-11-23)
 
 ### Features
