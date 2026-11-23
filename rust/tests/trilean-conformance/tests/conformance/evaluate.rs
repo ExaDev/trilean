@@ -207,6 +207,25 @@ fn computed_json(value: &ComputedValue) -> Json {
                 Json::Array(items.iter().map(computed_json).collect()),
             ));
         }
+        ComputedValue::Matrix {
+            rows,
+            imaginary,
+            unit: u,
+        } => {
+            let grid = |grid: &Vec<Vec<f64>>| {
+                Json::Array(
+                    grid.iter()
+                        .map(|row| Json::Array(row.iter().copied().map(Json::Number).collect()))
+                        .collect(),
+                )
+            };
+            members.push(("kind".to_owned(), text("matrix")));
+            members.push(("rows".to_owned(), grid(rows)));
+            if let Some(imaginary) = imaginary {
+                members.push(("imaginary".to_owned(), grid(imaginary)));
+            }
+            unit(&mut members, u);
+        }
     }
     Json::Object(members)
 }
@@ -216,6 +235,26 @@ fn number_at(value: &Json, key: &str) -> Check<f64> {
         .get(key)
         .and_then(Json::as_f64)
         .ok_or_else(|| format!("{value} has no number {key}"))
+}
+
+/// A grid of numbers: an array of rows, each an array of numbers.
+fn grid_at(value: &Json, key: &str) -> Check<Vec<Vec<f64>>> {
+    value
+        .get(key)
+        .and_then(Json::as_array)
+        .ok_or_else(|| format!("{value} has no grid {key}"))?
+        .iter()
+        .map(|row| {
+            row.as_array()
+                .ok_or_else(|| format!("the row {row} of {key} is not an array"))?
+                .iter()
+                .map(|cell| {
+                    cell.as_f64()
+                        .ok_or_else(|| format!("the cell {cell} of {key} is not a number"))
+                })
+                .collect::<Check<Vec<f64>>>()
+        })
+        .collect()
 }
 
 fn text_at(value: &Json, key: &str) -> Check<String> {
@@ -280,6 +319,15 @@ fn to_computed(value: &Json) -> Check<ComputedValue> {
         "complex" => ComputedValue::Complex {
             re: number_at(value, "re")?,
             im: number_at(value, "im")?,
+            unit: unit_at(value)?,
+        },
+        "matrix" => ComputedValue::Matrix {
+            rows: grid_at(value, "rows")?,
+            imaginary: if value.get("imaginary").is_some() {
+                Some(grid_at(value, "imaginary")?)
+            } else {
+                None
+            },
             unit: unit_at(value)?,
         },
         "list" => ComputedValue::List {

@@ -5,25 +5,21 @@
       "evaluator": {
         "functions": {
           "table": {
-            "makeList": [
+            "makeMatrix": [
               {
                 "args": [],
                 "result": {
-                  "items": [
-                    {
-                      "kind": "number",
-                      "value": 1
-                    },
-                    {
-                      "kind": "number",
-                      "value": 2
-                    },
-                    {
-                      "kind": "number",
-                      "value": 3
-                    }
-                  ],
-                  "kind": "list"
+                  "kind": "matrix",
+                  "rows": [
+                    [
+                      1,
+                      2
+                    ],
+                    [
+                      3,
+                      4
+                    ]
+                  ]
                 }
               }
             ]
@@ -33,11 +29,11 @@
       },
       "expect": {
         "code": "domain-error",
-        "message": "a function result holds more than the maximum of 2 list entries (resource exhausted)",
+        "message": "a function result holds more than the maximum of 3 list entries (resource exhausted)",
         "status": "indeterminate"
       },
-      "from": "recorded: trilean src/evaluator.ts (a function result over the value entry limit)",
-      "id": "list-value.a-function-result-over-the-entry-limit-is-resource-exhausted.1",
+      "from": "recorded: trilean src/evaluator.ts (a matrix result over the value entry limit)",
+      "id": "matrix-value.a-matrix-result-over-the-entry-limit-is-resource-exhausted.1",
       "kind": "evaluate",
       "resolvers": {
         "default": {
@@ -46,7 +42,7 @@
       },
       "tree": {
         "args": [],
-        "fn": "makeList",
+        "fn": "makeMatrix",
         "kind": "call"
       }
     }

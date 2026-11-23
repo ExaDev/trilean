@@ -376,7 +376,7 @@
       }
     },
     "trilean/call/builtin-functions.json": {
-      "cases": 197,
+      "cases": 221,
       "skip": {
         "rust": [],
         "ts": []
@@ -611,6 +611,20 @@
           "aggregates.map-collects-the-projected-value-of-every-item-in-order.1",
           "aggregates.map-over-the-entry-limit-is-resource-exhausted.1",
           "aggregates.map-within-the-entry-limit-is-definite.1"
+        ],
+        "ts": []
+      }
+    },
+    "trilean/evaluate/matrices.json": {
+      "cases": 10,
+      "skip": {
+        "rust": [
+          "matrices.a-matrix-over-the-entry-limit-is-resource-exhausted.1",
+          "matrices.a-product-of-a-two-by-two-and-a-two-by-one-matrix.1",
+          "matrices.a-product-whose-work-exceeds-the-node-limit-is-resource-exhausted-without-computing.1",
+          "matrices.a-product-whose-work-the-node-limit-covers-is-definite.1",
+          "matrices.cramers-rule-solves-the-x-of-a-two-by-two-system-from-entries-and-arithmetic.1",
+          "matrices.cramers-rule-solves-the-y-of-a-two-by-two-system-from-entries-and-arithmetic.1"
         ],
         "ts": []
       }

@@ -1,0 +1,1023 @@
+{
+  "cases": [
+    {
+      "as": "expression",
+      "evaluator": {
+        "functions": {
+          "builtin": true
+        }
+      },
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "matrix",
+          "rows": [
+            [
+              17
+            ],
+            [
+              39
+            ]
+          ]
+        }
+      },
+      "from": "recorded: trilean src/matrix-functions.ts (matrix values through a whole tree)",
+      "id": "matrices.a-product-of-a-two-by-two-and-a-two-by-one-matrix.1",
+      "kind": "evaluate",
+      "reason": "needs the built-in function registry, which the Rust crate does not provide",
+      "resolvers": {
+        "default": {
+          "found": false
+        }
+      },
+      "skip": "rust",
+      "tree": {
+        "args": [
+          {
+            "args": [
+              {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "kind": "numberLiteral",
+                        "value": 1
+                      },
+                      {
+                        "kind": "numberLiteral",
+                        "value": 2
+                      }
+                    ],
+                    "fn": "list",
+                    "kind": "call"
+                  },
+                  {
+                    "args": [
+                      {
+                        "kind": "numberLiteral",
+                        "value": 3
+                      },
+                      {
+                        "kind": "numberLiteral",
+                        "value": 4
+                      }
+                    ],
+                    "fn": "list",
+                    "kind": "call"
+                  }
+                ],
+                "fn": "list",
+                "kind": "call"
+              }
+            ],
+            "fn": "matrix",
+            "kind": "call"
+          },
+          {
+            "args": [
+              {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "kind": "numberLiteral",
+                        "value": 5
+                      }
+                    ],
+                    "fn": "list",
+                    "kind": "call"
+                  },
+                  {
+                    "args": [
+                      {
+                        "kind": "numberLiteral",
+                        "value": 6
+                      }
+                    ],
+                    "fn": "list",
+                    "kind": "call"
+                  }
+                ],
+                "fn": "list",
+                "kind": "call"
+              }
+            ],
+            "fn": "matrix",
+            "kind": "call"
+          }
+        ],
+        "fn": "matrixMultiply",
+        "kind": "call"
+      }
+    },
+    {
+      "as": "expression",
+      "evaluator": {
+        "functions": {
+          "builtin": true
+        }
+      },
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "unit": {},
+          "value": 1
+        }
+      },
+      "from": "recorded: trilean src/matrix-functions.ts (matrix values through a whole tree)",
+      "id": "matrices.cramers-rule-solves-the-x-of-a-two-by-two-system-from-entries-and-arithmetic.1",
+      "kind": "evaluate",
+      "reason": "needs the built-in function registry, which the Rust crate does not provide",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "A",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "matrix",
+                "rows": [
+                  [
+                    2,
+                    1
+                  ],
+                  [
+                    1,
+                    3
+                  ]
+                ]
+              }
+            }
+          },
+          {
+            "key": "B",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "matrix",
+                "rows": [
+                  [
+                    5
+                  ],
+                  [
+                    10
+                  ]
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "skip": "rust",
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "arithmetic",
+          "left": {
+            "kind": "arithmetic",
+            "left": {
+              "args": [
+                {
+                  "key": "B",
+                  "kind": "reference"
+                },
+                {
+                  "kind": "numberLiteral",
+                  "value": 0
+                },
+                {
+                  "kind": "numberLiteral",
+                  "value": 0
+                }
+              ],
+              "fn": "entry",
+              "kind": "call"
+            },
+            "op": "multiply",
+            "right": {
+              "args": [
+                {
+                  "key": "A",
+                  "kind": "reference"
+                },
+                {
+                  "kind": "numberLiteral",
+                  "value": 1
+                },
+                {
+                  "kind": "numberLiteral",
+                  "value": 1
+                }
+              ],
+              "fn": "entry",
+              "kind": "call"
+            }
+          },
+          "op": "subtract",
+          "right": {
+            "kind": "arithmetic",
+            "left": {
+              "args": [
+                {
+                  "key": "A",
+                  "kind": "reference"
+                },
+                {
+                  "kind": "numberLiteral",
+                  "value": 0
+                },
+                {
+                  "kind": "numberLiteral",
+                  "value": 1
+                }
+              ],
+              "fn": "entry",
+              "kind": "call"
+            },
+            "op": "multiply",
+            "right": {
+              "args": [
+                {
+                  "key": "B",
+                  "kind": "reference"
+                },
+                {
+                  "kind": "numberLiteral",
+                  "value": 1
+                },
+                {
+                  "kind": "numberLiteral",
+                  "value": 0
+                }
+              ],
+              "fn": "entry",
+              "kind": "call"
+            }
+          }
+        },
+        "op": "divide",
+        "right": {
+          "kind": "arithmetic",
+          "left": {
+            "kind": "arithmetic",
+            "left": {
+              "args": [
+                {
+                  "key": "A",
+                  "kind": "reference"
+                },
+                {
+                  "kind": "numberLiteral",
+                  "value": 0
+                },
+                {
+                  "kind": "numberLiteral",
+                  "value": 0
+                }
+              ],
+              "fn": "entry",
+              "kind": "call"
+            },
+            "op": "multiply",
+            "right": {
+              "args": [
+                {
+                  "key": "A",
+                  "kind": "reference"
+                },
+                {
+                  "kind": "numberLiteral",
+                  "value": 1
+                },
+                {
+                  "kind": "numberLiteral",
+                  "value": 1
+                }
+              ],
+              "fn": "entry",
+              "kind": "call"
+            }
+          },
+          "op": "subtract",
+          "right": {
+            "kind": "arithmetic",
+            "left": {
+              "args": [
+                {
+                  "key": "A",
+                  "kind": "reference"
+                },
+                {
+                  "kind": "numberLiteral",
+                  "value": 0
+                },
+                {
+                  "kind": "numberLiteral",
+                  "value": 1
+                }
+              ],
+              "fn": "entry",
+              "kind": "call"
+            },
+            "op": "multiply",
+            "right": {
+              "args": [
+                {
+                  "key": "A",
+                  "kind": "reference"
+                },
+                {
+                  "kind": "numberLiteral",
+                  "value": 1
+                },
+                {
+                  "kind": "numberLiteral",
+                  "value": 0
+                }
+              ],
+              "fn": "entry",
+              "kind": "call"
+            }
+          }
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "evaluator": {
+        "functions": {
+          "builtin": true
+        }
+      },
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "number",
+          "unit": {},
+          "value": 3
+        }
+      },
+      "from": "recorded: trilean src/matrix-functions.ts (matrix values through a whole tree)",
+      "id": "matrices.cramers-rule-solves-the-y-of-a-two-by-two-system-from-entries-and-arithmetic.1",
+      "kind": "evaluate",
+      "reason": "needs the built-in function registry, which the Rust crate does not provide",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "A",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "matrix",
+                "rows": [
+                  [
+                    2,
+                    1
+                  ],
+                  [
+                    1,
+                    3
+                  ]
+                ]
+              }
+            }
+          },
+          {
+            "key": "B",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "matrix",
+                "rows": [
+                  [
+                    5
+                  ],
+                  [
+                    10
+                  ]
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "skip": "rust",
+      "tree": {
+        "kind": "arithmetic",
+        "left": {
+          "kind": "arithmetic",
+          "left": {
+            "kind": "arithmetic",
+            "left": {
+              "args": [
+                {
+                  "key": "A",
+                  "kind": "reference"
+                },
+                {
+                  "kind": "numberLiteral",
+                  "value": 0
+                },
+                {
+                  "kind": "numberLiteral",
+                  "value": 0
+                }
+              ],
+              "fn": "entry",
+              "kind": "call"
+            },
+            "op": "multiply",
+            "right": {
+              "args": [
+                {
+                  "key": "B",
+                  "kind": "reference"
+                },
+                {
+                  "kind": "numberLiteral",
+                  "value": 1
+                },
+                {
+                  "kind": "numberLiteral",
+                  "value": 0
+                }
+              ],
+              "fn": "entry",
+              "kind": "call"
+            }
+          },
+          "op": "subtract",
+          "right": {
+            "kind": "arithmetic",
+            "left": {
+              "args": [
+                {
+                  "key": "B",
+                  "kind": "reference"
+                },
+                {
+                  "kind": "numberLiteral",
+                  "value": 0
+                },
+                {
+                  "kind": "numberLiteral",
+                  "value": 0
+                }
+              ],
+              "fn": "entry",
+              "kind": "call"
+            },
+            "op": "multiply",
+            "right": {
+              "args": [
+                {
+                  "key": "A",
+                  "kind": "reference"
+                },
+                {
+                  "kind": "numberLiteral",
+                  "value": 1
+                },
+                {
+                  "kind": "numberLiteral",
+                  "value": 0
+                }
+              ],
+              "fn": "entry",
+              "kind": "call"
+            }
+          }
+        },
+        "op": "divide",
+        "right": {
+          "kind": "arithmetic",
+          "left": {
+            "kind": "arithmetic",
+            "left": {
+              "args": [
+                {
+                  "key": "A",
+                  "kind": "reference"
+                },
+                {
+                  "kind": "numberLiteral",
+                  "value": 0
+                },
+                {
+                  "kind": "numberLiteral",
+                  "value": 0
+                }
+              ],
+              "fn": "entry",
+              "kind": "call"
+            },
+            "op": "multiply",
+            "right": {
+              "args": [
+                {
+                  "key": "A",
+                  "kind": "reference"
+                },
+                {
+                  "kind": "numberLiteral",
+                  "value": 1
+                },
+                {
+                  "kind": "numberLiteral",
+                  "value": 1
+                }
+              ],
+              "fn": "entry",
+              "kind": "call"
+            }
+          },
+          "op": "subtract",
+          "right": {
+            "kind": "arithmetic",
+            "left": {
+              "args": [
+                {
+                  "key": "A",
+                  "kind": "reference"
+                },
+                {
+                  "kind": "numberLiteral",
+                  "value": 0
+                },
+                {
+                  "kind": "numberLiteral",
+                  "value": 1
+                }
+              ],
+              "fn": "entry",
+              "kind": "call"
+            },
+            "op": "multiply",
+            "right": {
+              "args": [
+                {
+                  "key": "A",
+                  "kind": "reference"
+                },
+                {
+                  "kind": "numberLiteral",
+                  "value": 1
+                },
+                {
+                  "kind": "numberLiteral",
+                  "value": 0
+                }
+              ],
+              "fn": "entry",
+              "kind": "call"
+            }
+          }
+        }
+      }
+    },
+    {
+      "as": "expression",
+      "evaluator": {
+        "functions": {
+          "builtin": true
+        },
+        "maxNodes": 30
+      },
+      "expect": {
+        "code": "domain-error",
+        "message": "evaluation exceeded the maximum of 30 nodes visited in a single call (resource exhausted)",
+        "status": "indeterminate"
+      },
+      "from": "recorded: trilean src/matrix-functions.ts (matrix values through a whole tree)",
+      "id": "matrices.a-product-whose-work-exceeds-the-node-limit-is-resource-exhausted-without-computing.1",
+      "kind": "evaluate",
+      "reason": "needs the built-in function registry, which the Rust crate does not provide",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "A3",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "matrix",
+                "rows": [
+                  [
+                    1,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    1,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    1
+                  ]
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "skip": "rust",
+      "tree": {
+        "args": [
+          {
+            "key": "A3",
+            "kind": "reference"
+          },
+          {
+            "key": "A3",
+            "kind": "reference"
+          }
+        ],
+        "fn": "matrixMultiply",
+        "kind": "call"
+      }
+    },
+    {
+      "as": "expression",
+      "evaluator": {
+        "functions": {
+          "builtin": true
+        },
+        "maxNodes": 48
+      },
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "matrix",
+          "rows": [
+            [
+              1,
+              0,
+              0
+            ],
+            [
+              0,
+              1,
+              0
+            ],
+            [
+              0,
+              0,
+              1
+            ]
+          ]
+        }
+      },
+      "from": "recorded: trilean src/matrix-functions.ts (matrix values through a whole tree)",
+      "id": "matrices.a-product-whose-work-the-node-limit-covers-is-definite.1",
+      "kind": "evaluate",
+      "reason": "needs the built-in function registry, which the Rust crate does not provide",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "A3",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "matrix",
+                "rows": [
+                  [
+                    1,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    1,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    1
+                  ]
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "skip": "rust",
+      "tree": {
+        "args": [
+          {
+            "key": "A3",
+            "kind": "reference"
+          },
+          {
+            "key": "A3",
+            "kind": "reference"
+          }
+        ],
+        "fn": "matrixMultiply",
+        "kind": "call"
+      }
+    },
+    {
+      "as": "expression",
+      "evaluator": {
+        "functions": {
+          "builtin": true
+        },
+        "maxValueEntries": 3
+      },
+      "expect": {
+        "code": "domain-error",
+        "message": "a function result holds more than the maximum of 3 list entries (resource exhausted)",
+        "status": "indeterminate"
+      },
+      "from": "recorded: trilean src/matrix-functions.ts (matrix values through a whole tree)",
+      "id": "matrices.a-matrix-over-the-entry-limit-is-resource-exhausted.1",
+      "kind": "evaluate",
+      "reason": "needs the built-in function registry, which the Rust crate does not provide",
+      "resolvers": {
+        "default": {
+          "found": false
+        }
+      },
+      "skip": "rust",
+      "tree": {
+        "args": [
+          {
+            "args": [
+              {
+                "args": [
+                  {
+                    "kind": "numberLiteral",
+                    "value": 1
+                  },
+                  {
+                    "kind": "numberLiteral",
+                    "value": 2
+                  }
+                ],
+                "fn": "list",
+                "kind": "call"
+              },
+              {
+                "args": [
+                  {
+                    "kind": "numberLiteral",
+                    "value": 3
+                  },
+                  {
+                    "kind": "numberLiteral",
+                    "value": 4
+                  }
+                ],
+                "fn": "list",
+                "kind": "call"
+              }
+            ],
+            "fn": "list",
+            "kind": "call"
+          }
+        ],
+        "fn": "matrix",
+        "kind": "call"
+      }
+    },
+    {
+      "as": "expression",
+      "evaluator": {
+        "functions": {
+          "table": {
+            "makeMatrix": [
+              {
+                "args": [],
+                "result": {
+                  "kind": "matrix",
+                  "rows": [
+                    [
+                      1,
+                      2
+                    ],
+                    [
+                      3,
+                      4
+                    ]
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      },
+      "expect": {
+        "status": "definite",
+        "value": {
+          "kind": "matrix",
+          "rows": [
+            [
+              1,
+              2
+            ],
+            [
+              3,
+              4
+            ]
+          ]
+        }
+      },
+      "from": "recorded: trilean src/evaluator.ts (a function result that is a matrix)",
+      "id": "matrix-value.a-registered-function-may-return-a-matrix.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        }
+      },
+      "tree": {
+        "args": [],
+        "fn": "makeMatrix",
+        "kind": "call"
+      }
+    },
+    {
+      "as": "expression",
+      "evaluator": {
+        "functions": {
+          "table": {
+            "makeMatrix": [
+              {
+                "args": [],
+                "result": {
+                  "kind": "matrix",
+                  "rows": [
+                    [
+                      1,
+                      2
+                    ],
+                    [
+                      3,
+                      4
+                    ]
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        "maxValueEntries": 3
+      },
+      "expect": {
+        "code": "domain-error",
+        "message": "a function result holds more than the maximum of 3 list entries (resource exhausted)",
+        "status": "indeterminate"
+      },
+      "from": "recorded: trilean src/evaluator.ts (a matrix result over the value entry limit)",
+      "id": "matrix-value.a-matrix-result-over-the-entry-limit-is-resource-exhausted.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        }
+      },
+      "tree": {
+        "args": [],
+        "fn": "makeMatrix",
+        "kind": "call"
+      }
+    },
+    {
+      "as": "expression",
+      "evaluator": {
+        "functions": {
+          "table": {
+            "total": [
+              {
+                "args": [
+                  {
+                    "kind": "matrix",
+                    "rows": [
+                      [
+                        1,
+                        2
+                      ],
+                      [
+                        3,
+                        4
+                      ]
+                    ]
+                  }
+                ],
+                "result": {
+                  "kind": "number",
+                  "value": 10
+                }
+              }
+            ]
+          }
+        },
+        "maxNodes": 5
+      },
+      "expect": {
+        "code": "domain-error",
+        "message": "evaluation exceeded the maximum of 5 nodes visited in a single call (resource exhausted)",
+        "status": "indeterminate"
+      },
+      "from": "recorded: trilean src/evaluator.ts (the entries of a matrix argument are charged to the node limit before the function runs)",
+      "id": "matrix-value.the-entries-of-a-matrix-argument-are-charged-to-the-node-limit.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "m",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "matrix",
+                "rows": [
+                  [
+                    1,
+                    2
+                  ],
+                  [
+                    3,
+                    4
+                  ]
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "args": [
+          {
+            "key": "m",
+            "kind": "reference"
+          }
+        ],
+        "fn": "total",
+        "kind": "call"
+      }
+    },
+    {
+      "as": "predicate",
+      "expect": {
+        "code": "wrong-type",
+        "message": "comparison is not defined for matrix values; a matrix has no order and no equality",
+        "status": "indeterminate"
+      },
+      "from": "recorded: trilean src/evaluator-operations.ts (a matrix is not comparable)",
+      "id": "matrix-value.a-matrix-is-not-comparable.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        },
+        "values": [
+          {
+            "key": "m",
+            "result": {
+              "found": true,
+              "value": {
+                "kind": "matrix",
+                "rows": [
+                  [
+                    1
+                  ]
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "tree": {
+        "kind": "compare",
+        "left": {
+          "key": "m",
+          "kind": "reference"
+        },
+        "op": "eq",
+        "right": {
+          "key": "m",
+          "kind": "reference"
+        }
+      }
+    }
+  ]
+}

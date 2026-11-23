@@ -65,12 +65,42 @@ export function combineUnitsForDivide(
   return normalizeUnit(combined);
 }
 
-/** The entries a value holds, counted over every list in it: a list holds one entry per item plus the entries of each item that is itself a list, and any other value holds none. It is what `maxValueEntries` bounds and what a `call` is charged for the lists it is given. */
+/** The entries a value holds, counted over every list and matrix in it: a list holds one entry per item plus the entries of each item that is itself a list or matrix, a matrix holds one per cell, and any other value holds none. It is what `maxValueEntries` bounds and what a `call` is charged for the lists and matrices it is given. */
 export function valueEntryCount(value: ComputedValue): number {
+  if (value.kind === "matrix") {
+    return value.rows.reduce((total, row) => total + row.length, 0);
+  }
   if (value.kind !== "list") return 0;
 
   return value.items.reduce(
     (total, item) => total + 1 + valueEntryCount(item),
     0,
   );
+}
+
+/** Why a value is not a well-formed matrix, or `undefined` when it is, looked for through every list it holds: a matrix needs at least one row of at least one entry, every row the same length, and an `imaginary` part, when present, the same shape as `rows`. The generated schema cannot say this, so a value read from outside is checked with it. */
+export function matrixShapeIssue(value: ComputedValue): string | undefined {
+  if (value.kind === "list") {
+    for (const item of value.items) {
+      const issue = matrixShapeIssue(item);
+      if (issue !== undefined) return issue;
+    }
+
+    return undefined;
+  }
+  if (value.kind !== "matrix") return undefined;
+  const width = value.rows[0]?.length ?? 0;
+  if (width === 0 || value.rows.some((row) => row.length !== width)) {
+    return "a matrix needs at least one row, each with the same number of entries and at least one";
+  }
+  const { imaginary } = value;
+  if (
+    imaginary !== undefined &&
+    (imaginary.length !== value.rows.length ||
+      imaginary.some((row) => row.length !== width))
+  ) {
+    return "a matrix's imaginary part must have the same shape as its rows";
+  }
+
+  return undefined;
 }
