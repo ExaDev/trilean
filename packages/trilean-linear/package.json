@@ -1,0 +1,84 @@
+{
+  "name": "trilean-linear",
+  "description": "A linear-system solver for trilean: solveLinear, a registry function that solves a square system over matrices by Gaussian elimination with partial pivoting, and refuses a singular one as an indeterminate domain-error. It is kept out of the evaluator because solving is not closed-form.",
+  "version": "0.0.0",
+  "bugs": {
+    "url": "https://github.com/ExaDev/trilean/issues"
+  },
+  "dependencies": {
+    "trilean": "3.3.1"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
+    "@exadev/eslint-config": "3.1.0",
+    "@types/node": "^26.6.6",
+    "@vitest/coverage-v8": "^5.1.0",
+    "eslint": "^10.15.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.7",
+    "globals": "^17.14.0",
+    "prettier": "^3.10.1",
+    "publint": "^0.3.25",
+    "tsdown": "^0.23.7",
+    "turbo": "^2.11.11",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.72.2",
+    "vitest": "^5.1.0"
+  },
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "default": "./dist/*.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "homepage": "https://github.com/ExaDev/trilean/tree/main/packages/trilean-linear",
+  "keywords": [
+    "gaussian-elimination",
+    "linear-algebra",
+    "linear-system",
+    "matrix",
+    "rules-engine",
+    "three-valued-logic",
+    "trilean"
+  ],
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true,
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExaDev/trilean.git",
+    "directory": "packages/trilean-linear"
+  },
+  "scripts": {
+    "_build": "tsdown",
+    "_lint": "eslint . --fix --cache --max-warnings 0",
+    "_prepush": "true",
+    "_test": "vitest run --project unit",
+    "_test:coverage": "vitest run --project unit --coverage",
+    "_typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.node.json",
+    "_typecheck:attw": "attw --pack --profile esm-only",
+    "build": "turbo run _build",
+    "lint": "turbo run _lint",
+    "prepublishOnly": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run build && publint && attw --pack --profile esm-only",
+    "prepush": "turbo run _prepush",
+    "test": "turbo run _test",
+    "test:coverage": "turbo run _test:coverage",
+    "typecheck": "turbo run _typecheck _typecheck:attw"
+  },
+  "sideEffects": false,
+  "type": "module",
+  "types": "./dist/index.d.ts"
+}
