@@ -381,7 +381,7 @@ importers:
   packages/trilean-sql:
     dependencies:
       trilean:
-        specifier: 3.1.7
+        specifier: 3.2.0
         version: link:../trilean
       trilean-regex:
         specifier: 2.0.9

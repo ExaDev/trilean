@@ -1,3 +1,9 @@
+## [3.2.0](https://github.com/ExaDev/trilean/compare/trilean%403.1.7...trilean%403.2.0) (2026-11-23)
+
+### Features
+
+* **trilean:** add the list value kind with closed-form list functions and builders ([38089bb](https://github.com/ExaDev/trilean/commit/38089bb84cdaed571ef21db6c67bdbc02d3a8da7)), references [#210](https://github.com/ExaDev/trilean/issues/210)
+
 ## [3.1.7](https://github.com/ExaDev/trilean/compare/trilean%403.1.6...trilean%403.1.7) (2026-11-20)
 
 ### Build System
