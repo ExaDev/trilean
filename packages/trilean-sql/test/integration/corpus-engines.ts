@@ -1,5 +1,5 @@
+import { PGlite } from "@electric-sql/pglite";
 import Database from "better-sqlite3";
-import pg from "pg";
 import type {
   ComputedValue,
   JsonValue,
@@ -142,17 +142,14 @@ export function openSqlite(
 }
 
 /** A connected PostgreSQL client holding the fixture. */
-export async function openPostgres(
-  connectionString: string,
-  fixture: FixtureData,
-): Promise<Engine> {
-  const client = new pg.Client({ connectionString });
-  await client.connect();
-  // A client runs one query at a time, so the tables are created and filled one after another, each filled by a single statement.
+export async function openPglite(fixture: FixtureData): Promise<Engine> {
+  // PGlite is PostgreSQL itself compiled to WebAssembly and run in this process, so each fixture gets its own in-memory database with no server, port or container.
+  const db = new PGlite();
+  // A connection runs one query at a time, so the tables are created and filled one after another, each filled by a single statement.
   await fixture.tables.reduce(async (previous, table) => {
     await previous;
-    await client.query(createStatement(table, POSTGRES_TYPES));
-    await client.query(
+    await db.query(createStatement(table, POSTGRES_TYPES));
+    await db.query(
       insertStatement(table, (index) => `$${String(index)}`, table.rows.length),
       table.rows.flatMap((row) =>
         table.columns.map(({ name }) => row[name] ?? null),
@@ -162,15 +159,11 @@ export async function openPostgres(
 
   return {
     query: async (sql, params) => {
-      const result = await client.query({
-        text: sql,
-        values: [...params],
-        rowMode: "array",
-      });
+      const result = await db.query(sql, [...params], { rowMode: "array" });
 
       return arrayRows(result.rows);
     },
-    close: async () => client.end(),
+    close: async () => db.close(),
   };
 }
 
