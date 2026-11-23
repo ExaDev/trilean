@@ -22,7 +22,7 @@ pub enum DurationUnit {
     D,
 }
 
-/// A value an expression evaluates to, of one of seven kinds.
+/// A value an expression evaluates to, of one of eight kinds.
 #[derive(Shape, Clone, Debug, PartialEq)]
 #[serde(tag = "kind", rename_all = "camelCase", deny_unknown_fields)]
 pub enum ComputedValue {
@@ -71,6 +71,17 @@ pub enum ComputedValue {
         /// The items, in order.
         items: Vec<ComputedValue>,
     },
+    /// A rectangular matrix of real or complex entries that share one unit, in rows. Its entries count towards the
+    /// evaluator's value entry limit, one per cell, so a matrix is bounded exactly as a list is.
+    Matrix {
+        /// The real part of each entry, row by row. Every row has the same number of entries, and there is at least
+        /// one row of at least one entry.
+        rows: Vec<Vec<f64>>,
+        /// The imaginary part of each entry in the same shape as `rows`, present only when some entry is complex.
+        imaginary: Option<Vec<Vec<f64>>>,
+        /// The unit every entry is measured in, when it has one.
+        unit: Option<Unit>,
+    },
 }
 
 impl ComputedValue {
@@ -80,6 +91,7 @@ impl ComputedValue {
     pub fn entry_count(&self) -> usize {
         match self {
             Self::List { items } => items.iter().map(|item| 1 + item.entry_count()).sum(),
+            Self::Matrix { rows, .. } => rows.iter().map(Vec::len).sum(),
             _ => 0,
         }
     }

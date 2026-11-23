@@ -49,6 +49,7 @@ const COMPUTED_KINDS: ReadonlySet<string> = new Set([
   "duration",
   "complex",
   "list",
+  "matrix",
 ]);
 
 function isComputedValue(value: unknown): value is ComputedValue {

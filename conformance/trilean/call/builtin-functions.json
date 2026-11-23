@@ -4061,6 +4061,895 @@
       "function": "append",
       "id": "builtin.lists-append-refuses-a-first-argument-that-is-not-a-list.1",
       "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "items": [
+            {
+              "items": [
+                {
+                  "kind": "number",
+                  "value": 1
+                },
+                {
+                  "kind": "number",
+                  "value": 2
+                }
+              ],
+              "kind": "list"
+            },
+            {
+              "items": [
+                {
+                  "kind": "number",
+                  "value": 3
+                },
+                {
+                  "kind": "number",
+                  "value": 4
+                }
+              ],
+              "kind": "list"
+            }
+          ],
+          "kind": "list"
+        }
+      ],
+      "expect": {
+        "kind": "matrix",
+        "rows": [
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ]
+        ]
+      },
+      "from": "recorded: trilean src/matrix-functions.ts (the matrix functions)",
+      "function": "matrix",
+      "id": "builtin.matrices-matrix-builds-a-matrix-from-a-list-of-rows.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "items": [
+            {
+              "items": [
+                {
+                  "kind": "number",
+                  "unit": {
+                    "m": 1
+                  },
+                  "value": 1
+                },
+                {
+                  "kind": "number",
+                  "unit": {
+                    "m": 1
+                  },
+                  "value": 2
+                }
+              ],
+              "kind": "list"
+            }
+          ],
+          "kind": "list"
+        }
+      ],
+      "expect": {
+        "kind": "matrix",
+        "rows": [
+          [
+            1,
+            2
+          ]
+        ],
+        "unit": {
+          "m": 1
+        }
+      },
+      "from": "recorded: trilean src/matrix-functions.ts (the matrix functions)",
+      "function": "matrix",
+      "id": "builtin.matrices-matrix-shares-one-unit-across-its-entries.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "items": [
+            {
+              "items": [
+                {
+                  "kind": "number",
+                  "value": 1
+                },
+                {
+                  "im": 1,
+                  "kind": "complex",
+                  "re": 0
+                }
+              ],
+              "kind": "list"
+            }
+          ],
+          "kind": "list"
+        }
+      ],
+      "expect": {
+        "imaginary": [
+          [
+            0,
+            1
+          ]
+        ],
+        "kind": "matrix",
+        "rows": [
+          [
+            1,
+            0
+          ]
+        ]
+      },
+      "from": "recorded: trilean src/matrix-functions.ts (the matrix functions)",
+      "function": "matrix",
+      "id": "builtin.matrices-matrix-keeps-an-imaginary-part-only-when-an-entry-is-complex.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "items": [
+            {
+              "items": [
+                {
+                  "kind": "number",
+                  "value": 1
+                },
+                {
+                  "kind": "number",
+                  "value": 2
+                }
+              ],
+              "kind": "list"
+            },
+            {
+              "items": [
+                {
+                  "kind": "number",
+                  "value": 3
+                }
+              ],
+              "kind": "list"
+            }
+          ],
+          "kind": "list"
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "same number of entries"
+        ]
+      },
+      "from": "recorded: trilean src/matrix-functions.ts (the matrix functions)",
+      "function": "matrix",
+      "id": "builtin.matrices-matrix-refuses-rows-of-different-lengths.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "items": [
+            {
+              "items": [
+                {
+                  "kind": "number",
+                  "unit": {
+                    "m": 1
+                  },
+                  "value": 1
+                },
+                {
+                  "kind": "number",
+                  "unit": {
+                    "s": 1
+                  },
+                  "value": 2
+                }
+              ],
+              "kind": "list"
+            }
+          ],
+          "kind": "list"
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "share one unit"
+        ],
+        "wrongType": true
+      },
+      "from": "recorded: trilean src/matrix-functions.ts (the matrix functions)",
+      "function": "matrix",
+      "id": "builtin.matrices-matrix-refuses-entries-of-different-units.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "number",
+          "value": 1
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "list of rows"
+        ],
+        "wrongType": true
+      },
+      "from": "recorded: trilean src/matrix-functions.ts (the matrix functions)",
+      "function": "matrix",
+      "id": "builtin.matrices-matrix-refuses-an-argument-that-is-not-a-list-of-lists.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "matrix",
+          "rows": [
+            [
+              1,
+              2,
+              3
+            ],
+            [
+              4,
+              5,
+              6
+            ]
+          ]
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 2
+      },
+      "from": "recorded: trilean src/matrix-functions.ts (the matrix functions)",
+      "function": "rows",
+      "id": "builtin.matrices-rows-counts-the-rows.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "matrix",
+          "rows": [
+            [
+              1,
+              2,
+              3
+            ],
+            [
+              4,
+              5,
+              6
+            ]
+          ]
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 3
+      },
+      "from": "recorded: trilean src/matrix-functions.ts (the matrix functions)",
+      "function": "columns",
+      "id": "builtin.matrices-columns-counts-the-columns.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "matrix",
+          "rows": [
+            [
+              1,
+              2,
+              3
+            ],
+            [
+              4,
+              5,
+              6
+            ]
+          ]
+        },
+        {
+          "kind": "number",
+          "value": 1
+        },
+        {
+          "kind": "number",
+          "value": 2
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "value": 6
+      },
+      "from": "recorded: trilean src/matrix-functions.ts (the matrix functions)",
+      "function": "entry",
+      "id": "builtin.matrices-entry-reads-the-cell-at-a-zero-based-row-and-column.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "matrix",
+          "rows": [
+            [
+              1,
+              2
+            ]
+          ],
+          "unit": {
+            "m": 1
+          }
+        },
+        {
+          "kind": "number",
+          "value": 0
+        },
+        {
+          "kind": "number",
+          "value": 1
+        }
+      ],
+      "expect": {
+        "kind": "number",
+        "unit": {
+          "m": 1
+        },
+        "value": 2
+      },
+      "from": "recorded: trilean src/matrix-functions.ts (the matrix functions)",
+      "function": "entry",
+      "id": "builtin.matrices-entry-keeps-the-unit-of-the-matrix.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "imaginary": [
+            [
+              0,
+              1
+            ]
+          ],
+          "kind": "matrix",
+          "rows": [
+            [
+              1,
+              0
+            ]
+          ]
+        },
+        {
+          "kind": "number",
+          "value": 0
+        },
+        {
+          "kind": "number",
+          "value": 1
+        }
+      ],
+      "expect": {
+        "im": 1,
+        "kind": "complex",
+        "re": 0
+      },
+      "from": "recorded: trilean src/matrix-functions.ts (the matrix functions)",
+      "function": "entry",
+      "id": "builtin.matrices-entry-reads-a-complex-cell-as-a-complex-value.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "matrix",
+          "rows": [
+            [
+              1,
+              2
+            ]
+          ]
+        },
+        {
+          "kind": "number",
+          "value": 1
+        },
+        {
+          "kind": "number",
+          "value": 0
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "within the matrix"
+        ]
+      },
+      "from": "recorded: trilean src/matrix-functions.ts (the matrix functions)",
+      "function": "entry",
+      "id": "builtin.matrices-entry-refuses-a-cell-outside-the-matrix.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "matrix",
+          "rows": [
+            [
+              1,
+              2
+            ]
+          ]
+        },
+        {
+          "kind": "number",
+          "value": 0
+        },
+        {
+          "kind": "number",
+          "value": 1.5
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "whole-number"
+        ]
+      },
+      "from": "recorded: trilean src/matrix-functions.ts (the matrix functions)",
+      "function": "entry",
+      "id": "builtin.matrices-entry-refuses-an-index-that-is-not-a-whole-number.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "matrix",
+          "rows": [
+            [
+              1,
+              2,
+              3
+            ],
+            [
+              4,
+              5,
+              6
+            ]
+          ]
+        }
+      ],
+      "expect": {
+        "kind": "matrix",
+        "rows": [
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            3,
+            6
+          ]
+        ]
+      },
+      "from": "recorded: trilean src/matrix-functions.ts (the matrix functions)",
+      "function": "transpose",
+      "id": "builtin.matrices-transpose-swaps-rows-and-columns.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "matrix",
+          "rows": [
+            [
+              1,
+              2
+            ]
+          ],
+          "unit": {
+            "m": 1
+          }
+        },
+        {
+          "kind": "matrix",
+          "rows": [
+            [
+              3,
+              4
+            ]
+          ],
+          "unit": {
+            "m": 1
+          }
+        }
+      ],
+      "expect": {
+        "kind": "matrix",
+        "rows": [
+          [
+            4,
+            6
+          ]
+        ],
+        "unit": {
+          "m": 1
+        }
+      },
+      "from": "recorded: trilean src/matrix-functions.ts (the matrix functions)",
+      "function": "matrixAdd",
+      "id": "builtin.matrices-matrixadd-adds-matrices-of-one-shape-and-unit.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "matrix",
+          "rows": [
+            [
+              1
+            ]
+          ],
+          "unit": {
+            "m": 1
+          }
+        },
+        {
+          "kind": "matrix",
+          "rows": [
+            [
+              1
+            ]
+          ],
+          "unit": {
+            "s": 1
+          }
+        }
+      ],
+      "expect": {
+        "messageIncludes": [
+          "same unit"
+        ],
+        "wrongType": true
+      },
+      "from": "recorded: trilean src/matrix-functions.ts (the matrix functions)",
+      "function": "matrixAdd",
+      "id": "builtin.matrices-matrixadd-refuses-different-units.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "matrix",
+          "rows": [
+            [
+              1,
+              2
+            ]
+          ]
+        },
+        {
+          "kind": "matrix",
+          "rows": [
+            [
+              1
+            ],
+            [
+              2
+            ]
+          ]
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "same shape"
+        ]
+      },
+      "from": "recorded: trilean src/matrix-functions.ts (the matrix functions)",
+      "function": "matrixAdd",
+      "id": "builtin.matrices-matrixadd-refuses-different-shapes.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "matrix",
+          "rows": [
+            [
+              1,
+              2
+            ],
+            [
+              3,
+              4
+            ]
+          ]
+        },
+        {
+          "kind": "number",
+          "value": 2
+        }
+      ],
+      "expect": {
+        "kind": "matrix",
+        "rows": [
+          [
+            2,
+            4
+          ],
+          [
+            6,
+            8
+          ]
+        ]
+      },
+      "from": "recorded: trilean src/matrix-functions.ts (the matrix functions)",
+      "function": "scale",
+      "id": "builtin.matrices-scale-multiplies-every-entry.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "matrix",
+          "rows": [
+            [
+              1,
+              2
+            ]
+          ],
+          "unit": {
+            "m": 1
+          }
+        },
+        {
+          "kind": "number",
+          "unit": {
+            "s": 1
+          },
+          "value": 3
+        }
+      ],
+      "expect": {
+        "kind": "matrix",
+        "rows": [
+          [
+            3,
+            6
+          ]
+        ],
+        "unit": {
+          "m": 1,
+          "s": 1
+        }
+      },
+      "from": "recorded: trilean src/matrix-functions.ts (the matrix functions)",
+      "function": "scale",
+      "id": "builtin.matrices-scale-multiplies-the-units.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "matrix",
+          "rows": [
+            [
+              1,
+              2
+            ]
+          ]
+        },
+        {
+          "im": 1,
+          "kind": "complex",
+          "re": 0
+        }
+      ],
+      "expect": {
+        "imaginary": [
+          [
+            1,
+            2
+          ]
+        ],
+        "kind": "matrix",
+        "rows": [
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      "from": "recorded: trilean src/matrix-functions.ts (the matrix functions)",
+      "function": "scale",
+      "id": "builtin.matrices-scale-by-a-complex-number-makes-a-complex-matrix.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "matrix",
+          "rows": [
+            [
+              1,
+              2
+            ],
+            [
+              3,
+              4
+            ]
+          ]
+        },
+        {
+          "kind": "matrix",
+          "rows": [
+            [
+              5
+            ],
+            [
+              6
+            ]
+          ]
+        }
+      ],
+      "expect": {
+        "kind": "matrix",
+        "rows": [
+          [
+            17
+          ],
+          [
+            39
+          ]
+        ]
+      },
+      "from": "recorded: trilean src/matrix-functions.ts (the matrix functions)",
+      "function": "matrixMultiply",
+      "id": "builtin.matrices-matrixmultiply-multiplies-by-rows-and-columns.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "matrix",
+          "rows": [
+            [
+              1,
+              2
+            ]
+          ],
+          "unit": {
+            "m": 1
+          }
+        },
+        {
+          "kind": "matrix",
+          "rows": [
+            [
+              3
+            ],
+            [
+              4
+            ]
+          ],
+          "unit": {
+            "s": 1
+          }
+        }
+      ],
+      "expect": {
+        "kind": "matrix",
+        "rows": [
+          [
+            11
+          ]
+        ],
+        "unit": {
+          "m": 1,
+          "s": 1
+        }
+      },
+      "from": "recorded: trilean src/matrix-functions.ts (the matrix functions)",
+      "function": "matrixMultiply",
+      "id": "builtin.matrices-matrixmultiply-multiplies-the-units.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "imaginary": [
+            [
+              1
+            ]
+          ],
+          "kind": "matrix",
+          "rows": [
+            [
+              0
+            ]
+          ]
+        },
+        {
+          "imaginary": [
+            [
+              1
+            ]
+          ],
+          "kind": "matrix",
+          "rows": [
+            [
+              0
+            ]
+          ]
+        }
+      ],
+      "expect": {
+        "kind": "matrix",
+        "rows": [
+          [
+            -1
+          ]
+        ]
+      },
+      "from": "recorded: trilean src/matrix-functions.ts (the matrix functions)",
+      "function": "matrixMultiply",
+      "id": "builtin.matrices-matrixmultiply-of-complex-entries-drops-an-all-zero-imaginary-part.1",
+      "kind": "call"
+    },
+    {
+      "args": [
+        {
+          "kind": "matrix",
+          "rows": [
+            [
+              1,
+              2
+            ]
+          ]
+        },
+        {
+          "kind": "matrix",
+          "rows": [
+            [
+              1,
+              2
+            ]
+          ]
+        }
+      ],
+      "expect": {
+        "domainError": true,
+        "messageIncludes": [
+          "columns to equal"
+        ]
+      },
+      "from": "recorded: trilean src/matrix-functions.ts (the matrix functions)",
+      "function": "matrixMultiply",
+      "id": "builtin.matrices-matrixmultiply-refuses-shapes-that-do-not-chain.1",
+      "kind": "call"
     }
   ]
 }

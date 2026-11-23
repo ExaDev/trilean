@@ -708,6 +708,24 @@ const argmax = (collection: JsonValue, key: ExpressionNode, result: ExpressionNo
 
 A list is bounded two ways, both by the `maxValueEntries` option of the evaluators (default `DEFAULT_MAX_VALUE_ENTRIES`, equal to the default `maxNodes`), which counts one entry per item of every list nested in a value. A list input over it is rejected when the inputs are validated, before anything is evaluated, and a function result over it is an indeterminate `domain-error` that reports an exhausted resource. The entries of the lists a `call` is given are also charged to the `maxNodes` budget before the function runs, so work on a long list ends as the same resource-exhausted result instead of running to completion.
 
+### Matrix values
+
+A `matrix` computed value is a rectangular grid of real or complex entries that share one unit: `{ "kind": "matrix", "rows": [[1, 2], [3, 4]] }`, with an `imaginary` grid of the same shape when some entry is complex and one optional `unit` for the whole matrix, the shape `complex` already has. Entries with different units are not supported in one matrix; use separate matrices. A matrix has no order and no equality, so `compare`, `memberOf`, arithmetic and `negate` refuse it as a wrong type, and a matrix read from the inputs must be rectangular, with at least one row of at least one entry, or the inputs are rejected before anything is evaluated.
+
+The built-in functions are its closed-form operations:
+
+- `matrix(rows)` builds a matrix from a list of rows, each a list of numbers or complex values of one unit, and refuses rows of different lengths as a `domain-error`. The imaginary grid is kept only when some entry has an imaginary part.
+- `rows(matrix)` and `columns(matrix)` are the dimensions, as numbers without a unit.
+- `entry(matrix, row, column)` is the cell at zero-based whole-number indices, a number or a complex value in the matrix's unit, or a `domain-error` outside the matrix.
+- `transpose(matrix)` swaps rows and columns.
+- `matrixAdd(a, b)` adds matrices of the same shape and unit.
+- `scale(matrix, factor)` multiplies every entry by a number or complex value, and the units multiply as they do for numbers.
+- `matrixMultiply(a, b)` is the product when the columns of `a` equal the rows of `b`, with the units multiplied.
+
+Solving a linear system or iterating to a tolerance is not closed-form, so neither is a node or a built-in function of this package; a consumer that needs them supplies the function to the registry.
+
+Matrices are bounded exactly as lists are: each cell counts as one entry towards `maxValueEntries`, a matrix result over it is an indeterminate resource-exhausted `domain-error`, and a call is charged the cells of the matrices it is given before it runs. A product is charged for its arithmetic as well, rows of `a` times columns of `a` times columns of `b` multiply-adds, so a product too large for `maxNodes` ends as a resource-exhausted result without being computed.
+
 ### Derived values
 
 `coalesce` is never its own evaluated node kind — it is a builder function that assembles an ordinary `conditional`, the same treatment [Derived connectives](#derived-connectives) and [Derived aggregates](#derived-aggregates) already give `xor`/`nand`/`nor`/`implies`/`iff`/`none`/`sum`/`count`/`average`: correctness is inherited from the mechanism it's built from, rather than needing its own independent implementation that could silently drift from it.

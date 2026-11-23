@@ -221,9 +221,10 @@ export function compareValues(
           : left.re !== right.re || left.im !== right.im,
       );
     case "list":
+    case "matrix":
       return indeterminate(
         "wrong-type",
-        "comparison is not defined for list values; a list has no order and no equality",
+        `comparison is not defined for ${left.kind} values; a ${left.kind} has no order and no equality`,
       );
     default:
       throw new Error("unreachable computed-value kind");
@@ -406,9 +407,10 @@ export function computeMembershipMatch(
         operand.re === candidate.re && operand.im === candidate.im,
       );
     case "list":
+    case "matrix":
       return indeterminate(
         "wrong-type",
-        "membership is not defined for list values",
+        `membership is not defined for ${operand.kind} values`,
       );
     default:
       throw new Error("unreachable computed-value kind");
@@ -446,6 +448,7 @@ export function applyNegate(operand: ComputedValue): Evaluation<ComputedValue> {
     case "instant":
     case "boolean":
     case "list":
+    case "matrix":
       return indeterminate(
         "wrong-type",
         `cannot negate a '${operand.kind}' value`,
@@ -835,6 +838,10 @@ function hasFiniteMagnitude(value: ComputedValue): boolean {
       return true;
     case "list":
       return value.items.every(hasFiniteMagnitude);
+    case "matrix":
+      return [...value.rows, ...(value.imaginary ?? [])].every((row) =>
+        row.every((part) => Number.isFinite(part)),
+      );
     default:
       throw new Error("unreachable computed-value kind");
   }

@@ -1,5 +1,9 @@
 import type { ComputedValue } from "./computed-value";
-import { ComputedValueSchema, valueEntryCount } from "./computed-value";
+import {
+  ComputedValueSchema,
+  matrixShapeIssue,
+  valueEntryCount,
+} from "./computed-value";
 import { DEFAULT_MAX_VALUE_ENTRIES } from "./evaluator-budget";
 import { isPlainRecord } from "./plain-record";
 import type { SyncResolvers } from "./resolvers";
@@ -31,6 +35,8 @@ function readEntry(
 ): { value: ComputedValue } | { issue: string } {
   const computed = toComputedValue(raw);
   if (computed === undefined) return { issue: `${label}: ${NOT_A_VALUE}` };
+  const shapeIssue = matrixShapeIssue(computed);
+  if (shapeIssue !== undefined) return { issue: `${label}: ${shapeIssue}` };
   const entries = valueEntryCount(computed);
   if (entries > maxValueEntries) {
     return {

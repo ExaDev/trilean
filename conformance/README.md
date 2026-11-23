@@ -145,10 +145,10 @@ The cases are the specification of the package's behaviour: the reason codes, th
 | Kind | Cases |
 | --- | ---: |
 | `build` | 94 |
-| `call` | 197 |
+| `call` | 221 |
 | `cli` | 95 |
 | `document` | 36 |
-| `evaluate` | 829 |
+| `evaluate` | 839 |
 | `inputs` | 13 |
 | `number-format` | 40 |
 | `regex-match` | 139 |

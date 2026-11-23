@@ -2,6 +2,7 @@ import type { ComputedValue, Unit } from "./computed-value";
 import { unitsEqual } from "./computed-value";
 import { complexFromPolar, complexMagnitude, complexPhase } from "./complex";
 import type { FunctionFailure, FunctionRegistry } from "./functions";
+import { matrixFunctions } from "./matrix-functions";
 
 type NumberValue = Extract<ComputedValue, { kind: "number" }>;
 type ComplexValue = Extract<ComputedValue, { kind: "complex" }>;
@@ -239,6 +240,7 @@ function roundHalfAwayFromZero(value: number, places: number): number {
  * Frozen, so mutating the export cannot change what `evaluateDocument` resolves.
  */
 export const builtinFunctions: FunctionRegistry = Object.freeze({
+  ...matrixFunctions,
   list: (args) => ({ kind: "list", items: [...args] }),
   length: (args) => {
     const [list, ...extra] = args;
