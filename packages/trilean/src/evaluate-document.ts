@@ -25,6 +25,8 @@ export interface EvaluateDocumentOptions {
   as?: TreeKind;
   /** The most nodes one evaluation may visit before it ends as an indeterminate result (see `createSyncEvaluator`); absent means the evaluator's default. A fold visits its combine expression once per item, so a long list needs a larger budget. The caller supplies a positive integer. */
   maxNodes?: number;
+  /** The most entries one list value may hold, counted over every list nested in it (see `createSyncEvaluator`); an input over it is rejected before anything is evaluated, and absent means the evaluator's default. */
+  maxValueEntries?: number;
 }
 
 export type DocumentEvaluation =
@@ -96,12 +98,17 @@ export function evaluateDocument({
   inputs,
   as,
   maxNodes,
+  maxValueEntries,
 }: EvaluateDocumentOptions): DocumentEvaluation {
   const evaluator =
-    maxNodes === undefined
+    maxNodes === undefined && maxValueEntries === undefined
       ? defaultEvaluator
-      : createSyncEvaluator({ functions: builtinFunctions, maxNodes });
-  const parsedInputs = parseInputs(inputs ?? {});
+      : createSyncEvaluator({
+          functions: builtinFunctions,
+          maxNodes,
+          maxValueEntries,
+        });
+  const parsedInputs = parseInputs(inputs ?? {}, maxValueEntries);
   if (!parsedInputs.ok) {
     return {
       outcome: "rejected",

@@ -239,6 +239,46 @@ function roundHalfAwayFromZero(value: number, places: number): number {
  * Frozen, so mutating the export cannot change what `evaluateDocument` resolves.
  */
 export const builtinFunctions: FunctionRegistry = Object.freeze({
+  list: (args) => ({ kind: "list", items: [...args] }),
+  length: (args) => {
+    const [list, ...extra] = args;
+    if (list?.kind !== "list" || extra.length > 0) {
+      return { wrongType: "length requires exactly one list argument" };
+    }
+
+    return { kind: "number", value: list.items.length };
+  },
+  at: (args) => {
+    const [list, index, ...extra] = args;
+    if (
+      list?.kind !== "list" ||
+      !isNumberValue(index) ||
+      !isDimensionless(index) ||
+      extra.length > 0
+    ) {
+      return {
+        wrongType: "at requires a list and a dimensionless number index",
+      };
+    }
+    const item = Number.isInteger(index.value)
+      ? list.items[index.value]
+      : undefined;
+    if (item === undefined || index.value < 0) {
+      return {
+        domainError: "at requires an integer index within the list",
+      };
+    }
+
+    return item;
+  },
+  append: (args) => {
+    const [list, item, ...extra] = args;
+    if (list?.kind !== "list" || item === undefined || extra.length > 0) {
+      return { wrongType: "append requires a list and one value to add" };
+    }
+
+    return { kind: "list", items: [...list.items, item] };
+  },
   minimum: (args) =>
     extremum("minimum", args, (candidate, best) => candidate < best),
   maximum: (args) =>

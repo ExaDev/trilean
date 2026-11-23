@@ -1,5 +1,14 @@
 import { expect } from "vitest";
-import { average, count, presenceOf, sum } from "../derived-aggregates";
+import {
+  argmax,
+  argmin,
+  average,
+  count,
+  filter,
+  map,
+  presenceOf,
+  sum,
+} from "../derived-aggregates";
 import {
   and,
   iff,
@@ -122,6 +131,9 @@ function argumentsOf(args: readonly Json[]): Arguments {
   };
 }
 
+/** Where `argmin` and `argmax` take their optional filter: after the collection, the key and the result. */
+const FILTER_ARGUMENT = 3;
+
 /** The builders of the package, by the name a `build` case gives, each with the way its arguments are read. */
 const BUILDERS: Readonly<Record<string, (args: Arguments) => unknown>> = {
   not: (a) => not(a.predicate(0)),
@@ -140,6 +152,22 @@ const BUILDERS: Readonly<Record<string, (args: Arguments) => unknown>> = {
       filter: a.optionalPredicateMember(1, "filter"),
       probe: a.optionalExpressionMember(1, "probe"),
     }),
+  map: (a) => map(a.json(0), a.expression(1), a.optionalPredicate(2)),
+  filter: (a) => filter(a.json(0), a.predicate(1), a.expression(2)),
+  argmin: (a) =>
+    argmin(
+      a.json(0),
+      a.expression(1),
+      a.expression(2),
+      a.optionalPredicate(FILTER_ARGUMENT),
+    ),
+  argmax: (a) =>
+    argmax(
+      a.json(0),
+      a.expression(1),
+      a.expression(2),
+      a.optionalPredicate(FILTER_ARGUMENT),
+    ),
   presenceOf: (a) => presenceOf(a.expression(0)),
   coalesce: (a) => {
     const [first, second, ...rest] = a.expressions(0);

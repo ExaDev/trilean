@@ -16,12 +16,16 @@
     "Builder": {
       "description": "The functions of the package that build a tree.",
       "enum": [
+        "argmax",
+        "argmin",
         "average",
         "coalesce",
         "count",
+        "filter",
         "hierarchicalGlobPattern",
         "iff",
         "implies",
+        "map",
         "nand",
         "none",
         "nor",
@@ -1219,6 +1223,11 @@
           "maximum": 9007199254740991,
           "minimum": 1,
           "type": "integer"
+        },
+        "maxValueEntries": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
         }
       },
       "type": "object"
@@ -1251,12 +1260,16 @@
       "description": "The built-in functions a `call` case may name.",
       "enum": [
         "absoluteValue",
+        "append",
         "arcCosine",
         "arcSine",
         "arcTangent",
         "arcTangent2",
+        "at",
         "cosine",
         "exponential",
+        "length",
+        "list",
         "logarithm",
         "magnitude",
         "maximum",

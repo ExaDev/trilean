@@ -133,6 +133,7 @@ export interface EvaluateCase extends CaseBase {
     };
     readonly maxNestingDepth?: number;
     readonly maxNodes?: number;
+    readonly maxValueEntries?: number;
   };
   readonly modes?: readonly Mode[];
   readonly expect?: EvaluateExpectation;

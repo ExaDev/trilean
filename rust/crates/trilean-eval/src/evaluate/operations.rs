@@ -98,6 +98,7 @@ pub(crate) fn kind_name(value: &ComputedValue) -> &'static str {
         ComputedValue::Instant { .. } => "instant",
         ComputedValue::Duration { .. } => "duration",
         ComputedValue::Complex { .. } => "complex",
+        ComputedValue::List { .. } => "list",
     }
 }
 
@@ -219,6 +220,9 @@ pub(crate) fn compare_values(
             };
             Ok(apply_comparison(op, order, 0.0))
         }
+        ComputedValue::List { .. } => wrong_type(
+            "comparison is not defined for list values; a list has no order and no equality",
+        ),
         ComputedValue::Complex { re, im, unit } => {
             if !matches!(op, ComparisonOperator::Eq | ComparisonOperator::Neq) {
                 return wrong_type(format!(
@@ -356,6 +360,7 @@ pub(crate) fn membership_match(
             Ok(re == other_re && im == other_im)
         }
         (ComputedValue::Complex { .. }, _) => mismatch("a", "complex"),
+        (ComputedValue::List { .. }, _) => wrong_type("membership is not defined for list values"),
     }
 }
 
@@ -377,7 +382,8 @@ pub(crate) fn negate(operand: &ComputedValue) -> Outcome<ComputedValue> {
         }),
         ComputedValue::Text { .. }
         | ComputedValue::Instant { .. }
-        | ComputedValue::Boolean { .. } => {
+        | ComputedValue::Boolean { .. }
+        | ComputedValue::List { .. } => {
             wrong_type(format!("cannot negate a '{}' value", kind_name(operand)))
         }
     }
@@ -708,6 +714,7 @@ fn has_finite_magnitude(value: &ComputedValue) -> bool {
             value.is_finite()
         }
         ComputedValue::Complex { re, im, .. } => re.is_finite() && im.is_finite(),
+        ComputedValue::List { items } => items.iter().all(has_finite_magnitude),
         ComputedValue::Text { .. }
         | ComputedValue::Boolean { .. }
         | ComputedValue::Instant { .. } => true,

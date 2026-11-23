@@ -6,6 +6,7 @@ import {
   indeterminate,
 } from "./evaluation";
 import {
+  DEFAULT_MAX_VALUE_ENTRIES,
   type EvaluationBudget,
   createEvaluationBudget,
   isResourceExhaustion,
@@ -23,8 +24,8 @@ import {
   compareText,
   compareValues,
   computeMembershipMatch,
-  invokeRegisteredFunction,
 } from "./evaluator-operations";
+import { invokeRegisteredFunction } from "./evaluator-functions";
 import type { FunctionRegistry } from "./functions";
 import type { EvaluationContext, SyncResolvers } from "./resolvers";
 import type { ExpressionNode, PredicateNode } from "./tree";
@@ -47,7 +48,11 @@ type Run<T> = (
 ) => Evaluation<T>;
 
 /** Never charged: handed to the nodes of a tree compiled without budget counting, none of which reads it. */
-const UNLIMITED_BUDGET: EvaluationBudget = { checkNode: () => undefined };
+const UNLIMITED_BUDGET: EvaluationBudget = {
+  checkNode: () => undefined,
+  chargeWork: () => undefined,
+  maxValueEntries: Number.POSITIVE_INFINITY,
+};
 
 /** The `visitedTreeKeys` of a call that has not entered any `treeReference`; the interpreter copies it rather than mutating it, so one instance serves every call. */
 const NO_TREE_KEYS: ReadonlySet<string> = new Set();
@@ -63,6 +68,9 @@ class NodeCompiler {
 
   /** Whether any node was left to the interpreter. */
   interpreted = false;
+
+  /** Whether the tree has a `call` node: a function may build a list, so its work and its result's size are charged to the call's budget, which a compilation with the charge off cannot do. */
+  callsFunctions = false;
 
   /**
    * `functions` is the registry `call` nodes resolve against. A node at `maxNestingDepth` or deeper is left to the interpreter, so compilation never descends further than an evaluation would. `counted` says whether every compiled node charges the call's `EvaluationBudget` before doing its own work, exactly as the interpreter does; a tree that can never exhaust its budget is compiled with it off, which removes the charge from every node.
@@ -324,6 +332,7 @@ class NodeCompiler {
           indeterminate("wrong-type", ACCUMULATOR_OUTSIDE_FOLD),
         );
       case "call": {
+        this.callsFunctions = true;
         const args = node.args.map(handedOver);
         const { fn } = node;
         const { functions } = this;
@@ -336,7 +345,7 @@ class NodeCompiler {
             values.push(result.value);
           }
 
-          return invokeRegisteredFunction(functions, fn, values);
+          return invokeRegisteredFunction(functions, fn, values, budget);
         });
       }
       case "numberLiteral":
@@ -485,12 +494,24 @@ class NodeCompiler {
 export function compilePredicateTree(
   node: PredicateNode,
   functions: Readonly<FunctionRegistry>,
-  maxNodes: number,
-  maxNestingDepth: number,
+  limits: Readonly<{
+    maxNodes: number;
+    maxNestingDepth: number;
+    maxValueEntries?: number;
+  }>,
 ): CompiledPredicate {
+  const {
+    maxNodes,
+    maxNestingDepth,
+    maxValueEntries = DEFAULT_MAX_VALUE_ENTRIES,
+  } = limits;
   const uncounted = new NodeCompiler(functions, maxNestingDepth, false);
   const uncountedRun = uncounted.predicate(node, 0);
-  if (!uncounted.interpreted && uncounted.nodesCompiled <= maxNodes) {
+  if (
+    !uncounted.interpreted &&
+    !uncounted.callsFunctions &&
+    uncounted.nodesCompiled <= maxNodes
+  ) {
     return (context, resolvers) =>
       uncountedRun(context, resolvers, UNLIMITED_BUDGET);
   }
@@ -504,6 +525,6 @@ export function compilePredicateTree(
     countedRun(
       context,
       resolvers,
-      createEvaluationBudget(maxNodes, maxNestingDepth),
+      createEvaluationBudget(maxNodes, maxNestingDepth, maxValueEntries),
     );
 }

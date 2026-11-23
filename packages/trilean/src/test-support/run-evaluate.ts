@@ -64,6 +64,9 @@ function optionsOf(testCase: EvaluateCase): EvaluatorOptions {
   if (spec?.maxNestingDepth !== undefined) {
     options.maxNestingDepth = spec.maxNestingDepth;
   }
+  if (spec?.maxValueEntries !== undefined) {
+    options.maxValueEntries = spec.maxValueEntries;
+  }
 
   return options;
 }

@@ -25,8 +25,8 @@ import {
   compareText,
   compareValues,
   computeMembershipMatch,
-  invokeRegisteredFunction,
 } from "./evaluator-operations";
+import { invokeRegisteredFunction } from "./evaluator-functions";
 import { literalValue } from "./evaluator-literals";
 import type { FunctionRegistry } from "./functions";
 import { readAs } from "./read-as";
@@ -462,7 +462,7 @@ export function* evaluateValueInternal(
         args.push(result.value);
       }
 
-      return invokeRegisteredFunction(functions, node.fn, args);
+      return invokeRegisteredFunction(functions, node.fn, args, budget);
     }
     case "numberLiteral":
     case "textLiteral":

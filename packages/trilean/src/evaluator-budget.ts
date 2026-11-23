@@ -25,6 +25,9 @@ export const MAX_TREE_REFERENCE_DEPTH = 100;
 /** Default cap on the total number of predicate/expression nodes a single `evaluatePredicate`/`evaluateValue` call may visit -- see `createEvaluator`'s `maxNodes` option, threaded through to `createEvaluationBudget` below. Chosen generously above any realistic hand-authored business-rule, eligibility, or formula tree (see README.md's own consumer use cases), while still bounding an untrusted, adversarially-authored tree's total evaluation cost to a fixed, small amount of work regardless of how it is shaped. */
 export const DEFAULT_MAX_EVALUATION_NODES = 10_000;
 
+/** Default cap on the entries a list may hold, counted over every list in one value, and the work one `call` may do on lists: the node budget's own default, so one evaluation cannot hold or copy more entries than it could visit nodes. See `createEvaluator`'s `maxValueEntries` option. */
+export const DEFAULT_MAX_VALUE_ENTRIES = DEFAULT_MAX_EVALUATION_NODES;
+
 /** Default cap on ordinary recursive-descent nesting depth -- see `createEvaluator`'s `maxNestingDepth` option, threaded through to `createEvaluationBudget` below. Set comfortably below the depth at which this evaluator's own recursive descent has been observed to exhaust the host call stack (a chain of plain `not` nodes wrapped around a single leaf, evaluated directly against this file under Node.js, failed consistently somewhere in the low thousands of nesting levels, with some run-to-run variance from whatever else already occupied the stack), while remaining far deeper than any legitimate hand-authored tree is ever likely to nest. Kept well clear of that measured failure point because the exact threshold varies by host runtime (a Cloudflare Workers isolate's own stack is smaller than Node's) and by how much of the stack the rest of the call chain has already used. */
 export const DEFAULT_MAX_NESTING_DEPTH = 500;
 
@@ -36,17 +39,33 @@ export const DEFAULT_MAX_NESTING_DEPTH = 500;
 export interface EvaluationBudget {
   /** Charges one node visit and checks both caps, returning the `Evaluation` to return immediately if either is now exceeded, or `undefined` if evaluation of this node may proceed. Called as the very first action inside `evaluatePredicateInternal`/`evaluateValueInternal`, before any of that node's own work or further recursion, so an exceeded budget is discovered before it can be spent on additional descent. */
   checkNode: (nestingDepth: number) => Evaluation<never> | undefined;
+  /** The most entries one list value may hold, counted over every list nested in it: a value over it is refused when it is read or made. */
+  readonly maxValueEntries: number;
+  /** Charges `entries` units of work to the node budget, as that many node visits, before the work runs, and returns the resource-exhausted `Evaluation` when that exceeds `maxNodes`, or `undefined` when the work may proceed. */
+  chargeWork: (entries: number) => Evaluation<never> | undefined;
 }
 
 /** Constructs a fresh `EvaluationBudget` for one top-level `evaluatePredicate`/`evaluateValue` call -- see `createEvaluator`'s `maxNodes`/`maxNestingDepth` options, which supply `maxNodes`/`maxNestingDepth` here. A fresh closure per call is what keeps `nodesVisited` from leaking between unrelated evaluations. */
 export function createEvaluationBudget(
   maxNodes: number,
   maxNestingDepth: number,
+  maxValueEntries: number = DEFAULT_MAX_VALUE_ENTRIES,
 ): EvaluationBudget {
   /** Total predicate/expression nodes visited so far across the whole call -- shared by every branch of an `and`/`or`/`allOf`/`anyOf`/fold/quantifier through the closure below, so it accumulates across the whole traversal rather than resetting per branch. */
   let nodesVisited = 0;
 
   return {
+    maxValueEntries,
+    chargeWork(entries) {
+      nodesVisited += entries;
+      if (nodesVisited > maxNodes) {
+        return resourceExhausted(
+          `evaluation exceeded the maximum of ${maxNodes.toString()} nodes visited in a single call (resource exhausted)`,
+        );
+      }
+
+      return undefined;
+    },
     checkNode(nestingDepth) {
       nodesVisited += 1;
       if (nodesVisited > maxNodes) {

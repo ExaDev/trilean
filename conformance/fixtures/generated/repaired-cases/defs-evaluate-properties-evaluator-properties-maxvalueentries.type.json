@@ -1,0 +1,54 @@
+{
+  "cases": [
+    {
+      "as": "expression",
+      "evaluator": {
+        "functions": {
+          "table": {
+            "makeList": [
+              {
+                "args": [],
+                "result": {
+                  "items": [
+                    {
+                      "kind": "number",
+                      "value": 1
+                    },
+                    {
+                      "kind": "number",
+                      "value": 2
+                    },
+                    {
+                      "kind": "number",
+                      "value": 3
+                    }
+                  ],
+                  "kind": "list"
+                }
+              }
+            ]
+          }
+        },
+        "maxValueEntries": 2
+      },
+      "expect": {
+        "code": "domain-error",
+        "message": "a function result holds more than the maximum of 2 list entries (resource exhausted)",
+        "status": "indeterminate"
+      },
+      "from": "recorded: trilean src/evaluator.ts (a function result over the value entry limit)",
+      "id": "list-value.a-function-result-over-the-entry-limit-is-resource-exhausted.1",
+      "kind": "evaluate",
+      "resolvers": {
+        "default": {
+          "found": false
+        }
+      },
+      "tree": {
+        "args": [],
+        "fn": "makeList",
+        "kind": "call"
+      }
+    }
+  ]
+}

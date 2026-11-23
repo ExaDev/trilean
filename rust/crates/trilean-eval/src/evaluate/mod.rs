@@ -41,6 +41,10 @@ use operations::{
 /// visits, far above any hand-written tree and still a small, fixed amount of work for a tree from anywhere.
 pub const DEFAULT_MAX_EVALUATION_NODES: usize = 10_000;
 
+/// The default of [`Evaluator::with_max_value_entries`]: the most entries one list value may hold, counted over every
+/// list in it, equal to the node limit so one evaluation cannot hold or copy more entries than it could visit nodes.
+pub const DEFAULT_MAX_VALUE_ENTRIES: usize = DEFAULT_MAX_EVALUATION_NODES;
+
 /// The default of [`Evaluator::with_limits`]'s `max_nesting_depth`: how deep one evaluation descends, well clear of
 /// where a host's stack gives out and far deeper than a hand-written tree nests.
 pub const DEFAULT_MAX_NESTING_DEPTH: usize = 500;
@@ -264,6 +268,7 @@ pub struct Evaluator<F = NoFunctions, X = EcmaScriptSubset> {
     regex: X,
     max_nodes: usize,
     max_nesting_depth: usize,
+    max_value_entries: usize,
 }
 
 impl Default for Evaluator {
@@ -280,6 +285,7 @@ impl Evaluator {
             regex: EcmaScriptSubset,
             max_nodes: DEFAULT_MAX_EVALUATION_NODES,
             max_nesting_depth: DEFAULT_MAX_NESTING_DEPTH,
+            max_value_entries: DEFAULT_MAX_VALUE_ENTRIES,
         }
     }
 }
@@ -292,6 +298,7 @@ impl<F: Functions, X: EcmaScriptRegex> Evaluator<F, X> {
             regex: self.regex,
             max_nodes: self.max_nodes,
             max_nesting_depth: self.max_nesting_depth,
+            max_value_entries: self.max_value_entries,
         }
     }
 
@@ -302,6 +309,7 @@ impl<F: Functions, X: EcmaScriptRegex> Evaluator<F, X> {
             regex,
             max_nodes: self.max_nodes,
             max_nesting_depth: self.max_nesting_depth,
+            max_value_entries: self.max_value_entries,
         }
     }
 
@@ -328,6 +336,25 @@ impl<F: Functions, X: EcmaScriptRegex> Evaluator<F, X> {
         Ok(Evaluator {
             max_nodes,
             max_nesting_depth,
+            ..self
+        })
+    }
+
+    /// This evaluator with `max_value_entries` as the most entries one list value may hold, counted over every list
+    /// in it. A function's result over it is indeterminate `domain-error` (resource exhausted), and the entries of the
+    /// lists a `call` is given are charged to the node limit before the function runs.
+    ///
+    /// # Errors
+    ///
+    /// [`InvalidLimit`] when the limit is zero.
+    pub fn with_max_value_entries(self, max_value_entries: usize) -> Result<Self, InvalidLimit> {
+        if max_value_entries == 0 {
+            return Err(InvalidLimit {
+                name: "max_value_entries",
+            });
+        }
+        Ok(Evaluator {
+            max_value_entries,
             ..self
         })
     }
@@ -463,6 +490,19 @@ fn complex_literal(node: &ComplexLiteralNode) -> ComputedValue {
 }
 
 impl<F: Functions, X: EcmaScriptRegex, R> Run<'_, F, X, R> {
+    /// Charges `entries` units of work as that many node visits, before the work runs.
+    fn charge_work<T>(&self, entries: usize) -> Option<Outcome<T>> {
+        let visited = self.visited.get().saturating_add(entries);
+        self.visited.set(visited);
+        if visited > self.evaluator.max_nodes {
+            return Some(exhausted(format!(
+                "evaluation exceeded the maximum of {} nodes visited in a single call (resource exhausted)",
+                self.evaluator.max_nodes
+            )));
+        }
+        None
+    }
+
     /// Charges one node visit and checks both limits, before any of the node's own work.
     fn check_node<T>(&self, depth: usize) -> Option<Outcome<T>> {
         let visited = self.visited.get() + 1;
@@ -663,12 +703,26 @@ impl<F: Functions, X: EcmaScriptRegex, R> Run<'_, F, X, R> {
                     Ok(arguments) => arguments,
                     Err(reason) => return Ok(Err(reason)),
                 };
+                // The work on lists is charged before it runs, as the entries read.
+                let work: usize = arguments.iter().map(ComputedValue::entry_count).sum();
+                if let Some(exceeded) = self.charge_work(work) {
+                    return Ok(exceeded);
+                }
                 match self.evaluator.functions.call(function, &arguments) {
                     None => wrong_type(format!(
                         "no function registered under the name '{function}'"
                     )),
                     Some(Err(error)) => return Err(EvaluationError::Function(error)),
-                    Some(Ok(Ok(value))) => Ok(value),
+                    Some(Ok(Ok(value))) => {
+                        if value.entry_count() > self.evaluator.max_value_entries {
+                            exhausted(format!(
+                                "a function result holds more than the maximum of {} list entries (resource exhausted)",
+                                self.evaluator.max_value_entries
+                            ))
+                        } else {
+                            Ok(value)
+                        }
+                    }
                     Some(Ok(Err(FunctionFailure::DomainError(message)))) => domain_error(message),
                     Some(Ok(Err(FunctionFailure::WrongType(message)))) => wrong_type(message),
                 }

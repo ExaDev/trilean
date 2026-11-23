@@ -53,6 +53,7 @@ export type { CompiledPredicate } from "./evaluator-compiled";
 export {
   DEFAULT_MAX_EVALUATION_NODES,
   DEFAULT_MAX_NESTING_DEPTH,
+  DEFAULT_MAX_VALUE_ENTRIES,
 } from "./evaluator-budget";
 
 export {
@@ -67,7 +68,16 @@ export {
   xor,
 } from "./derived-connectives";
 export type { CountOptions } from "./derived-aggregates";
-export { average, count, presenceOf, sum } from "./derived-aggregates";
+export {
+  argmax,
+  argmin,
+  average,
+  count,
+  filter,
+  map,
+  presenceOf,
+  sum,
+} from "./derived-aggregates";
 export { coalesce } from "./derived-values";
 export {
   hierarchicalGlobPattern,

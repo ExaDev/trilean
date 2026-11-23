@@ -3,6 +3,7 @@ import type { Evaluation } from "./evaluation";
 import {
   DEFAULT_MAX_EVALUATION_NODES,
   DEFAULT_MAX_NESTING_DEPTH,
+  DEFAULT_MAX_VALUE_ENTRIES,
   createEvaluationBudget,
 } from "./evaluator-budget";
 import { evaluatePredicateInternal, evaluateValueInternal } from "./evaluator";
@@ -24,6 +25,8 @@ export interface EvaluatorOptions {
   maxNodes?: number;
   /** Caps ordinary recursive-descent nesting depth, independent of `MAX_TREE_REFERENCE_DEPTH`'s own `treeReference` chain-depth cap -- see `createEvaluationBudget`. Defaults to `DEFAULT_MAX_NESTING_DEPTH`. */
   maxNestingDepth?: number;
+  /** Caps the entries one list value may hold, counted over every list nested in it, and charges the work a `call` does on lists to the `maxNodes` budget. A value over it is refused as indeterminate resource-exhausted. Defaults to `DEFAULT_MAX_VALUE_ENTRIES`, the default `maxNodes`. */
+  maxValueEntries?: number;
 }
 
 /**
@@ -33,6 +36,7 @@ export function createEvaluator({
   functions = emptyFunctionRegistry,
   maxNodes = DEFAULT_MAX_EVALUATION_NODES,
   maxNestingDepth = DEFAULT_MAX_NESTING_DEPTH,
+  maxValueEntries = DEFAULT_MAX_VALUE_ENTRIES,
 }: EvaluatorOptions): {
   evaluatePredicate: (
     node: PredicateNode,
@@ -56,7 +60,7 @@ export function createEvaluator({
           functions,
           new Set(),
           0,
-          createEvaluationBudget(maxNodes, maxNestingDepth),
+          createEvaluationBudget(maxNodes, maxNestingDepth, maxValueEntries),
           0,
         ),
       ),
@@ -70,7 +74,7 @@ export function createEvaluator({
           functions,
           new Set(),
           0,
-          createEvaluationBudget(maxNodes, maxNestingDepth),
+          createEvaluationBudget(maxNodes, maxNestingDepth, maxValueEntries),
           0,
         ),
       ),
@@ -84,6 +88,7 @@ export function createSyncEvaluator({
   functions = emptyFunctionRegistry,
   maxNodes = DEFAULT_MAX_EVALUATION_NODES,
   maxNestingDepth = DEFAULT_MAX_NESTING_DEPTH,
+  maxValueEntries = DEFAULT_MAX_VALUE_ENTRIES,
 }: EvaluatorOptions): {
   evaluatePredicate: (
     node: PredicateNode,
@@ -109,7 +114,7 @@ export function createSyncEvaluator({
           functions,
           new Set(),
           0,
-          createEvaluationBudget(maxNodes, maxNestingDepth),
+          createEvaluationBudget(maxNodes, maxNestingDepth, maxValueEntries),
           0,
         ),
       ),
@@ -123,12 +128,16 @@ export function createSyncEvaluator({
           functions,
           new Set(),
           0,
-          createEvaluationBudget(maxNodes, maxNestingDepth),
+          createEvaluationBudget(maxNodes, maxNestingDepth, maxValueEntries),
           0,
         ),
       ),
     compilePredicate: (node) =>
-      compilePredicateTree(node, functions, maxNodes, maxNestingDepth),
+      compilePredicateTree(node, functions, {
+        maxNodes,
+        maxNestingDepth,
+        maxValueEntries,
+      }),
   };
 }
 
