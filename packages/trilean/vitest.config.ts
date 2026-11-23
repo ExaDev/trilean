@@ -3,6 +3,9 @@ import { defineConfig } from "vitest/config";
 
 const BUNDLER_TIMEOUT_MS = 180000;
 
+/** What a test that starts a compiler, validates the whole validate corpus or boots the Workers runtime pays: a few seconds on an idle host and tens of seconds on a shared one that the runner's default of five seconds fits on neither. It is a ceiling for work done once per test, so a test that hangs still fails. */
+const BUILT_PACKAGE_TIMEOUT_MS = 120000;
+
 /**
  * Coverage is a Vitest "unsupported option" inside a project config -- it can only be defined once, here in the root config, and applies across the whole run regardless of which project(s) are selected.
  *
@@ -42,6 +45,7 @@ export default defineConfig({
             "test/cli.e2e.test.ts",
             "test/zod.e2e.test.ts",
           ],
+          testTimeout: BUILT_PACKAGE_TIMEOUT_MS,
         },
       },
       {
@@ -64,6 +68,7 @@ export default defineConfig({
         test: {
           name: "workers",
           include: ["test/workers/**/*.test.ts"],
+          testTimeout: BUILT_PACKAGE_TIMEOUT_MS,
         },
       },
     ],
