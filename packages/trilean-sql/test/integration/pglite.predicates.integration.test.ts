@@ -152,7 +152,7 @@ describe("textCompare", () => {
 });
 
 /**
- * The same equivalence claim as `postgres.test.ts`'s own `portableMatches`/`portableNotMatches` suite, against PGlite instead of a server in a container -- see this file's own top-of-file comment for why keeping the two near-verbatim, rather than sharing a parameterised harness, is what actually establishes agreement rather than assuming it.
+ * The same equivalence claim as `postgres.test.ts`'s own `portableMatches`/`portableNotMatches` suite, against PGlite instead of a separate server -- see this file's own top-of-file comment for why keeping the two near-verbatim, rather than sharing a parameterised harness, is what actually establishes agreement rather than assuming it.
  */
 describe("portableMatches/portableNotMatches (trilean-regex, translated to PostgreSQL's own syntax)", () => {
   it("matches a start-anchored literal prefix", async () => {

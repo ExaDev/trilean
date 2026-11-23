@@ -1,7 +1,3 @@
-import {
-  PostgreSqlContainer,
-  type StartedPostgreSqlContainer,
-} from "@testcontainers/postgresql";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
@@ -24,14 +20,14 @@ import { validateManifest } from "../../src/test-support/validate";
 import {
   bindable,
   evaluatorRows,
-  openPostgres,
+  openPglite,
   openSqlite,
 } from "./corpus-engines";
 import type { Engine, Rows } from "./corpus-engines";
 import { fixtureNames, readFixture } from "./corpus-fixtures";
 
 /**
- * Runs the `execute` directory of this package's share of the language-neutral conformance corpus (`conformance/trilean-sql/execute/`) against real engines: SQLite in memory, and PostgreSQL in an ephemeral container, which needs a Docker-compatible daemon, as the integration suite always has. A case compiles its tree for its dialect, runs the fragment over the fixture's rows and requires the rows to be the ones it states and to be the rows trilean's evaluator selects over the same fixture; the other forms are in `conformance/README.md`.
+ * Runs the `execute` directory of this package's share of the language-neutral conformance corpus (`conformance/trilean-sql/execute/`) against real engines: SQLite in memory, and PostgreSQL as PGlite in process, so the suite needs nothing beyond Node. A case compiles its tree for its dialect, runs the fragment over the fixture's rows and requires the rows to be the ones it states and to be the rows trilean's evaluator selects over the same fixture; the other forms are in `conformance/README.md`.
  */
 
 const CORPUS_ROOT = fileURLToPath(
@@ -48,12 +44,9 @@ const corpus = checked.files.filter(({ name }) => name.startsWith(SHARE));
 // What this run does, written by the registration loop and the test bodies below and never computed from the parsed corpus.
 const record = createRunRecord();
 
-let container: StartedPostgreSqlContainer;
 const postgresEngines = new Map<string, Engine>();
 
 beforeAll(async () => {
-  container = await new PostgreSqlContainer("postgres:17-alpine").start();
-  // A fixture's tables are created in the one database, so two fixtures must not share a table name.
   const fixtures = new Set(
     corpus.flatMap(({ file }) =>
       file.cases.flatMap((testCase) =>
@@ -65,10 +58,7 @@ beforeAll(async () => {
   );
   await Promise.all(
     [...fixtures].map(async (name) => {
-      postgresEngines.set(
-        name,
-        await openPostgres(container.getConnectionUri(), readFixture(name)),
-      );
+      postgresEngines.set(name, await openPglite(readFixture(name)));
     }),
   );
 });
@@ -77,7 +67,6 @@ afterAll(async () => {
   await Promise.all(
     [...postgresEngines.values()].map(async (engine) => engine.close()),
   );
-  await container.stop();
 });
 
 function quote(identifier: string): string {

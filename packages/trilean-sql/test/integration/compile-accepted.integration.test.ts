@@ -1,14 +1,10 @@
-import {
-  PostgreSqlContainer,
-  type StartedPostgreSqlContainer,
-} from "@testcontainers/postgresql";
 import { fileURLToPath } from "node:url";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { checkCorpus } from "../../src/test-support/corpus";
 import { caseLimit, manifestCases } from "../../../../corpus-time-limit";
 import type { SqlCompileCase } from "../../src/test-support/corpus-types";
 import { decodeNumbers } from "../../src/test-support/numbers";
-import { bindable, openPostgres, openSqlite } from "./corpus-engines";
+import { bindable, openPglite, openSqlite } from "./corpus-engines";
 import type { Engine } from "./corpus-engines";
 import { textToString } from "../../src/test-support/text";
 import { readFixture } from "./corpus-fixtures";
@@ -172,20 +168,14 @@ async function run(
   };
 }
 
-let container: StartedPostgreSqlContainer;
 let postgres: Engine;
 
 beforeAll(async () => {
-  container = await new PostgreSqlContainer("postgres:17-alpine").start();
-  postgres = await openPostgres(
-    container.getConnectionUri(),
-    readFixture("subjects"),
-  );
+  postgres = await openPglite(readFixture("subjects"));
 });
 
 afterAll(async () => {
   await postgres.close();
-  await container.stop();
 });
 
 describe("the statements the compile cases record are accepted by their engine", () => {

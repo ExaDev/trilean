@@ -13,15 +13,10 @@ saveWorkspaceProtocol: false
 #
 # workerd (the Cloudflare Workers runtime @cloudflare/vitest-plugin drives the workers test suite through) and esbuild (its bundler) both need theirs: the script is how each fetches its own platform's binary, and neither runs at all without it.
 #
-# The three refused below arrive under testcontainers, which packages/trilean-sql's integration suite uses to start PostgreSQL. Each script is optional to the way this workspace uses the package: ssh2 and its cpu-features helper build native acceleration for SSH transports, and testcontainers reaches Docker over a local socket rather than SSH; protobufjs's script only regenerates bundled artefacts the published tarball already contains. Refusing them keeps a test-only dependency chain from executing arbitrary code at install time.
-#
 # better-sqlite3 is the engine packages/trilean-sql's SQLite integration suite executes its compiled fragments against, and it is a native addon. From version 13 it ships a prebuilt N-API binary per platform inside the package itself and loads it from there, so its install-time node-gyp rebuild is not needed on any platform that has one (macOS, Linux glibc and musl, Windows, on x64 and arm64). Refusing it keeps that compile, and the toolchain it would need, out of every install.
 allowBuilds:
   better-sqlite3: false
-  cpu-features: false
   esbuild: true
-  protobufjs: false
-  ssh2: false
   workerd: true
 
 # 60 minutes. pnpm reads workspace-level settings only from the workspace root, so this file is the one place they can take effect at all.
