@@ -16,7 +16,7 @@
     "@cloudflare/vitest-plugin": "1.8.4",
     "@exadev/eslint-config": "3.1.0",
     "@types/node": "^26.6.6",
-    "@vitest/coverage-v8": "^5.1.0",
+    "@vitest/coverage-v8": "^5.1.1",
     "ajv": "8.20.0",
     "canonicalize": "^5.1.0",
     "eslint": "^10.15.0",
